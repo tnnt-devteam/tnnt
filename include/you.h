@@ -54,6 +54,62 @@ struct u_event {
     Bitfield(ascended, 1);          /* has offered the Amulet */
 };
 
+/* TNNT specific achievements.
+ * Does not contain achievements which will be in TNNT but are already
+ * represented in the xlog somewhere, such as killing Medusa or escaping in
+ * celestial disgrace.
+ * Additionally, achievements for killing certain types of monsters are handled
+ * elsewhere.  TODO: where elsewhere?
+ * TODO 2: what about achievements for stuff which is tracked by in-game
+ * variables but is NOT expressed in the xlog, such as # of artifact gifts? For
+ * now, I've put them on the list.
+ * TODO 3: I've also marked the achievements which are relatively easily
+ * spammable, since discussion didn't resolve on whether these should remain in
+ * or not. */
+enum tnnt_achievements {
+    A_ENTERED_MINETOWN = 0,
+    A_CONSULTED_ORACLE,
+    A_STARTED_QUEST,
+    A_ENTERED_PLANES,
+    A_BOUGHT_PROTECTION,
+    A_SURVIVED_STONING,
+    A_SURVIVED_SLIMING,
+    A_SURVIVED_ILLNESS,
+    A_SURVIVED_DROWNING,
+    A_USED_THRONE,
+    A_LOST_RING_IN_SINK,
+    A_CURED_LYCANTHROPY,
+    A_CONVERTED_ALTAR,
+    A_CHATTED_IZCHAK,
+    A_KICKED_FRUIT_TREE,
+    A_PURCHASED,
+    A_ROBBED,
+    A_UNCURSED_IN_FOUNTAIN,
+    A_LEARNED_LV5_SPELL,
+    A_TAMED_DOMESTIC,
+    A_TAMED_NONDOMESTIC,
+    A_GRANTED_ARTI, /* Tracked by in-game variables */
+    A_CREATED_ARTI, /* trivial... */
+    A_GOT_EXCALIBUR,
+    A_CREATED_DSM, /* spammable... */
+    A_ROBBED_BY_NYMPH, /* spammable... */
+    A_ROBBED_BY_LEPRECHAUN,
+    A_ENCOUNTERED_FOOCUBUS, /* spammable... */
+    A_TRAPPED_MONSTER, /* spammable... */
+    A_AVENGED_ORCTOWN,
+    A_GOT_UNPUNISHED,
+    A_FELL_ONTO_SINK,
+    A_LEARNED_PASSTUNE, /* Tracked by in-game variables */
+    A_GOT_KELP,
+    A_USED_TOUCHSTONE, /* spammable... */
+    A_WROTE_SCROLL, /* spammable... */
+    A_RODE_DRAGON,
+    A_LAID_EGG, /* spammable... */
+    A_ERODEPROOFED_ITEM, /* spammable... */
+    A_THREW_UNICORN_GEM,
+    A_TINNED_TROLL, /* spammable... */
+};
+
 struct u_achieve {
     Bitfield(amulet, 1);  /* touched Amulet */
     Bitfield(bell, 1);    /* touched Bell */
@@ -66,7 +122,14 @@ struct u_achieve {
     Bitfield(finish_sokoban, 1);  /* obtained the sokoban prize */
 
     Bitfield(killed_medusa, 1);
+
+    /* 64 bits for the TNNT achievements above. If we come up with more than
+     * 64, we'll have to figure something else out... */
+    unsigned long long tnnt_achievements;
 };
+
+#define achieved(achvmt) \
+    u.uachieve.tnnt_achievements |= 1L << (achvmt);
 
 struct u_realtime {
     long   realtime;     /* accumulated playing time in seconds */
