@@ -144,6 +144,7 @@ int type;
             if (talk)
                 You_feel("cured.  What a relief!");
             Sick = 0L; /* set_itimeout(&Sick, 0L) */
+            tnnt_achieve(A_CURED_ILLNESS);
         }
         context.botl = TRUE;
     }
@@ -172,8 +173,10 @@ const char *msg;
         if (msg)
             pline1(msg);
     }
-    if (!Slimed)
+    if (!Slimed) {
+        tnnt_achieve(A_CURED_SLIMING);
         dealloc_killer(find_delayed_killer(SLIMED));
+    }
 }
 
 /* start or stop petrification */
@@ -196,8 +199,10 @@ const char *killername;
         if (msg)
             pline1(msg);
     }
-    if (!Stoned)
+    if (!Stoned) {
+        tnnt_achieve(A_CURED_STONING);
         dealloc_killer(find_delayed_killer(STONED));
+    }
     else if (!old)
         delayed_killer(STONED, killedby, killername);
 }

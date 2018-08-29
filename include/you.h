@@ -72,13 +72,13 @@ enum tnnt_achievements {
     A_STARTED_QUEST,        /* Tracked by in-game variable */
     A_ENTERED_PLANES,       /* Implemented. */
     A_BOUGHT_PROTECTION,    /* Implemented. */
-    A_SURVIVED_STONING,
-    A_SURVIVED_SLIMING,
-    A_SURVIVED_ILLNESS,
+    A_CURED_LYCANTHROPY,    /* Implemented. */
+    A_CURED_STONING,        /* Implemented. */
+    A_CURED_SLIMING,        /* Implemented. */
+    A_CURED_ILLNESS,        /* Implemented. */
     A_SURVIVED_DROWNING,
     A_USED_THRONE,          /* Implemented. */
     A_DROPPED_RING_IN_SINK, /* Implemented. */
-    A_CURED_LYCANTHROPY,
     A_CONVERTED_ALTAR,      /* Implemented. */
     A_CHATTED_IZCHAK,       /* Implemented. */
     A_KICKED_FRUIT_TREE,    /* Implemented. */

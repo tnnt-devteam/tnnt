@@ -199,6 +199,7 @@ boolean purify;
     if (purify) {
         You_feel("purified.");
         set_ulycn(NON_PM); /* cure lycanthropy */
+        tnnt_achieve(A_CURED_LYCANTHROPY);
     }
     if (!Unchanging && is_were(youmonst.data)
         && (!controllable_poly
