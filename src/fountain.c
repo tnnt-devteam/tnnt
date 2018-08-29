@@ -395,6 +395,7 @@ register struct obj *obj;
             obj->oeroded = obj->oeroded2 = 0;
             obj->oerodeproof = TRUE;
             exercise(A_WIS, TRUE);
+            tnnt_achieve(A_GOT_EXCALIBUR);
         }
         update_inventory();
         levl[u.ux][u.uy].typ = ROOM;

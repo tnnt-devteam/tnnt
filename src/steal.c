@@ -136,6 +136,7 @@ register struct monst *mtmp;
             (void) rloc(mtmp, TRUE);
         monflee(mtmp, 0, FALSE, FALSE);
         context.botl = 1;
+        tnnt_achieve(A_ROBBED_BY_LEPRECHAUN);
     }
 }
 
@@ -460,6 +461,7 @@ gotobj:
     pline("%s stole %s.", named ? "She" : Monnam(mtmp), doname(otmp));
     could_petrify =
         (otmp->otyp == CORPSE && touch_petrifies(&mons[otmp->corpsenm]));
+    tnnt_achieve(A_ROBBED_BY_NYMPH);
     (void) mpickobj(mtmp, otmp); /* may free otmp */
     if (could_petrify && !(mtmp->misc_worn_check & W_ARMG)) {
         minstapetrify(mtmp, TRUE);

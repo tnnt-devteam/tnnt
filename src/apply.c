@@ -1868,6 +1868,8 @@ struct obj *obj;
         }
         (void) hold_another_object(can, "You make, but cannot pick up, %s.",
                                    doname(can), (const char *) 0);
+        if (mons[corpse->corpsenm].mlet == S_TROLL)
+            tnnt_achieve(A_BLOCKED_TROLL_REVIVAL);
     } else
         impossible("Tinning failed.");
 }
@@ -2369,6 +2371,8 @@ struct obj *tstone;
             makeknown(TOUCHSTONE);
             makeknown(obj->otyp);
             prinv((char *) 0, obj, 0L);
+            if (objects[obj->otyp].oc_material == GLASS)
+                tnnt_achieve(A_USED_TOUCHSTONE);
             return;
         } else {
             /* either a ring or the touchstone was not effective */

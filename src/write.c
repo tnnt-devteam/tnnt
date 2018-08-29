@@ -330,7 +330,10 @@ found:
         /* acknowledge the change in the object's description... */
         pline_The("spellbook warps strangely, then turns %s.",
                   new_book_description(new_obj->otyp, namebuf));
+        tnnt_achieve(A_WROTE_SPELLBOOK);
     }
+    else
+        tnnt_achieve(A_WROTE_SCROLL);
     new_obj->blessed = (curseval > 0);
     new_obj->cursed = (curseval < 0);
 #ifdef MAIL

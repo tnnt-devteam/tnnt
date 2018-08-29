@@ -2131,6 +2131,8 @@ register struct monst *mtmp;
         /* Monster is aggravated by being trapped by you.
            Recognizing who made the trap isn't completely
            unreasonable; everybody has their own style. */
+        if (trap->madeby_u)
+            tnnt_achieve(A_TRAPPED_MONSTER);
         if (trap->madeby_u && rnl(5))
             setmangry(mtmp, TRUE);
 
@@ -2881,9 +2883,11 @@ long hmask, emask; /* might cancel timeout */
             if (sticks(youmonst.data))
                 You("aren't able to maintain your hold on %s.",
                     mon_nam(u.ustuck));
-            else
+            else {
                 pline("Startled, %s can no longer hold you!",
                       mon_nam(u.ustuck));
+                tnnt_achieve(A_SURVIVED_DROWNING);
+            }
             u.ustuck = 0;
         }
         /* kludge alert:

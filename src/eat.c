@@ -1865,6 +1865,8 @@ struct obj *otmp;
                will be abused more times before illness completes */
             make_vomiting((Vomiting & TIMEOUT) + (long) d(10, 4), TRUE);
         } else {
+            if (otmp->otyp == KELP_FROND)
+                tnnt_achieve(A_GOT_KELP);
         give_feedback:
             pline("This %s is %s", singular(otmp, xname),
                   otmp->cursed

@@ -543,6 +543,7 @@ dosinkfall()
         You(innate_lev ? "wobble unsteadily for a moment."
                        : "gain control of your flight.");
     } else {
+        tnnt_achieve(A_FELL_ONTO_SINK);
         long save_ELev = ELevitation, save_HLev = HLevitation;
 
         /* fake removal of levitation in advance so that final
@@ -1958,6 +1959,10 @@ switch_terrain()
            be adjusted to "resume flying", but isn't worth the effort...] */
         if (Flying)
             You("start flying.");
+    }
+
+    if (lev->typ == ALTAR && In_mines(&u.uz)) {
+        tnnt_achieve(A_FOUND_MINES_ALTAR);
     }
 }
 

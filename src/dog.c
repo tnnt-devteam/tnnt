@@ -940,7 +940,10 @@ register struct obj *obj;
         if (dog_eat(mtmp, obj, mtmp->mx, mtmp->my, TRUE) == 2)
             return TRUE; /* oops, it died... */
         /* `obj' is now obsolete */
+        tnnt_achieve(A_TAMED_BY_FOOD);
     }
+    else
+        tnnt_achieve(A_TAMED_NOT_BY_FOOD);
 
     newsym(mtmp->mx, mtmp->my);
     if (attacktype(mtmp->data, AT_WEAP)) {

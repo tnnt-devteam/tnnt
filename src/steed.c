@@ -336,6 +336,8 @@ boolean force;      /* Quietly force this animal */
             pline("%s magically floats up!", Monnam(mtmp));
         You("mount %s.", mon_nam(mtmp));
     }
+    if (mtmp->data->mlet == S_DRAGON)
+        tnnt_achieve(A_RODE_DRAGON);
     /* setuwep handles polearms differently when you're mounted */
     if (uwep && is_pole(uwep))
         unweapon = FALSE;

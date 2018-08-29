@@ -1068,6 +1068,8 @@ struct obj *sobj; /* scroll, or fake spellbook object for scroll-like spell */
                 otmp->oerodeproof = 1;
                 costly_alteration(otmp, COST_DEGRD);
             }
+            if (new_erodeproof)
+                tnnt_achieve(A_ERODEPROOFED_ITEM);
             otmp->oerodeproof = new_erodeproof ? 1 : 0;
             break;
         }
@@ -1120,6 +1122,7 @@ struct obj *sobj; /* scroll, or fake spellbook object for scroll-like spell */
             setworn(otmp, W_ARM);
             if (otmp->unpaid)
                 alter_cost(otmp, 0L); /* shop bill */
+            tnnt_achieve(A_CREATED_DSM);
             break;
         }
         pline("%s %s%s%s%s for a %s.", Yname2(otmp),
@@ -1173,6 +1176,8 @@ struct obj *sobj; /* scroll, or fake spellbook object for scroll-like spell */
                 otmp->oerodeproof = 1;
                 costly_alteration(otmp, COST_DEGRD);
             }
+            if (new_erodeproof)
+                tnnt_achieve(A_ERODEPROOFED_ITEM);
             otmp->oerodeproof = new_erodeproof ? 1 : 0;
             break;
         }
@@ -2393,6 +2398,7 @@ unpunish()
     dealloc_obj(savechain);
     uball->spe = 0;
     setworn((struct obj *) 0, W_BALL);
+    tnnt_achieve(A_GOT_UNPUNISHED);
 }
 
 /* some creatures have special data structures that only make sense in their

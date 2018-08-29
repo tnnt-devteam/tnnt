@@ -311,6 +311,7 @@ dosit()
         dropy(uegg);
         stackobj(uegg);
         morehungry((int) objects[EGG].oc_nutrition);
+        tnnt_achieve(A_LAID_EGG);
     } else {
         pline("Having fun sitting on the %s?", surface(u.ux, u.uy));
     }

@@ -1778,6 +1778,9 @@ long timeout UNUSED;
                 if (!rn2(3))
                     break;
         } else { /* rot this corpse away */
+            if (!is_rider(mptr))
+                /* must be troll */
+                tnnt_achieve(A_BLOCKED_TROLL_REVIVAL);
             You_feel("%sless hassled.", is_rider(mptr) ? "much " : "");
             action = ROT_CORPSE;
             when = 250L - (monstermoves - body->age);

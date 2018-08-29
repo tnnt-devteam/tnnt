@@ -63,11 +63,13 @@ struct u_event {
  * TODO 2: what about achievements for stuff which is tracked by in-game
  * variables but is NOT expressed in the xlog, such as # of artifact gifts? For
  * now, I've put them on the list.
+ *  They do need to go on this list because otherwise there's no expression of it in the xlog.
+ *  They're NOT implemented unless marked as such.
  * TODO 3: I've also marked the achievements which are relatively easily
- * spammable, since discussion didn't resolve on whether these should remain in
+ * scummable, since discussion didn't resolve on whether these should remain in
  * or not. */
 enum tnnt_achievements {
-    A_ENTERED_MINETOWN = 0,
+    A_FOUND_MINES_ALTAR = 0,/* Implemented. */
     A_CONSULTED_ORACLE,     /* Tracked by in-game variable */
     A_STARTED_QUEST,        /* Tracked by in-game variable */
     A_ENTERED_PLANES,       /* Implemented. */
@@ -86,28 +88,29 @@ enum tnnt_achievements {
     A_ROBBED,               /* Implemented. */
     A_UNCURSED_IN_FOUNTAIN, /* Implemented. */
     A_LEARNED_LV5_SPELL,    /* Implemented. */
-    A_TAMED_DOMESTIC,
-    A_TAMED_NONDOMESTIC,
-    A_GRANTED_ARTI, /* Tracked by in-game variables */
-    A_CREATED_ARTI, /* trivial... */
-    A_GOT_EXCALIBUR,
-    A_CREATED_DSM, /* spammable... */
-    A_ROBBED_BY_NYMPH, /* spammable... */
-    A_ROBBED_BY_LEPRECHAUN,
-    A_ENCOUNTERED_FOOCUBUS, /* spammable... */
-    A_TRAPPED_MONSTER, /* spammable... */
+    A_TAMED_BY_FOOD,        /* Implemented. */
+    A_TAMED_NOT_BY_FOOD,    /* Implemented. */
+    A_GRANTED_ARTI,         /* Tracked by in-game variables */
+    A_CREATED_ARTI,         /* trivial... */
+    A_GOT_EXCALIBUR,        /* Implemented. */
+    A_CREATED_DSM,          /* Implemented. Scummable... */
+    A_ROBBED_BY_NYMPH,      /* Implemented. Scummable... */
+    A_ROBBED_BY_LEPRECHAUN, /* Implemented. */
+    A_ENCOUNTERED_FOOCUBUS, /* Implemented. Scummable... */
+    A_TRAPPED_MONSTER,      /* Implemented. Scummable... */
     A_AVENGED_ORCTOWN,
-    A_GOT_UNPUNISHED,
-    A_FELL_ONTO_SINK,
-    A_LEARNED_PASSTUNE, /* Tracked by in-game variables */
-    A_GOT_KELP,
-    A_USED_TOUCHSTONE, /* spammable... */
-    A_WROTE_SCROLL, /* spammable... */
-    A_RODE_DRAGON,
-    A_LAID_EGG, /* spammable... */
-    A_ERODEPROOFED_ITEM, /* spammable... */
-    A_THREW_UNICORN_GEM,
-    A_TINNED_TROLL, /* spammable... */
+    A_GOT_UNPUNISHED,       /* Implemented. */
+    A_FELL_ONTO_SINK,       /* Implemented. */
+    A_LEARNED_PASSTUNE,     /* Tracked by in-game variables */
+    A_GOT_KELP,             /* Implemented. */
+    A_USED_TOUCHSTONE,      /* Implemented. Scummable... */
+    A_WROTE_SCROLL,         /* Implemented. Scummable... */
+    A_WROTE_SPELLBOOK,      /* Implemented.  */
+    A_RODE_DRAGON,          /* Implemented. */
+    A_LAID_EGG,             /* Implemented. Scummable... */
+    A_ERODEPROOFED_ITEM,    /* Implemented. Scummable... */
+    A_THREW_UNICORN_GEM,    /* Implemented. */
+    A_BLOCKED_TROLL_REVIVAL,/* Implemented. Scummable... */
 };
 
 struct u_achieve {
