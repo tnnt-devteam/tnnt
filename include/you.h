@@ -68,8 +68,8 @@ struct u_event {
  * or not. */
 enum tnnt_achievements {
     A_ENTERED_MINETOWN = 0,
-    A_CONSULTED_ORACLE,
-    A_STARTED_QUEST,
+    A_CONSULTED_ORACLE, /* Tracked by in-game variable */
+    A_STARTED_QUEST, /* Tracked by in-game variable */
     A_ENTERED_PLANES,
     A_BOUGHT_PROTECTION,
     A_SURVIVED_STONING,
@@ -128,7 +128,7 @@ struct u_achieve {
     unsigned long long tnnt_achievements;
 };
 
-#define achieved(achvmt) \
+#define tnnt_achieve(achvmt) \
     u.uachieve.tnnt_achievements |= 1L << (achvmt);
 
 struct u_realtime {
