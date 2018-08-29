@@ -1121,6 +1121,7 @@ dokick()
                 }
                 exercise(A_DEX, TRUE);
                 exercise(A_WIS, TRUE); /* discovered a new food source! */
+                tnnt_achieve(A_KICKED_FRUIT_TREE);
                 newsym(x, y);
                 maploc->looted |= TREE_LOOTED;
                 return 1;

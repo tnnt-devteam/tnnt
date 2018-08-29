@@ -428,6 +428,7 @@ register struct obj *obj;
             if (!Blind)
                 pline_The("%s glows for a moment.", hliquid("water"));
             uncurse(obj);
+            tnnt_achieve(A_UNCURSED_IN_FOUNTAIN);
         } else {
             pline("A feeling of loss comes over you.");
         }

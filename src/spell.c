@@ -412,6 +412,9 @@ learn(VOID_ARGS)
         } else {
             spl_book[i].sp_id = booktype;
             spl_book[i].sp_lev = objects[booktype].oc_level;
+            if (objects[booktype].oc_level >= 5) {
+                tnnt_achieve(A_LEARNED_LV5_SPELL);
+            }
             incrnknow(i, 1);
             book->spestudied++;
             You(i > 0 ? "add %s to your repertoire." : "learn %s.", splname);

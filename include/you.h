@@ -68,24 +68,24 @@ struct u_event {
  * or not. */
 enum tnnt_achievements {
     A_ENTERED_MINETOWN = 0,
-    A_CONSULTED_ORACLE, /* Tracked by in-game variable */
-    A_STARTED_QUEST, /* Tracked by in-game variable */
-    A_ENTERED_PLANES,
-    A_BOUGHT_PROTECTION,
+    A_CONSULTED_ORACLE,     /* Tracked by in-game variable */
+    A_STARTED_QUEST,        /* Tracked by in-game variable */
+    A_ENTERED_PLANES,       /* Implemented. */
+    A_BOUGHT_PROTECTION,    /* Implemented. */
     A_SURVIVED_STONING,
     A_SURVIVED_SLIMING,
     A_SURVIVED_ILLNESS,
     A_SURVIVED_DROWNING,
-    A_USED_THRONE,
-    A_LOST_RING_IN_SINK,
+    A_USED_THRONE,          /* Implemented. */
+    A_DROPPED_RING_IN_SINK, /* Implemented. */
     A_CURED_LYCANTHROPY,
-    A_CONVERTED_ALTAR,
-    A_CHATTED_IZCHAK,
-    A_KICKED_FRUIT_TREE,
-    A_PURCHASED,
-    A_ROBBED,
-    A_UNCURSED_IN_FOUNTAIN,
-    A_LEARNED_LV5_SPELL,
+    A_CONVERTED_ALTAR,      /* Implemented. */
+    A_CHATTED_IZCHAK,       /* Implemented. */
+    A_KICKED_FRUIT_TREE,    /* Implemented. */
+    A_PURCHASED,            /* Implemented. */
+    A_ROBBED,               /* Implemented. */
+    A_UNCURSED_IN_FOUNTAIN, /* Implemented. */
+    A_LEARNED_LV5_SPELL,    /* Implemented. */
     A_TAMED_DOMESTIC,
     A_TAMED_NONDOMESTIC,
     A_GRANTED_ARTI, /* Tracked by in-game variables */

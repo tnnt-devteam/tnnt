@@ -159,6 +159,7 @@ dosit()
         You(sit_message, "drawbridge");
     } else if (IS_THRONE(typ)) {
         You(sit_message, defsyms[S_throne].explanation);
+        tnnt_achieve(A_USED_THRONE);
         if (rnd(6) > 4) {
             switch (rnd(13)) {
             case 1:

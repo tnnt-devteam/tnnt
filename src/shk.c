@@ -497,6 +497,7 @@ struct monst *shkp;
     You("stole %ld %s worth of merchandise.", total, currency(total));
     if (!Role_if(PM_ROGUE)) /* stealing is unlawful */
         adjalign(-sgn(u.ualign.type));
+    tnnt_achieve(A_ROBBED);
 
     hot_pursuit(shkp);
     return TRUE;
@@ -1012,6 +1013,10 @@ register struct monst *shkp;
         if (robbed < 0)
             robbed = 0L;
         ESHK(shkp)->robbed = robbed;
+    }
+    else {
+        /* only give achievement for regular above board paying */
+        tnnt_achieve(A_PURCHASED);
     }
 }
 

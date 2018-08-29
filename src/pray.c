@@ -1639,6 +1639,7 @@ dosacrifice()
                     if ((pri = findpriest(temple_occupied(u.urooms)))
                         && !p_coaligned(pri))
                         angry_priest();
+                    tnnt_achieve(A_CONVERTED_ALTAR);
                 } else {
                     pline("Unluckily, you feel the power of %s decrease.",
                           u_gname());

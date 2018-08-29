@@ -355,6 +355,7 @@ register struct obj *obj;
     boolean ideed = TRUE;
     boolean nosink = FALSE;
 
+    tnnt_achieve(A_DROPPED_RING_IN_SINK);
     You("drop %s down the drain.", doname(obj));
     obj->in_use = TRUE;  /* block free identification via interrupt */
     switch (obj->otyp) { /* effects that can be noticed without eyes */
