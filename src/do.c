@@ -1147,6 +1147,7 @@ boolean at_stairs, falling, portal;
             return;  /* must have the Amulet */
         if (!wizard) /* wizard ^V can bypass Earth level */
             assign_level(newlevel, &earth_level); /* (redundant) */
+        tnnt_achieve(A_ENTERED_PLANES);
     }
     new_ledger = ledger_no(newlevel);
     if (new_ledger <= 0)

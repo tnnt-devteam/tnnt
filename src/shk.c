@@ -4252,6 +4252,7 @@ struct monst *shkp;
     } else if (is_izchak(shkp, FALSE)) {
         if (!Deaf && !muteshk(shkp))
             pline(Izchak_speaks[rn2(SIZE(Izchak_speaks))], shkname(shkp));
+        tnnt_achieve(A_CHATTED_IZCHAK);
     } else {
         if (!Deaf && !muteshk(shkp))
             pline("%s talks about the problem of shoplifters.", shkname(shkp));

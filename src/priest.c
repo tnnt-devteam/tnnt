@@ -623,6 +623,7 @@ register struct monst *priest;
                     u.ublessed = rn1(3, 2);
             } else
                 u.ublessed++;
+            tnnt_achieve(A_BOUGHT_PROTECTION);
         } else {
             verbalize("Thy selfless generosity is deeply appreciated.");
             if (money_cnt(invent) < (offer * 2L) && coaligned) {
