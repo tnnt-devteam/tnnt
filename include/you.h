@@ -70,8 +70,8 @@ struct u_event {
  * or not. */
 enum tnnt_achievements {
     A_FOUND_MINES_ALTAR = 0,/* Implemented. */
-    A_CONSULTED_ORACLE,     /* Tracked by in-game variable */
-    A_STARTED_QUEST,        /* Tracked by in-game variable */
+    A_CONSULTED_ORACLE,     /* Implemented. */
+    A_STARTED_QUEST,        /* Implemented. */
     A_ENTERED_PLANES,       /* Implemented. */
     A_BOUGHT_PROTECTION,    /* Implemented. */
     A_CURED_LYCANTHROPY,    /* Implemented. */
@@ -90,7 +90,7 @@ enum tnnt_achievements {
     A_LEARNED_LV5_SPELL,    /* Implemented. */
     A_TAMED_BY_FOOD,        /* Implemented. */
     A_TAMED_NOT_BY_FOOD,    /* Implemented. */
-    A_GRANTED_ARTI,         /* Tracked by in-game variables */
+    A_GRANTED_ARTI,         /* Implemented. */
     A_CREATED_ARTI,         /* trivial... */
     A_GOT_EXCALIBUR,        /* Implemented. */
     A_CREATED_DSM,          /* Implemented. Scummable... */
@@ -101,7 +101,7 @@ enum tnnt_achievements {
     A_AVENGED_ORCTOWN,
     A_GOT_UNPUNISHED,       /* Implemented. */
     A_FELL_ONTO_SINK,       /* Implemented. */
-    A_LEARNED_PASSTUNE,     /* Tracked by in-game variables */
+    A_LEARNED_PASSTUNE,     /* Implemented. */
     A_GOT_KELP,             /* Implemented. */
     A_USED_TOUCHSTONE,      /* Implemented. Scummable... */
     A_WROTE_SCROLL,         /* Implemented. Scummable... */

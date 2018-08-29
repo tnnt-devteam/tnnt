@@ -1110,6 +1110,22 @@ int how;
     urealtime.finish_time = endtime = getnow();
     urealtime.realtime += (long) (endtime - urealtime.start_timing);
 
+    /* TNNT: flag certain achievements that are already tracked by in-game
+     * variables. No sense scattering more tnnt_achieve() calls through the
+     * code if the game already takes care of it. */
+    if (u.uevent.uheard_tune == 2)
+        tnnt_achieve(A_LEARNED_PASSTUNE);
+    if (u.uevent.minor_oracle || u.uevent.major_oracle)
+        tnnt_achieve(A_CONSULTED_ORACLE);
+    if (u.ugifts)
+        tnnt_achieve(A_GRANTED_ARTI);
+    if (quest_status.got_quest)
+        tnnt_achieve(A_STARTED_QUEST);
+    /* TODO: TNNT achievements that carry their own variables tracked in-game.
+     */
+
+    /* END TNNT code */
+
     dump_open_log(endtime);
     /* Sometimes you die on the first move.  Life's not fair.
      * On those rare occasions you get hosed immediately, go out
