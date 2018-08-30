@@ -60,11 +60,6 @@ struct u_event {
  * celestial disgrace.
  * Additionally, achievements for killing certain types of monsters are handled
  * elsewhere.  TODO: where elsewhere?
- * TODO 2: what about achievements for stuff which is tracked by in-game
- * variables but is NOT expressed in the xlog, such as # of artifact gifts? For
- * now, I've put them on the list.
- *  They do need to go on this list because otherwise there's no expression of it in the xlog.
- *  They're NOT implemented unless marked as such.
  * TODO 3: I've also marked the achievements which are relatively easily
  * scummable, since discussion didn't resolve on whether these should remain in
  * or not. */
@@ -73,6 +68,7 @@ enum tnnt_achievements {
     A_CONSULTED_ORACLE,     /* Implemented. */
     A_STARTED_QUEST,        /* Implemented. */
     A_ENTERED_PLANES,       /* Implemented. */
+    A_LEARNED_PASSTUNE,     /* Implemented. */
     A_BOUGHT_PROTECTION,    /* Implemented. */
     A_CURED_LYCANTHROPY,    /* Implemented. */
     A_CURED_STONING,        /* Implemented. */
@@ -101,7 +97,6 @@ enum tnnt_achievements {
     A_AVENGED_ORCTOWN,
     A_GOT_UNPUNISHED,       /* Implemented. */
     A_FELL_ONTO_SINK,       /* Implemented. */
-    A_LEARNED_PASSTUNE,     /* Implemented. */
     A_GOT_KELP,             /* Implemented. */
     A_USED_TOUCHSTONE,      /* Implemented. Scummable... */
     A_WROTE_SCROLL,         /* Implemented. Scummable... */
