@@ -205,12 +205,18 @@
    (whose name can be overridden via #define in global.h if desired) */
 #define LOGFILE  "logfile"  /* larger file for debugging purposes */
 #define XLOGFILE "xlogfile" /* even larger logfile */
+#define LIVELOGFILE "livelog" /* in-game events recorded live */
+#ifdef LIVELOGFILE
+/* LL_flags defined in global.h. Value below is ignored if SYSCF is enabled */
+/* #define LIVELOG_DETAIL (LL_WISH|LL_ACHIEVE|LL_UMONST) */
+#define LIVELOG_DETAIL 0x0FFF
+#endif
 #define NEWS     "news"     /* the file containing the latest hack news */
 #define PANICLOG "paniclog" /* log of panic and impossible events */
 
 /* alternative paniclog format, better suited for public servers with
    many players, as it saves the player name and the game start time */
-/* #define PANICLOG_FMT2 */
+#define PANICLOG_FMT2
 
 /*
  *      PERSMAX, POINTSMIN, ENTRYMAX, PERS_IS_UID:
@@ -345,7 +351,7 @@
  * otherwise it will be the current directory.
  */
 #ifndef HACKDIR
-#define HACKDIR "/usr/games/lib/nethackdir"
+#define HACKDIR "/tnnt"
 #endif
 
 /*
@@ -455,7 +461,7 @@ typedef unsigned char uchar;
  *  FALSE: Show all errors as normal, with line numbers and context.
  */
 #ifndef CONFIG_ERROR_SECURE
-# define CONFIG_ERROR_SECURE TRUE
+# define CONFIG_ERROR_SECURE FALSE
 #endif
 
 /*
@@ -515,10 +521,21 @@ typedef unsigned char uchar;
    but it isn't necessary for successful operation of the program */
 #define FREE_ALL_MEMORY             /* free all memory at exit */
 
+/* Extra enhancements borrowed from nao343 and elsewhwere
+   for dgamelaunch-based server play */
+#define DGAMELAUNCH
+#ifdef DGAMELAUNCH
+#define EXTRAINFO_FN    "/dgldir/extrainfo-tnnt/%n.extrainfo"
+#define MAILCKFREQ 5  /* SIMPLE_MAIL is in unixconf.h */
+#endif
+
+
 /* EDIT_GETLIN makes the string input in TTY, Qt4, and X11
    so some prompts will remember the previously input text
    (within the same session) */
 /* #define EDIT_GETLIN */
+
+#define WHEREIS_FILE "whereis/%n.whereis" /* Write out player's current location to player.whereis */
 
 /* #define DUMPLOG */  /* End-of-game dump logs */
 #ifdef DUMPLOG

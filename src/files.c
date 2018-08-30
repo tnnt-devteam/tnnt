@@ -12,6 +12,13 @@
 #include "wintty.h" /* more() */
 #endif
 
+#ifdef WHEREIS_FILE
+#include <ctype.h> /* whereis-file tolower() */
+#ifdef UNIX
+#include <sys/stat.h> /* whereis-file chmod() */
+#endif
+#endif
+
 #if (!defined(MAC) && !defined(O_WRONLY) && !defined(AZTEC_C)) \
     || defined(USE_FCNTL)
 #include <fcntl.h>
@@ -85,6 +92,10 @@ char lock[PL_NSIZ + 25]; /* long enough for username+-+name+.99 */
 #endif
 #endif
 
+#ifdef WHEREIS_FILE
+char whereis_file[255]=WHEREIS_FILE;
+#endif
+
 #if defined(UNIX) || defined(__BEOS__)
 #define SAVESIZE (PL_NSIZ + 13) /* save/99999player.e */
 #else
@@ -124,6 +135,10 @@ struct level_ftrack {
 #include <share.h>
 #endif
 #endif /*HOLD_LOCKFILE_OPEN*/
+
+#ifdef WHEREIS_FILE
+STATIC_DCL void FDECL(write_whereis, (int));
+#endif
 
 #define WIZKIT_MAX 128
 static char wizkit[WIZKIT_MAX];
@@ -608,6 +623,10 @@ clearlocks()
             delete_levelfile(x); /* not all levels need be present */
     }
 #endif /* ?PC_LOCKING,&c */
+
+#ifdef WHEREIS_FILE
+	delete_whereis();
+#endif
 }
 
 #if defined(SELECTSAVED)
@@ -700,6 +719,95 @@ int fd;
     return close(fd);
 }
 #endif /* ?HOLD_LOCKFILE_OPEN */
+
+#ifdef WHEREIS_FILE
+/** Set the filename for the whereis file. */
+void
+set_whereisfile()
+{
+	char *p = (char *) strstr(whereis_file, "%n");
+	if (p) {
+		int new_whereis_len = strlen(whereis_file)+strlen(plname)-2; /* %n */
+		char *new_whereis_fn = (char *) alloc((unsigned)(new_whereis_len+1));
+		char *q = new_whereis_fn;
+		strncpy(q, whereis_file, p-whereis_file);
+		q += p-whereis_file;
+		strncpy(q, plname, strlen(plname) + 1);
+		regularize(q);
+		q[strlen(plname)] = '\0';
+		q += strlen(q);
+		p += 2;   /* skip "%n" */
+		strncpy(q, p, strlen(p));
+		new_whereis_fn[new_whereis_len] = '\0';
+		Sprintf(whereis_file,new_whereis_fn);
+		free(new_whereis_fn); /* clean up the pointer */
+	}
+}
+ /** Write out information about current game to plname.whereis. */
+void
+write_whereis(playing)
+boolean playing; /**< True if game is running.  */
+{
+	FILE* fp;
+	char whereis_work[511];
+	if (strstr(whereis_file, "%n")) set_whereisfile();
+	Sprintf(whereis_work,
+	        "player=%s:depth=%d:dnum=%d:dname=%s:hp=%d:maxhp=%d:turns=%ld:score=%ld:role=%s:race=%s:gender=%s:align=%s:conduct=0x%lx:amulet=%d:ascended=%d:playing=%d\n",
+	        plname,
+	        depth(&u.uz),
+	        u.uz.dnum,
+	        dungeons[u.uz.dnum].dname,
+	        u.uhp,
+	        u.uhpmax,
+	        moves,
+#ifdef SCORE_ON_BOTL
+	        botl_score(),
+#else
+	        0L,
+#endif
+	        (flags.female && urole.name.f) ? urole.name.f : urole.name.m,
+	        urace.adj,
+	        genders[flags.female].filecode,
+	        align_str(u.ualign.type),
+#ifdef RECORD_CONDUCT
+	        encodeconduct(),
+#else
+	        0L,
+#endif
+	        u.uhave.amulet ? 1 : 0,
+	        u.uevent.ascended ? 2 : killer.name ? 1 : 0,
+	        playing);
+ 	fp = fopen_datafile(whereis_file,"w",LEVELPREFIX);
+	if (fp) {
+#ifdef UNIX
+		mode_t whereismode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
+		chmod(fqname(whereis_file, LEVELPREFIX, 2), whereismode);
+#endif
+		fwrite(whereis_work,strlen(whereis_work),1,fp);
+		fclose(fp);
+	} else {
+		pline("Can't open %s for output.", whereis_file);
+		pline("No whereis file created.");
+	}
+}
+ /** Signal handler to update whereis information. */
+void
+signal_whereis(sig_unused)
+int sig_unused;
+{
+	touch_whereis();
+}
+ void
+touch_whereis()
+{
+	write_whereis(TRUE);
+}
+ void
+delete_whereis()
+{
+	write_whereis(FALSE);
+}
+#endif /* WHEREIS_FILE */
 
 /* ----------  END LEVEL FILE HANDLING ----------- */
 
@@ -4161,5 +4269,101 @@ int bufsz;
 }
 
 /* ----------  END TRIBUTE ----------- */
+
+#ifdef EXTRAINFO_FN
+char *
+dump_format_str(char *str)
+{
+    static char buf[512];
+    char *f, *p, *end;
+    int ispercent = 0;
+     buf[0] = '\0';
+     if (!str) return NULL;
+     f = str;
+    p = buf;
+    end = buf + sizeof(buf) - 10;
+     while (*f) {
+      if (ispercent) {
+        switch (*f) {
+        case 't':
+          snprintf (p, end + 1 - p, "%ld", ubirthday);
+          while (*p != '\0')
+            p++;
+          break;
+        case 'N':
+          *p = plname[0];
+          p++;
+          *p = '\0';
+          break;
+        case 'n':
+          snprintf (p, end + 1 - p, "%s", plname);
+          while (*p != '\0')
+            p++;
+          break;
+        default:
+          *p = *f;
+          if (p < end)
+            p++;
+        }
+        ispercent = 0;
+      } else {
+        if (*f == '%')
+          ispercent = 1;
+        else {
+          *p = *f;
+          if (p < end)
+            p++;
+        }
+      }
+      f++;
+    }
+    *p = '\0';
+     return buf;
+}
+ void
+mk_dgl_extrainfo()
+{
+    FILE *extrai = (FILE *)0;
+#ifdef UNIX
+    mode_t eimode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+#endif
+    char new_fn[512];
+     Sprintf(new_fn, "%s", dump_format_str(EXTRAINFO_FN));
+     extrai = fopen(new_fn, "w");
+    if (!extrai) {
+    } else {
+        int sortval = 0;
+        char tmpdng[16];
+        sortval += (u.uhave.amulet ? 1024 : 0);
+        if (Is_knox(&u.uz)) {
+            Sprintf(tmpdng, "%s", "Knx");
+            sortval += 245;
+        } else if (In_quest(&u.uz)) {
+            Sprintf(tmpdng, "%s%i", "Q", dunlev(&u.uz));
+            sortval += 250+(dunlev(&u.uz));
+        } else if (In_endgame(&u.uz)) {
+            Sprintf(tmpdng, "%s", "End");
+            sortval += 256;
+        } else if (In_tower(&u.uz)) {
+            Sprintf(tmpdng, "T%i", dunlev(&u.uz));
+            sortval += 235+(depth(&u.uz));
+        } else if (In_sokoban(&u.uz)) {
+            Sprintf(tmpdng, "S%i", dunlev(&u.uz));
+            sortval += 225+(depth(&u.uz));
+        } else if (In_mines(&u.uz)) {
+            Sprintf(tmpdng, "M%i", dunlev(&u.uz));
+            sortval += 215+(dunlev(&u.uz));
+        } else {
+            Sprintf(tmpdng, "D%i", depth(&u.uz));
+            sortval += (depth(&u.uz));
+        }
+#ifdef UNIX
+        chmod(new_fn, eimode);
+#endif
+        fprintf(extrai, "%i|%c %s", sortval, (u.uhave.amulet ? 'A' : ' '), tmpdng);
+        fclose(extrai);
+    }
+}
+#endif /* EXTRAINFO_FN */
 
 /*files.c*/

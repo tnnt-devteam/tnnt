@@ -19,6 +19,10 @@ STATIC_DCL void FDECL(regen_hp, (int));
 STATIC_DCL void FDECL(interrupt_multi, (const char *));
 STATIC_DCL void FDECL(debug_fields, (const char *));
 
+#ifdef EXTRAINFO_FN
+static long prev_dgl_extrainfo = 0;
+#endif
+
 void
 moveloop(resuming)
 boolean resuming;
@@ -81,6 +85,11 @@ boolean resuming;
     context.move = 0;
 
     program_state.in_moveloop = 1;
+
+#ifdef WHEREIS_FILE
+    touch_whereis();
+#endif
+
     for (;;) {
 #ifdef SAFERHANGUP
         if (program_state.done_hup)
@@ -183,6 +192,13 @@ boolean resuming;
                         u.ublesscnt--;
                     if (flags.time && !context.run)
                         context.botl = 1;
+
+#ifdef EXTRAINFO_FN
+                    if ((prev_dgl_extrainfo == 0) || (prev_dgl_extrainfo < (moves + 250))) {
+                        prev_dgl_extrainfo = moves;
+                        mk_dgl_extrainfo();
+                    }
+#endif
 
                     /* One possible result of prayer is healing.  Whether or
                      * not you get healed depends on your current hit points.
@@ -667,8 +683,8 @@ boolean new_game; /* false => restoring an old game */
                 : currentgend != flags.initgend))
         Sprintf(eos(buf), " %s", genders[currentgend].adj);
 
-    pline(new_game ? "%s %s, welcome to NetHack!  You are a%s %s %s."
-                   : "%s %s, the%s %s %s, welcome back to NetHack!",
+    pline(new_game ? "%s %s, welcome to The November NetHack Tournament!  You are a%s %s %s."
+                   : "%s %s, the%s %s %s, welcome back to The November NetHack Tournament!",
           Hello((struct monst *) 0), plname, buf, urace.adj,
           (currentgend && urole.name.f) ? urole.name.f : urole.name.m);
 }

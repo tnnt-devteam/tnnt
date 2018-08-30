@@ -803,12 +803,21 @@ E int FDECL(nhclose, (int));
 #ifdef HOLD_LOCKFILE_OPEN
 E void NDECL(really_close);
 #endif
+#ifdef WHEREIS_FILE
+E void NDECL(touch_whereis);
+E void NDECL(delete_whereis);
+E void FDECL(signal_whereis, (int));
+#endif
 #ifdef DEBUG
 E boolean FDECL(debugcore, (const char *, BOOLEAN_P));
 #endif
 E boolean FDECL(read_tribute, (const char *, const char *, int,
                                char *, int, unsigned));
 E boolean FDECL(Death_quote, (char *, int));
+
+#ifdef EXTRAINFO_FN
+E void NDECL(mk_dgl_extrainfo);
+#endif
 
 /* ### fountain.c ### */
 
@@ -2406,6 +2415,10 @@ E int NDECL(wiz_timeout_queue);
 E void NDECL(timer_sanity_check);
 
 /* ### topten.c ### */
+
+#ifdef RECORD_CONDUCT
+E long FDECL(encodeconduct, (void));
+#endif
 
 E void FDECL(formatkiller, (char *, unsigned, int, BOOLEAN_P));
 E void FDECL(topten, (int, time_t));
