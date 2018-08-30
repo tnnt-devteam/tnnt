@@ -201,7 +201,7 @@
    read within game, from demon-delivered mail scrolls.
    The mail spool file will be deleted once the player
    has read the message. */
-/* #define SIMPLE_MAIL */
+#define SIMPLE_MAIL
 
 #ifndef MAILCKFREQ
 /* How often mail spool file is checked for new messages, in turns */
@@ -237,7 +237,7 @@
 #endif
 
 #ifndef FCMASK
-#define FCMASK 0660 /* file creation mask */
+#define FCMASK 0644 /* file creation mask */
 #endif
 
 /* fcntl(2) is a POSIX-portable call for manipulating file descriptors.
