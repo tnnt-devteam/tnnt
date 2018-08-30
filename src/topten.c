@@ -425,6 +425,8 @@ encodeconduct()
         e |= 1L << 10;
     if (!num_genocides())
         e |= 1L << 11;
+    if (!u.uconduct.elbereth)
+        e |= 1L << 12;
 
     return e;
 }
