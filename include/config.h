@@ -210,7 +210,7 @@
 
 /* alternative paniclog format, better suited for public servers with
    many players, as it saves the player name and the game start time */
-/* #define PANICLOG_FMT2 */
+#define PANICLOG_FMT2
 
 /*
  *      PERSMAX, POINTSMIN, ENTRYMAX, PERS_IS_UID:
@@ -345,7 +345,7 @@
  * otherwise it will be the current directory.
  */
 #ifndef HACKDIR
-#define HACKDIR "/usr/games/lib/nethackdir"
+#define HACKDIR "/tnnt"
 #endif
 
 /*
