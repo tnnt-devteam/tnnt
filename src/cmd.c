@@ -115,6 +115,7 @@ static int NDECL(dosuspend_core); /**/
 
 static int NDECL((*timed_occ_fn));
 
+STATIC_PTR int NDECL(doshowachievements);
 STATIC_PTR int NDECL(doherecmdmenu);
 STATIC_PTR int NDECL(dotherecmdmenu);
 STATIC_PTR int NDECL(doprev_message);
@@ -2881,6 +2882,10 @@ struct ext_func_tab extcmdlist[] = {
             doextcmd, IFBURIED | GENERALCMD },
     { M('?'), "?", "list all extended commands",
             doextlist, IFBURIED | AUTOCOMPLETE | GENERALCMD },
+    /* TODO: remove the autocomplete and possibly this entire command before
+     * the tournament */
+    { '\0', "achievements", "display your TNNT achievements",
+            doshowachievements, IFBURIED | AUTOCOMPLETE | WIZMODECMD },
     { M('a'), "adjust", "adjust inventory letters",
             doorganize, IFBURIED | AUTOCOMPLETE },
     { M('A'), "annotate", "name current level",
@@ -4680,6 +4685,16 @@ register int x, y;
 {
     /* x corresponds to curx, so x==1 is the first column. Ach. %% */
     return x >= 1 && x <= COLNO - 1 && y >= 0 && y <= ROWNO - 1;
+}
+
+/* #achievements command */
+STATIC_PTR int
+doshowachievements(VOID_ARGS)
+{
+    int i;
+    for (i = 0; i < SIZE(u.uachieve.tnnt_achievements); ++i) {
+        pline("achv[%d]: 0x%llx", i, u.uachieve.tnnt_achievements[i]);
+    }
 }
 
 /* #herecmdmenu command */
