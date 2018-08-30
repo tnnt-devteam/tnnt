@@ -12,6 +12,7 @@
 #include "prop.h" /* (needed here for util/makedefs.c) */
 #endif
 #include "skills.h"
+#include <stdint.h>
 
 /*** Substructures ***/
 
@@ -193,13 +194,13 @@ struct u_achieve {
 
     Bitfield(killed_medusa, 1);
 
-    /* 64 bits for the TNNT achievements above. If we come up with more than
-     * 64, we'll have to figure something else out... */
-    unsigned long long tnnt_achievements;
+    /* 64 bits for the TNNT achievements above. Since there are more than 64
+     * achievements, we need multiple 64 bit ints. */
+    uint64_t tnnt_achievements[2];
 };
 
 #define tnnt_achieve(achvmt) \
-    u.uachieve.tnnt_achievements |= 1L << (achvmt);
+    u.uachieve.tnnt_achievements[achvmt / 64] |= 1L << (achvmt % 64);
 
 struct u_realtime {
     long   realtime;     /* accumulated playing time in seconds */
