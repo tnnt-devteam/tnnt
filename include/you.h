@@ -65,25 +65,25 @@ struct u_event {
  * scummable, since discussion didn't resolve on whether these should remain in
  * or not. */
 enum tnnt_achievements {
-    A_FOUND_MINES_ALTAR = 0,/* Implemented. */
-    A_CONSULTED_ORACLE,     /* Implemented. */
-    A_STARTED_QUEST,        /* Implemented. */
-    A_ENTERED_PLANES,       /* Implemented. */
-    A_LEARNED_PASSTUNE,     /* Implemented. */
-    A_BOUGHT_PROTECTION,    /* Implemented. */
-    A_CURED_LYCANTHROPY,    /* Implemented. */
-    A_CURED_STONING,        /* Implemented. */
-    A_CURED_SLIMING,        /* Implemented. */
-    A_CURED_ILLNESS,        /* Implemented. */
+    A_FOUND_MINES_ALTAR = 0,/* Implemented,tested. */
+    A_CONSULTED_ORACLE,     /* Implemented,tested. */
+    A_STARTED_QUEST,        /* Implemented,tested. */
+    A_ENTERED_PLANES,       /* Implemented,tested. */
+    A_LEARNED_PASSTUNE,     /* Implemented,tested. */
+    A_BOUGHT_PROTECTION,    /* Implemented,tested. */
+    A_CURED_LYCANTHROPY,    /* Implemented,tested. */
+    A_CURED_STONING,        /* Implemented,tested. */
+    A_CURED_SLIMING,        /* Implemented,tested. */
+    A_CURED_ILLNESS,        /* Implemented,tested. */
     A_SURVIVED_DROWNING,
-    A_USED_THRONE,          /* Implemented. */
-    A_DROPPED_RING_IN_SINK, /* Implemented. */
-    A_CONVERTED_ALTAR,      /* Implemented. */
-    A_CHATTED_IZCHAK,       /* Implemented. */
-    A_KICKED_FRUIT_TREE,    /* Implemented. */
-    A_PURCHASED,            /* Implemented. */
-    A_ROBBED,               /* Implemented. */
-    A_UNCURSED_IN_FOUNTAIN, /* Implemented. */
+    A_USED_THRONE,          /* Implemented,tested. */
+    A_DROPPED_RING_IN_SINK, /* Implemented,tested. */
+    A_CONVERTED_ALTAR,      /* Implemented,tested. */
+    A_CHATTED_IZCHAK,       /* Implemented,tested. */
+    A_KICKED_FRUIT_TREE,    /* Implemented,tested. */
+    A_PURCHASED,            /* Implemented,tested. */
+    A_ROBBED,               /* Implemented,tested. */
+    A_UNCURSED_IN_FOUNTAIN, /* Implemented,tested. */
     A_LEARNED_LV5_SPELL,    /* Implemented. */
     A_TAMED_BY_FOOD,        /* Implemented. */
     A_TAMED_NOT_BY_FOOD,    /* Implemented. */
