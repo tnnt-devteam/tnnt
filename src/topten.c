@@ -346,6 +346,7 @@ int how;
 #define Fprintf (void) fprintf
 #define XLOG_SEP '\t' /* xlogfile field separator. */
     char buf[BUFSZ], tmpbuf[DTHSZ + 1];
+    int i;
 
     Sprintf(buf, "version=%d.%d.%d", tt->ver_major, tt->ver_minor,
             tt->patchlevel);
@@ -377,6 +378,10 @@ int how;
             genders[flags.initgend].filecode, XLOG_SEP,
             aligns[1 - u.ualignbase[A_ORIGINAL]].filecode);
     Fprintf(rfile, "%cflags=0x%lx", XLOG_SEP, encodexlogflags());
+    for (i = 0; i < SIZE(u.uachieve.tnnt_achievements); ++i) {
+        Fprintf(rfile, "%ctnntachieve%d=0x%llx", XLOG_SEP, i,
+                u.uachieve.tnnt_achievements[i]);
+    }
     Fprintf(rfile, "\n");
 #undef XLOG_SEP
 }
