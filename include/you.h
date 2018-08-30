@@ -87,7 +87,6 @@ enum tnnt_achievements {
     A_TAMED_BY_FOOD,        /* Implemented. */
     A_TAMED_NOT_BY_FOOD,    /* Implemented. */
     A_GRANTED_ARTI,         /* Implemented. */
-    A_CREATED_ARTI,         /* trivial... */
     A_GOT_EXCALIBUR,        /* Implemented. */
     A_CREATED_DSM,          /* Implemented. Scummable... */
     A_ROBBED_BY_NYMPH,      /* Implemented. Scummable... */
@@ -95,6 +94,7 @@ enum tnnt_achievements {
     A_ENCOUNTERED_FOOCUBUS, /* Implemented. Scummable... */
     A_TRAPPED_MONSTER,      /* Implemented. Scummable... */
     A_AVENGED_ORCTOWN,
+    A_CLEARED_BIGROOM,
     A_GOT_UNPUNISHED,       /* Implemented. */
     A_FELL_ONTO_SINK,       /* Implemented. */
     A_GOT_KELP,             /* Implemented. */
@@ -106,6 +106,78 @@ enum tnnt_achievements {
     A_ERODEPROOFED_ITEM,    /* Implemented. Scummable... */
     A_THREW_UNICORN_GEM,    /* Implemented. */
     A_BLOCKED_TROLL_REVIVAL,/* Implemented. Scummable... */
+    A_ENTERED_VAULT,
+    /* A_ENTERED_ANTHOLE, etc...? */
+    A_KILLED_GHOST,
+    A_REVIVIFIED_CORPSE,
+    A_DESTROYED_VIA_TURN,
+    A_ATE_MILITARY_RATION,
+    A_BLEW_UP_DRAWBRIDGE,
+    A_GOT_LIFESAVED,
+    A_USED_CORRECT_BANE,
+    A_DUG_UP_GRAVE,
+    A_KILLED_MOLOCH_PRIEST,
+    A_CAUSED_EARTHQUAKE,
+    A_CHARMED_SNAKE,
+    A_KILLED_DRAGON,
+    A_EVADED_BRAINSUCK,
+    A_HIT_WITH_BOOMERANG,
+    A_DEALT_SILVER_DAMAGE,
+    A_MADE_CRYSKNIFE,
+    A_KILLED_RUBBER_HOSE,
+    A_WIZ_WORE_CORNUTHAUM,
+    A_WORE_MITHRIL_COAT,
+    A_FOUND_10_GRAFFITI,
+    A_SPLIT_A_PUDDING,
+    A_WORE_MEAT_RING,
+    A_LOOTED_ICE_BOX,
+    A_ANIMATED_FIGURINE,
+    A_NERD,
+    A_CHARGED_AN_OBJECT,
+    A_KICKED_EMBEDDED_ITEM,
+    A_SNAGGED_WITH_HOOK,
+    A_REFILLED_CANDELABRUM,
+    A_ATE_ALL_PRODUCE,
+    A_ATE_ALL_FOODS,
+    A_REFILLED_OIL_LAMP,
+    A_LIT_OIL_POTION,
+    A_LIT_UP_GREMLIN,
+    A_ALCHEMIZED,
+    A_GASSED_MONSTER,
+    A_READ_NOVEL,
+    A_TALKED_TO_DEATH,
+    A_IDENTIFIED_ALL_GEMS,
+    A_GOT_SPBOOK_FROM_STATUE,
+    A_SUMMONED_NYMPH,
+    A_FULLY_RAISED_PET,
+    A_GOT_OBJECT_UNDERWATER,
+    A_RODE_WUMPUS_OVER_WATER,
+    A_KILLED_TAMED_WOODCHUCK,
+    A_KILLED_ARCHON,
+    A_TAMED_SHAPECHANGER,
+    A_TAMED_7_CATS,
+    A_OPENED_SCHROEDINGERS,
+    A_FREED_PRISONER,
+    A_UNTRAPPED_PET,
+    A_READ_MAIL,
+    A_ATE_ROYAL_JELLY,
+    A_GOT_CORPSE_INTRINSIC,
+    A_BANKRUPTED_SHOPKEEPER,
+    A_POLYED_PET_ON_TRAP,
+    A_CHANGED_GENDER,
+    A_HATCHED_EGG_TAME,
+    A_HEALED_BY_NURSE,
+    A_KILLED_WHILE_IN_PIT,
+    A_KILLED_INVISIBLE,
+    A_FELL_DOWN_SHAFT
+
+    /* boring
+    A_SHOPPED_WITH_LEASHED,
+    A_NO_SHIRT_NO_SHOES,
+    */
+    /* Won't implement on account of being trivial.
+    A_CREATED_ARTI,
+    */
 };
 
 struct u_achieve {
