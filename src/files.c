@@ -765,10 +765,10 @@ boolean playing; /**< True if game is running.  */
 #else
 	        0L,
 #endif
-	        (flags.female && urole.name.f) ? urole.name.f : urole.name.m,
-	        urace.adj,
+	        urole.filecode,
+	        urace.filecode,
 	        genders[flags.female].filecode,
-	        align_str(u.ualign.type),
+	        aligns[1-u.ualign.type].filecode,
 #ifdef RECORD_CONDUCT
 	        encodeconduct(),
 #else
