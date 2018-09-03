@@ -11,7 +11,6 @@
 
 #PREFIX=/usr
 PREFIX=$(wildcard ~)/tnnth/install
-PREFIX=/opt
 HACKDIR=$(PREFIX)/games/lib/$(GAME)dir
 SHELLDIR = $(PREFIX)/games
 INSTDIR=$(HACKDIR)
@@ -21,7 +20,7 @@ VARDIR = $(HACKDIR)
 
 POSTINSTALL=cp -n sys/unix/sysconf $(INSTDIR)/sysconf; $(CHOWN) $(GAMEUID) $(INSTDIR)/sysconf; $(CHGRP) $(GAMEGRP) $(INSTDIR)/sysconf; chmod $(VARFILEPERM) $(INSTDIR)/sysconf;
 
-CFLAGS=-g -O -I../include -DNOTPARMDECL -DDLB
+CFLAGS=-g -O0 -I../include -DNOTPARMDECL -DDLB
 CFLAGS+=-DCOMPRESS=\"/bin/gzip\" -DCOMPRESS_EXTENSION=\".gz\"
 CFLAGS+=-DSYSCF -DSYSCF_FILE=\"$(HACKDIR)/sysconf\" -DSECURE
 CFLAGS+=-DTIMED_DELAY
@@ -38,12 +37,6 @@ WINLIB = $(WINTTYLIB)
 
 WINTTYLIB=-lcurses
 
-CHOWN=chown
-CHGRP=chgrp
-
-GAMEUID=games
-GAMEGRP=bin
-
 VARDIRPERM = 0755
 VARFILEPERM = 0600
-GAMEPERM = 4755
+GAMEPERM = 0755
