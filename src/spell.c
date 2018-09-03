@@ -481,6 +481,9 @@ register struct obj *spellbook;
             return 1;
         }
 
+        if (uarmu && (ublindf && ublindf->otyp == LENSES))
+            tnnt_achieve(A_NERD); /* Neeeeeeeerrrd! */
+
         /* 3.6 tribute */
         if (booktype == SPE_NOVEL) {
             /* Obtain current Terry Pratchett book title */

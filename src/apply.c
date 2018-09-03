@@ -1212,9 +1212,12 @@ struct obj **optr;
                       otmp->lamplit ? "burn" : "use",
                       (obj->quan > 1L) ? "them" : "it",
                       (obj->quan > 1L) ? "them" : "it");
-        if (obj->quan < 7L && otmp->spe == 7)
+        if (obj->quan < 7L && otmp->spe == 7) {
             pline("%s now has seven%s candles attached.", The(xname(otmp)),
                   otmp->lamplit ? " lit" : "");
+            if (u.uevent.invoked)
+                tnnt_achieve(A_REFILLED_CANDELABRUM);
+        }
         /* candelabrum's light range might increase */
         if (otmp->lamplit)
             obj_merge_light_sources(otmp, otmp);
@@ -1403,6 +1406,8 @@ struct obj **optr;
 
     You("light %spotion.%s", shk_your(buf, obj),
         Blind ? "" : "  It gives off a dim light.");
+
+    tnnt_achieve(A_LIT_OIL_POTION);
 
     if (obj->unpaid && costly_spot(u.ux, u.uy)) {
         /* Normally, we shouldn't both partially and fully charge
@@ -2248,6 +2253,7 @@ struct obj **optr;
     (void) make_familiar(obj, cc.x, cc.y, FALSE);
     (void) stop_timer(FIG_TRANSFORM, obj_to_any(obj));
     useup(obj);
+    tnnt_achieve(A_ANIMATED_FIGURINE);
     *optr = 0;
 }
 
@@ -3190,6 +3196,7 @@ struct obj *obj;
     case 1: /* Object */
         if ((otmp = level.objects[cc.x][cc.y]) != 0) {
             You("snag an object from the %s!", surface(cc.x, cc.y));
+            tnnt_achieve(A_SNAGGED_WITH_HOOK);
             (void) pickup_object(otmp, 1L, FALSE);
             /* If pickup fails, leave it alone */
             newsym(cc.x, cc.y);

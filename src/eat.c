@@ -1369,6 +1369,9 @@ const char *mesg;
         cprefx(mnum);
         cpostfx(mnum);
 
+        /* more highly unstable TNNT code! isn't this fun? */
+        u.uachieve.foods_eaten |= 0x100000000; /* TIN */
+
         /* charge for one at pre-eating cost */
         tin = costly_tin(COST_OPEN);
 
@@ -1734,6 +1737,13 @@ struct obj *otmp;
               (yummy || !palatable) ? '!' : '.');
     }
 
+    /* wow this TNNT unstable code is just being scattered everywhere */
+    if (glob)
+        /* treat eating one glob as eating all types */
+        u.uachieve.foods_eaten |= 0x780; /* All GLOB_* */
+    else
+        u.uachieve.foods_eaten |= 0x2; /* CORPSE */
+
     return retcode;
 }
 
@@ -1886,8 +1896,14 @@ struct obj *otmp;
                will be abused more times before illness completes */
             make_vomiting((Vomiting & TIMEOUT) + (long) d(10, 4), TRUE);
         } else {
-            if (otmp->otyp == KELP_FROND)
+            /* TNNT: achievements for eating certain foods */
+            if (otmp->otyp == KELP_FROND) {
                 tnnt_achieve(A_GOT_KELP);
+            }
+            else if (otmp->otyp == C_RATION || otmp->otyp == K_RATION) {
+                tnnt_achieve(A_ATE_MILITARY_RATION);
+            }
+
         give_feedback:
             pline("This %s is %s", singular(otmp, xname),
                   otmp->cursed
@@ -2196,6 +2212,10 @@ STATIC_OVL void
 fpostfx(otmp)
 struct obj *otmp;
 {
+    /* this is highly unstable and relies on TRIPE_RATION being the
+     * first defined food */
+    u.uachieve.foods_eaten |= 1L << (otmp->otyp - TRIPE_RATION);
+
     switch (otmp->otyp) {
     case SPRIG_OF_WOLFSBANE:
         if (u.ulycn >= LOW_PM || is_were(youmonst.data))
@@ -2586,7 +2606,7 @@ doeat()
                 livelog_printf(LL_CONDUCT, "tasted meat for the first time, by eating %s", an(food_xname(otmp,FALSE)));
             violated_vegetarian();
         } else if (material == WAX)
-            if(!u.uconduct.unvegan++ && !ll_conduct) 
+            if(!u.uconduct.unvegan++ && !ll_conduct)
                 livelog_printf(LL_CONDUCT, "consumed animal products for the first time, by eating %s", an(food_xname(otmp,FALSE)));
 
         if (otmp->cursed) {

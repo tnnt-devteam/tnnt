@@ -2266,6 +2266,20 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
         if(!u.uconduct.killer++)
             livelog_write_string (LL_CONDUCT,"killed for the first time");
 
+    /* TNNT code for anything that triggers when the player kills a monster
+     * goes here. */
+    if (mtmp->data == &mons[PM_GHOST]) {
+        tnnt_achieve(A_KILLED_GHOST);
+    }
+    else if (mtmp->data->mlet == S_DRAGON) {
+        tnnt_achieve(A_KILLED_DRAGON);
+    }
+    else if ((mtmp->data == &mons[PM_ALIGNED_PRIEST]
+                 || mtmp->data == &mons[PM_HIGH_PRIEST])
+             && mon_aligntyp(mtmp) == A_NONE) {
+        tnnt_achieve(A_KILLED_MOLOCH_PRIEST);
+    }
+
     if (!nomsg) {
         boolean namedpet = has_mname(mtmp) && !Hallucination;
 

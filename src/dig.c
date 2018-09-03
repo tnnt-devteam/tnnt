@@ -900,6 +900,8 @@ coord *cc;
             return;
     }
 
+    tnnt_achieve(A_DUG_UP_GRAVE);
+
     /* Grave-robbing is frowned upon... */
     exercise(A_WIS, FALSE);
     if (Role_if(PM_ARCHEOLOGIST)) {

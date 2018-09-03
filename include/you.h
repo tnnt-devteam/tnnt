@@ -109,39 +109,39 @@ enum tnnt_achievements {
     A_BLOCKED_TROLL_REVIVAL,/* Implemented. Scummable... */
     A_ENTERED_VAULT,        /* Implemented, tested. */
     /* A_ENTERED_ANTHOLE, etc...? */
-    A_KILLED_GHOST,
-    A_REVIVIFIED_CORPSE,
-    A_DESTROYED_VIA_TURN,
-    A_ATE_MILITARY_RATION,
-    A_BLEW_UP_DRAWBRIDGE,
-    A_GOT_LIFESAVED,
-    A_USED_CORRECT_BANE,
-    A_DUG_UP_GRAVE,
-    A_KILLED_MOLOCH_PRIEST,
-    A_CAUSED_EARTHQUAKE,
-    A_CHARMED_SNAKE,
-    A_KILLED_DRAGON,
-    A_EVADED_BRAINSUCK,
-    A_HIT_WITH_BOOMERANG,
-    A_DEALT_SILVER_DAMAGE,
-    A_MADE_CRYSKNIFE,
-    A_KILLED_RUBBER_HOSE,
-    A_WIZ_WORE_CORNUTHAUM,
-    A_WORE_MITHRIL_COAT,
-    A_FOUND_10_GRAFFITI,
-    A_SPLIT_A_PUDDING,
-    A_WORE_MEAT_RING,
-    A_LOOTED_ICE_BOX,
-    A_ANIMATED_FIGURINE,
-    A_NERD,
-    A_CHARGED_AN_OBJECT,
-    A_KICKED_EMBEDDED_ITEM,
-    A_SNAGGED_WITH_HOOK,
-    A_REFILLED_CANDELABRUM,
-    A_ATE_ALL_PRODUCE,
-    A_ATE_ALL_FOODS,
-    A_REFILLED_OIL_LAMP,
-    A_LIT_OIL_POTION,
+    A_KILLED_GHOST,         /* Implemented. */
+    A_REVIVIFIED_CORPSE,    /* Implemented. */
+    A_DESTROYED_VIA_TURN,   /* Implemented. */
+    A_ATE_MILITARY_RATION,  /* Implemented. */
+    A_BLEW_UP_DRAWBRIDGE,   /* Implemented. */
+    A_GOT_LIFESAVED,        /* Implemented. */
+    A_USED_CORRECT_BANE,    /* Implemented. */
+    A_DUG_UP_GRAVE,         /* Implemented. */
+    A_KILLED_MOLOCH_PRIEST, /* Implemented. */
+    A_CAUSED_EARTHQUAKE,    /* Implemented. */
+    A_CHARMED_SNAKE,        /* Implemented. */
+    A_KILLED_DRAGON,        /* Implemented. */
+    A_EVADED_BRAINSUCK,     /* Implemented. */
+    A_HIT_WITH_BOOMERANG,   /* Implemented. */
+    A_DEALT_SILVER_DAMAGE,  /* Implemented. */
+    A_MADE_CRYSKNIFE,       /* Implemented. */
+    A_KILLED_RUBBER_HOSE,   /* Implemented. */
+    A_WIZ_WORE_CORNUTHAUM,  /* Implemented. */
+    A_WORE_MITHRIL_COAT,    /* Implemented. */
+    A_FOUND_5_GRAFFITI,     /* Implemented. */
+    A_SPLIT_A_PUDDING,      /* Implemented. */
+    A_WORE_MEAT_RING,       /* Implemented. */
+    A_LOOTED_ICE_BOX,       /* Implemented. */
+    A_ANIMATED_FIGURINE,    /* Implemented. */
+    A_NERD,                 /* Implemented. */
+    A_CHARGED_AN_OBJECT,    /* Implemented. */
+    A_KICKED_EMBEDDED_ITEM, /* Implemented. */
+    A_SNAGGED_WITH_HOOK,    /* Implemented. */
+    A_REFILLED_CANDELABRUM, /* Implemented. */
+    A_ATE_ALL_PRODUCE,      /* Implemented. */
+    A_ATE_ALL_FOODS,        /* Implemented. */
+    A_REFILLED_OIL_LAMP,    /* Implemented. */
+    A_LIT_OIL_POTION,       /* Implemented. */
     A_LIT_UP_GREMLIN,
     A_ALCHEMIZED,
     A_GASSED_MONSTER,
@@ -193,6 +193,8 @@ struct u_achieve {
     Bitfield(finish_sokoban, 1);  /* obtained the sokoban prize */
 
     Bitfield(killed_medusa, 1);
+    Bitfield(graffiti_found, 4); /* TNNT achievement */
+    uint64_t foods_eaten; /* TNNT achievement; sadly there are 33 foods */
 
     /* 64 bits for the TNNT achievements above. Since there are more than 64
      * achievements, we need multiple 64 bit ints. */

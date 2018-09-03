@@ -888,6 +888,7 @@ int x, y;
     lev1 = &levl[x][y];
     if (!IS_DRAWBRIDGE(lev1->typ))
         return;
+    tnnt_achieve(A_BLEW_UP_DRAWBRIDGE);
     x2 = x;
     y2 = y;
     get_wall_for_db(&x2, &y2);

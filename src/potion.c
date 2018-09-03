@@ -2157,6 +2157,7 @@ more_dips:
                 obj->age = 1500L;
             useup(potion);
             exercise(A_WIS, TRUE);
+            tnnt_achieve(A_REFILLED_OIL_LAMP);
         }
         makeknown(POT_OIL);
         obj->spe = 1;

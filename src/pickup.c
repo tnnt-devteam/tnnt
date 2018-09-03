@@ -1701,6 +1701,8 @@ int cindex, ccount; /* index of this container (1..N), number of them (N) */
         return 1;
     }
 
+    if (cobj->otyp == ICE_BOX)
+        tnnt_achieve(A_LOOTED_ICE_BOX);
     You("%sopen %s...", (!cobj->cknown || !cobj->lknown) ? "carefully " : "",
         the(xname(cobj)));
     return use_container(cobjp, 0, (boolean) (cindex < ccount));

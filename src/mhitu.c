@@ -1130,13 +1130,16 @@ register struct attack *mattk;
             /* Not clear what to do for green slimes */
             break;
         }
-        if (u_slip_free(mtmp, mattk))
+        if (u_slip_free(mtmp, mattk)) {
+            tnnt_achieve(A_EVADED_BRAINSUCK);
             break;
+        }
 
         if (uarmh && rn2(8)) {
             /* not body_part(HEAD) */
             Your("%s blocks the attack to your head.",
                  helm_simple_name(uarmh));
+            tnnt_achieve(A_EVADED_BRAINSUCK);
             break;
         }
         /* negative armor class doesn't reduce this damage */

@@ -582,6 +582,7 @@ xchar x, y;
                   otense(kickedobj, "come"));
         obj_extract_self(kickedobj);
         newsym(x, y);
+        tnnt_achieve(A_KICKED_EMBEDDED_ITEM);
         if (costly && (!costly_spot(u.ux, u.uy)
                        || !index(u.urooms, *in_rooms(x, y, SHOPBASE))))
             addtobill(kickedobj, FALSE, FALSE, FALSE);

@@ -4,6 +4,8 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "artifact.h" /* needed for TNNT stuff */
+#include "artilist.h" /* needed for TNNT stuff */
 
 STATIC_DCL boolean FDECL(known_hitum, (struct monst *, struct obj *, int *,
                                        int, int, struct attack *, int));
@@ -666,6 +668,9 @@ int dieroll;
     boolean hand_to_hand = (thrown == HMON_MELEE
                             /* not grapnels; applied implies uwep */
                             || (thrown == HMON_APPLIED && is_pole(uwep)));
+    /* TNNT */
+    boolean artibane = FALSE;
+
     int jousting = 0;
     int wtype;
     struct obj *monwep;
@@ -744,6 +749,9 @@ int dieroll;
                         tmp++;
                 }
             } else {
+                if (obj->otyp == BOOMERANG)
+                    /* guaranteed not hitting in melee */
+                    tnnt_achieve(A_HIT_WITH_BOOMERANG);
                 tmp = dmgval(obj, mon);
                 /* a minimal hit doesn't exercise proficiency */
                 valid_weapon_attack = (tmp > 1);
@@ -793,13 +801,26 @@ int dieroll;
                     hittxt = TRUE;
                 }
 
-                if (obj->oartifact
-                    && artifact_hit(&youmonst, mon, obj, &tmp, dieroll)) {
-                    if (mon->mhp <= 0) /* artifact killed monster */
-                        return FALSE;
-                    if (tmp == 0)
-                        return TRUE;
-                    hittxt = TRUE;
+                if (obj->oartifact) {
+                    /* TNNT: stealing some code from spec_applies... */
+                    const struct artifact * weap = &artilist[obj->oartifact];
+                    if (((weap->spfx & SPFX_DMONS)
+                            && (mdat == &mons[(int) weap->mtype]))
+                        || ((weap->spfx & SPFX_DCLAS)
+                            && (weap->mtype == (unsigned long) mdat->mlet))
+                        || ((weap->spfx & SPFX_DFLAG1)
+                            && ((mdat->mflags1 & weap->mtype) != 0L))
+                        || ((weap->spfx & SPFX_DFLAG2)
+                            && ((mdat->mflags2 & weap->mtype) != 0L))) {
+                        artibane = TRUE;
+                    }
+                    if (artifact_hit(&youmonst, mon, obj, &tmp, dieroll)) {
+                        if (mon->mhp <= 0) /* artifact killed monster */
+                            return FALSE;
+                        if (tmp == 0)
+                            return TRUE;
+                        hittxt = TRUE;
+                    }
                 }
                 if (objects[obj->otyp].oc_material == SILVER
                     && mon_hates_silver(mon)) {
@@ -1209,6 +1230,7 @@ int dieroll;
                 Sprintf(withwhat, " with %s", yname(obj));
             pline("%s divides as you hit it%s!", Monnam(mon), withwhat);
             hittxt = TRUE;
+            tnnt_achieve(A_SPLIT_A_PUDDING);
         }
     }
 
@@ -1228,6 +1250,8 @@ int dieroll;
         const char *fmt;
         char *whom = mon_nam(mon);
         char silverobjbuf[BUFSZ];
+
+        tnnt_achieve(A_DEALT_SILVER_DAMAGE);
 
         if (canspotmon(mon)) {
             if (barehand_silver_rings == 1)
@@ -1273,6 +1297,10 @@ int dieroll;
     } else if (destroyed) {
         if (!already_killed)
             killed(mon); /* takes care of most messages */
+        if (artibane)
+            tnnt_achieve(A_USED_CORRECT_BANE);
+        if (obj && obj->otyp == RUBBER_HOSE)
+            tnnt_achieve(A_KILLED_RUBBER_HOSE);
     } else if (u.umconf && hand_to_hand) {
         nohandglow(mon);
         if (!mon->mconf && !resist(mon, SPBOOK_CLASS, 0, NOTELL)) {

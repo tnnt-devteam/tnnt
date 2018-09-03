@@ -136,6 +136,7 @@ int distance;
                           Monnam(mtmp),
                           was_peaceful ? "" : ", and now seems quieter");
             }
+            tnnt_achieve(A_CHARMED_SNAKE);
         }
     }
 }
@@ -587,6 +588,7 @@ struct obj *instr;
         /* shake up monsters in a much larger radius... */
         awaken_monsters(ROWNO * COLNO);
         makeknown(DRUM_OF_EARTHQUAKE);
+        tnnt_achieve(A_CAUSED_EARTHQUAKE);
         break;
     case LEATHER_DRUM: /* Awaken monsters */
         You("beat a deafening row!");

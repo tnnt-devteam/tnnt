@@ -1976,6 +1976,11 @@ switch_terrain()
     if (lev->typ == ALTAR && In_mines(&u.uz)) {
         tnnt_achieve(A_FOUND_MINES_ALTAR);
     }
+    if (lev->graffitied) {
+        u.uachieve.graffiti_found++;
+        if (u.uachieve.graffiti_found > 5)
+            tnnt_achieve(A_FOUND_5_GRAFFITI);
+    }
 }
 
 /* extracted from spoteffects; called by spoteffects to check for entering or

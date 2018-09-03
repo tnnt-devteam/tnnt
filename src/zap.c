@@ -814,6 +814,8 @@ boolean by_hero;
     if (by_hero) {
         struct monst *shkp = 0;
 
+        tnnt_achieve(A_REVIVIFIED_CORPSE);
+
         x = corpse->ox, y = corpse->oy;
         if (costly_spot(x, y)
             && (carried(corpse) ? corpse->unpaid : !corpse->no_charge))

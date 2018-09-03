@@ -387,6 +387,8 @@ Helmet_on(VOID_ARGS)
         ABON(A_CHA) += (Role_if(PM_WIZARD) ? 1 : -1);
         context.botl = 1;
         makeknown(uarmh->otyp);
+        if (Role_if(PM_WIZARD))
+            tnnt_achieve(A_WIZ_WORE_CORNUTHAUM);
         break;
     case HELM_OF_OPPOSITE_ALIGNMENT:
         /* changing alignment can toggle off active artifact
@@ -655,6 +657,9 @@ STATIC_PTR
 int
 Armor_on(VOID_ARGS)
 {
+    if (uarm && (uarm->otyp == ELVEN_MITHRIL_COAT
+                 || uarm->otyp == DWARVISH_MITHRIL_COAT))
+        tnnt_achieve(A_WORE_MITHRIL_COAT);
     return 0;
 }
 
@@ -875,7 +880,9 @@ register struct obj *obj;
     case RIN_FREE_ACTION:
     case RIN_SLOW_DIGESTION:
     case RIN_SUSTAIN_ABILITY:
+        break;
     case MEAT_RING:
+        tnnt_achieve(A_WORE_MEAT_RING);
         break;
     case RIN_STEALTH:
         toggle_stealth(obj, oldprop, TRUE);

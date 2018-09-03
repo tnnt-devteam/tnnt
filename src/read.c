@@ -490,6 +490,7 @@ int curse_bless;
 
     is_cursed = curse_bless < 0;
     is_blessed = curse_bless > 0;
+    tnnt_achieve(A_CHARGED_AN_OBJECT);
 
     if (obj->oclass == WAND_CLASS) {
         int lim = (obj->otyp == WAN_WISHING)
