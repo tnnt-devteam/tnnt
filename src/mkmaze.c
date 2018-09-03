@@ -774,8 +774,11 @@ const char *s;
     coord mm;
 
     if (*s) {
-        if (sp && sp->rndlevs)
-            Sprintf(protofile, "%s-%d", s, rnd((int) sp->rndlevs));
+        if (sp && sp->rndlevs) {
+            int level_variant = rnd((int) sp->rndlevs);
+            Sprintf(protofile, "%s-%d", s, level_variant);
+            sp->which_level = level_variant;
+        }
         else
             Strcpy(protofile, s);
     } else if (*(dungeons[u.uz.dnum].proto)) {
@@ -806,8 +809,10 @@ const char *s;
                 if (!strncmp(ep, protofile, len)) {
                     int pick = atoi(ep + len);
                     /* use choice only if valid */
-                    if (pick > 0 && pick <= (int) sp->rndlevs)
+                    if (pick > 0 && pick <= (int) sp->rndlevs) {
                         Sprintf(protofile + len, "%d", pick);
+                        sp->which_level = pick;
+                    }
                     break;
                 } else {
                     ep = index(ep, ',');

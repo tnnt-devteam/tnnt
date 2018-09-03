@@ -94,10 +94,10 @@ enum tnnt_achievements {
     A_ROBBED_BY_LEPRECHAUN, /* Implemented. */
     A_ENCOUNTERED_FOOCUBUS, /* Implemented. Scummable... */
     A_TRAPPED_MONSTER,      /* Implemented. Scummable... */
-    A_AVENGED_ORCTOWN,
-    A_CLEARED_BIGROOM,
+    A_AVENGED_ORCTOWN,      /* Implemented, tested. */
+    A_CLEARED_BIGROOM,      /* Implemented, tested. */
     A_GOT_UNPUNISHED,       /* Implemented. */
-    A_FELL_ONTO_SINK,       /* Implemented. */
+    A_FELL_ONTO_SINK,       /* Implemented. Achievment #32. */
     A_GOT_KELP,             /* Implemented. */
     A_USED_TOUCHSTONE,      /* Implemented. Scummable... */
     A_WROTE_SCROLL,         /* Implemented. Scummable... */
@@ -107,7 +107,7 @@ enum tnnt_achievements {
     A_ERODEPROOFED_ITEM,    /* Implemented. Scummable... */
     A_THREW_UNICORN_GEM,    /* Implemented. */
     A_BLOCKED_TROLL_REVIVAL,/* Implemented. Scummable... */
-    A_ENTERED_VAULT,
+    A_ENTERED_VAULT,        /* Implemented, tested. */
     /* A_ENTERED_ANTHOLE, etc...? */
     A_KILLED_GHOST,
     A_REVIVIFIED_CORPSE,
@@ -200,7 +200,7 @@ struct u_achieve {
 };
 
 #define tnnt_achieve(achvmt) \
-    u.uachieve.tnnt_achievements[achvmt / 64] |= 1L << (achvmt % 64);
+    u.uachieve.tnnt_achievements[achvmt / 64] |= 1L << (achvmt % 64)
 
 struct u_realtime {
     long   realtime;     /* accumulated playing time in seconds */

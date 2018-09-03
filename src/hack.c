@@ -2383,6 +2383,9 @@ register boolean newlev;
          * and temples should remain TEMPLEs,
          * but everything else gives a message only the first time */
         switch (rt) {
+        case VAULT:
+            tnnt_achieve(A_ENTERED_VAULT);
+            break;
         case ZOO:
             pline("Welcome to David's treasure zoo!");
             break;

@@ -27,6 +27,7 @@ typedef struct s_level { /* special dungeon level element */
     char boneid;    /* character to id level in bones files */
     uchar rndlevs;  /* no. of randomly available similar levels */
     d_flags flags;  /* type flags */
+    uchar which_level; /* TNNT: set to track which variant this is */
 } s_level;
 
 typedef struct stairway { /* basic stairway identifier */
