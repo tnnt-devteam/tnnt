@@ -153,6 +153,8 @@ register struct monst *mtmp;
                     if (!rn2(4)) {
                         pline("%s releases you!", Monnam(mtmp));
                         u.ustuck = 0;
+                        if (is_pool(mtmp->mx, mtmp->my))
+                            tnnt_achieve(A_SURVIVED_DROWNING);
                     } else
                         break;
                 }

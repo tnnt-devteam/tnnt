@@ -479,8 +479,11 @@ int dieroll;
                 /* maybe should regurgitate if swallowed? */
                 monflee(mon, !rn2(3) ? rnd(100) : 0, FALSE, TRUE);
 
-                if (u.ustuck == mon && !u.uswallow && !sticks(youmonst.data))
+                if (u.ustuck == mon && !u.uswallow && !sticks(youmonst.data)) {
                     u.ustuck = 0;
+                    if (is_pool(mon->mx, mon->my))
+                        tnnt_achieve(A_SURVIVED_DROWNING);
+                }
             }
             /* Vorpal Blade hit converted to miss */
             /* could be headless monster or worm tail */

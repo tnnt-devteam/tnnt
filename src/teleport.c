@@ -289,6 +289,8 @@ boolean allow_drag;
             }
         }
     }
+    if (u.ustuck && is_pool(u.ustuck->mx, u.ustuck->my))
+        tnnt_achieve(A_SURVIVED_DROWNING);
     u.utrap = 0;
     u.ustuck = 0;
     u.ux0 = u.ux;
@@ -1018,6 +1020,8 @@ register int x, y;
             docrt();
         } else
             u.ustuck = 0;
+        if (is_pool(mtmp->mx, mtmp->my))
+            tnnt_achieve(A_SURVIVED_DROWNING);
     }
 
     newsym(x, y);      /* update new location */

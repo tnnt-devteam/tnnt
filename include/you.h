@@ -75,7 +75,7 @@ enum tnnt_achievements {
     A_CURED_STONING,         /* Implemented,tested. */
     A_CURED_SLIMING,         /* Implemented,tested. */
     A_CURED_ILLNESS,         /* Implemented,tested. */
-    A_SURVIVED_DROWNING,
+    A_SURVIVED_DROWNING,     /* Implemented. */
     A_USED_THRONE,           /* Implemented,tested. */
     A_DROPPED_RING_IN_SINK,  /* Implemented,tested. */
     A_CONVERTED_ALTAR,       /* Implemented,tested. */

@@ -1677,6 +1677,8 @@ int magic; /* 0=Physical, otherwise skill level */
         if (u.ustuck->mtame && !Conflict && !u.ustuck->mconf) {
             You("pull free from %s.", mon_nam(u.ustuck));
             u.ustuck = 0;
+            if (is_pool(u.ustuck->mx, u.ustuck->my))
+                tnnt_achieve(A_SURVIVED_DROWNING);
             return 1;
         }
         if (magic) {
