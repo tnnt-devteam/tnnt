@@ -65,112 +65,111 @@ struct u_event {
  * scummable, since discussion didn't resolve on whether these should remain in
  * or not. */
 enum tnnt_achievements {
-    A_FOUND_MINES_ALTAR = 0,/* Implemented,tested. */
-    A_CONSULTED_ORACLE,     /* Implemented,tested. */
-    A_STARTED_QUEST,        /* Implemented,tested. */
-    A_ENTERED_PLANES,       /* Implemented,tested. */
-    A_LEARNED_PASSTUNE,     /* Implemented,tested. */
-    A_BOUGHT_PROTECTION,    /* Implemented,tested. */
-    A_CURED_LYCANTHROPY,    /* Implemented,tested. */
-    A_CURED_STONING,        /* Implemented,tested. */
-    A_CURED_SLIMING,        /* Implemented,tested. */
-    A_CURED_ILLNESS,        /* Implemented,tested. */
+    A_FOUND_MINES_ALTAR = 0, /* Implemented,tested. */
+    A_CONSULTED_ORACLE,      /* Implemented,tested. */
+    A_STARTED_QUEST,         /* Implemented,tested. */
+    A_ENTERED_PLANES,        /* Implemented,tested. */
+    A_LEARNED_PASSTUNE,      /* Implemented,tested. */
+    A_BOUGHT_PROTECTION,     /* Implemented,tested. */
+    A_CURED_LYCANTHROPY,     /* Implemented,tested. */
+    A_CURED_STONING,         /* Implemented,tested. */
+    A_CURED_SLIMING,         /* Implemented,tested. */
+    A_CURED_ILLNESS,         /* Implemented,tested. */
     A_SURVIVED_DROWNING,
-    A_USED_THRONE,          /* Implemented,tested. */
-    A_DROPPED_RING_IN_SINK, /* Implemented,tested. */
-    A_CONVERTED_ALTAR,      /* Implemented,tested. */
-    A_CHATTED_IZCHAK,       /* Implemented,tested. */
-    A_KICKED_FRUIT_TREE,    /* Implemented,tested. */
-    A_PURCHASED,            /* Implemented,tested. */
-    A_ROBBED,               /* Implemented,tested. */
-    A_UNCURSED_IN_FOUNTAIN, /* Implemented,tested. */
-    A_LEARNED_LV5_SPELL,    /* Implemented. */
-    A_TAMED_BY_FOOD,        /* Implemented. */
-    A_TAMED_NOT_BY_FOOD,    /* Implemented. */
-    A_GRANTED_ARTI,         /* Implemented. */
-    A_GOT_EXCALIBUR,        /* Implemented. */
-    A_CREATED_DSM,          /* Implemented. Scummable... */
-    A_ROBBED_BY_NYMPH,      /* Implemented. Scummable... */
-    A_ROBBED_BY_LEPRECHAUN, /* Implemented. */
-    A_ENCOUNTERED_FOOCUBUS, /* Implemented. Scummable... */
-    A_TRAPPED_MONSTER,      /* Implemented. Scummable... */
-    A_AVENGED_ORCTOWN,      /* Implemented, tested. */
-    A_CLEARED_BIGROOM,      /* Implemented, tested. */
-    A_GOT_UNPUNISHED,       /* Implemented. */
-    A_FELL_ONTO_SINK,       /* Implemented. */
-    A_GOT_KELP,             /* Implemented. */
-    A_USED_TOUCHSTONE,      /* Implemented. Scummable... */
-    A_WROTE_SCROLL,         /* Implemented. Scummable... */
-    A_WROTE_SPELLBOOK,      /* Implemented.  */
-    A_RODE_DRAGON,          /* Implemented. */
-    A_LAID_EGG,             /* Implemented. Scummable... */
-    A_ERODEPROOFED_ITEM,    /* Implemented. Scummable... */
-    A_THREW_UNICORN_GEM,    /* Implemented. */
-    A_BLOCKED_TROLL_REVIVAL,/* Implemented. Scummable... */
-    A_ENTERED_VAULT,        /* Implemented, tested. */
+    A_USED_THRONE,           /* Implemented,tested. */
+    A_DROPPED_RING_IN_SINK,  /* Implemented,tested. */
+    A_CONVERTED_ALTAR,       /* Implemented,tested. */
+    A_CHATTED_IZCHAK,        /* Implemented,tested. */
+    A_KICKED_FRUIT_TREE,     /* Implemented,tested. */
+    A_PURCHASED,             /* Implemented,tested. */
+    A_ROBBED,                /* Implemented,tested. */
+    A_UNCURSED_IN_FOUNTAIN,  /* Implemented,tested. */
+    A_LEARNED_LV5_SPELL,     /* Implemented. */
+    A_TAMED_BY_FOOD,         /* Implemented. */
+    A_TAMED_NOT_BY_FOOD,     /* Implemented. */
+    A_GRANTED_ARTI,          /* Implemented. */
+    A_GOT_EXCALIBUR,         /* Implemented. */
+    A_CREATED_DSM,           /* Implemented. Scummable... */
+    A_ROBBED_BY_NYMPH,       /* Implemented. Scummable... */
+    A_ROBBED_BY_LEPRECHAUN,  /* Implemented. */
+    A_ENCOUNTERED_FOOCUBUS,  /* Implemented. Scummable... */
+    A_TRAPPED_MONSTER,       /* Implemented. Scummable... */
+    A_AVENGED_ORCTOWN,       /* Implemented, tested. */
+    A_CLEARED_BIGROOM,       /* Implemented, tested. */
+    A_GOT_UNPUNISHED,        /* Implemented. */
+    A_FELL_ONTO_SINK,        /* Implemented. */
+    A_USED_TOUCHSTONE,       /* Implemented. Scummable... */
+    A_WROTE_SCROLL,          /* Implemented. Scummable... */
+    A_WROTE_SPELLBOOK,       /* Implemented.  */
+    A_RODE_DRAGON,           /* Implemented. */
+    A_LAID_EGG,              /* Implemented. Scummable... */
+    A_ERODEPROOFED_ITEM,     /* Implemented. Scummable... */
+    A_THREW_UNICORN_GEM,     /* Implemented. */
+    A_BLOCKED_TROLL_REVIVAL, /* Implemented. Scummable... */
+    A_ENTERED_VAULT,         /* Implemented, tested. */
     /* A_ENTERED_ANTHOLE, etc...? */
-    A_KILLED_GHOST,         /* Implemented. */
-    A_REVIVIFIED_CORPSE,    /* Implemented. */
-    A_DESTROYED_VIA_TURN,   /* Implemented. */
-    A_ATE_MILITARY_RATION,  /* Implemented. */
-    A_BLEW_UP_DRAWBRIDGE,   /* Implemented. */
-    A_GOT_LIFESAVED,        /* Implemented. */
-    A_USED_CORRECT_BANE,    /* Implemented. */
-    A_DUG_UP_GRAVE,         /* Implemented. */
-    A_KILLED_MOLOCH_PRIEST, /* Implemented. */
-    A_CAUSED_EARTHQUAKE,    /* Implemented. */
-    A_CHARMED_SNAKE,        /* Implemented. */
-    A_KILLED_DRAGON,        /* Implemented. */
-    A_EVADED_BRAINSUCK,     /* Implemented. */
-    A_HIT_WITH_BOOMERANG,   /* Implemented. */
-    A_DEALT_SILVER_DAMAGE,  /* Implemented. */
-    A_MADE_CRYSKNIFE,       /* Implemented. */
-    A_KILLED_RUBBER_HOSE,   /* Implemented. */
-    A_WIZ_WORE_CORNUTHAUM,  /* Implemented. */
-    A_WORE_MITHRIL_COAT,    /* Implemented. */
-    A_FOUND_5_GRAFFITI,     /* Implemented. */
-    A_SPLIT_A_PUDDING,      /* Implemented. */
-    A_WORE_MEAT_RING,       /* Implemented. */
-    A_LOOTED_ICE_BOX,       /* Implemented. */
-    A_ANIMATED_FIGURINE,    /* Implemented. */
-    A_NERD,                 /* Implemented. */
-    A_CHARGED_AN_OBJECT,    /* Implemented. */
-    A_KICKED_EMBEDDED_ITEM, /* Implemented. */
-    A_SNAGGED_WITH_HOOK,    /* Implemented. */
-    A_REFILLED_CANDELABRUM, /* Implemented. */
-    A_ATE_ALL_PRODUCE,      /* Implemented. */
-    A_ATE_ALL_FOODS,        /* Implemented. */
-    A_REFILLED_OIL_LAMP,    /* Implemented. */
-    A_LIT_OIL_POTION,       /* Implemented. */
-    A_LIT_UP_GREMLIN,       /* Implemented. */
-    A_ALCHEMIZED,           /* Implemented. */
-    A_GASSED_MONSTER,       /* Implemented. */
-    A_READ_NOVEL,           /* Implemented. */
-    A_TALKED_TO_DEATH,      /* Implemented. */
-    A_IDENTIFIED_ALL_GEMS,  /* Implemented. */
+    A_KILLED_GHOST,          /* Implemented. */
+    A_REVIVIFIED_CORPSE,     /* Implemented. */
+    A_DESTROYED_VIA_TURN,    /* Implemented. */
+    A_ATE_MILITARY_RATION,   /* Implemented. */
+    A_BLEW_UP_DRAWBRIDGE,    /* Implemented. */
+    A_GOT_LIFESAVED,         /* Implemented. */
+    A_USED_CORRECT_BANE,     /* Implemented. */
+    A_DUG_UP_GRAVE,          /* Implemented. */
+    A_KILLED_MOLOCH_PRIEST,  /* Implemented. */
+    A_CAUSED_EARTHQUAKE,     /* Implemented. */
+    A_CHARMED_SNAKE,         /* Implemented. */
+    A_KILLED_DRAGON,         /* Implemented. */
+    A_EVADED_BRAINSUCK,      /* Implemented. */
+    A_HIT_WITH_BOOMERANG,    /* Implemented. */
+    A_DEALT_SILVER_DAMAGE,   /* Implemented. */
+    A_MADE_CRYSKNIFE,        /* Implemented. */
+    A_KILLED_RUBBER_HOSE,    /* Implemented. */
+    A_WIZ_WORE_CORNUTHAUM,   /* Implemented. */
+    A_WORE_MITHRIL_COAT,     /* Implemented. */
+    A_FOUND_5_GRAFFITI,      /* Implemented. */
+    A_SPLIT_A_PUDDING,       /* Implemented. */
+    A_WORE_MEAT_RING,        /* Implemented. */
+    A_LOOTED_ICE_BOX,        /* Implemented. */
+    A_ANIMATED_FIGURINE,     /* Implemented. */
+    A_NERD,                  /* Implemented. */
+    A_CHARGED_AN_OBJECT,     /* Implemented. */
+    A_KICKED_EMBEDDED_ITEM,  /* Implemented. */
+    A_SNAGGED_WITH_HOOK,     /* Implemented. */
+    A_REFILLED_CANDELABRUM,  /* Implemented. */
+    A_ATE_ALL_PRODUCE,       /* Implemented. */
+    A_ATE_ALL_FOODS,         /* Implemented. */
+    A_REFILLED_OIL_LAMP,     /* Implemented. */
+    A_LIT_OIL_POTION,        /* Implemented. */
+    A_LIT_UP_GREMLIN,        /* Implemented. */
+    A_ALCHEMIZED,            /* Implemented. */
+    A_GASSED_MONSTER,        /* Implemented. */
+    A_READ_NOVEL,            /* Implemented. */
+    A_TALKED_TO_DEATH,       /* Implemented. */
+    A_IDENTIFIED_ALL_GEMS,   /* Implemented. */
     A_GOT_SPBOOK_FROM_STATUE,/* Implemented. */
-    A_SUMMONED_NYMPH,       /* Implemented. */
-    A_FULLY_RAISED_PET,     /* Implemented. */
-    A_GOT_OBJECT_UNDERWATER,/* Implemented. */
+    A_SUMMONED_NYMPH,        /* Implemented. */
+    A_FULLY_RAISED_PET,      /* Implemented. */
+    A_GOT_OBJECT_UNDERWATER, /* Implemented. */
     A_RODE_WUMPUS_OVER_WATER,/* Implemented. */
     A_KILLED_TAMED_WOODCHUCK,/* Implemented. */
-    A_KILLED_ARCHON,        /* Implemented. */
-    A_TAMED_SHAPECHANGER,   /* Implemented. */
-    A_TAMED_7_CATS,         /* Implemented. */
-    A_OPENED_SCHROEDINGERS, /* Implemented. */
-    A_FREED_PRISONER,       /* Implemented. */
-    A_UNTRAPPED_PET,        /* Implemented. */
-    A_READ_MAIL,            /* Implemented. */
-    A_ATE_ROYAL_JELLY,      /* Implemented. */
-    A_GOT_CORPSE_INTRINSIC, /* Implemented. */
-    A_BANKRUPTED_SHOPKEEPER,/* Implemented. */
-    A_POLYED_PET_ON_TRAP,   /* Implemented. */
-    A_CHANGED_GENDER,       /* Implemented. */
-    A_HATCHED_EGG_TAME,     /* Implemented. */
-    A_HEALED_BY_NURSE,      /* Implemented. */
-    A_KILLED_WHILE_IN_PIT,  /* Implemented. */
-    A_KILLED_INVISIBLE,     /* Implemented. */
-    A_FELL_DOWN_SHAFT       /* Implemented. */
+    A_KILLED_ARCHON,         /* Implemented. */
+    A_TAMED_SHAPECHANGER,    /* Implemented. */
+    A_TAMED_7_CATS,          /* Implemented. */
+    A_OPENED_SCHROEDINGERS,  /* Implemented. */
+    A_FREED_PRISONER,        /* Implemented. */
+    A_UNTRAPPED_PET,         /* Implemented. */
+    A_READ_MAIL,             /* Implemented. */
+    A_ATE_ROYAL_JELLY,       /* Implemented. */
+    A_GOT_CORPSE_INTRINSIC,  /* Implemented. */
+    A_BANKRUPTED_SHOPKEEPER, /* Implemented. */
+    A_POLYED_PET_ON_TRAP,    /* Implemented. */
+    A_CHANGED_GENDER,        /* Implemented. */
+    A_HATCHED_EGG_TAME,      /* Implemented. */
+    A_HEALED_BY_NURSE,       /* Implemented. */
+    A_KILLED_WHILE_IN_PIT,   /* Implemented. */
+    A_KILLED_INVISIBLE,      /* Implemented. */
+    A_FELL_DOWN_SHAFT        /* Implemented. */
 
     /* boring
     A_SHOPPED_WITH_LEASHED,

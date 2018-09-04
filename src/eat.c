@@ -1899,10 +1899,7 @@ struct obj *otmp;
             make_vomiting((Vomiting & TIMEOUT) + (long) d(10, 4), TRUE);
         } else {
             /* TNNT: achievements for eating certain foods */
-            if (otmp->otyp == KELP_FROND) {
-                tnnt_achieve(A_GOT_KELP);
-            }
-            else if (otmp->otyp == C_RATION || otmp->otyp == K_RATION) {
+            if (otmp->otyp == C_RATION || otmp->otyp == K_RATION) {
                 tnnt_achieve(A_ATE_MILITARY_RATION);
             }
 
