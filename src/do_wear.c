@@ -714,6 +714,7 @@ Amulet_on()
         if (Unchanging)
             break;
         change_sex();
+        tnnt_achieve(A_CHANGED_GENDER);
         /* Don't use same message as polymorph */
         if (orig_sex != poly_gender()) {
             makeknown(AMULET_OF_CHANGE);

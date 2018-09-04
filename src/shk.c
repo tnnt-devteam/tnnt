@@ -3132,6 +3132,8 @@ xchar x, y;
                          : "sold %s for %ld gold piece%s.%s")
             : "relinquish %s and receive %ld gold piece%s in compensation.%s",
                           offer, "");
+            if (money_cnt(shkp->minvent) < 1)
+                tnnt_achieve(A_BANKRUPTED_SHOPKEEPER);
             break;
         default:
             impossible("invalid sell response");

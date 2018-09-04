@@ -1133,6 +1133,16 @@ int how;
      * 12th through 22nd foods, inclusive, defined in objects.c. Yay! */
     if (u.uachieve.foods_eaten & 0x2FF800)
         tnnt_achieve(A_ATE_ALL_PRODUCE);
+    if (u.uevent.read_tribute)
+        tnnt_achieve(A_READ_NOVEL);
+    for (tmp = FIRST_GEM; tmp <= LAST_GEM; ++tmp) {
+        if (!objects[tmp].oc_name_known) {
+            tmp = -1;
+            break;
+        }
+    }
+    if (tmp > 0)
+        tnnt_achieve(A_IDENTIFIED_ALL_GEMS);
 
     /* END TNNT code */
 

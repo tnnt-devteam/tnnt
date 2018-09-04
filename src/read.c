@@ -1044,6 +1044,7 @@ struct obj *sobj; /* scroll, or fake spellbook object for scroll-like spell */
     "This seems to be junk mail addressed to the finder of the Eye of Larn.");
         else
             readmail(sobj);
+        tnnt_achieve(A_READ_MAIL);
         break;
 #endif
     case SCR_ENCHANT_ARMOR: {

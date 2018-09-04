@@ -926,6 +926,7 @@ register struct monst *mtmp;
                 verbl_msg = verbuf;
             }
             context.tribute.Deathnotice = 1;
+            tnnt_achieve(A_TALKED_TO_DEATH);
         } else if (ms_Death && rn2(3) && Death_quote(verbuf, sizeof verbuf)) {
             verbl_msg = verbuf;
         /* end of tribute addition */

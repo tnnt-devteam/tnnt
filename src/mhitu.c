@@ -1426,6 +1426,7 @@ register struct attack *mattk;
         }
         if (!uwep && !uarmu && !uarm && !uarmc
             && !uarms && !uarmg && !uarmf && !uarmh) {
+            tnnt_achieve(A_HEALED_BY_NURSE);
             boolean goaway = FALSE;
 
             pline("%s hits!  (I hope you don't mind.)", Monnam(mtmp));

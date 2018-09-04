@@ -1847,6 +1847,10 @@ struct monst *mtmp, *victim;
         mtmp->female = fem; /* gender might be changing */
     }
 
+    if (is_starting_pet(mtmp) && mtmp->mtame
+        && (ptr == &mons[PM_LARGE_CAT] || ptr == &mons[PM_LARGE_DOG]))
+        tnnt_achieve(A_FULLY_RAISED_PET);
+
     /* sanity checks */
     if ((int) mtmp->m_lev > lev_limit) {
         mtmp->m_lev--; /* undo increment */

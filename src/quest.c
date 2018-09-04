@@ -389,6 +389,7 @@ struct monst *mtmp;
         verbalize("I'm finally free!");
         mtmp->mstrategy &= ~STRAT_WAITMASK;
         mtmp->mpeaceful = 1;
+        tnnt_achieve(A_FREED_PRISONER);
 
         /* Your god is happy... */
         adjalign(3);

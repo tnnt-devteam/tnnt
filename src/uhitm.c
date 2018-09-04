@@ -2888,8 +2888,10 @@ int dmg;
     if (mon->mhp <= 0) {
         if (context.mon_moving)
             monkilled(mon, (char *) 0, AD_BLND);
-        else
+        else {
             killed(mon);
+            tnnt_achieve(A_LIT_UP_GREMLIN);
+        }
     } else if (cansee(mon->mx, mon->my) && !canspotmon(mon)) {
         map_invisible(mon->mx, mon->my);
     }

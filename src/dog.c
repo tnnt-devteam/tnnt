@@ -945,6 +945,16 @@ register struct obj *obj;
     else
         tnnt_achieve(A_TAMED_NOT_BY_FOOD);
 
+    if (mtmp->data == &mons[PM_WOODCHUCK])
+        tnnt_achieve(A_KILLED_TAMED_WOODCHUCK);
+    if (is_shapeshifter(mtmp->data))
+        tnnt_achieve(A_TAMED_SHAPECHANGER);
+    if (mtmp->data->mlet == S_FELINE) {
+        u.uachieve.felines_tamed++;
+        if (u.uachieve.felines_tamed == 7)
+            tnnt_achieve(A_TAMED_7_CATS);
+    }
+
     newsym(mtmp->mx, mtmp->my);
     if (attacktype(mtmp->data, AT_WEAP)) {
         mtmp->weapon_check = NEED_HTH_WEAPON;

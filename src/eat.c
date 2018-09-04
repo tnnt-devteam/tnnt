@@ -868,6 +868,8 @@ register struct permonst *ptr;
     if (ptr->mlevel <= rn2(chance))
         return; /* failed die roll */
 
+    tnnt_achieve(A_GOT_CORPSE_INTRINSIC);
+
     switch (type) {
     case FIRE_RES:
         debugpline0("Trying to give fire resistance");
@@ -2258,6 +2260,7 @@ struct obj *otmp;
         }
         if (!otmp->cursed)
             heal_legs();
+        tnnt_achieve(A_ATE_ROYAL_JELLY);
         break;
     case EGG:
         if (flesh_petrifies(&mons[otmp->corpsenm])) {

@@ -97,7 +97,7 @@ enum tnnt_achievements {
     A_AVENGED_ORCTOWN,      /* Implemented, tested. */
     A_CLEARED_BIGROOM,      /* Implemented, tested. */
     A_GOT_UNPUNISHED,       /* Implemented. */
-    A_FELL_ONTO_SINK,       /* Implemented. Achievment #32. */
+    A_FELL_ONTO_SINK,       /* Implemented. */
     A_GOT_KELP,             /* Implemented. */
     A_USED_TOUCHSTONE,      /* Implemented. Scummable... */
     A_WROTE_SCROLL,         /* Implemented. Scummable... */
@@ -142,35 +142,35 @@ enum tnnt_achievements {
     A_ATE_ALL_FOODS,        /* Implemented. */
     A_REFILLED_OIL_LAMP,    /* Implemented. */
     A_LIT_OIL_POTION,       /* Implemented. */
-    A_LIT_UP_GREMLIN,
-    A_ALCHEMIZED,
-    A_GASSED_MONSTER,
-    A_READ_NOVEL,
-    A_TALKED_TO_DEATH,
-    A_IDENTIFIED_ALL_GEMS,
-    A_GOT_SPBOOK_FROM_STATUE,
-    A_SUMMONED_NYMPH,
-    A_FULLY_RAISED_PET,
-    A_GOT_OBJECT_UNDERWATER,
-    A_RODE_WUMPUS_OVER_WATER,
-    A_KILLED_TAMED_WOODCHUCK,
-    A_KILLED_ARCHON,
-    A_TAMED_SHAPECHANGER,
-    A_TAMED_7_CATS,
-    A_OPENED_SCHROEDINGERS,
-    A_FREED_PRISONER,
-    A_UNTRAPPED_PET,
-    A_READ_MAIL,
-    A_ATE_ROYAL_JELLY,
-    A_GOT_CORPSE_INTRINSIC,
-    A_BANKRUPTED_SHOPKEEPER,
-    A_POLYED_PET_ON_TRAP,
-    A_CHANGED_GENDER,
-    A_HATCHED_EGG_TAME,
-    A_HEALED_BY_NURSE,
-    A_KILLED_WHILE_IN_PIT,
-    A_KILLED_INVISIBLE,
-    A_FELL_DOWN_SHAFT
+    A_LIT_UP_GREMLIN,       /* Implemented. */
+    A_ALCHEMIZED,           /* Implemented. */
+    A_GASSED_MONSTER,       /* Implemented. */
+    A_READ_NOVEL,           /* Implemented. */
+    A_TALKED_TO_DEATH,      /* Implemented. */
+    A_IDENTIFIED_ALL_GEMS,  /* Implemented. */
+    A_GOT_SPBOOK_FROM_STATUE,/* Implemented. */
+    A_SUMMONED_NYMPH,       /* Implemented. */
+    A_FULLY_RAISED_PET,     /* Implemented. */
+    A_GOT_OBJECT_UNDERWATER,/* Implemented. */
+    A_RODE_WUMPUS_OVER_WATER,/* Implemented. */
+    A_KILLED_TAMED_WOODCHUCK,/* Implemented. */
+    A_KILLED_ARCHON,        /* Implemented. */
+    A_TAMED_SHAPECHANGER,   /* Implemented. */
+    A_TAMED_7_CATS,         /* Implemented. */
+    A_OPENED_SCHROEDINGERS, /* Implemented. */
+    A_FREED_PRISONER,       /* Implemented. */
+    A_UNTRAPPED_PET,        /* Implemented. */
+    A_READ_MAIL,            /* Implemented. */
+    A_ATE_ROYAL_JELLY,      /* Implemented. */
+    A_GOT_CORPSE_INTRINSIC, /* Implemented. */
+    A_BANKRUPTED_SHOPKEEPER,/* Implemented. */
+    A_POLYED_PET_ON_TRAP,   /* Implemented. */
+    A_CHANGED_GENDER,       /* Implemented. */
+    A_HATCHED_EGG_TAME,     /* Implemented. */
+    A_HEALED_BY_NURSE,      /* Implemented. */
+    A_KILLED_WHILE_IN_PIT,  /* Implemented. */
+    A_KILLED_INVISIBLE,     /* Implemented. */
+    A_FELL_DOWN_SHAFT       /* Implemented. */
 
     /* boring
     A_SHOPPED_WITH_LEASHED,
@@ -194,6 +194,7 @@ struct u_achieve {
 
     Bitfield(killed_medusa, 1);
     Bitfield(graffiti_found, 4); /* TNNT achievement */
+    Bitfield(felines_tamed, 3); /* TNNT achievement */
     uint64_t foods_eaten; /* TNNT achievement; sadly there are 33 foods */
 
     /* 64 bits for the TNNT achievements above. Since there are more than 64

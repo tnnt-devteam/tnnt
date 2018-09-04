@@ -1010,6 +1010,7 @@ struct obj **optr;
             && (mtmp = makemon(mkclass(S_NYMPH, 0), u.ux, u.uy, NO_MINVENT))
                    != 0) {
             You("summon %s!", a_monnam(mtmp));
+            tnnt_achieve(A_SUMMONED_NYMPH);
             if (!obj_resists(obj, 93, 100)) {
                 pline("%s shattered!", Tobjnam(obj, "have"));
                 useup(obj);

@@ -518,9 +518,11 @@ boolean td; /* td == TRUE : trap door or hole */
         int dist = newlevel - dunlev(&u.uz);
         dtmp.dnum = u.uz.dnum;
         dtmp.dlevel = newlevel;
-        if (dist > 1)
+        if (dist > 1) {
             You("fall down a %s%sshaft!", dist > 3 ? "very " : "",
                 dist > 2 ? "deep " : "");
+            tnnt_achieve(A_FELL_DOWN_SHAFT);
+        }
     }
     if (!td)
         Sprintf(msgbuf, "The hole in the %s above you closes up.",
@@ -2619,9 +2621,12 @@ register struct monst *mtmp;
             if (resists_magm(mtmp)) {
                 shieldeff(mtmp->mx, mtmp->my);
             } else if (!resist(mtmp, WAND_CLASS, 0, NOTELL)) {
-                if (newcham(mtmp, (struct permonst *) 0, FALSE, FALSE))
+                if (newcham(mtmp, (struct permonst *) 0, FALSE, FALSE)) {
                     /* we're done with mptr but keep it up to date */
                     mptr = mtmp->data;
+                    if (mtmp->mtame)
+                        tnnt_achieve(A_POLYED_PET_ON_TRAP);
+                }
                 if (in_sight)
                     seetrap(trap);
             }
@@ -4033,6 +4038,8 @@ struct monst *mtmp;
             adjalign(1);
             You_feel("that you did the right thing.");
         }
+        if (mtmp->mtame)
+            tnnt_achieve(A_UNTRAPPED_PET);
     }
 }
 

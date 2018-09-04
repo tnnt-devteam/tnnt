@@ -4641,6 +4641,8 @@ register struct obj *obj;
         return FALSE;
     /* drop any objects contained inside the statue */
     while ((item = obj->cobj) != 0) {
+        if (item->oclass == SPBOOK_CLASS)
+            tnnt_achieve(A_GOT_SPBOOK_FROM_STATUE);
         obj_extract_self(item);
         place_object(item, obj->ox, obj->oy);
     }

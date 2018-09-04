@@ -2031,6 +2031,8 @@ boolean newspot;             /* true if called by spoteffects */
                 || is_clinger(u.usteed->data))) {
             /* floating or clinging steed keeps hero safe (is_flyer() test
                is redundant; it can't be true since Flying yielded false) */
+            if (is_clinger(u.usteed->data))
+                tnnt_achieve(A_RODE_WUMPUS_OVER_WATER);
             return FALSE;
         } else if (u.usteed) {
             /* steed enters pool */

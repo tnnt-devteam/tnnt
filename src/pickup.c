@@ -1484,6 +1484,9 @@ boolean telekinesis; /* not picking it up directly by hand */
     if ((res = lift_object(obj, (struct obj *) 0, &count, telekinesis)) <= 0)
         return res;
 
+    if (Underwater)
+        tnnt_achieve(A_GOT_OBJECT_UNDERWATER);
+
     /* Whats left of the special case for gold :-) */
     if (obj->oclass == COIN_CLASS)
         context.botl = 1;
@@ -2331,6 +2334,8 @@ struct obj *box;
     struct obj *deadcat;
     struct monst *livecat;
     xchar ox, oy;
+
+    tnnt_achieve(A_OPENED_SCHROEDINGERS);
 
     box->spe = 0; /* box->owt will be updated below */
     if (get_obj_location(box, &ox, &oy, 0))

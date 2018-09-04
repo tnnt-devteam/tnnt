@@ -1978,8 +1978,10 @@ register struct monst *mtmp;
             if (DEADMONSTER(mtmp) || mtmp == &youmonst)
                 continue;
             if ((bigrm && !mtmp->mpeaceful)
-                || (orctown && mtmp->data->mlet == S_ORC))
+                || (orctown && mtmp->data->mlet == S_ORC)) {
                 didit = FALSE;
+                break;
+            }
         }
         if (didit) {
             if (bigrm)
@@ -2279,6 +2281,16 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
              && mon_aligntyp(mtmp) == A_NONE) {
         tnnt_achieve(A_KILLED_MOLOCH_PRIEST);
     }
+    else if (mtmp->data == &mons[PM_WOODCHUCK]) {
+        tnnt_achieve(A_KILLED_TAMED_WOODCHUCK);
+    }
+    else if (mtmp->data == &mons[PM_ARCHON]) {
+        tnnt_achieve(A_KILLED_ARCHON);
+    }
+    if (mtmp->minvis && !See_invisible)
+        tnnt_achieve(A_KILLED_INVISIBLE);
+    if (u.utraptype == TT_PIT)
+        tnnt_achieve(A_KILLED_WHILE_IN_PIT);
 
     if (!nomsg) {
         boolean namedpet = has_mname(mtmp) && !Hallucination;
