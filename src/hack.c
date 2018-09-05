@@ -1469,9 +1469,9 @@ domove()
         if (u.ustuck && (x != u.ustuck->mx || y != u.ustuck->my)) {
             if (distu(u.ustuck->mx, u.ustuck->my) > 2) {
                 /* perhaps it fled (or was teleported or ... ) */
-                u.ustuck = 0;
                 if (is_pool(x, y))
                     tnnt_achieve(A_SURVIVED_DROWNING);
+                u.ustuck = 0;
             } else if (sticks(youmonst.data)) {
                 /* When polymorphed into a sticking monster,
                  * u.ustuck means it's stuck to you, not you to it.
@@ -1494,9 +1494,9 @@ domove()
                 case 2:
                 pull_free:
                     You("pull free from %s.", mon_nam(u.ustuck));
-                    u.ustuck = 0;
                     if (is_pool(u.ustuck->mx, u.ustuck->my))
                         tnnt_achieve(A_SURVIVED_DROWNING);
+                    u.ustuck = 0;
                     break;
                 case 3:
                     if (!u.ustuck->mcanmove) {

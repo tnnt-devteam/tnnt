@@ -2236,9 +2236,9 @@ struct monst *mtmp;
             if (attacktype(mtmp->data, AT_ENGL) && !mtmp->mspec_used)
                 mtmp->mspec_used = rnd(2);
         }
-        u.ustuck = 0;
         if (is_pool(mtmp->mx, mtmp->my))
             tnnt_achieve(A_SURVIVED_DROWNING);
+        u.ustuck = 0;
     }
 }
 
