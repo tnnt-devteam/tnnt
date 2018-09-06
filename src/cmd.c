@@ -2893,7 +2893,7 @@ struct ext_func_tab extcmdlist[] = {
     /* TODO: remove the autocomplete and possibly this entire command before
      * the tournament */
     { '\0', "achievements", "display your TNNT achievements",
-            doshowachievements, IFBURIED | AUTOCOMPLETE | WIZMODECMD },
+            doshowachievements, IFBURIED | AUTOCOMPLETE },
     { M('a'), "adjust", "adjust inventory letters",
             doorganize, IFBURIED | AUTOCOMPLETE },
     { M('A'), "annotate", "name current level",
