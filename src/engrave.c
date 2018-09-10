@@ -346,6 +346,12 @@ int x, y;
             if (!Blind) {
                 sensed = 1;
                 pline("There's some graffiti on the %s here.", surface(x, y));
+                if (levl[x][y].graffitied) {
+                    levl[x][y].graffitied = 0;
+                    u.uachieve.graffiti_found++;
+                    if (u.uachieve.graffiti_found >= 5)
+                        tnnt_achieve(A_FOUND_5_GRAFFITI);
+                }
             }
             break;
         case ENGR_BLOOD:
