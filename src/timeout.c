@@ -715,6 +715,8 @@ long timeout;
                     if (tamedog(mon, (struct obj *) 0)) {
                         if (carried(egg) && mon->data->mlet != S_DRAGON)
                             mon->mtame = 20;
+                        if (!egg->spe)
+                            tnnt_achieve(A_HATCHED_FOREIGN_EGG);
                     }
                 }
                 if (mvitals[mnum].mvflags & G_EXTINCT)
@@ -778,7 +780,6 @@ long timeout;
                 pline("%s cries sound like \"%s%s\"",
                       siblings ? "Their" : "Its",
                       flags.female ? "mommy" : "daddy", egg->spe ? "." : "?");
-                tnnt_achieve(A_HATCHED_EGG_TAME);
             } else if (mon->data->mlet == S_DRAGON && !Deaf) {
                 verbalize("Gleep!"); /* Mything eggs :-) */
             }

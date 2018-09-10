@@ -165,7 +165,7 @@ enum tnnt_achievements {
     A_BANKRUPTED_SHOPKEEPER, /* Implemented. */
     A_POLYED_PET_ON_TRAP,    /* Implemented. */
     A_CHANGED_GENDER,        /* Implemented. */
-    A_HATCHED_EGG_TAME,      /* Implemented. */
+    A_HATCHED_FOREIGN_EGG,   /* Implemented. */
     A_HEALED_BY_NURSE,       /* Implemented. */
     A_KILLED_WHILE_IN_PIT,   /* Implemented. */
     A_KILLED_INVISIBLE,      /* Implemented. */
