@@ -638,6 +638,8 @@ u_init()
     adjabil(0, 1);
     u.ulevel = u.ulevelmax = 1;
 
+    u.uswapitems = 0; /* TNNT swap chest */
+
     init_uhunger();
     for (i = 0; i <= MAXSPELL; i++)
         spl_book[i].sp_id = NO_SPELL;

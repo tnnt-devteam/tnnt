@@ -651,6 +651,7 @@ CONTAINER("sack",           "bag", 0, 0, 0, 35,  15,   2, CLOTH, HI_CLOTH),
 CONTAINER("oilskin sack",   "bag", 0, 0, 0,  5,  15, 100, CLOTH, HI_CLOTH),
 CONTAINER("bag of holding", "bag", 0, 1, 0, 20,  15, 100, CLOTH, HI_CLOTH),
 CONTAINER("bag of tricks",  "bag", 0, 1, 1, 20,  15, 100, CLOTH, HI_CLOTH),
+CONTAINER("swap chest",     "mysterious container made from sentient pearwood", 0, 1, 0, 0, 6000,  16000, WOOD, CLR_GREEN),
 #undef CONTAINER
 
 /* lock opening tools */
