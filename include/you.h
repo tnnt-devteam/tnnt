@@ -68,7 +68,6 @@ enum tnnt_achievements {
     A_FOUND_MINES_ALTAR = 0, /* Implemented,tested. */
     A_CONSULTED_ORACLE,      /* Implemented,tested. */
     A_STARTED_QUEST,         /* Implemented,tested. */
-    A_ENTERED_PLANES,        /* Implemented,tested. */
     A_LEARNED_PASSTUNE,      /* Implemented,tested. */
     A_BOUGHT_PROTECTION,     /* Implemented,tested. */
     A_CURED_LYCANTHROPY,     /* Implemented,tested. */
