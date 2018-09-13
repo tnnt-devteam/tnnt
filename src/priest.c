@@ -580,6 +580,7 @@ register struct monst *priest;
                 pline("%s gives you %s for an ale.", Monnam(priest),
                       (pmoney == 1L) ? "one bit" : "two bits");
                 money2u(priest, pmoney > 1L ? 2 : 1);
+                tnnt_achieve(A_GOT_TWO_BITS);
             } else
                 pline("%s preaches the virtues of poverty.", Monnam(priest));
             exercise(A_WIS, TRUE);

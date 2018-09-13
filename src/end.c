@@ -1143,6 +1143,32 @@ int how;
     }
     if (tmp > 0)
         tnnt_achieve(A_IDENTIFIED_ALL_GEMS);
+    if (mvitals[PM_NAZGUL].died == 9)
+        tnnt_achieve(A_KILLED_9_NAZGUL);
+    if (mvitals[PM_ERINYS].died == 3)
+        tnnt_achieve(A_KILLED_3_ERINYES);
+    if ((mvitals[PM_SOLDIER].mvflags & G_EXTINCT)
+        || mvitals[PM_KEYSTONE_KOP].mvflags & G_EXTINCT)
+        /* Unlike nazgul and erinyes, NOT necessary to kill all of them, only
+         * necessary to have officially extincted them. */
+        tnnt_achieve(A_EXTINCTED_ARMY_OR_KOPS);
+    if (u.uevent.uhand_of_elbereth)
+        tnnt_achieve(A_CROWNED);
+    if (how == ESCAPED && Is_astralevel(&u.uz))
+        tnnt_achieve(A_ESCAPED_IN_DISGRACE);
+
+    if (mvitals[PM_ASMODEUS].died) tnnt_achieve(A_KILLED_ASMODEUS);
+    if (mvitals[PM_BAALZEBUB].died) tnnt_achieve(A_KILLED_BAALZEBUB);
+    if (mvitals[PM_ORCUS].died) tnnt_achieve(A_KILLED_ORCUS);
+    if (mvitals[PM_JUIBLEX].died) tnnt_achieve(A_KILLED_JUIBLEX);
+    if (mvitals[PM_DEMOGORGON].died) tnnt_achieve(A_KILLED_DEMOGORGON);
+    if (mvitals[PM_YEENOGHU].died) tnnt_achieve(A_KILLED_YEENOGHU);
+    if (mvitals[PM_GERYON].died) tnnt_achieve(A_KILLED_GERYON);
+    if (mvitals[PM_DISPATER].died) tnnt_achieve(A_KILLED_DISPATER);
+    if (mvitals[PM_DEATH].died) tnnt_achieve(A_KILLED_DEATH);
+    if (mvitals[PM_PESTILENCE].died) tnnt_achieve(A_KILLED_PESTILENCE);
+    if (mvitals[PM_FAMINE].died) tnnt_achieve(A_KILLED_FAMINE);
+
 
     /* END TNNT code */
 

@@ -954,6 +954,8 @@ struct obj *obj;
         (void) mpickobj(mtmp, obj);
         if (!tele_restrict(mtmp))
             (void) rloc(mtmp, TRUE);
+        if (mlet == S_NYMPH)
+            tnnt_achieve(A_DEFLECTED_NYMPH);
     } else if (!is_unicorn(mtmp->data) && !humanoid(mtmp->data)
                && (!mtmp->minvis || perceives(mtmp->data)) && rn2(5)) {
         if (vis)
