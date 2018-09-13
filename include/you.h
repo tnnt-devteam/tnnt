@@ -70,13 +70,17 @@ enum tnnt_achievements {
     A_STARTED_QUEST,         /* Implemented,tested. */
     A_LEARNED_PASSTUNE,      /* Implemented,tested. */
     A_BOUGHT_PROTECTION,     /* Implemented,tested. */
-    A_CURED_LYCANTHROPY,     /* Implemented,tested. */
     A_CURED_STONING,         /* Implemented,tested. */
     A_CURED_SLIMING,         /* Implemented,tested. */
-    A_CURED_ILLNESS,         /* Implemented,tested. */
     A_SURVIVED_DROWNING,     /* Implemented. */
+    A_CURED_LYCANTHROPY,     /* Implemented,tested. */
+    A_CURED_ILLNESS,         /* Implemented,tested. */
     A_USED_THRONE,           /* Implemented,tested. */
     A_DROPPED_RING_IN_SINK,  /* Implemented,tested. */
+    /* Insert here:
+    A_KILLED_9_NAZGUL,
+    A_KILLED_3_ERINYES,
+     */
     A_CONVERTED_ALTAR,       /* Implemented,tested. */
     A_CHATTED_IZCHAK,        /* Implemented,tested. */
     A_KICKED_FRUIT_TREE,     /* Implemented,tested. */
@@ -86,6 +90,9 @@ enum tnnt_achievements {
     A_LEARNED_LV5_SPELL,     /* Implemented. */
     A_TAMED_BY_FOOD,         /* Implemented. */
     A_TAMED_NOT_BY_FOOD,     /* Implemented. */
+    /* Insert here:
+    A_CROWNED,
+    */
     A_GRANTED_ARTI,          /* Implemented. */
     A_GOT_EXCALIBUR,         /* Implemented. */
     A_CREATED_DSM,           /* Implemented. Scummable... */
@@ -105,8 +112,6 @@ enum tnnt_achievements {
     A_ERODEPROOFED_ITEM,     /* Implemented. Scummable... */
     A_THREW_UNICORN_GEM,     /* Implemented. */
     A_BLOCKED_TROLL_REVIVAL, /* Implemented. Scummable... */
-    A_ENTERED_VAULT,         /* Implemented, tested. */
-    /* A_ENTERED_ANTHOLE, etc...? */
     A_KILLED_GHOST,          /* Implemented. */
     A_REVIVIFIED_CORPSE,     /* Implemented. */
     A_DESTROYED_VIA_TURN,    /* Implemented. */
@@ -168,8 +173,30 @@ enum tnnt_achievements {
     A_HEALED_BY_NURSE,       /* Implemented. */
     A_KILLED_WHILE_IN_PIT,   /* Implemented. */
     A_KILLED_INVISIBLE,      /* Implemented. */
-    A_FELL_DOWN_SHAFT        /* Implemented. */
+    A_FELL_DOWN_SHAFT,       /* Implemented. */
+    /* Insert here:
+    A_GOT_TWO_BITS,
+    A_EXTINCTED_KOPS,
+    A_DEFLECTED_NYMPH,
+    A_BRIBED_DEMON_LORD,
+    */
+    A_ENTERED_VAULT          /* Implemented, tested. */
+    /* A_ENTERED_ANTHOLE, etc...? */
 
+    /* Need to add:
+    A_KILLED_ASMODEUS,
+    A_KILLED_BAALZEBUB,
+    A_KILLED_ORCUS,
+    A_KILLED_JUIBLEX,
+    A_KILLED_DEMOGORGON,
+    A_KILLED_YEENOGHU,
+    A_KILLED_GERYON,
+    A_KILLED_DISPATER,
+    A_KILLED_DEATH,
+    A_KILLED_PESTILENCE,
+    A_KILLED_FAMINE,
+    A_ESCAPED_IN_DISGRACE,
+    */
     /* boring
     A_SHOPPED_WITH_LEASHED,
     A_NO_SHIRT_NO_SHOES,
