@@ -48,11 +48,12 @@ const
 #endif
 #endif
 
-#if defined(UNIX) && defined(QT_GRAPHICS)
+#if defined(UNIX)
 #include <sys/types.h>
 #include <dirent.h>
 #include <stdlib.h>
 #endif
+
 
 #if defined(UNIX) || defined(VMS) || !defined(NO_SIGNAL)
 #include <signal.h>
@@ -4478,5 +4479,171 @@ VA_DECL2(unsigned int, ll_type, const char *, fmt)
 } /* would be matched in VA_END() but we don't need this */
 
 #endif /* LIVELOGFILE */
+
+/* TNNT swap chest file handling goes here. */
+#ifdef TNNT_SWAPCHEST_DIR
+char *
+make_swapobj_filename(o)
+struct obj *o;
+{
+    /* needs to be big enough for full path */
+    static char buf[BUFSZ];
+    sprintf(buf,"%s/SW-%ld-%s-%x", TNNT_SWAPCHEST_DIR, time(NULL), plname, o->o_id);
+    return strdup(buf);
+}
+
+boolean
+write_swapobj_file(o)
+struct obj *o;
+{
+    static char *objnames[SWAP_ITEMS_MAX] = {
+        /* this needs to be adjusted if SWAP_ITEMS_MAX changes */
+        /* playername will be appended to the end */
+        /* no spaces - underscores will be converted */
+        "a_token_from",
+        "altruistically_donated_by",
+        "bestowed_unto_you_through_the_boundless_generosity_of"
+    };
+    char *filename = make_swapobj_filename(o);
+    if (!filename) return FALSE;
+    FILE *f = fopen(filename,"w");
+    free(filename);
+    if (!f) return FALSE;
+    fprintf(f, "o_id=%x\totyp=%d\towt=%d\tquan=%d\tspe=%d\toclass=%c\t"
+               "cursed=%d\tblessed=%d\toeroded=%d\toeroded2=%d\toerodeproof=%d\t"
+               "recharged=%d\tgreased=%d\tusecount=%d\tname=%s_%s\n",
+               o->o_id, o->otyp, o->owt, o->quan, o->spe, o->oclass,
+               o->cursed, o->blessed, o->oeroded, o->oeroded2, o->oerodeproof,
+               o->recharged, o->greased, o->usecount, objnames[u.uswapitems], plname);
+    /* the second line is just for humans to read what the object is, for debugging */
+    iflags.override_ID++;
+    fprintf(f, "%s\n", xname(o));
+    iflags.override_ID--;
+    fclose(f);
+    return TRUE;
+}
+
+/* Create object from file and add to swapchest */
+struct obj *
+mkswapobj(swapchest, filename)
+struct obj *swapchest;
+char *filename;
+{
+    char buf[BUFSZ]; /* multi-use */
+    char *p;
+    FILE *f;
+    struct obj *o;
+    int tmp_bitfield;
+    sprintf(buf, "%s/%s", TNNT_SWAPCHEST_DIR, filename);
+    f = fopen(buf,"r");
+    if (!f) return NULL;
+
+    /* there is no nice way to do this... */
+    o = newobj();
+    *o = zeroobj;
+    o->age = monstermoves;
+    o->o_id = context.ident++;
+    if (!o->o_id) o->o_id = context.ident++; /* overflow */
+    o->corpsenm = NON_PM;
+    o->known = 1;
+    o->dknown = 1;
+    o->bknown = 1;
+    o->rknown = 1;
+
+    /* this only works because we separate fields with whitespace */
+    while (fscanf(f,"%s",buf) == 1) {
+        if (sscanf(buf, "otyp=%hd", &(o->otyp)) == 1) continue;
+        if (sscanf(buf, "owt=%d", &(o->owt)) == 1) continue;
+        if (sscanf(buf, "quan=%ld", &(o->quan)) == 1) continue;
+        if (sscanf(buf, "spe=%hhd", &(o->spe)) == 1) continue;
+        if (sscanf(buf, "oclass=%c", &(o->oclass)) == 1) continue;
+        if (sscanf(buf, "cursed=%d", &tmp_bitfield) == 1) {
+            o->cursed = tmp_bitfield;
+            continue;
+        }
+        if (sscanf(buf, "blessed=%d", &tmp_bitfield) == 1) {
+            o->blessed = tmp_bitfield;
+            continue;
+        }
+        if (sscanf(buf, "oeroded=%d", &tmp_bitfield) == 1) {
+            o->oeroded = tmp_bitfield;
+            continue;
+        }
+        if (sscanf(buf, "oeroded2=%d", &tmp_bitfield) == 1) {
+            o->oeroded2 = tmp_bitfield;
+            continue;
+        }
+        if (sscanf(buf, "oerodeproof=%d", &tmp_bitfield) == 1) {
+            o->oerodeproof = tmp_bitfield;
+            continue;
+        }
+        if (sscanf(buf, "recharged=%d", &tmp_bitfield) == 1) {
+            o->recharged = tmp_bitfield;
+            continue;
+        }
+        if (sscanf(buf, "greased=%d", &tmp_bitfield) == 1) {
+            o->greased = tmp_bitfield;
+            continue;
+        }
+        if (sscanf(buf, "usecount=%d", &(o->usecount)) == 1) continue;
+        if (sscanf(buf, "name=%ms", &p) == 1) {
+            if (!o->oextra) o->oextra = newoextra();
+            o->oextra->oname = p;
+            for (; *p; p++) {
+                if (*p == '_') *p = ' ';
+            }
+        }
+    }
+    if (!o->otyp) {
+        if (o->oextra) dealloc_oextra(o);
+        free(o);
+        return NULL;
+    }
+    add_to_container(swapchest, o);
+    o->where = OBJ_INSWAP;
+    o->swapobj_filename = strdup(filename);
+    return o;
+}
+
+void
+refresh_swap_chest_contents(swapchest)
+struct obj *swapchest;
+{   
+    DIR *d;
+    struct dirent *de;
+    struct obj *otmp, **ptmp;
+    for (otmp = swapchest->cobj; otmp; otmp = otmp->nobj) {
+        free(otmp->swapobj_filename);
+        otmp->ocontainer = swapchest;
+        otmp->where = OBJ_CONTAINED;
+    }
+    delete_contents(swapchest);
+    d = opendir(TNNT_SWAPCHEST_DIR);
+    ptmp = &(swapchest->cobj);
+    while (de = readdir(d)) {
+        if (!strncmp(de->d_name, "SW-", 3)) { 
+            *ptmp = mkswapobj(swapchest, de->d_name);
+            if (!*ptmp) {
+                impossible("Swapchest obj not read from %s", de->d_name);
+            }
+        }
+    }
+    *ptmp = NULL;
+    closedir(d);
+}
+
+boolean
+delete_swapobj_file(o)
+struct obj *o;
+{
+    char path[BUFSZ];
+    sprintf(path, "%s/%s", TNNT_SWAPCHEST_DIR, o->swapobj_filename);
+    if (unlink(path) == -1)
+        if (errno != ENOENT) impossible("delete_swapobj_file %d", errno);
+        return FALSE; /* someone else deleted it first */
+    return TRUE;
+}
+
+#endif /* TNNT_SWAPCHEST_DIR */
 
 /*files.c*/

@@ -1924,9 +1924,8 @@ struct obj *obj;
         extract_nobj(obj, &billobjs);
         break;
     case OBJ_INSWAP:
-        obj->swapobj_filename = NULL; /* this gets freed elsewnere */
-        obj->where = OBJ_FREE;
-        obj->nobj = NULL;
+        /* need to set container and change to OBJ_CONTAINED */
+        impossible("obj_extract_self - swapchest");
     default:
         panic("obj_extract_self");
         break;

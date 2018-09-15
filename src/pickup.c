@@ -2138,7 +2138,7 @@ struct obj *obj;
             return TRUE;
         case SCROLL_CLASS:
             return (obj->otyp != SCR_BLANK_PAPER && obj->otyp != SCR_MAIL && obj->otyp != SCR_AMNESIA);
-        default: /* gems, boulders, statues, iron chains, etc */
+        default: /* food, gems, boulders, statues, iron chains, etc */
             return FALSE;
 
     }
@@ -2232,6 +2232,15 @@ register struct obj *obj;
         return 0;
     }
 
+    /* TNNT make sure file is written before freeinv() */
+    if (current_container->otyp == SWAP_CHEST) {
+        if (!write_swapobj_file(obj)) {
+            impossible("Could not write swapchest file");
+            return -1;
+        }
+        u.uswapitems++;
+    }
+
     freeinv(obj);
 
     if (obj_is_burning(obj)) /* this used to be part of freeinv() */
@@ -2290,9 +2299,6 @@ register struct obj *obj;
             sellobj(obj, current_container->ox, current_container->oy);
         (void) add_to_container(current_container, obj);
         current_container->owt = weight(current_container);
-        if (current_container->otyp == SWAP_CHEST) {
-            write_swapobj_file(obj);
-        }
     }
     /* gold needs this, and freeinv() many lines above may cause
      * the encumbrance to disappear from the status, so just always
@@ -2366,6 +2372,9 @@ register struct obj *obj;
             pline(swapchest_failmsg[rn2(n_swapchest_failmsg)]);
             return -1;
         }
+        free(obj->swapobj_filename);
+        obj->where = OBJ_CONTAINED;
+        obj->ocontainer = current_container;
     }
     /* <-- */
 
@@ -2553,35 +2562,6 @@ u_handsy()
         return FALSE;
     }
     return TRUE;
-}
-
-void
-refresh_swap_container_contents(swapchest)
-struct obj *swapchest;
-{
-    static char **swapobj_filenames = NULL;
-    int i;
-    struct obj **otmp;
-    /* objects in swapchest have pointer into
-     * swapobj_filenames array.
-     * delete objects first to avoid dangling pointers
-     */
-    delete_contents(swapchest);
-    /* then clean up old filename array */
-    if (swapobj_filenames) {
-        for (i = 0; swapobj_filenames[i]; i++) {
-            free(swapobj_filenames[i]);
-            swapobj_filenames[i] = NULL;
-        }
-        free(swapobj_filenames);
-        swapobj_filenames = NULL;
-    }
-    swapobj_filenames = get_swapobj_filenames();
-    otmp = &(swapchest->cobj);
-    for (i = 0; swapobj_filenames[i]; i++) {
-        *otmp = mkswapobj(swapobj_filenames[i]);
-        otmp = &(*otmp)->nobj;
-    }
 }
 
 static const char stashable[] = { ALLOW_COUNT, COIN_CLASS, ALL_CLASSES, 0 };

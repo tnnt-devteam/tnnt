@@ -358,6 +358,12 @@
 #ifndef HACKDIR
 #define HACKDIR "/tnnt"
 #endif
+/* TNNT specific
+ * the directory where we maintain the state of the swap chest
+ */
+#ifndef TNNT_SWAPCHEST_DIR
+#define TNNT_SWAPCHEST_DIR HACKDIR "/swapchest"
+#endif
 
 /*
  * Some system administrators are stupid enough to make Hack suid root

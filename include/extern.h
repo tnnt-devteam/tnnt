@@ -821,6 +821,14 @@ E void VDECL(livelog_printf, (unsigned int, const char *, ...)) PRINTF_F(2, 3);
 E void NDECL(mk_dgl_extrainfo);
 #endif
 
+#ifdef TNNT_SWAPCHEST_DIR
+E boolean FDECL(write_swapobj_file, (struct obj *));
+E void FDECL(refresh_swap_chest_contents, (struct obj *));
+E boolean FDECL(delete_swapobj_file, (struct obj *));
+#endif
+
+
+
 /* ### fountain.c ### */
 
 E void FDECL(floating_above, (const char *));
