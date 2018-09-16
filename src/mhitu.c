@@ -1384,6 +1384,7 @@ register struct attack *mattk;
         if (uncancelled) {
             if (flags.verbose)
                 Your("position suddenly seems very uncertain!");
+            tnnt_achieve(A_HEISENBERG);
             tele();
         }
         break;
@@ -2418,6 +2419,7 @@ struct monst *mon;
                 remove_worn_item(ring, FALSE);
             freeinv(ring);
             (void) mpickobj(mon, ring);
+            tnnt_achieve(A_GAVE_ADORNMENT);
         } else {
             if (uleft && uright && uleft->otyp == RIN_ADORNMENT
                 && uright->otyp == RIN_ADORNMENT)

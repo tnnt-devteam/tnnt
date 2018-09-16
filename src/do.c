@@ -1468,6 +1468,7 @@ boolean at_stairs, falling, portal;
         forget_traps();      /* forget all traps too */
         familiar = TRUE;
         level_info[new_ledger].flags &= ~FORGOTTEN;
+        tnnt_achieve(A_REVISITED_LOST_LEVEL);
     }
 
     /* Reset the screen. */

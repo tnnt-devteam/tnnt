@@ -696,6 +696,7 @@ register int pm;
                 context.victual.eating = FALSE;
             return; /* lifesaved */
         }
+        tnnt_achieve(A_TASTED_COCKATRICE);
     }
 
     switch (pm) {
@@ -1065,6 +1066,7 @@ register int pm;
             HFast |= FROMOUTSIDE;
             You("seem faster.");
         }
+        tnnt_achieve(A_HEISENBERG);
         break;
     case PM_LIZARD:
         if ((HStun & TIMEOUT) > 2)
@@ -1962,6 +1964,7 @@ struct obj *otmp;
 {
     pline("Magic spreads through your body as you digest the %s.",
           (otmp->oclass == RING_CLASS) ? "ring" : "amulet");
+    tnnt_achieve(A_INTRINSIC_FROM_JEWELRY);
 }
 
 STATIC_OVL void

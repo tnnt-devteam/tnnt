@@ -2289,6 +2289,9 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
     else if (mtmp->data == &mons[PM_ARCHON]) {
         tnnt_achieve(A_KILLED_ARCHON);
     }
+    else if (mtmp->data == &mons[PM_SOLDIER_ANT]) {
+        tnnt_achieve(A_KILLED_SOLDIER_ANT);
+    }
     if (mtmp->minvis && !See_invisible)
         tnnt_achieve(A_KILLED_INVISIBLE);
     if (u.utraptype == TT_PIT)

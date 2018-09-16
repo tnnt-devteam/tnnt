@@ -1304,7 +1304,11 @@ int dieroll;
         if (artibane)
             tnnt_achieve(A_USED_CORRECT_BANE);
         if (obj && obj->otyp == RUBBER_HOSE)
-            tnnt_achieve(A_KILLED_RUBBER_HOSE);
+            tnnt_achieve(A_KILLED_WITH_HOSE);
+        if (obj && obj->otyp == HEAVY_IRON_BALL)
+            tnnt_achieve(A_KILLED_WITH_IRONBALL);
+        if (obj && obj->otyp == AKLYS && thrown == HMON_THROWN)
+            tnnt_achieve(A_KILLED_WITH_AKLYS);
     } else if (u.umconf && hand_to_hand) {
         nohandglow(mon);
         if (!mon->mconf && !resist(mon, SPBOOK_CLASS, 0, NOTELL)) {

@@ -2077,8 +2077,11 @@ register struct obj *wand;
 {
     if (wand->spe < 0 || (wand->spe == 0 && rn2(121)))
         return 0;
-    if (wand->spe == 0)
+    if (wand->spe == 0) {
         You("wrest one last charge from the worn-out wand.");
+        if (wand->otyp == WAN_WISHING)
+            tnnt_achieve(A_WRESTED_WOW);
+    }
     wand->spe--;
     return 1;
 }
@@ -2688,6 +2691,8 @@ boolean youattack, allow_cancel_kill, self_cancel;
                 rehumanize();
         }
     } else {
+        if (youattack)
+            tnnt_achieve(A_CANCELED_MONSTER);
         mdef->mcan = TRUE;
 
         if (is_were(mdef->data) && mdef->data->mlet != S_HUMAN)

@@ -1156,6 +1156,13 @@ int how;
         tnnt_achieve(A_CROWNED);
     if (how == ESCAPED && Is_astralevel(&u.uz))
         tnnt_achieve(A_ESCAPED_IN_DISGRACE);
+    /* umoney is calculated later... */
+    umoney = money_cnt(invent) + hidden_gold();
+    if (umoney >= 100000L)
+        tnnt_achieve(A_FINISHED_WITH_100000);
+    if (umoney >= 50000L)
+        /* not an else if; getting 100000 nets both of these */
+        tnnt_achieve(A_FINISHED_WITH_50000);
 
     if (mvitals[PM_ASMODEUS].died) tnnt_achieve(A_KILLED_ASMODEUS);
     if (mvitals[PM_BAALZEBUB].died) tnnt_achieve(A_KILLED_BAALZEBUB);

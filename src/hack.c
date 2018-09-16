@@ -1980,6 +1980,9 @@ switch_terrain()
     if (lev->typ == ALTAR && In_mines(&u.uz)) {
         tnnt_achieve(A_FOUND_MINES_ALTAR);
     }
+    if (lev->typ == GRAVE && Is_rogue_level(&u.uz)) {
+        tnnt_achieve(A_FOUND_ROGUE_BONES_PILE);
+    }
 }
 
 /* extracted from spoteffects; called by spoteffects to check for entering or
@@ -2393,19 +2396,24 @@ register boolean newlev;
             tnnt_achieve(A_ENTERED_VAULT);
             break;
         case ZOO:
+            tnnt_achieve(A_ENTERED_ZOO);
             pline("Welcome to David's treasure zoo!");
             break;
         case SWAMP:
+            tnnt_achieve(A_ENTERED_SWAMP);
             pline("It %s rather %s down here.", Blind ? "feels" : "looks",
                   Blind ? "humid" : "muddy");
             break;
         case COURT:
+            tnnt_achieve(A_ENTERED_THRONE_ROOM);
             You("enter an opulent throne room!");
             break;
         case LEPREHALL:
+            tnnt_achieve(A_ENTERED_LEP_HALL);
             You("enter a leprechaun hall!");
             break;
         case MORGUE:
+            tnnt_achieve(A_ENTERED_GRAVEYARD);
             if (midnight()) {
                 const char *run = locomotion(youmonst.data, "Run");
                 pline("%s away!  %s away!", run, run);
@@ -2413,15 +2421,19 @@ register boolean newlev;
                 You("have an uncanny feeling...");
             break;
         case BEEHIVE:
+            tnnt_achieve(A_ENTERED_BEEHIVE);
             You("enter a giant beehive!");
             break;
         case COCKNEST:
+            tnnt_achieve(A_ENTERED_COCKNEST);
             You("enter a disgusting nest!");
             break;
         case ANTHOLE:
+            tnnt_achieve(A_ENTERED_ANTHOLE);
             You("enter an anthole!");
             break;
         case BARRACKS:
+            tnnt_achieve(A_ENTERED_BARRACKS);
             if (monstinroom(&mons[PM_SOLDIER], roomno)
                 || monstinroom(&mons[PM_SERGEANT], roomno)
                 || monstinroom(&mons[PM_LIEUTENANT], roomno)

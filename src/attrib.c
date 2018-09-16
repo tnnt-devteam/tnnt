@@ -118,6 +118,7 @@ int msgflg; /* positive => no message, zero => message, and */
     int old_acurr, old_abase;
     boolean abonflg;
     const char *attrstr;
+    int itr, flag = 1;
 
     if (Fixed_abil || !incr)
         return FALSE;
@@ -141,6 +142,12 @@ int msgflg; /* positive => no message, zero => message, and */
         }
         attrstr = plusattr[ndx];
         abonflg = (ABON(ndx) < 0);
+        for (itr = A_MAX; itr > 0; itr--) {
+            if (ACURR(itr) < 18)
+                flag = 0;
+        }
+        if (flag)
+            tnnt_achieve(A_MAXED_ATTRIBUTES);
     } else {
         ABASE(ndx) += incr;
         if (ABASE(ndx) < ATTRMIN(ndx)) {
@@ -1147,6 +1154,7 @@ int reason; /* 0==conversion, 1==helm-of-OA on, 2==helm-of-OA off */
     if (u.ualign.type != oldalign) {
         u.ualign.record = 0; /* slate is wiped clean */
         retouch_equipment(0);
+        tnnt_achieve(A_CHANGED_ALIGNMENT);
     }
 }
 

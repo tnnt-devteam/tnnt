@@ -1117,8 +1117,11 @@ boolean your_fault, from_invent;
                 pline_The("iron bars are dissolved!");
             else
                 You_hear(Hallucination ? "angry snakes!" : "a hissing noise.");
-            if (!unbreakable)
+            if (!unbreakable) {
                 dissolve_bars(barsx, barsy);
+                if (your_fault)
+                    tnnt_achieve(A_DISSOLVED_IRONBARS);
+            }
         }
     }
     else if (obj_type == BOULDER || obj_type == HEAVY_IRON_BALL)

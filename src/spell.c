@@ -1186,6 +1186,7 @@ boolean atme;
         break;
     case SPE_CREATE_FAMILIAR:
         (void) make_familiar((struct obj *) 0, u.ux, u.uy, FALSE);
+        tnnt_achieve(A_CREATED_FAMILIAR);
         break;
     case SPE_CLAIRVOYANCE:
         if (!BClairvoyant) {

@@ -124,7 +124,7 @@ enum tnnt_achievements {
     A_HIT_WITH_BOOMERANG,    /* Implemented. */
     A_DEALT_SILVER_DAMAGE,   /* Implemented. */
     A_MADE_CRYSKNIFE,        /* Implemented. */
-    A_KILLED_RUBBER_HOSE,    /* Implemented. */
+    A_KILLED_WITH_HOSE,      /* Implemented. */
     A_WIZ_WORE_CORNUTHAUM,   /* Implemented. */
     A_WORE_MITHRIL_COAT,     /* Implemented. */
     A_FOUND_5_GRAFFITI,      /* Implemented. */
@@ -175,7 +175,15 @@ enum tnnt_achievements {
     A_DEFLECTED_NYMPH,       /* Implemented. */
     A_BRIBED_DEMON_LORD,     /* Implemented. */
     A_ENTERED_VAULT,         /* Implemented, tested. */
-    /* A_ENTERED_ANTHOLE, etc...? */
+    A_ENTERED_ZOO,           /* Implemented. */
+    A_ENTERED_THRONE_ROOM,   /* Implemented. */
+    A_ENTERED_LEP_HALL,      /* Implemented. */
+    A_ENTERED_BEEHIVE,       /* Implemented. */
+    A_ENTERED_GRAVEYARD,     /* Implemented. */
+    A_ENTERED_ANTHOLE,       /* Implemented. */
+    A_ENTERED_BARRACKS,      /* Implemented. */
+    A_ENTERED_SWAMP,         /* Implemented. */
+    A_ENTERED_COCKNEST,      /* Implemented. */
     A_KILLED_ASMODEUS,       /* Implemented. */
     A_KILLED_BAALZEBUB,      /* Implemented. */
     A_KILLED_ORCUS,          /* Implemented. */
@@ -188,13 +196,32 @@ enum tnnt_achievements {
     A_KILLED_PESTILENCE,     /* Implemented. */
     A_KILLED_FAMINE,         /* Implemented. */
     A_ESCAPED_IN_DISGRACE,   /* Implemented. */
-    /* boring
-    A_SHOPPED_WITH_LEASHED,
-    A_NO_SHIRT_NO_SHOES,
-    */
-    /* Won't implement on account of being trivial.
-    A_CREATED_ARTI,
-    */
+    A_CHANGED_ALIGNMENT,     /* Implemented. */
+    A_HEISENBERG,            /* Implemented. */
+    A_SCARED_BY_GHOST,       /* Implemented. */
+    A_REVISITED_LOST_LEVEL,  /* Implemented. */
+    A_DIPPED_IN_UNHOLY,      /* Implemented. */
+    A_DISSOLVED_IRONBARS,    /* Implemented. */
+    A_BROKE_WAN_NOTHING,     /* Implemented. */
+    A_CANCELED_MONSTER,      /* Implemented. */
+    A_INTRINSIC_FROM_JEWELRY,/* Implemented. */
+    A_KILLED_WITH_AKLYS,     /* Implemented. */
+    A_NEUTRALIZED_POTION,    /* Implemented. */
+    A_KILLED_WITH_IRONBALL,  /* Implemented. */
+    A_FINISHED_WITH_50000,   /* Implemented. */
+    A_FINISHED_WITH_100000,  /* Implemented. */
+    A_APPLIED_CRYSTAL_BALL,  /* Implemented. */
+    A_MAXED_ATTRIBUTES,      /* Implemented. */
+    A_FOUND_BONES_PILE,      /* Implemented. */
+    A_FOUND_ROGUE_BONES_PILE,/* Implemented. */
+    A_CREATED_FAMILIAR,      /* Implemented. */
+    A_GAVE_ADORNMENT,        /* Implemented. */
+    A_UNWINNABLE,
+    A_GOT_FOOD_APPRAISAL,    /* Implemented. */
+    A_KILLED_SOLDIER_ANT,    /* Implemented. */
+    A_SUMMONED_DEMON_LORD,   /* Implemented. */
+    A_TASTED_COCKATRICE,     /* Implemented. */
+    A_WRESTED_WOW            /* Implemented. */
 };
 
 struct u_achieve {

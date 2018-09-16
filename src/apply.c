@@ -3305,6 +3305,9 @@ struct obj *obj;
     freeinv(obj);       /* hide it from destroy_item instead... */
     setnotworn(obj);    /* so we need to do this ourselves */
 
+    if (obj->otyp == WAN_NOTHING && objects[WAN_NOTHING].oc_name_known)
+        tnnt_achieve(A_BROKE_WAN_NOTHING);
+
     if (!zappable(obj)) {
         pline(nothing_else_happens);
         goto discard_broken_wand;

@@ -505,6 +505,7 @@ int roomno;
             nomul(-3);
             multi_reason = "being terrified of a ghost";
             nomovemsg = "You regain your composure.";
+            tnnt_achieve(A_SCARED_BY_GHOST);
         }
     }
 }

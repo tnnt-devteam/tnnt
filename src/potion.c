@@ -444,6 +444,7 @@ ghost_from_bottle()
     nomul(-3);
     multi_reason = "being frightened to death";
     nomovemsg = "You regain your composure.";
+    tnnt_achieve(A_SCARED_BY_GHOST);
 }
 
 /* "Quaffing is like drinking, except you spill more." - Terry Pratchett */
@@ -1221,6 +1222,7 @@ const char *objphrase; /* "Your widget glows" or "Steed's saddle glows" */
             costchange = COST_alter;
             altfmt = TRUE;
         }
+        tnnt_achieve(A_DIPPED_IN_UNHOLY);
     } else {
         /* dipping into uncursed water; carried() check skips steed saddle */
         if (carried(targobj)) {
@@ -2174,6 +2176,8 @@ more_dips:
         boolean old_dknown = FALSE;
         boolean more_than_one = potion->quan > 1L;
 
+        if (obj->otyp == UNICORN_HORN)
+            tnnt_achieve(A_NEUTRALIZED_POTION);
         oldbuf[0] = '\0';
         if (potion->dknown) {
             old_dknown = TRUE;

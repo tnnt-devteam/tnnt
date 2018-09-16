@@ -314,6 +314,7 @@ makerogueghost()
         return;
     ghost->msleeping = 1;
     ghost = christen_monst(ghost, roguename());
+    levl[x][y].typ = GRAVE;
 
     if (rn2(4)) {
         ghostobj = mksobj_at(FOOD_RATION, x, y, FALSE, FALSE);

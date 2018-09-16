@@ -1409,6 +1409,7 @@ dosacrifice()
                     nomul(-3);
                     multi_reason = "being terrified of a demon";
                     nomovemsg = 0;
+                    tnnt_achieve(A_SUMMONED_DEMON_LORD);
                 } else
                     pline_The("%s.", demonless_msg);
             }
