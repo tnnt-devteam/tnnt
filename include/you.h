@@ -128,8 +128,8 @@ enum tnnt_achievements {
     A_WIZ_WORE_CORNUTHAUM,   /* Implemented. */
     A_WORE_MITHRIL_COAT,     /* Implemented. */
     A_FOUND_5_GRAFFITI,      /* Implemented. */
-    A_SPLIT_A_PUDDING,       /* Implemented. */
-    A_WORE_MEAT_RING,        /* Implemented. */
+    A_SPLIT_A_PUDDING,       /* Implemented. */ /* #64 */
+    A_WORE_MEAT_RING,        /* Implemented. */ /* begin tnntachieve1 here */
     A_LOOTED_ICE_BOX,        /* Implemented. */
     A_ANIMATED_FIGURINE,     /* Implemented. */
     A_NERD,                  /* Implemented. */
@@ -192,8 +192,8 @@ enum tnnt_achievements {
     A_KILLED_YEENOGHU,       /* Implemented. */
     A_KILLED_GERYON,         /* Implemented. */
     A_KILLED_DISPATER,       /* Implemented. */
-    A_KILLED_DEATH,          /* Implemented. */
-    A_KILLED_PESTILENCE,     /* Implemented. */
+    A_KILLED_DEATH,          /* Implemented. */ /* #128 */
+    A_KILLED_PESTILENCE,     /* Implemented. */ /* begin tnntachieve2 here */
     A_KILLED_FAMINE,         /* Implemented. */
     A_ESCAPED_IN_DISGRACE,   /* Implemented. */
     A_CHANGED_ALIGNMENT,     /* Implemented. */
