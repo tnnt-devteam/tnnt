@@ -426,7 +426,7 @@ unsigned cxn_flags; /* bitmask of CXN_xxx values */
     if (Role_if(PM_PRIEST))
         obj->bknown = TRUE;
 
-    if (iflags.override_ID) {
+    if (iflags.override_ID || obj->where == OBJ_INSWAP) {
         known = dknown = bknown = TRUE;
         nn = 1;
     } else {
@@ -3647,6 +3647,8 @@ typfnd:
         case MAGIC_LAMP:
             typ = OIL_LAMP;
             break;
+        case SWAP_CHEST:
+            typ = CHEST;
         default:
             /* catch any other non-wishable objects (venom) */
             if (objects[typ].oc_nowish)

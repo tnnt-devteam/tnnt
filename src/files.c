@@ -686,7 +686,7 @@ void
 really_close()
 {
     int fd;
-    
+
     if (lftrack.init) {
         fd = lftrack.fd;
 
@@ -2606,7 +2606,7 @@ char *origbuf;
         sysopt.tt_oname_maxrank = n;
     } else if (src == SET_IN_SYS && match_varname(buf, "LIVELOG", 7)) {
 #ifdef LIVELOGFILE
-        n = strtol(bufp,NULL,0); 
+        n = strtol(bufp,NULL,0);
         if (n < 0 || n > 0xFFFF) {
             raw_printf("Illegal value in LIVELOG (must be between 0 and 0xFFFF).");
             return 0;
@@ -3716,7 +3716,7 @@ const char *reason; /* explanation */
 void
 testinglog(filenm, type, reason)
 const char *filenm;   /* ad hoc file name */
-const char *type; 
+const char *type;
 const char *reason;   /* explanation */
 {
     FILE *lfile;
@@ -4509,16 +4509,18 @@ struct obj *o;
     FILE *f = fopen(filename,"w");
     free(filename);
     if (!f) return FALSE;
-    fprintf(f, "o_id=%x\totyp=%d\towt=%d\tquan=%d\tspe=%d\toclass=%c\t"
+    fprintf(f, "o_id=%x\totyp=%d\towt=%d\tquan=%d\tspe=%d\toclass=%d\t"
                "cursed=%d\tblessed=%d\toeroded=%d\toeroded2=%d\toerodeproof=%d\t"
                "recharged=%d\tgreased=%d\tusecount=%d\tname=%s_%s\n",
                o->o_id, o->otyp, o->owt, o->quan, o->spe, o->oclass,
                o->cursed, o->blessed, o->oeroded, o->oeroded2, o->oerodeproof,
                o->recharged, o->greased, o->usecount, objnames[u.uswapitems], plname);
     /* the second line is just for humans to read what the object is, for debugging */
-    iflags.override_ID++;
-    fprintf(f, "%s\n", xname(o));
-    iflags.override_ID--;
+    o->known = 1;
+    o->dknown = 1;
+    o->bknown = 1;
+    o->rknown = 1;
+    fprintf(f, "%s\n", killer_xname(o));
     fclose(f);
     return TRUE;
 }
@@ -4556,7 +4558,7 @@ char *filename;
         if (sscanf(buf, "owt=%d", &(o->owt)) == 1) continue;
         if (sscanf(buf, "quan=%ld", &(o->quan)) == 1) continue;
         if (sscanf(buf, "spe=%hhd", &(o->spe)) == 1) continue;
-        if (sscanf(buf, "oclass=%c", &(o->oclass)) == 1) continue;
+        if (sscanf(buf, "oclass=%hhd", &(o->oclass)) == 1) continue;
         if (sscanf(buf, "cursed=%d", &tmp_bitfield) == 1) {
             o->cursed = tmp_bitfield;
             continue;
@@ -4608,27 +4610,20 @@ char *filename;
 void
 refresh_swap_chest_contents(swapchest)
 struct obj *swapchest;
-{   
+{
     DIR *d;
     struct dirent *de;
-    struct obj *otmp, **ptmp;
-    for (otmp = swapchest->cobj; otmp; otmp = otmp->nobj) {
-        free(otmp->swapobj_filename);
-        otmp->ocontainer = swapchest;
-        otmp->where = OBJ_CONTAINED;
-    }
-    delete_contents(swapchest);
+    struct obj *otmp;
+    delete_swap_chest_contents(swapchest);
     d = opendir(TNNT_SWAPCHEST_DIR);
-    ptmp = &(swapchest->cobj);
     while (de = readdir(d)) {
-        if (!strncmp(de->d_name, "SW-", 3)) { 
-            *ptmp = mkswapobj(swapchest, de->d_name);
-            if (!*ptmp) {
+        if (!strncmp(de->d_name, "SW-", 3)) {
+            otmp = mkswapobj(swapchest, de->d_name);
+            if (!otmp) {
                 impossible("Swapchest obj not read from %s", de->d_name);
             }
         }
     }
-    *ptmp = NULL;
     closedir(d);
 }
 
@@ -4638,9 +4633,10 @@ struct obj *o;
 {
     char path[BUFSZ];
     sprintf(path, "%s/%s", TNNT_SWAPCHEST_DIR, o->swapobj_filename);
-    if (unlink(path) == -1)
+    if (unlink(path) == -1) {
         if (errno != ENOENT) impossible("delete_swapobj_file %d", errno);
         return FALSE; /* someone else deleted it first */
+    }
     return TRUE;
 }
 

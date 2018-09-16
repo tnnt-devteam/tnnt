@@ -815,7 +815,7 @@ E boolean FDECL(read_tribute, (const char *, const char *, int,
                                char *, int, unsigned));
 E boolean FDECL(Death_quote, (char *, int));
 E void FDECL(livelog_write_string, (unsigned int, char *));
-E void VDECL(livelog_printf, (unsigned int, const char *, ...)) PRINTF_F(2, 3); 
+E void VDECL(livelog_printf, (unsigned int, const char *, ...)) PRINTF_F(2, 3);
 
 #ifdef EXTRAINFO_FN
 E void NDECL(mk_dgl_extrainfo);
@@ -1842,6 +1842,7 @@ E boolean FDECL(allow_all, (struct obj *));
 E boolean FDECL(allow_category, (struct obj *));
 E boolean FDECL(is_worn_by_type, (struct obj *));
 E int FDECL(ck_bag, (struct obj *));
+E void FDECL(delete_swap_chest_contents, (struct obj *));
 #ifdef USE_TRAMPOLI
 E int FDECL(in_container, (struct obj *));
 E int FDECL(out_container, (struct obj *));

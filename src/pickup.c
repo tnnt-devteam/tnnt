@@ -2320,6 +2320,22 @@ struct obj *obj;
     return (current_container && obj != current_container);
 }
 
+void
+delete_swap_chest_contents(swapchest)
+struct obj *swapchest;
+{
+    struct obj *otmp;
+    for (otmp = swapchest->cobj; otmp; otmp = otmp->nobj) {
+        /* newly placed objects dont have ptr to filename yet */
+        if (otmp->where == OBJ_INSWAP) {
+            free(otmp->swapobj_filename);
+            otmp->ocontainer = swapchest;
+            otmp->where = OBJ_CONTAINED;
+        }
+    }
+    delete_contents(swapchest);
+}
+
 /* Returns: -1 to stop, 1 item was removed, 0 item was not removed. */
 STATIC_PTR int
 out_container(obj)
@@ -2329,7 +2345,8 @@ register struct obj *obj;
     boolean is_gold = (obj->oclass == COIN_CLASS);
     int res, loadlev;
     long count;
-    char **swapchest_failmsg = {
+#define N_SWAPCHEST_FAILMSG 6
+    char *swapchest_failmsg[N_SWAPCHEST_FAILMSG] = {
         "The item turns out to be a hologram, and vanishes as your hand passes through it.",
         "The item vanishes in a puff of logic.",
         "You thought you felt something in your hand, but it disappears!",
@@ -2338,7 +2355,6 @@ register struct obj *obj;
         /* this one is the most accurate description: */
         "As you reach for the item, a hand reaches in from another dimension, and snatches it away!"
         };
-    short n_swapchest_failmsg = 6;
 
     if (!current_container) {
         impossible("<out> no current_container?");
@@ -2369,7 +2385,7 @@ register struct obj *obj;
         }
         if (!delete_swapobj_file(obj)) {
             /* fails if file already doesn't exist */
-            pline(swapchest_failmsg[rn2(n_swapchest_failmsg)]);
+            pline(swapchest_failmsg[rn2(N_SWAPCHEST_FAILMSG)]);
             return -1;
         }
         free(obj->swapobj_filename);
@@ -2410,9 +2426,11 @@ register struct obj *obj;
     if (current_container->otyp == SWAP_CHEST) {
         u.uswapitems = -1;
         /* items from chest come pre-identified */
-        makeknown(otmp);
+        makeknown(otmp->otyp);
+        makeknown(SWAP_CHEST);
         pline("%s gives you a mischievous wink and vanishes into thin air!",  The(xname(current_container)));
-        delete_contents(current_container);
+
+        delete_swap_chest_contents(current_container);
         if (carried(current_container))
             useup(current_container);
         else if (obj_here(current_container, u.ux, u.uy))
@@ -2718,6 +2736,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
                     return 0;
                 }
                 refresh_swap_chest_contents(current_container);
+                current_container->cknown = 0;
             }
             /* <-- */
             if (!current_container->cknown)
@@ -2751,6 +2770,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
                     return 0;
                 }
                 refresh_swap_chest_contents(current_container);
+                current_container->cknown = 0;
             }
             add_valid_menu_class(0); /* reset */
             if (flags.menu_style == MENU_TRADITIONAL)
