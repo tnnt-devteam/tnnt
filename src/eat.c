@@ -685,6 +685,7 @@ register int pm;
 {
     (void) maybe_cannibal(pm, TRUE);
     if (flesh_petrifies(&mons[pm])) {
+        tnnt_achieve(A_TASTED_COCKATRICE);
         if (!Stone_resistance
             && !(poly_when_stoned(youmonst.data)
                  && polymon(PM_STONE_GOLEM))) {
@@ -696,7 +697,6 @@ register int pm;
                 context.victual.eating = FALSE;
             return; /* lifesaved */
         }
-        tnnt_achieve(A_TASTED_COCKATRICE);
     }
 
     switch (pm) {
