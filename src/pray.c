@@ -821,8 +821,10 @@ gcrownu()
             if (!Blind)
                 Your("sword shines brightly for a moment.");
             obj = oname(obj, artiname(ART_EXCALIBUR));
-            if (obj && obj->oartifact == ART_EXCALIBUR)
+            if (obj && obj->oartifact == ART_EXCALIBUR) {
                 u.ugifts++;
+                tnnt_achieve(A_GRANTED_ARTI);
+            }
         }
         /* acquire Excalibur's skill regardless of weapon or gift */
         unrestrict_weapon_skill(P_LONG_SWORD);
@@ -842,6 +844,7 @@ gcrownu()
             at_your_feet("A sword");
             dropy(obj);
             u.ugifts++;
+            tnnt_achieve(A_GRANTED_ARTI);
         }
         /* acquire Vorpal Blade's skill regardless of weapon or gift */
         unrestrict_weapon_skill(P_LONG_SWORD);
@@ -864,6 +867,7 @@ gcrownu()
             at_your_feet(An(swordbuf));
             dropy(obj);
             u.ugifts++;
+            tnnt_achieve(A_GRANTED_ARTI);
         }
         /* acquire Stormbringer's skill regardless of weapon or gift */
         unrestrict_weapon_skill(P_BROAD_SWORD);
