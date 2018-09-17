@@ -444,6 +444,7 @@ ghost_from_bottle()
     nomul(-3);
     multi_reason = "being frightened to death";
     nomovemsg = "You regain your composure.";
+    tnnt_achieve(A_SCARED_BY_GHOST);
 }
 
 /* "Quaffing is like drinking, except you spill more." - Terry Pratchett */
@@ -1221,6 +1222,7 @@ const char *objphrase; /* "Your widget glows" or "Steed's saddle glows" */
             costchange = COST_alter;
             altfmt = TRUE;
         }
+        tnnt_achieve(A_DIPPED_IN_UNHOLY);
     } else {
         /* dipping into uncursed water; carried() check skips steed saddle */
         if (carried(targobj)) {
@@ -1469,7 +1471,7 @@ int how;
                         wake_nearto(tx, ty, mon->data->mlevel * 10);
                     mon->mhp -= d(2, 6);
                     /* should only be by you */
-                    if (mon->mhp < 1)
+                    if (DEADMONSTER(mon))
                         killed(mon);
                     else if (is_were(mon->data) && !is_human(mon->data))
                         new_were(mon); /* revert to human */
@@ -1492,7 +1494,7 @@ int how;
                     pline("%s rusts.", Monnam(mon));
                 mon->mhp -= d(1, 6);
                 /* should only be by you */
-                if (mon->mhp < 1)
+                if (DEADMONSTER(mon))
                     killed(mon);
             }
             break;
@@ -1507,7 +1509,7 @@ int how;
                 if (!is_silent(mon->data))
                     wake_nearto(tx, ty, mon->data->mlevel * 10);
                 mon->mhp -= d(obj->cursed ? 2 : 1, obj->blessed ? 4 : 8);
-                if (mon->mhp < 1) {
+                if (DEADMONSTER(mon)) {
                     if (your_fault)
                         killed(mon);
                     else
@@ -1528,7 +1530,7 @@ int how;
         */
         }
         /* target might have been killed */
-        if (mon->mhp > 0) {
+        if (!DEADMONSTER(mon)) {
             if (angermon)
                 wakeup(mon, TRUE);
             else
@@ -2174,6 +2176,8 @@ more_dips:
         boolean old_dknown = FALSE;
         boolean more_than_one = potion->quan > 1L;
 
+        if (obj->otyp == UNICORN_HORN)
+            tnnt_achieve(A_NEUTRALIZED_POTION);
         oldbuf[0] = '\0';
         if (potion->dknown) {
             old_dknown = TRUE;

@@ -535,7 +535,7 @@ int *dmg_p; /* for dishing out extra damage in lieu of Int loss */
             if (visflag && canseemon(magr))
                 pline("%s turns to stone!", Monnam(magr));
             monstone(magr);
-            if (magr->mhp > 0) {
+            if (!DEADMONSTER(magr)) {
                 /* life-saved; don't continue eating the brains */
                 return MM_MISS;
             } else {
@@ -622,7 +622,7 @@ int *dmg_p; /* for dishing out extra damage in lieu of Int loss */
             return MM_MISS;
         } else if (is_rider(pd)) {
             mondied(magr);
-            if (magr->mhp <= 0)
+            if (DEADMONSTER(magr))
                 result = MM_AGR_DIED;
             /* Rider takes extra damage regardless of whether attacker dies */
             *dmg_p += xtra_dmg;
@@ -696,6 +696,7 @@ register int pm;
                 context.victual.eating = FALSE;
             return; /* lifesaved */
         }
+        tnnt_achieve(A_TASTED_COCKATRICE);
     }
 
     switch (pm) {
@@ -1065,6 +1066,7 @@ register int pm;
             HFast |= FROMOUTSIDE;
             You("seem faster.");
         }
+        tnnt_achieve(A_HEISENBERG);
         break;
     case PM_LIZARD:
         if ((HStun & TIMEOUT) > 2)
@@ -1962,6 +1964,7 @@ struct obj *otmp;
 {
     pline("Magic spreads through your body as you digest the %s.",
           (otmp->oclass == RING_CLASS) ? "ring" : "amulet");
+    tnnt_achieve(A_INTRINSIC_FROM_JEWELRY);
 }
 
 STATIC_OVL void

@@ -1469,9 +1469,9 @@ domove()
         if (u.ustuck && (x != u.ustuck->mx || y != u.ustuck->my)) {
             if (distu(u.ustuck->mx, u.ustuck->my) > 2) {
                 /* perhaps it fled (or was teleported or ... ) */
-                u.ustuck = 0;
                 if (is_pool(x, y))
                     tnnt_achieve(A_SURVIVED_DROWNING);
+                u.ustuck = 0;
             } else if (sticks(youmonst.data)) {
                 /* When polymorphed into a sticking monster,
                  * u.ustuck means it's stuck to you, not you to it.
@@ -1494,9 +1494,9 @@ domove()
                 case 2:
                 pull_free:
                     You("pull free from %s.", mon_nam(u.ustuck));
-                    u.ustuck = 0;
                     if (is_pool(u.ustuck->mx, u.ustuck->my))
                         tnnt_achieve(A_SURVIVED_DROWNING);
+                    u.ustuck = 0;
                     break;
                 case 3:
                     if (!u.ustuck->mcanmove) {
@@ -1980,10 +1980,8 @@ switch_terrain()
     if (lev->typ == ALTAR && In_mines(&u.uz)) {
         tnnt_achieve(A_FOUND_MINES_ALTAR);
     }
-    if (lev->graffitied) {
-        u.uachieve.graffiti_found++;
-        if (u.uachieve.graffiti_found > 5)
-            tnnt_achieve(A_FOUND_5_GRAFFITI);
+    if (lev->typ == GRAVE && Is_rogue_level(&u.uz)) {
+        tnnt_achieve(A_FOUND_ROGUE_BONES_PILE);
     }
 }
 
@@ -2398,19 +2396,24 @@ register boolean newlev;
             tnnt_achieve(A_ENTERED_VAULT);
             break;
         case ZOO:
+            tnnt_achieve(A_ENTERED_ZOO);
             pline("Welcome to David's treasure zoo!");
             break;
         case SWAMP:
+            tnnt_achieve(A_ENTERED_SWAMP);
             pline("It %s rather %s down here.", Blind ? "feels" : "looks",
                   Blind ? "humid" : "muddy");
             break;
         case COURT:
+            tnnt_achieve(A_ENTERED_THRONE_ROOM);
             You("enter an opulent throne room!");
             break;
         case LEPREHALL:
+            tnnt_achieve(A_ENTERED_LEP_HALL);
             You("enter a leprechaun hall!");
             break;
         case MORGUE:
+            tnnt_achieve(A_ENTERED_GRAVEYARD);
             if (midnight()) {
                 const char *run = locomotion(youmonst.data, "Run");
                 pline("%s away!  %s away!", run, run);
@@ -2418,15 +2421,19 @@ register boolean newlev;
                 You("have an uncanny feeling...");
             break;
         case BEEHIVE:
+            tnnt_achieve(A_ENTERED_BEEHIVE);
             You("enter a giant beehive!");
             break;
         case COCKNEST:
+            tnnt_achieve(A_ENTERED_COCKNEST);
             You("enter a disgusting nest!");
             break;
         case ANTHOLE:
+            tnnt_achieve(A_ENTERED_ANTHOLE);
             You("enter an anthole!");
             break;
         case BARRACKS:
+            tnnt_achieve(A_ENTERED_BARRACKS);
             if (monstinroom(&mons[PM_SOLDIER], roomno)
                 || monstinroom(&mons[PM_SERGEANT], roomno)
                 || monstinroom(&mons[PM_LIEUTENANT], roomno)
@@ -2499,16 +2506,14 @@ register boolean newlev;
     return;
 }
 
-/* the ',' command */
+/* returns
+   1 = cannot pickup, time taken
+   0 = cannot pickup, no time taken
+  -1 = do normal pickup
+  -2 = loot the monster */
 int
-dopickup()
+pickup_checks()
 {
-    int count, tmpcount;
-    struct trap *traphere = t_at(u.ux, u.uy);
-
-    /* awful kludge to work around parse()'s pre-decrement */
-    count = (multi || (save_cm && *save_cm == ',')) ? multi + 1 : 0;
-    multi = 0; /* always reset */
     /* uswallow case added by GAN 01/29/87 */
     if (u.uswallow) {
         if (!u.ustuck->minvent) {
@@ -2520,8 +2525,7 @@ dopickup()
                     Blind ? "feel" : "see");
             return 1;
         } else {
-            tmpcount = -count;
-            return loot_mon(u.ustuck, &tmpcount, (boolean *) 0);
+            return -2; /* loot the monster inventory */
         }
     }
     if (is_pool(u.ux, u.uy)) {
@@ -2563,6 +2567,7 @@ dopickup()
         return 0;
     }
     if (!can_reach_floor(TRUE)) {
+        struct trap *traphere = t_at(u.ux, u.uy);
         if (traphere && uteetering_at_seen_pit(traphere))
             You("cannot reach the bottom of the pit.");
         else if (u.usteed && P_SKILL(P_RIDING) < P_BASIC)
@@ -2573,6 +2578,25 @@ dopickup()
             You("cannot reach the %s.", surface(u.ux, u.uy));
         return 0;
     }
+    return -1; /* can do normal pickup */
+}
+
+/* the ',' command */
+int
+dopickup(VOID_ARGS)
+{
+    int count, tmpcount, ret;
+
+    /* awful kludge to work around parse()'s pre-decrement */
+    count = (multi || (save_cm && *save_cm == cmd_from_func(dopickup))) ? multi + 1 : 0;
+    multi = 0; /* always reset */
+
+    if ((ret = pickup_checks() >= 0))
+        return ret;
+    else if (ret == -2) {
+        tmpcount = -count;
+        return loot_mon(u.ustuck, &tmpcount, (boolean *) 0);
+    } /* else ret == -1 */
 
     return pickup(-count);
 }

@@ -214,7 +214,7 @@ struct obj *otmp;
                 dmg = spell_damage_bonus(dmg);
             context.bypasses = TRUE; /* for make_corpse() */
             if (!resist(mtmp, otmp->oclass, dmg, NOTELL)) {
-                if (mtmp->mhp > 0)
+                if (!DEADMONSTER(mtmp))
                     monflee(mtmp, 0, FALSE, TRUE);
             }
         }
@@ -412,11 +412,11 @@ struct obj *otmp;
             dmg = spell_damage_bonus(dmg);
         if (resists_drli(mtmp)) {
             shieldeff(mtmp->mx, mtmp->my);
-        } else if (!resist(mtmp, otmp->oclass, dmg, NOTELL) && mtmp->mhp > 0) {
+        } else if (!resist(mtmp, otmp->oclass, dmg, NOTELL) && !DEADMONSTER(mtmp)) {
             mtmp->mhp -= dmg;
             mtmp->mhpmax -= dmg;
             /* die if already level 0, regardless of hit points */
-            if (mtmp->mhp <= 0 || mtmp->mhpmax <= 0 || mtmp->m_lev < 1) {
+            if (DEADMONSTER(mtmp) || mtmp->mhpmax <= 0 || mtmp->m_lev < 1) {
                 killed(mtmp);
             } else {
                 mtmp->m_lev--;
@@ -433,7 +433,7 @@ struct obj *otmp;
         break;
     }
     if (wake) {
-        if (mtmp->mhp > 0) {
+        if (!DEADMONSTER(mtmp)) {
             wakeup(mtmp, helpful_gesture ? FALSE : TRUE);
             m_respond(mtmp);
             if (mtmp->isshk && !*u.ushops)
@@ -446,7 +446,7 @@ struct obj *otmp;
      * might be an invisible worm hit on the tail.
      */
     if (reveal_invis) {
-        if (mtmp->mhp > 0 && cansee(bhitpos.x, bhitpos.y)
+        if (!DEADMONSTER(mtmp) && cansee(bhitpos.x, bhitpos.y)
             && !canspotmon(mtmp))
             map_invisible(bhitpos.x, bhitpos.y);
     }
@@ -2077,8 +2077,11 @@ register struct obj *wand;
 {
     if (wand->spe < 0 || (wand->spe == 0 && rn2(121)))
         return 0;
-    if (wand->spe == 0)
+    if (wand->spe == 0) {
         You("wrest one last charge from the worn-out wand.");
+        if (wand->otyp == WAN_WISHING)
+            tnnt_achieve(A_WRESTED_WOW);
+    }
     wand->spe--;
     return 1;
 }
@@ -2688,6 +2691,8 @@ boolean youattack, allow_cancel_kill, self_cancel;
                 rehumanize();
         }
     } else {
+        if (youattack)
+            tnnt_achieve(A_CANCELED_MONSTER);
         mdef->mcan = TRUE;
 
         if (is_were(mdef->data) && mdef->data->mlet != S_HUMAN)
@@ -3959,7 +3964,7 @@ boolean say; /* Announce out of sight hit/miss events if true */
         /* Using disintegration from the inside only makes a hole... */
         if (tmp == MAGIC_COOKIE)
             u.ustuck->mhp = 0;
-        if (u.ustuck->mhp < 1)
+        if (DEADMONSTER(u.ustuck))
             killed(u.ustuck);
         return;
     }
@@ -4047,7 +4052,7 @@ boolean say; /* Announce out of sight hit/miss events if true */
 
                     if (tmp == MAGIC_COOKIE) { /* disintegration */
                         disintegrate_mon(mon, type, fltxt);
-                    } else if (mon->mhp < 1) {
+                    } else if (DEADMONSTER(mon)) {
                         if (type < 0) {
                             /* mon has just been killed by another monster */
                             monkilled(mon, fltxt, AD_RBRE);
@@ -5003,7 +5008,7 @@ int damage, tell;
 
     if (damage) {
         mtmp->mhp -= damage;
-        if (mtmp->mhp < 1) {
+        if (DEADMONSTER(mtmp)) {
             if (m_using)
                 monkilled(mtmp, "", AD_RBRE);
             else

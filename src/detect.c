@@ -562,6 +562,8 @@ register struct obj *sobj;
         if (u.uburied)
             under_ground(2);
     }
+    if (u.uedibility)
+        tnnt_achieve(A_GOT_FOOD_APPRAISAL);
     return 0;
 }
 
@@ -1167,6 +1169,8 @@ struct obj **optr;
         }
         return;
     }
+
+    tnnt_achieve(A_APPLIED_CRYSTAL_BALL);
 
     /* read a single character */
     if (flags.verbose)

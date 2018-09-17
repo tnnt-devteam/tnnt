@@ -767,7 +767,7 @@ register xchar x, y;
                        corpse less likely to remain tame after revival */
                     xkilled(mtmp, XKILL_NOMSG);
                     /* life-saving doesn't ordinarily reset this */
-                    if (mtmp->mhp > 0)
+                    if (!DEADMONSTER(mtmp))
                         u.uconduct.killer = save_pacifism;
                 } else {
                     pline("%s is choked by the leash!", Monnam(mtmp));
@@ -954,6 +954,8 @@ struct obj *obj;
         (void) mpickobj(mtmp, obj);
         if (!tele_restrict(mtmp))
             (void) rloc(mtmp, TRUE);
+        if (mlet == S_NYMPH)
+            tnnt_achieve(A_DEFLECTED_NYMPH);
     } else if (!is_unicorn(mtmp->data) && !humanoid(mtmp->data)
                && (!mtmp->minvis || perceives(mtmp->data)) && rn2(5)) {
         if (vis)
@@ -1676,9 +1678,9 @@ int magic; /* 0=Physical, otherwise skill level */
     } else if (u.ustuck) {
         if (u.ustuck->mtame && !Conflict && !u.ustuck->mconf) {
             You("pull free from %s.", mon_nam(u.ustuck));
-            u.ustuck = 0;
             if (is_pool(u.ustuck->mx, u.ustuck->my))
                 tnnt_achieve(A_SURVIVED_DROWNING);
+            u.ustuck = 0;
             return 1;
         }
         if (magic) {
@@ -2246,17 +2248,20 @@ struct obj **optr;
     /* Passing FALSE arg here will result in messages displayed */
     if (!figurine_location_checks(obj, &cc, FALSE))
         return;
-    You("%s and it transforms.",
+    You("%s and it %stransforms.",
         (u.dx || u.dy) ? "set the figurine beside you"
                        : (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)
                           || is_pool(cc.x, cc.y))
                              ? "release the figurine"
                              : (u.dz < 0 ? "toss the figurine into the air"
-                                         : "set the figurine on the ground"));
+                                         : "set the figurine on the ground"),
+        Blind ? "supposedly " : "");
     (void) make_familiar(obj, cc.x, cc.y, FALSE);
     (void) stop_timer(FIG_TRANSFORM, obj_to_any(obj));
     useup(obj);
     tnnt_achieve(A_ANIMATED_FIGURINE);
+    if (Blind)
+        map_invisible(cc.x, cc.y);
     *optr = 0;
 }
 
@@ -3299,6 +3304,9 @@ struct obj *obj;
     current_wand = obj; /* destroy_item might reset this */
     freeinv(obj);       /* hide it from destroy_item instead... */
     setnotworn(obj);    /* so we need to do this ourselves */
+
+    if (obj->otyp == WAN_NOTHING && objects[WAN_NOTHING].oc_name_known)
+        tnnt_achieve(A_BROKE_WAN_NOTHING);
 
     if (!zappable(obj)) {
         pline(nothing_else_happens);

@@ -2646,6 +2646,7 @@ recalc_mapseen()
         if (lastseentyp[bp->frpx][bp->frpy]) {
             bp->bonesknown = TRUE;
             mptr->flags.knownbones = 1;
+            tnnt_achieve(A_FOUND_BONES_PILE);
         }
 }
 

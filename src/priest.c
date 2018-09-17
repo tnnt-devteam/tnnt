@@ -505,6 +505,7 @@ int roomno;
             nomul(-3);
             multi_reason = "being terrified of a ghost";
             nomovemsg = "You regain your composure.";
+            tnnt_achieve(A_SCARED_BY_GHOST);
         }
     }
 }
@@ -580,6 +581,7 @@ register struct monst *priest;
                 pline("%s gives you %s for an ale.", Monnam(priest),
                       (pmoney == 1L) ? "one bit" : "two bits");
                 money2u(priest, pmoney > 1L ? 2 : 1);
+                tnnt_achieve(A_GOT_TWO_BITS);
             } else
                 pline("%s preaches the virtues of poverty.", Monnam(priest));
             exercise(A_WIS, TRUE);

@@ -1172,7 +1172,6 @@ boolean at_stairs, falling, portal;
             return;  /* must have the Amulet */
         if (!wizard) {/* wizard ^V can bypass Earth level */
             assign_level(newlevel, &earth_level); /* (redundant) */
-        tnnt_achieve(A_ENTERED_PLANES);
             livelog_write_string(LL_ACHIEVE, "entered the Planes");
         }
     }
@@ -1469,6 +1468,7 @@ boolean at_stairs, falling, portal;
         forget_traps();      /* forget all traps too */
         familiar = TRUE;
         level_info[new_ledger].flags &= ~FORGOTTEN;
+        tnnt_achieve(A_REVISITED_LOST_LEVEL);
     }
 
     /* Reset the screen. */
@@ -1500,7 +1500,7 @@ boolean at_stairs, falling, portal;
             You_hear("groans and moans everywhere.");
         } else
             pline("It is hot here.  You smell smoke...");
-        if(!u.uachieve.enter_gehennom) 
+        if(!u.uachieve.enter_gehennom)
             livelog_write_string(LL_ACHIEVE, "entered Gehennom");
         u.uachieve.enter_gehennom = 1;
     }
