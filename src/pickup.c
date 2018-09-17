@@ -2077,6 +2077,72 @@ int held;
     }
     return 0;
 }
+static boolean
+swap_chest_eligible(obj)
+struct obj *obj;
+{
+    if (obj->oartifact)
+        return FALSE;
+    switch (obj->oclass) {
+        case RING_CLASS:
+            return !obj->cursed;
+        case WAND_CLASS:
+            /* no wands of nothing. Probably other stuff here too */
+            /* also should check charges in wands */
+            return (obj->otyp != WAN_NOTHING);
+        case AMULET_CLASS:
+            switch(obj->otyp) {
+                case AMULET_OF_STRANGULATION:
+                case AMULET_OF_RESTFUL_SLEEP:
+                case FAKE_AMULET_OF_YENDOR: /* real one already checked */
+                    return FALSE;
+                default:
+                    return !obj->cursed;
+            }
+        case POTION_CLASS:
+            if (objects[obj->otyp].oc_magic) return TRUE;
+            return (obj->otyp == POT_WATER) && (obj->blessed || obj->cursed);
+        case TOOL_CLASS:
+            if (Has_contents(obj)) return FALSE; /* bags with stuff in them not allowed */
+            if (objects[obj->otyp].oc_magic) return TRUE; /* magic things including empty BoH ok */
+            return (obj->otyp == TINNING_KIT || obj->otyp == STETHOSCOPE);
+        case WEAPON_CLASS:
+            if (obj->cursed) return FALSE;
+            return (obj->otyp == SILVER_SABER || obj->otyp == SILVER_SPEAR
+                    || obj->otyp == SILVER_DAGGER || obj->spe > 2);
+        case ARMOR_CLASS:
+            if (obj->cursed) return FALSE;
+            switch (obj->otyp) {
+                case DUNCE_CAP:
+                case FUMBLE_BOOTS:
+                case GAUNTLETS_OF_FUMBLING:
+                    return FALSE;
+                case GRAY_DRAGON_SCALES:
+                case SILVER_DRAGON_SCALES:
+                case RED_DRAGON_SCALES:
+                case ORANGE_DRAGON_SCALES:
+                case WHITE_DRAGON_SCALES:
+                case BLACK_DRAGON_SCALES:
+                case BLUE_DRAGON_SCALES:
+                case GREEN_DRAGON_SCALES:
+                case YELLOW_DRAGON_SCALES:
+                    return TRUE;
+                default:
+                    return (objects[obj->otyp].oc_magic || obj->spe > 2);
+            }
+        case SPBOOK_CLASS:
+            if (obj->cursed) return FALSE;
+            if (obj->otyp == SPE_BLANK_PAPER || obj->otyp == SPE_NOVEL) return FALSE;
+            if (obj->spestudied > MAX_SPELL_STUDY-1) return FALSE; /* this probably allows 2 more readings */
+
+            return TRUE;
+        case SCROLL_CLASS:
+            return (obj->otyp != SCR_BLANK_PAPER && obj->otyp != SCR_MAIL && obj->otyp != SCR_AMNESIA);
+        default: /* food, gems, boulders, statues, iron chains, etc */
+            return FALSE;
+
+    }
+}
 
 /* Returns: -1 to stop, 1 item was inserted, 0 item was not inserted. */
 STATIC_PTR int
@@ -2117,7 +2183,21 @@ register struct obj *obj;
     } else if (obj->otyp == LEASH && obj->leashmon != 0) {
         pline("%s attached to your pet.", Tobjnam(obj, "are"));
         return 0;
-    } else if (obj == uwep) {
+    /* TNNT swap chest --> */
+    } else if (current_container->otyp == SWAP_CHEST) {
+        if (u.uswapitems >= SWAP_ITEMS_MAX) {
+            pline("%s refuses to impose further on your generosity, and encourages you to take something and be on your way.",
+                  The(xname(current_container)));
+            return -1;
+        }
+        if (!swap_chest_eligible(obj)) {
+            Strcpy(buf, the(xname(obj)));
+            pline("%s has no interest in taking %s off your hands.", The(xname(current_container)), buf);
+            return -1;
+        }
+    }
+    /* <-- */
+    if (obj == uwep) {
         if (welded(obj)) {
             weldmsg(obj);
             return 0;
@@ -2150,6 +2230,15 @@ register struct obj *obj;
         Strcpy(buf, the(xname(obj)));
         You("cannot fit %s into %s.", buf, the(xname(current_container)));
         return 0;
+    }
+
+    /* TNNT make sure file is written before freeinv() */
+    if (current_container->otyp == SWAP_CHEST) {
+        if (!write_swapobj_file(obj)) {
+            impossible("Could not write swapchest file");
+            return -1;
+        }
+        u.uswapitems++;
     }
 
     freeinv(obj);
@@ -2231,6 +2320,22 @@ struct obj *obj;
     return (current_container && obj != current_container);
 }
 
+void
+delete_swap_chest_contents(swapchest)
+struct obj *swapchest;
+{
+    struct obj *otmp;
+    for (otmp = swapchest->cobj; otmp; otmp = otmp->nobj) {
+        /* newly placed objects dont have ptr to filename yet */
+        if (otmp->where == OBJ_INSWAP) {
+            free(otmp->swapobj_filename);
+            otmp->ocontainer = swapchest;
+            otmp->where = OBJ_CONTAINED;
+        }
+    }
+    delete_contents(swapchest);
+}
+
 /* Returns: -1 to stop, 1 item was removed, 0 item was not removed. */
 STATIC_PTR int
 out_container(obj)
@@ -2240,6 +2345,16 @@ register struct obj *obj;
     boolean is_gold = (obj->oclass == COIN_CLASS);
     int res, loadlev;
     long count;
+#define N_SWAPCHEST_FAILMSG 6
+    char *swapchest_failmsg[N_SWAPCHEST_FAILMSG] = {
+        "The item turns out to be a hologram, and vanishes as your hand passes through it.",
+        "The item vanishes in a puff of logic.",
+        "You thought you felt something in your hand, but it disappears!",
+        "The item suddenly polymporphs into a bowl of petunias, and says 'Oh No, not again!' as it slips from your hands and smashes on the ground.",
+        "The object disintegrates into a swarm of giant cockroaches, that scurry off in different directions.",
+        /* this one is the most accurate description: */
+        "As you reach for the item, a hand reaches in from another dimension, and snatches it away!"
+        };
 
     if (!current_container) {
         impossible("<out> no current_container?");
@@ -2260,6 +2375,24 @@ register struct obj *obj;
 
     if (obj->quan != count && obj->otyp != LOADSTONE)
         obj = splitobj(obj, count);
+
+    /* TNNT swap chest --> */
+    if (current_container->otyp == SWAP_CHEST) {
+        if (u.uswapitems < SWAP_ITEMS_MIN) {
+            /* should not get to here if we haven't contributed to the chest */
+            pline("You feel %s wants someting from you, first.",  the(xname(current_container)));
+            return -1;
+        }
+        if (!delete_swapobj_file(obj)) {
+            /* fails if file already doesn't exist */
+            pline(swapchest_failmsg[rn2(N_SWAPCHEST_FAILMSG)]);
+            return -1;
+        }
+        free(obj->swapobj_filename);
+        obj->where = OBJ_CONTAINED;
+        obj->ocontainer = current_container;
+    }
+    /* <-- */
 
     /* Remove the object from the list. */
     obj_extract_self(obj);
@@ -2288,6 +2421,27 @@ register struct obj *obj;
     if (is_gold) {
         bot(); /* update character's gold piece count immediately */
     }
+    /* TNNT swap chest --> */
+    /* Chest vanishes after successful removal of item */
+    if (current_container->otyp == SWAP_CHEST) {
+        u.uswapitems = -1;
+        /* items from chest come pre-identified */
+        makeknown(otmp->otyp);
+        makeknown(SWAP_CHEST);
+        pline("%s gives you a mischievous wink and vanishes into thin air!",  The(xname(current_container)));
+
+        delete_swap_chest_contents(current_container);
+        if (carried(current_container))
+            useup(current_container);
+        else if (obj_here(current_container, u.ux, u.uy))
+            useupf(current_container, current_container->quan);
+        else
+            impossible("out_container:  swap chest not found.");
+        current_container = 0;
+        return -1;
+    }
+    /* <-- */
+
     return 1;
 }
 
@@ -2449,6 +2603,11 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
     if (!u_handsy())
         return 0;
 
+    /* not currently used, as the chest vanishes when finished. THis may change */
+    if (obj->otyp == SWAP_CHEST && u.uswapitems == -1) {
+        pline("%s has no further interest in your fate", The(xname(obj)));
+        return 0;
+    }
     if (obj->olocked) {
         pline("%s locked.", Tobjnam(obj, "are"));
         if (held)
@@ -2569,6 +2728,17 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
         if (c == '?') {
             explain_container_prompt(more_containers);
         } else if (c == ':') { /* note: will set obj->cknown */
+            /* TNNT Swap chest --> */
+            if (current_container->otyp == SWAP_CHEST) {
+                if (u.uswapitems < SWAP_ITEMS_MIN) {
+                    pline("%s refuses to reveal its contents.", The(xname(current_container)));
+                    You_feel("like it wants something from you.");
+                    return 0;
+                }
+                refresh_swap_chest_contents(current_container);
+                current_container->cknown = 0;
+            }
+            /* <-- */
             if (!current_container->cknown)
                 used = 1; /* gaining info */
             container_contents(current_container, FALSE, FALSE, TRUE);
@@ -2593,6 +2763,15 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
                 used = 1;
             current_container->cknown = 1;
         } else {
+            if (current_container->otyp == SWAP_CHEST) {
+                if (u.uswapitems < SWAP_ITEMS_MIN) {
+                    pline("%s resists your efforts to rummage through it.", The(xname(current_container)));
+                    You_feel("like it wants something from you.");
+                    return 0;
+                }
+                refresh_swap_chest_contents(current_container);
+                current_container->cknown = 0;
+            }
             add_valid_menu_class(0); /* reset */
             if (flags.menu_style == MENU_TRADITIONAL)
                 used |= traditional_loot(FALSE);

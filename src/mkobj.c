@@ -263,6 +263,10 @@ struct obj *box;
     box->cobj = (struct obj *) 0;
 
     switch (box->otyp) {
+    case SWAP_CHEST:
+        /* really just here to get cobj zeroed */
+        n = 0;
+        break;
     case ICE_BOX:
         n = 20;
         break;
@@ -887,6 +891,7 @@ boolean artif;
                 otmp->otrapped = !(rn2(10));
                 /*FALLTHRU*/
             case ICE_BOX:
+            case SWAP_CHEST:
             case SACK:
             case OILSKIN_SACK:
             case BAG_OF_HOLDING:
@@ -1923,6 +1928,9 @@ struct obj *obj;
     case OBJ_ONBILL:
         extract_nobj(obj, &billobjs);
         break;
+    case OBJ_INSWAP:
+        /* need to set container and change to OBJ_CONTAINED */
+        impossible("obj_extract_self - swapchest");
     default:
         panic("obj_extract_self");
         break;

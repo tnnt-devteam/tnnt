@@ -13,6 +13,7 @@ union vptrs {
     struct obj *v_nexthere;   /* floor location lists */
     struct obj *v_ocontainer; /* point back to container */
     struct monst *v_ocarry;   /* point back to carrying monst */
+    char *v_swapobj_filename; /* object's filename if it's in the TNNT swap chest */
 };
 
 /****
@@ -33,6 +34,7 @@ struct obj {
 #define nexthere v.v_nexthere
 #define ocontainer v.v_ocontainer
 #define ocarry v.v_ocarry
+#define swapobj_filename v.v_swapobj_filename
 
     struct obj *cobj; /* contents list for containers */
     unsigned o_id;
@@ -66,7 +68,8 @@ struct obj {
 #define OBJ_MIGRATING 5 /* object sent off to another level */
 #define OBJ_BURIED 6    /* object buried */
 #define OBJ_ONBILL 7    /* object on shk bill */
-#define NOBJ_STATES 8
+#define OBJ_INSWAP 8    /* object in TNNT swap chest */
+#define NOBJ_STATES 9
     xchar timed; /* # of fuses (timers) attached to this obj */
 
     Bitfield(cursed, 1);

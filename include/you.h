@@ -569,6 +569,9 @@ struct you {
     xchar skill_record[P_SKILL_LIMIT]; /* skill advancements */
     struct skills weapon_skills[P_NUM_SKILLS];
     boolean twoweap;         /* KMH -- Using two-weapon combat */
+    short uswapitems;        /* TNNT - nitems placed in swap chest; -1 means item was taken out */
+#define SWAP_ITEMS_MIN 1     /* you must put this many in, to take one out */
+#define SWAP_ITEMS_MAX 3     /* you can put this many in, but only take one out */
 
 }; /* end of `struct you' */
 
