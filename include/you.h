@@ -72,42 +72,42 @@ enum tnnt_achievements {
     A_BOUGHT_PROTECTION,     /* Implemented,tested. */
     A_CURED_STONING,         /* Implemented,tested. */
     A_CURED_SLIMING,         /* Implemented,tested. */
-    A_SURVIVED_DROWNING,     /* Implemented. */
+    A_SURVIVED_DROWNING,     /* Implemented,tested. */
     A_CURED_LYCANTHROPY,     /* Implemented,tested. */
     A_CURED_ILLNESS,         /* Implemented,tested. */
     A_USED_THRONE,           /* Implemented,tested. */
     A_DROPPED_RING_IN_SINK,  /* Implemented,tested. */
-    A_KILLED_9_NAZGUL,       /* Implemented. */
-    A_KILLED_3_ERINYES,      /* Implemented. */
+    A_KILLED_9_NAZGUL,       /* Implemented,tested. */
+    A_KILLED_3_ERINYES,      /* Implemented,tested. */
     A_CONVERTED_ALTAR,       /* Implemented,tested. */
     A_CHATTED_IZCHAK,        /* Implemented,tested. */
     A_KICKED_FRUIT_TREE,     /* Implemented,tested. */
     A_PURCHASED,             /* Implemented,tested. */
     A_ROBBED,                /* Implemented,tested. */
     A_UNCURSED_IN_FOUNTAIN,  /* Implemented,tested. */
-    A_LEARNED_LV5_SPELL,     /* Implemented. */
-    A_TAMED_BY_FOOD,         /* Implemented. */
-    A_TAMED_NOT_BY_FOOD,     /* Implemented. */
-    A_CROWNED,               /* Implemented. */
-    A_GRANTED_ARTI,          /* Implemented. */
-    A_GOT_EXCALIBUR,         /* Implemented. */
-    A_CREATED_DSM,           /* Implemented. Scummable... */
-    A_ROBBED_BY_NYMPH,       /* Implemented. Scummable... */
-    A_ROBBED_BY_LEPRECHAUN,  /* Implemented. */
-    A_ENCOUNTERED_FOOCUBUS,  /* Implemented. Scummable... */
-    A_TRAPPED_MONSTER,       /* Implemented. Scummable... */
-    A_AVENGED_ORCTOWN,       /* Implemented, tested. */
-    A_CLEARED_BIGROOM,       /* Implemented, tested. */
-    A_GOT_UNPUNISHED,        /* Implemented. */
-    A_FELL_ONTO_SINK,        /* Implemented. */
-    A_USED_TOUCHSTONE,       /* Implemented. Scummable... */
-    A_WROTE_SCROLL,          /* Implemented. Scummable... */
-    A_WROTE_SPELLBOOK,       /* Implemented.  */
+    A_LEARNED_LV5_SPELL,     /* Implemented,tested. */
+    A_TAMED_BY_FOOD,         /* Implemented,tested. */
+    A_TAMED_NOT_BY_FOOD,     /* Implemented,tested. */
+    A_CROWNED,               /* Implemented,tested. */
+    A_GRANTED_ARTI,          /* Implemented,tested. */
+    A_GOT_EXCALIBUR,         /* Implemented,tested. */
+    A_CREATED_DSM,           /* Implemented,tested. */
+    A_ROBBED_BY_NYMPH,       /* Implemented,tested. */
+    A_ROBBED_BY_LEPRECHAUN,  /* Implemented,tested. */
+    A_ENCOUNTERED_FOOCUBUS,  /* Implemented,tested. */
+    A_TRAPPED_MONSTER,       /* Implemented,tested. */
+    A_AVENGED_ORCTOWN,       /* Implemented,tested. */
+    A_CLEARED_BIGROOM,       /* Implemented,tested. */
+    A_GOT_UNPUNISHED,        /* Implemented,tested. */
+    A_FELL_ONTO_SINK,        /* Implemented,tested. */
+    A_USED_TOUCHSTONE,       /* Implemented,tested. */
+    A_WROTE_SCROLL,          /* Implemented. */
+    A_WROTE_SPELLBOOK,       /* Implemented. */
     A_RODE_DRAGON,           /* Implemented. */
-    A_LAID_EGG,              /* Implemented. Scummable... */
-    A_ERODEPROOFED_ITEM,     /* Implemented. Scummable... */
+    A_LAID_EGG,              /* Implemented. */
+    A_ERODEPROOFED_ITEM,     /* Implemented. */
     A_THREW_UNICORN_GEM,     /* Implemented. */
-    A_BLOCKED_TROLL_REVIVAL, /* Implemented. Scummable... */
+    A_BLOCKED_TROLL_REVIVAL, /* Implemented. */
     A_KILLED_GHOST,          /* Implemented. */
     A_REVIVIFIED_CORPSE,     /* Implemented. */
     A_DESTROYED_VIA_TURN,    /* Implemented. */
@@ -242,7 +242,7 @@ struct u_achieve {
 
     /* 64 bits for the TNNT achievements above. Since there are more than 64
      * achievements, we need multiple 64 bit ints. */
-    uint64_t tnnt_achievements[2];
+    uint64_t tnnt_achievements[3];
 };
 
 #define tnnt_achieve(achvmt) \
