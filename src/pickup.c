@@ -2193,7 +2193,7 @@ register struct obj *obj;
         if (!swap_chest_eligible(obj)) {
             Strcpy(buf, the(xname(obj)));
             pline("%s has no interest in taking %s off your hands.", The(xname(current_container)), buf);
-            return -1;
+            return 0;
         }
     }
     /* <-- */
@@ -2653,6 +2653,9 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
     }
     inokay = (invent != 0
               && !(invent == current_container && !current_container->nobj));
+    if (current_container->otyp == SWAP_CHEST) {
+        refresh_swap_chest_contents(current_container);
+    }
     outokay = Has_contents(current_container);
     if (!outokay) /* preformat the empty-container message */
         Sprintf(emptymsg, "%s is %sempty.", Ysimple_name2(current_container),
