@@ -128,24 +128,24 @@ enum tnnt_achievements {
     A_WIZ_WORE_CORNUTHAUM,   /* Implemented. */
     A_WORE_MITHRIL_COAT,     /* Implemented. */
     A_FOUND_5_GRAFFITI,      /* Implemented. */
-    A_SPLIT_A_PUDDING,       /* Implemented. */ /* #64 */
-    A_WORE_MEAT_RING,        /* Implemented. */ /* begin tnntachieve1 here */
-    A_LOOTED_ICE_BOX,        /* Implemented. */
-    A_ANIMATED_FIGURINE,     /* Implemented. */
-    A_NERD,                  /* Implemented. */
-    A_CHARGED_AN_OBJECT,     /* Implemented. */
-    A_KICKED_EMBEDDED_ITEM,  /* Implemented. */
-    A_SNAGGED_WITH_HOOK,     /* Implemented. */
-    A_REFILLED_CANDELABRUM,  /* Implemented. */
-    A_ATE_ALL_PRODUCE,       /* Implemented. */
-    A_ATE_ALL_FOODS,         /* Implemented. */
-    A_REFILLED_OIL_LAMP,     /* Implemented. */
-    A_LIT_OIL_POTION,        /* Implemented. */
-    A_LIT_UP_GREMLIN,        /* Implemented. */
-    A_ALCHEMIZED,            /* Implemented. */
-    A_GASSED_MONSTER,        /* Implemented. */
-    A_READ_NOVEL,            /* Implemented. */
-    A_TALKED_TO_DEATH,       /* Implemented. */
+    A_SPLIT_A_PUDDING,       /* Implemented,tested. */ /* #64 */
+    A_WORE_MEAT_RING,        /* Implemented,tested. */ /* begin tnntachieve1 here */
+    A_LOOTED_ICE_BOX,        /* Implemented,tested. */
+    A_ANIMATED_FIGURINE,     /* Implemented,tested. */
+    A_NERD,                  /* Implemented,tested. */
+    A_CHARGED_AN_OBJECT,     /* Implemented,tested. */
+    A_KICKED_EMBEDDED_ITEM,  /* Implemented,tested. */
+    A_SNAGGED_WITH_HOOK,     /* Implemented,tested. */
+    A_REFILLED_CANDELABRUM,  /* Implemented,tested. */
+    A_ATE_ALL_PRODUCE,       /* Implemented,tested. */
+    A_ATE_ALL_FOODS,         /* Implemented,tested. */
+    A_REFILLED_OIL_LAMP,     /* Implemented,tested. */
+    A_LIT_OIL_POTION,        /* Implemented,tested. */
+    A_LIT_UP_GREMLIN,        /* Implemented,tested. */
+    A_ALCHEMIZED,            /* Implemented,tested. */
+    A_GASSED_MONSTER,        /* Implemented,tested. */
+    A_READ_NOVEL,            /* Implemented,tested. */
+    A_TALKED_TO_DEATH,       /* Implemented,tested. */
     A_IDENTIFIED_ALL_GEMS,   /* Implemented. */
     A_GOT_SPBOOK_FROM_STATUE,/* Implemented. */
     A_SUMMONED_NYMPH,        /* Implemented. */
@@ -168,13 +168,13 @@ enum tnnt_achievements {
     A_HATCHED_FOREIGN_EGG,   /* Implemented. */
     A_HEALED_BY_NURSE,       /* Implemented. */
     A_KILLED_WHILE_IN_PIT,   /* Implemented. */
-    A_KILLED_INVISIBLE,      /* Implemented. */
+    A_KILLED_INVISIBLE,      /* Implemented,tested. */
     A_FELL_DOWN_SHAFT,       /* Implemented. */
     A_GOT_TWO_BITS,          /* Implemented. */
     A_EXTINCTED_ARMY_OR_KOPS,/* Implemented. */
     A_DEFLECTED_NYMPH,       /* Implemented. */
     A_BRIBED_DEMON_LORD,     /* Implemented. */
-    A_ENTERED_VAULT,         /* Implemented, tested. */
+    A_ENTERED_VAULT,         /* Implemented,tested. */
     A_ENTERED_ZOO,           /* Implemented. */
     A_ENTERED_THRONE_ROOM,   /* Implemented. */
     A_ENTERED_LEP_HALL,      /* Implemented. */
