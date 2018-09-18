@@ -2606,7 +2606,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
 
     /* not currently used, as the chest vanishes when finished. THis may change */
     if (obj->otyp == SWAP_CHEST && u.uswapitems == -1) {
-        You_feel("%s is profoundly disinterested in your further fate.", The(xname(obj)));
+        You_feel("%s is profoundly disinterested in your further fate.", the(xname(obj)));
         return 0;
     }
     if (obj->olocked) {
