@@ -1026,6 +1026,11 @@ register struct obj *otmp;
 
     while (otmp) {
         otmp2 = otmp->nobj;
+        if (otmp->otyp == SWAP_CHEST) {
+            /* this does not save obj filename pointers correctly,
+             * and is not needed anyway. */
+            delete_swap_chest_contents(otmp);
+        }
         if (perform_bwrite(mode)) {
             saveobj(fd, otmp);
         }
