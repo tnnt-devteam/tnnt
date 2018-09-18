@@ -1127,11 +1127,11 @@ int how;
         tnnt_achieve(A_GRANTED_ARTI);
     if (quest_status.got_quest)
         tnnt_achieve(A_STARTED_QUEST);
-    if (u.uachieve.foods_eaten & 0x1FFFFFFFF)
+    if ((u.uachieve.foods_eaten & 0x1FFFFFFFF) == 0x1FFFFFFFF)
         tnnt_achieve(A_ATE_ALL_FOODS);
     /* More highly unstable code. This relies on the "produce" foods being the
      * 12th through 22nd foods, inclusive, defined in objects.c. Yay! */
-    if (u.uachieve.foods_eaten & 0x2FF800)
+    if ((u.uachieve.foods_eaten & 0x2FF800) == 0x2FF800)
         tnnt_achieve(A_ATE_ALL_PRODUCE);
     if (u.uevent.read_tribute)
         tnnt_achieve(A_READ_NOVEL);

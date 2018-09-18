@@ -132,6 +132,7 @@ static int NDECL(dosuspend_core); /**/
 static int NDECL((*timed_occ_fn));
 
 STATIC_PTR int NDECL(doshowachievements);
+STATIC_PTR int NDECL(doshowfoodseaten);
 STATIC_PTR int NDECL(doherecmdmenu);
 STATIC_PTR int NDECL(dotherecmdmenu);
 STATIC_PTR int NDECL(doprev_message);
@@ -2930,6 +2931,8 @@ struct ext_func_tab extcmdlist[] = {
     { '\0', "exploremode", "enter explore (discovery) mode",
             enter_explore_mode, IFBURIED },
     { 'f', "fire", "fire ammunition from quiver", dofire },
+    { '\0', "foodseaten", "show foods eaten so far (TNNT)",
+            doshowfoodseaten, IFBURIED | AUTOCOMPLETE },
     { M('f'), "force", "force a lock", doforce, AUTOCOMPLETE },
     { ';', "glance", "show what type of thing a map symbol corresponds to",
             doquickwhatis, IFBURIED | GENERALCMD },
@@ -4704,7 +4707,7 @@ register int x, y;
     return x >= 1 && x <= COLNO - 1 && y >= 0 && y <= ROWNO - 1;
 }
 
-/* #achievements command */
+/* TNNT: #achievements command */
 STATIC_PTR int
 doshowachievements(VOID_ARGS)
 {
@@ -4712,6 +4715,63 @@ doshowachievements(VOID_ARGS)
     for (i = 0; i < SIZE(u.uachieve.tnnt_achievements); ++i) {
         pline("achv[%d]: 0x%llx", i, u.uachieve.tnnt_achievements[i]);
     }
+}
+
+/* TNNT: #foodseaten command */
+STATIC_PTR int
+doshowfoodseaten(VOID_ARGS)
+{
+    /* More highly unstable food-based code. Assumes that TRIPE_RATION is the
+     * first food and TIN is the last food defined in objects.c.
+     * Also assumes that globs appear contiguously, and that gray ooze is first
+     * and black pudding is last.
+     */
+    int i;
+    boolean glob_eaten = FALSE;
+    en_win = create_nhwindow(NHW_MENU);
+
+    putstr(en_win, ATR_BOLD, "Foods you have eaten at least once:");
+    for (i = TRIPE_RATION; i <= TIN; ++i) {
+        int foodidx = i - TRIPE_RATION;
+        if (u.uachieve.foods_eaten & (1L << foodidx)) {
+            if (i >= GLOB_OF_GRAY_OOZE && i <= GLOB_OF_BLACK_PUDDING) {
+                putstr(en_win, 0, "glob");
+                glob_eaten = TRUE;
+                /* skip the rest of the globs to avoid repeating */
+                i = GLOB_OF_BLACK_PUDDING;
+            }
+            else if (i == SLIME_MOLD) {
+                putstr(en_win, 0, "custom fruit");
+            }
+            else {
+                putstr(en_win, 0, OBJ_NAME(objects[i]));
+            }
+        }
+    }
+
+    putstr(en_win, 0, "");
+    putstr(en_win, ATR_BOLD, "Foods you have never eaten:");
+    for (i = TRIPE_RATION; i <= TIN; ++i) {
+        int foodidx = i - TRIPE_RATION;
+        if (!(u.uachieve.foods_eaten & (1L << foodidx))) {
+            if (i >= GLOB_OF_GRAY_OOZE && i <= GLOB_OF_BLACK_PUDDING) {
+                if (!glob_eaten)
+                    putstr(en_win, 0, "glob");
+                /* skip the rest of the globs to avoid repeating */
+                i = GLOB_OF_BLACK_PUDDING;
+            }
+            else if (i == SLIME_MOLD) {
+                putstr(en_win, 0, "custom fruit");
+            }
+            else {
+                putstr(en_win, 0, OBJ_NAME(objects[i]));
+            }
+        }
+    }
+
+    display_nhwindow(en_win, TRUE);
+    destroy_nhwindow(en_win);
+    en_win = WIN_ERR;
 }
 
 /* #herecmdmenu command */
