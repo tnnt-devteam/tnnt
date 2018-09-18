@@ -1958,9 +1958,11 @@ dodip()
     } else if (obj->oclass == POTION_CLASS && obj->otyp != potion->otyp) {
         int amt = (int) obj->quan;
         boolean magic;
-        tnnt_achieve(A_ALCHEMIZED);
 
         mixture = mixtype(obj, potion);
+
+        if (mixture != STRANGE_OBJECT)
+            tnnt_achieve(A_ALCHEMIZED);
 
         magic = (mixture != STRANGE_OBJECT) ? objects[mixture].oc_magic
             : (objects[obj->otyp].oc_magic || objects[potion->otyp].oc_magic);
