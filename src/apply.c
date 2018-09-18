@@ -1218,9 +1218,9 @@ struct obj **optr;
         if (obj->quan < 7L && otmp->spe == 7) {
             pline("%s now has seven%s candles attached.", The(xname(otmp)),
                   otmp->lamplit ? " lit" : "");
-            if (u.uevent.invoked)
-                tnnt_achieve(A_REFILLED_CANDELABRUM);
         }
+        if (otmp->spe == 7 && u.uevent.invoked)
+            tnnt_achieve(A_REFILLED_CANDELABRUM);
         /* candelabrum's light range might increase */
         if (otmp->lamplit)
             obj_merge_light_sources(otmp, otmp);
