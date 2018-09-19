@@ -328,8 +328,7 @@ int x, y, typ;
         if (u.utrap && x == u.ux && y == u.uy
             && ((u.utraptype == TT_BEARTRAP && typ != BEAR_TRAP)
                 || (u.utraptype == TT_WEB && typ != WEB)
-                || (u.utraptype == TT_PIT && typ != PIT
-                    && typ != SPIKED_PIT)))
+                || (u.utraptype == TT_PIT && !is_pit(typ))))
             u.utrap = 0;
         /* old <tx,ty> remain valid */
     } else if (IS_FURNITURE(lev->typ)
@@ -407,8 +406,7 @@ int x, y, typ;
     case HOLE:
     case TRAPDOOR:
         if (*in_rooms(x, y, SHOPBASE)
-            && (typ == HOLE || typ == TRAPDOOR
-                || IS_DOOR(lev->typ) || IS_WALL(lev->typ)))
+            && (is_hole(typ) || IS_DOOR(lev->typ) || IS_WALL(lev->typ)))
             add_damage(x, y, /* schedule repair */
                        ((IS_DOOR(lev->typ) || IS_WALL(lev->typ))
                         && !context.mon_moving)
@@ -864,8 +862,7 @@ unsigned trflags;
     nomul(0);
 
     /* KMH -- You can't escape the Sokoban level traps */
-    if (Sokoban && (ttype == PIT || ttype == SPIKED_PIT
-                    || ttype == HOLE || ttype == TRAPDOOR)) {
+    if (Sokoban && (is_pit(ttype) || is_hole(ttype))) {
         /* The "air currents" message is still appropriate -- even when
          * the hero isn't flying or levitating -- because it conveys the
          * reason why the player cannot escape the trap with a dexterity
@@ -877,7 +874,7 @@ unsigned trflags;
         /* then proceed to normal trap effect */
     } else if (already_seen && !forcetrap) {
         if ((Levitation || (Flying && !plunged))
-            && (ttype == PIT || ttype == SPIKED_PIT || ttype == HOLE
+            && (is_pit(ttype) || ttype == HOLE
                 || ttype == BEAR_TRAP)) {
             You("%s over %s %s.", Levitation ? "float" : "fly",
                 a_your[trap->madeby_u],
@@ -887,7 +884,7 @@ unsigned trflags;
         if (!Fumbling && ttype != MAGIC_PORTAL && ttype != VIBRATING_SQUARE
             && ttype != ANTI_MAGIC && !forcebungle && !plunged
             && !conj_pit && !adj_pit
-            && (!rn2(5) || ((ttype == PIT || ttype == SPIKED_PIT)
+            && (!rn2(5) || (is_pit(ttype)
                             && is_clinger(youmonst.data)))) {
                 You("escape %s %s.", (ttype == ARROW_TRAP && !trap->madeby_u)
                                      ? "an"
@@ -2077,8 +2074,8 @@ register struct monst *mtmp;
         mtmp->mtrapped = 0;      /* perhaps teleported? */
     } else if (mtmp->mtrapped) { /* is currently in the trap */
         if (!trap->tseen && cansee(mtmp->mx, mtmp->my) && canseemon(mtmp)
-            && (trap->ttyp == SPIKED_PIT || trap->ttyp == BEAR_TRAP
-                || trap->ttyp == HOLE || trap->ttyp == PIT
+            && (is_pit(trap->ttyp) || trap->ttyp == BEAR_TRAP
+                || trap->ttyp == HOLE
                 || trap->ttyp == WEB)) {
             /* If you come upon an obviously trapped monster, then
              * you must be able to see the trap it's in too.
@@ -2088,7 +2085,7 @@ register struct monst *mtmp;
 
         if (!rn2(40)) {
             if (sobj_at(BOULDER, mtmp->mx, mtmp->my)
-                && (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT)) {
+                && is_pit(trap->ttyp)) {
                 if (!rn2(2)) {
                     mtmp->mtrapped = 0;
                     if (canseemon(mtmp))
@@ -2825,7 +2822,7 @@ int x, y;
     struct obj *otmp;
     struct trap *t;
 
-    if ((t = t_at(x, y)) && ((t->ttyp == PIT) || (t->ttyp == SPIKED_PIT))
+    if ((t = t_at(x, y)) && is_pit(t->ttyp)
         && (otmp = sobj_at(BOULDER, x, y))) {
         obj_extract_self(otmp);
         (void) flooreffects(otmp, x, y, "settle");
@@ -2872,8 +2869,7 @@ long hmask, emask; /* might cancel timeout */
     if (Punished && !carried(uball)
         && (is_pool(uball->ox, uball->oy)
             || ((trap = t_at(uball->ox, uball->oy))
-                && ((trap->ttyp == PIT) || (trap->ttyp == SPIKED_PIT)
-                    || (trap->ttyp == TRAPDOOR) || (trap->ttyp == HOLE))))) {
+                && (is_pit(trap->ttyp) || is_hole(trap->ttyp))))) {
         u.ux0 = u.ux;
         u.uy0 = u.uy;
         u.ux = uball->ox;
@@ -4325,7 +4321,7 @@ boolean force;
         if (ttmp) {
             Strcpy(the_trap, the(trapdescr));
             if (boxcnt) {
-                if (ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT) {
+                if (is_pit(ttmp->ttyp)) {
                     You_cant("do much about %s%s.", the_trap,
                              u.utrap ? " that you're stuck in"
                                      : " while standing on the edge of it");
@@ -4627,8 +4623,7 @@ boolean *noticed; /* set to true iff hero notices the effect; */
     /* if no trap here or it's not a falling trap, we're done
        (note: falling rock traps have a trapdoor in the ceiling) */
     if (!t || ((t->ttyp != TRAPDOOR && t->ttyp != ROCKTRAP)
-               && (trapdoor_only || (t->ttyp != HOLE && t->ttyp != PIT
-                                     && t->ttyp != SPIKED_PIT))))
+               && (trapdoor_only || (t->ttyp != HOLE && !is_pit(t->ttyp)))))
         return FALSE;
 
     if (ishero) {
@@ -4887,8 +4882,8 @@ boolean u_entering_trap2;
     if (!trap1 || !trap2)
         return FALSE;
     if (!isok(trap2->tx, trap2->ty) || !isok(trap1->tx, trap1->ty)
-        || !(trap2->ttyp == PIT || trap2->ttyp == SPIKED_PIT)
-        || !(trap1->ttyp == PIT || trap1->ttyp == SPIKED_PIT)
+        || !is_pit(trap2->ttyp)
+        || !is_pit(trap1->ttyp)
         || (u_entering_trap2 && !(u.utrap && u.utraptype == TT_PIT)))
         return FALSE;
     dx = sgn(trap2->tx - trap1->tx);
@@ -4913,14 +4908,14 @@ struct trap *trap;
     int diridx, adjidx, x, y;
     struct trap *t;
 
-    if (trap && (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT)) {
+    if (trap && is_pit(trap->ttyp)) {
         for (diridx = 0; diridx < 8; ++diridx) {
             if (trap->conjoined & (1 << diridx)) {
                 x = trap->tx + xdir[diridx];
                 y = trap->ty + ydir[diridx];
                 if (isok(x, y)
                     && (t = t_at(x, y)) != 0
-                    && (t->ttyp == PIT || t->ttyp == SPIKED_PIT)) {
+                    && is_pit(t->ttyp)) {
                     adjidx = (diridx + 4) % 8;
                     t->conjoined &= ~(1 << adjidx);
                 }
@@ -4937,8 +4932,8 @@ struct trap *adjtrap;
     struct trap *trap_with_u = t_at(u.ux0, u.uy0);
 
     if (trap_with_u && adjtrap && u.utrap && u.utraptype == TT_PIT &&
-        (trap_with_u->ttyp == PIT || trap_with_u->ttyp == SPIKED_PIT) &&
-        (adjtrap->ttyp == PIT || adjtrap->ttyp == SPIKED_PIT)) {
+        is_pit(trap_with_u->ttyp) &&
+        is_pit(adjtrap->ttyp)) {
         int idx;
         for (idx = 0; idx < 8; idx++) {
             if (xdir[idx] == u.dx && ydir[idx] == u.dy)
@@ -4967,7 +4962,7 @@ struct trap *trap;
         y = trap->ty + ydir[diridx];
         if (isok(x, y)) {
             if ((t = t_at(x, y)) != 0
-                && (t->ttyp == PIT || t->ttyp == SPIKED_PIT)) {
+                && is_pit(t->ttyp)) {
                 trap->conjoined |= (1 << diridx);
                 join_adjacent_pits(t);
             } else
@@ -4985,7 +4980,7 @@ uteetering_at_seen_pit(trap)
 struct trap *trap;
 {
     if (trap && trap->tseen && (!u.utrap || u.utraptype != TT_PIT)
-        && (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT))
+        && is_pit(trap->ttyp))
         return TRUE;
     else
         return FALSE;
@@ -4999,8 +4994,8 @@ register struct trap *ttmp;
     /* some of these are arbitrary -dlc */
     if (ttmp && ((ttmp->ttyp == SQKY_BOARD) || (ttmp->ttyp == BEAR_TRAP)
                  || (ttmp->ttyp == LANDMINE) || (ttmp->ttyp == FIRE_TRAP)
-                 || (ttmp->ttyp == PIT) || (ttmp->ttyp == SPIKED_PIT)
-                 || (ttmp->ttyp == HOLE) || (ttmp->ttyp == TRAPDOOR)
+                 || is_pit(ttmp->ttyp)
+                 || is_hole(ttmp->ttyp)
                  || (ttmp->ttyp == TELEP_TRAP) || (ttmp->ttyp == LEVEL_TELEP)
                  || (ttmp->ttyp == WEB) || (ttmp->ttyp == MAGIC_TRAP)
                  || (ttmp->ttyp == ANTI_MAGIC))) {
