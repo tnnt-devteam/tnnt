@@ -1706,8 +1706,10 @@ int cindex, ccount; /* index of this container (1..N), number of them (N) */
 
     if (cobj->otyp == ICE_BOX)
         tnnt_achieve(A_LOOTED_ICE_BOX);
-    You("%sopen %s...", (!cobj->cknown || !cobj->lknown) ? "carefully " : "",
-        the(xname(cobj)));
+    if (cobj->otyp != SWAP_CHEST || u.uswapitems != -1) {
+        You("%sopen %s...", (!cobj->cknown || !cobj->lknown) ? "carefully " : "",
+            the(xname(cobj)));
+    }
     return use_container(cobjp, 0, (boolean) (cindex < ccount));
 }
 
@@ -2191,8 +2193,8 @@ register struct obj *obj;
             return -1;
         }
         if (!swap_chest_eligible(obj)) {
-            Strcpy(buf, the(xname(obj)));
-            pline("%s has no interest in taking %s off your hands.", The(xname(current_container)), buf);
+            Strcpy(buf, xname(obj));
+            pline("%s spits out your %s disdainfully.", The(xname(current_container)), buf);
             return 0;
         }
     }
@@ -2293,6 +2295,13 @@ register struct obj *obj;
     if (current_container) {
         Strcpy(buf, the(xname(current_container)));
         You("put %s into %s.", doname(obj), buf);
+        if (current_container->otyp == SWAP_CHEST) {
+            static char *chest_emotions[SWAP_ITEMS_MAX] = {
+                "satisfied.", "grateful.", "very pleased!"
+            };
+            pline("Your offering is snatched from your hands!");
+            You_feel("that %s is %s",buf, chest_emotions[u.uswapitems-1]);
+        }
 
         /* gold in container always needs to be added to credit */
         if (floor_container && obj->oclass == COIN_CLASS)
@@ -2380,7 +2389,8 @@ register struct obj *obj;
     if (current_container->otyp == SWAP_CHEST) {
         if (u.uswapitems < SWAP_ITEMS_MIN) {
             /* should not get to here if we haven't contributed to the chest */
-            pline("You feel %s wants someting from you, first.",  the(xname(current_container)));
+            You_feel(u.uswapitems == -1 ? "%s is no longer interested in dealing with you."
+                                        : "%s wants someting from you, first.",  the(xname(current_container)));
             return -1;
         }
         if (!delete_swapobj_file(obj)) {
@@ -2422,23 +2432,14 @@ register struct obj *obj;
         bot(); /* update character's gold piece count immediately */
     }
     /* TNNT swap chest --> */
-    /* Chest vanishes after successful removal of item */
+    /* Chest becomes "dormant" after successful removal of item */
     if (current_container->otyp == SWAP_CHEST) {
         u.uswapitems = -1;
         /* items from chest come pre-identified */
         makeknown(otmp->otyp);
         makeknown(SWAP_CHEST);
-        pline("%s gives you a mischievous wink and vanishes into thin air!",  The(xname(current_container)));
-
+        pline("%s snaps shut and backs away slightly.",  The(xname(current_container)));
         delete_swap_chest_contents(current_container);
-        if (carried(current_container))
-            useup(current_container);
-        else if (obj_here(current_container, u.ux, u.uy))
-            useupf(current_container, current_container->quan);
-        else
-            impossible("out_container:  swap chest not found.");
-        current_container = 0;
-        return -1;
     }
     /* <-- */
 
@@ -2605,7 +2606,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
 
     /* not currently used, as the chest vanishes when finished. THis may change */
     if (obj->otyp == SWAP_CHEST && u.uswapitems == -1) {
-        pline("%s has no further interest in your fate", The(xname(obj)));
+        You_feel("%s is profoundly disinterested in your further fate.", the(xname(obj)));
         return 0;
     }
     if (obj->olocked) {
@@ -2768,7 +2769,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
         } else {
             if (current_container->otyp == SWAP_CHEST) {
                 if (u.uswapitems < SWAP_ITEMS_MIN) {
-                    pline("%s resists your efforts to rummage through it.", The(xname(current_container)));
+                    pline("%s resists your attempt to rummage through it.", The(xname(current_container)));
                     You_feel("like it wants something from you.");
                     return 0;
                 }
@@ -2820,6 +2821,9 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
 
     /* out after in */
     if (loot_out && loot_in_first) {
+        if (current_container->otyp == SWAP_CHEST) {
+            refresh_swap_chest_contents(current_container);
+        }
         if (!Has_contents(current_container)) {
             pline1(emptymsg); /* <whatever> is empty. */
             if (!current_container->cknown)

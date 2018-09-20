@@ -362,7 +362,12 @@ struct obj *pick;
 
         count = 0;
         c = 'n'; /* in case there are no boxes here */
-        for (otmp = level.objects[cc.x][cc.y]; otmp; otmp = otmp->nexthere)
+        for (otmp = level.objects[cc.x][cc.y]; otmp; otmp = otmp->nexthere) {
+            if (otmp->otyp == SWAP_CHEST) {
+                ++count; /* suppress the no locks here message */
+                pline("Access to %s cannot be controlled with mere tools.", the(xname(otmp)));
+                continue;
+            }
             if (Is_box(otmp)) {
                 ++count;
                 if (!can_reach_floor(TRUE)) {
@@ -420,6 +425,7 @@ struct obj *pick;
                 xlock.door = 0;
                 break;
             }
+        }
         if (c != 'y') {
             if (!count)
                 There("doesn't seem to be any sort of lock here.");

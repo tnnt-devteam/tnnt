@@ -1050,12 +1050,22 @@ dochat()
     mtmp = m_at(tx, ty);
 
     if ((!mtmp || mtmp->mundetected)
-        && (otmp = vobj_at(tx, ty)) != 0 && otmp->otyp == STATUE) {
-        /* Talking to a statue */
-        if (!Blind) {
-            pline_The("%s seems not to notice you.",
-                      /* if hallucinating, you can't tell it's a statue */
-                      Hallucination ? rndmonnam((char *) 0) : "statue");
+        && (otmp = vobj_at(tx, ty)) != 0) {
+        if (otmp->otyp == STATUE) {
+            /* Talking to a statue */
+            if (!Blind) {
+                pline_The("%s seems not to notice you.",
+                          /* if hallucinating, you can't tell it's a statue */
+                          Hallucination ? rndmonnam((char *) 0) : "statue");
+            }
+        }
+        if (otmp->otyp == SWAP_CHEST) {
+            if (u.uswapitems == -1) {
+                pline("You get no response from %s. It seems to be waiting for someoene else.", the(xname(otmp)));
+            } else {
+                pline("%s bounces impatiently, and flaps its lid.", The(xname(otmp)));
+                pline("Inside, you catch a glimpse of treasure left behind by adventurers who came before you.");
+            }
         }
         return 0;
     }

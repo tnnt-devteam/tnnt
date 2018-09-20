@@ -1,5 +1,5 @@
 #!/bin/bash
-# 
+#
 # Ideas and some parts from the original dgl-create-chroot (by joshk@triplehelix.org, modifications by jilles@stack.nl)
 # More by <paxed@alt.org>
 # More by Michael Andrew Streib <dtype@dtype.org>
@@ -93,6 +93,8 @@ mkdir -p "$NAO_CHROOT/$NHSUBDIR/var/save"
 chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/save"
 mkdir -p "$NAO_CHROOT/$NHSUBDIR/var/whereis"
 chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/whereis"
+mkdir -p "$NAO_CHROOT/$NHSUBDIR/swapchest"
+chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/swapchest"
 
 touch "$NAO_CHROOT/$NHSUBDIR/var/logfile"
 chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/logfile"
