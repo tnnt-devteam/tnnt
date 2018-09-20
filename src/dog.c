@@ -947,7 +947,7 @@ register struct obj *obj;
 
     if (mtmp->data == &mons[PM_WOODCHUCK])
         tnnt_achieve(A_KILLED_TAMED_WOODCHUCK);
-    if (is_shapeshifter(mtmp->data))
+    if (mtmp->cham != NON_PM || is_shapeshifter(mtmp->data))
         tnnt_achieve(A_TAMED_SHAPECHANGER);
     if (mtmp->data->mlet == S_FELINE) {
         u.uachieve.felines_tamed++;
