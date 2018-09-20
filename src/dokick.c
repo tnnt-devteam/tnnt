@@ -596,7 +596,10 @@ xchar x, y;
 
     if (kickedobj->otyp == SWAP_CHEST) {
         if (u.uswapitems > -1) {
-            pline("This feels like kicking a puppy. You just can't do it!");
+            pline("%s reveals hundreds of little legs and stomps on you!",
+                  The(xname(kickedobj)));
+            losehp(rn1(10,5), "trampled to death by an angry box",
+                   NO_KILLER_PREFIX);
             return 1;
         } else {
             pline("%s is unresponsive, but seems quietly amused by your frustration.", The(xname(kickedobj)));
@@ -1700,7 +1703,7 @@ unsigned long deliverflags;
         where = (int) (otmp->owornmask & 0x7fffL); /* destination code */
         if ((where & MIGR_TO_SPECIES) == 0)
             continue;
-        
+
         if ((mtmp->data->mflags2 & otmp->corpsenm) != 0) {
             obj_extract_self(otmp);
             otmp->owornmask = 0L;
