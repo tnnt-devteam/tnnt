@@ -65,7 +65,7 @@ struct u_event {
  * scummable, since discussion didn't resolve on whether these should remain in
  * or not. */
 enum tnnt_achievements {
-    A_FOUND_MINES_ALTAR = 0, /* Implemented,tested. */
+    A_FOUND_MINES_ALTAR = 0, /* Implemented,tested. */ /* begin tnntachieve0 */
     A_CONSULTED_ORACLE,      /* Implemented,tested. */
     A_STARTED_QUEST,         /* Implemented,tested. */
     A_LEARNED_PASSTUNE,      /* Implemented,tested. */
@@ -96,7 +96,7 @@ enum tnnt_achievements {
     A_ROBBED_BY_LEPRECHAUN,  /* Implemented,tested. */
     A_ENCOUNTERED_FOOCUBUS,  /* Implemented,tested. */
     A_TRAPPED_MONSTER,       /* Implemented,tested. */
-    A_AVENGED_ORCTOWN,       /* Implemented,tested. */
+    A_AVENGED_ORCTOWN,       /* Implemented,tested. */ /* #32 */
     A_CLEARED_BIGROOM,       /* Implemented,tested. */
     A_GOT_UNPUNISHED,        /* Implemented,tested. */
     A_FELL_ONTO_SINK,        /* Implemented,tested. */
@@ -146,55 +146,55 @@ enum tnnt_achievements {
     A_GASSED_MONSTER,        /* Implemented,tested. */
     A_READ_NOVEL,            /* Implemented,tested. */
     A_TALKED_TO_DEATH,       /* Implemented,tested. */
-    A_IDENTIFIED_ALL_GEMS,   /* Implemented. */
-    A_GOT_SPBOOK_FROM_STATUE,/* Implemented. */
-    A_SUMMONED_NYMPH,        /* Implemented. */
-    A_FULLY_RAISED_PET,      /* Implemented. */
-    A_GOT_OBJECT_UNDERWATER, /* Implemented. */
-    A_RODE_WUMPUS_OVER_WATER,/* Implemented. */
-    A_KILLED_TAMED_WOODCHUCK,/* Implemented. */
-    A_KILLED_ARCHON,         /* Implemented. */
-    A_TAMED_SHAPECHANGER,    /* Implemented. */
-    A_TAMED_7_CATS,          /* Implemented. */
-    A_OPENED_SCHROEDINGERS,  /* Implemented. */
-    A_FREED_PRISONER,        /* Implemented. */
-    A_UNTRAPPED_PET,         /* Implemented. */
-    A_READ_MAIL,             /* Implemented. */
-    A_ATE_ROYAL_JELLY,       /* Implemented. */
-    A_GOT_CORPSE_INTRINSIC,  /* Implemented. */
-    A_BANKRUPTED_SHOPKEEPER, /* Implemented. */
-    A_POLYED_PET_ON_TRAP,    /* Implemented. */
-    A_CHANGED_GENDER,        /* Implemented. */
-    A_HATCHED_FOREIGN_EGG,   /* Implemented. */
-    A_HEALED_BY_NURSE,       /* Implemented. */
-    A_KILLED_WHILE_IN_PIT,   /* Implemented. */
+    A_IDENTIFIED_ALL_GEMS,   /* Implemented,tested. */
+    A_GOT_SPBOOK_FROM_STATUE,/* Implemented,tested. */
+    A_SUMMONED_NYMPH,        /* Implemented,tested. */
+    A_FULLY_RAISED_PET,      /* Implemented,tested. */
+    A_GOT_OBJECT_UNDERWATER, /* Implemented,tested. */
+    A_RODE_WUMPUS_OVER_WATER,/* Implemented,tested. */
+    A_KILLED_TAMED_WOODCHUCK,/* Implemented,tested. */
+    A_KILLED_ARCHON,         /* Implemented,tested. */
+    A_TAMED_SHAPECHANGER,    /* Implemented,tested. */
+    A_TAMED_7_CATS,          /* Implemented,tested. */
+    A_OPENED_SCHROEDINGERS,  /* Implemented,tested. */
+    A_FREED_PRISONER,        /* Implemented,tested. */
+    A_UNTRAPPED_PET,         /* Implemented,tested. */
+    A_READ_MAIL,             /* Implemented,tested. */
+    A_ATE_ROYAL_JELLY,       /* Implemented,tested. */ /* #96 */
+    A_GOT_CORPSE_INTRINSIC,  /* Implemented,tested. */
+    A_BANKRUPTED_SHOPKEEPER, /* Implemented,tested. */
+    A_POLYED_PET_ON_TRAP,    /* Implemented,tested. */
+    A_CHANGED_GENDER,        /* Implemented,tested. */
+    A_HATCHED_FOREIGN_EGG,   /* Implemented,tested. */
+    A_HEALED_BY_NURSE,       /* Implemented,tested. */
+    A_KILLED_WHILE_IN_PIT,   /* Implemented,tested. */
     A_KILLED_INVISIBLE,      /* Implemented,tested. */
-    A_FELL_DOWN_SHAFT,       /* Implemented. */
-    A_GOT_TWO_BITS,          /* Implemented. */
-    A_EXTINCTED_ARMY_OR_KOPS,/* Implemented. */
-    A_DEFLECTED_NYMPH,       /* Implemented. */
-    A_BRIBED_DEMON_LORD,     /* Implemented. */
+    A_FELL_DOWN_SHAFT,       /* Implemented,tested. */
+    A_GOT_TWO_BITS,          /* Implemented,tested. */
+    A_EXTINCTED_ARMY_OR_KOPS,/* Implemented,tested. */
+    A_DEFLECTED_NYMPH,       /* Implemented,tested. */
+    A_BRIBED_DEMON_LORD,     /* Implemented,tested. */
     A_ENTERED_VAULT,         /* Implemented,tested. */
-    A_ENTERED_ZOO,           /* Implemented. */
-    A_ENTERED_THRONE_ROOM,   /* Implemented. */
-    A_ENTERED_LEP_HALL,      /* Implemented. */
-    A_ENTERED_BEEHIVE,       /* Implemented. */
-    A_ENTERED_GRAVEYARD,     /* Implemented. */
-    A_ENTERED_ANTHOLE,       /* Implemented. */
-    A_ENTERED_BARRACKS,      /* Implemented. */
-    A_ENTERED_SWAMP,         /* Implemented. */
-    A_ENTERED_COCKNEST,      /* Implemented. */
-    A_KILLED_ASMODEUS,       /* Implemented. */
-    A_KILLED_BAALZEBUB,      /* Implemented. */
-    A_KILLED_ORCUS,          /* Implemented. */
-    A_KILLED_JUIBLEX,        /* Implemented. */
-    A_KILLED_DEMOGORGON,     /* Implemented. */
-    A_KILLED_YEENOGHU,       /* Implemented. */
-    A_KILLED_GERYON,         /* Implemented. */
-    A_KILLED_DISPATER,       /* Implemented. */
-    A_KILLED_DEATH,          /* Implemented. */ /* #128 */
-    A_KILLED_PESTILENCE,     /* Implemented. */ /* begin tnntachieve2 here */
-    A_KILLED_FAMINE,         /* Implemented. */
+    A_ENTERED_ZOO,           /* Implemented,tested. */
+    A_ENTERED_THRONE_ROOM,   /* Implemented,tested. */
+    A_ENTERED_LEP_HALL,      /* Implemented,tested. */
+    A_ENTERED_BEEHIVE,       /* Implemented,tested. */
+    A_ENTERED_GRAVEYARD,     /* Implemented,tested. */
+    A_ENTERED_ANTHOLE,       /* Implemented,tested. */
+    A_ENTERED_BARRACKS,      /* Implemented,tested. */
+    A_ENTERED_SWAMP,         /* Implemented,tested. */
+    A_ENTERED_COCKNEST,      /* Implemented,tested. */
+    A_KILLED_ASMODEUS,       /* Implemented,tested. */
+    A_KILLED_BAALZEBUB,      /* Implemented,tested. */
+    A_KILLED_ORCUS,          /* Implemented,tested. */
+    A_KILLED_JUIBLEX,        /* Implemented,tested. */
+    A_KILLED_DEMOGORGON,     /* Implemented,tested. */
+    A_KILLED_YEENOGHU,       /* Implemented,tested. */
+    A_KILLED_GERYON,         /* Implemented,tested. */
+    A_KILLED_DISPATER,       /* Implemented,tested. */
+    A_KILLED_DEATH,          /* Implemented,tested. */ /* #128 */
+    A_KILLED_PESTILENCE,     /* Implemented,tested. */ /* begin tnntachieve2 here */
+    A_KILLED_FAMINE,         /* Implemented,tested. */
     A_ESCAPED_IN_DISGRACE,   /* Implemented. */
     A_CHANGED_ALIGNMENT,     /* Implemented. */
     A_HEISENBERG,            /* Implemented. */
@@ -213,7 +213,7 @@ enum tnnt_achievements {
     A_APPLIED_CRYSTAL_BALL,  /* Implemented. */
     A_MAXED_ATTRIBUTES,      /* Implemented. */
     A_FOUND_BONES_PILE,      /* Implemented. */
-    A_FOUND_ROGUE_BONES_PILE,/* Implemented. */
+    A_FOUND_ROGUE_BONES_PILE,/* Implemented,tested. */
     A_CREATED_FAMILIAR,      /* Implemented. */
     A_GAVE_ADORNMENT,        /* Implemented. */
     A_UNWINNABLE,
