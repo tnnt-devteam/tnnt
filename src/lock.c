@@ -369,6 +369,10 @@ struct obj *pick;
                     You_cant("reach %s from up here.", the(xname(otmp)));
                     return PICKLOCK_LEARNED_SOMETHING;
                 }
+                if (otmp->otyp == SWAP_CHEST) {
+                    pline("Access to %s cannot be controlled with mere tools.", the(xname(otmp)));
+                    continue;
+                }
                 it = 0;
                 if (otmp->obroken)
                     verb = "fix";

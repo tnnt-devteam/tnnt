@@ -594,6 +594,14 @@ xchar x, y;
         return 1;
     }
 
+    if (kickedobj->otyp == SWAP_CHEST) {
+        if (u.uswapitems > -1) {
+            pline("This feels like kicking a puppy. You just can't do it!");
+            return 1;
+        } else {
+            pline("%s is unresponsive, but seems quietly amused by your frustration.", The(xname(kickedobj)));
+        }
+    }
     /* a box gets a chance of breaking open here */
     if (Is_box(kickedobj)) {
         boolean otrp = kickedobj->otrapped;
