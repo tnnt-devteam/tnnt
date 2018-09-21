@@ -221,7 +221,11 @@ enum tnnt_achievements {
     A_KILLED_SOLDIER_ANT,    /* Implemented. */
     A_SUMMONED_DEMON_LORD,   /* Implemented. */
     A_TASTED_COCKATRICE,     /* Implemented. */
-    A_WRESTED_WOW            /* Implemented. */
+    A_WRESTED_WOW,           /* Implemented. */
+    A_AMETHYST_BOOZE,        /* Implemented. */
+    A_SCARED_OF_SKELETON,    /* Implemented. */
+    A_ENTERED_LUDIOS,        /* Implemented. */ /* #160 */
+    A_KILLED_CROESUS,        /* Implemented. */
 };
 
 struct u_achieve {

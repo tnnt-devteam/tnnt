@@ -721,6 +721,7 @@ register struct monst *mtmp;
         nomul(-2);
         multi_reason = "scared by rattling";
         nomovemsg = 0;
+        tnnt_achieve(A_SCARED_OF_SKELETON);
         break;
     case MS_LAUGH: {
         static const char *const laugh_msg[4] = {

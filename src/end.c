@@ -1175,6 +1175,7 @@ int how;
     if (mvitals[PM_DEATH].died) tnnt_achieve(A_KILLED_DEATH);
     if (mvitals[PM_PESTILENCE].died) tnnt_achieve(A_KILLED_PESTILENCE);
     if (mvitals[PM_FAMINE].died) tnnt_achieve(A_KILLED_FAMINE);
+    if (mvitals[PM_CROESUS].died) tnnt_achieve(A_KILLED_CROESUS);
 
 
     /* END TNNT code */

@@ -13,7 +13,7 @@
 # Which users can use debug mode (aka wizard mode; accessed via '-D' command
 # line flag or OPTIONS=playmode:debug in the runtime options config file).
 # A value of * allows anyone to enter debugging mode.
-WIZARDS=nobody
+WIZARDS=*
 
 # Which users can use explore mode (aka discover mode; accessed via '-X'
 # command line flag or OPTIONS=playmode:explore in runtime options file or
@@ -91,7 +91,7 @@ ENTRYMAX=2000
 # 0x10 - Life-saving
 # 0x20 - Break conduct - see also LLC_TURNS below.
 # 0x40 - Artifact obtained (#name Sting, dip for Excalibur)
-# 0x80 - Genocides 
+# 0x80 - Genocides
 # 0x100 - Murder of tame pet
 # 0x8000 - Livelog debug msgs (currently only 'enter new level')
 # Enabled at compile time by defining LIVELOGFILE in config.h

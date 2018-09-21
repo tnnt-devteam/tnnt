@@ -1556,6 +1556,7 @@ boolean at_stairs, falling, portal;
                 mtmp->msleeping = 0;
             }
         }
+        tnnt_achieve(A_ENTERED_LUDIOS);
     } else {
         if (new && Is_rogue_level(&u.uz))
             You("enter what seems to be an older, more primitive world.");
