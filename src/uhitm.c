@@ -817,6 +817,7 @@ int dieroll;
                             && ((mdat->mflags2 & weap->mtype) != 0L))) {
                         artibane = TRUE;
                     }
+                }
                 if (obj->oartifact
                     && artifact_hit(&youmonst, mon, obj, &tmp, dieroll)) {
                     if (DEADMONSTER(mon)) /* artifact killed monster */
@@ -854,7 +855,6 @@ int dieroll;
                         ispoisoned = TRUE;
                 }
             }
-        }
 	} else if (obj->oclass == POTION_CLASS) {
             if (obj->quan > 1L)
                 obj = splitobj(obj, 1L);
