@@ -216,7 +216,7 @@ enum tnnt_achievements {
     A_FOUND_ROGUE_BONES_PILE,/* Implemented,tested. */
     A_CREATED_FAMILIAR,      /* Implemented. */
     A_GAVE_ADORNMENT,        /* Implemented. */
-    A_UNWINNABLE,
+    A_EXPELLED_FROM_QUEST,   /* Implemented. */
     A_GOT_FOOD_APPRAISAL,    /* Implemented. */
     A_KILLED_SOLDIER_ANT,    /* Implemented. */
     A_SUMMONED_DEMON_LORD,   /* Implemented. */

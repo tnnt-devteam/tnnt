@@ -1156,6 +1156,8 @@ int how;
         tnnt_achieve(A_CROWNED);
     if (how == ESCAPED && Is_astralevel(&u.uz))
         tnnt_achieve(A_ESCAPED_IN_DISGRACE);
+    if (u.uevent.qexpelled)
+        tnnt_achieve(A_EXPELLED_FROM_QUEST);
     /* umoney is calculated later... */
     umoney = money_cnt(invent) + hidden_gold();
     if (umoney >= 100000L)
