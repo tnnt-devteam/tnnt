@@ -2931,8 +2931,6 @@ struct ext_func_tab extcmdlist[] = {
     { '\0', "exploremode", "enter explore (discovery) mode",
             enter_explore_mode, IFBURIED },
     { 'f', "fire", "fire ammunition from quiver", dofire },
-    { '\0', "foodseaten", "show foods eaten so far (TNNT)",
-            doshowfoodseaten, IFBURIED | AUTOCOMPLETE },
     { M('f'), "force", "force a lock", doforce, AUTOCOMPLETE },
     { ';', "glance", "show what type of thing a map symbol corresponds to",
             doquickwhatis, IFBURIED | GENERALCMD },
@@ -3024,6 +3022,8 @@ struct ext_func_tab extcmdlist[] = {
     { '!', "shell", "do a shell escape", dosh, IFBURIED | GENERALCMD },
 #endif /* SHELL */
     { M('s'), "sit", "sit down", dosit, AUTOCOMPLETE },
+    { '\0', "snacks", "show foods eaten so far (TNNT)",
+            doshowfoodseaten, IFBURIED | AUTOCOMPLETE },
     { '\0', "stats", "show memory statistics",
             wiz_show_stats, IFBURIED | AUTOCOMPLETE | WIZMODECMD },
 #ifdef SUSPEND
