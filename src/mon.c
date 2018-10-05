@@ -462,7 +462,7 @@ unsigned corpseflags;
      *  underneath it, you could be told the corpse type of a
      *  monster that you never knew was there without this.
      *  The code in hitmu() substitutes the word "something"
-     *  if the corpses obj->dknown is 0.
+     *  if the corpse's obj->dknown is 0.
      */
     if (Blind && !sensemon(mtmp))
         obj->dknown = 0;
@@ -1320,7 +1320,11 @@ nexttry: /* eels prefer the water, but if there is no water nearby,
                 && !((IS_TREE(ntyp) ? treeok : rockok) && may_dig(nx, ny)))
                 continue;
             /* KMH -- Added iron bars */
-            if (ntyp == IRONBARS && !(flag & ALLOW_BARS))
+            if (ntyp == IRONBARS
+                && (!(flag & ALLOW_BARS)
+                    || ((levl[nx][ny].wall_info & W_NONDIGGABLE)
+                        && (dmgtype(mdat, AD_RUST)
+                            || dmgtype(mdat, AD_CORR)))))
                 continue;
             if (IS_DOOR(ntyp) && !(amorphous(mdat) || can_fog(mon))
                 && (((levl[nx][ny].doormask & D_CLOSED) && !(flag & OPENDOOR))

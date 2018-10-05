@@ -1,4 +1,4 @@
-/* NetHack 3.6	pager.c	$NHDT-Date: 1523142395 2018/04/07 23:06:35 $  $NHDT-Branch: NetHack-3.6.0 $:$NHDT-Revision: 1.123 $ */
+/* NetHack 3.6	pager.c	$NHDT-Date: 1537477571 2018/09/20 21:06:11 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.129 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2018. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -1226,10 +1226,11 @@ coord *click_cc;
                 && !clicklook) {
                 char temp_buf[BUFSZ], supplemental_name[BUFSZ];
 
+                supplemental_name[0] = '\0';
                 Strcpy(temp_buf, firstmatch);
                 checkfile(temp_buf, pm, FALSE,
                           (boolean) (ans == LOOK_VERBOSE), supplemental_name);
-                if (supplemental_pm && supplemental_name)
+                if (supplemental_pm)
                     do_supplemental_info(supplemental_name, supplemental_pm,
                                          (boolean) (ans == LOOK_VERBOSE));
             }
@@ -1364,19 +1365,20 @@ boolean without_asking;
         if (yes_to_moreinfo) {
             int i, subs = 0;
             char *gang = bp + 4;
-            char *text[] = {
-                "%s is a member of a marauding horde of orcs",
-                "rumored to have brutally attacked and plundered the ordinarily",
-                "sheltered town that is located deep within The Gnomish Mines.",
-                "",
-                "The members of that vicious horde proudly and defiantly acclaim their",
-                "allegiance to their leader %s in their names.",
+            static const char *text[] = {
+             "%s is a member of a marauding horde of orcs",
+             "rumored to have brutally attacked and plundered the ordinarily",
+             "sheltered town that is located deep within The Gnomish Mines.",
+             "",
+             "The members of that vicious horde proudly and defiantly acclaim",
+             "their allegiance to their leader %s in their names.",
             };
 
             *bp = '\0';
             datawin = create_nhwindow(NHW_MENU);
             for (i = 0; i < SIZE(text); i++) {
-                char buf[BUFSZ], *txt;
+                char buf[BUFSZ];
+                const char *txt;
 
                 if (strstri(text[i], "%s") != 0) {
                     Sprintf(buf, text[i],
@@ -1388,7 +1390,7 @@ boolean without_asking;
             }
             display_nhwindow(datawin, FALSE);
             destroy_nhwindow(datawin), datawin = WIN_ERR;
-	}
+        }
     }
 }
 
@@ -1468,7 +1470,7 @@ doidtrap()
     commands:  basic letters vs digits, 'g' vs 'G' for '5', phone
     keypad vs normal layout of digits, and QWERTZ keyboard swap between
     y/Y/^Y/M-y/M-Y/M-^Y and z/Z/^Z/M-z/M-Z/M-^Z.)
-    
+
     The interpretor understands
      '&#' for comment,
      '&? option' for 'if' (also '&? !option'
@@ -1479,7 +1481,7 @@ doidtrap()
      '&:' for 'else' (also '&: #comment';
                       0 or 1 instance for a given 'if'), and
      '&.' for 'endif' (also '&. #comment'; required for each 'if').
-    
+
     The option handling is a bit of a mess, with no generality for
     which options to deal with and only a comma separated list of
     integer values for the '=value' part.  number_pad is the only

@@ -664,12 +664,8 @@ int x, y;
 
         mon->mundetected = 0; /* wakeup() will handle mimic */
         mnam = a_monnam(mon); /* after unhiding */
-        pronoun = mhim(mon);
+        pronoun = noit_mhim(mon);
         if (!strcmp(mnam, "it")) {
-            /* mhim() uses pronoun_gender() which forces neuter if monster
-               can't be seen; we want him/her for humanoid sensed by touch */
-            if (!strcmp(pronoun, "it") && humanoid(mon->data))
-                pronoun = genders[mon->female].him;
             mnam = !strcmp(pronoun, "it") ? "something" : "someone";
         }
         if (!glyph_is_monster(glyph) && !glyph_is_invisible(glyph))
@@ -1138,6 +1134,8 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
         mon = u.ustuck;
         bhitpos.x = mon->mx;
         bhitpos.y = mon->my;
+        if (tethered_weapon)
+            tmp_at(DISP_TETHER, obj_to_glyph(obj));
     } else if (u.dz) {
         if (u.dz < 0
             /* Mjollnir must we wielded to be thrown--caller verifies this;
@@ -1284,12 +1282,20 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
         /* missile has already been handled */
         if (tethered_weapon) tmp_at(DISP_END, 0);
     } else if (u.uswallow) {
-        if (tethered_weapon)
+        if (tethered_weapon) {
             tmp_at(DISP_END, 0);
-        /* ball is not picked up by monster */
-        if (obj != uball)
-            (void) mpickobj(u.ustuck, obj);
-        thrownobj = (struct obj *) 0;
+            pline("%s returns to your hand!", The(xname(thrownobj)));
+            thrownobj = addinv(thrownobj);
+            (void) encumber_msg();
+            if (thrownobj->owornmask & W_QUIVER) /* in case addinv() autoquivered */
+                setuqwep((struct obj *) 0);
+            setuwep(thrownobj);            
+        } else {
+            /* ball is not picked up by monster */
+            if (obj != uball)
+                (void) mpickobj(u.ustuck, obj);
+            thrownobj = (struct obj *) 0;
+        }
     } else {
         /* Mjollnir must we wielded to be thrown--caller verifies this;
            aklys must we wielded as primary to return when thrown */

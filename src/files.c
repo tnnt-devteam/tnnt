@@ -2265,24 +2265,27 @@ char sep;
         return (char *) 0;
 
     while (*str) {
-	if (*str == sep) nsep++;
-	str++;
+        if (*str == sep)
+            nsep++;
+        str++;
     }
     csep = rn2(nsep);
     str = begin;
     while ((csep > 0) && *str) {
-	str++;
-	if (*str == sep) csep--;
+        str++;
+        if (*str == sep)
+            csep--;
     }
     if (*str) {
-	if (*str == sep) str++;
-	begin = str;
-	while (*str && *str != sep) {
-	    str++;
-	    len++;
-	}
-	*str = '\0';
-	if (len)
+        if (*str == sep)
+            str++;
+        begin = str;
+        while (*str && *str != sep) {
+            str++;
+            len++;
+        }
+        *str = '\0';
+        if (len)
             return begin;
     }
     return (char *) 0;
