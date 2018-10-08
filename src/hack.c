@@ -2402,6 +2402,7 @@ register boolean newlev;
         switch (rt) {
         case VAULT:
             tnnt_achieve(A_ENTERED_VAULT);
+            rt = 0; // don't unmake vault
             break;
         case ZOO:
             tnnt_achieve(A_ENTERED_ZOO);
