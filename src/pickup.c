@@ -2139,7 +2139,15 @@ struct obj *obj;
 
             return TRUE;
         case SCROLL_CLASS:
-            return (obj->otyp != SCR_BLANK_PAPER && obj->otyp != SCR_MAIL && obj->otyp != SCR_AMNESIA);
+            switch (obj->otyp) {
+                case SCR_BLANK_PAPER:
+                case SCR_MAIL:
+                case SCR_AMNESIA:
+                case SCR_PUNISHMENT:
+                    return FALSE;
+                default:
+                    return TRUE;
+            }
         default: /* food, gems, boulders, statues, iron chains, etc */
             return FALSE;
 

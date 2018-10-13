@@ -99,7 +99,7 @@ LIVELOG=0x0FFF
 
 # Do not livelog breaking of conducts before this turncount
 # Cuts down on spam
-LLC_TURNS=1
+LLC_TURNS=3000
 
 # Show debugging information originating from these source files.
 # Use '*' for all, or list source files separated by spaces.
@@ -162,7 +162,7 @@ OPTIONS=pickup_burden:unencumbered
 OPTIONS=hilite_pet
 OPTIONS=hilite_pile
 OPTIONS=msg_window:reversed
-OPTIONS=number_pad:1
+OPTIONS=number_pad:0
 OPTIONS=sortloot:full
 OPTIONS=time
 
