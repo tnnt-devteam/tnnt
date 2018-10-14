@@ -223,9 +223,38 @@ enum tnnt_achievements {
     A_TASTED_COCKATRICE,     /* Implemented. */
     A_WRESTED_WOW,           /* Implemented. */
     A_AMETHYST_BOOZE,        /* Implemented. */
-    A_SCARED_OF_SKELETON,    /* Implemented. */
-    A_ENTERED_LUDIOS,        /* Implemented. */ /* #160 */
-    A_KILLED_CROESUS,        /* Implemented. */
+    A_SCARED_OF_SKELETON,    /* Implemented,tested. */
+    A_ENTERED_LUDIOS,        /* Implemented,tested. */ /* #160 */
+    A_KILLED_CROESUS,        /* Implemented,tested. */
+    A_LIED_TO_GUARD,         /* Implemented,tested. */
+    A_GOT_13_LUCK,           /* Implemented,tested. */
+    A_GOT_NEGATIVE_13_LUCK,  /* Implemented,tested. */
+    A_GREASED_ARMOR,         /* Implemented,tested. */
+    A_REACHED_VIBRATING_SQ,  /* Implemented,tested. */
+    A_VISITED_HIGH_ALTARS,   /* Implemented,tested. */
+    A_PARTIAL_VEGETARIAN,    /* Implemented,tested. */
+    A_PARTIAL_VEGAN,         /* Implemented,tested. */
+    A_PARTIAL_FOODLESS,      /* Implemented,tested. */
+    A_PARTIAL_ATHEIST,       /* Implemented,tested. */
+    A_PARTIAL_WEAPONLESS,    /* Implemented,tested. */
+    A_PARTIAL_PACIFIST,      /* Implemented,tested. */
+    A_PARTIAL_ILLITERATE,    /* Implemented,tested. */
+    A_PARTIAL_POLYPILELESS,  /* Implemented,tested. */
+    A_PARTIAL_POLYSELFLESS,  /* Implemented,tested. */
+    A_PARTIAL_WISHLESS,      /* Implemented,tested. */
+    A_PARTIAL_ARTIWISHLESS,  /* Implemented,tested. */
+    A_PARTIAL_ELBERETHLESS,  /* Implemented,tested. */
+    A_PARTIAL_ZEN,           /* Implemented,tested. */
+    A_PARTIAL_NUDIST,        /* Implemented,tested. */
+    A_PARTIAL_GENOCIDELESS,  /* Implemented,tested. */
+    A_PUT_INTO_SWAPCHEST     /* Implemented,tested. */
+    /* 183 achievements defined */
+    /* NOTE: There is another achievement that is the combination of all
+     * A_PARTIAL_* achievements. That is NOT defined here, because we already
+     * have the bits for it, but it means that there are actually more
+     * achievements in the tournament than are defined here. This was already
+     * sort of the case with achievements that use the regular achieve bitfield.
+     */
 };
 
 struct u_achieve {
@@ -242,6 +271,7 @@ struct u_achieve {
     Bitfield(killed_medusa, 1);
     Bitfield(graffiti_found, 4); /* TNNT achievement */
     Bitfield(felines_tamed, 3); /* TNNT achievement */
+    Bitfield(high_altars, 3);  /* TNNT achievement */
     uint64_t foods_eaten; /* TNNT achievement; sadly there are 33 foods */
 
     /* 64 bits for the TNNT achievements above. Since there are more than 64

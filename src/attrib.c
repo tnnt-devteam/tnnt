@@ -334,6 +334,11 @@ register schar n;
         u.uluck = LUCKMIN;
     if (u.uluck > 0 && u.uluck > LUCKMAX)
         u.uluck = LUCKMAX;
+
+    if (Luck == 13)
+        tnnt_achieve(A_GOT_13_LUCK);
+    else if (Luck == -13)
+        tnnt_achieve(A_GOT_NEGATIVE_13_LUCK);
 }
 
 int
