@@ -2312,6 +2312,9 @@ struct obj *obj;
                 pline("Some of the grease gets all over your %s.",
                       makeplural(body_part(HAND)));
             }
+            if (otmp->oclass == ARMOR_CLASS) {
+                tnnt_achieve(A_GREASED_ARMOR);
+            }
         } else {
             incr_itimeout(&Glib, rnd(15));
             You("coat your %s with grease.", makeplural(body_part(FINGER)));

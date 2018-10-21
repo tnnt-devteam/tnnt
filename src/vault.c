@@ -391,10 +391,12 @@ invault()
             (void) mungspaces(buf);
         } while (!buf[0] && --trycount > 0);
 
-        if (u.ualign.type == A_LAWFUL
-            /* ignore trailing text, in case player includes rank */
-            && strncmpi(buf, plname, (int) strlen(plname)) != 0) {
-            adjalign(-1); /* Liar! */
+        /* ignore trailing text, in case player includes rank */
+        if (strncmpi(buf, plname, (int) strlen(plname)) != 0) {
+            tnnt_achieve(A_LIED_TO_GUARD);
+            if (u.ualign.type == A_LAWFUL) {
+                adjalign(-1); /* Liar! */
+            }
         }
 
         if (!strcmpi(buf, "Croesus") || !strcmpi(buf, "Kroisos")

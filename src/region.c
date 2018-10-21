@@ -990,11 +990,12 @@ genericptr_t p2;
                 return FALSE;
             mtmp->mhp -= rnd(dam) + 5;
             if (DEADMONSTER(mtmp)) {
-                if (heros_fault(reg))
+                if (heros_fault(reg)) {
                     killed(mtmp);
                     tnnt_achieve(A_GASSED_MONSTER);
                 } else {
                     monkilled(mtmp, "gas cloud", AD_DRST);
+                }
                 if (DEADMONSTER(mtmp)) { /* not lifesaved */
                     return TRUE;
                 }

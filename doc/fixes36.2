@@ -158,6 +158,16 @@ being trapped (bear trap, web, molten or solidified lava, chained to buried
 	iron ball) blocks both levitation and flight (note: being stuck in a
 	pit ends when either of those starts so doesn't apply)
 change default value for the 'autodescribe' option to 'on'
+Elbereth hypocrisy penalty doesn't apply if attacking a monster which isn't
+	frightened by Elbereth; normal scuffing of engravings still applies
+Elbereth hypocrisy penalty reduced when alignment is already low
+during character creation, don't unset alternate weapon when a shield gets
+	worn (was preventing knight from having lance set up as uswapwep)
+preformatted Guidebook.txt split line in middle of "' '" for #wait command
+prevent simiulated screenshot in Guidebook.txt from spanning page boundary
+overview information for former hero was not being set properly when bones
+	file was saved, so current hero coming across a dead hero's grave
+	didn't have #overview feedback augmented with "final resting place"
 
 
 Fixes to Post-3.6.1 Problems that Were Exposed Via git Repository
@@ -220,6 +230,12 @@ Qt: add Qt5 specific hints file for linux and Mac OS X (Ray Chason)
 Qt: enable compiling Qt5 on Windows (Ray Chason)
 Qt: entering extended commands, hide non-matching ones
 Qt: remember tile and font size
+X11: implement menucolors and allow menus to obey some attributes
+X11: make key translations work with menus on Linux
+X11: allow mouse wheel scrolling to work in menus by default
+X11: handle paged menu control keys
+X11: remember perm_invent window geometry
+X11: handle X errors via panic
 
 
 General New Features

@@ -1984,8 +1984,16 @@ switch_terrain()
             You("start flying.");
     }
 
-    if (lev->typ == ALTAR && In_mines(&u.uz)) {
-        tnnt_achieve(A_FOUND_MINES_ALTAR);
+    if (lev->typ == ALTAR) {
+        if (In_mines(&u.uz)) {
+            tnnt_achieve(A_FOUND_MINES_ALTAR);
+        }
+        else if (Is_astralevel(&u.uz)) {
+            /* Assumes that the AM_* flags are 1, 2, and 4. */
+            u.uachieve.high_altars |= (lev->altarmask & ~AM_SHRINE);
+            if (u.uachieve.high_altars == 0x7)
+                tnnt_achieve(A_VISITED_HIGH_ALTARS);
+        }
     }
     if (lev->typ == GRAVE && Is_rogue_level(&u.uz)) {
         tnnt_achieve(A_FOUND_ROGUE_BONES_PILE);

@@ -1,4 +1,4 @@
-/* NetHack 3.6	mon.c	$NHDT-Date: 1526132509 2018/05/12 13:41:49 $  $NHDT-Branch: master $:$NHDT-Revision: 1.252 $ */
+/* NetHack 3.6	mon.c	$NHDT-Date: 1539479657 2018/10/14 01:14:17 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.260 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Derek S. Ray, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -2479,7 +2479,7 @@ cleanup:
             You_hear("the studio audience applaud!");
         if (!unique_corpstat(mdat) && has_mname(mtmp)) {
             livelog_printf(LL_KILLEDPET, "murdered %s, %s faithful %s",
-                           mon_nam(mtmp), uhis(), mdat->mname);
+                           MNAME(mtmp), uhis(), mdat->mname);
         }
     } else if (mtmp->mpeaceful)
         adjalign(-5);
@@ -2730,7 +2730,10 @@ setmangry(mtmp, via_attack)
 struct monst *mtmp;
 boolean via_attack;
 {
-    if (via_attack && sengr_at("Elbereth", u.ux, u.uy, TRUE)) {
+    if (via_attack && sengr_at("Elbereth", u.ux, u.uy, TRUE)
+        /* only hypocritical if monster is vulnerable to Elbereth (or
+           peaceful--not vulnerable but attacking it is hypocritical) */
+        && (onscary(u.ux, u.uy, mtmp) || mtmp->mpeaceful)) {
         You_feel("like a hypocrite.");
         /* AIS: Yes, I know alignment penalties and bonuses aren't balanced
            at the moment. This is about correct relative to other "small"
@@ -2739,7 +2742,8 @@ boolean via_attack;
            violating your own request. I know 5 isn't actually large, but
            it's intentionally larger than the 1s and 2s that are normally
            given for this sort of thing. */
-        adjalign(-5);
+        /* reduce to 3 (average) when alignment is already very low */
+        adjalign((u.ualign.record > 5) ? -5 : -rnd(5));
 
         if (!Blind)
             pline("The engraving beneath you fades.");

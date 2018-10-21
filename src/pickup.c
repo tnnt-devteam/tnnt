@@ -2205,6 +2205,7 @@ register struct obj *obj;
             pline("%s spits out your %s disdainfully.", The(xname(current_container)), buf);
             return 0;
         }
+        tnnt_achieve(A_PUT_INTO_SWAPCHEST);
     }
     /* <-- */
     if (obj == uwep) {
