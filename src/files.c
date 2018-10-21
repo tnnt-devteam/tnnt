@@ -4496,8 +4496,9 @@ struct obj *o;
 }
 
 boolean
-write_swapobj_file(o)
+write_swapobj_file(o,swapnum)
 struct obj *o;
+schar swapnum;
 {
     static char *objnames[SWAP_ITEMS_MAX] = {
         /* this needs to be adjusted if SWAP_ITEMS_MAX changes */
@@ -4517,7 +4518,7 @@ struct obj *o;
                "recharged=%d\tgreased=%d\tusecount=%d\tname=%s_%s\n",
                o->o_id, o->otyp, o->owt, o->quan, o->spe, o->oclass,
                o->cursed, o->blessed, o->oeroded, o->oeroded2, o->oerodeproof,
-               o->recharged, o->greased, o->usecount, objnames[u.uswapitems], plname);
+               o->recharged, o->greased, o->usecount, objnames[swapnum], plname);
     /* the second line is just for humans to read what the object is, for debugging */
     o->known = 1;
     o->dknown = 1;

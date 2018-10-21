@@ -178,6 +178,8 @@ boolean restore;
             } else if (otmp->otyp == SPE_BOOK_OF_THE_DEAD) {
                 otmp->otyp = SPE_BLANK_PAPER;
                 curse(otmp);
+            } else if (otmp->otyp == SWAP_CHEST) {
+                otmp->swapitems = 0;
             }
         }
     }

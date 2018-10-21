@@ -55,6 +55,11 @@ struct obj {
 #define STATUE_HISTORIC 0x01
 #define STATUE_MALE 0x02
 #define STATUE_FEMALE 0x04
+               /* for swapchest n_items hero has put in.
+                  starts at 0, becomes -1 when item is removed */
+#define swapitems spe
+#define SWAP_ITEMS_MIN 1     /* you must put this many in, to take one out */
+#define SWAP_ITEMS_MAX 3     /* you can put this many in, but only take one out */
     char oclass;    /* object class */
     char invlet;    /* designation in inventory */
     char oartifact; /* artifact array index */

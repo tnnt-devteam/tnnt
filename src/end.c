@@ -1555,7 +1555,8 @@ boolean identified, all_containers, reportempty;
 
     for (box = list; box; box = box->nobj) {
         if (Is_container(box) || box->otyp == STATUE) {
-            box->cknown = 1; /* we're looking at the contents now */
+            if (box->otyp != SWAP_CHEST)
+                box->cknown = 1; /* we're looking at the contents now */
             if (identified)
                 box->lknown = 1;
             cat = deadcat = FALSE;

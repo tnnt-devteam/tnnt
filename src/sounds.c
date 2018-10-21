@@ -1061,7 +1061,7 @@ dochat()
             }
         }
         if (otmp->otyp == SWAP_CHEST) {
-            if (u.uswapitems == -1) {
+            if (otmp->swapitems == -1) {
                 pline("You get no response from %s. It seems to be waiting for someoene else.", the(xname(otmp)));
             } else {
                 pline("%s bounces impatiently, and flaps its lid.", The(xname(otmp)));

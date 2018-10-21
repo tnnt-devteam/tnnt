@@ -595,7 +595,7 @@ xchar x, y;
     }
 
     if (kickedobj->otyp == SWAP_CHEST) {
-        if (u.uswapitems > -1) {
+        if (kickedobj->swapitems > -1) {
             pline("%s reveals hundreds of little legs and stomps on you!",
                   The(xname(kickedobj)));
             losehp(rn1(10,5), "trampled to death by an angry box",
