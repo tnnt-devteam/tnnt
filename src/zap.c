@@ -1917,6 +1917,13 @@ struct obj *obj, *otmp;
             /* target object has now been "seen (up close)" */
             obj->dknown = 1;
             if (Is_container(obj) || obj->otyp == STATUE) {
+                if (obj->otyp == SWAP_CHEST) {
+                    pline ("The contents of %s seem to be in a state of flux",
+                           the(xname(obj)));
+                    res = 1;
+                    learn_it = TRUE;
+                    break;
+                }
                 obj->cknown = obj->lknown = 1;
                 if (!obj->cobj) {
                     boolean catbox = SchroedingersBox(obj);

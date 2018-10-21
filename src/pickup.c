@@ -2853,7 +2853,7 @@ containerdone:
            whatever was already inside, now we suddenly do.  That can't
            be helped unless we want to track things item by item and then
            deal with containers whose contents are "partly known". */
-        if (current_container)
+        if (current_container && current_container->otyp != SWAP_CHEST)
             current_container->cknown = 1;
         update_inventory();
     }
@@ -2940,7 +2940,8 @@ boolean put_in;
     }
 
     if (loot_everything) {
-        current_container->cknown = 1;
+        if (current_container->otyp != SWAP_CHEST)
+            current_container->cknown = 1;
         for (otmp = current_container->cobj; otmp; otmp = otmp2) {
             otmp2 = otmp->nobj;
             res = out_container(otmp);
@@ -2952,7 +2953,8 @@ boolean put_in;
         if (put_in && flags.invlet_constant)
             mflags |= USE_INVLET;
         if (!put_in)
-            current_container->cknown = 1;
+            if (current_container->otyp != SWAP_CHEST)
+                current_container->cknown = 1;
         Sprintf(buf, "%s what?", action);
         n = query_objlist(buf, put_in ? &invent : &(current_container->cobj),
                           mflags, &pick_list, PICK_ANY,
@@ -3154,6 +3156,18 @@ dotip()
                         return 0;
                     if (c == 'n')
                         continue;
+                    if (cobj->otyp == SWAP_CHEST) {
+                        if (rn2(5)) {
+                            pline("%s digs its toes in and refuses to budge.",
+                                  The(xname(cobj)));
+                        } else {
+                            pline("%s reveals hundreds of little legs and stomps on you!",
+                                  The(xname(cobj)));
+                            losehp(rn1(10,5), "trampled to death by an angry box",
+                                              NO_KILLER_PREFIX);
+                        }
+                        return 0;
+                    }
                     tipcontainer(cobj);
                     /* can only tip one container at a time */
                     return 1;
