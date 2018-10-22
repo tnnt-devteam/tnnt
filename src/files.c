@@ -4515,10 +4515,10 @@ schar swapnum;
     if (!f) return FALSE;
     fprintf(f, "o_id=%x\totyp=%d\towt=%d\tquan=%d\tspe=%d\toclass=%d\t"
                "cursed=%d\tblessed=%d\toeroded=%d\toeroded2=%d\toerodeproof=%d\t"
-               "recharged=%d\tgreased=%d\tusecount=%d\tname=%s_%s\n",
+               "recharged=%d\tgreased=%d\tusecount=%d\tcorpsenm=%d\tname=%s_%s\n",
                o->o_id, o->otyp, o->owt, o->quan, o->spe, o->oclass,
                o->cursed, o->blessed, o->oeroded, o->oeroded2, o->oerodeproof,
-               o->recharged, o->greased, o->usecount, objnames[swapnum], plname);
+               o->recharged, o->greased, o->usecount, o->corpsenm, objnames[swapnum], plname);
     /* the second line is just for humans to read what the object is, for debugging */
     o->known = 1;
     o->dknown = 1;
@@ -4592,6 +4592,7 @@ char *filename;
             continue;
         }
         if (sscanf(buf, "usecount=%d", &(o->usecount)) == 1) continue;
+        if (sscanf(buf, "corpsenm=%d", &(o->corpsenm)) == 1) continue;
         if (sscanf(buf, "name=%ms", &p) == 1) {
             if (!o->oextra) o->oextra = newoextra();
             o->oextra->oname = p;
