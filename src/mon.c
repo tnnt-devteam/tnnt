@@ -922,6 +922,19 @@ struct monst *mtmp;
        [despite comment at top, doesn't assume that eater is a g.cube] */
     for (otmp = level.objects[mtmp->mx][mtmp->my]; otmp; otmp = otmp2) {
         otmp2 = otmp->nexthere;
+        /* TNNT swap chest - these are not part of a gelcube's diet */
+        if (otmp->otyp == SWAP_CHEST) {
+
+            if (cansee(mtmp->mx, mtmp->my) && flags.verbose) {
+                pline("%s eats %s.", Monnam(mtmp), the(xname(otmp)));
+                pline("%s shudders briefly and explodes into a million tiny globs of goo as %s bursts out of it!",
+                      Monnam(mtmp), the(xname(otmp)));
+            } else if (flags.verbose) {
+                You_hear("a loud SPLAT!");
+            }
+            mondead(mtmp);
+            return 0;
+        }
 
         /* touch sensitive items */
         if (otmp->otyp == CORPSE && is_rider(&mons[otmp->corpsenm])) {
