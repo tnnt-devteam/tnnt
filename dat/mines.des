@@ -887,7 +887,7 @@ STAIR:(36,04),up
 # Non diggable walls
 NON_DIGGABLE:(00,00,74,17)
 # Niches
-# Note: $place[6] empty
+# Note: $place[6] swap chest
 OBJECT:('*',"diamond"),$place[0]
 OBJECT:('*',"emerald"),$place[0]
 OBJECT:('*',"worthless piece of violet glass"),$place[0]
@@ -910,6 +910,7 @@ OBJECT:('*',"loadstone"),$place[4]
 OBJECT:('*',"ruby"),$place[5]
 OBJECT:('*',"worthless piece of red glass"),$place[5]
 OBJECT:('*',"luckstone"),$place[5]
+OBJECT:('(',"swap chest"),$place[6]
 # Random objects
 OBJECT:'*',random
 OBJECT:'*',random
@@ -1007,6 +1008,7 @@ IF [50%] {
 
 # Dungeon Description
 FOUNTAIN:(14,13)
+OBJECT:('(',"swap chest"),(14,12)
 REGION:(23,03,48,06),lit,"ordinary"
 REGION:(21,06,22,06),lit,"ordinary"
 REGION:(14,04,14,04),unlit,"ordinary"
@@ -1145,6 +1147,7 @@ STAIR:(42,8),up
 WALLIFY
 
 # Objects
+OBJECT:('(',"swap chest"),(68,4)
 OBJECT:('*',"diamond"),random
 OBJECT:'*',random
 OBJECT:('*',"diamond"),random
