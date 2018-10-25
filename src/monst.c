@@ -2829,24 +2829,16 @@ struct permonst _mons2[] = {
         M3_INFRAVISIBLE, 12, HI_DOMESTIC),
     /*
      * The Devteam
-     * Would it be easier to just populate a map with a few character class
-     * types and name then in the .des file? Sure, but we'd like the devteam
-     * characters to be their own unique entities.
+     * Initially we set out to make each individual DT member.
+     * aosdict had a better method - make the one, and then can
+     * name it after each DT member in the .des file.
      */
-    MON("bhaak", S_HUMAN, LVL(100, 16, 0, 30, 20), (G_NOGEN | G_UNIQ),
-        A(ATTK(AT_WEAP, AD_PHYS, 8, 8), NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK,
-          NO_ATTK),
-        SIZ(WT_HUMAN, 400, MS_BHAAK, MZ_HUMAN), 0, 0,
-        M1_HUMANOID | M1_OMNIVORE,
-        M2_NOPOLY | M2_HUMAN | M2_PNAME | M2_PEACEFUL | M2_STRONG | M2_MALE,
-            M3_CLOSE | M3_INFRAVISIBLE, 104, HI_DOMESTIC),
-    MON("paxed", S_HUMAN, LVL(100, 16, 0, 30, 20), (G_NOGEN | G_UNIQ),
-        A(ATTK(AT_WEAP, AD_PHYS, 8, 8), NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK,
-          NO_ATTK),
-        SIZ(WT_HUMAN, 400, MS_PAXED, MZ_HUMAN), 0, 0,
-        M1_HUMANOID | M1_OMNIVORE,
-        M2_NOPOLY | M2_HUMAN | M2_PNAME | M2_PEACEFUL | M2_STRONG | M2_MALE,
-            M3_CLOSE | M3_INFRAVISIBLE, 104, HI_DOMESTIC),
+    MON("devteam", S_HUMAN, LVL(110, 20, -20, 99, 20), (G_NOGEN | G_UNIQ),
+        A(ATTK(AT_WEAP, AD_PHYS, 8, 8), ATTK(AT_WEAP, AD_STUN, 8, 8),
+        NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
+        SIZ(WT_HUMAN, 400, MS_DEVTEAM, MZ_HUMAN), MR_SLEEP | MR_POISON | MR_DISINT | MR_STONE, 0,
+        M1_HUMANOID | M1_OMNIVORE, M2_NOPOLY | M2_HUMAN | M2_PRINCE | M2_PEACEFUL | M2_STRONG | M2_MALE,
+        M3_CLOSE | M3_INFRAVISION | M3_DISPLACES, 60, HI_DOMESTIC),
     /*
      * quest leaders
      */

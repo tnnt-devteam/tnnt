@@ -825,36 +825,17 @@ register struct monst *mtmp;
             }
         break;
     /* The Devteam */
-    case MS_BHAAK:
+    case MS_DEVTEAM:
         if (mtmp->mpeaceful) {
-            switch (rn2(4)) {
+            switch (rn2(3)) {
             case 0:
-                pline_msg = "tries to get you to play something called 'UnNetHack'.";
+                pline_msg = "asks you about your day.";
                 break;
             case 1:
-                pline_msg = "starts swearing at you in German.";
+                pline_msg = "mumbles something about X11 tty status.";
                 break;
             case 2:
-                verbl_msg = "That bastard just punched me in the face!";
-                break;
-            default:
-                pline_msg = "discusses the merits of html dumplogs.";
-                break;
-            }
-            break;
-        }
-    break;
-    case MS_PAXED:
-        if (mtmp->mpeaceful) {
-            switch (rn2(4)) {
-            case 0:
-                pline_msg = "asks you if you've seen dtype.";
-                break;
-            case 1:
-                pline_msg = "mumbles something about waiting for the fat lady to start yodeling.";
-                break;
-            case 2:
-                verbl_msg = "Most of us just idle here.";
+                verbl_msg = "LOUD NOISES!!";
                 break;
             default:
                 verbl_msg = "You can finally wish for oranges. Now go away.";

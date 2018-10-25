@@ -46,10 +46,7 @@
 #define MS_SPELL 37     /* spellcaster not matching any of the above */
 #define MS_WERE 38      /* lycanthrope in human form */
 #define MS_BOAST 39     /* giants */
-#define MS_BHAAK 40     /* devteam */
-#define MS_PAXED 41     /* devteam */
-#define MS_AIS523 42    /* devteam */
-#define MS_LORIMER 43   /* devteam */
+#define MS_DEVTEAM 40     /* devteam */
 
 #define MR_FIRE 0x01   /* resists fire */
 #define MR_COLD 0x02   /* resists cold */

@@ -9,7 +9,7 @@
 
 MAZE:"devteam",' '
 FLAGS:nommap,noteleport,hardfloor
-MESSAGE: "You magically arrive to a place bustling with activity."
+MESSAGE: "You arrive to a place bustling with activity and excitement."
 MESSAGE: "You notice several people mumbling incoherently, something to do about 'the source code'."
 GEOMETRY:center,center
 
@@ -43,11 +43,11 @@ SHUFFLE: $place
 
 REGION:(00,00,57,16),lit,"ordinary"
 NON_DIGGABLE:(0,0,57,16)
-BRANCH:(01,09,01,09),(0,0,0,0)
+STAIR:(01,09),down
 
 #The Devteam
-MONSTER:('@',"bhaak"),(32,10),peaceful
-MONSTER:('@',"paxed"),(53,08),peaceful
+MONSTER:('@',"devteam"),(32,10),peaceful,"bhaak"
+MONSTER:('@',"devteam"),(53,08),peaceful,"paxed"
 
 #THE OFFICE
 FOUNTAIN:(13,09)
