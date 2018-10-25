@@ -48,6 +48,9 @@ NON_DIGGABLE:(0,0,57,16)
 #The Devteam
 MONSTER:"devteam member",(32,10),peaceful,"bhaak"
 MONSTER:"devteam member",(53,08),peaceful,"paxed"
+MONSTER:"devteam member",random,peaceful,"lorimer"
+MONSTER:"devteam member",random,peaceful,"PatR"
+MONSTER:"devteam member",random,peaceful,"ais"
 
 #THE OFFICE
 FOUNTAIN:(13,09)
