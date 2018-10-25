@@ -9,6 +9,10 @@
 
 #include "hack.h"
 
+/* TNNT - swap chest related */
+#define SWAP_ITEMS_MIN 1     /* you must put this many in, to take one out */
+#define SWAP_ITEMS_MAX 3     /* you can put this many in, but only take one out */
+
 #define CONTAINED_SYM '>' /* from invent.c */
 
 STATIC_DCL void FDECL(simple_look, (struct obj *, BOOLEAN_P));
