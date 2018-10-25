@@ -1,4 +1,4 @@
-/* NetHack 3.6	makemon.c	$NHDT-Date: 1537477761 2018/09/20 21:09:21 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.124 $ */
+/* NetHack 3.6	makemon.c	$NHDT-Date: 1539804904 2018/10/17 19:35:04 $  $NHDT-Branch: keni-makedefsm $:$NHDT-Revision: 1.127 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2012. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -25,12 +25,10 @@ STATIC_DCL void FDECL(m_initinv, (struct monst *));
 STATIC_DCL boolean FDECL(makemon_rnd_goodpos, (struct monst *,
                                                unsigned, coord *));
 
-extern const int monstr[];
-
 #define m_initsgrp(mtmp, x, y) m_initgrp(mtmp, x, y, 3)
 #define m_initlgrp(mtmp, x, y) m_initgrp(mtmp, x, y, 10)
-#define toostrong(monindx, lev) (monstr[monindx] > lev)
-#define tooweak(monindx, lev) (monstr[monindx] < lev)
+#define toostrong(monindx, lev) (mons[monindx].difficulty > lev)
+#define tooweak(monindx, lev) (mons[monindx].difficulty < lev)
 
 boolean
 is_home_elemental(ptr)
@@ -187,6 +185,13 @@ register struct monst *mtmp;
             (void) mongets(mtmp, (mm != PM_ETTIN) ? BOULDER : CLUB);
         break;
     case S_HUMAN:
+            case PM_DEVTEAM:
+                (void) mongets(mtmp, rn2(2) ? LONG_SWORD : KATANA);
+                (void) mongets(mtmp, rn2(3) ? LARGE_SHIELD : SHIELD_OF_REFLECTION);
+                (void) mongets(mtmp, LEATHER_GLOVES);
+                (void) mongets(mtmp, HIGH_BOOTS);
+                (void) mongets(mtmp, rn2(2) ? ELVEN_MITHRIL_COAT : DWARVISH_MITHRIL_COAT);
+                break;
         if (is_mercenary(ptr)) {
             w1 = w2 = 0;
             switch (mm) {
@@ -1652,7 +1657,7 @@ int spc;
         if (mk_gen_ok(last, G_GONE, mask)) {
             /* consider it */
             if (num && toostrong(last, maxmlev)
-                && monstr[last] != monstr[last - 1] && rn2(2))
+                && mons[last].difficulty != mons[last - 1].difficulty && rn2(2))
                 break;
             num += mons[last].geno & G_FREQ;
         }

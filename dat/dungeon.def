@@ -25,6 +25,7 @@ CHAINBRANCH:	"Sokoban" "oracle" + (1, 0) up
 RNDLEVEL:	"bigrm" "B" @ (10, 3) 40 10
 CHAINBRANCH:	"The Quest" "oracle" + (6, 2) portal
 BRANCH:		"Fort Ludios" @ (18, 4) portal
+CHAINBRANCH:    "devteam" "oracle" + (2, 0) up
 RNDLEVEL:	"medusa" "none" @ (-5, 4) 4
 LEVALIGN:	chaotic
 LEVEL:		"castle" "none" @ (-1, 0)
@@ -108,6 +109,15 @@ DESCRIPTION:	mazelike
 ALIGNMENT:	unaligned
 LEVEL:		"knox" "K" @ (-1, 0)
 #
+#       The NetHack Devteam Office
+#
+DUNGEON:        "devteam" "Z" (1, 0)
+DESCRIPTION:    mazelike
+ALIGNMENT:      unaligned
+ENTRY:          -1
+LEVEL:          "devteam" "Z" @ (1, 0)
+
+#
 #	Vlad's Tower
 #
 #	It has been removed from Gehennom, and it is surrounded by stone.
@@ -141,3 +151,4 @@ LEVEL:		"fire"   "none" @ (3, 0)
 LEVEL:		"air"    "none" @ (4, 0)
 LEVEL:		"earth"  "none" @ (5, 0)
 LEVEL:		"dummy"  "none" @ (6, 0)
+

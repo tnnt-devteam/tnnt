@@ -130,6 +130,10 @@ OBJECT:'+',random
 OBJECT:'(',random
 OBJECT:'(',random
 OBJECT:'(',random
+#
+# TNNT Swap Chest
+#
+OBJECT:('(',"swap chest"),(74,2)
 
 # (Not so) Random traps.
 TRAP:"spiked pit", (05,02)

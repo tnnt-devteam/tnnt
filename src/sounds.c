@@ -824,6 +824,27 @@ register struct monst *mtmp;
                 break;
             }
         break;
+    /* The Devteam */
+    case MS_DEVTEAM:
+        if (mtmp->mpeaceful) {
+            switch (rn2(3)) {
+            case 0:
+                pline_msg = "asks you about your day.";
+                break;
+            case 1:
+                pline_msg = "mumbles something about X11 tty status.";
+                break;
+            case 2:
+                verbl_msg = "LOUD NOISES!!";
+                break;
+            default:
+                verbl_msg = "You can finally wish for oranges. Now go away.";
+                break;
+            }
+            break;
+        }
+    break;
+    /* END of The Devteam */
     case MS_SEDUCE: {
         int swval;
 
