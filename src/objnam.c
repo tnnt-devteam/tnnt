@@ -621,7 +621,7 @@ unsigned cxn_flags; /* bitmask of CXN_xxx values */
         } else if (un) {
             Strcat(buf, " called ");
             Strcat(buf, un);
-        } else if (ocl->oc_magic) {
+        } else if (ocl->oc_magic || typ == SCR_MISSING_CODE) {
             Strcat(buf, " labeled ");
             Strcat(buf, dn);
         } else {

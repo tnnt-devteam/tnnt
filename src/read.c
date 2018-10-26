@@ -393,6 +393,7 @@ doread()
         /* a few scroll feedback messages describe something happening
            to the scroll itself, so avoid "it disappears" for those */
         nodisappear = (scroll->otyp == SCR_FIRE
+                       || scroll->otyp == SCR_MISSING_CODE
                        || (scroll->otyp == SCR_REMOVE_CURSE
                            && scroll->cursed));
         if (Blind)
@@ -419,7 +420,7 @@ doread()
                 docall(scroll);
         }
         scroll->in_use = FALSE;
-        if (scroll->otyp != SCR_BLANK_PAPER)
+        if (scroll->otyp != SCR_BLANK_PAPER && scroll->otyp != SCR_MISSING_CODE)
             useup(scroll);
     }
     return 1;
@@ -1735,6 +1736,20 @@ struct obj *sobj; /* scroll, or fake spellbook object for scroll-like spell */
                                 8 + 4 * bcsign(sobj));
         break;
     }
+    case SCR_MISSING_CODE:
+        if (already_known) {
+            You_feel("like you should show this to someone knowledgeable.");
+        }
+        else {
+            learnscrolltyp(SCR_MISSING_CODE);
+            pline("This looks like an arcane fragment of C code.");
+            if (ACURR(A_INT) >= 18)
+                pline("Unfortunately, you never studied C.");
+            else
+                You("can't decipher it.");
+            You_feel("that someone might be looking for this...");
+        }
+        break;
     default:
         impossible("What weird effect is this? (%u)", otyp);
     }

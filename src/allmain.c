@@ -628,6 +628,35 @@ newgame()
     vision_reset();          /* set up internals for level (after mklev) */
     check_special_room(FALSE);
 
+    /* TNNT - game init stuff */
+    /* Create the lost Scrolls of Missing Code, then send them to various places
+     * in the Dungeons of Doom. */
+    for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
+        struct obj* scroll = mksobj(SCR_MISSING_CODE, FALSE, FALSE);
+
+        /* TODO: More fine-grained control over where these end up.
+         * Currently they just get sent to random levels. */
+        int castle_depth = stronghold_level.dlevel;
+        d_level dest;
+        dest.dnum = u.uz.dnum; // should always be DoD
+        do {
+            // We don't want to put it on dungeon level 1, the Castle, or
+            // Medusa. Since level 1 and the Castle are the extremes, we can
+            // eliminate them in here, though.
+            dest.dlevel = rnd(castle_depth - 2) + 1;
+        } while (dest.dlevel == medusa_level.dlevel);
+        tnnt_globals.missing_scroll_levs[i] = ledger_no(&dest);
+
+        scroll->owornmask = MIGR_RANDOM;
+        scroll->ox = dest.dnum;
+        scroll->oy = dest.dlevel;
+        /* For devteam feedback on where to find scrolls: store the dlevel in
+         * corpsenm, so we know not to send the hero chasing after a scroll that
+         * they already found */
+        scroll->corpsenm = dest.dlevel;
+        add_to_migration(scroll);
+    }
+
     if (MON_AT(u.ux, u.uy))
         mnexto(m_at(u.ux, u.uy));
     (void) makedog();
