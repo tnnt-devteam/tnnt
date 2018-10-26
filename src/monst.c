@@ -2833,14 +2833,14 @@ struct permonst _mons2[] = {
      * aosdict had a better method - make the one, and then can
      * name it after each DT member in the .des file.
      */
-    MON("devteam member", S_HUMAN, LVL(110, 20, -20, 99, 20), (G_NOGEN),
+    MON("devteam member", S_HUMAN, LVL(110, 20, -20, 127, 20), (G_NOGEN | G_NOCORPSE),
         A(ATTK(AT_WEAP, AD_PHYS, 8, 8), ATTK(AT_WEAP, AD_STUN, 8, 8),
         NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
         SIZ(WT_HUMAN, 400, MS_DEVTEAM, MZ_HUMAN),
         MR_SLEEP | MR_POISON | MR_DISINT | MR_STONE, 0,
         M1_HUMANOID | M1_OMNIVORE,
         M2_NOPOLY | M2_HUMAN | M2_PRINCE | M2_PEACEFUL | M2_STRONG | M2_MALE,
-        M3_CLOSE | M3_INFRAVISION | M3_DISPLACES, 60, C(CLR_YELLOW)),
+        M3_INFRAVISION | M3_DISPLACES, 60, C(CLR_YELLOW)),
     /*
      * quest leaders
      */

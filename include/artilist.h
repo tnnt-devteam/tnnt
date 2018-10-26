@@ -242,7 +242,7 @@ A("The Palantir of Westernesse",        CRYSTAL_BALL,
      *  Custom armor artifact for 'The November Nethack Tournament'
      */
 
-    A("Test", T_SHIRT,
+    A("The Really Cool T-Shirt", T_SHIRT,
       (SPFX_NOGEN | SPFX_RESTR | SPFX_LUCK), SPFX_WARN, 0,
       NO_ATTK, NO_DFNS, NO_CARY, 0, A_NONE, NON_PM, NON_PM, 800L,
       NO_COLOR),
