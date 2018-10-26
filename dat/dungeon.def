@@ -107,15 +107,6 @@ DUNGEON:	"Fort Ludios" "K" (1, 0)
 DESCRIPTION:	mazelike
 ALIGNMENT:	unaligned
 LEVEL:		"knox" "K" @ (-1, 0)
-BRANCH:         "devteam" @ (1, 1) portal
-#
-#       The NetHack Devteam Office
-#
-DUNGEON:        "devteam" "Z" (1, 0)
-DESCRIPTION:    mazelike
-ALIGNMENT:      unaligned
-LEVEL:          "devteam" "Z" @ (1, 0)
-
 #
 #	Vlad's Tower
 #
@@ -150,4 +141,3 @@ LEVEL:		"fire"   "none" @ (3, 0)
 LEVEL:		"air"    "none" @ (4, 0)
 LEVEL:		"earth"  "none" @ (5, 0)
 LEVEL:		"dummy"  "none" @ (6, 0)
-

@@ -691,7 +691,6 @@ struct level_map {
                   { "fire", &fire_level },
                   { "juiblex", &juiblex_level },
                   { "knox", &knox_level },
-                  { "devteam", &devteam_level },
                   { "medusa", &medusa_level },
                   { "oracle", &oracle_level },
                   { "orcus", &orcus_level },
@@ -1975,7 +1974,7 @@ xchar *rdgn;
         else if (Is_earthlevel(&u.uz) || Is_waterlevel(&u.uz)
                  || Is_firelevel(&u.uz) || Is_airlevel(&u.uz)
                  || Is_qstart(&u.uz) || at_dgn_entrance("The Quest")
-                 || Is_knox(&u.uz) || Is_devteam(&u.uz))
+                 || Is_knox(&u.uz))
             Strcpy(buf, "No portal found.");
 
         /* only give output if we found a portal or expected one and didn't */

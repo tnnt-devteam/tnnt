@@ -249,9 +249,8 @@ char **argv;
         ":dat:Samurai.des", ":dat:Tourist.des",  ":dat:Valkyrie.des",
         ":dat:Wizard.des",  ":dat:bigroom.des",  ":dat:castle.des",
         ":dat:endgame.des", ":dat:gehennom.des", ":dat:knox.des",
-        ":dat:devteam.des", ":dat:medusa.des",   ":dat:mines.des",
-        ":dat:oracle.des",  ":dat:sokoban.des",  ":dat:tower.des",
-        ":dat:yendor.des"
+        ":dat:medusa.des",  ":dat:mines.des",    ":dat:oracle.des",
+        ":dat:sokoban.des", ":dat:tower.des",    ":dat:yendor.des"
     };
 
     argc = SIZE(mac_argv);
