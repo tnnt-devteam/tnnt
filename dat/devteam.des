@@ -81,6 +81,8 @@ MONSTER:"little dog",(44,02),peaceful,"Yermak"
 MONSTER:"kitten",(44,04),peaceful,"Micka"
 MONSTER:"little dog",(44,16),peaceful,"Fudd"
 MONSTER:"pony",(44,14),peaceful,"Bill"
+MONSTER:"lizard",random,peaceful,"the Lizard of Yendor"
+MONSTER:"troll",random,peaceful,"MR SHOUTY"
 
 ENGRAVING:(02,09),burn,"This is my program. There are many programs like it, but this one is mine..."
 ENGRAVING:(47,09),burn,"Beware - PEBCAK disposal area"
