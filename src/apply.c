@@ -1886,7 +1886,7 @@ struct obj *obj;
         }
         (void) hold_another_object(can, "You make, but cannot pick up, %s.",
                                    doname(can), (const char *) 0);
-        if (mons[corpse->corpsenm].mlet == S_TROLL)
+        if (mons[can->corpsenm].mlet == S_TROLL)
             tnnt_achieve(A_BLOCKED_TROLL_REVIVAL);
     } else
         impossible("Tinning failed.");
