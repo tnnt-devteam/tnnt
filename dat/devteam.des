@@ -16,12 +16,12 @@ GEOMETRY:center,center
 #         1         2         3         4         5         6         7
 #123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
-                                        
-                                          -----
-                        ----------------  |...|
-                        |...|..........S##+...|
-                       --...|..........|  |...|
-          |-----|    --|....|-+-FFFF-+-|  -----
+                               ------
+                               |....|      -----
+                        ---------LL-----   |...|
+                        |...|..........S###+...|
+                       --...|..........|   |...|
+          |-----|    --|....|-+-FFFF-+-|   -----
         ---.....---  |......|..........|         ---------
  -------|.........|--|.....--..........|         |LLLLLLL|
 -|........................-|...........|---------|L.....L|
@@ -29,16 +29,16 @@ MAP
 -|........................-|...........|---------|L.....L|
  -------|.........|--|.....--..........|         |LLLLLLL|
         ---.....---  |......|..........|         ---------
-          |-----|    --|....|-+-FFFF-+-|  -----
-                       --...|..........|  |...|
-                        |...|..........S##+...|
-                        ----------------  |...|
-                                          -----
-                                        
+          |-----|    --|....|-+-FFFF-+-|   -----
+                       --...|..........|   |...|
+                        |...|..........S###+...|
+                        ---------LL-----   |...|
+                               |....|      -----
+                               ------
                                         
 ENDMAP
 
-$place = { (04,08),(10,10),(14,07),(25,13),(20,08),(36,09),(38,03) }
+$place = { (32,01),(33,01),(34,01),(35,01),(32,17),(33,17),(34,17),(35,17) }
 SHUFFLE: $place
 
 BRANCH:(01,09,01,09),(0,0,0,0)
@@ -54,35 +54,37 @@ MONSTER:"devteam member",random,peaceful,"ais"
 
 #THE OFFICE
 FOUNTAIN:(13,09)
-DOOR:locked,(48,09)
-DOOR:locked,(26,09)
-DOOR:locked,(39,09)
-DOOR:locked,(30,05)
-DOOR:locked,(37,05)
-DOOR:locked,(30,13)
-DOOR:locked,(37,13)
+DOOR:closed,(48,09)
+DOOR:closed,(26,09)
+DOOR:closed,(39,09)
+DOOR:closed,(30,05)
+DOOR:closed,(37,05)
+DOOR:closed,(30,13)
+DOOR:closed,(37,13)
 DOOR:locked,(39,03)
-DOOR:locked,(42,03)
+DOOR:closed,(43,03)
 DOOR:locked,(39,15)
-DOOR:locked,(42,15)
+DOOR:closed,(43,15)
 
 OBJECT: ('(', "chest"), (53,09)
 OBJECT: ('?', "identify"),$place[0],uncursed
 OBJECT: ('?', "identify"),$place[1],uncursed
 OBJECT: ('?', "identify"),$place[2],blessed
-OBJECT: ('+', "identify"),$place[3],uncursed
-OBJECT: ('+', "detect monsters"),$place[4],uncursed
-OBJECT: ('+', "light"),$place[5],blessed
+OBJECT: ('?', "identify"),$place[3],uncursed
+OBJECT: ('+', "identify"),$place[4],uncursed
+OBJECT: ('+', "detect monsters"),$place[5],uncursed
+OBJECT: ('+', "light"),$place[6],blessed
+OBJECT: ('+', "detect unseen"),$place[7],uncursed
 
-OBJECT: ('`', "statue"), (33,09), montype:"human",5,name:"The RNG"
+OBJECT: ('`', "statue"), (33,09), montype:"balrog",5,name:"The RNG"
 
 # Funny bits that makes K2 chuckle
-MONSTER:"woodchuck",(44,03),peaceful,"Carl"
-MONSTER:"kitten",(44,15),peaceful,"Poes"
-MONSTER:"little dog",(44,02),peaceful,"Yermak"
-MONSTER:"kitten",(44,04),peaceful,"Micka"
-MONSTER:"little dog",(44,16),peaceful,"Fudd"
-MONSTER:"kitten",(44,14),peaceful,"Pierre"
+MONSTER:"woodchuck",(46,03),peaceful,"Carl"
+MONSTER:"kitten",(46,15),peaceful,"Poes"
+MONSTER:"little dog",(46,02),peaceful,"Yermak"
+MONSTER:"kitten",(46,04),peaceful,"Micka"
+MONSTER:"little dog",(46,16),peaceful,"Fudd"
+MONSTER:"kitten",(46,14),peaceful,"Pierre"
 MONSTER:"lizard",random,peaceful,"the Lizard of Yendor"
 MONSTER:"troll",random,peaceful,"MR SHOUTY"
 
