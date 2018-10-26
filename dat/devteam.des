@@ -74,13 +74,15 @@ OBJECT: ('+', "identify"),$place[3],uncursed
 OBJECT: ('+', "detect monsters"),$place[4],uncursed
 OBJECT: ('+', "light"),$place[5],blessed
 
+OBJECT: ('`', "statue"), (33,09), montype:"human",5,name:"The RNG"
+
 # Funny bits that makes K2 chuckle
 MONSTER:"woodchuck",(44,03),peaceful,"Carl"
 MONSTER:"kitten",(44,15),peaceful,"Poes"
 MONSTER:"little dog",(44,02),peaceful,"Yermak"
 MONSTER:"kitten",(44,04),peaceful,"Micka"
 MONSTER:"little dog",(44,16),peaceful,"Fudd"
-MONSTER:"pony",(44,14),peaceful,"Bill"
+MONSTER:"kitten",(44,14),peaceful,"Pierre"
 MONSTER:"lizard",random,peaceful,"the Lizard of Yendor"
 MONSTER:"troll",random,peaceful,"MR SHOUTY"
 
