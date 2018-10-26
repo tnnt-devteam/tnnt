@@ -77,6 +77,10 @@ OBJECT: ('+', "light"),$place[5],blessed
 # Funny bits that makes K2 chuckle
 MONSTER:"woodchuck",(44,03),peaceful,"Carl"
 MONSTER:"kitten",(44,15),peaceful,"Poes"
+MONSTER:"little dog",(44,02),peaceful,"Yermak"
+MONSTER:"kitten",(44,04),peaceful,"Micka"
+MONSTER:"little dog",(44,16),peaceful,"Fudd"
+MONSTER:"pony",(44,14),peaceful,"Bill"
 
 ENGRAVING:(02,09),burn,"This is my program. There are many programs like it, but this one is mine..."
 ENGRAVING:(47,09),burn,"Beware - PEBCAK disposal area"
