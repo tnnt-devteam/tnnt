@@ -185,7 +185,7 @@ register struct monst *mtmp;
             (void) mongets(mtmp, (mm != PM_ETTIN) ? BOULDER : CLUB);
         break;
     case S_HUMAN:
-        if (mm == PM_DEVTEAM_MEMBER) {
+        if (mm == PM_DEVTEAM) {
             (void) mongets(mtmp, rn2(2) ? LONG_SWORD : KATANA);
             (void) mongets(mtmp, rn2(3) ? LARGE_SHIELD : SHIELD_OF_REFLECTION);
             (void) mongets(mtmp, LEATHER_GLOVES);
