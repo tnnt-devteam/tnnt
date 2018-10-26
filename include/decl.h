@@ -440,6 +440,14 @@ struct early_opt {
     boolean valallowed;
 };
 
+/* TNNT - generic globals that don't belong in you.h */
+#define NUM_MISSING_CODE_SCROLLS 3
+struct tnnt_globals_t {
+    xchar missing_scroll_levs[NUM_MISSING_CODE_SCROLLS];
+    /* tnnt devs: add more as needed */
+};
+struct tnnt_globals_t tnnt_globals;
+
 #undef E
 
 #endif /* DECL_H */
