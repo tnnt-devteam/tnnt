@@ -17,11 +17,11 @@ GEOMETRY:center,center
 #123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
                                         
-                                        
-                        ----------------
-                        |...|..........|
-                       --...|..........|
-          |-----|    --|....|-+-FFFF-+-|
+                                          -----
+                        ----------------  |...|
+                        |...|..........S##+...|
+                       --...|..........|  |...|
+          |-----|    --|....|-+-FFFF-+-|  -----
         ---.....---  |......|..........|         ---------
  -------|.........|--|.....--..........|         |LLLLLLL|
 -|........................-|...........|---------|L.....L|
@@ -29,11 +29,11 @@ MAP
 -|........................-|...........|---------|L.....L|
  -------|.........|--|.....--..........|         |LLLLLLL|
         ---.....---  |......|..........|         ---------
-          |-----|    --|....|-+-FFFF-+-|
-                       --...|..........|
-                        |...|..........|
-                        ----------------
-                                        
+          |-----|    --|....|-+-FFFF-+-|  -----
+                       --...|..........|  |...|
+                        |...|..........S##+...|
+                        ----------------  |...|
+                                          -----
                                         
                                         
 ENDMAP
@@ -61,6 +61,10 @@ DOOR:locked,(30,05)
 DOOR:locked,(37,05)
 DOOR:locked,(30,13)
 DOOR:locked,(37,13)
+DOOR:locked,(39,03)
+DOOR:locked,(42,03)
+DOOR:locked,(39,15)
+DOOR:locked,(42,15)
 
 OBJECT: ('(', "chest"), (53,09)
 OBJECT: ('?', "identify"),$place[0],uncursed
@@ -69,6 +73,10 @@ OBJECT: ('?', "identify"),$place[2],blessed
 OBJECT: ('+', "identify"),$place[3],uncursed
 OBJECT: ('+', "detect monsters"),$place[4],uncursed
 OBJECT: ('+', "light"),$place[5],blessed
+
+# Funny bits that makes K2 chuckle
+MONSTER:"woodchuck",(44,03),peaceful,"Carl"
+MONSTER:"kitten",(44,15),peaceful,"Poes"
 
 ENGRAVING:(02,09),burn,"This is my program. There are many programs like it, but this one is mine..."
 ENGRAVING:(47,09),burn,"Beware - PEBCAK disposal area"
