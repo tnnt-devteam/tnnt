@@ -3,11 +3,13 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "qtext.h" // TNNT - for com_pager constants
 
 STATIC_DCL boolean FDECL(mon_is_gecko, (struct monst *));
 STATIC_DCL int FDECL(domonnoise, (struct monst *));
 STATIC_DCL int NDECL(dochat);
 STATIC_DCL int FDECL(mon_in_room, (struct monst *, int));
+STATIC_DCL void FDECL(devteam_quest, (struct monst *));
 
 /* this easily could be a macro, but it might overtax dumb compilers */
 STATIC_OVL int
@@ -19,6 +21,97 @@ int rmtyp;
     if (rno >= ROOMOFFSET)
         return rooms[rno - ROOMOFFSET].rtype == rmtyp;
     return FALSE;
+}
+
+/* TNNT - The DevTeam sends the player on a quest to find the missing scrolls
+ * containing their source code.
+ * Assumes that the player is chatting to a special devteam member who is
+ * basically the "quest leader". */
+STATIC_OVL void
+devteam_quest(leader)
+struct monst* leader;
+{
+    xchar qstatus = tnnt_globals.devteam_quest_status;
+
+    if (qstatus == DTQUEST_NOTSTARTED) {
+        /* Even if you manage to find all the scrolls before finding the actual
+         * devteam, this will still only assign the quest and it requires a
+         * second #chat to complete it. */
+        com_pager(QT_DEVTEAM_GIVENQUEST);
+        tnnt_globals.devteam_quest_status = DTQUEST_INPROGRESS;
+    }
+    else if (qstatus == DTQUEST_INPROGRESS) {
+        /* Fork over any scrolls of missing code.
+         * Mark them as completed in missing_scroll_levs, by removing the
+         * number.  See allmain.c - the scrolls SHOULD be all on different
+         * levels so there should be no duplicates in the array, but I realized
+         * that this doesn't actually require them to be on different levels.
+         * Hopefully, if these scrolls become stackable in the future, this code
+         * is tolerant of it - the useup() will remove one, then the next
+         * carrying() will find the remaining one(s).
+         */
+        int i;
+        int nscrolls_given = 0;
+        struct obj* scroll = carrying(SCR_MISSING_CODE);
+        while (scroll) {
+            int level = scroll->corpsenm;
+            for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
+                if (tnnt_globals.missing_scroll_levels[i] == level) {
+                    tnnt_globals.missing_scroll_levels[i] = 0;
+                    nscrolls_given++;
+                    useup(scroll);
+                }
+            }
+            scroll = carrying(SCR_MISSING_CODE);
+        }
+        xchar scrolls_remaining = 0;
+        xchar nextlevel; // they tell you where to look next
+        for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
+            if (tnnt_globals.missing_scroll_levels[i] != 0) {
+                // there are still scrolls out there that haven't been handed
+                // over
+                scrolls_remaining++;
+                nextlevel = tnnt_globals.missing_scroll_levels[i];
+            }
+        }
+        if (nscrolls_given == 0) {
+            verbalize("How is your search going?");
+            /* make them actually find the first one... no message when none
+             * have been found yet. */
+            if (scrolls_remaining < NUM_MISSING_CODE_SCROLLS) {
+                verbalize("Paxed thinks that there might be a scroll on level %d...",
+                        nextlevel);
+            }
+        }
+        else {
+            pline("%s gratefully takes the scroll%s from you.", Monnam(leader),
+                  (nscrolls_given > 1 ? "s" : ""));
+            if (scrolls_remaining > 0) {
+                // TODO: make better.
+                verbalize("Thank you.");
+            }
+            else {
+                // finished!!!
+                tnnt_globals.devteam_quest_status = DTQUEST_COMPLETED;
+                com_pager(QT_DEVTEAM_FINISHQUEST);
+                struct obj* reward = mksobj(T_SHIRT, FALSE, FALSE);
+                reward = oname(reward, artiname(ART_REALLY_COOL_SHIRT));
+                // player should have just given up at least one scroll, so
+                // should have room for this in inventory, but might get
+                // encumbered and want to decline :d
+                dropy(reward);
+                pickup_object(reward, 1, FALSE);
+            }
+        }
+    }
+    else if (qstatus == DTQUEST_COMPLETED) {
+        verbalize("Thank you again for finding our lost code.");
+        return;
+    }
+    else {
+        impossible("weird devteam quest status?");
+        return;
+    }
 }
 
 void
@@ -827,6 +920,10 @@ register struct monst *mtmp;
     /* The Devteam */
     case MS_DEVTEAM:
         if (mtmp->mpeaceful) {
+            if (!strcmpi(MNAME(mtmp), "Mike Stephenson")) {
+                devteam_quest(mtmp);
+                break;
+            }
             /* TODO: stuff here that gives you valid in-game information */
             if (!mtmp->mcan) {
                 // break;
