@@ -358,12 +358,19 @@
 #ifndef HACKDIR
 #define HACKDIR "/tnnt"
 #endif
+
 /* TNNT specific
  * the directory where we maintain the state of the swap chest
  */
 #ifndef TNNT_SWAPCHEST_DIR
 #define TNNT_SWAPCHEST_DIR HACKDIR "/swapchest"
 #endif
+
+/* Whether to enable the #tnntdebug command (and possibly, in the future, other
+ * debugging / public beta testing stuff) outside of wizard mode. */
+#define TNNT_BETA
+
+/* END TNNT specific defines */
 
 /*
  * Some system administrators are stupid enough to make Hack suid root

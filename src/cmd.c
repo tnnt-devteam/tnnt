@@ -130,7 +130,7 @@ static int NDECL(dosuspend_core); /**/
 
 static int NDECL((*timed_occ_fn));
 
-STATIC_PTR int NDECL(doshowachievements);
+STATIC_PTR int NDECL(dotnntdebug);
 STATIC_PTR int NDECL(doshowfoodseaten);
 STATIC_PTR int NDECL(doherecmdmenu);
 STATIC_PTR int NDECL(dotherecmdmenu);
@@ -3042,10 +3042,6 @@ struct ext_func_tab extcmdlist[] = {
             doextcmd, IFBURIED | GENERALCMD },
     { M('?'), "?", "list all extended commands",
             doextlist, IFBURIED | AUTOCOMPLETE | GENERALCMD },
-    /* TODO: remove the autocomplete and possibly this entire command before
-     * the tournament */
-    { '\0', "achievements", "display your TNNT achievements",
-            doshowachievements, IFBURIED | AUTOCOMPLETE },
     { M('a'), "adjust", "adjust inventory letters",
             doorganize, IFBURIED | AUTOCOMPLETE },
     { M('A'), "annotate", "name current level",
@@ -3183,6 +3179,13 @@ struct ext_func_tab extcmdlist[] = {
     { '\0', "timeout", "look at timeout queue and hero's timed intrinsics",
             wiz_timeout_queue, IFBURIED | AUTOCOMPLETE | WIZMODECMD },
     { M('T'), "tip", "empty a container", dotip, AUTOCOMPLETE },
+    { '\0', "tnntdebug", "display TNNT debug information",
+            dotnntdebug,
+#ifdef TNNT_BETA
+            IFBURIED | AUTOCOMPLETE },
+#else
+            IFBURIED | AUTOCOMPLETE | WIZMODECMD },
+#endif
     { '_', "travel", "travel to a specific location on the map", dotravel },
     { M('t'), "turn", "turn undead away", doturn, IFBURIED | AUTOCOMPLETE },
     { 'X', "twoweapon", "toggle two-weapon combat",
@@ -4845,14 +4848,51 @@ register int x, y;
     return x >= 1 && x <= COLNO - 1 && y >= 0 && y <= ROWNO - 1;
 }
 
-/* TNNT: #achievements command */
+/* TNNT: #tnntdebug command */
 STATIC_PTR int
-doshowachievements(VOID_ARGS)
+dotnntdebug(VOID_ARGS)
 {
+    char buf[BUFSZ];
+    char buf2[BUFSZ];
+    en_win = create_nhwindow(NHW_MENU);
+
+    // tnnt achievements
+    putstr(en_win, ATR_BOLD, "TNNT achievements (in hexadecimal):");
     int i;
     for (i = 0; i < SIZE(u.uachieve.tnnt_achievements); ++i) {
-        pline("achv[%d]: 0x%llx", i, u.uachieve.tnnt_achievements[i]);
+        Sprintf(buf, "tnntachieve%d: 0x%llx", i, u.uachieve.tnnt_achievements[i]);
+        putstr(en_win, 0, buf);
     }
+    putstr(en_win, 0, "");
+
+    // devteam quest info
+    putstr(en_win, ATR_BOLD, "Devteam Quest:");
+    Strcpy(buf, "Scroll levels:");
+    for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
+        if (tnnt_globals.missing_scroll_levels[i] == 0) {
+            Strcat(buf, " [DONE]");
+        }
+        else {
+            Sprintf(buf2, " %d", tnnt_globals.missing_scroll_levels[i]);
+            Strcat(buf, buf2);
+        }
+    }
+    putstr(en_win, 0, buf);
+    switch(tnnt_globals.devteam_quest_status) {
+        case DTQUEST_NOTSTARTED:
+            putstr(en_win, 0, "Quest not started yet.");
+            break;
+        case DTQUEST_INPROGRESS:
+            putstr(en_win, 0, "Quest in progress.");
+            break;
+        case DTQUEST_COMPLETED:
+            putstr(en_win, 0, "Quest completed.");
+            break;
+    }
+
+    display_nhwindow(en_win, TRUE);
+    destroy_nhwindow(en_win);
+    en_win = WIN_ERR;
 }
 
 /* TNNT: #foodseaten command */
