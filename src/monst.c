@@ -2840,7 +2840,7 @@ struct permonst _mons2[] = {
         MR_SLEEP | MR_POISON | MR_DISINT | MR_STONE | MR_FIRE | MR_COLD | MR_ACID | MR_ELEC, 0,
         M1_HUMANOID | M1_OMNIVORE | M1_FLY,
         M2_NOPOLY | M2_HUMAN | M2_PRINCE | M2_PEACEFUL | M2_STRONG | M2_ROCKTHROW | M2_MALE,
-        M3_INFRAVISION | M3_DISPLACES, 66, C(CLR_YELLOW)),
+        M3_CLOSE | M3_INFRAVISION | M3_DISPLACES, 66, C(CLR_YELLOW)),
     /*
      * quest leaders
      */
