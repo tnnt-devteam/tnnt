@@ -636,26 +636,39 @@ newgame()
 
         /* TODO: More fine-grained control over where these end up.
          * Currently they just get sent to random levels. */
-        int castle_depth = stronghold_level.dlevel;
-        d_level dest;
-        dest.dnum = u.uz.dnum; // should always be DoD
+        tnnt_globals.missing_scroll_levels[i] = 0;
+        xchar castle_depth = stronghold_level.dlevel;
+        xchar dest;
+        boolean samelevel;
         do {
             // We don't want to put it on dungeon level 1, the Castle, or
             // Medusa. Since level 1 and the Castle are the extremes, we can
             // eliminate them in here, though.
-            dest.dlevel = rnd(castle_depth - 2) + 1;
-        } while (dest.dlevel == medusa_level.dlevel);
-        tnnt_globals.missing_scroll_levs[i] = ledger_no(&dest);
+            dest = rnd(castle_depth - 2) + 1;
+
+            // Don't put two scrolls on the same level.
+            // TODO: This may not be needed.
+            int j;
+            samelevel = FALSE;
+            for (j = 0; j < i; ++j) {
+                if (dest == tnnt_globals.missing_scroll_levels[j]) {
+                    samelevel = TRUE;
+                }
+            }
+        } while (dest == 1 || samelevel || dest == stronghold_level.dlevel
+                 || dest == medusa_level.dlevel);
+        tnnt_globals.missing_scroll_levels[i] = dest;
 
         scroll->owornmask = MIGR_RANDOM;
-        scroll->ox = dest.dnum;
-        scroll->oy = dest.dlevel;
-        /* For devteam feedback on where to find scrolls: store the dlevel in
+        scroll->ox = u.uz.dnum; // should always be DoD
+        scroll->oy = dest;
+        /* For devteam feedback on where to find scrolls: store the dest in
          * corpsenm, so we know not to send the hero chasing after a scroll that
          * they already found */
-        scroll->corpsenm = dest.dlevel;
+        scroll->corpsenm = dest;
         add_to_migration(scroll);
     }
+    tnnt_globals.devteam_quest_status = DTQUEST_NOTSTARTED;
 
     if (MON_AT(u.ux, u.uy))
         mnexto(m_at(u.ux, u.uy));
