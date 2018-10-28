@@ -393,6 +393,16 @@ dosounds()
         }
         return;
     }
+    /* TNNT - clue the player in to the location of the devteam level */
+    if (Is_rogue_level(&u.uz) && !rn2(300)) {
+        static const char* const devteambranch_msg[] = {
+            "a nearby typing noise.",
+            "people arguing about game balance.",
+            "a voice say \"3.6.2\".",
+            "an infinite number of monkeys arguing about the script for Hamlet"
+        };
+        You_hear1(devteambranch_msg[rn2(3 + hallu)]);
+    }
 }
 
 static const char *const h_sounds[] = {
