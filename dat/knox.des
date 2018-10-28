@@ -103,7 +103,7 @@ MONSTER:('@',"soldier"),(57,10)
 MONSTER:('@',"soldier"),(57,09)
 MONSTER:('@',"lieutenant"),(15,08)
 # Possible source of a boulder
-MONSTER:('H',"stone giant"),(05,01)
+MONSTER:('H',"stone giant"),(03,01)
 # Four dragons guarding each side
 MONSTER:'D',(18,09)
 MONSTER:'D',(49,10)
