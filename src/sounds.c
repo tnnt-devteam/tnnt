@@ -55,6 +55,11 @@ struct monst* leader;
         struct obj* scroll = carrying(SCR_MISSING_CODE);
         while (scroll) {
             int level = scroll->corpsenm;
+            if (level <= 0) {
+                // wizmode wished scroll?
+                impossible("scroll marked with bad level?");
+                return;
+            }
             for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
                 if (tnnt_globals.missing_scroll_levels[i] == level) {
                     tnnt_globals.missing_scroll_levels[i] = 0;
