@@ -68,6 +68,7 @@ E struct dgn_topology { /* special dungeon levels for speed */
     xchar d_mines_dnum, d_quest_dnum;
     d_level d_qstart_level, d_qlocate_level, d_nemesis_level;
     d_level d_knox_level;
+    d_level d_devteam_level;
     d_level d_mineend_level;
     d_level d_sokoend_level;
 } dungeon_topology;
@@ -101,6 +102,7 @@ E struct dgn_topology { /* special dungeon levels for speed */
 #define qlocate_level           (dungeon_topology.d_qlocate_level)
 #define nemesis_level           (dungeon_topology.d_nemesis_level)
 #define knox_level              (dungeon_topology.d_knox_level)
+#define devteam_level           (dungeon_topology.d_devteam_level)
 #define mineend_level           (dungeon_topology.d_mineend_level)
 #define sokoend_level           (dungeon_topology.d_sokoend_level)
 /* clang-format on */
@@ -437,6 +439,20 @@ struct early_opt {
     int minlength;
     boolean valallowed;
 };
+
+/* TNNT - generic globals that don't belong in you.h */
+#define NUM_MISSING_CODE_SCROLLS 3
+enum dtquest_status {
+    DTQUEST_NOTSTARTED = 0,
+    DTQUEST_INPROGRESS,
+    DTQUEST_COMPLETED
+};
+struct tnnt_globals_t {
+    xchar missing_scroll_levels[NUM_MISSING_CODE_SCROLLS];
+    xchar devteam_quest_status;
+    /* tnnt devs: add more as needed */
+};
+struct tnnt_globals_t tnnt_globals;
 
 #undef E
 

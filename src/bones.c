@@ -124,6 +124,9 @@ boolean restore;
                 if (otmp->spe == 0)
                     otmp->spe = 1;
 #endif
+            } else if (otmp->otyp == SCR_MISSING_CODE) {
+                otmp->otyp = SCR_MAIL;
+                otmp->spe = 1;
             } else if (otmp->otyp == EGG) {
                 otmp->spe = 0; /* not "laid by you" in next game */
             } else if (otmp->otyp == TIN) {

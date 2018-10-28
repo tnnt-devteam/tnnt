@@ -691,6 +691,7 @@ struct level_map {
                   { "fire", &fire_level },
                   { "juiblex", &juiblex_level },
                   { "knox", &knox_level },
+                  { "devteam", &devteam_level },
                   { "medusa", &medusa_level },
                   { "oracle", &oracle_level },
                   { "orcus", &orcus_level },

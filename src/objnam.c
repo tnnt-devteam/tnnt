@@ -621,7 +621,7 @@ unsigned cxn_flags; /* bitmask of CXN_xxx values */
         } else if (un) {
             Strcat(buf, " called ");
             Strcat(buf, un);
-        } else if (ocl->oc_magic) {
+        } else if (ocl->oc_magic || typ == SCR_MISSING_CODE) {
             Strcat(buf, " labeled ");
             Strcat(buf, dn);
         } else {
@@ -3681,6 +3681,10 @@ typfnd:
             break;
         case SWAP_CHEST:
             typ = CHEST;
+            break;
+        case SCR_MISSING_CODE:
+            typ = SCR_MAIL;
+            break;
         default:
             /* catch any other non-wishable objects (venom) */
             if (objects[typ].oc_nowish)

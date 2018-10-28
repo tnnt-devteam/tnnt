@@ -657,6 +657,8 @@ unsigned int *stuckid, *steedid;
     mread(fd, (genericptr_t) &monstermoves, sizeof monstermoves);
     mread(fd, (genericptr_t) &quest_status, sizeof (struct q_score));
     mread(fd, (genericptr_t) spl_book, (MAXSPELL + 1) * sizeof (struct spell));
+    /* TNNT - restore globals */
+    mread(fd, (genericptr_t) &tnnt_globals, sizeof tnnt_globals);
     restore_artifacts(fd);
     restore_oracles(fd);
     if (u.ustuck)

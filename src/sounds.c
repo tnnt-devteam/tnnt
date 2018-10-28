@@ -3,11 +3,13 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "qtext.h" // TNNT - for com_pager constants
 
 STATIC_DCL boolean FDECL(mon_is_gecko, (struct monst *));
 STATIC_DCL int FDECL(domonnoise, (struct monst *));
 STATIC_DCL int NDECL(dochat);
 STATIC_DCL int FDECL(mon_in_room, (struct monst *, int));
+STATIC_DCL void FDECL(devteam_quest, (struct monst *));
 
 /* this easily could be a macro, but it might overtax dumb compilers */
 STATIC_OVL int
@@ -19,6 +21,102 @@ int rmtyp;
     if (rno >= ROOMOFFSET)
         return rooms[rno - ROOMOFFSET].rtype == rmtyp;
     return FALSE;
+}
+
+/* TNNT - The DevTeam sends the player on a quest to find the missing scrolls
+ * containing their source code.
+ * Assumes that the player is chatting to a special devteam member who is
+ * basically the "quest leader". */
+STATIC_OVL void
+devteam_quest(leader)
+struct monst* leader;
+{
+    xchar qstatus = tnnt_globals.devteam_quest_status;
+
+    if (qstatus == DTQUEST_NOTSTARTED) {
+        /* Even if you manage to find all the scrolls before finding the actual
+         * devteam, this will still only assign the quest and it requires a
+         * second #chat to complete it. */
+        com_pager(QT_DEVTEAM_GIVENQUEST);
+        tnnt_globals.devteam_quest_status = DTQUEST_INPROGRESS;
+    }
+    else if (qstatus == DTQUEST_INPROGRESS) {
+        /* Fork over any scrolls of missing code.
+         * Mark them as completed in missing_scroll_levs, by removing the
+         * number.  See allmain.c - the scrolls SHOULD be all on different
+         * levels so there should be no duplicates in the array, but I realized
+         * that this doesn't actually require them to be on different levels.
+         * Hopefully, if these scrolls become stackable in the future, this code
+         * is tolerant of it - the useup() will remove one, then the next
+         * carrying() will find the remaining one(s).
+         */
+        int i;
+        int nscrolls_given = 0;
+        struct obj* scroll = carrying(SCR_MISSING_CODE);
+        while (scroll) {
+            int level = scroll->corpsenm;
+            if (level <= 0) {
+                // wizmode wished scroll?
+                impossible("scroll marked with bad level?");
+                return;
+            }
+            for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
+                if (tnnt_globals.missing_scroll_levels[i] == level) {
+                    tnnt_globals.missing_scroll_levels[i] = 0;
+                    nscrolls_given++;
+                    useup(scroll);
+                }
+            }
+            scroll = carrying(SCR_MISSING_CODE);
+        }
+        xchar scrolls_remaining = 0;
+        xchar nextlevel; // they tell you where to look next
+        for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
+            if (tnnt_globals.missing_scroll_levels[i] != 0) {
+                // there are still scrolls out there that haven't been handed
+                // over
+                scrolls_remaining++;
+                nextlevel = tnnt_globals.missing_scroll_levels[i];
+            }
+        }
+        if (nscrolls_given == 0) {
+            verbalize("How is your search going?");
+            /* make them actually find the first one... no message when none
+             * have been found yet. */
+            if (scrolls_remaining < NUM_MISSING_CODE_SCROLLS) {
+                verbalize("Paxed thinks that there might be a scroll on level %d...",
+                        nextlevel);
+            }
+        }
+        else {
+            pline("%s gratefully takes the scroll%s from you.", Monnam(leader),
+                  (nscrolls_given > 1 ? "s" : ""));
+            if (scrolls_remaining > 0) {
+                // TODO: make better.
+                verbalize("Thank you.");
+            }
+            else {
+                // finished!!!
+                tnnt_globals.devteam_quest_status = DTQUEST_COMPLETED;
+                com_pager(QT_DEVTEAM_FINISHQUEST);
+                struct obj* reward = mksobj(T_SHIRT, FALSE, FALSE);
+                reward = oname(reward, artiname(ART_REALLY_COOL_SHIRT));
+                // player should have just given up at least one scroll, so
+                // should have room for this in inventory, but might get
+                // encumbered and want to decline :d
+                dropy(reward);
+                pickup_object(reward, 1, FALSE);
+            }
+        }
+    }
+    else if (qstatus == DTQUEST_COMPLETED) {
+        verbalize("Thank you again for finding our lost code.");
+        return;
+    }
+    else {
+        impossible("weird devteam quest status?");
+        return;
+    }
 }
 
 void
@@ -294,6 +392,16 @@ dosounds()
             You_hear1(ora_msg[rn2(3) + hallu * 2]);
         }
         return;
+    }
+    /* TNNT - clue the player in to the location of the devteam level */
+    if (Is_rogue_level(&u.uz) && !rn2(300)) {
+        static const char* const devteambranch_msg[] = {
+            "a nearby typing noise.",
+            "people arguing about game balance.",
+            "a voice say \"3.6.2\".",
+            "an infinite number of monkeys arguing about the script for Hamlet"
+        };
+        You_hear1(devteambranch_msg[rn2(3 + hallu)]);
     }
 }
 
@@ -824,6 +932,80 @@ register struct monst *mtmp;
                 break;
             }
         break;
+    /* The Devteam */
+    case MS_DEVTEAM:
+        if (mtmp->mpeaceful) {
+            if (!strcmpi(MNAME(mtmp), "Mike Stephenson")) {
+                devteam_quest(mtmp);
+                break;
+            }
+            /* TODO: stuff here that gives you valid in-game information */
+            if (!mtmp->mcan) {
+                // break;
+            }
+            struct devteam_msg {
+                const char* msg;
+                boolean verbl;
+            };
+            const struct devteam_msg bhaakmsgs[] = {
+                { "tries to get you to play something called 'UnNetHack'.", 0},
+                { "starts swearing at you in German.", 0},
+                { "discusses the merits of HTML dumplogs.", 0},
+                { "Denial is a valid bug resolution technique.", 1},
+                { "UnNetHack5 > NetHack4. Just ask any sorting algorithm.", 1},
+            };
+            const struct devteam_msg paxedmsgs[] = {
+                { "asks you if you've seen dtype.", 0},
+                { "mumbles something about X11 tty status.", 0},
+                { "We just come here to idle.", 1},
+                { "You can finally wish for oranges. Now go away.", 1},
+            };
+            const struct devteam_msg patrmsgs[] = {
+                { "Thanks for that recent bug report.", 1},
+                { "indicates that 3.6.2 might be released soon.", 0},
+                { "To be honest, I'm surprised RGRN is still going.", 1},
+            };
+            const struct devteam_msg lorimermsgs[] = {
+                { "Oh, you must be looking for remirol.", 1},
+                { "Ask me about Orctown!", 1},
+                { "Have you heard of DIRGE? SporkHack introduced it.", 1},
+            };
+            const struct devteam_msg aismsgs[] = {
+                { "discusses limiting the player's inventory.", 0},
+                { "encourages you to try ascending with a large box.", 0},
+                { "mentions tweaking the Wands Balance Patch.", 0},
+                { "opines that NetHack4 is fairer to the player.", 0},
+                { "NetHack is just a mound of special cases taped together by global variables.", 1},
+            };
+            /* This probably won't be needed.
+            const struct devteam_msg genericmsgs[] = {
+                { "asks you about your day.", 0},
+                { "LOUD NOISES!!", 1}
+            };
+            */
+            struct devteam_msg chosenmsg;
+            if (!strcmpi(MNAME(mtmp), "bhaak")) {
+                chosenmsg = bhaakmsgs[rn2(SIZE(bhaakmsgs))];
+            }
+            else if (!strcmpi(MNAME(mtmp), "paxed")) {
+                chosenmsg = paxedmsgs[rn2(SIZE(paxedmsgs))];
+            }
+            else if (!strcmpi(MNAME(mtmp), "patr")) {
+                chosenmsg = patrmsgs[rn2(SIZE(patrmsgs))];
+            }
+            else if (!strcmpi(MNAME(mtmp), "ais")) {
+                chosenmsg = aismsgs[rn2(SIZE(aismsgs))];
+            }
+            else if (!strcmpi(MNAME(mtmp), "lorimer")) {
+                chosenmsg = lorimermsgs[rn2(SIZE(lorimermsgs))];
+            }
+            if (chosenmsg.verbl)
+                verbl_msg = chosenmsg.msg;
+            else
+                pline_msg = chosenmsg.msg;
+        }
+    break;
+    /* END of The Devteam */
     case MS_SEDUCE: {
         int swval;
 

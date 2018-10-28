@@ -880,6 +880,8 @@ SCROLL(None, "STRC PRST SKRZ KRK",  1,   0, 100), /* Czech and Slovak
 #ifdef MAIL
 SCROLL("mail",          "stamped",  0,   0,   0),
 #endif
+/* TNNT - devteam-related fetch quest */
+SCROLL("missing code", "PLZ RETURN TO DEVTEAM", 0, 0, 0),
 SCROLL("blank paper", "unlabeled",  0,  28,  60),
 #undef SCROLL
 

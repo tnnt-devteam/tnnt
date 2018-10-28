@@ -185,6 +185,15 @@ register struct monst *mtmp;
             (void) mongets(mtmp, (mm != PM_ETTIN) ? BOULDER : CLUB);
         break;
     case S_HUMAN:
+        if (mm == PM_DEVTEAM_MEMBER) {
+            (void) mongets(mtmp, rn2(2) ? LONG_SWORD : KATANA);
+            (void) mongets(mtmp, SHIELD_OF_REFLECTION); /* No wand of death kills for you */
+            (void) mongets(mtmp, LEATHER_GLOVES);
+            (void) mongets(mtmp, HIGH_BOOTS);
+            (void) mongets(mtmp, rn2(2) ? ELVEN_MITHRIL_COAT
+                                        : DWARVISH_MITHRIL_COAT);
+            break;
+        }
         if (is_mercenary(ptr)) {
             w1 = w2 = 0;
             switch (mm) {

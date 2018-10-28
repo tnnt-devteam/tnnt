@@ -905,7 +905,7 @@ arts on the unsuspecting."
 %Cc Hea 00019
 "Alas, %p, you are yet too inexperienced to deal with the rigors
 of such a task.  You must be able to draw on the knowledge of botany,
-alchemy and veterinary practices before I can send you on this quest 
+alchemy and veterinary practices before I can send you on this quest
 with good conscience.
 
 "Return when you wear %Ra's caduceus."
@@ -3476,6 +3476,32 @@ resides.
 
 Go now!  You are banished from this place.
 %E [You are banished from %H for betraying your allegiance to %d.]
+#
+#        TNNT - Devteam Quest messages
+#
+%Cc - 00080
+"Ah, you must be a hero questing for the Amulet of Yendor. May I ask you
+to listen for a moment? We are in dire need of some assistance.
+
+Recently, we had collected our best new ideas and inscribed the source
+code on three scrolls. But before we were able to add them to the
+codebase, the RNG glitched and sent them into the game itself.
+
+Without these scrolls, we can't finish work on the next version of
+NetHack. We're trying to use our terminals here to search for them, and
+paxed is pretty sure that they all ended up in the Dungeons of Doom...
+but we're still trying to figure out on which levels.
+
+It's too dangerous for me to send any of the DevTeam members out
+searching for them. Unlike you, we are not expendable. But, if you can
+return our missing code to us, I can promise you a fine reward."
+%E [You are asked to search the Dungeons of Doom for the missing scrolls.]
+%Cc - 00081
+"Thank you, %p! You have done the DevTeam a great service. We will
+certainly be able to release the next version before long. In exchange,
+allow me to present you with this T-shirt, which you may find helpful in
+your quest."
+%E [You have recovered all the missing code, and are given a T-shirt.]
 #
 #	TEST PATTERN
 #

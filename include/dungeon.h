@@ -122,6 +122,7 @@ typedef struct branch {
 #define Is_qlocate(x) (on_level(x, &qlocate_level))
 #define Is_nemesis(x) (on_level(x, &nemesis_level))
 #define Is_knox(x) (on_level(x, &knox_level))
+#define Is_devteam(x) (on_level(x, &devteam_level))
 #define Is_mineend_level(x) (on_level(x, &mineend_level))
 #define Is_sokoend_level(x) (on_level(x, &sokoend_level))
 
@@ -148,7 +149,7 @@ typedef struct branch {
 #define MIGR_WITH_HERO 9    /* mon: followers; obj: trap door */
 #define MIGR_NOBREAK 1024   /* bitmask: don't break on delivery */
 #define MIGR_NOSCATTER 2048 /* don't scatter on delivery */
-#define MIGR_TO_SPECIES 4096 /* migrating to species as they are made */ 
+#define MIGR_TO_SPECIES 4096 /* migrating to species as they are made */
 #define MIGR_LEFTOVERS 8192  /* grab remaining MIGR_TO_SPECIES objects */
 /* level information (saved via ledger number) */
 
@@ -233,6 +234,7 @@ typedef struct mapseen {
         Bitfield(valley, 1);
         Bitfield(msanctum, 1);
         Bitfield(ludios, 1);
+        Bitfield(devteam, 1);
         Bitfield(roguelevel, 1);
         /* quest annotations: quest_summons is for main dungeon level
            with entry portal and is reset once quest has been finished;

@@ -2828,6 +2828,20 @@ struct permonst _mons2[] = {
         M2_NOPOLY | M2_HUMAN | M2_STRONG | M2_COLLECT | M2_MAGIC,
         M3_INFRAVISIBLE, 12, HI_DOMESTIC),
     /*
+     * The Devteam
+     * Initially we set out to make each individual DT member.
+     * aosdict had a better method - make the one, and then can
+     * name it after each DT member in the .des file.
+     */
+    MON("devteam member", S_HUMAN, LVL(120, 12, -20, 127, 20), (G_NOGEN),
+        A(ATTK(AT_WEAP, AD_PHYS, 8, 8), ATTK(AT_WEAP, AD_STUN, 8, 8),
+        NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
+        SIZ(WT_HUMAN, 400, MS_DEVTEAM, MZ_HUMAN),
+        MR_SLEEP | MR_POISON, 0,
+        M1_HUMANOID | M1_OMNIVORE,
+        M2_NOPOLY | M2_HUMAN | M2_PRINCE | M2_PEACEFUL | M2_STRONG | M2_MALE,
+        M3_CLOSE | M3_INFRAVISION | M3_DISPLACES, 66, C(CLR_YELLOW)),
+    /*
      * quest leaders
      */
     MON("Lord Carnarvon", S_HUMAN, LVL(20, 12, 0, 30, 20), (G_NOGEN | G_UNIQ),
