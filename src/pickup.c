@@ -2143,9 +2143,8 @@ struct obj *obj;
 
             return TRUE;
         case SCROLL_CLASS:
+            if (!objects[obj->otyp].oc_magic) return FALSE;
             switch (obj->otyp) {
-                case SCR_BLANK_PAPER:
-                case SCR_MAIL:
                 case SCR_AMNESIA:
                 case SCR_PUNISHMENT:
                     return FALSE;
