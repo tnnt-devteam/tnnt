@@ -3681,6 +3681,10 @@ typfnd:
             break;
         case SWAP_CHEST:
             typ = CHEST;
+            break;
+        case SCR_MISSING_CODE:
+            typ = SCR_MAIL;
+            break;
         default:
             /* catch any other non-wishable objects (venom) */
             if (objects[typ].oc_nowish)
