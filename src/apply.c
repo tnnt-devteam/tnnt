@@ -1868,6 +1868,9 @@ struct obj *obj;
     if ((can = mksobj(TIN, FALSE, FALSE)) != 0) {
         static const char you_buy_it[] = "You tin it, you bought it!";
 
+        if (mons[corpse->corpsenm].mlet == S_TROLL)
+            tnnt_achieve(A_BLOCKED_TROLL_REVIVAL);
+
         can->corpsenm = corpse->corpsenm;
         can->cursed = obj->cursed;
         can->blessed = obj->blessed;
@@ -1886,8 +1889,6 @@ struct obj *obj;
         }
         (void) hold_another_object(can, "You make, but cannot pick up, %s.",
                                    doname(can), (const char *) 0);
-        if (mons[can->corpsenm].mlet == S_TROLL)
-            tnnt_achieve(A_BLOCKED_TROLL_REVIVAL);
     } else
         impossible("Tinning failed.");
 }
