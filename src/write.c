@@ -212,6 +212,9 @@ found:
         You_cant("write that!");
         pline("It's obscene!");
         return 1;
+    } else if (i == SCR_MISSING_CODE) {
+        pline("Without a compiler, that would probably be a bad idea...");
+        return 1;
     } else if (i == SPE_BOOK_OF_THE_DEAD) {
         pline("No mere dungeon adventurer could write that.");
         return 1;

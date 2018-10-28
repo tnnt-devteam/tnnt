@@ -438,6 +438,20 @@ struct early_opt {
     boolean valallowed;
 };
 
+/* TNNT - generic globals that don't belong in you.h */
+#define NUM_MISSING_CODE_SCROLLS 3
+enum dtquest_status {
+    DTQUEST_NOTSTARTED = 0,
+    DTQUEST_INPROGRESS,
+    DTQUEST_COMPLETED
+};
+struct tnnt_globals_t {
+    xchar missing_scroll_levels[NUM_MISSING_CODE_SCROLLS];
+    xchar devteam_quest_status;
+    /* tnnt devs: add more as needed */
+};
+struct tnnt_globals_t tnnt_globals;
+
 #undef E
 
 #endif /* DECL_H */

@@ -1,0 +1,118 @@
+# NetHack 3.6   devteam.des     $NHDT-Date: 1540389707 2018/10/24 14:01:47 $  $NHDT-Branch: master $:$NHDT-Revision: 1.13 $
+#       Copyright (c) 1989 by Jean-Christophe Collet
+#       Copyright (c) 1992,1993 by Izchak Miller, David Cohrs,
+#                      and Timo Hakulinen
+# NetHack may be freely redistributed.  See license for details.
+#
+# "The NetHack Devteam Office" by the TNNT devteam (loosely based off of 'Orc Temple' by Khor)
+#
+
+MAZE:"devteam",' '
+FLAGS:nommap,noteleport,hardfloor
+MESSAGE: "You arrive to a place bustling with activity and excitement."
+MESSAGE: "You notice several people mumbling incoherently, something to do about 'the source code'."
+GEOMETRY:center,center
+
+#         1         2         3         4         5         6         7
+#123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+                               ----- 
+                               |...|       -----
+          ----------------------LLL-----   |...|
+          |.+.....+.....+...|..........S###+...|
+          |.|.K.K.|------...|..........|   |...|
+          |--------  ---....|-F--++--F-|--------
+        ---.....---  |......|...|..|...|....|    ---------
+ --------.........----.....--...|..|...|....|    |LLLLLLL|
+--........................--T..........|-+-------|L.....L|
+|.........................+............+........+.L.....L|
+--........................--T..........|-+-------|L.....L|
+ --------.........----.....--...|..|...|......|  |LLLLLLL|
+        ---.....---  |......|...|..|...|....\.|  ---------
+          -------    ---....|-F--++--F-|--------
+                       --...|..........|   |...|
+                        |...|..........S###+...|
+                        -----S----------   |...|
+                            |..|           -----
+                            ----
+ENDMAP
+
+BRANCH:(01,09,01,09),(0,0,0,0)
+REGION:(00,00,57,16),lit,"ordinary"
+NON_DIGGABLE:(0,0,57,16)
+
+#The Devteam
+MONSTER:"devteam member",(29,06),peaceful,"bhaak"
+MONSTER:"devteam member",(38,06),peaceful,"paxed"
+MONSTER:"devteam member",(29,12),peaceful,"lorimer"
+MONSTER:"devteam member",(38,12),peaceful,"ais"
+MONSTER:"devteam member",(43,07),peaceful,"PatR"
+MONSTER:"devteam member",(44,12),peaceful,"Mike Stephenson"
+
+#THE OFFICE
+FOUNTAIN:(13,09)
+DOOR:closed,(48,09)
+DOOR:closed,(26,09)
+DOOR:open,(39,09)
+DOOR:closed,(33,05)
+DOOR:closed,(34,05)
+DOOR:closed,(33,13)
+DOOR:closed,(34,13)
+DOOR:locked,(39,03)
+DOOR:closed,(43,03)
+DOOR:locked,(39,15)
+DOOR:closed,(43,15)
+DOOR:closed,(41,08)
+DOOR:open,(41,10)
+DOOR:closed,(12,03)
+DOOR:open,(18,03)
+DOOR:closed,(24,03)
+
+# Centerpiece.
+OBJECT: ('`', "statue"), (33,09), montype:"balrog",5,name:"The RNG"
+
+# Chest with identify scrolls.
+CONTAINER: ('(', "chest"), (53,09) {
+    OBJECT: ('?', "identify"),blessed
+    OBJECT: ('?', "identify"),uncursed
+    OBJECT: ('?', "identify"),uncursed
+}
+
+# Some devs have books lying around.
+$devbooks = { (45,11),(45,12),(43,06) }
+SHUFFLE: $devbooks
+OBJECT:('+', "detect monsters"),$devbooks[0],uncursed
+OBJECT:('+', "light"),$devbooks[1],blessed
+OBJECT:('+', "detect unseen"),$devbooks[2],uncursed
+
+# janitor closet
+DOOR:locked,(29,16)
+OBJECT:"grappling hook",(30,17)
+OBJECT:"rubber hose",(30,17)
+OBJECT:"tin opener",(30,17)
+
+# snack area
+$snackrack = { (32,01),(33,01),(34,01) }
+SHUFFLE: $snackrack
+OBJECT:"candy bar",$snackrack[0],quantity:1d3
+OBJECT:"apple",$snackrack[1],quantity:1d5
+OBJECT:"banana",$snackrack[2],quantity:1d4
+ENGRAVING:(33,03),burn,"Due to snack theft, lava has been installed."
+
+# novel
+OBJECT:"novel",(11,03),uncursed
+
+# Funny bits that makes K2 chuckle
+MONSTER:"woodchuck",(46,03),peaceful,"Carl"
+MONSTER:"kitten",(46,15),peaceful,"Poes"
+MONSTER:"little dog",(46,02),peaceful,"Yermak"
+MONSTER:"kitten",(46,04),peaceful,"Micka"
+MONSTER:"little dog",(46,16),peaceful,"Fudd"
+MONSTER:"kitten",(46,14),peaceful,"Pierre"
+MONSTER:"lizard",random,peaceful,"the Lizard of Yendor"
+MONSTER:"troll",random,peaceful,"MR SHOUTY"
+
+ENGRAVING:(02,09),burn,"This is my program. There are many programs like it, but this one is mine..."
+ENGRAVING:(47,09),burn,"Beware - PEBCAK disposal area"
+
+# end devteam.des
