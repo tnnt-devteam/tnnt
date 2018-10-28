@@ -465,6 +465,9 @@ VA_DECL(const char *, s)
     pline("%s", VA_PASS1(pbuf));
     pline(VA_PASS1(
        "Program in disorder!  (Saving and reloading may fix this problem.)"));
+    if (sysopt.support) {
+        pline("Please report this: %s", sysopt.support);
+    }
     program_state.in_impossible = 0;
     VA_END();
 }
