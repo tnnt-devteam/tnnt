@@ -247,8 +247,10 @@ enum tnnt_achievements {
     A_PARTIAL_ZEN,           /* Implemented,tested. */
     A_PARTIAL_NUDIST,        /* Implemented,tested. */
     A_PARTIAL_GENOCIDELESS,  /* Implemented,tested. */
-    A_PUT_INTO_SWAPCHEST     /* Implemented,tested. */
-    /* 183 achievements defined */
+    A_PUT_INTO_SWAPCHEST,    /* Implemented,tested. */
+    A_TALKED_TO_DEVTEAM,     /* Implemented. */
+    A_FINISHED_DEVTEAM_QUEST /* Implemented. */
+    /* 185 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more

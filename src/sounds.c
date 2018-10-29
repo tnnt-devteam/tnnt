@@ -106,6 +106,7 @@ struct monst* leader;
                 // encumbered and want to decline :d
                 dropy(reward);
                 pickup_object(reward, 1, FALSE);
+                tnnt_achieve(A_FINISHED_DEVTEAM_QUEST);
             }
         }
     }
@@ -935,6 +936,7 @@ register struct monst *mtmp;
     /* The Devteam */
     case MS_DEVTEAM:
         if (mtmp->mpeaceful) {
+            tnnt_achieve(A_TALKED_TO_DEVTEAM);
             if (!strcmpi(MNAME(mtmp), "Mike Stephenson")) {
                 devteam_quest(mtmp);
                 break;
