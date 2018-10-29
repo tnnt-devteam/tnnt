@@ -4271,9 +4271,17 @@ struct monst *shkp;
               Shknam(shkp),
               (!Deaf && !muteshk(shkp)) ? "says" : "indicates");
     } else if (is_izchak(shkp, FALSE)) {
-        if (!Deaf && !muteshk(shkp))
-            pline(Izchak_speaks[rn2(SIZE(Izchak_speaks))], shkname(shkp));
-        tnnt_achieve(A_CHATTED_IZCHAK);
+        if (!Deaf && !muteshk(shkp)) {
+            /* TNNT - hint about the Devteam Office if player brings him missing
+             * code scrolls */
+            if (carrying(SCR_MISSING_CODE)) {
+                pline("Izchak peers at your scroll.");
+                verbalize("That looks familiar. You should show it to my colleagues in the Devteam Office.");
+            }
+            else
+                pline(Izchak_speaks[rn2(SIZE(Izchak_speaks))], shkname(shkp));
+            tnnt_achieve(A_CHATTED_IZCHAK);
+        }
     } else {
         if (!Deaf && !muteshk(shkp))
             pline("%s talks about the problem of shoplifters.", Shknam(shkp));
