@@ -2463,6 +2463,21 @@ cleanup:
     more_experienced(tmp, 0);
     newexplevel(); /* will decide if you go up */
 
+    /* TNNT - killing the DevTeam is VERY BAD */
+    if (mndx == PM_DEVTEAM_MEMBER) {
+        pline("With a DevTeam member dead, the world starts to destabilize...");
+        pline("Light fails, the floor shakes, and the air grows hot.");
+        pline("The remaining members look at you reproachfully, and then vanish out of this world.");
+        pline("Fissures open up, and the realm collapses in on itself.");
+        pline("You die...");
+        Strcpy(killer.name, "collapsing dungeon");
+        done(CRUSHING);
+        // life saving?
+        pline("Unfortunately, you are still buried under tons of rock...");
+        done(CRUSHING);
+        // wizards can refuse to die twice, I guess.
+    }
+
     /* adjust alignment points */
     if (mtmp->m_id == quest_status.leader_m_id) { /* REAL BAD! */
         adjalign(-(u.ualign.record + (int) ALIGNLIM / 2));
