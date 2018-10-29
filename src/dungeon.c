@@ -2020,8 +2020,13 @@ d_level *dest;
         return;
 
     if ((mptr = find_mapseen(source)) != 0) {
+        /* TNNT - Sorry!
+         * It's currently possible to have the quest portal and devteam
+         * staircase on the same (Rogue) level. Everything works, so this
+         * impossible just gets in the way.
         if (mptr->br && br != mptr->br)
             impossible("Two branches on the same level?");
+            */
         mptr->br = br;
     } else {
         impossible("Can't note branch for unseen level (%d, %d)",

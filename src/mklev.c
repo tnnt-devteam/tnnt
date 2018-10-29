@@ -1175,6 +1175,20 @@ xchar x, y; /* location */
         levl[x][y].ladder = sstairs.up ? LA_UP : LA_DOWN;
         levl[x][y].typ = STAIRS;
     }
+    /* TNNT hack - look for a second, separate branch on this level.
+     * (Needed if the quest portal generates on the rogue level, where the
+     * devteam stairs are.)
+     */
+    br = br->next;
+    while (br) {
+        // this logic is stolen from Is_branchlev in dungeon.c
+        if (on_level(&u.uz, &br->end1) || on_level(&u.uz, &br->end2)) {
+            // x=0, y=0 causes the second branch to be randomly placed... this
+            // is fine for TNNT but is not extensible.
+            place_branch(br, 0, 0);
+        }
+        br = br->next;
+    }
     /*
      * Set made_branch to TRUE even if we didn't make a stairwell (i.e.
      * make_stairs is false) since there is currently only one branch
