@@ -2093,9 +2093,11 @@ struct obj *obj;
         case RING_CLASS:
             return !obj->cursed;
         case WAND_CLASS:
-            /* no wands of nothing. Probably other stuff here too */
-            /* also should check charges in wands */
-            return (obj->otyp != WAN_NOTHING);
+            /* no wands of nothing. Maybe other stuff here too */
+            if (obj->otyp == WAN_NOTHING)
+                return FALSE;
+            /* allow empty wands of wishing... */
+            return (obj->spe > 0 || obj->otyp == WAN_WISHING);
         case AMULET_CLASS:
             switch(obj->otyp) {
                 case AMULET_OF_STRANGULATION:
@@ -2110,8 +2112,20 @@ struct obj *obj;
             return (obj->otyp == POT_WATER) && (obj->blessed || obj->cursed);
         case TOOL_CLASS:
             if (Has_contents(obj)) return FALSE; /* bags with stuff in them not allowed */
+            switch (obj->otyp) {
+                /* charged allowed tools - conveniently, these all work the same. */
+                case EXPENSIVE_CAMERA:
+                case TINNING_KIT:
+                case MAGIC_MARKER:
+                    return (obj->spe > 10);
+                case STETHOSCOPE:
+                    return TRUE;
+            }
+            /* other tools only require at least 1 charge */
+            if (!is_weptool(obj) && objects[obj->otyp].oc_charged)
+                return (obj->spe > 0);
             if (objects[obj->otyp].oc_magic) return TRUE; /* magic things including empty BoH ok */
-            return (obj->otyp == TINNING_KIT || obj->otyp == STETHOSCOPE);
+            return FALSE;
         case WEAPON_CLASS:
             if (obj->cursed) return FALSE;
             return (obj->otyp == SILVER_SABER || obj->otyp == SILVER_SPEAR
@@ -2150,6 +2164,19 @@ struct obj *obj;
                     return FALSE;
                 default:
                     return TRUE;
+            }
+        case FOOD_CLASS:
+            switch(obj->otyp) {
+                case LUMP_OF_ROYAL_JELLY:
+                case SPRIG_OF_WOLFSBANE:
+                    return TRUE;
+                case TIN:
+                    /* spinach only; currently not allowing other tins like dragons */
+                    if (obj->spe == 1)
+                        return TRUE;
+                    /* FALLTHRU */
+                default:
+                    return FALSE;
             }
         default: /* food, gems, boulders, statues, iron chains, etc */
             return FALSE;
