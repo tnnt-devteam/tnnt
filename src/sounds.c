@@ -945,6 +945,10 @@ register struct monst *mtmp;
             if (!mtmp->mcan) {
                 // break;
             }
+            if (carrying(SCR_MISSING_CODE)) {
+                verbalize("Oh, neat! Show this scroll to Mike Stephenson!");
+                break;
+            }
             struct devteam_msg {
                 const char* msg;
                 boolean verbl;
