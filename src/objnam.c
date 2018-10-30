@@ -3685,6 +3685,9 @@ typfnd:
         case SCR_MISSING_CODE:
             typ = SCR_MAIL;
             break;
+        case ART_REALLY_COOL_SHIRT:
+            typ = T_SHIRT;
+            break;
         default:
             /* catch any other non-wishable objects (venom) */
             if (objects[typ].oc_nowish)
