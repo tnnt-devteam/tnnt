@@ -3685,9 +3685,6 @@ typfnd:
         case SCR_MISSING_CODE:
             typ = SCR_MAIL;
             break;
-        case ART_REALLY_COOL_SHIRT:
-            typ = T_SHIRT;
-            break;
         default:
             /* catch any other non-wishable objects (venom) */
             if (objects[typ].oc_nowish)
@@ -3952,7 +3949,7 @@ typfnd:
 
     /* more wishing abuse: don't allow wishing for certain artifacts */
     /* and make them pay; charge them for the wish anyway! */
-    if ((is_quest_artifact(otmp)
+    if ((is_quest_artifact(otmp) || (otmp->oartifact == ART_REALLY_COOL_SHIRT)
          || (otmp->oartifact && rn2(nartifact_exist()) > 1)) && !wizard) {
         artifact_exists(otmp, safe_oname(otmp), FALSE);
         obfree(otmp, (struct obj *) 0);
