@@ -368,7 +368,7 @@
 
 /* Whether to enable the #tnntdebug command (and possibly, in the future, other
  * debugging / public beta testing stuff) outside of wizard mode. */
-#define TNNT_BETA
+/* #define TNNT_BETA */
 
 /* END TNNT specific defines */
 
