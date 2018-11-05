@@ -2282,6 +2282,7 @@ E void NDECL(attrcurse);
 
 /* ### sounds.c ### */
 
+E void FDECL(devteam_quest, (struct monst *, struct obj *));
 E void NDECL(dosounds);
 E const char *FDECL(growl_sound, (struct monst *));
 E void FDECL(growl, (struct monst *));

@@ -1289,7 +1289,7 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
             (void) encumber_msg();
             if (thrownobj->owornmask & W_QUIVER) /* in case addinv() autoquivered */
                 setuqwep((struct obj *) 0);
-            setuwep(thrownobj);            
+            setuwep(thrownobj);
         } else {
             /* ball is not picked up by monster */
             if (obj != uball)
@@ -1574,6 +1574,15 @@ register struct obj *obj; /* thrownobj or kickedobj or uwep */
             pline("%s catches %s.", Monnam(mon), the(xname(obj)));
             return gem_accept(mon, obj);
         }
+    }
+
+    /* TNNT - allow naive player to throw scrolls of missing code at the devteam
+     * without ticking them off */
+    if (obj->otyp == SCR_MISSING_CODE && mon->data == &mons[PM_DEVTEAM_MEMBER]) {
+        /* Devteam dialogue, maybe even give the hero the prize. Either way, the
+         * scroll is handled. */
+        devteam_quest(mon, obj);
+        return 1;
     }
 
     /* don't make game unwinnable if naive player throws artifact

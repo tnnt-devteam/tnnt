@@ -9,7 +9,6 @@ STATIC_DCL boolean FDECL(mon_is_gecko, (struct monst *));
 STATIC_DCL int FDECL(domonnoise, (struct monst *));
 STATIC_DCL int NDECL(dochat);
 STATIC_DCL int FDECL(mon_in_room, (struct monst *, int));
-STATIC_DCL void FDECL(devteam_quest, (struct monst *));
 
 /* this easily could be a macro, but it might overtax dumb compilers */
 STATIC_OVL int
@@ -25,14 +24,31 @@ int rmtyp;
 
 /* TNNT - The DevTeam sends the player on a quest to find the missing scrolls
  * containing their source code.
- * Assumes that the player is chatting to a special devteam member who is
- * basically the "quest leader". */
-STATIC_OVL void
-devteam_quest(leader)
-struct monst* leader;
+ * thrownscroll is a scroll of missing code if and only if the player actually
+ * threw it at the devteam member. If thrownscroll is null, the player must be
+ * chatting to the special "leader" devteam member. If non-null, it might be any
+ * devteam member. */
+void
+devteam_quest(devteam, thrownscroll)
+struct monst* devteam;
+struct obj* thrownscroll;
 {
     xchar qstatus = tnnt_globals.devteam_quest_status;
+    boolean is_leader = !strcmp(MNAME(devteam), "Mike Stephenson");
 
+    if (thrownscroll && !(is_leader && qstatus == DTQUEST_INPROGRESS)) {
+        /* Throwing to leader with the quest in progress is OK and will make him
+         * accept the scroll. Any other scenario doesn't work, but won't anger
+         * the devteam. */
+        const char* annoyance[] = { "peeved", "indignant", "irritated" };
+        pline_The("scroll bounces off %s's head and falls to the floor.", mon_nam(devteam));
+        pline("%s looks %s.", Monnam(devteam), annoyance[rn2(SIZE(annoyance))]);
+        place_object(thrownscroll, devteam->mx, devteam->my);
+        if (is_leader) {
+            verbalize("Why don't you just #chat to me like a normal adventurer?");
+        }
+        return;
+    }
     if (qstatus == DTQUEST_NOTSTARTED) {
         /* Even if you manage to find all the scrolls before finding the actual
          * devteam, this will still only assign the quest and it requires a
@@ -52,7 +68,7 @@ struct monst* leader;
          */
         int i;
         int nscrolls_given = 0;
-        struct obj* scroll = carrying(SCR_MISSING_CODE);
+        struct obj* scroll = (thrownscroll ? thrownscroll : carrying(SCR_MISSING_CODE));
         while (scroll) {
             int level = scroll->corpsenm;
             if (level <= 0) {
@@ -64,10 +80,13 @@ struct monst* leader;
                 if (tnnt_globals.missing_scroll_levels[i] == level) {
                     tnnt_globals.missing_scroll_levels[i] = 0;
                     nscrolls_given++;
-                    useup(scroll);
+                    if (thrownscroll)
+                        obfree(scroll, NULL);
+                    else
+                        useup(scroll);
                 }
             }
-            scroll = carrying(SCR_MISSING_CODE);
+            scroll = (thrownscroll ? NULL : carrying(SCR_MISSING_CODE));
         }
         xchar scrolls_remaining = 0;
         xchar nextlevel; // they tell you where to look next
@@ -89,8 +108,13 @@ struct monst* leader;
             }
         }
         else {
-            pline("%s gratefully takes the scroll%s from you.", Monnam(leader),
-                  (nscrolls_given > 1 ? "s" : ""));
+            if (thrownscroll) {
+                pline("%s catches the scroll.", Monnam(devteam));
+            }
+            else {
+                pline("%s gratefully takes the scroll%s from you.", Monnam(devteam),
+                    (nscrolls_given > 1 ? "s" : ""));
+            }
             if (scrolls_remaining > 0) {
                 // TODO: make better.
                 verbalize("Thank you. There should only be %d more scroll%s.",
@@ -939,7 +963,7 @@ register struct monst *mtmp;
         if (mtmp->mpeaceful) {
             tnnt_achieve(A_TALKED_TO_DEVTEAM);
             if (!strcmpi(MNAME(mtmp), "Mike Stephenson")) {
-                devteam_quest(mtmp);
+                devteam_quest(mtmp, NULL);
                 break;
             }
             /* TODO: stuff here that gives you valid in-game information */
