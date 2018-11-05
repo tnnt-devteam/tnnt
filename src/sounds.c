@@ -93,7 +93,8 @@ struct monst* leader;
                   (nscrolls_given > 1 ? "s" : ""));
             if (scrolls_remaining > 0) {
                 // TODO: make better.
-                verbalize("Thank you.");
+                verbalize("Thank you. There should only be %d more scroll%s.",
+                          scrolls_remaining, (scrolls_remaining > 1 ? "s" : ""));
             }
             else {
                 // finished!!!
