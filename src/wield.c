@@ -757,6 +757,7 @@ register int amount;
              multiple ? "fuse, and become" : "is");
         uwep->otyp = CRYSKNIFE;
         uwep->oerodeproof = 0;
+        tnnt_achieve(A_MADE_CRYSKNIFE);
         if (multiple) {
             uwep->quan = 1L;
             uwep->owt = weight(uwep);
