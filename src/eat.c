@@ -1418,6 +1418,11 @@ const char *mesg;
         /* don't need vegan/vegetarian checks for spinach */
         if(!u.uconduct.food++)
             livelog_write_string(LL_CONDUCT, "ate for the first time (spinach)");
+
+        /* more highly unstable TNNT code! And *this* one needs to be duplicated
+         * from above! */
+        u.uachieve.foods_eaten |= 0x100000000; /* TIN */
+
         if (!tin->cursed)
             pline("This makes you feel like %s!",
                   /* "Swee'pea" is a character from the Popeye cartoons */
