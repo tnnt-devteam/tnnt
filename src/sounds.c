@@ -867,6 +867,14 @@ register struct monst *mtmp;
         pline_msg = "mumbles incomprehensibly.";
         break;
     case MS_DJINNI:
+        if (ptr == &mons[PM_PRISONER]) {
+            /* Strictly speaking, they might not have _freed_ the prisoner -
+             * teleporting into the cells is possible - but anyone who can do
+             * that can probably unlock the door, and the code for making the
+             * prisoner speak appears to be inconsistent and may not get called.
+             */
+            tnnt_achieve(A_FREED_PRISONER);
+        }
         if (mtmp->mtame) {
             verbl_msg = "Sorry, I'm all out of wishes.";
         } else if (mtmp->mpeaceful) {
