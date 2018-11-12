@@ -4601,6 +4601,7 @@ char *filename;
             }
         }
     }
+    fclose(f);
     if (!o->otyp) {
         if (o->oextra) dealloc_oextra(o);
         free(o);
