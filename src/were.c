@@ -199,7 +199,6 @@ boolean purify;
     if (purify) {
         You_feel("purified.");
         set_ulycn(NON_PM); /* cure lycanthropy */
-        tnnt_achieve(A_CURED_LYCANTHROPY);
     }
     if (!Unchanging && is_were(youmonst.data)
         && (!controllable_poly
@@ -215,6 +214,8 @@ set_ulycn(which)
 int which;
 {
     u.ulycn = which;
+    if (which == NON_PM)
+        tnnt_achieve(A_CURED_LYCANTHROPY);
     /* add or remove lycanthrope's innate intrinsics (Drain_resistance) */
     set_uasmon();
 }
