@@ -289,6 +289,7 @@ register struct monst *mtmp;
                   Amonnam(mtmp));
             livelog_printf(LL_UMONST, "bribed %s with %ld %s for safe passage",
                   Amonnam(mtmp), offer, currency(offer));
+            tnnt_achieve(A_BRIBED_DEMON_LORD);
         } else {
             pline("%s gets angry...", Amonnam(mtmp));
             mtmp->mpeaceful = 0;
