@@ -1990,10 +1990,29 @@ register struct monst *mtmp;
     if (mtmp->data == &mons[PM_MEDUSA]) {
         u.uachieve.killed_medusa = 1;
         livelog_write_string(LL_ACHIEVE|LL_UMONST, "killed Medusa");
-    } else if (unique_corpstat(mtmp->data))
-        livelog_printf(LL_UMONST, "%s %s",
-              nonliving(mtmp->data) ? "destroyed" : "killed",
-              noit_mon_nam(mtmp));
+    } else if (unique_corpstat(mtmp->data)) {
+        switch(mvitals[tmp].died) {
+            case 1:
+                livelog_printf(LL_UMONST, "%s %s",
+                    nonliving(mtmp->data) ? "destroyed" : "killed",
+                    noit_mon_nam(mtmp));
+                break;
+            case 5:
+            case 10:
+            case 50:
+            case 100:
+            case 150:
+            case 200:
+            case 250:
+                livelog_printf(LL_UMONST, "%s %s (%d times)",
+                    nonliving(mtmp->data) ? "destroyed" : "killed",
+                    noit_mon_nam(mtmp), mvitals[tmp].died);
+                break;
+            default:
+                /* don't spam the log every time */
+                break;
+        }
+    }
 
     /* TNNT code for anything that triggers when a monster dies (NOT when the
      * player kills a monster) goes here. */
