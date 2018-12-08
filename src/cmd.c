@@ -131,6 +131,7 @@ static int NDECL(dosuspend_core); /**/
 static int NDECL((*timed_occ_fn));
 
 STATIC_PTR int NDECL(dotnntdebug);
+STATIC_PTR int NDECL(dotnntstats);
 STATIC_PTR int NDECL(doshowfoodseaten);
 STATIC_PTR int NDECL(doherecmdmenu);
 STATIC_PTR int NDECL(dotherecmdmenu);
@@ -3334,6 +3335,8 @@ struct ext_func_tab extcmdlist[] = {
 #else
             IFBURIED | AUTOCOMPLETE | WIZMODECMD },
 #endif
+    { '\0', "tnntstats", "display TNNT statistics in-game", dotnntstats,
+            IFBURIED | AUTOCOMPLETE }, /* this one is for regular play */
     { '_', "travel", "travel to a specific location on the map", dotravel },
     { M('t'), "turn", "turn undead away", doturn, IFBURIED | AUTOCOMPLETE },
     { 'X', "twoweapon", "toggle two-weapon combat",
@@ -5038,6 +5041,43 @@ dotnntdebug(VOID_ARGS)
             break;
     }
 
+    display_nhwindow(en_win, TRUE);
+    destroy_nhwindow(en_win);
+    en_win = WIN_ERR;
+}
+
+/* TNNT: #tnntstats command.
+ * Non-spoilery non-info-leaky stuff that a regular tournament player can check
+ * during play.
+ * Non-spoilery in the sense that the user is presumed to know what all the
+ * achievements are and what they require. */
+STATIC_PTR int
+dotnntstats(VOID_ARGS)
+{
+    char buf[BUFSZ];
+    char buf2[BUFSZ];
+    en_win = create_nhwindow(NHW_MENU);
+
+    /* devteam quest progress */
+    if (tnnt_globals.devteam_quest_status != DTQUEST_NOTSTARTED) {
+        int found_scrolls = 0;
+        int i;
+        for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
+            if (tnnt_globals.missing_scroll_levels[i] == 0) {
+                found_scrolls++;
+            }
+        }
+        if (found_scrolls == NUM_MISSING_CODE_SCROLLS) {
+            putstr(en_win, 0, "Devteam Quest: Completed!");
+        }
+        else {
+            Sprintf(buf, "Devteam Quest: %d/%d scrolls returned",
+                    found_scrolls, NUM_MISSING_CODE_SCROLLS);
+            putstr(en_win, 0, buf);
+        }
+    }
+
+    putstr(en_win, 0, "Foods eaten not shown. To show them, use #snacks.");
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
