@@ -1378,7 +1378,7 @@ const char *mesg;
         cpostfx(mnum);
 
         /* more highly unstable TNNT code! isn't this fun? */
-        u.uachieve.foods_eaten |= 0x100000000; /* TIN */
+        tnnt_globals.foods_eaten |= 0x100000000; /* TIN */
 
         /* charge for one at pre-eating cost */
         tin = costly_tin(COST_OPEN);
@@ -1421,7 +1421,7 @@ const char *mesg;
 
         /* more highly unstable TNNT code! And *this* one needs to be duplicated
          * from above! */
-        u.uachieve.foods_eaten |= 0x100000000; /* TIN */
+        tnnt_globals.foods_eaten |= 0x100000000; /* TIN */
 
         if (!tin->cursed)
             pline("This makes you feel like %s!",
@@ -1753,9 +1753,9 @@ struct obj *otmp;
     /* wow this TNNT unstable code is just being scattered everywhere */
     if (glob)
         /* treat eating one glob as eating all types */
-        u.uachieve.foods_eaten |= 0x780; /* All GLOB_* */
+        tnnt_globals.foods_eaten |= 0x780; /* All GLOB_* */
     else
-        u.uachieve.foods_eaten |= 0x2; /* CORPSE */
+        tnnt_globals.foods_eaten |= 0x2; /* CORPSE */
 
     return retcode;
 }
@@ -2225,7 +2225,7 @@ struct obj *otmp;
 {
     /* this is highly unstable and relies on TRIPE_RATION being the
      * first defined food */
-    u.uachieve.foods_eaten |= 1L << (otmp->otyp - TRIPE_RATION);
+    tnnt_globals.foods_eaten |= 1L << (otmp->otyp - TRIPE_RATION);
 
     switch (otmp->otyp) {
     case SPRIG_OF_WOLFSBANE:

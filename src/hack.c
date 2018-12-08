@@ -1992,8 +1992,8 @@ switch_terrain()
         }
         else if (Is_astralevel(&u.uz)) {
             /* Assumes that the AM_* flags are 1, 2, and 4. */
-            u.uachieve.high_altars |= (lev->altarmask & ~AM_SHRINE);
-            if (u.uachieve.high_altars == 0x7)
+            tnnt_globals.high_altars |= (lev->altarmask & ~AM_SHRINE);
+            if (tnnt_globals.high_altars == 0x7)
                 tnnt_achieve(A_VISITED_HIGH_ALTARS);
         }
     }

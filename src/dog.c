@@ -956,8 +956,8 @@ register struct obj *obj;
     if (mtmp->cham != NON_PM || is_shapeshifter(mtmp->data))
         tnnt_achieve(A_TAMED_SHAPECHANGER);
     if (mtmp->data->mlet == S_FELINE) {
-        u.uachieve.felines_tamed++;
-        if (u.uachieve.felines_tamed == 7)
+        tnnt_globals.felines_tamed++;
+        if (tnnt_globals.felines_tamed == 7)
             tnnt_achieve(A_TAMED_7_CATS);
     }
 

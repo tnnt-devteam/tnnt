@@ -5010,8 +5010,8 @@ dotnntdebug(VOID_ARGS)
     // tnnt achievements
     putstr(en_win, ATR_BOLD, "TNNT achievements (in hexadecimal):");
     int i;
-    for (i = 0; i < SIZE(u.uachieve.tnnt_achievements); ++i) {
-        Sprintf(buf, "tnntachieve%d: 0x%llx", i, u.uachieve.tnnt_achievements[i]);
+    for (i = 0; i < SIZE(tnnt_globals.tnnt_achievements); ++i) {
+        Sprintf(buf, "tnntachieve%d: 0x%llx", i, tnnt_globals.tnnt_achievements[i]);
         putstr(en_win, 0, buf);
     }
     putstr(en_win, 0, "");
@@ -5099,7 +5099,7 @@ doshowfoodseaten(VOID_ARGS)
     putstr(en_win, ATR_BOLD, "Foods you have eaten at least once:");
     for (i = TRIPE_RATION; i <= TIN; ++i) {
         int foodidx = i - TRIPE_RATION;
-        if (u.uachieve.foods_eaten & (1L << foodidx)) {
+        if (tnnt_globals.foods_eaten & (1L << foodidx)) {
             if (i >= GLOB_OF_GRAY_OOZE && i <= GLOB_OF_BLACK_PUDDING) {
                 putstr(en_win, 0, "glob");
                 glob_eaten = TRUE;
@@ -5119,7 +5119,7 @@ doshowfoodseaten(VOID_ARGS)
     putstr(en_win, ATR_BOLD, "Foods you have never eaten:");
     for (i = TRIPE_RATION; i <= TIN; ++i) {
         int foodidx = i - TRIPE_RATION;
-        if (!(u.uachieve.foods_eaten & (1L << foodidx))) {
+        if (!(tnnt_globals.foods_eaten & (1L << foodidx))) {
             if (i >= GLOB_OF_GRAY_OOZE && i <= GLOB_OF_BLACK_PUDDING) {
                 if (!glob_eaten)
                     putstr(en_win, 0, "glob");

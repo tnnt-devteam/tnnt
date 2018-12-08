@@ -336,6 +336,9 @@ struct plinemsg_type *plinemsg_types = (struct plinemsg_type *) 0;
 const char *ARGV0;
 #endif
 
+/* TNNT - initialization of tnnt_globals */
+struct tnnt_globals_t tnnt_globals = DUMMY;
+
 /* support for lint.h */
 unsigned nhUse_dummy = 0;
 
