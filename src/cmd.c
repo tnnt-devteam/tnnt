@@ -5077,6 +5077,26 @@ dotnntstats(VOID_ARGS)
         }
     }
 
+    /* other counters for various things */
+    Sprintf(buf, "You have found %d graffiti.", tnnt_globals.graffiti_found);
+    putstr(en_win, 0, buf);
+    Sprintf(buf, "You have tamed %d feline(s).", tnnt_globals.felines_tamed);
+    putstr(en_win, 0, buf);
+    unsigned char amask = tnnt_globals.high_altars;
+    xchar naltars = 0;
+    while (amask > 0) {
+        if (amask & 1)
+            naltars++;
+        amask = amask >> 1;
+    }
+    Sprintf(buf, "You have touched %d of the three high altars.", naltars);
+    putstr(en_win, 0, buf);
+    Sprintf(buf, "You have killed %d/9 Nazgul.", mvitals[PM_NAZGUL].died);
+    putstr(en_win, 0, buf);
+    Sprintf(buf, "You have killed %d/3 erinyes.", mvitals[PM_ERINYS].died);
+    putstr(en_win, 0, buf);
+
+    /* #snacks command already describes this, just reference it */
     putstr(en_win, 0, "Foods eaten not shown. To show them, use #snacks.");
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
