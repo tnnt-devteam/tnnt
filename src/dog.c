@@ -956,9 +956,20 @@ register struct obj *obj;
     if (mtmp->cham != NON_PM || is_shapeshifter(mtmp->data))
         tnnt_achieve(A_TAMED_SHAPECHANGER);
     if (mtmp->data->mlet == S_FELINE) {
-        tnnt_globals.felines_tamed++;
-        if (tnnt_globals.felines_tamed == 7)
+        int i;
+        for (i = 0; i < tnnt_globals.felines_tamed; ++i) {
+            if (mtmp->m_id == tnnt_globals.feline_m_ids[i]) {
+                break;
+            }
+        }
+        if (i == tnnt_globals.felines_tamed) {
+            /* looped through without finding a repeat */
+            tnnt_globals.feline_m_ids[i] = mtmp->m_id;
+            tnnt_globals.felines_tamed++;
+        }
+        if (tnnt_globals.felines_tamed == MAX_TAMED_FELINES) {
             tnnt_achieve(A_TAMED_7_CATS);
+        }
     }
 
     newsym(mtmp->mx, mtmp->my);

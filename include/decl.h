@@ -647,6 +647,7 @@ enum tnnt_achievements {
 /* TNNT - generic globals that don't belong in you.h */
 #include <stdint.h> /* uint64_t */
 #define NUM_MISSING_CODE_SCROLLS 3
+#define MAX_TAMED_FELINES 7
 enum dtquest_status {
     DTQUEST_NOTSTARTED = 0,
     DTQUEST_INPROGRESS,
@@ -655,7 +656,7 @@ enum dtquest_status {
 struct tnnt_globals_t {
     /* Various achievement counters */
     unsigned char graffiti_found;
-    unsigned char felines_tamed;
+    unsigned char felines_tamed; /* redundant; for #tnntstats */
     unsigned char high_altars;
     uint64_t foods_eaten; /* sadly there are 33 foods */
 
@@ -668,6 +669,9 @@ struct tnnt_globals_t {
     /* Devteam quest */
     xchar missing_scroll_levels[NUM_MISSING_CODE_SCROLLS];
     xchar devteam_quest_status;
+
+    /* Cat Lady: ids of felines tamed */
+    unsigned feline_m_ids[MAX_TAMED_FELINES];
 
     /* tnnt devs: add more as needed */
 };
