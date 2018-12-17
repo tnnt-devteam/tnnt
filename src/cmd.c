@@ -5089,7 +5089,7 @@ dotnntstats(VOID_ARGS)
             naltars++;
         amask = amask >> 1;
     }
-    Sprintf(buf, "You have touched %d of the three high altars.", naltars);
+    Sprintf(buf, "You have visited %d of the three high altars.", naltars);
     putstr(en_win, 0, buf);
     Sprintf(buf, "You have killed %d/9 Nazgul.", mvitals[PM_NAZGUL].died);
     putstr(en_win, 0, buf);
