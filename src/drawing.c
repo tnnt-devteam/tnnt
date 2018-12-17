@@ -26,7 +26,8 @@ nhsym l_syms[SYM_MAX] = DUMMY;   /* loaded symbols          */
 nhsym r_syms[SYM_MAX] = DUMMY;   /* rogue symbols           */
 
 nhsym warnsyms[WARNCOUNT] = DUMMY; /* the current warning display symbols */
-const char invisexplain[] = "remembered, unseen, creature";
+const char invisexplain[] = "remembered, unseen, creature",
+           altinvisexplain[] = "unseen creature"; /* for clairvoyance */
 
 /* Default object class symbols.  See objclass.h.
  * {symbol, name, explain}
@@ -498,10 +499,10 @@ int nondefault;
         if (SYMHANDLING(H_DEC) && decgraphics_mode_callback)
             (*decgraphics_mode_callback)();
 #endif
-#ifdef CURSES_GRAPHICS
+# ifdef CURSES_GRAPHICS
         if (SYMHANDLING(H_CURS) && cursesgraphics_mode_callback)
-            (*cursesgraphics_mode_callback)();
-#endif
+            (*cursesgraphics_mode_callback)();		
+# endif
     } else
         init_symbols();
 }
@@ -551,9 +552,10 @@ boolean name_too;
  * to this array at the matching offset.
  */
 const char *known_handling[] = {
-    "UNKNOWN", /* H_UNK */
-    "IBM",     /* H_IBM */
-    "DEC",     /* H_DEC */
+    "UNKNOWN", /* H_UNK  */
+    "IBM",     /* H_IBM  */
+    "DEC",     /* H_DEC  */
+    "CURS",    /* H_CURS */
     (const char *) 0,
 };
 

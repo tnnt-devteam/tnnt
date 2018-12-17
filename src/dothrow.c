@@ -1,4 +1,4 @@
-/* NetHack 3.6	dothrow.c	$NHDT-Date: 1525012611 2018/04/29 14:36:51 $  $NHDT-Branch: master $:$NHDT-Revision: 1.137 $ */
+/* NetHack 3.6	dothrow.c	$NHDT-Date: 1544401268 2018/12/10 00:21:08 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.153 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2013. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -707,6 +707,11 @@ int x, y;
     newsym(ox, oy);    /* update old position */
     vision_recalc(1);  /* update for new position */
     flush_screen(1);
+    /* if terrain type changes, levitation or flying might become blocked
+       or unblocked; might issue message, so do this after map+vision has
+       been updated for new location instead of right after u_on_newpos() */
+    if (levl[u.ux][u.uy].typ != levl[ox][oy].typ)
+        switch_terrain();
 
     if (is_pool(x, y) && !u.uinwater) {
         if ((Is_waterlevel(&u.uz) && levl[x][y].typ == WATER)
@@ -1287,7 +1292,8 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
             pline("%s returns to your hand!", The(xname(thrownobj)));
             thrownobj = addinv(thrownobj);
             (void) encumber_msg();
-            if (thrownobj->owornmask & W_QUIVER) /* in case addinv() autoquivered */
+            /* in case addinv() autoquivered */
+            if (thrownobj->owornmask & W_QUIVER)
                 setuqwep((struct obj *) 0);
             setuwep(thrownobj);
         } else {
@@ -1660,14 +1666,17 @@ register struct obj *obj; /* thrownobj or kickedobj or uwep */
         }
 
         if (tmp >= dieroll) {
-            boolean wasthrown = (thrownobj != 0);
+            boolean wasthrown = (thrownobj != 0),
+                    /* remember weapon attribute; hmon() might destroy obj */
+                    chopper = is_axe(obj);
 
             /* attack hits mon */
             if (hmode == HMON_APPLIED)
                 if(!u.uconduct.weaphit++)
                     livelog_write_string(LL_CONDUCT, "hit with a wielded weapon for the first time");
             if (hmon(mon, obj, hmode, dieroll)) { /* mon still alive */
-                cutworm(mon, bhitpos.x, bhitpos.y, obj);
+                if (mon->wormno)
+                    cutworm(mon, bhitpos.x, bhitpos.y, chopper);
             }
             exercise(A_DEX, TRUE);
             /* if hero was swallowed and projectile killed the engulfer,
@@ -1677,8 +1686,9 @@ register struct obj *obj; /* thrownobj or kickedobj or uwep */
             if (wasthrown && !thrownobj)
                 return 1;
 
-            /* projectiles other than magic stones
-               sometimes disappear when thrown */
+            /* projectiles other than magic stones sometimes disappear
+               when thrown; projectiles aren't among the types of weapon
+               that hmon() might have destroyed so obj is intact */
             if (objects[otyp].oc_skill < P_NONE
                 && objects[otyp].oc_skill > -P_BOOMERANG
                 && !objects[otyp].oc_magic) {

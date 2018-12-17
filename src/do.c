@@ -1,4 +1,4 @@
-/* NetHack 3.6	do.c	$NHDT-Date: 1472809073 2016/09/02 09:37:53 $  $NHDT-Branch: NetHack-3.6.0 $:$NHDT-Revision: 1.158 $ */
+/* NetHack 3.6	do.c	$NHDT-Date: 1545036287 2018/12/17 08:44:47 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.180 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Derek S. Ray, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -67,7 +67,7 @@ boolean pushing;
                 levl[rx][ry].drawbridgemask &= ~DB_UNDER; /* clear lava */
                 levl[rx][ry].drawbridgemask |= DB_FLOOR;
             } else
-                levl[rx][ry].typ = ROOM;
+                levl[rx][ry].typ = ROOM, levl[rx][ry].flags = 0;
 
             if (ttmp)
                 (void) delfloortrap(ttmp);
@@ -178,7 +178,9 @@ const char *verb;
             if (Blind && (x == u.ux) && (y == u.uy)) {
                 You_hear("a CRASH! beneath you.");
             } else if (!Blind && cansee(x, y)) {
-                pline_The("boulder %s%s.", t->tseen ? "" : "triggers and ",
+                pline_The("boulder %s%s.",
+                    (t->ttyp == TRAPDOOR && !t->tseen)
+                        ? "triggers and " : "",
                           t->ttyp == TRAPDOOR
                               ? "plugs a trap door"
                               : t->ttyp == HOLE ? "plugs a hole"
@@ -277,22 +279,29 @@ STATIC_DCL void
 polymorph_sink()
 {
     uchar sym = S_sink;
+    boolean sinklooted;
 
     if (levl[u.ux][u.uy].typ != SINK)
         return;
 
+    sinklooted = levl[u.ux][u.uy].looted != 0;
     level.flags.nsinks--;
-    levl[u.ux][u.uy].doormask = 0;
+    levl[u.ux][u.uy].doormask = 0; /* levl[][].flags */
     switch (rn2(4)) {
     default:
     case 0:
         sym = S_fountain;
         levl[u.ux][u.uy].typ = FOUNTAIN;
+        levl[u.ux][u.uy].blessedftn = 0;
+        if (sinklooted)
+            SET_FOUNTAIN_LOOTED(u.ux, u.uy);
         level.flags.nfountains++;
         break;
     case 1:
         sym = S_throne;
         levl[u.ux][u.uy].typ = THRONE;
+        if (sinklooted)
+            levl[u.ux][u.uy].looted = T_LOOTED;
         break;
     case 2:
         sym = S_altar;
@@ -579,11 +588,12 @@ register struct obj *obj;
     if (u.uswallow) {
         /* barrier between you and the floor */
         if (flags.verbose) {
-            char buf[BUFSZ];
+            char *onam_p, monbuf[BUFSZ];
 
             /* doname can call s_suffix, reusing its buffer */
-            Strcpy(buf, s_suffix(mon_nam(u.ustuck)));
-            You("drop %s into %s %s.", doname(obj), buf,
+            Strcpy(monbuf, s_suffix(mon_nam(u.ustuck)));
+            onam_p = ckunpaid(obj) ? yobjnam(obj, (char *) 0) : doname(obj);
+            You("drop %s into %s %s.", onam_p, monbuf,
                 mbodypart(u.ustuck, STOMACH));
         }
     } else {
@@ -677,6 +687,8 @@ boolean with_impact;
                 could_grow = (obj->corpsenm == PM_WRAITH);
                 could_heal = (obj->corpsenm == PM_NURSE);
             }
+            if (ckunpaid(obj))
+                (void) stolen_value(obj, u.ux, u.uy, TRUE, FALSE);
             (void) mpickobj(u.ustuck, obj);
             if (is_animal(u.ustuck->data)) {
                 if (could_poly || could_slime) {
@@ -1063,7 +1075,9 @@ doup()
         return 1;
     }
     if (ledger_no(&u.uz) == 1) {
-        if (yn("Beware, there will be no return! Still climb?") != 'y')
+        if (iflags.debug_fuzzer)
+            return 0;
+        if (yn("Beware, there will be no return!  Still climb?") != 'y')
             return 0;
     }
     if (!next_to_u()) {
@@ -1238,6 +1252,17 @@ boolean at_stairs, falling, portal;
     fd = currentlevel_rewrite();
     if (fd < 0)
         return;
+
+    /* discard context which applies to the level we're leaving;
+       for lock-picking, container may be carried, in which case we
+       keep context; if on the floor, it's about to be saved+freed and
+       maybe_reset_pick() needs to do its carried() check before that */
+    maybe_reset_pick();
+    reset_trapset(); /* even if to-be-armed trap obj is accompanying hero */
+    iflags.travelcc.x = iflags.travelcc.y = 0; /* travel destination cache */
+    context.polearm.hitmon = (struct monst *) 0; /* polearm target */
+    /* digging context is level-aware and can actually be resumed if
+       hero returns to the previous level without any intervening dig */
 
     if (falling) /* assuming this is only trap door or hole */
         impact_drop((struct obj *) 0, u.ux, u.uy, newlevel->dlevel);
@@ -1449,10 +1474,9 @@ boolean at_stairs, falling, portal;
                with the situation, so only say something when debugging */
             if (wizard)
                 pline("(monster in hero's way)");
-            if (!rloc(mtmp, TRUE))
+            if (!rloc(mtmp, TRUE) || (mtmp = m_at(u.ux, u.uy)) != 0)
                 /* no room to move it; send it away, to return later */
-                migrate_to_level(mtmp, ledger_no(&u.uz), MIGR_RANDOM,
-                                 (coord *) 0);
+                m_into_limbo(mtmp);
         }
     }
 
@@ -1584,14 +1608,6 @@ boolean at_stairs, falling, portal;
     /* assume this will always return TRUE when changing level */
     (void) in_out_region(u.ux, u.uy);
     (void) pickup(1);
-
-    /* discard context which applied to previous level */
-    maybe_reset_pick(); /* for door or for box not accompanying hero */
-    reset_trapset(); /* even if to-be-armed trap obj is accompanying hero */
-    iflags.travelcc.x = iflags.travelcc.y = -1; /* travel destination cache */
-    context.polearm.hitmon = (struct monst *) 0; /* polearm target */
-    /* digging context is level-aware and can actually be resumed if
-       hero returns to the previous level without any intervening dig */
 
 #ifdef WHEREIS_FILE
 	touch_whereis();
@@ -1896,7 +1912,8 @@ register int timex;
 }
 
 void
-heal_legs()
+heal_legs(how)
+int how; /* 0: ordinary, 1: dismounting steed, 2: limbs turn to stone */
 {
     if (Wounded_legs) {
         if (ATEMP(A_DEX) < 0) {
@@ -1904,7 +1921,11 @@ heal_legs()
             context.botl = 1;
         }
 
-        if (!u.usteed) {
+        /* when mounted, wounded legs applies to the steed;
+           during petrification countdown, "your limbs turn to stone"
+           before the final stages and that calls us (how==2) to cure
+           wounded legs, but we want to suppress the feel better message */
+        if (!u.usteed && how != 2) {
             const char *legs = body_part(LEG);
 
             if ((EWounded_legs & BOTH_SIDES) == BOTH_SIDES)
@@ -1914,7 +1935,7 @@ heal_legs()
             Your("%s %s better.", legs, vtense(legs, "feel"));
         }
 
-        HWounded_legs = EWounded_legs = 0;
+        HWounded_legs = EWounded_legs = 0L;
 
         /* Wounded_legs reduces carrying capacity, so we want
            an encumbrance check when they're healed.  However,
@@ -1926,7 +1947,7 @@ heal_legs()
            it might be immediately contradicted [able to carry
            more when steed becomes healthy, then possible floor
            feedback, then able to carry less when back on foot]. */
-        if (!in_steed_dismounting)
+        if (how == 0)
             (void) encumber_msg();
     }
 }

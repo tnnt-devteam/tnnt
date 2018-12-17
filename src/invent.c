@@ -1,4 +1,4 @@
-/* NetHack 3.6	invent.c	$NHDT-Date: 1541145517 2018/11/02 07:58:37 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.241 $ */
+/* NetHack 3.6	invent.c	$NHDT-Date: 1545036289 2018/12/17 08:44:49 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.243 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Derek S. Ray, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -25,7 +25,6 @@ STATIC_DCL boolean FDECL(only_here, (struct obj *));
 STATIC_DCL void FDECL(compactify, (char *));
 STATIC_DCL boolean FDECL(taking_off, (const char *));
 STATIC_DCL boolean FDECL(putting_on, (const char *));
-STATIC_PTR int FDECL(ckunpaid, (struct obj *));
 STATIC_PTR int FDECL(ckvalidcat, (struct obj *));
 STATIC_PTR char *FDECL(safeq_xprname, (struct obj *));
 STATIC_PTR char *FDECL(safeq_shortxprname, (struct obj *));
@@ -1395,7 +1394,7 @@ getobj(let, word)
 register const char *let, *word;
 {
     register struct obj *otmp;
-    register char ilet;
+    register char ilet = 0;
     char buf[BUFSZ], qbuf[QBUFSZ];
     char lets[BUFSZ], altlets[BUFSZ], *ap;
     register int foo = 0;
@@ -1840,7 +1839,7 @@ struct obj *otmp;
     return (int) allow_category(otmp);
 }
 
-STATIC_PTR int
+int
 ckunpaid(otmp)
 struct obj *otmp;
 {

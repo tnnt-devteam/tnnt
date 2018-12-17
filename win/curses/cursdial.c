@@ -1,4 +1,7 @@
 /* vim:set cin ft=c sw=4 sts=4 ts=8 et ai cino=Ls\:0t0(0 : -*- mode:c;fill-column:80;tab-width:8;c-basic-offset:4;indent-tabs-mode:nil;c-file-style:"k&r" -*-*/
+/* NetHack 3.6 cursdial.c */
+/* Copyright (c) Karl Garrison, 2010. */
+/* NetHack may be freely redistributed.  See license for details. */
 
 #include "curses.h"
 #include "hack.h"
@@ -6,6 +9,13 @@
 #include "cursdial.h"
 #include "func_tab.h"
 #include <ctype.h>
+
+#if defined(FILENAME_CMP)
+#define strcasecmp FILENAME_CMP
+#endif
+#if defined(STRNCMPI)
+#define strncasecmp strncmpi
+#endif
 
 /* Dialog windows for curses interface */
 
@@ -73,17 +83,28 @@ curses_line_input_dialog(const char *prompt, char *answer, int buffer)
 {
     int map_height, map_width, maxwidth, remaining_buf, winx, winy, count;
     WINDOW *askwin, *bwin;
-    char input[buffer];
     char *tmpstr;
     int prompt_width = strlen(prompt) + buffer + 1;
     int prompt_height = 1;
     int height = prompt_height;
+#if __STDC_VERSION__ >= 199901L
+    char input[buffer];
+#else
+#ifndef BUFSZ
+#define BUFSZ 256
+#endif
+    char input[BUFSZ];
+
+    buffer = BUFSZ - 1;
+#endif
 
     maxwidth = term_cols - 2;
 
     if (iflags.window_inited) {
-        if (!iflags.wc_popup_dialog)
-            return curses_message_win_getline(prompt, answer, buffer);
+        if (!iflags.wc_popup_dialog) {
+            curses_message_win_getline(prompt, answer, buffer);
+            return;
+        }
         curses_get_window_size(MAP_WIN, &map_height, &map_width);
         if ((prompt_width + 2) > map_width)
             maxwidth = map_width - 2;
@@ -143,6 +164,7 @@ curses_character_input_dialog(const char *prompt, const char *choices,
                               CHAR_P def)
 {
     WINDOW *askwin = NULL;
+    WINDOW *message_window;
     int answer, count, maxwidth, map_height, map_width;
     char *linestr;
     char askstr[BUFSZ + QBUFSZ];
@@ -159,6 +181,9 @@ curses_character_input_dialog(const char *prompt, const char *choices,
         map_width = term_cols;
     }
 
+#ifdef PDCURSES
+    message_window = curses_get_nhwin(MESSAGE_WIN);
+#endif
     maxwidth = map_width - 2;
 
     if (choices != NULL) {
@@ -220,8 +245,11 @@ curses_character_input_dialog(const char *prompt, const char *choices,
     /*curses_stupid_hack = 0; */
 
     while (1) {
+#ifdef PDCURSES
+        answer = wgetch(message_window);
+#else
         answer = getch();
-
+#endif
         if (answer == ERR) {
             answer = def;
             break;
@@ -267,7 +295,7 @@ curses_character_input_dialog(const char *prompt, const char *choices,
         }
 
         if (choices != NULL) {
-            for (count = 0; count < strlen(choices); count++) {
+            for (count = 0; (size_t) count < strlen(choices); count++) {
                 if (choices[count] == answer) {
                     break;
                 }
@@ -402,7 +430,7 @@ curses_ext_cmd()
                 continue;
             if (!(extcmdlist[count].flags & AUTOCOMPLETE))
                 continue;
-            if (strlen(extcmdlist[count].ef_txt) > prompt_width) {
+            if (strlen(extcmdlist[count].ef_txt) > (size_t) prompt_width) {
                 if (strncasecmp(cur_choice, extcmdlist[count].ef_txt,
                                 prompt_width) == 0) {
                     if ((extcmdlist[count].ef_txt[prompt_width] ==
@@ -574,14 +602,14 @@ curses_display_nhmenu(winid wid, int how, MENU_ITEM_P ** _selected)
 
     if (current_menu == NULL) {
         impossible("curses_display_nhmenu: attempt to display nonexistent menu");
-        return;
+        return '\033';
     }
 
     menu_item_ptr = current_menu->entries;
 
     if (menu_item_ptr == NULL) {
         impossible("curses_display_nhmenu: attempt to display empty menu");
-        return;
+        return '\033';
     }
 
     /* Reset items to unselected to clear out selections from previous
@@ -858,7 +886,7 @@ menu_win_size(nhmenu *menu)
         } else {
             /* Add space for accelerator */
             curentrywidth = strlen(menu_item_ptr->str) + 4;
-#if 0 // FIXME: menu glyphs
+#if 0 /* FIXME: menu glyphs */
             if (menu_item_ptr->glyph != NO_GLYPH
                         && iflags.use_menu_glyphs)
                 curentrywidth += 2;
