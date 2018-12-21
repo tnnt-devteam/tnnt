@@ -2754,6 +2754,7 @@ boolean byplayer;
     if (byplayer) {
         stoned = TRUE;
         xkilled(mon, XKILL_NOMSG);
+        tnnt_achieve(A_STONED_A_MONSTER);
     } else
         monstone(mon);
 }

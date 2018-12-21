@@ -733,6 +733,11 @@ struct obj *instr;
                                     close_drawbridge(x, y);
                                 else
                                     open_drawbridge(x, y);
+                                /* intentional that this achievement works even
+                                 * if you are first using it to close the
+                                 * drawbridge (maybe you opened it previously
+                                 * with an opening beam) */
+                                tnnt_achieve(A_USED_PASSTUNE);
                                 return 1;
                             }
             } else if (!Deaf) {

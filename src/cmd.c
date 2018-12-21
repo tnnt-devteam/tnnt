@@ -5082,15 +5082,25 @@ dotnntstats(VOID_ARGS)
     putstr(en_win, 0, buf);
     Sprintf(buf, "You have tamed %d feline(s).", tnnt_globals.felines_tamed);
     putstr(en_win, 0, buf);
-    unsigned char amask = tnnt_globals.high_altars;
-    xchar naltars = 0;
-    while (amask > 0) {
-        if (amask & 1)
-            naltars++;
-        amask = amask >> 1;
-    }
-    Sprintf(buf, "You have visited %d of the three high altars.", naltars);
+    Sprintf(buf, "You have changed gender %d time(s).",
+            tnnt_globals.genderflips);
     putstr(en_win, 0, buf);
+#define print_visited(altars)    \
+    if ((altars) == 0)           \
+        Strcat(buf, " none");    \
+    if ((altars) & AM_LAWFUL)    \
+        Strcat(buf, " lawful");  \
+    if ((altars) & AM_NEUTRAL)   \
+        Strcat(buf, " neutral"); \
+    if ((altars) & AM_CHAOTIC)   \
+        Strcat(buf, " chaotic");
+    Strcpy(buf, "High altar alignments visited:");
+    print_visited(tnnt_globals.high_altars);
+    putstr(en_win, 0, buf);
+    Strcpy(buf, "Regular altar alignments visited:");
+    print_visited(tnnt_globals.regular_altars);
+    putstr(en_win, 0, buf);
+#undef print_visited
     Sprintf(buf, "You have killed %d/9 Nazgul.", mvitals[PM_NAZGUL].died);
     putstr(en_win, 0, buf);
     Sprintf(buf, "You have killed %d/3 erinyes.", mvitals[PM_ERINYS].died);

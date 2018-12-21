@@ -2293,6 +2293,13 @@ struct obj *obj;
     switch (chance) {
     case 0:
         verbalize("I am in your debt.  I will grant one wish!");
+        if (obj->otyp == MAGIC_LAMP) {
+            tnnt_globals.wish_sources |= WISHSRC_LAMP;
+        }
+        else if (obj->oclass == POTION_CLASS) {
+            /* don't actually need to compare description to "smoky" */
+            tnnt_globals.wish_sources |= WISHSRC_SMOKY_POTION;
+        }
         /* give a wish and discard the monster (mtmp set to null) */
         mongrantswish(&mtmp);
         break;

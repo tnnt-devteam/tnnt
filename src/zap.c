@@ -2150,6 +2150,7 @@ register struct obj *obj;
             pline("Unfortunately, nothing happens.");
             break;
         }
+        tnnt_globals.wish_sources |= WISHSRC_WAND;
         makewish();
         break;
     case WAN_ENLIGHTENMENT:
@@ -5136,6 +5137,11 @@ makewish()
     struct obj *otmp, nothing;
     int tries = 0;
     boolean prev_artwish = u.uconduct.wisharti;
+
+    /* TNNT: the wish_sources flag for this wish should have been properly set
+     * already */
+    if ((tnnt_globals.wish_sources & WISHSRC_ALL) != 0)
+        tnnt_achieve(A_WISH_FROM_EVERYTHING);
 
     promptbuf[0] = '\0';
     nothing = zeroobj; /* lint suppression; only its address matters */

@@ -362,8 +362,23 @@ boolean credit_hero;
                 exercise(A_WIS, TRUE);
         }
         /* moves==1L => initial inventory, gameover => final disclosure */
-        if (moves > 1L && !program_state.gameover)
+        if (moves > 1L && !program_state.gameover) {
             update_inventory();
+            if (mark_as_known && credit_hero) {
+                /* TNNT: identify both detect food sources; trigger on
+                 * discovering either of them when the other is already known;
+                 * but do not count it if the player starts the game with both.
+                 * Theoretically, one could still get this achievement by
+                 * starting the game with both and amnesiaing themselves to
+                 * forget one, then re-learn it later. */
+                if ((oindx == SPE_DETECT_FOOD
+                     && objects[SCR_FOOD_DETECTION].oc_name_known)
+                    || (oindx == SCR_FOOD_DETECTION
+                        && objects[SPE_DETECT_FOOD].oc_name_known)) {
+                    tnnt_achieve(A_ID_DETECT_FOOD);
+                }
+            }
+        }
     }
 }
 

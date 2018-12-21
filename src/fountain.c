@@ -71,6 +71,7 @@ dowaterdemon()
                 pline("Grateful for %s release, %s grants you a wish!",
                       mhis(mtmp), mhe(mtmp));
                 /* give a wish and discard the monster (mtmp set to null) */
+                tnnt_globals.wish_sources |= WISHSRC_WATER_DEMON;
                 mongrantswish(&mtmp);
             } else if (t_at(mtmp->mx, mtmp->my))
                 (void) mintrap(mtmp);

@@ -241,6 +241,10 @@ change_sex()
        swap unintentionally makes `Upolyd' appear to be true */
     boolean already_polyd = (boolean) Upolyd;
 
+    tnnt_globals.genderflips++;
+    if (tnnt_globals.genderflips > 1) {
+        tnnt_achieve(A_MULTI_GENDER_FLIP);
+    }
     /* Some monsters are always of one sex and their sex can't be changed;
      * Succubi/incubi can change, but are handled below.
      *

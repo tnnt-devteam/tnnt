@@ -2799,6 +2799,7 @@ struct obj *obj;
                 obj_extract_self(otmp);
                 possibly_unwield(mtmp, FALSE);
                 setmnotwielded(mtmp, otmp);
+                tnnt_achieve(A_DISARMED_WITH_WHIP);
 
                 switch (rn2(proficient + 1)) {
                 case 2:
@@ -3319,6 +3320,10 @@ struct obj *obj;
 
     if (obj->otyp == WAN_NOTHING && objects[WAN_NOTHING].oc_name_known)
         tnnt_achieve(A_BROKE_WAN_NOTHING);
+
+    if (obj->otyp == WAN_WISHING && objects[WAN_WISHING].oc_name_known
+        && obj->known && obj->spe >= 1)
+        tnnt_achieve(A_BROKE_WAND_WISHING);
 
     if (!zappable(obj)) {
         pline(nothing_else_happens);

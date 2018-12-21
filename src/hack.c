@@ -1985,21 +1985,6 @@ switch_terrain()
         if (Flying)
             You("start flying.");
     }
-
-    if (lev->typ == ALTAR) {
-        if (In_mines(&u.uz)) {
-            tnnt_achieve(A_FOUND_MINES_ALTAR);
-        }
-        else if (Is_astralevel(&u.uz)) {
-            /* Assumes that the AM_* flags are 1, 2, and 4. */
-            tnnt_globals.high_altars |= (lev->altarmask & ~AM_SHRINE);
-            if (tnnt_globals.high_altars == 0x7)
-                tnnt_achieve(A_VISITED_HIGH_ALTARS);
-        }
-    }
-    if (lev->typ == GRAVE && Is_rogue_level(&u.uz)) {
-        tnnt_achieve(A_FOUND_ROGUE_BONES_PILE);
-    }
 }
 
 /* extracted from spoteffects; called by spoteffects to check for entering or
@@ -2109,6 +2094,28 @@ boolean pick;
     ++inspoteffects;
     spotterrain = levl[u.ux][u.uy].typ;
     spotloc.x = u.ux, spotloc.y = u.uy;
+
+    /* TNNT: a few achievements trigger by moving onto a certain terrain type */
+    if (spotterrain == ALTAR) {
+        xchar mask = (levl[u.ux][u.uy].altarmask & ~AM_SHRINE);
+        if (In_mines(&u.uz)) {
+            tnnt_achieve(A_FOUND_MINES_ALTAR);
+        }
+        else if (Is_astralevel(&u.uz)) {
+            /* Assumes that the AM_* flags are 1, 2, and 4. */
+            tnnt_globals.high_altars |= mask;
+            if (tnnt_globals.high_altars == 0x7)
+                tnnt_achieve(A_VISITED_HIGH_ALTARS);
+        }
+        /* this is the weaker form of grand tour and happens anywhere, even on
+         * the astral plane */
+        tnnt_globals.regular_altars |= mask;
+        if (tnnt_globals.regular_altars == 0x7)
+            tnnt_achieve(A_VISITED_ALL_ALTARS);
+    }
+    if (spotterrain == GRAVE && Is_rogue_level(&u.uz)) {
+        tnnt_achieve(A_FOUND_ROGUE_BONES_PILE);
+    }
 
     /* moving onto different terrain might cause Lev or Fly to toggle */
     if (spotterrain != levl[u.ux0][u.uy0].typ || !on_level(&u.uz, &u.uz0))

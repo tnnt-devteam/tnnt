@@ -758,9 +758,10 @@ int dieroll;
                         tmp++;
                 }
             } else {
-                if (obj->otyp == BOOMERANG)
+                if (obj->otyp == BOOMERANG) {
                     /* guaranteed not hitting in melee */
                     tnnt_achieve(A_HIT_WITH_BOOMERANG);
+                }
                 tmp = dmgval(obj, mon);
                 /* a minimal hit doesn't exercise proficiency */
                 valid_weapon_attack = (tmp > 1);
@@ -1327,6 +1328,7 @@ int dieroll;
         pline_The("poison doesn't seem to affect %s.", mon_nam(mon));
     if (poiskilled) {
         pline_The("poison was deadly...");
+        tnnt_achieve(A_INSTAPOISONED);
         if (!already_killed)
             xkilled(mon, XKILL_NOMSG);
         destroyed = TRUE; /* return FALSE; */
@@ -1341,6 +1343,11 @@ int dieroll;
             tnnt_achieve(A_KILLED_WITH_IRONBALL);
         if (obj && obj->otyp == AKLYS && thrown == HMON_THROWN)
             tnnt_achieve(A_KILLED_WITH_AKLYS);
+        if (obj && obj->otyp == TRIDENT && mdat->mlet == S_EEL)
+            tnnt_achieve(A_KILLED_WITH_TRIDENT);
+        if (obj && is_pole(otmp) && mdat == &mons[PM_FLOATING_EYE])
+            tnnt_achieve(A_KILLED_EYE_POLEARM);
+
     } else if (u.umconf && hand_to_hand) {
         nohandglow(mon);
         if (!mon->mconf && !resist(mon, SPBOOK_CLASS, 0, NOTELL)) {
@@ -1842,6 +1849,7 @@ register struct attack *mattk;
                 if (!rn2(10)) {
                     Your("poison was deadly...");
                     tmp = mdef->mhp;
+                    tnnt_achieve(A_INSTAPOISONED);
                 } else
                     tmp += rn1(10, 6);
             }

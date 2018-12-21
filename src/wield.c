@@ -193,6 +193,14 @@ struct obj *wep;
         }
         setuwep(wep);
 
+        if (wep->otyp == WAN_DEATH && objects[WAN_DEATH].oc_name_known
+            && uamul && uamul->otyp == AMULET_OF_LIFE_SAVING
+            && objects[AMULET_OF_LIFE_SAVING].oc_name_known
+            && uarmc && uarmc->otyp == CLOAK_OF_INVISIBILITY
+            && objects[CLOAK_OF_INVISIBILITY].oc_name_known) {
+            tnnt_achieve(A_DEATHLY_HALLOWS);
+        }
+
         /* KMH -- Talking artifacts are finally implemented */
         arti_speak(wep);
 

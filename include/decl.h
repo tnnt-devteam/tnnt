@@ -634,14 +634,36 @@ enum tnnt_achievements {
     A_PARTIAL_GENOCIDELESS,  /* Implemented,tested. */
     A_PUT_INTO_SWAPCHEST,    /* Implemented,tested. */
     A_TALKED_TO_DEVTEAM,     /* Implemented. */
-    A_FINISHED_DEVTEAM_QUEST /* Implemented. */
-    /* 185 achievements defined */
+    A_FINISHED_DEVTEAM_QUEST,/* Implemented. */
+    A_INSTAPOISONED,         /* Implemented. */
+    A_MULTI_GENDER_FLIP,     /* Implemented. */
+    A_DEATHLY_HALLOWS,       /* Implemented. */
+    A_DISARMED_WITH_WHIP,    /* Implemented. */
+    A_VISITED_ALL_ALTARS,    /* Implemented. */
+    A_BROKE_WAND_WISHING,    /* Implemented. */
+    A_KILLED_WITH_TRIDENT,   /* Implemented. */ /* #192 */
+    A_STONED_A_MONSTER,      /* Implemented. */ /* begin tnntachieve3 here */
+    A_USED_PASSTUNE,         /* Implemented. */
+    A_ID_DETECT_FOOD,        /* Implemented. */
+    A_WISH_FROM_EVERYTHING,  /* Implemented. */
+    A_KILLED_EYE_POLEARM,    /* Implemented. */
+    A_IDENTIFIED_ALL_RINGS,
+    A_IDENTIFIED_ALL_WANDS,
+    A_IDENTIFIED_ALL_AMULETS,
+    A_IDENTIFIED_ALL_BOOKS,
+    A_IDENTIFIED_ALL_SCROLLS,
+    A_IDENTIFIED_ALL_POTIONS,
+    A_IDENTIFIED_ACCESSORIES,
+    A_DISARMED_LUDIOS_MINES,
+    A_READ_ALL_READABLE,
+    /* 186 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more
      * achievements in the tournament than are defined here. This was already
      * sort of the case with achievements that use the regular achieve bitfield.
      */
+    NUM_TNNT_ACHIEVEMENTS
 };
 
 /* TNNT - generic globals that don't belong in you.h */
@@ -658,13 +680,22 @@ struct tnnt_globals_t {
     unsigned char graffiti_found;
     unsigned char felines_tamed; /* redundant; for #tnntstats */
     unsigned char high_altars;
+    unsigned char regular_altars;
     uint64_t foods_eaten; /* sadly there are 33 foods */
+    unsigned short genderflips;
+    unsigned char wish_sources;
+#define WISHSRC_WAND 0x01
+#define WISHSRC_LAMP 0x02
+#define WISHSRC_SMOKY_POTION 0x04
+#define WISHSRC_THRONE 0x08
+#define WISHSRC_WATER_DEMON 0x10
+#define WISHSRC_ALL 0x1F
 
     /* The actual achievement bitfields which get written out to xlogfile and
      * track whether or not you have achieved something.
      * Since there are more than 64 achievements, we need multiple 64 bit ints.
      */
-    uint64_t tnnt_achievements[3];
+    uint64_t tnnt_achievements[4];
 
     /* Devteam quest */
     xchar missing_scroll_levels[NUM_MISSING_CODE_SCROLLS];

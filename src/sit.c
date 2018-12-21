@@ -200,6 +200,7 @@ dosit()
                     You_feel("your luck is changing.");
                     change_luck(1);
                 } else
+                    tnnt_globals.wish_sources |= WISHSRC_THRONE;
                     makewish();
                 break;
             case 7:
