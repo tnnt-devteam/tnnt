@@ -5050,7 +5050,8 @@ dotnntdebug(VOID_ARGS)
  * Non-spoilery non-info-leaky stuff that a regular tournament player can check
  * during play.
  * Non-spoilery in the sense that the user is presumed to know what all the
- * achievements are and what they require. */
+ * achievements are and what they require. It doesn't alert an unaware user that
+ * there's a devteam quest. */
 STATIC_PTR int
 dotnntstats(VOID_ARGS)
 {
@@ -5080,11 +5081,14 @@ dotnntstats(VOID_ARGS)
     /* other counters for various things */
     Sprintf(buf, "You have found %d graffiti.", tnnt_globals.graffiti_found);
     putstr(en_win, 0, buf);
+
     Sprintf(buf, "You have tamed %d feline(s).", tnnt_globals.felines_tamed);
     putstr(en_win, 0, buf);
+
     Sprintf(buf, "You have changed gender %d time(s).",
             tnnt_globals.genderflips);
     putstr(en_win, 0, buf);
+
 #define print_visited(altars)    \
     if ((altars) == 0)           \
         Strcat(buf, " none");    \
@@ -5097,10 +5101,58 @@ dotnntstats(VOID_ARGS)
     Strcpy(buf, "High altar alignments visited:");
     print_visited(tnnt_globals.high_altars);
     putstr(en_win, 0, buf);
+
     Strcpy(buf, "Regular altar alignments visited:");
     print_visited(tnnt_globals.regular_altars);
     putstr(en_win, 0, buf);
 #undef print_visited
+
+    Strcpy(buf, "You have received wishes from:");
+    if (tnnt_globals.wish_sources == 0) {
+        Strcat(buf, " nothing");
+    }
+    else {
+        if ((tnnt_globals.wish_sources & WISHSRC_WAND) != 0)
+            Strcat(buf, " wand");
+        if ((tnnt_globals.wish_sources & WISHSRC_LAMP) != 0)
+            Strcat(buf, " lamp");
+        if ((tnnt_globals.wish_sources & WISHSRC_SMOKY_POTION) != 0)
+            Strcat(buf, " bottle");
+        if ((tnnt_globals.wish_sources & WISHSRC_THRONE) != 0)
+            Strcat(buf, " throne");
+        if ((tnnt_globals.wish_sources & WISHSRC_WATER_DEMON) != 0)
+            Strcat(buf, " fountain");
+    }
+    putstr(en_win, 0, buf);
+
+    Strcpy(buf, "Things you have read:");
+    if (tnnt_globals.readables == 0)
+        Strcat(buf, " nothing");
+    if ((tnnt_globals.readables & RDBL_SCROLL) != 0)
+        Strcat(buf, " scroll");
+    if ((tnnt_globals.readables & RDBL_BOOK) != 0)
+        Strcat(buf, " book");
+    if ((tnnt_globals.readables & RDBL_COIN) != 0)
+        Strcat(buf, " coin");
+    if ((tnnt_globals.readables & RDBL_SHIRT) != 0)
+        Strcat(buf, " shirt");
+    if ((tnnt_globals.readables & RDBL_APRON) != 0)
+        Strcat(buf, " apron");
+    if ((tnnt_globals.readables & RDBL_MARKER) != 0)
+        Strcat(buf, " marker");
+    if ((tnnt_globals.readables & RDBL_CANDY) != 0)
+        Strcat(buf, " candy");
+    if ((tnnt_globals.readables & RDBL_CARD) != 0)
+        Strcat(buf, " card");
+    if ((tnnt_globals.readables & RDBL_COOKIE) != 0)
+        Strcat(buf, " cookie");
+    putstr(en_win, 0, buf);
+
+    Sprintf(buf, "You have %sblown up a land mine in Fort Ludios.",
+            tnnt_globals.blew_up_ludios ? "" : "not ");
+    putstr(en_win, 0, buf);
+
+    /* kill a certain number of foo */
     Sprintf(buf, "You have killed %d/9 Nazgul.", mvitals[PM_NAZGUL].died);
     putstr(en_win, 0, buf);
     Sprintf(buf, "You have killed %d/3 erinyes.", mvitals[PM_ERINYS].died);
