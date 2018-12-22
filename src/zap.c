@@ -5140,7 +5140,7 @@ makewish()
 
     /* TNNT: the wish_sources flag for this wish should have been properly set
      * already */
-    if ((tnnt_globals.wish_sources & WISHSRC_ALL) != 0)
+    if ((tnnt_globals.wish_sources & WISHSRC_ALL) == WISHSRC_ALL)
         tnnt_achieve(A_WISH_FROM_EVERYTHING);
 
     promptbuf[0] = '\0';

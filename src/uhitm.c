@@ -1345,7 +1345,7 @@ int dieroll;
             tnnt_achieve(A_KILLED_WITH_AKLYS);
         if (obj && obj->otyp == TRIDENT && mdat->mlet == S_EEL)
             tnnt_achieve(A_KILLED_WITH_TRIDENT);
-        if (obj && is_pole(otmp) && mdat == &mons[PM_FLOATING_EYE])
+        if (obj && is_pole(obj) && mdat == &mons[PM_FLOATING_EYE])
             tnnt_achieve(A_KILLED_EYE_POLEARM);
 
     } else if (u.umconf && hand_to_hand) {

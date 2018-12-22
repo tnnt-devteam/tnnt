@@ -494,6 +494,7 @@ register struct obj *spellbook;
                 if(!u.uconduct.literate++)
                     livelog_printf(LL_CONDUCT,
                             "became literate by reading %s", tribtitle);
+                tnnt_read(RDBL_BOOK);
                 check_unpaid(spellbook);
                 makeknown(booktype);
                 if (!u.uevent.read_tribute) {

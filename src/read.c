@@ -207,10 +207,12 @@ doread()
         if (flags.verbose)
             You("break up the cookie and throw away the pieces.");
         outrumor(bcsign(scroll), BY_COOKIE);
-        if (!Blind)
+        if (!Blind) {
             if(!u.uconduct.literate++)
                 livelog_write_string(LL_CONDUCT,
                         "became literate by reading a fortune cookie");
+            tnnt_read(RDBL_COOKIE);
+        }
         useup(scroll);
         return 1;
     } else if (scroll->otyp == T_SHIRT || scroll->otyp == ALCHEMY_SMOCK) {
@@ -231,6 +233,7 @@ doread()
         if(!u.uconduct.literate++)
             livelog_printf(LL_CONDUCT, "became literate by reading %s",
                     (scroll->otyp == T_SHIRT) ? "a T-shirt" : "an apron");
+        tnnt_read(scroll->otyp == T_SHIRT ? RDBL_SHIRT : RDBL_APRON);
         /* populate 'buf[]' */
         mesg = (scroll->otyp == T_SHIRT) ? tshirt_text(scroll, buf)
                                          : apron_text(scroll, buf);
@@ -285,6 +288,7 @@ doread()
         if(!u.uconduct.literate++)
             livelog_write_string(LL_CONDUCT,
                     "became literate by reading a credit card");
+        tnnt_read(RDBL_CARD);
         return 1;
     } else if (scroll->otyp == CAN_OF_GREASE) {
         pline("This %s has no label.", singular(scroll, xname));
@@ -300,6 +304,7 @@ doread()
         if(!u.uconduct.literate++)
             livelog_write_string(LL_CONDUCT,
                     "became literate by reading a magic marker");
+        tnnt_read(RDBL_MARKER);
         return 1;
     } else if (scroll->oclass == COIN_CLASS) {
         if (Blind)
@@ -310,6 +315,7 @@ doread()
         if(!u.uconduct.literate++)
             livelog_write_string(LL_CONDUCT,
                     "became literate by reading a coin's engravings");
+        tnnt_read(RDBL_COIN);
         return 1;
     } else if (scroll->oartifact == ART_ORB_OF_FATE) {
         if (Blind)
@@ -341,6 +347,7 @@ doread()
         if(!u.uconduct.literate++)
             livelog_write_string(LL_CONDUCT,
                     "became literate by reading a candy bar wrapper");
+        tnnt_read(RDBL_CANDY);
         return 1;
     } else if (scroll->oclass != SCROLL_CLASS
                && scroll->oclass != SPBOOK_CLASS) {
@@ -383,11 +390,13 @@ doread()
     /* Novel conduct is handled in read_tribute so exclude it too*/
     if (scroll->otyp != SPE_BOOK_OF_THE_DEAD
         && scroll->otyp != SPE_BLANK_PAPER && scroll->otyp != SCR_BLANK_PAPER
-        && scroll->otyp != SPE_NOVEL)
+        && scroll->otyp != SPE_NOVEL) {
         if(!u.uconduct.literate++)
             livelog_printf(LL_CONDUCT, "became literate by reading %s",
                     scroll->oclass == SPBOOK_CLASS ? "a book" :
                     scroll->oclass == SCROLL_CLASS ? "a scroll" : "something");
+        tnnt_read(scroll->oclass == SPBOOK_CLASS ? RDBL_BOOK : RDBL_SCROLL);
+    }
 
     if (scroll->oclass == SPBOOK_CLASS) {
         return study_book(scroll);

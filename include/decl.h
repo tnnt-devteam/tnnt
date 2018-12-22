@@ -647,15 +647,15 @@ enum tnnt_achievements {
     A_ID_DETECT_FOOD,        /* Implemented. */
     A_WISH_FROM_EVERYTHING,  /* Implemented. */
     A_KILLED_EYE_POLEARM,    /* Implemented. */
-    A_IDENTIFIED_ALL_RINGS,
-    A_IDENTIFIED_ALL_WANDS,
-    A_IDENTIFIED_ALL_AMULETS,
-    A_IDENTIFIED_ALL_BOOKS,
-    A_IDENTIFIED_ALL_SCROLLS,
-    A_IDENTIFIED_ALL_POTIONS,
+    A_IDENTIFIED_ALL_RINGS,  /* Implemented. */
+    A_IDENTIFIED_ALL_WANDS,  /* Implemented. */
+    A_IDENTIFIED_ALL_AMULETS,/* Implemented. */
+    A_IDENTIFIED_ALL_BOOKS,  /* Implemented. */
+    A_IDENTIFIED_ALL_SCROLLS,/* Implemented. */
+    A_IDENTIFIED_ALL_POTIONS,/* Implemented. */
     A_IDENTIFIED_ACCESSORIES,
-    A_DISARMED_LUDIOS_MINES,
-    A_READ_ALL_READABLE,
+    A_DISARMED_LUDIOS_MINES, /* Implemented. */
+    A_READ_ALL_READABLE,     /* Implemented. */
     /* 186 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
@@ -690,6 +690,28 @@ struct tnnt_globals_t {
 #define WISHSRC_THRONE 0x08
 #define WISHSRC_WATER_DEMON 0x10
 #define WISHSRC_ALL 0x1F
+    boolean blew_up_ludios; /* blew up any of its land mines */
+    unsigned short readables;
+#define RDBL_SCROLL  0x0001
+#define RDBL_BOOK    0x0002
+#define RDBL_COIN    0x0004
+#define RDBL_SHIRT   0x0008
+#define RDBL_MARKER  0x0010
+#define RDBL_CANDY   0x0020
+#define RDBL_CARD    0x0040
+#define RDBL_COOKIE  0x0080
+#define RDBL_APRON   0x0100
+    /* Book of the Dead and Orb of Fate are also readable items, but are not
+     * counted towards the "read all readable items" achievement. */
+#define ALL_READABLE 0x01FF
+    /* Macro for adding a readable and auto-achieving the readables achievement
+     * if it has been obtained. */
+#define tnnt_read(rdbl)                                              \
+    do {                                                             \
+        tnnt_globals.readables |= (rdbl);                            \
+        if ((tnnt_globals.readables & ALL_READABLE) == ALL_READABLE) \
+            tnnt_achieve(A_READ_ALL_READABLE);                       \
+    } while(0)
 
     /* The actual achievement bitfields which get written out to xlogfile and
      * track whether or not you have achieved something.

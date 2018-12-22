@@ -2293,7 +2293,10 @@ struct obj *obj;
     switch (chance) {
     case 0:
         verbalize("I am in your debt.  I will grant one wish!");
-        if (obj->otyp == MAGIC_LAMP) {
+        /* If from a magic lamp, it has already been transmuted into oil by the
+         * caller. That's fine here since we just want to differentiate between
+         * the lamp and potion djinni. */
+        if (obj->otyp == OIL_LAMP) {
             tnnt_globals.wish_sources |= WISHSRC_LAMP;
         }
         else if (obj->oclass == POTION_CLASS) {

@@ -2239,9 +2239,11 @@ struct obj *otmp;
         break;
     case FORTUNE_COOKIE:
         outrumor(bcsign(otmp), BY_COOKIE);
-        if (!Blind)
+        if (!Blind) {
             if(!u.uconduct.literate++)
                 livelog_write_string(LL_CONDUCT, "became literate by reading the fortune inside a cookie");
+            tnnt_read(RDBL_COOKIE);
+        }
         break;
     case LUMP_OF_ROYAL_JELLY:
         /* This stuff seems to be VERY healthy! */

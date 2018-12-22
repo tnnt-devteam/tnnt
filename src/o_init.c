@@ -11,6 +11,7 @@ STATIC_DCL void FDECL(shuffle, (int, int, BOOLEAN_P));
 STATIC_DCL void NDECL(shuffle_all);
 STATIC_DCL boolean FDECL(interesting_to_discover, (int));
 STATIC_DCL char *FDECL(oclass_to_name, (CHAR_P, char *));
+STATIC_DCL void FDECL(tnnt_check_identifications, (int));
 
 static NEARDATA short disco[NUM_OBJECTS] = DUMMY;
 
@@ -365,22 +366,94 @@ boolean credit_hero;
         if (moves > 1L && !program_state.gameover) {
             update_inventory();
             if (mark_as_known && credit_hero) {
-                /* TNNT: identify both detect food sources; trigger on
-                 * discovering either of them when the other is already known;
-                 * but do not count it if the player starts the game with both.
-                 * Theoretically, one could still get this achievement by
-                 * starting the game with both and amnesiaing themselves to
-                 * forget one, then re-learn it later. */
-                if ((oindx == SPE_DETECT_FOOD
-                     && objects[SCR_FOOD_DETECTION].oc_name_known)
-                    || (oindx == SCR_FOOD_DETECTION
-                        && objects[SPE_DETECT_FOOD].oc_name_known)) {
-                    tnnt_achieve(A_ID_DETECT_FOOD);
-                }
+                /* TNNT: trigger on discovering stuff, but do not count it if
+                 * the game is just starting or just ending. The final piece of
+                 * the set must become actively identified during the course of
+                 * the game. */
+                tnnt_check_identifications(oindx);
             }
         }
     }
 }
+
+/* TNNT: various checks for if the player has identified all of some set of
+ * objects to earn an achievement.
+ * This used to be checked at end-of-game, but there are some reasons for doing
+ * it here: the player might have identified the full set earlier, and then got
+ * hit with amnesia and doesn't remember them anymore at the end, and the
+ * achievement isn't otherwise trackable until the xlogfile is written.
+ */
+STATIC_OVL void
+tnnt_check_identifications(otyp)
+int otyp;
+{
+    int firstobj, lastobj, i;
+    unsigned short achvmt;
+    if (otyp == SPE_DETECT_FOOD || otyp == SCR_FOOD_DETECTION) {
+        /* special case: identify both of these for an achievement.
+         * Note that it is possible to start the game (e.g. as a Wizard) with
+         * both of these; in this case, since tnnt_check_identifications is
+         * called only during the game and on items that aren't yet known, it
+         * will require amnesia to "forget" one or both of them and then
+         * re-identify it. But this combination should be pretty rare.
+         */
+        if (objects[SCR_FOOD_DETECTION].oc_name_known
+            && objects[SPE_DETECT_FOOD].oc_name_known) {
+            tnnt_achieve(A_ID_DETECT_FOOD);
+        }
+        /* don't return; check scroll/spellbook class for completion */
+    }
+    /* If the objects[] array ever gets more of these or they get reordered,
+     * this will need to change... */
+    switch(objects[otyp].oc_class) {
+    case ARMOR_CLASS:
+        /* This is not identifying all armor. It is identifying certain subsets
+         * of armor. */
+
+        return;
+    case RING_CLASS:
+        firstobj = RIN_ADORNMENT;
+        lastobj = RIN_PROTECTION_FROM_SHAPE_CHAN;
+        achvmt = A_IDENTIFIED_ALL_RINGS;
+        break;
+    case AMULET_CLASS:
+        /* does not require Amulet of Yendor or fakes... */
+        firstobj = AMULET_OF_ESP;
+        lastobj = AMULET_OF_MAGICAL_BREATHING;
+        achvmt = A_IDENTIFIED_ALL_AMULETS;
+    case POTION_CLASS:
+        firstobj = POT_GAIN_ABILITY;
+        lastobj = POT_WATER;
+        achvmt = A_IDENTIFIED_ALL_POTIONS;
+    case SCROLL_CLASS:
+        /* no requirements for mail or missing code or blank paper */
+        firstobj = SCR_ENCHANT_ARMOR;
+        lastobj = SCR_STINKING_CLOUD;
+        achvmt = A_IDENTIFIED_ALL_SCROLLS;
+    case SPBOOK_CLASS:
+        /* no requirement for blank book or novel */
+        firstobj = SPE_DIG;
+        lastobj = SPE_STONE_TO_FLESH;
+        achvmt = A_IDENTIFIED_ALL_BOOKS;
+    case WAND_CLASS:
+        firstobj = WAN_LIGHT;
+        lastobj = WAN_LIGHTNING;
+        achvmt = A_IDENTIFIED_ALL_WANDS;
+    case GEM_CLASS:
+        firstobj = DILITHIUM_CRYSTAL;
+        lastobj = JADE;
+        achvmt = A_IDENTIFIED_ALL_GEMS;
+    default:
+        /* RANDOM_CLASS, CHAIN_CLASS, WEAPON_CLASS, ... */
+        return;
+    }
+    for (i = firstobj; i <= lastobj; ++i) {
+        if (!objects[i].oc_name_known)
+            return;
+    }
+    tnnt_achieve(achvmt);
+}
+
 
 /* if a class name has been cleared, we may need to purge it from disco[] */
 void
