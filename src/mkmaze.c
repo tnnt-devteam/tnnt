@@ -1,4 +1,4 @@
-/* NetHack 3.6	mkmaze.c	$NHDT-Date: 1537477570 2018/09/20 21:06:10 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.61 $ */
+/* NetHack 3.6	mkmaze.c	$NHDT-Date: 1543185071 2018/11/25 22:31:11 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.67 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Pasi Kallinen, 2018. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -632,7 +632,7 @@ char *s;
 }
 
 #define ORC_LEADER 1
-static const char *orcfruit[] = {"paddle cactus", "dwarven root"};
+static const char *orcfruit[] = { "paddle cactus", "dwarven root" };
 
 void
 migrate_orc(mtmp, mflags)
@@ -643,8 +643,8 @@ unsigned long mflags;
     d_level dest;
 
     cur_depth = (int) depth(&u.uz);
-    max_depth = dunlevs_in_dungeon(&u.uz) +
-                (dungeons[u.uz.dnum].depth_start - 1);
+    max_depth = dunlevs_in_dungeon(&u.uz)
+                + (dungeons[u.uz.dnum].depth_start - 1);
     if (mflags == ORC_LEADER) {
         /* Note that the orc leader will take possession of any
          * remaining stuff not already delivered to other
@@ -695,8 +695,7 @@ struct monst *mtmp;
     }
     if (is_captain || !rn2(8)) {
         otyp = shiny_obj(RING_CLASS);
-        if ((otyp != STRANGE_OBJECT) &&
-            (otmp = mksobj(otyp, FALSE, FALSE)) != 0)
+        if (otyp != STRANGE_OBJECT && (otmp = mksobj(otyp, FALSE, FALSE)) != 0)
             add_to_minv(mtmp, otmp);
     }
 }
@@ -706,9 +705,10 @@ int otyp;
 const char *gang;
 {
     struct obj *otmp;
+
     otmp = mksobj_migr_to_species(otyp, (unsigned long) M2_ORC, FALSE, FALSE);
     if (otmp && gang) {
-        new_oname(otmp, strlen(gang) + 1); /* removes old name if one is present */
+        new_oname(otmp, strlen(gang) + 1); /* removes old name if present */
         Strcpy(ONAME(otmp), gang);
         if (otyp >= TRIPE_RATION && otyp <= TIN) {
             if (otyp == SLIME_MOLD)
@@ -754,11 +754,11 @@ stolen_booty(VOID_ARGS)
     for (i = 0; i < cnt; ++i) {
         /* Food items - but no lembas! (or some other weird things) */
         otyp = rn2((TIN - TRIPE_RATION) + 1) + TRIPE_RATION;
-        if (otyp != LEMBAS_WAFER && otyp != GLOB_OF_GRAY_OOZE &&
-              otyp != GLOB_OF_BROWN_PUDDING && otyp != GLOB_OF_GREEN_SLIME &&
-              otyp != GLOB_OF_BLACK_PUDDING && otyp != MEAT_STICK &&
-              otyp != MEATBALL && otyp != MEAT_STICK && otyp != MEAT_RING &&
-              otyp != HUGE_CHUNK_OF_MEAT && otyp != CORPSE)
+        if (otyp != LEMBAS_WAFER && otyp != GLOB_OF_GRAY_OOZE
+            && otyp != GLOB_OF_BROWN_PUDDING && otyp != GLOB_OF_GREEN_SLIME
+            && otyp != GLOB_OF_BLACK_PUDDING && otyp != MEAT_STICK
+            && otyp != MEATBALL && otyp != MEAT_STICK && otyp != MEAT_RING
+            && otyp != HUGE_CHUNK_OF_MEAT && otyp != CORPSE)
             migr_booty_item(otyp, gang);
     }
     migr_booty_item(rn2(2) ? LONG_SWORD : SILVER_SABER, gang);
@@ -786,7 +786,7 @@ stolen_booty(VOID_ARGS)
              * member of the main orc horde.
              */
             if (mtmp->data != &mons[PM_ORC_CAPTAIN])
-                mtmp = christen_orc(mtmp, upstart(gang));
+                mtmp = christen_orc(mtmp, upstart(gang), "");
         }
     }
     /* Lastly, ensure there's several more orcs from the gang along the way.
