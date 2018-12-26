@@ -744,7 +744,9 @@ E struct tnnt_globals_t tnnt_globals;
 
 /* This is the main "function" for marking you as having achieved something. */
 #define tnnt_achieve(achvmt) \
-    tnnt_globals.tnnt_achievements[achvmt / 64] |= 1L << (achvmt % 64)
+    (tnnt_globals.tnnt_achievements[(achvmt) / 64] |= 1L << ((achvmt) % 64))
+#define tnnt_is_achieved(achvmt) \
+    ((tnnt_globals.tnnt_achievements[(achvmt) / 64] & (1L << ((achvmt) % 64))) != 0)
 
 #undef E
 

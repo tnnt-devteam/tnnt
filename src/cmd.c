@@ -130,6 +130,7 @@ static int NDECL((*timed_occ_fn));
 
 STATIC_PTR int NDECL(dotnntdebug);
 STATIC_PTR int NDECL(dotnntstats);
+STATIC_PTR int NDECL(dotnntachievements);
 STATIC_PTR int NDECL(doshowfoodseaten);
 STATIC_PTR int NDECL(dosuspend_core);
 STATIC_PTR int NDECL(dosh_core);
@@ -3227,6 +3228,8 @@ struct ext_func_tab extcmdlist[] = {
             doextcmd, IFBURIED | GENERALCMD },
     { M('?'), "?", "list all extended commands",
             doextlist, IFBURIED | AUTOCOMPLETE | GENERALCMD },
+    { '\0', "achievements", "show TNNT complete or unfinished achievements",
+            dotnntachievements, IFBURIED | AUTOCOMPLETE },
     { M('a'), "adjust", "adjust inventory letters",
             doorganize, IFBURIED | AUTOCOMPLETE },
     { M('A'), "annotate", "name current level",
@@ -5157,6 +5160,7 @@ dotnntdebug(VOID_ARGS)
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
+    return 0;
 }
 
 /* TNNT: #tnntstats command.
@@ -5171,6 +5175,9 @@ dotnntstats(VOID_ARGS)
     char buf[BUFSZ];
     char buf2[BUFSZ];
     en_win = create_nhwindow(NHW_MENU);
+
+    /* mention overall #achievements display */
+    putstr(en_win, 0, "To view complete or incomplete achievements, use #achievements.");
 
     /* devteam quest progress */
     if (tnnt_globals.devteam_quest_status != DTQUEST_NOTSTARTED) {
@@ -5276,6 +5283,76 @@ dotnntstats(VOID_ARGS)
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
+    return 0;
+}
+
+/* TNNT: #achievements command. Ask whether they want to see achievements earned
+ * or unearned, then display whichever list is appropriate. */
+STATIC_PTR int
+dotnntachievements(VOID_ARGS)
+{
+    menu_item* choice = NULL;
+    winid win = create_nhwindow(NHW_MENU);
+    start_menu(win);
+    char response;
+    anything any;
+    any.a_char = 'e';
+    add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
+             "show only achievements earned this game", MENU_UNSELECTED);
+    any.a_char = 'u';
+    add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
+             "show only achievements not yet earned this game", MENU_UNSELECTED);
+    any.a_char = 'b';
+    add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
+             "show all achievements, marked as earned or not", MENU_UNSELECTED);
+    end_menu(win, "Which achievements do you want a list of?");
+    if (select_menu(win, PICK_ONE, &choice) > 0) {
+        response = choice->item.a_char;
+        free((genericptr_t) choice);
+    }
+    else {
+        destroy_nhwindow(win);
+        return 0;
+    }
+    destroy_nhwindow(win);
+    /* TODO: will need NHW_MENU if we can get paging to work in tty */
+    win = create_nhwindow(NHW_TEXT);
+    char buf[BUFSZ];
+    int i;
+    if (response == 'b') {
+        putstr(win, ATR_BOLD, "All achievements:");
+    }
+    else {
+        Sprintf(buf, "Achievements %searned so far:",
+                response == 'e' ? "" : "not ");
+        putstr(win, ATR_BOLD, buf);
+    }
+    putstr(win, ATR_BOLD, "(Use #tnntstats to check progress of certain ones)");
+
+    int num_earned = 0;
+    for (i = 0; i < NUM_TNNT_ACHIEVEMENTS; ++i) {
+        /* a response of "both" unconditionally prints any achievement;
+         * otherwise, only print the achievement if earned and response was
+         * "earned", or if not earned and response was "not earned" */
+        boolean earned = tnnt_is_achieved(i);
+        if (earned)
+            num_earned++;
+        any.a_char = 'a';
+        if (response == 'b' || earned == (response == 'e')) {
+            struct tnnt_achvmt_data* dat = &tnnt_achievements[i];
+            Sprintf(buf, "[%c] #%03d \"%s\" - %s", (earned ? 'X' : ' '),
+                    i + 1, dat->name, dat->descr);
+            /* add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE, buf, MENU_UNSELECTED); */
+            /* break; */
+            putstr(win, 0, buf);
+        }
+    }
+    Sprintf(buf, "%d/%d achievements earned in this game.", num_earned, NUM_TNNT_ACHIEVEMENTS);
+    putstr(win, 0, buf);
+    display_nhwindow(win, TRUE);
+    /* select_menu(win, PICK_ONE, &choice); */
+    destroy_nhwindow(win);
+    return 0;
 }
 
 /* TNNT: #foodseaten command */
