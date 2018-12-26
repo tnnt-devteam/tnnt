@@ -406,11 +406,27 @@ int otyp;
     /* If the objects[] array ever gets more of these or they get reordered,
      * this will need to change... */
     switch(objects[otyp].oc_class) {
-    case ARMOR_CLASS:
+    case ARMOR_CLASS: {
         /* This is not identifying all armor. It is identifying certain subsets
-         * of armor. */
-
+         * of randomized / non-obvious armor, which are annoyingly entangled. */
+        int firstobjs[] = { CORNUTHAUM, HELMET, CLOAK_OF_PROTECTION,
+                            LEATHER_GLOVES, SPEED_BOOTS };
+        int lastobjs[] =  { DUNCE_CAP, HELM_OF_TELEPATHY, CLOAK_OF_DISPLACEMENT,
+                            GAUNTLETS_OF_DEXTERITY, LEVITATION_BOOTS };
+        int octr;
+        for (octr = 0; octr < SIZE(firstobjs); octr++) {
+            firstobj = firstobjs[octr];
+            lastobj = lastobjs[octr];
+            for (i = firstobj; i <= lastobj; ++i) {
+                /* luckily for performance cornuthaums and dunce caps are likely
+                 * going to be some of the last to be identified... */
+                if (!objects[i].oc_name_known)
+                    return;
+            }
+        }
+        tnnt_achieve(A_IDENTIFIED_ACCESSORIES);
         return;
+    }
     case RING_CLASS:
         firstobj = RIN_ADORNMENT;
         lastobj = RIN_PROTECTION_FROM_SHAPE_CHAN;

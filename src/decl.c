@@ -547,6 +547,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Bookworm", "Identify all spellbooks"},
   {"Scholar", "Identify all scrolls"},
   {"Alchemist", "Identify all potions"},
+  {"Fashionista", "Identify all non-obvious cloaks, helms, boots, and gloves"},
   {"Minesweeper", "Disarm all land mines in Fort Ludios without blowing any up"},
   {"Hyperliterate", "Read every readable item in the game"},
 };

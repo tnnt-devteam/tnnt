@@ -657,7 +657,7 @@ enum tnnt_achievements {
     A_IDENTIFIED_ALL_BOOKS,  /* Implemented. */
     A_IDENTIFIED_ALL_SCROLLS,/* Implemented. */
     A_IDENTIFIED_ALL_POTIONS,/* Implemented. */
-    A_IDENTIFIED_ACCESSORIES,
+    A_IDENTIFIED_ACCESSORIES,/* Implemented. */
     A_DISARMED_LUDIOS_MINES, /* Implemented. */
     A_READ_ALL_READABLE,     /* Implemented. */
     /* 186 achievements defined */
