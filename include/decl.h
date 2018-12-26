@@ -450,13 +450,9 @@ struct early_opt {
 
 /* TNNT specific achievements.
  * Does not contain achievements which will be in TNNT but are already
- * represented in the xlog somewhere, such as killing Medusa or escaping in
- * celestial disgrace.
- * Additionally, achievements for killing certain types of monsters are handled
- * elsewhere.  TODO: where elsewhere?
- * TODO 3: I've also marked the achievements which are relatively easily
- * scummable, since discussion didn't resolve on whether these should remain in
- * or not. */
+ * represented in the 'achieve' xlogfile field, such as killing Medusa.
+ * The order of these MUST be the exact same as that of tnnt_achievements in
+ * decl.c! If you reorder these, also reorder those. */
 enum tnnt_achievements {
     A_FOUND_MINES_ALTAR = 0, /* Implemented,tested. */ /* begin tnntachieve0 */
     A_CONSULTED_ORACLE,      /* Implemented,tested. */
@@ -673,6 +669,14 @@ enum tnnt_achievements {
      */
     NUM_TNNT_ACHIEVEMENTS
 };
+
+/* TNNT - achievement names and descriptions */
+struct tnnt_achvmt_data {
+    const char* name;
+    const char* descr;
+    /* Maybe track achievement earned/not status here with a boolean? */
+};
+E struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS];
 
 /* TNNT - generic globals that don't belong in you.h */
 #include <stdint.h> /* uint64_t */
