@@ -1385,7 +1385,7 @@ const char *mesg;
         cpostfx(mnum);
 
         /* more highly unstable TNNT code! isn't this fun? */
-        tnnt_globals.foods_eaten |= 0x100000000; /* TIN */
+        tnnt_globals.foods_eaten |= FOODMASK_TIN; /* TIN */
 
         /* charge for one at pre-eating cost */
         tin = costly_tin(COST_OPEN);
@@ -1428,7 +1428,7 @@ const char *mesg;
 
         /* more highly unstable TNNT code! And *this* one needs to be duplicated
          * from above! */
-        tnnt_globals.foods_eaten |= 0x100000000; /* TIN */
+        tnnt_globals.foods_eaten |= FOODMASK_TIN; /* TIN */
 
         if (!tin->cursed)
             pline("This makes you feel like %s!",
@@ -1760,7 +1760,7 @@ struct obj *otmp;
     /* wow this TNNT unstable code is just being scattered everywhere */
     if (glob)
         /* treat eating one glob as eating all types */
-        tnnt_globals.foods_eaten |= 0x780; /* All GLOB_* */
+        tnnt_globals.foods_eaten |= FOODMASK_GLOBS; /* All GLOB_* */
     else
         tnnt_globals.foods_eaten |= 0x2; /* CORPSE */
 

@@ -691,9 +691,17 @@ struct tnnt_globals_t {
     /* Various achievement counters */
     unsigned char graffiti_found;
     unsigned char felines_tamed; /* redundant; for #tnntstats */
-    unsigned char high_altars;
+    unsigned char high_altars; /* bitmask using regular AM_* masks */
     unsigned char regular_altars;
     uint64_t foods_eaten; /* sadly there are 33 foods */
+    /* More highly unstable code. This relies on the "produce" foods being the
+     * 12th through 22nd foods, inclusive, defined in objects.c. Yay!
+     * The expectation here is that 0x1 = first food type defined in objects.c,
+     * 0x2 = second defined, etc. */
+#define FOODMASK_ALL     0x1FFFFFFFF /* all foods, period */
+#define FOODMASK_PRODUCE 0x0002FF800 /* all fruits & veggies */
+#define FOODMASK_TIN     0x100000000 /* only tin */
+#define FOODMASK_GLOBS   0x000000780 /* all types of glob (only need one) */
     unsigned short genderflips;
     unsigned char wish_sources;
 #define WISHSRC_WAND 0x01
