@@ -502,6 +502,7 @@ register struct obj *spellbook;
                     more_experienced(20, 0);
                     newexplevel();
                     u.uevent.read_tribute = 1; /* only once */
+                    tnnt_achieve(A_READ_NOVEL);
                 }
             }
             return 1;

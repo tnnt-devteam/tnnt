@@ -782,6 +782,7 @@ gcrownu()
                 u_gname());
         break;
     }
+    tnnt_achieve(A_CROWNED);
 
     class_gift = STRANGE_OBJECT;
     /* 3.3.[01] had this in the A_NEUTRAL case below,
@@ -1065,6 +1066,7 @@ aligntyp g_align;
                     You_hear("a divine music...");
                     pline("It sounds like:  \"%s\".", tune);
                     u.uevent.uheard_tune++;
+                    tnnt_achieve(A_LEARNED_PASSTUNE);
                     break;
                 }
             }
@@ -1750,6 +1752,7 @@ dosacrifice()
                     u.ugifts++;
                     u.ublesscnt = rnz(300 + (50 * nartifacts));
                     exercise(A_WIS, TRUE);
+                    tnnt_achieve(A_GRANTED_ARTI);
                     livelog_printf (LL_DIVINEGIFT|LL_ARTIFACT,
                             "had %s bestowed upon %s by %s",
                             artiname(otmp->oartifact),

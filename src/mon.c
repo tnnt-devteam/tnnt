@@ -2361,26 +2361,53 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
 
     /* TNNT code for anything that triggers when the player kills a monster
      * goes here. */
-    if (mtmp->data == &mons[PM_GHOST]) {
-        tnnt_achieve(A_KILLED_GHOST);
-    }
-    else if (mtmp->data->mlet == S_DRAGON) {
+    if (mtmp->data->mlet == S_DRAGON) {
         tnnt_achieve(A_KILLED_DRAGON);
     }
-    else if ((mtmp->data == &mons[PM_ALIGNED_PRIEST]
-                 || mtmp->data == &mons[PM_HIGH_PRIEST])
-             && mon_aligntyp(mtmp) == A_NONE) {
-        tnnt_achieve(A_KILLED_MOLOCH_PRIEST);
-    }
-    else if (mtmp->data == &mons[PM_WOODCHUCK]) {
+    int m_idx = mtmp->data - &mons[LOW_PM];
+    switch (monsndx(mtmp->data)) {
+    case PM_GHOST:
+        tnnt_achieve(A_KILLED_GHOST);
+        break;
+    case PM_ALIGNED_PRIEST:
+    case PM_HIGH_PRIEST:
+        if (mon_aligntyp(mtmp) == A_NONE)
+            tnnt_achieve(A_KILLED_MOLOCH_PRIEST);
+        break;
+    case PM_WOODCHUCK:
         tnnt_achieve(A_KILLED_TAMED_WOODCHUCK);
-    }
-    else if (mtmp->data == &mons[PM_ARCHON]) {
+        break;
+    case PM_ARCHON:
         tnnt_achieve(A_KILLED_ARCHON);
-    }
-    else if (mtmp->data == &mons[PM_SOLDIER_ANT]) {
+        break;
+    case PM_SOLDIER_ANT:
         tnnt_achieve(A_KILLED_SOLDIER_ANT);
+        break;
+    /* Weirdness: The other 8 nazgul / 2 erinyes can die however, including to
+     * traps before the player even knew they were there, but the player MUST
+     * kill the 9th nazgul and 3rd erinys. */
+    case PM_NAZGUL:
+        if (mvitals[PM_NAZGUL].died == 9)
+            tnnt_achieve(A_KILLED_9_NAZGUL);
+        break;
+    case PM_ERINYS:
+        if (mvitals[PM_ERINYS].died == 3)
+            tnnt_achieve(A_KILLED_3_ERINYES);
+        break;
+    case PM_ASMODEUS:   tnnt_achieve(A_KILLED_ASMODEUS);   break;
+    case PM_BAALZEBUB:  tnnt_achieve(A_KILLED_BAALZEBUB);  break;
+    case PM_ORCUS:      tnnt_achieve(A_KILLED_ORCUS);      break;
+    case PM_JUIBLEX:    tnnt_achieve(A_KILLED_JUIBLEX);    break;
+    case PM_DEMOGORGON: tnnt_achieve(A_KILLED_DEMOGORGON); break;
+    case PM_YEENOGHU:   tnnt_achieve(A_KILLED_YEENOGHU);   break;
+    case PM_GERYON:     tnnt_achieve(A_KILLED_GERYON);     break;
+    case PM_DISPATER:   tnnt_achieve(A_KILLED_DISPATER);   break;
+    case PM_DEATH:      tnnt_achieve(A_KILLED_DEATH);      break;
+    case PM_PESTILENCE: tnnt_achieve(A_KILLED_PESTILENCE); break;
+    case PM_FAMINE:     tnnt_achieve(A_KILLED_FAMINE);     break;
+    case PM_CROESUS:    tnnt_achieve(A_KILLED_CROESUS);    break;
     }
+
     if (mtmp->minvis && !See_invisible)
         tnnt_achieve(A_KILLED_INVISIBLE);
     if (u.utraptype == TT_PIT)

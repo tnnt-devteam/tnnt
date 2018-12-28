@@ -57,6 +57,15 @@ char msgbuf[BUFSZ];
 #define nonrotting_food(otyp) \
     ((otyp) == LEMBAS_WAFER || (otyp) == CRAM_RATION)
 
+/* TNNT - macro to check eaten foods achievements */
+#define tnnt_check_foodseaten() \
+    do {                                                                       \
+        if ((tnnt_globals.foods_eaten & FOODMASK_ALL) == FOODMASK_ALL)         \
+            tnnt_achieve(A_ATE_ALL_FOODS);                                     \
+        if ((tnnt_globals.foods_eaten & FOODMASK_PRODUCE) == FOODMASK_PRODUCE) \
+            tnnt_achieve(A_ATE_ALL_PRODUCE);                                   \
+    } while(0)
+
 STATIC_OVL NEARDATA const char comestibles[] = { FOOD_CLASS, 0 };
 STATIC_OVL NEARDATA const char offerfodder[] = { FOOD_CLASS, AMULET_CLASS,
                                                  0 };
@@ -1386,6 +1395,7 @@ const char *mesg;
 
         /* more highly unstable TNNT code! isn't this fun? */
         tnnt_globals.foods_eaten |= FOODMASK_TIN; /* TIN */
+        tnnt_check_foodseaten();
 
         /* charge for one at pre-eating cost */
         tin = costly_tin(COST_OPEN);
@@ -1429,6 +1439,7 @@ const char *mesg;
         /* more highly unstable TNNT code! And *this* one needs to be duplicated
          * from above! */
         tnnt_globals.foods_eaten |= FOODMASK_TIN; /* TIN */
+        tnnt_check_foodseaten();
 
         if (!tin->cursed)
             pline("This makes you feel like %s!",
@@ -1763,6 +1774,7 @@ struct obj *otmp;
         tnnt_globals.foods_eaten |= FOODMASK_GLOBS; /* All GLOB_* */
     else
         tnnt_globals.foods_eaten |= 0x2; /* CORPSE */
+    tnnt_check_foodseaten();
 
     return retcode;
 }

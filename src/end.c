@@ -1174,40 +1174,12 @@ int how;
     urealtime.finish_time = endtime = getnow();
     urealtime.realtime += (long) (endtime - urealtime.start_timing);
 
-    /* TNNT: flag certain achievements that are already tracked by in-game
-     * variables. No sense scattering more tnnt_achieve() calls through the
-     * code if the game already takes care of it. */
-    if (u.uevent.uheard_tune == 2)
-        tnnt_achieve(A_LEARNED_PASSTUNE);
-    if (u.uevent.minor_oracle || u.uevent.major_oracle)
-        tnnt_achieve(A_CONSULTED_ORACLE);
-    if (u.ugifts)
-        tnnt_achieve(A_GRANTED_ARTI);
-    if (quest_status.got_quest)
-        tnnt_achieve(A_STARTED_QUEST);
-    if ((tnnt_globals.foods_eaten & FOODMASK_ALL) == FOODMASK_ALL)
-        tnnt_achieve(A_ATE_ALL_FOODS);
-    if ((tnnt_globals.foods_eaten & FOODMASK_PRODUCE) == FOODMASK_PRODUCE)
-        tnnt_achieve(A_ATE_ALL_PRODUCE);
-    if (u.uevent.read_tribute)
-        tnnt_achieve(A_READ_NOVEL);
-    if (mvitals[PM_NAZGUL].died == 9)
-        tnnt_achieve(A_KILLED_9_NAZGUL);
-    if (mvitals[PM_ERINYS].died == 3)
-        tnnt_achieve(A_KILLED_3_ERINYES);
-    if ((mvitals[PM_SOLDIER].mvflags & G_EXTINCT)
-        || mvitals[PM_KEYSTONE_KOP].mvflags & G_EXTINCT)
-        /* Unlike nazgul and erinyes, NOT necessary to kill all of them, only
-         * necessary to have officially extincted them. */
-        tnnt_achieve(A_EXTINCTED_ARMY_OR_KOPS);
-    if (u.uevent.uhand_of_elbereth)
-        tnnt_achieve(A_CROWNED);
-    if (how == ESCAPED && Is_astralevel(&u.uz))
-        tnnt_achieve(A_ESCAPED_IN_DISGRACE);
-    if (u.uevent.qexpelled)
-        tnnt_achieve(A_EXPELLED_FROM_QUEST);
-    if (u.uevent.uvibrated)
-        tnnt_achieve(A_REACHED_VIBRATING_SQ);
+    /* TNNT: Any achievements that can ONLY be scored at the end of the game go
+     * here. Previously we put various achievements here that were convenient to
+     * track at the end of the game, but now that the player can see
+     * earned/unearned achievements it's misleading to show the achievement as
+     * unearned because it wouldn't be processed until the end of the game. */
+
     /* umoney is calculated later... */
     umoney = money_cnt(invent) + hidden_gold();
     if (umoney >= 100000L)
@@ -1215,19 +1187,6 @@ int how;
     if (umoney >= 50000L)
         /* not an else if; getting 100000 nets both of these */
         tnnt_achieve(A_FINISHED_WITH_50000);
-
-    if (mvitals[PM_ASMODEUS].died)   tnnt_achieve(A_KILLED_ASMODEUS);
-    if (mvitals[PM_BAALZEBUB].died)  tnnt_achieve(A_KILLED_BAALZEBUB);
-    if (mvitals[PM_ORCUS].died)      tnnt_achieve(A_KILLED_ORCUS);
-    if (mvitals[PM_JUIBLEX].died)    tnnt_achieve(A_KILLED_JUIBLEX);
-    if (mvitals[PM_DEMOGORGON].died) tnnt_achieve(A_KILLED_DEMOGORGON);
-    if (mvitals[PM_YEENOGHU].died)   tnnt_achieve(A_KILLED_YEENOGHU);
-    if (mvitals[PM_GERYON].died)     tnnt_achieve(A_KILLED_GERYON);
-    if (mvitals[PM_DISPATER].died)   tnnt_achieve(A_KILLED_DISPATER);
-    if (mvitals[PM_DEATH].died)      tnnt_achieve(A_KILLED_DEATH);
-    if (mvitals[PM_PESTILENCE].died) tnnt_achieve(A_KILLED_PESTILENCE);
-    if (mvitals[PM_FAMINE].died)     tnnt_achieve(A_KILLED_FAMINE);
-    if (mvitals[PM_CROESUS].died)    tnnt_achieve(A_KILLED_CROESUS);
 
     /* END TNNT code */
 

@@ -534,6 +534,7 @@ struct monst *oracl;
             add_xpts = u_pay / (u.uevent.major_oracle ? 25 : 10);
         /* 5 pts if very 1st, or 2 pts if major already done */
         u.uevent.minor_oracle = TRUE;
+        tnnt_achieve(A_CONSULTED_ORACLE);
     } else {
         boolean cheapskate = u_pay < major_cost;
 
@@ -542,6 +543,7 @@ struct monst *oracl;
             add_xpts = u_pay / (u.uevent.minor_oracle ? 25 : 10);
         /* ~100 pts if very 1st, ~40 pts if minor already done */
         u.uevent.major_oracle = TRUE;
+        tnnt_achieve(A_CONSULTED_ORACLE);
         exercise(A_WIS, !cheapskate);
     }
     if (add_xpts) {

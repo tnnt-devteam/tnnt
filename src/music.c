@@ -729,6 +729,7 @@ struct obj *instr;
                             if (find_drawbridge(&x, &y)) {
                                 u.uevent.uheard_tune =
                                     2; /* tune now fully known */
+                                tnnt_achieve(A_LEARNED_PASSTUNE);
                                 if (levl[x][y].typ == DRAWBRIDGE_DOWN)
                                     close_drawbridge(x, y);
                                 else
@@ -788,8 +789,10 @@ struct obj *instr;
                         /* could only get `gears == 5' by playing five
                            correct notes followed by excess; otherwise,
                            tune would have matched above */
-                        if (gears == 5)
+                        if (gears == 5) {
                             u.uevent.uheard_tune = 2;
+                            tnnt_achieve(A_LEARNED_PASSTUNE);
+                        }
                     }
                 }
             }
