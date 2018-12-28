@@ -450,7 +450,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Never Saw It Coming", "Kill invisible monster without see invisible"},
   {"Shafted", "Fall down a shaft"},
   {"Potions of Booze Cost More Than That", "Get two bits for an ale from a priest"},
-  {"Horatius at the Bridge", "Extinct any kind of soldier or kop"},
+  {"Horatius at the Bridge", "Extinct soldiers or Keystone Kops"},
   {"Who's That Pretty Girl in the Mirror, There?", "Deflect a nymph with a mirror"},
   {"Money Talks", "Bribe a demon lord"},
   {"Breaking and Entering", "Enter a vault"},
