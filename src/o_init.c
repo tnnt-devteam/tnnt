@@ -371,6 +371,9 @@ boolean credit_hero;
                  * the game. */
                 tnnt_check_identifications(oindx);
             }
+            if (objects[oindx].oc_class == GEM_CLASS)
+                gem_learned(oindx); /* could affect price of unpaid gems */
+            update_inventory();
         }
     }
 }
@@ -425,11 +428,6 @@ int otyp;
         }
         tnnt_achieve(A_IDENTIFIED_ACCESSORIES);
         return;
-
-            if (objects[oindx].oc_class == GEM_CLASS)
-                gem_learned(oindx); /* could affect price of unpaid gems */
-            update_inventory();
-        }
     }
     case RING_CLASS:
         firstobj = RIN_ADORNMENT;
