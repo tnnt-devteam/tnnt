@@ -1339,6 +1339,8 @@ const char *mesg;
         goto use_up_tin;
     }
 
+    if (uwep && uwep->otyp == TIN_OPENER)
+        tnnt_achieve(A_OPENED_TIN_PROPERLY);
     pline1(mesg); /* "You succeed in opening the tin." */
 
     if (r != SPINACH_TIN) {

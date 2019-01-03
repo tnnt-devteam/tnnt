@@ -660,6 +660,12 @@ enum tnnt_achievements {
     A_IDENTIFIED_ACCESSORIES,/* Implemented. */
     A_DISARMED_LUDIOS_MINES, /* Implemented. */
     A_READ_ALL_READABLE,     /* Implemented. */
+    A_OPENED_TIN_PROPERLY,   /* Implemented. */
+    A_UNLOCKED_CREDIT_CARD,
+    A_RELEASED_CAMERA_DEMON,
+    A_SCARED_WITH_MUSIC,
+    A_READ_FORTUNE_FOODLESS,
+    A_GATE_IN_DEMON_LORD,
     /* 186 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already

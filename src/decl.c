@@ -550,6 +550,12 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Fashionista", "Identify all non-obvious cloaks, helms, boots, and gloves"},
   {"Minesweeper", "Disarm all land mines in Fort Ludios without blowing any up"},
   {"Hyperliterate", "Read every readable item in the game"},
+  {"Civilized Cooking", "Open a tin with a tin opener"},
+  {"007", "Unlock something with a credit card"},
+  {"Bob Ross", "Release a picture-painting demon from a camera"},
+  {"Got No Talent", "Scare something by playing music"},
+  {"Cookie Monster", "Read a fortune without eating its cookie"},
+  {"Say Hello To My Evil Friend", "Have a non-guaranteed demon lord gated in or summoned"},
 };
 
 /* support for lint.h */
