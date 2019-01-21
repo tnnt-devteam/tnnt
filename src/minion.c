@@ -143,6 +143,15 @@ struct monst *mon;
                 EMIN(mtmp)->renegade =
                     (atyp != u.ualign.type) ^ !mtmp->mpeaceful;
             }
+            /* TNNT - achievement for summoning unusual uniques. Check only on
+             * unique candidate - the only uniques which can be msummoned are
+             * demon lords at the moment.
+             * Also, we hardcode ineligible ones. Not the greatest but it's the
+             * simplest way. */
+            if ((mons[dtype].geno & G_UNIQ) && dtype != PM_ASMODEUS
+                && dtype != PM_BAALZEBUB && dtype != PM_JUIBLEX
+                && dtype != PM_ORCUS)
+                tnnt_achieve(A_GATED_IN_DEMON_LORD);
         }
         cnt--;
     }

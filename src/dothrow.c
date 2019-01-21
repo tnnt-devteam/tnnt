@@ -1949,6 +1949,7 @@ xchar x, y;
                                          : "The picture-painting demon");
         mtmp->mpeaceful = !obj->cursed;
         set_malign(mtmp);
+        tnnt_achieve(A_RELEASED_CAMERA_DEMON);
     }
 }
 

@@ -78,8 +78,9 @@ int distance;
             else if (distm < distance / 3
                      && !resist(mtmp, TOOL_CLASS, 0, NOTELL)
                      /* some monsters are immune */
-                     && onscary(0, 0, mtmp))
+                     && onscary(0, 0, mtmp)) {
                 monflee(mtmp, 0, FALSE, TRUE);
+                tnnt_achieve(A_SCARED_WITH_MUSIC);
         }
     }
 }

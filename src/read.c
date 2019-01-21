@@ -212,6 +212,7 @@ doread()
                 livelog_write_string(LL_CONDUCT,
                         "became literate by reading a fortune cookie");
             tnnt_read(RDBL_COOKIE);
+            tnnt_achieve(A_READ_FORTUNE_FOODLESS);
         }
         useup(scroll);
         return 1;
