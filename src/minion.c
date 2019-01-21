@@ -152,6 +152,8 @@ struct monst *mon;
                 && dtype != PM_BAALZEBUB && dtype != PM_JUIBLEX
                 && dtype != PM_ORCUS)
                 tnnt_achieve(A_GATED_IN_DEMON_LORD);
+            if (is_demon(ptr) && canseemon(mtmp))
+                pline("%s appears in a cloud of smoke!", Amonnam(mtmp));
         }
         cnt--;
     }
