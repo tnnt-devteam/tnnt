@@ -69,7 +69,9 @@ DOOR:open,(18,03)
 DOOR:closed,(24,03)
 
 # Centerpiece.
-OBJECT: ('`', "statue"), (33,09), montype:"balrog",5,name:"The RNG"
+CONTAINER: ('`', "statue"), (33,09), montype:"balrog",5,name:"The RNG" {
+  OBJECT:"egg",name:"Easter Egg"
+}
 
 # Chest with identify scrolls.
 CONTAINER: ('(', "chest"), (53,09) {
@@ -80,10 +82,12 @@ CONTAINER: ('(', "chest"), (53,09) {
 
 # Some devs have books lying around.
 $devbooks = { (45,11),(45,12),(43,06) }
+$booknames = { "grep", "ls", "htop" }
 SHUFFLE: $devbooks
-OBJECT:('+', "detect monsters"),$devbooks[0],uncursed
-OBJECT:('+', "light"),$devbooks[1],blessed
-OBJECT:('+', "detect unseen"),$devbooks[2],uncursed
+SHUFFLE: $booknames
+OBJECT:('+', "detect monsters"),$devbooks[0],uncursed,name:$booknames[0]
+OBJECT:('+', "light"),$devbooks[1],blessed,name:$booknames[1]
+OBJECT:('+', "detect unseen"),$devbooks[2],uncursed,name:$booknames[2]
 
 # janitor closet
 DOOR:locked,(29,16)

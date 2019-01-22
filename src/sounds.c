@@ -984,7 +984,7 @@ register struct monst *mtmp;
             }
             struct devteam_msg {
                 const char* msg;
-                boolean verbl;
+                boolean verbl; /* 1 = verbalize directly */
             };
             const struct devteam_msg bhaakmsgs[] = {
                 { "tries to get you to play something called 'UnNetHack'.", 0},
@@ -1011,10 +1011,11 @@ register struct monst *mtmp;
             };
             const struct devteam_msg aismsgs[] = {
                 { "discusses limiting the player's inventory.", 0},
-                { "encourages you to try ascending with a large box.", 0},
+                { "Ever tried to ascend with only a large box for a container?", 1},
                 { "mentions tweaking the Wands Balance Patch.", 0},
                 { "opines that NetHack4 is fairer to the player.", 0},
                 { "NetHack is just a mound of special cases taped together by global variables.", 1},
+                { "You know, you really don't need most items to ascend.", 1},
             };
             /* This probably won't be needed.
             const struct devteam_msg genericmsgs[] = {
