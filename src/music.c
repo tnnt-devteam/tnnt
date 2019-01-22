@@ -81,6 +81,7 @@ int distance;
                      && onscary(0, 0, mtmp)) {
                 monflee(mtmp, 0, FALSE, TRUE);
                 tnnt_achieve(A_SCARED_WITH_MUSIC);
+            }
         }
     }
 }
