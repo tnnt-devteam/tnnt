@@ -1,4 +1,4 @@
-.\" $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.292 $ $NHDT-Date: 1546984605 2019/01/08 21:56:45 $
+.\" $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.298 $ $NHDT-Date: 1551312285 2019/02/28 00:04:45 $
 .\"
 .\" This is an excerpt from the 'roff' man page from the 'groff' package.
 .\" NetHack's Guidebook.mn currently does *not* adhere to these guidelines.
@@ -24,7 +24,7 @@
 .ds vr "NetHack 3.6
 .ds f0 "\*(vr
 .ds f1
-.ds f2 "December 15, 2018
+.ds f2 "February 27, 2019
 .
 .\" A note on some special characters:
 .\" \(lq = left double quote
@@ -636,7 +636,7 @@ Panic button.  Quit the game.
 .lp d
 Drop something.
 .lp ""
-Ex. \(lqd7a\(rq means drop seven items of object \fIa\fP.
+For example \(lqd7a\(rq means drop seven items of object \fIa\fP.
 .lp D
 Drop several things.
 .lp ""
@@ -1068,7 +1068,7 @@ Cast a spell.
 Default key is \(oqZ\(cq.
 .lp "#chat    "
 Talk to someone.
-Default key is \(oqM-c\)cq.
+Default key is \(oqM-c\(cq.
 .lp "#close   "
 Close a door.
 Default key is \(oqc\(cq.
@@ -1603,7 +1603,7 @@ straight on, horizontally or vertically.  Doorways without doors are
 not restricted in this fashion.
 .pg
 Doors can be useful for shutting out monsters.  Most monsters cannot
-open doors, although a few don't need to (ex. ghosts can walk through
+open doors, although a few don't need to (for example, ghosts can walk through
 doors).
 .pg
 Secret doors are hidden.  You can find them with the \(oqs\(cq (search)
@@ -2170,7 +2170,7 @@ leather jacket	9
 no armor	10
 .TE
 .pg
-You can also wear other pieces of armor (ex. helmets, boots, shields, cloaks)
+You can also wear other pieces of armor (for example helmets, boots, shields, cloaks)
 to lower your armor class even further, but you can only wear one item
 of each category (one suit of armor, one cloak, one helmet, one
 shield, and so on) at a time.
@@ -2223,7 +2223,7 @@ The command to eat food is \(oqe\(cq.
 Scrolls (\(oq?\(cq)
 .pg
 Scrolls are labeled with various titles, probably chosen by ancient wizards
-for their amusement value (ex. \(lqREAD ME,\(rq or \(lqTHANX MAUD\(rq
+for their amusement value (for example \(lqREAD ME,\(rq or \(lqTHANX MAUD\(rq
 backwards).
 Scrolls disappear after you read them (except for blank ones, without
 magic spells on them).
@@ -2371,7 +2371,7 @@ have a limited number of uses, akin to wand charges.  For example, lamps burn
 out after a while.  Other tools are containers, which objects can
 be placed into or taken out of.
 .pg
-The command to use tools is \(oqa\(cq (apply).
+The command to use a tool is \(oqa\(cq (apply).
 .hn 3
 Containers
 .pg
@@ -2638,15 +2638,15 @@ Prefix a boolean option with \(lqno\(rq or \(oq!\(cq to turn it off.
 For compound options, the option name and value are separated by a colon.
 Some options are persistent, and apply only to new games.
 You can specify multiple OPTIONS statements, and multiple options
-in a single OPTIONS statement.
+separated by commas in a single OPTIONS statement.
+(Comma separated options are processed from right to left.)
 .pg
 Example:
 .sd
 .ft CR
 OPTIONS=dogname:Fido
 .\" '\(dq' == double quote; including a literal double quote here works
-.\"           for formatting but confuses Emacs' nroff-mode into thinking
-.\"           that the \fP is part of a string rather than a font toggle
+.\"           for formatting but confuses Emacs' nroff-mode
 OPTIONS=!legacy,autopickup,pickup_types:$\(dq=/!?+
 .ft
 .ed
@@ -2802,6 +2802,13 @@ to that shell), or the pair of commands
 .ED
 in \fIsh\fP, \fIksh\fP, or \fIbash\fP.
 .pg
+The NETHACKOPTIONS value is effectively the same as a single OPTIONS
+statement in a configuration file.
+The \(lqOPTIONS=\(rq prefix is implied and comma separated options are
+processed from right to left.
+Other types of configuration statements such as BIND or MSGTYPE are
+not allowed.
+.pg
 Instead of a comma-separated list of options,
 NETHACKOPTIONS can be set to the full name of a configuration file you
 want to use.
@@ -2869,11 +2876,11 @@ Persistent.
 Set the character used to display boulders (default is the \(lqlarge rock\(rq
 class symbol, \(oq\`\(cq).
 .lp catname
-Name your starting cat (ex. \(lqcatname:Morris\(rq).
+Name your starting cat (for example \(lqcatname:Morris\(rq).
 Cannot be set with the \(oqO\(cq command.
 .lp character
 Synonym for \(lqrole\(rq to pick the type of your character
-(ex. \(lqcharacter:Monk\(rq).
+(for example \(lqcharacter:Monk\(rq).
 See
 .op role
 for more details.
@@ -2944,7 +2951,7 @@ Specified categories with omitted prefix implicitly use \(oq+\(cq prefix.
 Order of the disclosure categories does not matter, program display for
 end-of-game disclosure follows a set sequence.
 .lp ""
-(ex. \(lqdisclose:yi na +v -g o\(rq)
+(for example \(lqdisclose:yi na +v -g o\(rq)
 The example sets
 \fBinventory\fP to \fIprompt\fP and default to \fIyes\fP,
 \fBattributes\fP to \fIprompt\fP and default to \fIno\fP,
@@ -2958,7 +2965,7 @@ traps and each other as well as by you.
 And the dungeon overview shows all levels you had visited but does not
 reveal things about them that you hadn't discovered.
 .lp dogname
-Name your starting dog (ex. \(lqdogname:Fang\(rq).
+Name your starting dog (for example \(lqdogname:Fang\(rq).
 Cannot be set with the \(oqO\(cq command.
 .lp extmenu
 Changes the extended commands interface to pop-up a menu of available
@@ -2978,7 +2985,7 @@ Persistent.
 Commands asking for an inventory item show a menu instead of
 a text query with possible menu letters. Default is off.
 .lp "fruit   "
-Name a fruit after something you enjoy eating (ex. \(lqfruit:mango\(rq)
+Name a fruit after something you enjoy eating (for example \(lqfruit:mango\(rq)
 (default \(lqslime mold\(rq).
 Basically a nostalgic whimsy that NetHack uses from time to time.
 You should set this to something you find more appetizing than slime mold.
@@ -3003,6 +3010,10 @@ Gold is never blessed or cursed, but it is not described as \(lquncursed\(rq
 even when the
 .op implicit_uncursed
 option is \(lqoff\(rq.
+.lp guicolor
+Use color text and/or highlighting attributes when displaying some
+non-map data (such as menu selector letters).
+Curses interface only; default is on.
 .lp "help    "
 If more information is available for an object looked at
 with the \(oq/\(cq command, ask if you want to see it (default on).
@@ -3019,6 +3030,12 @@ Visually distinguish pets from similar animals (default off).
 The behavior of this option depends on the type of windowing you use.
 In text windowing, text highlighting or inverse video is often used;
 with tiles, generally displays a heart symbol near pets.
+.lp ""
+With the curses interface, the
+.op petattr
+option controls how to highlight pets and setting it will turn the
+.op hilite_pet
+option on or off as warranted.
 .lp hilite_pile
 Visually distinguish piles of objects from individual objects (default off).
 The behavior of this option depends on the type of windowing you use.
@@ -3029,7 +3046,7 @@ on the top of the pile.
 Show a hit point bar graph behind your name and title.
 Only available for TTY and Windows GUI, and only when statushilites is on.
 .lp horsename
-Name your starting horse (ex. \(lqhorsename:Trigger\(rq).
+Name your starting horse (for example \(lqhorsename:Trigger\(rq).
 Cannot be set with the \(oqO\(cq command.
 .lp ignintr
 Ignore interrupt signals, including breaks (default off).  Persistent.
@@ -3265,6 +3282,35 @@ such as \(lqparanoid_confirmation:attack pray Remove\(rq.
 .lp perm_invent
 If true, always display your current inventory in a window.  This only
 makes sense for windowing system interfaces that implement this feature.
+.lp petattr
+Specifies one or more text highlighting attributes to use when showing
+pets on the map.
+Effectively a superset of the
+.op hilite_pet
+boolean option.
+Curses interface only; value is one or more of the following letters.
+.sd
+.si
+.CC N "Normal text (no highlighting)"
+.CC I "Inverse video (default)"
+.CC B "Bold text"
+.CC U "Underlined text"
+.CC K "blinKing text"
+.CC D "Dim text"
+.CC T "iTalic text"
+.CC L "Left line indicator"
+.CC R "Right line indicator"
+.ei
+.ed
+Some of those choices might not work, particularly the final three,
+depending upon terminal hardware or terminal emulation software.
+.lp ""
+Currently multiple highlight-style letters can be combined by simply
+stringing them together (for example, \(lqBK\(rq), but in the future
+they might require being separated by plus signs (such as \(lqB+K\(rq,
+which works already).
+When using the \(oqN\(cq choice, it should be specified on its own,
+not in combination with any of the other letters.
 .lp pettype
 Specify the type of your initial pet, if you are playing a character class
 that uses multiple types of pets; or choose to have no initial pet at all.
@@ -3328,7 +3374,7 @@ Persistent.
 Make the space bar a synonym for the \(oq.\(cq (#wait) command (default off).
 Persistent.
 .lp "role    "
-Pick your type of character (ex. \(lqrole:Samurai\(rq);
+Pick your type of character (for example \(lqrole:Samurai\(rq);
 synonym for \(lqcharacter\(rq.
 See \(lqname\(rq for an alternate method of specifying your role.
 Normally only the first letter of the value is examined; \(oqr\(cq is an
@@ -3373,7 +3419,7 @@ Persistent.
 Evaluate monsters, objects, and map prior to each turn (default off).
 Debug mode only.
 .lp scores
-Control what parts of the score list you are shown at the end (ex.
+Control what parts of the score list you are shown at the end (for example
 \(lqscores:5 top scores/4 around my score/own scores\(rq).
 Only the first letter of each category (\(oqt\(cq, \(oqa\(cq, or \(oqo\(cq)
 is necessary.
@@ -3423,11 +3469,18 @@ Allow updates to the status lines at the bottom of the screen (default true).
 .lp suppress_alert
 This option may be set to a NetHack version level to suppress
 alert notification messages about feature changes for that
-and prior versions (ex. \(lqsuppress_alert:3.3.1\(rq).
+and prior versions (for example \(lqsuppress_alert:3.3.1\(rq).
 .lp symset
 This option may be used to select one of the named symbol sets found within
 \(lqsymbols\(rq to alter the symbols displayed on the screen.
 Use \(lqsymset:default\(rq to explicitly select the default symbols.
+.lp "term_cols\ \ \fIand\fP"
+.lp term_rows
+Curses interface only.
+Number of columns and rows to use for the display.
+Curses will attempt to resize to the values specified but will settle
+for smaller sizes if they are too big.
+Default is the current window size.
 .lp "time    "
 Show the elapsed game time in turns on bottom line (default off).
 Persistent.
@@ -3472,7 +3525,6 @@ The possible settings are:
 .CC n "none (no coordinates shown) [default]."
 .ei
 .ed
-.lp ""
 The
 .op whatis_coord
 option is also used with the \(lq/m\(rq, \(lq/M\(rq, \(lq/o\(rq,
@@ -3481,7 +3533,6 @@ where the \(lqnone\(rq setting is overridden with \(lqmap\(rq.
 .lp whatis_filter
 When getting a location on the map, and using the keys to cycle through
 next and previous targets, allows filtering the possible targets.
-.lp ""
 .sd
 .si
 .CC n "no filtering [default]"
@@ -3489,7 +3540,6 @@ next and previous targets, allows filtering the possible targets.
 .CC a "in same area only"
 .ei
 .ed
-.lp ""
 The area-filter tries to be slightly predictive \(em if you're standing
 on a doorway,
 it will consider the area on the side of the door you were last moving towards.
@@ -3505,6 +3555,21 @@ When getting a location on the map, and using shifted movement keys or
 meta-digit keys to fast-move, instead of moving 8 units at a time,
 move by skipping the same glyphs.
 (default off)
+.lp windowborders
+Whether to draw boxes around the map, status area, message area, and
+persistent inventory window if enabled.
+Curses interface only.
+Acceptable values are
+.sd
+.si
+.CC 1 "on, always show borders"
+.CC 2 "off, never show borders"
+.CC 3 "auto, on if terminal or window is at least (24+2)x(80+2)\ \ (default)"
+.ei
+.ed
+.lp ""
+(The 26x82 size threshold for \(oq3\(cq refers to number of rows and
+columns of the display.)
 .lp windowtype
 When the program has been built to support multiple interfaces,
 select which one to use, such as \(lqtty\(rq or \(lqX11\(rq
@@ -3671,7 +3736,7 @@ display quickly and to read the keyboard (allowing the use of arrow
 keys to move) on machines with an IBM PC compatible BIOS ROM (default off,
 OS/2, PC, and ST NetHack only).
 .lp flush
-(default off, AMIGA NetHack only).
+(default off, Amiga NetHack only).
 .lp "MACgraphics"
 (default on, Mac NetHack only).
 .lp page_wait
@@ -4392,7 +4457,7 @@ s	S_spider	(arachnid or centipede)
 \\	S_throne	(opulent throne)
 \-	S_tlcorn	(top left corner)
 |	S_tlwall	(wall)
-(	S_tool	(useful item (pick-axe\, key\, lamp...))
+(	S_tool	(useful item (pick-axe, key, lamp...))
 \(ha	S_trap_door	(trap door)
 t	S_trapper	(trapper or lurker above)
 \-	S_trcorn	(top right corner)
@@ -4737,7 +4802,7 @@ Creps\fP, \fBEric Hendrickson\fP, \fBIzchak Miller\fP, \fBJohn Rupley\fP,
 .pg
 NetHack 3.0 was ported to the Atari by \fBEric R. Smith\fP, to OS/2 by
 \fBTimo Hakulinen\fP, and to VMS by \fBDavid Gentzel\fP.  The three of them
-and \fBKevin Darcy\fP later joined the main development team to produce
+and \fBKevin Darcy\fP later joined the main NetHack Development Team to produce
 subsequent revisions of 3.0.
 .pg
 \fBOlaf Seibert\fP ported NetHack 2.3 and 3.0 to the Amiga.
@@ -4748,7 +4813,7 @@ continued to enhance the PC, Macintosh, and Amiga ports through the later
 revisions of 3.0.
 .pg
 Headed by \fBMike Stephenson\fP and coordinated by \fBIzchak Miller\fP and
-\fBJanet Walz\fP, the development team which now included \fBKen Arromdee\fP,
+\fBJanet Walz\fP, the NetHack Development Team which now included \fBKen Arromdee\fP,
 \fBDavid Cohrs\fP, \fBJean-Christophe Collet\fP, \fBKevin Darcy\fP,
 \fBMatt Day\fP, \fBTimo Hakulinen\fP, \fBSteve Linhart\fP, \fBDean Luick\fP,
 \fBPat Rankin\fP, \fBEric Raymond\fP, and \fBEric Smith\fP undertook a radical
@@ -4780,10 +4845,10 @@ ported NetHack 3.1 to the Atari.  \fBPat Rankin\fP, with help from
 \fBDean Luick\fP, with help from \fBDavid Cohrs\fP, developed NetHack
 3.1 for X11.
 \fBWarwick Allison\fP wrote a tiled version of NetHack for the Atari;
-he later contributed the tiles to the DevTeam and tile support was
+he later contributed the tiles to the NetHack Development Team and tile support was
 then added to other platforms.
 .pg
-The 3.2 development team, comprised of \fBMichael Allison\fP, \fBKen
+The 3.2 NetHack Development Team, comprised of \fBMichael Allison\fP, \fBKen
 Arromdee\fP, \fBDavid Cohrs\fP, \fBJessie Collet\fP, \fBSteve Creps\fP,
 \fBKevin Darcy\fP, \fBTimo Hakulinen\fP, \fBSteve Linhart\fP, \fBDean
 Luick\fP, \fBPat Rankin\fP, \fBEric Smith\fP, \fBMike Stephenson\fP,
@@ -4792,9 +4857,9 @@ Luick\fP, \fBPat Rankin\fP, \fBEric Smith\fP, \fBMike Stephenson\fP,
 .pg
 Version 3.2 marked the tenth anniversary of the formation of the development
 team.  In a testament to their dedication to the game, all thirteen members
-of the original development team remained on the team at the start of work
+of the original NetHack Development Team remained on the team at the start of work
 on that release.  During the interval between the release of 3.1.3
-and 3.2, one of the founding members of the development team, \fBDr. Izchak
+and 3.2, one of the founding members of the NetHack Development Team, \fBDr. Izchak
 Miller\fP, was diagnosed with cancer and passed away.  That release of the
 game was dedicated to him by the development and porting teams.
 .pg
@@ -4815,12 +4880,12 @@ casting system with the Wizard Patch.
 \fBWarren Cheung\fP combined SLASH with the Wizard Patch to produce Slash'EM,
 and with the help of \fBKevin Hugo\fP, added more features.
 Kevin later joined the
-DevTeam and incorporated the best of these ideas in NetHack 3.3.
+NetHack Development Team and incorporated the best of these ideas in NetHack 3.3.
 .pg
 The final update to 3.2 was the bug fix release 3.2.3, which was released
 simultaneously with 3.3.0 in December 1999 just in time for the Year 2000.
 .pg
-The 3.3 development team, consisting of
+The 3.3 NetHack Development Team, consisting of
 \fBMichael Allison\fP, \fBKen Arromdee\fP,
 \fBDavid Cohrs\fP, \fBJessie Collet\fP, \fBSteve Creps\fP, \fBKevin Darcy\fP,
 \fBTimo Hakulinen\fP, \fBKevin Hugo\fP, \fBSteve Linhart\fP, \fBKen Lorber\fP,
@@ -4840,7 +4905,7 @@ available web-site listing all the bugs that had been discovered.  Despite
 that constantly growing bug list, 3.3 proved stable enough to last for
 more than a year and a half.
 .pg
-The 3.4 development team initially consisted of
+The 3.4 NetHack Development Team initially consisted of
 \fBMichael Allison\fP, \fBKen Arromdee\fP,
 \fBDavid Cohrs\fP, \fBJessie Collet\fP, \fBKevin Hugo\fP, \fBKen Lorber\fP,
 \fBDean Luick\fP, \fBPat Rankin\fP, \fBMike Stephenson\fP,
@@ -4880,7 +4945,7 @@ resurrected it for 3.3.1.
 The release of NetHack 3.4.3 in December 2003 marked the beginning of a
 long release hiatus. 3.4.3 proved to be a remarkably stable version that
 provided continued enjoyment by the community for more than a decade. The
-devteam slowly and quietly continued to work on the game behind the scenes
+NetHack Development Team slowly and quietly continued to work on the game behind the scenes
 during the tenure of 3.4.3. It was during that same period that several new
 variants emerged within the NetHack community. Notably sporkhack by
 \fBDerek S. Ray\fP, unnethack by \fBPatric Mueller\fP, nitrohack and its
@@ -4893,21 +4958,23 @@ released publicly by other parties. Since that code was a work-in-progress
 and had not gone through the process of debugging it as a suitable release,
 it was decided that the version numbers present on that code snapshot would
 be retired and never used in an official NetHack release. An announcement
-was posted on the devteam's official nethack.org website to that effect,
+was posted on the NetHack Development Team's official
+.UR nethack.org
+website to that effect,
 stating that there would never be a 3.4.4, 3.5, or 3.5.0 official release
 version.
 .pg
 In January 2015, preparation began for the release of NetHack 3.6.
 .pg
 At the beginning of development for what would eventually get released
-as 3.6.0, the development team consisted of \fBWarwick Allison\fP,
+as 3.6.0, the NetHack Development Team consisted of \fBWarwick Allison\fP,
 \fBMichael Allison\fP, \fBKen Arromdee\fP,
 \fBDavid Cohrs\fP, \fBJessie Collet\fP,
 \fBKen Lorber\fP, \fBDean Luick\fP, \fBPat Rankin\fP,
 \fBMike Stephenson\fP, \fBJanet Walz\fP, and \fBPaul Winner\fP.
 In early 2015, ahead of the release of 3.6.0, new members
 \fBSean Hunt\fP, \fBPasi Kallinen\fP, and \fBDerek S. Ray\fP
-joined the NetHack development team.
+joined the NetHack Development Team.
 .pg
 Near the end of the development of 3.6.0, one of the significant inspirations for many of
 the humorous and fun features found in the game, author Terry Pratchett,
@@ -4919,14 +4986,14 @@ patches. Many bugs were fixed and some code was restructured.
 .pg
 In late April 2018, several hundred bug fixes for 3.6.0 and
 some new features were assembled and released as NetHack 3.6.1.
-The development team at the time of release of 3.6.1 consisted of
+The NetHack Development Team at the time of release of 3.6.1 consisted of
 \fBWarwick Allison\fP, \fBMichael Allison\fP, \fBKen Arromdee\fP,
 \fBDavid Cohrs\fP, \fBJessie Collet\fP, \fBPasi Kallinen\fP,
 \fBKen Lorber\fP, \fBDean Luick\fP, \fBPatric Mueller\fP,
 \fBPat Rankin\fP, \fBDerek S. Ray\fP, \fBAlex Smith\fP,
 \fBMike Stephenson\fP, \fBJanet Walz\fP, and \fBPaul Winner\fP.
 .pg
-The development team, as well as \fBSteve VanDevender\fP and
+The NetHack Development Team, as well as \fBSteve VanDevender\fP and
 \fBKevin Smolkowski\fP, ensured that NetHack 3.6 continued to operate on
 various
 .UX
@@ -4949,7 +5016,8 @@ and Integrity (aka Itanium aka IA64) but not VAX.
 necessary updates to the community at large.
 .pg
 The official NetHack web site is maintained by \fBKen Lorber\fP
-at http://www.nethack.org/.
+at
+.UR http://www.nethack.org/ .
 .pg
 .hn 2
 SPECIAL THANKS
@@ -4967,9 +5035,9 @@ and in days past, devnull.net (gone for now, but not forgotten).
 .                          \" to the right, so pad them with a few spaces
 .pg
 From time to time, some depraved individual out there in netland sends a
-particularly intriguing modification to help out with the game.  The Gods of
-the Dungeon sometimes make note of the names of the worst of these miscreants
-in this, the list of Dungeoneers:
+particularly intriguing modification to help out with the game.  The NetHack
+Development Team sometimes makes note of the names of the worst of these
+miscreants in this, the list of Dungeoneers:
 .
 .TS S
 center;
@@ -5022,6 +5090,6 @@ J. Ali Harlow	Mikko Juola
 .\"Microsoft and MS-DOS are registered trademarks of Microsoft Corporation.
 .\"Lattice is a trademark of Lattice, Inc.
 .\"Atari and 1040ST are trademarks of Atari, Inc.
-.\"AMIGA is a trademark of Commodore-Amiga, Inc.
+.\"Amiga is a trademark of Commodore-Amiga, Inc
 .sm "Brand and product names are trademarks or registered trademarks \
 of their respective holders."

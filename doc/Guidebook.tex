@@ -45,7 +45,7 @@
 %.au
 \author{Original version - Eric S. Raymond\\
 (Edited and expanded for 3.6 by Mike Stephenson and others)}
-\date{December 15, 2018}
+\date{February 27, 2019}
 
 \maketitle
 
@@ -761,7 +761,7 @@ Panic button.  Quit the game.
 %.lp
 \item[\tb{d}]
 Drop something.\\
-{\tt d7a} --- drop seven items of object
+For example {\tt d7a} --- drop seven items of object
 {\it a}.
 %.lp
 \item[\tb{D}]
@@ -1767,7 +1767,7 @@ not restricted in this fashion.
 
 %.pg
 Doors can be useful for shutting out monsters.  Most monsters cannot
-open doors, although a few don't need to (ex.\ ghosts can walk through
+open doors, although a few don't need to (for example, ghosts can walk through
 doors).
 
 %.pg
@@ -2373,7 +2373,7 @@ leather jacket         & 9 &                   & no armor              & 10\\
 \end{center}
 
 %.pg
-\nd You can also wear other pieces of armor (ex.\ helmets, boots,
+\nd You can also wear other pieces of armor (for example, helmets, boots,
 shields, cloaks)
 to lower your armor class even further, but you can only wear one item
 of each category (one suit of armor, one cloak, one helmet, one
@@ -2433,7 +2433,7 @@ The command to eat food is `{\tt e}'.
 
 %.pg
 Scrolls are labeled with various titles, probably chosen by ancient wizards
-for their amusement value (ex.\ ``READ ME,'' or ``THANX MAUD'' backwards).
+for their amusement value (for example, ``READ ME,'' or ``THANX MAUD'' backwards).
 Scrolls disappear after you read them (except for blank ones, without
 magic spells on them).
 
@@ -2885,7 +2885,8 @@ Prefix a boolean option with `no' or `!' to turn it off.
 For compound options, the option name and value are separated by a colon.
 Some options are persistent, and apply only to new games.
 You can specify multiple OPTIONS statements, and multiple options
-in a single OPTIONS statement.
+separated by commas in a single OPTIONS statement.
+(Comma separated options are processed from right to left.)
 
 %.pg
 Example:
@@ -3076,6 +3077,14 @@ to that shell), or the pair of commands
 \nd in {\it sh}, {\it ksh}, or {\it bash}.
 
 %.pg
+The NETHACKOPTIONS value is effectively the same as a single OPTIONS
+statement in a configuration file.
+The ``OPTIONS='' prefix is implied and comma separated options are
+processed from right to left.
+Other types of configuration statements such as BIND or MSGTYPE are
+not allowed.
+
+%.pg
 Instead of a comma-separated list of options,
 NETHACKOPTIONS can be set to the full name of a configuration file you
 want to use.
@@ -3152,11 +3161,11 @@ Set the character used to display boulders (default is the ``large rock''
 class symbol, `{\tt `}').
 %.lp
 \item[\ib{catname}]
-Name your starting cat (ex.\ ``{\tt catname:Morris}'').
+Name your starting cat (for example, ``{\tt catname:Morris}'').
 Cannot be set with the `{\tt O}' command.
 %.lp character
 \item[\ib{character}]
-Pick your type of character (ex.\ ``{\tt character:Monk}'');
+Pick your type of character (for example, ``{\tt character:Monk}'');
 synonym for ``{\it role\/}''.  See {\it role\/} for more details.
 %.lp
 \item[\ib{checkpoint}]
@@ -3234,7 +3243,7 @@ from high level to low level.\\
 .lp ""
 
 %.lp ""
-(ex.\ ``{\tt disclose:yi na +v -g o}'')
+(for example, ``{\tt disclose:yi na +v -g o}'')
 The example sets
 {\tt inventory} to {\it prompt\/} and default to {\it yes\/},
 {\tt attributes} to {\it prompt\/} and default to {\it no\/},
@@ -3250,7 +3259,7 @@ And the dungeon overview shows all levels you had visited but does not
 reveal things about them that you hadn't discovered.
 %.lp
 \item[\ib{dogname}]
-Name your starting dog (ex.\ ``{\tt dogname:Fang}'').
+Name your starting dog (for example, ``{\tt dogname:Fang}'').
 Cannot be set with the `{\tt O}' command.
 %.lp
 \item[\ib{extmenu}]
@@ -3273,7 +3282,7 @@ Commands asking for an inventory item show a menu instead of
 a text query with possible menu letters. Default is off.
 %.lp
 \item[\ib{fruit}]
-Name a fruit after something you enjoy eating (ex.\ ``{\tt fruit:mango}'')
+Name a fruit after something you enjoy eating (for example, ``{\tt fruit:mango}'')
 (default ``{\tt slime mold}''). Basically a nostalgic whimsy that
 {\it NetHack\/} uses from time to time.  You should set this to something you
 find more appetizing than slime mold.  Apples, oranges, pears, bananas, and
@@ -3296,6 +3305,11 @@ or {\tt U} (known to be uncursed, when `off', the default).
 Gold is never blessed or cursed, but it is not described as ``uncursed''
 even when the {\it implicit\verb+_+uncursed\/} option is `off'.
 %.lp
+\item[\ib{guicolor}]
+Use color text and/or highlighting attributes when displaying some
+non-map data (such as menu selector letters).
+Curses interface only; default is on.
+%.lp
 \item[\ib{help}]
 If more information is available for an object looked at
 with the `{\tt /}' command, ask if you want to see it (default on).
@@ -3313,6 +3327,10 @@ Visually distinguish pets from similar animals (default off).
 The behavior of this option depends on the type of windowing you use.
 In text windowing, text highlighting or inverse video is often used;
 with tiles, generally displays a heart symbol near pets.
+%.lp ""
+With the curses interface, the {\it petattr\/}
+option controls how to highlight pets and setting it will turn the
+{\it hilite\verb+_+pet\/} option on or off as warranted.
 %.lp
 \item[\ib{hilite\verb+_+pile}]
 Visually distinguish piles of objects from individual objects (default off).
@@ -3322,7 +3340,7 @@ with tiles, generally displays a small plus-symbol beside the object
 on the top of the pile.
 %.lp
 \item[\ib{horsename}]
-Name your starting horse (ex.\ ``{\tt horsename:Trigger}'').
+Name your starting horse (for example, ``{\tt horsename:Trigger}'').
 Cannot be set with the `{\tt O}' command.
 %.lp
 \item[\ib{hitpointbar}]
@@ -3568,6 +3586,38 @@ such as ``{\it par\-a\-noid\verb+_+con\-fir\-ma\-tion:attack~pray~Remove}''.
 If true, always display your current inventory in a window.  This only
 makes sense for windowing system interfaces that implement this feature.
 %.lp
+\item[\ib{petattr}]
+Specifies one or more text highlighting attributes to use when showing
+pets on the map.
+Effectively a superset of the {\it hilite\verb+_+pet\/} boolean option.
+Curses interface only; value is one or more of the following letters.
+
+%.sd
+%.si
+{\tt N} --- Normal text (no highlighting)\\
+{\tt I} --- Inverse video (default)\\
+{\tt B} --- Bold text\\
+{\tt U} --- Underlined text\\
+{\tt K} --- blinKing text\\
+{\tt D} --- Dim text\\
+{\tt T} --- iTalic text\\
+{\tt L} --- Left line indicator\\
+{\tt R} --- Right line indicator\\
+%.ei
+%.ed
+
+Some of those choices might not work, particularly the final three,
+depending upon terminal hardware or terminal emulation software.
+
+%.lp ""
+Currently multiple highlight-style letters can be combined by simply
+stringing them together (for example, ``BK''), but in the future
+they might require being separated by plus signs (such as ``B\verb&+&K'',
+which works already).
+When using the `N' choice, it should be specified on its own,
+not in combination with any of the other letters.
+
+%.lp
 \item[\ib{pettype}]
 Specify the type of your initial pet, if you are playing a character class
 that uses multiple types of pets; or choose to have no initial pet at all.
@@ -3632,7 +3682,7 @@ Make the space bar a synonym for the `{\tt .}' (\#wait) command (default off).
 Persistent.
 %.lp
 \item[\ib{role}]
-Pick your type of character (ex.\ ``{\tt role:Samurai}'');
+Pick your type of character (for example, ``{\tt role:Samurai}'');
 synonym for ``{\it character\/}''.  See ``{\it name\/}'' for an alternate method
 of specifying your role.  Normally only the first letter of the
 value is examined; `r' is an exception with ``{\tt Rogue}'', {\tt Ranger}'',
@@ -3680,7 +3730,7 @@ Prevent you from (knowingly) attacking your pets (default on).  Persistent.
 +Debug mode only.
 %.lp
 \item[\ib{scores}]
-Control what parts of the score list you are shown at the end (ex.\
+Control what parts of the score list you are shown at the end (for example,
 ``{\tt scores:5top scores/4around my score/own scores}'').  Only the first
 letter of each category (`{\tt t}', `{\tt a}' or `{\tt o}') is necessary.
 Persistent.
@@ -3738,12 +3788,21 @@ Allow updates to the status lines at the bottom of the screen (default true).
 \item[\ib{suppress\verb+_+alert}]
 This option may be set to a {\it NetHack\/} version level to suppress
 alert notification messages about feature changes for that
-and prior versions (ex.\ ``{\tt suppress\verb+_+alert:3.3.1}'')
+and prior versions (for example, ``{\tt suppress\verb+_+alert:3.3.1}'')
 %.lp
 \item[\ib{symset}]
 This option may be used to select one of the named symbol sets found within
 {\tt symbols} to alter the symbols displayed on the screen.
 Use ``{\tt symset:default}'' to explicitly select the default symbols.
+%.lp
+\item[\ib{term\verb+_+cols}\ \ {\it and}]"
+%.lp
+\item[\ib{term\verb+_+rows}]
+Curses interface only.
+Number of columns and rows to use for the display.
+Curses will attempt to resize to the values specified but will settle
+for smaller sizes if they are too big.
+Default is the current window size.
 %.lp
 \item[\ib{time}]
 Show the elapsed game time in turns on bottom line (default off).  Persistent.
@@ -3835,6 +3894,25 @@ When getting a location on the map, and using shifted movement keys or
 meta-digit keys to fast-move, instead of moving 8 units at a time,
 move by skipping the same glyphs.
 (default off)
+%.lp
+\item[\ib{windowborders}]
+Whether to draw boxes around the map, status area, message area, and
+persistent inventory window if enabled.
+Curses interface only.
+Acceptable values are
+
+%.sd
+%.si
+{\tt 1} --- on, always show borders\\
+{\tt 2} --- off, never show borders\\
+{\tt 3} --- auto, on if terminal or window is at least
+(24\verb&+&2)x(80\verb&+&2)\ \ (default)\\
+%.ei
+%.ed
+
+%.lp ""
+(The 26x82 size threshold for `3' refers to number of rows and
+columns of the display.)
 %.lp
 \item[\ib{windowtype}]
 When the program has been built to support multiple interfaces,
@@ -5231,7 +5309,7 @@ NetHack\/} 3.0c.
 \medskip
 \nd {\it NetHack\/} 3.0 was ported to the Atari by {\it Eric R. Smith}, to OS/2 by
 {\it Timo Hakulinen}, and to VMS by {\it David Gentzel}.  The three of them
-and {\it Kevin Darcy\/} later joined the main development team to produce
+and {\it Kevin Darcy\/} later joined the main {\it NetHack Development Team} to produce
 subsequent revisions of 3.0.
 
 %.pg
@@ -5246,7 +5324,7 @@ revisions of 3.0.
 %.pg
 \medskip
 \nd Headed by {\it Mike Stephenson\/} and coordinated by {\it Izchak Miller\/} and
-{\it Janet Walz}, the development team which now included {\it Ken Arromdee},
+{\it Janet Walz}, the {\it NetHack Development Team} which now included {\it Ken Arromdee},
 {\it David Cohrs}, {\it Jean-Christophe Collet}, {\it Kevin Darcy},
 {\it Matt Day}, {\it Timo Hakulinen}, {\it Steve Linhart}, {\it Dean Luick},
 {\it Pat Rankin}, {\it Eric Raymond}, and {\it Eric Smith\/} undertook a radical
@@ -5289,12 +5367,12 @@ was responsible for the VMS version of {\it NetHack\/} 3.1.
 \nd {\it Dean Luick}, with help from {\it David Cohrs}, developed {\it NetHack\/}
 3.1 for X11.
 {\it Warwick Allison} wrote a tiled version of {\it NetHack\/} for the Atari;
-he later contributed the tiles to the DevTeam and tile support was
+he later contributed the tiles to the {\it NetHack Development Team} and tile support was
 then added to other platforms.
 
 %.pg
 \medskip
-\nd The 3.2 development team, comprised of {\it Michael Allison}, {\it Ken
+\nd The 3.2 {\it NetHack Development Team}, comprised of {\it Michael Allison}, {\it Ken
 Arromdee}, {\it David Cohrs}, {\it Jessie Collet}, {\it Steve Creps}, {\it
 Kevin Darcy}, {\it Timo Hakulinen}, {\it Steve Linhart}, {\it Dean Luick},
 {\it Pat Rankin}, {\it Eric Smith}, {\it Mike Stephenson}, {\it Janet Walz},
@@ -5304,9 +5382,9 @@ and {\it Paul Winner}, released version 3.2 in April of 1996.
 \medskip
 \nd Version 3.2 marked the tenth anniversary of the formation of the development
 team.  In a testament to their dedication to the game, all thirteen members
-of the original development team remained on the team at the start of work on
+of the original {\it NetHack Development Team} remained on the team at the start of work on
 that release.  During the interval between the release of 3.1.3 and 3.2,
-one of the founding members of the development team, {\it Dr. Izchak Miller},
+one of the founding members of the {\it NetHack Development Team}, {\it Dr. Izchak Miller},
 was diagnosed with cancer and passed away.  That release of the game was
 dedicated to him by the development and porting teams.
 
@@ -5334,7 +5412,7 @@ casting system with the Wizard Patch.
 to produce {\it Slash'EM\/}, and
 with the help of {\it Kevin Hugo}, added more features.
 Kevin later joined the
-DevTeam and incorporated the best of these ideas into {\it NetHack\/} 3.3.
+{\it NetHack Development Team} and incorporated the best of these ideas into {\it NetHack\/} 3.3.
 
 %.pg
 \medskip
@@ -5343,7 +5421,7 @@ simultaneously with 3.3.0 in December 1999 just in time for the Year 2000.
 
 %.pg
 \medskip
-The 3.3 development team, consisting of {\it Michael Allison}, {\it Ken Arromdee},
+The 3.3 {\it NetHack Development Team}, consisting of {\it Michael Allison}, {\it Ken Arromdee},
 {\it David Cohrs}, {\it Jessie Collet}, {\it Steve Creps}, {\it Kevin Darcy},
 {\it Timo Hakulinen}, {\it Kevin Hugo}, {\it Steve Linhart}, {\it Ken Lorber},
 {\it Dean Luick}, {\it Pat Rankin}, {\it Eric Smith}, {\it Mike Stephenson},
@@ -5365,7 +5443,7 @@ more than a year and a half.
 
 %.pg
 \medskip
-The 3.4 development team initially consisted of
+The 3.4 {\it NetHack Development Team} initially consisted of
 {\it Michael Allison}, {\it Ken Arromdee},
 {\it David Cohrs}, {\it Jessie Collet}, {\it Kevin Hugo}, {\it Ken Lorber},
 {\it Dean Luick}, {\it Pat Rankin}, {\it Mike Stephenson},
@@ -5426,7 +5504,7 @@ resurrected it for 3.3.1.
 The release of {\it NetHack\/} 3.4.3 in December 2003 marked the beginning of
 a long release hiatus. 3.4.3 proved to be a remarkably stable version that
 provided continued enjoyment by the community for more than a decade. The
-devteam slowly and quietly continued to work on the game behind the scenes
+{\it NetHack Development Team} slowly and quietly continued to work on the game behind the scenes
 during the tenure of 3.4.3. It was during that same period that several new
 variants emerged within the {\it NetHack\/} community. Notably sporkhack by
 Derek S. Ray, {\it unnethack\/} by Patric Mueller, {\it nitrohack\/} and its
@@ -5441,7 +5519,7 @@ released publicly by other parties. Since that code was a work-in-progress
 and had not gone through the process of debugging it as a suitable release,
 it was decided that the version numbers present on that code snapshot would
 be retired and never used in an official {\it NetHack\/} release. An
-announcement was posted on the devteam's official {\it nethack.org\/} website
+announcement was posted on the {\it NetHack Development Team}'s official {\it nethack.org\/} website
 to that effect, stating that there would never be a 3.4.4, 3.5, or 3.5.0
 official release version.
 
@@ -5452,7 +5530,7 @@ In January 2015, preparation began for the release of NetHack 3.6.
 %.pg
 \medskip
 At the beginning of development for what would eventually get released
-as 3.6.0, the development team consisted of {\it Warwick Allison},
+as 3.6.0, the {\it NetHack Development Team} consisted of {\it Warwick Allison},
 {\it Michael Allison}, {\it Ken Arromdee},
 {\it David Cohrs}, {\it Jessie Collet},
 {\it Ken Lorber}, {\it Dean Luick}, {\it Pat Rankin},
@@ -5477,7 +5555,7 @@ patches.  Many bugs were fixed and some code was restructured.
 %.pg
 \medskip
 In late April 2018, several hundred bug fixes for 3.6.0 and some new features
-were assembled and released as NetHack 3.6.1. The development team at the
+were assembled and released as NetHack 3.6.1. The {\it NetHack Development Team} at the
 time of release of 3.6.1 consisted of
 {\it Warwick Allison}, {\it Michael Allison}, {\it Ken Arromdee},
 {\it David Cohrs}, {\it Jessie Collet},
@@ -5488,7 +5566,7 @@ time of release of 3.6.1 consisted of
 
 %.pg
 \medskip
-The development team, as well as {\it Steve VanDevender} and
+The {\it NetHack Development Team}, as well as {\it Steve VanDevender} and
 {\it Kevin Smolkowski}, ensured that {\it NetHack\/} 3.6 continued to
 operate on various Unix flavors and maintained the X11 interface.
 
@@ -5543,9 +5621,9 @@ unnamed dungeoneers who invest their time and effort into annual
 \section*{Dungeoneers}
 %.pg
 \nd From time to time, some depraved individual out there in netland sends a
-particularly intriguing modification to help out with the game.  The Gods of
-the Dungeon sometimes make note of the names of the worst of these miscreants
-in this, the list of Dungeoneers:
+particularly intriguing modification to help out with the game.  The 
+{\it NetHack Development Team} sometimes makes note of the names of the worst
+of these miscreants in this, the list of Dungeoneers:
 %.sd
 \begin{center}
 \begin{tabular}{llll}
@@ -5604,7 +5682,7 @@ J. Ali Harlow & Mikko Juola
 %UNIX is a registered trademark of AT\&T.\\
 %Lattice is a trademark of Lattice, Inc.\\
 %Atari and 1040ST are trademarks of Atari, Inc.\\
-%AMIGA is a trademark of Commodore-Amiga, Inc.\\
+%Amiga is a trademark of Commodore-Amiga, Inc.\\
 %%.sm
 %Brand and product names are trademarks or registered trademarks
 %of their respective holders.
