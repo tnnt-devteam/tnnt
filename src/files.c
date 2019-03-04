@@ -740,7 +740,7 @@ set_whereisfile()
 		p += 2;   /* skip "%n" */
 		strncpy(q, p, strlen(p));
 		new_whereis_fn[new_whereis_len] = '\0';
-		Sprintf(whereis_file,new_whereis_fn);
+		Sprintf(whereis_file, "%s", new_whereis_fn);
 		free(new_whereis_fn); /* clean up the pointer */
 	}
 }
@@ -4428,7 +4428,7 @@ char *buffer;
                      LLOG_SEP,
                      msgbuf);
 
-            fprintf(livelogfile, tmpbuf);
+            fprintf(livelogfile, "%s", tmpbuf);
             (void) fclose(livelogfile);
         }
         unlock_file(LIVELOGFILE);
