@@ -2466,7 +2466,7 @@ register struct obj *obj;
         }
         if (!delete_swapobj_file(obj)) {
             /* fails if file already doesn't exist */
-            pline(swapchest_failmsg[rn2(N_SWAPCHEST_FAILMSG)]);
+            pline(swapchest_failmsg[rn2(N_SWAPCHEST_FAILMSG)], "%s");
             return -1;
         }
         free(obj->swapobj_filename);

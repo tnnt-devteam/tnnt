@@ -4494,7 +4494,7 @@ schar swapnum;
     FILE *f = fopen(filename,"w");
     free(filename);
     if (!f) return FALSE;
-    fprintf(f, "o_id=%x\totyp=%d\towt=%d\tquan=%d\tspe=%d\toclass=%d\t"
+    fprintf(f, "o_id=%x\totyp=%d\towt=%d\tquan=%ld\tspe=%d\toclass=%d\t"
                "cursed=%d\tblessed=%d\toeroded=%d\toeroded2=%d\toerodeproof=%d\t"
                "recharged=%d\tgreased=%d\tusecount=%d\tcorpsenm=%d\tname=%s_%s\n",
                o->o_id, o->otyp, o->owt, o->quan, o->spe, o->oclass,

@@ -378,7 +378,7 @@ int how;
             aligns[1 - u.ualignbase[A_ORIGINAL]].filecode);
     Fprintf(rfile, "%cflags=0x%lx", XLOG_SEP, encodexlogflags());
     for (i = 0; i < SIZE(tnnt_globals.tnnt_achievements); ++i) {
-        Fprintf(rfile, "%ctnntachieve%d=0x%llx", XLOG_SEP, i,
+        Fprintf(rfile, "%ctnntachieve%d=0x%lx", XLOG_SEP, i,
                 tnnt_globals.tnnt_achievements[i]);
     }
     Fprintf(rfile, "\n");
