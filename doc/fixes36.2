@@ -1,4 +1,4 @@
-$NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.267 $ $NHDT-Date: 1551395521 2019/02/28 23:12:01 $
+$NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.276 $ $NHDT-Date: 1552697495 2019/03/16 00:51:35 $
 
 This fixes36.2 file is here to capture information about updates in the 3.6.x
 lineage following the release of 3.6.1 in April 2018. Please note, however,
@@ -387,6 +387,13 @@ toggling perm_invent on didn't immediately show persistent inventory window
 some fish should lay their eggs in the water rather than on land
 wand or spell of undead turning handled messages and wand-discovery in a
 	non-intuitive manner biased toward healers
+if steed ate a mimic corpse and began masquerading as something, hero could
+	keep riding it; force dismount
+kicking an object stack moves the topmost 1, but range calculation used the
+	weight of the whole stack to decide how far it would move, possibly
+	yielding "thump" result with no movement despite being a light item
+status lines' dungeon location field in the elemental planes now shows Earth
+	or Air or Fire or Water instead of generic End Game
 
 
 Fixes to Post-3.6.1 Problems that Were Exposed Via git Repository
@@ -443,13 +450,16 @@ when engulfed while in a shop, dropping an item into the engulfer and then
 	using ':' to look at current location could cause a crash
 when items were on the floor just inside a shop's door where the shopkeeper
 	doesn't buy and sell stuff, those items showed a 'for sale' price
+applying a container while inside a shop and initiating a put-in operation
+	would show non-empty containers in inventory--including the one being
+	applied--with "for sale" amounts for the prices of their contents
 after 'when donning armor, enchanment becomes known even if interrupted' fix,
 	wearing a leather jacket, fedora, or dented pot (no multi-turn delay
 	worn in a slot which usually has one) didn't make +/- become known
+when persistent inventory window is enabled, wearing armor didn't immediately
+	update it with armor's newly observed +/- value
 having an artifact wish be refused ("for a moment you feel <artifact> in
 	your hands, but it disappears") would immediately segfault
-when persistent inventory window is enabled, wearing armor doesn't immediately
-	update it with armor's newly observed +/- value
 tty: turn off an optimization that is the suspected cause of Windows reported
 	partial status lines following level changes
 tty: ensure that current status fields are always copied to prior status
@@ -469,6 +479,10 @@ curses: if the interface code ran out of memory, it would crash rather than
 curses: when getting multi-character responses from player, support <delete>
 	as well as <backspace> to remove last character entered; also, return
 	<escape> to core if ESC is typed when there is no input entered
+curses: extend preceding <delete> support to typing of extended command names
+curses: support hilite_pet and hilite_pile even when color is disabled
+curses: support color hilite_status rules even if 'guicolor' is off
+curses: update status if 'O' is used to add/change/remove hilite_status rules
 vms: add compile of isaac64.c to Makefile.src and vmsbuild.com
 
 
@@ -508,6 +522,8 @@ unix: Makefile.src and Makefile.utl inadvertently relied on a 'gnu make'
 	specifically requested; use 'make QUIETCC=1 <target>' to get the
 	3.6.1 behavior back
 unix: add curses window port
+unix: in nethack.sh, use 'test -f' instead of 'test -e' when checking for
+	fonts.dir while running under X11
 vms: data file processing and playground setup were missing post-3.4.3 files
 	engrave, epitaph, and bogusmon made from corresponding *.txt
 windows: Added ntassert() mechanism for Windows based port use
@@ -557,6 +573,8 @@ X11: text popups on OSX wouldn't accept keyboard input unless the 'autofocus'
 	resource was enabled; most noticeable when trying to dismiss 'things
 	that are here' while walking over object piles
 X11: default to using XPM format tile file and rip screen
+X11: when showing graphical tombstone, would crash if file rip.xpm is missing;
+	revert to text tombstone instead
 
 
 General New Features
