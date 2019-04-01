@@ -1,4 +1,4 @@
-/* NetHack 3.6	end.c	$NHDT-Date: 1549921169 2019/02/11 21:39:29 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.163 $ */
+/* NetHack 3.6	end.c	$NHDT-Date: 1554045810 2019/03/31 15:23:30 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.167 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2012. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -1053,7 +1053,7 @@ int how;
 #endif
         ) {
         /* skip status update if panicking or disconnected */
-        context.botl = context.botlx = FALSE;
+        context.botl = context.botlx = iflags.time_botl = FALSE;
     } else {
         /* otherwise force full status update */
         context.botlx = TRUE;
@@ -1091,10 +1091,11 @@ int how;
     if (how < PANICKED) {
         u.umortality++;
         /* in case caller hasn't already done this */
-        if (u.uhp > 0 || (Upolyd && u.mh > 0)) {
-            /* for deaths not triggered by loss of hit points, force
-               current HP to zero (0 HP when turning into green slime
-               is iffy but we don't have much choice--that is fatal) */
+        if (u.uhp != 0 || (Upolyd && u.mh != 0)) {
+            /* force HP to zero in case it is still positive (some
+               deaths aren't triggered by loss of hit points), or
+               negative (-1 is used as a flag in some circumstances
+               which don't apply when actually dying due to HP loss) */
             u.uhp = u.mh = 0;
             context.botl = 1;
         }
