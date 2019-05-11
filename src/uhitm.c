@@ -148,7 +148,7 @@ struct obj *wep; /* uwep for attack(), null for kick_monster() */
         /* if it was an invisible mimic, treat it as if we stumbled
          * onto a visible mimic
          */
-        if (mtmp->m_ap_type && !Protection_from_shape_changers
+        if (M_AP_TYPE(mtmp) && !Protection_from_shape_changers
             /* applied pole-arm attack is too far to get stuck */
             && distu(mtmp->mx, mtmp->my) <= 2) {
             if (!u.ustuck && !mtmp->mflee && dmgtype(mtmp->data, AD_STCK))
@@ -164,7 +164,7 @@ struct obj *wep; /* uwep for attack(), null for kick_monster() */
         return TRUE;
     }
 
-    if (mtmp->m_ap_type && !Protection_from_shape_changers && !sensemon(mtmp)
+    if (M_AP_TYPE(mtmp) && !Protection_from_shape_changers && !sensemon(mtmp)
         && !glyph_is_warning(glyph)) {
         /* If a hidden mimic was in a square where a player remembers
          * some (probably different) unseen monster, the player is in
@@ -206,7 +206,7 @@ struct obj *wep; /* uwep for attack(), null for kick_monster() */
      * make sure to wake up a monster from the above cases if the
      * hero can sense that the monster is there.
      */
-    if ((mtmp->mundetected || mtmp->m_ap_type) && sensemon(mtmp)) {
+    if ((mtmp->mundetected || M_AP_TYPE(mtmp)) && sensemon(mtmp)) {
         mtmp->mundetected = 0;
         wakeup(mtmp, TRUE);
     }
@@ -1256,7 +1256,8 @@ int dieroll;
             /* but not bashing with darts, arrows or ya */
             && !(is_ammo(obj) || is_missile(obj)))
         && hand_to_hand) {
-        if (clone_mon(mon, 0, 0)) {
+        struct monst *mclone;
+        if ((mclone = clone_mon(mon, 0, 0)) != 0) {
             char withwhat[BUFSZ];
 
             withwhat[0] = '\0';
@@ -1265,6 +1266,7 @@ int dieroll;
             pline("%s divides as you hit it%s!", Monnam(mon), withwhat);
             hittxt = TRUE;
             tnnt_achieve(A_SPLIT_A_PUDDING);
+            mintrap(mclone);
         }
     }
 
@@ -3040,7 +3042,7 @@ struct monst *mtmp;
     if (Blind) {
         if (!Blind_telepat)
             what = generic; /* with default fmt */
-        else if (mtmp->m_ap_type == M_AP_MONSTER)
+        else if (M_AP_TYPE(mtmp) == M_AP_MONSTER)
             what = a_monnam(mtmp); /* differs from what was sensed */
     } else {
         int glyph = levl[u.ux + u.dx][u.uy + u.dy].glyph;

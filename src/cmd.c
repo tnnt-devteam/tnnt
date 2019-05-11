@@ -1,4 +1,4 @@
-/* NetHack 3.6	cmd.c	$NHDT-Date: 1549327488 2019/02/05 00:44:48 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.331 $ */
+/* NetHack 3.6	cmd.c	$NHDT-Date: 1557088405 2019/05/05 20:33:25 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.333 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2013. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -2276,7 +2276,7 @@ int final;
                   : surface(u.ux, u.uy)); /* catchall; shouldn't happen */
         you_are(buf, from_what(WWALKING));
     }
-    if (Upolyd && (u.uundetected || youmonst.m_ap_type != M_AP_NOTHING))
+    if (Upolyd && (u.uundetected || U_AP_TYPE != M_AP_NOTHING))
         youhiding(TRUE, final);
 
     /* internal troubles, mostly in the order that prayer ranks them */
@@ -3098,16 +3098,16 @@ int msgflag;          /* for variant message phrasing */
     char *bp, buf[BUFSZ];
 
     Strcpy(buf, "hiding");
-    if (youmonst.m_ap_type != M_AP_NOTHING) {
+    if (U_AP_TYPE != M_AP_NOTHING) {
         /* mimic; hero is only able to mimic a strange object or gold
            or hallucinatory alternative to gold, so we skip the details
            for the hypothetical furniture and monster cases */
         bp = eos(strcpy(buf, "mimicking"));
-        if (youmonst.m_ap_type == M_AP_OBJECT) {
+        if (U_AP_TYPE == M_AP_OBJECT) {
             Sprintf(bp, " %s", an(simple_typename(youmonst.mappearance)));
-        } else if (youmonst.m_ap_type == M_AP_FURNITURE) {
+        } else if (U_AP_TYPE == M_AP_FURNITURE) {
             Strcpy(bp, " something");
-        } else if (youmonst.m_ap_type == M_AP_MONSTER) {
+        } else if (U_AP_TYPE == M_AP_MONSTER) {
             Strcpy(bp, " someone");
         } else {
             ; /* something unexpected; leave 'buf' as-is */
@@ -4127,6 +4127,7 @@ sanity_check()
     timer_sanity_check();
     mon_sanity_check();
     light_sources_sanity_check();
+    bc_sanity_check();
 }
 
 #ifdef DEBUG_MIGRATING_MONS
