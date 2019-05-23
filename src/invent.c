@@ -1,4 +1,4 @@
-/* NetHack 3.6	invent.c	$NHDT-Date: 1555196229 2019/04/13 22:57:09 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.253 $ */
+/* NetHack 3.6	invent.c	$NHDT-Date: 1558234540 2019/05/19 02:55:40 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.258 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Derek S. Ray, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -720,7 +720,8 @@ struct obj **potmp, **pobj;
             otmp->age = ((otmp->age * otmp->quan) + (obj->age * obj->quan))
                         / (otmp->quan + obj->quan);
 
-        otmp->quan += obj->quan;
+        if (!otmp->globby)
+            otmp->quan += obj->quan;
         /* temporary special case for gold objects!!!! */
         if (otmp->oclass == COIN_CLASS)
             otmp->owt = weight(otmp), otmp->bknown = 0;
@@ -3595,11 +3596,8 @@ register struct obj *otmp, *obj;
     if (obj->oclass == COIN_CLASS)
         return TRUE;
 
-    if (obj->unpaid != otmp->unpaid || obj->spe != otmp->spe
-        || obj->cursed != otmp->cursed || obj->blessed != otmp->blessed
-        || obj->no_charge != otmp->no_charge || obj->obroken != otmp->obroken
-        || obj->otrapped != otmp->otrapped || obj->lamplit != otmp->lamplit
-        || obj->bypass != otmp->bypass)
+    if (obj->bypass != otmp->bypass
+        || obj->cursed != otmp->cursed || obj->blessed != otmp->blessed)
         return FALSE;
 
     if (obj->globby)
@@ -3608,6 +3606,11 @@ register struct obj *otmp, *obj;
      * or don't inhibit their merger.
      */
     if (obj->otyp == SCR_MISSING_CODE)
+        return FALSE;
+
+    if (obj->unpaid != otmp->unpaid || obj->spe != otmp->spe
+        || obj->no_charge != otmp->no_charge || obj->obroken != otmp->obroken
+        || obj->otrapped != otmp->otrapped || obj->lamplit != otmp->lamplit)
         return FALSE;
 
     if (obj->oclass == FOOD_CLASS
