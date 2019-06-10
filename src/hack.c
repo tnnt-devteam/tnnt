@@ -1,4 +1,4 @@
-/* NetHack 3.6	hack.c	$NHDT-Date: 1551137618 2019/02/25 23:33:38 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.208 $ */
+/* NetHack 3.6	hack.c	$NHDT-Date: 1559664951 2019/06/04 16:15:51 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.213 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Derek S. Ray, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -1170,6 +1170,7 @@ int x,y;
     int ty = u.ty;
     boolean ret;
     int g = glyph_at(x,y);
+
     if (x == u.ux && y == u.uy)
         return TRUE;
     if (isok(x,y) && glyph_is_cmap(g) && S_stone == glyph_to_cmap(g)
@@ -1470,6 +1471,21 @@ domove_core()
             }
         }
         if (!isok(x, y)) {
+            if (iflags.mention_walls) {
+                int dx = u.dx, dy = u.dy;
+
+                if (dx && dy) { /* diagonal */
+                    /* only as far as possible diagonally if in very
+                       corner; otherwise just report whichever of the
+                       cardinal directions has reached its limit */
+                    if (isok(x, u.uy))
+                        dx = 0;
+                    else if (isok(u.ux, y))
+                        dy = 0;
+                }
+                You("have already gone as far %s as possible.",
+                    directionname(xytod(dx, dy)));
+            }
             nomul(0);
             return;
         }
@@ -2775,6 +2791,7 @@ lookaround()
                 if (x == u.ux + u.dx && y == u.uy + u.dy) {
                     if (iflags.mention_walls) {
                         int tt = what_trap(trap->ttyp, rn2_on_display_rng);
+
                         You("stop in front of %s.",
                             an(defsyms[trap_to_defsym(tt)].explanation));
                     }
@@ -2939,8 +2956,16 @@ const char *msg_override;
         nomovemsg = msg_override;
     else if (!nomovemsg)
         nomovemsg = You_can_move_again;
-    if (*nomovemsg)
+    if (*nomovemsg) {
         pline("%s", nomovemsg);
+        /* follow "you survived that attempt on your life" with a message
+           about current form if it's not the default; primarily for
+           life-saving while turning into green slime but is also a reminder
+           if life-saved while poly'd and Unchanging (explore or wizard mode
+           declining to die since can't be both Unchanging and Lifesaved) */
+        if (Upolyd && !strncmpi(nomovemsg, "You survived that ", 18))
+            You("are %s", an(mons[u.umonnum].mname)); /* (ignore Hallu) */
+    }
     nomovemsg = 0;
     u.usleep = 0;
     multi_reason = NULL;

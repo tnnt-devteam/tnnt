@@ -1,4 +1,4 @@
-/* NetHack 3.6	pickup.c	$NHDT-Date: 1545785547 2018/12/26 00:52:27 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.222 $ */
+/* NetHack 3.6	pickup.c	$NHDT-Date: 1559675617 2019/06/04 19:13:37 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.228 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2012. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -191,7 +191,7 @@ int *menu_on_demand;
         const char *where = 0;
         char sym, oc_of_sym, *p;
 
-    ask_again:
+ ask_again:
         oclasses[oclassct = 0] = '\0';
         *one_at_a_time = *everything = FALSE;
         not_everything = filtered = FALSE;
@@ -412,8 +412,8 @@ struct obj *obj;
                           ? TRUE : FALSE)
                        : TRUE; /* catchall: no filters specified, so accept */
 
-    if (Role_if(PM_PRIEST))
-        obj->bknown = TRUE;
+    if (Role_if(PM_PRIEST) && !obj->bknown)
+        set_bknown(obj, 1);
 
     /*
      * There are three types of filters possible and the first and
@@ -590,7 +590,7 @@ int what; /* should be a long */
                               &pick_list, PICK_ANY, all_but_uchain);
         }
 
-    menu_pickup:
+ menu_pickup:
         n_tried = n;
         for (n_picked = i = 0; i < n; i++) {
             res = pickup_object(pick_list[i].item.a_obj, pick_list[i].count,
@@ -694,7 +694,7 @@ int what; /* should be a long */
                 break;
             n_picked += res;
         }
-    end_query:
+ end_query:
         ; /* statement required after label */
     }
 
@@ -903,6 +903,7 @@ boolean FDECL((*allow), (OBJ_P)); /* allow function */
                 && will_feel_cockatrice(curr, FALSE)) {
                 destroy_nhwindow(win); /* stop the menu and revert */
                 (void) look_here(0, FALSE);
+                unsortloot(&sortedolist);
                 return 0;
             }
             if ((*allow)(curr)) {
@@ -1710,7 +1711,7 @@ int cindex, ccount; /* index of this container (1..N), number of them (N) */
         cobj->lknown = 1;
         return 0;
     }
-    cobj->lknown = 1;
+    cobj->lknown = 1; /* floor container, so no need for update_inventory() */
 
     if (cobj->otyp == BAG_OF_TRICKS) {
         int tmp;
@@ -1949,8 +1950,7 @@ reverse_loot()
         if (g_at(x, y))
             pline("Ok, now there is loot here.");
     } else {
-        /* find original coffers chest if present, otherwise use nearest one
-         */
+        /* find original coffers chest if present, otherwise use nearest one */
         otmp = 0;
         for (coffers = fobj; coffers; coffers = coffers->nobj)
             if (coffers->otyp == CHEST) {
@@ -2224,7 +2224,7 @@ register struct obj *obj;
               Icebox ? "refrigerate" : "stash", something);
         return 0;
     } else if ((obj->otyp == LOADSTONE) && obj->cursed) {
-        obj->bknown = 1;
+        set_bknown(obj, 1);
         pline_The("stone%s won't leave your person.", plur(obj->quan));
         return 0;
     } else if (obj->otyp == AMULET_OF_YENDOR
@@ -2702,16 +2702,19 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
         You_feel("%s is profoundly disinterested in your further fate.", the(xname(obj)));
         return 0;
     }
+    if (!obj->lknown) { /* do this in advance */
+        obj->lknown = 1;
+        if (held)
+            update_inventory();
+    }
     if (obj->olocked) {
         pline("%s locked.", Tobjnam(obj, "are"));
         if (held)
             You("must put it down to unlock.");
-        obj->lknown = 1;
         return 0;
     } else if (obj->otrapped) {
         if (held)
             You("open %s...", the(xname(obj)));
-        obj->lknown = 1;
         (void) chest_trap(obj, HAND, FALSE);
         /* even if the trap fails, you've used up this turn */
         if (multi >= 0) { /* in case we didn't become paralyzed */
@@ -2722,7 +2725,6 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
         abort_looting = TRUE;
         return 1;
     }
-    obj->lknown = 1;
 
     current_container = obj; /* for use by in/out_container */
     /*
@@ -2781,7 +2783,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
      * or
      * <The/Your/Shk's container> is empty.  Do what with it? [:irs nq or ?]
      */
-    for (;;) { /* repeats iff '?' or ":' gets chosen */
+    for (;;) { /* repeats iff '?' or ':' gets chosen */
         outmaybe = (outokay || !current_container->cknown);
         if (!outmaybe)
             (void) safe_qbuf(qbuf, (char *) 0, " is empty.  Do what with it?",
@@ -2932,7 +2934,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
         }
     }
 
-containerdone:
+ containerdone:
     if (used) {
         /* Not completely correct; if we put something in without knowing
            whatever was already inside, now we suddenly do.  That can't
@@ -3354,7 +3356,11 @@ struct obj *box; /* or bag */
     /* caveat: this assumes that cknown, lknown, olocked, and otrapped
        fields haven't been overloaded to mean something special for the
        non-standard "container" horn of plenty */
-    box->lknown = 1;
+    if (!box->lknown) {
+        box->lknown = 1;
+        if (carried(box))
+            update_inventory(); /* jumping the gun slightly; hope that's ok */
+    }
     if (box->olocked) {
         pline("It's locked.");
     } else if (box->otrapped) {
@@ -3475,6 +3481,8 @@ struct obj *box; /* or bag */
         if (held)
             (void) encumber_msg();
     }
+    if (carried(box)) /* box is now empty with cknown set */
+        update_inventory();
 }
 
 /*pickup.c*/

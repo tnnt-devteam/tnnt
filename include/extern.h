@@ -1,4 +1,4 @@
-/* NetHack 3.6	extern.h	$NHDT-Date: 1558485640 2019/05/22 00:40:40 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.706 $ */
+/* NetHack 3.6	extern.h	$NHDT-Date: 1560085861 2019/06/09 13:11:01 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.713 $ */
 /* Copyright (c) Steve Creps, 1988.				  */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -127,8 +127,23 @@ E void FDECL(uchangealign, (int, int));
 
 E void FDECL(ballrelease, (BOOLEAN_P));
 E void NDECL(ballfall);
+#ifndef BREADCRUMBS
 E void NDECL(placebc);
 E void NDECL(unplacebc);
+E int NDECL(unplacebc_and_covet_placebc);
+E void FDECL(lift_covet_and_placebc, (int));
+#else
+E void FDECL(Placebc, (const char *, int));
+E void FDECL(Unplacebc, (const char *, int));
+E int FDECL(Unplacebc_and_covet_placebc, (const char *, int));
+E void FDECL(Lift_covet_and_placebc, (int, const char *, int));
+#define placebc() Placebc(__FUNCTION__, __LINE__)
+#define unplacebc() Unplacebc(__FUNCTION__, __LINE__)
+#define unplacebc_and_covet_placebc() \
+            Unplacebc_and_covet_placebc(__FUNCTION__, __LINE__)
+#define lift_covet_and_placebc(x) \
+            Lift_covet_and_placebc(x, __FUNCTION__, __LINE__) 
+#endif
 E void FDECL(set_bc, (int));
 E void FDECL(move_bc, (int, int, XCHAR_P, XCHAR_P, XCHAR_P, XCHAR_P));
 E boolean FDECL(drag_ball, (XCHAR_P, XCHAR_P, int *, xchar *, xchar *,
@@ -345,6 +360,7 @@ E void FDECL(newsym, (int, int));
 E void FDECL(newsym_force, (int, int));
 E void FDECL(shieldeff, (XCHAR_P, XCHAR_P));
 E void FDECL(tmp_at, (int, int));
+E void FDECL(flash_glyph_at, (int, int, int, int));
 E void FDECL(swallowed, (int));
 E void FDECL(under_ground, (int));
 E void FDECL(under_water, (int));
@@ -1068,6 +1084,8 @@ E int NDECL(dosuspend);
 E void FDECL(new_light_source, (XCHAR_P, XCHAR_P, int, int, ANY_P *));
 E void FDECL(del_light_source, (int, ANY_P *));
 E void FDECL(do_light_sources, (char **));
+E void FDECL(show_transient_light, (struct obj *, int, int));
+E void NDECL(transient_light_cleanup);
 E struct monst *FDECL(find_mid, (unsigned, unsigned));
 E void FDECL(save_light_sources, (int, int, int));
 E void FDECL(restore_light_sources, (int));
@@ -1353,6 +1371,7 @@ E void FDECL(unbless, (struct obj *));
 E void FDECL(curse, (struct obj *));
 E void FDECL(uncurse, (struct obj *));
 E void FDECL(blessorcurse, (struct obj *, int));
+E void FDECL(set_bknown, (struct obj *, unsigned));
 E boolean FDECL(is_flammable, (struct obj *));
 E boolean FDECL(is_rottable, (struct obj *));
 E void FDECL(place_object, (struct obj *, int, int));
@@ -1413,6 +1432,7 @@ E int FDECL(can_carry, (struct monst *, struct obj *));
 E int FDECL(mfndpos, (struct monst *, coord *, long *, long));
 E boolean FDECL(monnear, (struct monst *, int, int));
 E void NDECL(dmonsfree);
+E void FDECL(elemental_clog, (struct monst *));
 E int FDECL(mcalcmove, (struct monst *));
 E void NDECL(mcalcdistress);
 E void FDECL(replmon, (struct monst *, struct monst *));

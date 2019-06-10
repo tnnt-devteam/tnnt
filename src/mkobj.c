@@ -1,4 +1,4 @@
-/* NetHack 3.6	mkobj.c	$NHDT-Date: 1558124913 2019/05/17 20:28:33 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.147 $ */
+/* NetHack 3.6	mkobj.c	$NHDT-Date: 1559670606 2019/06/04 17:50:06 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.150 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Derek S. Ray, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -702,7 +702,7 @@ int alter_type;
 {
     xchar ox, oy;
     char objroom;
-    boolean set_bknown;
+    boolean learn_bknown;
     const char *those, *them;
     struct monst *shkp = 0;
 
@@ -742,21 +742,21 @@ int alter_type;
     /* when shopkeeper describes the object as being uncursed or unblessed
        hero will know that it is now uncursed; will also make the feedback
        from `I x' after bill_dummy_object() be more specific for this item */
-    set_bknown = (alter_type == COST_UNCURS || alter_type == COST_UNBLSS);
+    learn_bknown = (alter_type == COST_UNCURS || alter_type == COST_UNBLSS);
 
     switch (obj->where) {
     case OBJ_FREE: /* obj_no_longer_held() */
     case OBJ_INVENT:
-        if (set_bknown)
-            obj->bknown = 1;
+        if (learn_bknown)
+            set_bknown(obj, 1);
         verbalize("You %s %s %s, you pay for %s!",
                   alteration_verbs[alter_type], those, simpleonames(obj),
                   them);
         bill_dummy_object(obj);
         break;
     case OBJ_FLOOR:
-        if (set_bknown)
-            obj->bknown = 1;
+        if (learn_bknown)
+            obj->bknown = 1; /* ok to bypass set_bknown() here */
         if (costly_spot(u.ux, u.uy) && objroom == *u.ushops) {
             verbalize("You %s %s, you pay for %s!",
                       alteration_verbs[alter_type], those, them);
@@ -1394,6 +1394,19 @@ register struct obj *otmp;
     return (!!otmp->blessed - !!otmp->cursed);
 }
 
+/* set the object's bless/curse-state known flag */
+void
+set_bknown(obj, onoff)
+struct obj *obj;
+unsigned onoff; /* 1 or 0 */
+{
+    if (obj->bknown != onoff) {
+        obj->bknown = onoff;
+        if (obj->where == OBJ_INVENT && moves > 1L)
+            update_inventory();
+    }
+}
+
 /*
  *  Calculate the weight of the given object.  This will recursively follow
  *  and calculate the weight of any containers.
@@ -1728,8 +1741,17 @@ int x, y;
 {
     register struct obj *otmp2 = level.objects[x][y];
 
+    if (!isok(x, y)) { /* validate location */
+        void VDECL((*func), (const char *, ...)) PRINTF_F(1, 2);
+
+        func = (x < 0 || y < 0 || x > COLNO - 1 || y > ROWNO - 1) ? panic
+               : impossible;
+        (*func)("place_object: \"%s\" [%d] off map <%d,%d>",
+                safe_typename(otmp->otyp), otmp->where, x, y);
+    }
     if (otmp->where != OBJ_FREE)
-        panic("place_object: obj not free");
+        panic("place_object: obj \"%s\" [%d] not free",
+              safe_typename(otmp->otyp), otmp->where);
 
     obj_no_longer_held(otmp);
     if (otmp->otyp == BOULDER) {
