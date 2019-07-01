@@ -1,4 +1,4 @@
-/* NetHack 3.6	objnam.c	$NHDT-Date: 1559670607 2019/06/04 17:50:07 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.242 $ */
+/* NetHack 3.6	objnam.c	$NHDT-Date: 1561081353 2019/06/21 01:42:33 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.244 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2011. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -25,7 +25,7 @@ STATIC_DCL boolean FDECL(singplur_lookup, (char *, char *, BOOLEAN_P,
 STATIC_DCL char *FDECL(singplur_compound, (char *));
 STATIC_DCL char *FDECL(xname_flags, (struct obj *, unsigned));
 STATIC_DCL boolean FDECL(badman, (const char *, BOOLEAN_P));
-STATIC_DCL char *FDECL(globwt, (struct obj *, char *));
+STATIC_DCL char *FDECL(globwt, (struct obj *, char *, boolean *));
 
 struct Jitem {
     int item;
@@ -932,7 +932,8 @@ unsigned doname_flags;
 {
     boolean ispoisoned = FALSE,
             with_price = (doname_flags & DONAME_WITH_PRICE) != 0,
-            vague_quan = (doname_flags & DONAME_VAGUE_QUAN) != 0;
+            vague_quan = (doname_flags & DONAME_VAGUE_QUAN) != 0,
+            weightshown = FALSE;
     boolean known, dknown, cknown, bknown, lknown;
     int omndx = obj->corpsenm;
     char prefix[PREFIX], globbuf[QBUFSZ];
@@ -1243,7 +1244,8 @@ unsigned doname_flags;
 
         Sprintf(eos(bp), " (%s, %s%ld %s)",
                 obj->unpaid ? "unpaid" : "contents",
-                globwt(obj, globbuf), quotedprice, currency(quotedprice));
+                globwt(obj, globbuf, &weightshown),
+                quotedprice, currency(quotedprice));
     } else if (with_price) { /* on floor or in container on floor */
         int nochrg = 0;
         long price = get_cost_of_shop_item(obj, &nochrg);
@@ -1251,9 +1253,11 @@ unsigned doname_flags;
         if (price > 0L)
             Sprintf(eos(bp), " (%s, %s%ld %s)",
                     nochrg ? "contents" : "for sale",
-                    globwt(obj, globbuf), price, currency(price));
+                    globwt(obj, globbuf, &weightshown),
+                    price, currency(price));
         else if (nochrg > 0)
-            Sprintf(eos(bp), " (%sno charge)", globwt(obj, globbuf));
+            Sprintf(eos(bp), " (%sno charge)",
+                    globwt(obj, globbuf, &weightshown));
     }
     if (!strncmp(prefix, "a ", 2)) {
         /* save current prefix, without "a "; might be empty */
@@ -1264,11 +1268,13 @@ unsigned doname_flags;
         Strcat(prefix, tmpbuf);
     }
 
-    /* show weight for items (debug tourist info)
-     * aum is stolen from Crawl's "Arbitrary Unit of Measure" */
+    /* show weight for items (debug tourist info);
+       "aum" is stolen from Crawl's "Arbitrary Unit of Measure" */
     if (wizard && iflags.wizweight) {
-        if (!obj->globby)   /* aum already apparent for globs */
-            Sprintf(eos(bp), " (%d aum)", obj->owt);
+        /* wizard mode user has asked to see object weights;
+           globs with shop pricing attached already include it */
+        if (!weightshown)
+            Sprintf(eos(bp), " (%u aum)", obj->owt);
     }
     bp = strprepend(bp, prefix);
     return bp;
@@ -2812,7 +2818,7 @@ int xtra_prob; /* to force 0% random generation items to also be considered */
      * probabilities are not very useful because they don't take
      * the class generation probability into account.  [If 10%
      * of spellbooks were blank and 1% of scrolls were blank,
-     * "blank" would have 10/11 chance to yield a blook even though
+     * "blank" would have 10/11 chance to yield a book even though
      * scrolls are supposed to be much more common than books.]
      */
     for (i = oclass ? bases[(int) oclass] : STRANGE_OBJECT + 1;
@@ -3347,6 +3353,7 @@ struct obj *no_wish;
         for (i = 0; i < (int) (sizeof wrpsym); i++) {
             register int j = strlen(wrp[i]);
 
+            /* check for "<class> [ of ] something" */
             if (!strncmpi(bp, wrp[i], j)) {
                 oclass = wrpsym[i];
                 if (oclass != AMULET_CLASS) {
@@ -3358,12 +3365,27 @@ struct obj *no_wish;
                     actualn = bp;
                 goto srch;
             }
+            /* check for "something <class>" */
             if (!BSTRCMPI(bp, p - j, wrp[i])) {
                 oclass = wrpsym[i];
-                p -= j;
-                *p = 0;
-                if (p > bp && p[-1] == ' ')
-                    p[-1] = 0;
+                /* for "foo amulet", leave the class name so that
+                   wishymatch() can do "of inversion" to try matching
+                   "amulet of foo"; other classes don't include their
+                   class name in their full object names (where
+                   "potion of healing" is just "healing", for instance) */
+                if (oclass != AMULET_CLASS) {
+                    p -= j;
+                    *p = '\0';
+                    if (p > bp && p[-1] == ' ')
+                        p[-1] = '\0';
+                } else {
+                    /* amulet without "of"; convoluted wording but better a
+                       special case that's handled than one that's missing */
+                    if (!strncmpi(bp, "versus poison ", 14)) {
+                        typ = AMULET_VERSUS_POISON;
+                        goto typfnd;
+                    }
+                }
                 actualn = dn = bp;
                 goto srch;
             }
@@ -4236,13 +4258,17 @@ const char *lastR;
 }
 
 STATIC_OVL char *
-globwt(otmp, buf)
+globwt(otmp, buf, weightformatted_p)
 struct obj *otmp;
 char *buf;
+boolean *weightformatted_p;
 {
     *buf = '\0';
     if (otmp->globby) {
         Sprintf(buf, "%u aum, ", otmp->owt);
+        *weightformatted_p = TRUE;
+    } else {
+        *weightformatted_p = FALSE;
     }
     return buf;
 }
