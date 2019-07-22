@@ -17,6 +17,10 @@
 #define strncasecmp strncmpi
 #endif
 
+/* defined in sys/<foo>/<foo>tty.c or cursmain.c as last resort;
+   set up by curses_init_nhwindows() */
+extern char erase_char, kill_char;
+
 /*
  * Note:
  *
@@ -125,9 +129,7 @@ curses_line_input_dialog(const char *prompt, char *answer, int buffer)
     int map_height, map_width, maxwidth, remaining_buf, winx, winy, count;
     WINDOW *askwin, *bwin;
     char *tmpstr;
-    int prompt_width = (int) strlen(prompt) + buffer + 1;
-    int prompt_height = 1;
-    int height = prompt_height;
+    int prompt_width, prompt_height = 1, height = prompt_height;
     char input[BUFSZ];
 
     /* if messages were being suppressed for the remainder of the turn,
@@ -136,6 +138,8 @@ curses_line_input_dialog(const char *prompt, char *answer, int buffer)
 
     if (buffer > (int) sizeof input)
         buffer = (int) sizeof input;
+    /* +1: space between prompt and answer; buffer already accounts for \0 */
+    prompt_width = (int) strlen(prompt) + 1 + buffer;
     maxwidth = term_cols - 2;
 
     if (iflags.window_inited) {
@@ -163,23 +167,20 @@ curses_line_input_dialog(const char *prompt, char *answer, int buffer)
         free(tmpstr);
     }
 
-    if (iflags.window_inited) {
-        bwin = curses_create_window(prompt_width, height, UP);
-        wrefresh(bwin);
-        getbegyx(bwin, winy, winx);
-        askwin = newwin(height, prompt_width, winy + 1, winx + 1);
-    } else {
-        bwin = curses_create_window(prompt_width, height, CENTER);
-        wrefresh(bwin);
-        getbegyx(bwin, winy, winx);
-        askwin = newwin(height, prompt_width, winy + 1, winx + 1);
-    }
+    bwin = curses_create_window(prompt_width, height,
+                                iflags.window_inited ? UP : CENTER);
+    wrefresh(bwin);
+    getbegyx(bwin, winy, winx);
+    askwin = newwin(height, prompt_width, winy + 1, winx + 1);
+
     for (count = 0; count < prompt_height; count++) {
         tmpstr = curses_break_str(prompt, maxwidth, count + 1);
-        if (count == (prompt_height - 1)) { /* Last line */
-            mvwprintw(askwin, count, 0, "%s ", tmpstr);
-        } else {
-            mvwaddstr(askwin, count, 0, tmpstr);
+        mvwaddstr(askwin, count, 0, tmpstr);
+        if (count == prompt_height - 1) { /* Last line */
+            if ((int) strlen(tmpstr) < maxwidth)
+                waddch(askwin, ' ');
+            else
+                wmove(askwin, count + 1, 0);
         }
         free(tmpstr);
     }
@@ -188,7 +189,7 @@ curses_line_input_dialog(const char *prompt, char *answer, int buffer)
     curs_set(1);
     wgetnstr(askwin, input, buffer - 1);
     curs_set(0);
-    strcpy(answer, input);
+    Strcpy(answer, input);
     werase(bwin);
     delwin(bwin);
     curses_destroy_win(askwin);
@@ -415,7 +416,7 @@ curses_ext_cmd()
         wmove(extwin, starty, startx + 2);
         waddstr(extwin, cur_choice);
         wmove(extwin, starty, (int) strlen(cur_choice) + startx + 2);
-        wprintw(extwin, "             ");
+        wclrtoeol(extwin);
 
         /* if we have an autocomplete command, AND it matches uniquely */
         if (matches == 1) {
@@ -424,12 +425,12 @@ curses_ext_cmd()
             wprintw(extwin, "%s",
                     extcmdlist[ret].ef_txt + (int) strlen(cur_choice));
             curses_toggle_color_attr(extwin, NONE, A_UNDERLINE, OFF);
-            mvwprintw(extwin, starty,
-                      (int) strlen(extcmdlist[ret].ef_txt) + 2, "          ");
         }
 
+        curs_set(1);
         wrefresh(extwin);
         letter = getch();
+        curs_set(0);
         prompt_width = (int) strlen(cur_choice);
         matches = 0;
 
@@ -451,8 +452,9 @@ curses_ext_cmd()
         }
 
         if (letter == '\177') /* DEL/Rubout */
-             letter = '\b';
-        if (letter == '\b' || letter == KEY_BACKSPACE) {
+            letter = '\b';
+        if (letter == '\b' || letter == KEY_BACKSPACE
+            || (erase_char && letter == (int) (uchar) erase_char)) {
             if (prompt_width == 0) {
                 ret = -1;
                 break;
@@ -461,7 +463,15 @@ curses_ext_cmd()
                 letter = '*';
                 prompt_width--;
             }
+
+        /* honor kill_char if it's ^U or similar, but not if it's '@' */
+        } else if (kill_char && letter == (int) (uchar) kill_char
+                   && (letter < ' ' || letter >= '\177')) { /*ASCII*/
+            cur_choice[0] = '\0';
+            letter = '*';
+            prompt_width = 0;
         }
+
         if (letter != '*' && prompt_width < maxlen) {
             cur_choice[prompt_width] = letter;
             cur_choice[prompt_width + 1] = '\0';
@@ -489,7 +499,8 @@ curses_ext_cmd()
     }
 
     curses_destroy_win(extwin);
-    if (extwin2) curses_destroy_win(extwin2);
+    if (extwin2)
+        curses_destroy_win(extwin2);
     return ret;
 }
 

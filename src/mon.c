@@ -45,7 +45,7 @@ const char *warnings[] = {
 #endif /* 0 */
 
 
-void
+STATIC_OVL void
 sanity_check_single_mon(mtmp, chk_geno, msg)
 struct monst *mtmp;
 boolean chk_geno;
@@ -2880,7 +2880,7 @@ struct monst *mtmp;
     return;
 }
 
-void
+STATIC_OVL void
 deal_with_overcrowding(mtmp)
 struct monst *mtmp;
 {
