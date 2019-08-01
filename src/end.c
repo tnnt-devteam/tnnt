@@ -732,8 +732,10 @@ time_t when; /* date+time at end of game */
     init_symbols(); /* revert to default symbol set */
 
     /* let folks know this was a TNNT game */
-    Sprintf(pbuf, "The November NetHack Tournament, November 2018");
-    putstr(0, 0, pbuf);
+    Sprintf(pbuf, "The November NetHack Tournament, November 2019");
+    /* putstr(0, 0, pbuf); */
+    putstr(0, ATR_SUBHEAD, pbuf);
+    putstr(NHW_DUMPTXT, 0, "");
 
     /* one line version ID, which includes build date+time;
        it's conceivable that the game started with a different
