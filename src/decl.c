@@ -280,7 +280,7 @@ char *fqn_prefix[PREFIX_COUNT] = { (char *) 0, (char *) 0, (char *) 0,
                                    (char *) 0, (char *) 0, (char *) 0,
                                    (char *) 0, (char *) 0, (char *) 0,
                                    (char *) 0 };
-                                   
+
 #ifdef PREFIXES_IN_USE
 char *fqn_prefix_names[PREFIX_COUNT] = {
     "hackdir",  "leveldir", "savedir",    "bonesdir",  "datadir",
@@ -427,7 +427,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Chemistry 101", "Alchemize two potions in an established recipe"},
   {"Get Your Gas Mask", "Kill a monster with a stinking cloud"},
   {"Escape to Discworld", "Read a Terry Pratchett novel"},
-  {"Near Death Experience", "#chat to Death while carrying a Terry Pratchett Novel"},
+  {"Near Death Experience", "#chat to Death while carrying a Terry Pratchett novel"},
   {"Jeweler", "Identify every type of valuable gemstone"},
   {"Prize Inside!", "Get a spellbook by breaking a randomly-generated statue"},
   {"Ding-a-Ling", "Summon a nymph by ringing a cursed bell"},
