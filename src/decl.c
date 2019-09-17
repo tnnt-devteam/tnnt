@@ -428,7 +428,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Get Your Gas Mask", "Kill a monster with a stinking cloud"},
   {"Escape to Discworld", "Read a Terry Pratchett novel"},
   {"Near Death Experience", "#chat to Death while carrying a Terry Pratchett novel"},
-  {"Jeweler", "Identify every type of valuable gemstone"},
+  {"Mineralogist", "Identify every type of valuable gemstone"},
   {"Prize Inside!", "Get a spellbook by breaking a randomly-generated statue"},
   {"Ding-a-Ling", "Summon a nymph by ringing a cursed bell"},
   {"Best Friends Forever", "Take your starting pet to full adulthood"},
