@@ -245,8 +245,8 @@ struct obj *obj; /* quest artifact; possibly null if carrying Amulet */
     }
 }
 
-/* Trigger checks for TNNT achievements that get achieved when you first meet
- * your leader. */
+/* Trigger checks for TNNT achievements that get achieved when you first get
+ * assigned the quest. */
 STATIC_OVL void
 tnnt_quest_checks()
 {
@@ -285,9 +285,6 @@ tnnt_quest_checks()
 STATIC_OVL void
 chat_with_leader()
 {
-    /* TNNT: Check for conducts maintained so far. */
-    tnnt_quest_checks();
-
     /*  Rule 0: Cheater checks. */
     if (u.uhave.questart && !Qstat(met_nemesis))
         Qstat(cheater) = TRUE;
@@ -354,6 +351,8 @@ chat_with_leader()
             exercise(A_WIS, TRUE);
             Qstat(got_quest) = TRUE;
             tnnt_achieve(A_STARTED_QUEST);
+            /* TNNT: Check for conducts maintained so far. */
+            tnnt_quest_checks();
         }
     }
 }
