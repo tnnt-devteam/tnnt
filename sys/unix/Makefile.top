@@ -86,7 +86,7 @@ DATHELP = help hh cmdhelp keyhelp history opthelp wizhelp
 SPEC_LEVS = asmodeus.lev baalz.lev bigrm-*.lev castle.lev fakewiz?.lev \
 	juiblex.lev knox.lev medusa-?.lev minend-?.lev minefill.lev \
 	minetn-?.lev oracle.lev orcus.lev sanctum.lev soko?-?.lev \
-	tower?.lev valley.lev wizard?.lev devteam.lev \
+	tower?.lev valley.lev wizard?.lev devteam.lev npcdeath.lev \
 	astral.lev air.lev earth.lev fire.lev water.lev
 QUEST_LEVS = ???-goal.lev ???-fil?.lev ???-loca.lev ???-strt.lev
 
@@ -208,22 +208,22 @@ dofiles:
 	$(MAKE) dofiles-$${target-nodlb}
 	cp src/$(GAME) $(INSTDIR)
 	cp util/recover $(INSTDIR)
-	-if test -n '$(SHELLDIR)'; then rm -f $(SHELLDIR)/$(GAME); fi
+	-if test -n '$(SHELLDIR)'; then rm -f $(SHELLDIR)/tnnt; fi
 	if test -n '$(SHELLDIR)'; then \
 		sed -e 's;/usr/games/lib/nethackdir;$(HACKDIR);' \
 		-e 's;HACKDIR/nethack;HACKDIR/$(GAME);' \
 		< sys/unix/nethack.sh \
-		> $(SHELLDIR)/$(GAME) ; fi
+		> $(SHELLDIR)/tnnt ; fi
 # set up their permissions
 	-( cd $(INSTDIR) ; $(CHOWN) $(GAMEUID) $(GAME) recover ; \
 			$(CHGRP) $(GAMEGRP) $(GAME) recover )
 	chmod $(GAMEPERM) $(INSTDIR)/$(GAME)
 	chmod $(EXEPERM) $(INSTDIR)/recover
 	-if test -n '$(SHELLDIR)'; then \
-		$(CHOWN) $(GAMEUID) $(SHELLDIR)/$(GAME); fi
+		$(CHOWN) $(GAMEUID) $(SHELLDIR)/tnnt; fi
 	if test -n '$(SHELLDIR)'; then \
-		$(CHGRP) $(GAMEGRP) $(SHELLDIR)/$(GAME); \
-		chmod $(EXEPERM) $(SHELLDIR)/$(GAME); fi
+		$(CHGRP) $(GAMEGRP) $(SHELLDIR)/tnnt; \
+		chmod $(EXEPERM) $(SHELLDIR)/tnnt; fi
 
 dofiles-dlb: check-dlb
 	( cd dat ; cp nhdat $(DATNODLB) $(INSTDIR) )

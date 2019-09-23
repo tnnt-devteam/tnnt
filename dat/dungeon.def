@@ -27,6 +27,7 @@ CHAINBRANCH:	"The Quest" "oracle" + (6, 2) portal
 BRANCH:		"Fort Ludios" @ (18, 4) portal
 CHAINBRANCH:    "devteam" "rogue" + (0, 0) up
 RNDLEVEL:	"medusa" "none" @ (-5, 4) 4
+CHAINBRANCH:    "npcdeath" "oracle" + (1, 1) portal
 LEVALIGN:	chaotic
 LEVEL:		"castle" "none" @ (-1, 0)
 CHAINBRANCH:	"Gehennom" "castle" + (0, 0) no_down
@@ -116,6 +117,13 @@ DESCRIPTION:    mazelike
 ALIGNMENT:      unaligned
 ENTRY:          -1
 LEVEL:          "devteam" "Z" @ (1, 0)
+#
+#       NPC Deathmatch
+#
+DUNGEON:        "npcdeath" "Y" (1, 0)
+DESCRIPTION:    mazelike
+ALIGNMENT:      unaligned
+LEVEL:          "npcdeath" "Y" @ (1, 0)
 #
 #	Vlad's Tower
 #

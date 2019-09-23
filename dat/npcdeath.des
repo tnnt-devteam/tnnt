@@ -1,0 +1,84 @@
+# NetHack 3.6   devteam.des     $NHDT-Date: 1540389707 2018/10/24 14:01:47 $  $NHDT-Branch: master $:$NHDT-Revision: 1.13 $
+#       Copyright (c) 1989 by Jean-Christophe Collet
+#       Copyright (c) 1992,1993 by Izchak Miller, David Cohrs,
+#                      and Timo Hakulinen
+# NetHack may be freely redistributed.  See license for details.
+#
+# "NPC Deathmatch" by the TNNT devteam
+#
+
+MAZE:"npcdeath",' '
+FLAGS:nommap,noteleport,hardfloor
+MESSAGE: "Upon exiting the portal, you immediately feel on edge."
+MESSAGE: "You feel as if you've stumbled across something very dangerous.  You resist the urge to flee."
+GEOMETRY:center,center
+
+#         1         2         3         4         5         6         7
+#123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+                               
+                               
+         
+            ------------------------------------------
+            |........................................|
+            |...................}}...................|
+            |...--.......--.....}}.....--.......--...|      ---------
+            |...--.......--.....}}.....--.......--...|      |.......|
+            |...................}}...................|------|.......|
+            |........................................+..............|
+            |...................}}...................|------|.......|
+            |...--.......--.....}}.....--.......--...|      |.......|
+            |...--.......--.....}}.....--.......--...|      ---------
+            |...................}}...................| 
+            |........................................|
+            ------------------------------------------
+         
+         
+         
+ENDMAP
+
+BRANCH:(67,09,67,09),(0,0,0,0)
+REGION:(12,03,68,15),lit,"ordinary"
+NON_DIGGABLE:(0,0,75,19)
+
+## Foyer
+ENGRAVING:(54,09),burn,"Point of no return."
+ENGRAVING:(60,09),burn,"Two players enter, one player leaves..."
+
+FOUNTAIN:(64,08)
+FOUNTAIN:(64,10)
+DOOR:closed,(53,09)
+
+# Statues of those before...
+CONTAINER:('`',"statue"),(61,07) { }
+CONTAINER:('`',"statue"),(62,07) { }
+CONTAINER:('`',"statue"),(63,07) { }
+CONTAINER:('`',"statue"),(64,07) { }
+CONTAINER:('`',"statue"),(65,07) { }
+CONTAINER:('`',"statue"),(66,07) { }
+CONTAINER:('`',"statue"),(67,07) { }
+CONTAINER:('`',"statue"),(61,11) { }
+CONTAINER:('`',"statue"),(62,11) { }
+CONTAINER:('`',"statue"),(63,11) { }
+CONTAINER:('`',"statue"),(64,11) { }
+CONTAINER:('`',"statue"),(65,11) { }
+CONTAINER:('`',"statue"),(66,11) { }
+CONTAINER:('`',"statue"),(67,11) { }
+
+## The Arena
+
+# What's in the moat...
+MONSTER:(';',"giant eel"),(32,05)
+MONSTER:(';',"giant eel"),(33,08)
+MONSTER:(';',"giant eel"),(32,10)
+MONSTER:(';',"giant eel"),(33,13)
+
+# Pitfalls
+TRAP:"spiked pit",random
+TRAP:"spiked pit",random
+TRAP:"spiked pit",random
+TRAP:"spiked pit",random
+TRAP:"spiked pit",random
+TRAP:"spiked pit",random
+
+# end npcdeath.des
