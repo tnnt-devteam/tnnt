@@ -121,6 +121,11 @@ LLC_TURNS=3000
 #   %N first character of player name
 DUMPLOGFILE=/dgldir/userdata/%N/%n/tnnt/dumplog/%t.tnnt.txt
 
+# End of game HTML dump.
+# Only available if NetHack was compiled with DUMPHTML
+# Allows placeholders as above.
+DUMPHTMLFILE=/dgldir/userdata/%N/%n/tnnt/dumplog/%t.tnnt.html
+
 # Number of bones file pools.
 # The pool you belong to is determined at game start. You will
 # load and save bones only from that pool. Generally useful
@@ -131,7 +136,8 @@ DUMPLOGFILE=/dgldir/userdata/%N/%n/tnnt/dumplog/%t.tnnt.txt
 
 # Try to get more info in case of a program bug or crash.  Only used
 # if the program is built with the PANICTRACE compile-time option enabled.
-# By default PANICTRACE is enabled if BETA is defined, otherwise disabled.
+# By default PANICTRACE is enabled if (NH_DEVEL_STATUS != NH_STATUS_RELEASED),
+# otherwise disabled.
 # Using GDB can get more information and works on more systems but requires
 # 'gdb' be available; using LIBC only works if NetHack is linked with a
 # libc that supports the backtrace(3) API.  Both require certain compilation
