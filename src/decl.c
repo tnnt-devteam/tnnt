@@ -477,7 +477,6 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Conqueror of Death", "Kill Death"},
   {"Curer of Pestilence", "Kill Pestilence"},
   {"Feeder of Famine", "Kill Famine"},
-  {"You Had ONE Job", "Escape the Astral Plane in celestial disgrace"},
   {"Under New Management", "Change your alignment by any means"},
   {"Heisenberg", "Become uncertain about your position or velocity"},
   {"Who You Gonna Call?", "Get scared by a ghost"},

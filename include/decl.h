@@ -598,7 +598,6 @@ enum tnnt_achievements {
     A_KILLED_DEATH,          /* Implemented,tested. */ /* #128 */
     A_KILLED_PESTILENCE,     /* Implemented,tested. */ /* begin tnntachieve2 here */
     A_KILLED_FAMINE,         /* Implemented,tested. */
-    A_ESCAPED_IN_DISGRACE,   /* Implemented. */
     A_CHANGED_ALIGNMENT,     /* Implemented. */
     A_HEISENBERG,            /* Implemented. */
     A_SCARED_BY_GHOST,       /* Implemented. */
@@ -627,8 +626,8 @@ enum tnnt_achievements {
     A_WRESTED_WOW,           /* Implemented. */
     A_AMETHYST_BOOZE,        /* Implemented. */
     A_SCARED_OF_SKELETON,    /* Implemented,tested. */
-    A_ENTERED_LUDIOS,        /* Implemented,tested. */ /* #160 */
-    A_KILLED_CROESUS,        /* Implemented,tested. */
+    A_ENTERED_LUDIOS,        /* Implemented,tested. */
+    A_KILLED_CROESUS,        /* Implemented,tested. */ /* #160 */
     A_LIED_TO_GUARD,         /* Implemented,tested. */
     A_GOT_13_LUCK,           /* Implemented,tested. */
     A_GOT_NEGATIVE_13_LUCK,  /* Implemented,tested. */
@@ -659,9 +658,9 @@ enum tnnt_achievements {
     A_DISARMED_WITH_WHIP,    /* Implemented. */
     A_VISITED_ALL_ALTARS,    /* Implemented. */
     A_BROKE_WAND_WISHING,    /* Implemented. */
-    A_KILLED_WITH_TRIDENT,   /* Implemented. */ /* #192 */
-    A_STONED_A_MONSTER,      /* Implemented. */ /* begin tnntachieve3 here */
-    A_USED_PASSTUNE,         /* Implemented. */
+    A_KILLED_WITH_TRIDENT,   /* Implemented. */
+    A_STONED_A_MONSTER,      /* Implemented. */ /* #192 */
+    A_USED_PASSTUNE,         /* Implemented. */ /* begin tnntachieve3 here */
     A_ID_DETECT_FOOD,        /* Implemented. */
     A_WISH_FROM_EVERYTHING,  /* Implemented. */
     A_KILLED_EYE_POLEARM,    /* Implemented. */
