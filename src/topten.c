@@ -347,7 +347,8 @@ int how;
     char buf[BUFSZ], tmpbuf[DTHSZ + 1];
     int i;
 
-    Sprintf(buf, "version=%d.%d.%d", tt->ver_major, tt->ver_minor,
+    Fprintf(rfile, "server=%s", SERVER_LOCATION);
+    Sprintf(buf, "%cversion=%d.%d.%d", XLOG_SEP, tt->ver_major, tt->ver_minor,
             tt->patchlevel);
     Sprintf(eos(buf), "%cpoints=%ld%cdeathdnum=%d%cdeathlev=%d", XLOG_SEP,
             tt->points, XLOG_SEP, tt->deathdnum, XLOG_SEP, tt->deathlev);
