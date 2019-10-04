@@ -6677,6 +6677,25 @@ Z = (195, 195, 195)
   ....BPPPPPPE....
   ................
 }
+# tile 000 (devteam member)
+{
+  .............EE.
+  .....CCC.....E.E
+  ....KAAAC....E.E
+  ....KAAACC...EE.
+  ....KAAACCK...P.
+  .....KJKK.....P.
+  ....KCKCCK....P.
+  ..KKCCCKCCCK..P.
+  .KKCCCCKCCCCCCS.
+  .KC.KCKCCK.KCCS.
+  .HS..KCCK.AAKCP.
+  .....EEEEAAAAKP.
+  ....EKKJKJAAAAP.
+  ....CKKJKCAAA.PA
+  ....CKKJKCAA..PA
+  ...CKKKJKKCAA.PA
+}
 # tile 350 (Lord Carnarvon)
 {
   .......JJ.......
