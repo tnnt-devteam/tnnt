@@ -217,6 +217,7 @@
    (whose name can be overridden via #define in global.h if desired) */
 #define LOGFILE  "logfile"  /* larger file for debugging purposes */
 #define XLOGFILE "xlogfile" /* even larger logfile */
+#define SERVER_LOCATION "us.hardfought.org" /* FQDN of the server */
 #define LIVELOGFILE "livelog" /* in-game events recorded live */
 #ifdef LIVELOGFILE
 /* LL_flags defined in global.h. Value below is ignored if SYSCF is enabled */
