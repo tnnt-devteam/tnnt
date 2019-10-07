@@ -142,7 +142,7 @@ E void FDECL(Lift_covet_and_placebc, (int, const char *, int));
 #define unplacebc_and_covet_placebc() \
             Unplacebc_and_covet_placebc(__FUNCTION__, __LINE__)
 #define lift_covet_and_placebc(x) \
-            Lift_covet_and_placebc(x, __FUNCTION__, __LINE__) 
+            Lift_covet_and_placebc(x, __FUNCTION__, __LINE__)
 #endif
 E void FDECL(set_bc, (int));
 E void FDECL(move_bc, (int, int, XCHAR_P, XCHAR_P, XCHAR_P, XCHAR_P));
@@ -303,7 +303,7 @@ E void NDECL(warnreveal);
 E int FDECL(dosearch0, (int));
 E int NDECL(dosearch);
 E void NDECL(sokoban_detect);
-#if defined(DUMPLOG) || defined(DUMPHTML) 
+#if defined(DUMPLOG) || defined(DUMPHTML)
 E void NDECL(dump_map);
 #endif
 E void FDECL(reveal_terrain, (int, int));
@@ -1448,6 +1448,7 @@ E void FDECL(mongone, (struct monst *));
 E void FDECL(monstone, (struct monst *));
 E void FDECL(monkilled, (struct monst *, const char *, int));
 E void FDECL(unstuck, (struct monst *));
+E boolean FDECL(tnnt_common_monst, (int));
 E void FDECL(killed, (struct monst *));
 E void FDECL(xkilled, (struct monst *, int));
 E void FDECL(mon_to_stone, (struct monst *));

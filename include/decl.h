@@ -277,6 +277,8 @@ E NEARDATA struct mvitals {
     uchar born;
     uchar died;
     uchar mvflags;
+    /* TNNT: Monsters the player has personally killed. Should be <= died. */
+    uchar ukilled;
 } mvitals[NUMMONS];
 
 E NEARDATA long domove_attempting;

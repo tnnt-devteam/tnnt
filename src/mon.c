@@ -2388,6 +2388,114 @@ struct monst *mtmp;
     }
 }
 
+/* TNNT: truthiness of whether a given monster counts towards certain
+ * achievements. */
+boolean
+tnnt_common_monst(mndx)
+int mndx;
+{
+    /* Rule 0: We don't want anything after SPECIAL_PM (long worm tail, player
+     * monsters, quest guardians/nemeses/leaders). This also excludes the
+     * off-by-ones of PM_NINJA and PM_CAVEWOMAN. */
+    if (mndx >= SPECIAL_PM)
+        return FALSE;
+
+    /* Rule 1: Uniques tend to have their own achievements already, and aren't
+     * really "species". High priests are the exception, because they aren't
+     * really unique. */
+    if ((mons[mndx].geno & G_UNIQ) && mndx != PM_HIGH_PRIEST)
+        return FALSE;
+
+    switch (mndx) {
+        /* Rule 2: Duplicates of other monsters that should be reduced down
+         * already. For weres, only the PM_HUMAN_WERE* counts. */
+        case PM_WERERAT:
+        case PM_WEREJACKAL:
+        case PM_WEREWOLF:
+        /* Rule 3: You shouldn't have to kill nonthreatening humans. */
+        case PM_SHOPKEEPER:
+        case PM_GUARD:
+        case PM_WATCHMAN:
+        case PM_WATCH_CAPTAIN:
+        case PM_PRISONER:
+        case PM_DEVTEAM_MEMBER:
+        /* Rule 4: No monsters that might never be generated in a game.
+         * If none generate, the player shouldn't have to go out of their
+         * way to engineer their generation. */
+        case PM_WATER_TROLL:
+        case PM_WATER_DEMON:
+        case PM_QUEEN_BEE:
+        case PM_GIANT:
+        case PM_ELF:
+        case PM_ORC:
+        case PM_HUMAN:
+        case PM_MAIL_DAEMON:
+            return FALSE;
+        /* There used to be a Rule 5 about not counting baby versions of
+         * monsters at separate species, but we currently have it as
+         * counting the baby versions separately.
+         */
+    }
+    return TRUE;
+}
+
+/* TNNT: the player personally just killed one of monster mndx. Update ukilled,
+ * doing any filtration or translation as necessary, then process achievements
+ * that trigger based on the player personally killing stuff. */
+void
+tnnt_update_ukilled(mndx)
+int mndx;
+{
+    /* First: translate monsters that exist in multiple forms. */
+    if (mndx == PM_WERERAT)
+        mndx = PM_HUMAN_WERERAT;
+    else if (mndx == PM_WEREJACKAL)
+        mndx = PM_HUMAN_WEREJACKAL;
+    else if (mndx == PM_WEREWOLF)
+        mndx = PM_HUMAN_WEREWOLF;
+
+    if (mvitals[mndx].ukilled < 255)
+        mvitals[mndx].ukilled++;
+
+    /* Count the number of monster species that have had at least 1 monster
+     * killed. */
+    int i, ct = 0;
+    int32_t lowercase_killed = 0x0;
+    boolean missedany = FALSE;
+    for (i = LOW_PM; i < SPECIAL_PM; ++i) {
+        /* Certain species don't count */
+        if (!tnnt_common_monst(i))
+            continue;
+
+        if (mvitals[i].ukilled) {
+            ct++;
+            if (ct >= 25)
+                tnnt_achieve(A_KILLED_25_SPECIES);
+            if (ct >= 50)
+                tnnt_achieve(A_KILLED_50_SPECIES);
+            if (ct >= 100)
+                tnnt_achieve(A_KILLED_100_SPECIES);
+            if (ct >= 200)
+                tnnt_achieve(A_KILLED_200_SPECIES);
+
+            /* a to z achievement */
+            if (mons[i].mlet >= S_ANT && mons[i].mlet <= S_ZRUTY) {
+                xchar offset = (mons[i].mlet - S_ANT);
+                lowercase_killed |= (1 << offset);
+                if (lowercase_killed == 0x03FFFFFF) /* low 26 bits */
+                    tnnt_achieve(A_KILLED_A_Z_SPECIES);
+            }
+        }
+        else {
+            missedany = TRUE;
+        }
+    }
+    /* Checks that should only happen after the whole mons array has been gone
+     * through. */
+    if (!missedany)
+        tnnt_achieve(A_KILLED_ALL_SPECIES);
+}
+
 void
 killed(mtmp)
 struct monst *mtmp;
@@ -2418,11 +2526,13 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
 
     /* TNNT code for anything that triggers when the player kills a monster
      * goes here. */
-    if (mtmp->data->mlet == S_DRAGON) {
+    int m_idx = (mtmp->cham != NON_PM) ? mtmp->cham : monsndx(mtmp->data);
+    tnnt_update_ukilled(m_idx); /* killing groups of monsters achievements */
+
+    if (mons[m_idx].mlet == S_DRAGON) {
         tnnt_achieve(A_KILLED_DRAGON);
     }
-    int m_idx = mtmp->data - &mons[LOW_PM];
-    switch (monsndx(mtmp->data)) {
+    switch (m_idx) {
     case PM_GHOST:
         tnnt_achieve(A_KILLED_GHOST);
         break;
@@ -2440,15 +2550,12 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
     case PM_SOLDIER_ANT:
         tnnt_achieve(A_KILLED_SOLDIER_ANT);
         break;
-    /* Weirdness: The other 8 nazgul / 2 erinyes can die however, including to
-     * traps before the player even knew they were there, but the player MUST
-     * kill the 9th nazgul and 3rd erinys. */
     case PM_NAZGUL:
-        if (mvitals[PM_NAZGUL].died == 9)
+        if (mvitals[PM_NAZGUL].ukilled == 9)
             tnnt_achieve(A_KILLED_9_NAZGUL);
         break;
     case PM_ERINYS:
-        if (mvitals[PM_ERINYS].died == 3)
+        if (mvitals[PM_ERINYS].ukilled == 3)
             tnnt_achieve(A_KILLED_3_ERINYES);
         break;
     case PM_ASMODEUS:   tnnt_achieve(A_KILLED_ASMODEUS);   break;

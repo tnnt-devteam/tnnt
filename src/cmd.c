@@ -134,6 +134,7 @@ static int NDECL((*timed_occ_fn));
 STATIC_PTR int NDECL(dotnntdebug);
 STATIC_PTR int NDECL(dotnntstats);
 STATIC_PTR int NDECL(dotnntachievements);
+STATIC_PTR int NDECL(dotnntspecies);
 STATIC_PTR int NDECL(doshowfoodseaten);
 STATIC_PTR int NDECL(dosuspend_core);
 STATIC_PTR int NDECL(dosh_core);
@@ -3490,6 +3491,8 @@ struct ext_func_tab extcmdlist[] = {
     { M('s'), "sit", "sit down", dosit, AUTOCOMPLETE },
     { '\0', "snacks", "show foods eaten so far (TNNT)",
             doshowfoodseaten, IFBURIED | AUTOCOMPLETE },
+    { '\0', "species", "show species you have killed at least 1 of (TNNT)",
+            dotnntspecies, IFBURIED | AUTOCOMPLETE },
     { '\0', "stats", "show memory statistics",
             wiz_show_stats, IFBURIED | AUTOCOMPLETE | WIZMODECMD },
     { C('z'), "suspend", "suspend the game",
@@ -5509,6 +5512,7 @@ dotnntstats(VOID_ARGS)
 
     /* #snacks command already describes this, just reference it */
     putstr(en_win, 0, "Foods eaten not shown. To show them, use #snacks.");
+    putstr(en_win, 0, "Species killed not shown. To show them, use #species.");
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
@@ -5584,7 +5588,7 @@ dotnntachievements(VOID_ARGS)
     return 0;
 }
 
-/* TNNT: #foodseaten command */
+/* TNNT: #snacks command */
 STATIC_PTR int
 doshowfoodseaten(VOID_ARGS)
 {
@@ -5639,6 +5643,45 @@ doshowfoodseaten(VOID_ARGS)
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
+    return 0;
+}
+
+/* TNNT: #species command */
+STATIC_PTR int
+dotnntspecies(VOID_ARGS)
+{
+    int i, total = 0, numeligible = 0;
+    char buf[BUFSZ];
+    char lets[27] = "                          "; /* 26 spaces */
+    en_win = create_nhwindow(NHW_MENU);
+    putstr(en_win, ATR_BOLD, "Eligible species you have personally killed at least 1 member of:");
+
+    for (i = LOW_PM; i < SPECIAL_PM; ++i) {
+        if (tnnt_common_monst(i)) {
+            boolean killed = (mvitals[i].ukilled > 0);
+            Sprintf(buf, "[%c] %s", (killed ? 'X' : ' '), mons[i].mname);
+            putstr(en_win, 0, buf);
+            numeligible++;
+            if (killed) {
+                total++;
+                /* note that mons[].mlet isn't the actual character it displays
+                 * as. S_ANT is 1, for instance. */
+                char mlet = mons[i].mlet - S_ANT + 'a';
+                if (mlet >= 'a' && mlet <= 'z') {
+                    lets[mlet - 'a'] = mlet;
+                }
+            }
+        }
+    }
+    Sprintf(buf, "%d/%d eligible species killed.", total, numeligible);
+    putstr(en_win, 0, buf);
+    Sprintf(buf, "Lowercase-letter species killed: [%s]", lets);
+    putstr(en_win, 0, buf);
+
+    display_nhwindow(en_win, TRUE);
+    destroy_nhwindow(en_win);
+    en_win = WIN_ERR;
+    return 0;
 }
 
 /* #herecmdmenu command */
