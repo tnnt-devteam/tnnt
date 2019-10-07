@@ -409,7 +409,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Kop Training Program", "Kill a monster with a rubber hose"},
   {"Obligatory Pointy Hat", "Put on a cornuthaum as a wizard"},
   {"Hobbit Skin", "Wear a mithril coat"},
-  {"The Words of the Prophets", "Read 5 random graffiti"},
+  {"The Words of the Prophets", "Read 3 random graffiti"},
   {"Are You Still Pudding Farming", "Split a pudding"},
   {"Wearable Snack", "Wear a meat ring"},
   {"Frozen Treats", "Loot an ice box"},

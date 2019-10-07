@@ -533,7 +533,7 @@ enum tnnt_achievements {
     A_KILLED_WITH_HOSE,      /* Implemented. */
     A_WIZ_WORE_CORNUTHAUM,   /* Implemented. */
     A_WORE_MITHRIL_COAT,     /* Implemented. */
-    A_FOUND_5_GRAFFITI,      /* Implemented. */
+    A_FOUND_3_GRAFFITI,      /* Implemented. */
     A_SPLIT_A_PUDDING,       /* Implemented,tested. */ /* #64 */
     A_WORE_MEAT_RING,        /* Implemented,tested. */ /* begin tnntachieve1 here */
     A_LOOTED_ICE_BOX,        /* Implemented,tested. */

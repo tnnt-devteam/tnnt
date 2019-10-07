@@ -350,8 +350,8 @@ int x, y;
                 if (levl[x][y].typ == ROOM && levl[x][y].graffitied) {
                     levl[x][y].graffitied = 0;
                     tnnt_globals.graffiti_found++;
-                    if (tnnt_globals.graffiti_found >= 5)
-                        tnnt_achieve(A_FOUND_5_GRAFFITI);
+                    if (tnnt_globals.graffiti_found >= 3)
+                        tnnt_achieve(A_FOUND_3_GRAFFITI);
                 }
             }
             break;

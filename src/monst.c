@@ -2828,7 +2828,7 @@ struct permonst _mons2[] = {
         M2_NOPOLY | M2_HUMAN | M2_STRONG | M2_COLLECT | M2_MAGIC,
         M3_INFRAVISIBLE, 12, HI_DOMESTIC),
     /*
-     * The Devteam
+     * TNNT: The Devteam
      * Initially we set out to make each individual DT member.
      * aosdict had a better method - make the one, and then can
      * name it after each DT member in the .des file.
