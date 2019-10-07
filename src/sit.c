@@ -200,9 +200,10 @@ dosit()
                 if (u.uluck + rn2(5) < 0) {
                     You_feel("your luck is changing.");
                     change_luck(1);
-                } else
+                } else {
                     tnnt_globals.wish_sources |= WISHSRC_THRONE;
                     makewish();
+                }
                 break;
             case 7:
               {

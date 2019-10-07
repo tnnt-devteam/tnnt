@@ -832,7 +832,7 @@ int dieroll;
 
                 if (obj->oartifact) {
                     /* TNNT: stealing some code from spec_applies... */
-                    const struct artifact * weap = &artilist[obj->oartifact];
+                    const struct artifact * weap = &artilist[(uchar) obj->oartifact];
                     if (((weap->spfx & SPFX_DMONS)
                             && (mdat == &mons[(int) weap->mtype]))
                         || ((weap->spfx & SPFX_DCLAS)

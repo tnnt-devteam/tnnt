@@ -5404,7 +5404,6 @@ STATIC_PTR int
 dotnntstats(VOID_ARGS)
 {
     char buf[BUFSZ];
-    char buf2[BUFSZ];
     en_win = create_nhwindow(NHW_MENU);
 
     /* mention overall #achievements display */

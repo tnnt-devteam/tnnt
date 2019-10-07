@@ -439,28 +439,34 @@ int otyp;
         firstobj = AMULET_OF_ESP;
         lastobj = AMULET_OF_MAGICAL_BREATHING;
         achvmt = A_IDENTIFIED_ALL_AMULETS;
+        break;
     case POTION_CLASS:
         firstobj = POT_GAIN_ABILITY;
         lastobj = POT_WATER;
         achvmt = A_IDENTIFIED_ALL_POTIONS;
+        break;
     case SCROLL_CLASS:
         /* no requirements for mail or missing code or blank paper */
         firstobj = SCR_ENCHANT_ARMOR;
         lastobj = SCR_STINKING_CLOUD;
         achvmt = A_IDENTIFIED_ALL_SCROLLS;
+        break;
     case SPBOOK_CLASS:
         /* no requirement for blank book or novel */
         firstobj = SPE_DIG;
         lastobj = SPE_STONE_TO_FLESH;
         achvmt = A_IDENTIFIED_ALL_BOOKS;
+        break;
     case WAND_CLASS:
         firstobj = WAN_LIGHT;
         lastobj = WAN_LIGHTNING;
         achvmt = A_IDENTIFIED_ALL_WANDS;
+        break;
     case GEM_CLASS:
         firstobj = DILITHIUM_CRYSTAL;
         lastobj = JADE;
         achvmt = A_IDENTIFIED_ALL_GEMS;
+        break;
     default:
         /* RANDOM_CLASS, CHAIN_CLASS, WEAPON_CLASS, ... */
         return;

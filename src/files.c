@@ -794,7 +794,7 @@ boolean playing; /**< True if game is running.  */
  /** Signal handler to update whereis information. */
 void
 signal_whereis(sig_unused)
-int sig_unused;
+int sig_unused UNUSED;
 {
 	touch_whereis();
 }
@@ -3675,7 +3675,6 @@ const char *reason; /* explanation */
 {
 #ifdef PANICLOG
     FILE *lfile;
-    char buf[BUFSZ];
 
     if (!program_state.in_paniclog) {
         program_state.in_paniclog = 1;
@@ -3683,7 +3682,7 @@ const char *reason; /* explanation */
         if (lfile) {
 #ifdef PANICLOG_FMT2
             (void) fprintf(lfile, "%ld %s: %s %s\n",
-                           ubirthday, (plname ? plname : "(none)"),
+                           ubirthday, (*plname ? plname : "(none)"),
                            type, reason);
 #else
             time_t now = getnow();
@@ -4608,7 +4607,7 @@ struct obj *swapchest;
     struct obj *otmp;
     delete_swap_chest_contents(swapchest);
     d = opendir(TNNT_SWAPCHEST_DIR);
-    while (de = readdir(d)) {
+    while ((de = readdir(d)) != NULL) {
         if (!strncmp(de->d_name, "SW-", 3)) {
             otmp = mkswapobj(swapchest, de->d_name);
             if (!otmp) {

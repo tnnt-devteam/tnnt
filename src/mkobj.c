@@ -2000,6 +2000,7 @@ struct obj *obj;
     case OBJ_INSWAP:
         /* need to set container and change to OBJ_CONTAINED */
         impossible("obj_extract_self - swapchest");
+        break;
     default:
         panic("obj_extract_self");
         break;
