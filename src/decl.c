@@ -558,6 +558,24 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Got No Talent", "Scare something by playing music"},
   {"Cookie Monster", "Read a fortune without eating its cookie"},
   {"Say Hello To My Evil Friend", "Have a non-guaranteed demon lord gated in or summoned"},
+  {"Death onna Stick", "Kill a member of 25 different monster species"},
+  {"Bring out your Dead", "Kill a member of 50 different monster species"},
+  {"Diverse Death-Dealer", "Kill a member of 100 different monster species"},
+  {"Grim Reaper", "Kill a memer of 200 different monster species"},
+  {"Gotta Kill 'em All", "Kill a member of all 298 eligible monster species"},
+  {"Learn the Alphabet", "Kill a member of each species from a to z"},
+  {"Make your Mark", "Engrave with an athame"},
+  {"One Hit KO", "One-shot a monster with at least 10 HP damage"},
+  {"Drink It To The Next Level", "Level up by drinking from a sink"},
+  {"Why Won't You DIE Already", "Kill the Wizard of Yendor 20 or more times"},
+  {"You're About To Die, You Scrub", "Get a special message saying you're about to die"},
+  {"Six Pack", "Stock an ice box with 6 or more potions of booze"},
+  {"Bar Brawler", "Kill a monster with HP damage by smashing a bottle on it"},
+  {"Extreme Omnivore", "Eat an object from every common, edible object class"},
+  {"Extinctionist Lite", "Genocide 20 or more monster species"},
+  {"Dudley's Hero", "Genocide or extinct newts"},
+  {"Ice Jesus", "Walk on top of lava unharmed"},
+  {"Rare Loot", "Acquire an athame that was generated in the inventory of a lich"}
 };
 
 /* support for lint.h */

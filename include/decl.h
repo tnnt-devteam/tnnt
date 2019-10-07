@@ -466,7 +466,10 @@ struct early_opt {
  * Does not contain achievements which will be in TNNT but are already
  * represented in the 'achieve' xlogfile field, such as killing Medusa.
  * The order of these MUST be the exact same as that of tnnt_achievements in
- * decl.c! If you reorder these, also reorder those. */
+ * decl.c! If you reorder these, also reorder those.
+ * Also, avoid inserting blank lines or comment lines in the middle of this
+ * enum. Makes it harder to verify we have as many achievements as we think :>
+ */
 enum tnnt_achievements {
     A_FOUND_MINES_ALTAR = 0, /* Implemented,tested. */ /* begin tnntachieve0 */
     A_CONSULTED_ORACLE,      /* Implemented,tested. */
@@ -679,7 +682,25 @@ enum tnnt_achievements {
     A_SCARED_WITH_MUSIC,     /* Implemented. */
     A_READ_FORTUNE_FOODLESS, /* Implemented. */
     A_GATED_IN_DEMON_LORD,   /* Implemented. */
-    /* 186 achievements defined */
+    A_KILLED_25_SPECIES,
+    A_KILLED_50_SPECIES,
+    A_KILLED_100_SPECIES,
+    A_KILLED_200_SPECIES,
+    A_KILLED_ALL_SPECIES,
+    A_KILLED_A_Z_SPECIES,
+    A_ENGRAVE_WITH_ATHAME,
+    A_ONE_HIT_KO,
+    A_LEVELED_UP_FROM_SINK,
+    A_KILLED_20_WIZARDS,
+    A_ABOUT_TO_DIE,
+    A_STOCKED_SIX_PACK,
+    A_KILLED_WITH_BOTTLE,     /* #224 */
+    A_ATE_EVERY_OBJCLASS,
+    A_GENOCIDED_20_SPECIES,
+    A_EXTINCTED_NEWTS,
+    A_WALKED_ON_LAVA,
+    A_GOT_LICH_ATHAME,
+    /* 229 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more
