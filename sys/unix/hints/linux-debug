@@ -10,7 +10,7 @@
 
 
 #PREFIX=/usr
-PREFIX=$(wildcard ~)/xnh/install
+PREFIX=$(wildcard ~)/tnnth/install
 HACKDIR=$(PREFIX)/games/lib/$(GAME)dir
 SHELLDIR = $(PREFIX)/games
 INSTDIR=$(HACKDIR)
