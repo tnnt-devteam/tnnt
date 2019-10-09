@@ -684,7 +684,7 @@ enum tnnt_achievements {
     A_DISARMED_LUDIOS_MINES, /* Implemented. */
     A_READ_ALL_READABLE,     /* Implemented. */
     A_OPENED_TIN_PROPERLY,   /* Implemented. */
-    A_UNLOCKED_CREDIT_CARD,
+    A_UNLOCKED_CREDIT_CARD,  /* Implemented, tested. */
     A_RELEASED_CAMERA_DEMON, /* Implemented. */
     A_SCARED_WITH_MUSIC,     /* Implemented. */
     A_READ_FORTUNE_FOODLESS, /* Implemented. */

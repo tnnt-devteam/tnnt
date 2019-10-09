@@ -143,6 +143,8 @@ picklock(VOID_ARGS)
     }
 
     You("succeed in %s.", lock_action());
+    if (xlock.picktyp == CREDIT_CARD)
+        tnnt_achieve(A_UNLOCKED_CREDIT_CARD);
     if (xlock.door) {
         if (xlock.door->doormask & D_TRAPPED) {
             b_trapped("door", FINGER);
