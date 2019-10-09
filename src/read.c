@@ -1872,6 +1872,8 @@ boolean confused, byu;
                           xname(helmet), mhim(mtmp));
             }
         }
+        if (mdmg >= mtmp->mhpmax && mdmg >= 10)
+            tnnt_achieve(A_ONE_HIT_KO);
         mtmp->mhp -= mdmg;
         if (DEADMONSTER(mtmp)) {
             if (byu) {
@@ -2337,11 +2339,15 @@ int how;
             which = !type_is_pname(ptr) ? "the " : "";
     }
     if (how & REALLY) {
-        if(!num_genocides())
+        const int ngeno = num_genocides();
+        if(ngeno == 0)
             livelog_printf(LL_CONDUCT|LL_GENOCIDE,
                     "performed %s first genocide (%s)", uhis(), buf);
         else
             livelog_printf(LL_GENOCIDE, "genocided %s", buf);
+
+        if (ngeno >= 19) /* will become 20 after the rest of this block */
+            tnnt_achieve(A_GENOCIDED_20_SPECIES);
 
         /* setting no-corpse affects wishing and random tin generation */
         mvitals[mndx].mvflags |= (G_GENOD | G_NOCORPSE);

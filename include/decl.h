@@ -689,24 +689,24 @@ enum tnnt_achievements {
     A_SCARED_WITH_MUSIC,     /* Implemented. */
     A_READ_FORTUNE_FOODLESS, /* Implemented. */
     A_GATED_IN_DEMON_LORD,   /* Implemented. */
-    A_KILLED_25_SPECIES,
-    A_KILLED_50_SPECIES,
-    A_KILLED_100_SPECIES,
-    A_KILLED_200_SPECIES,
-    A_KILLED_ALL_SPECIES,
-    A_KILLED_A_Z_SPECIES,
-    A_ENGRAVE_WITH_ATHAME,
-    A_ONE_HIT_KO,
-    A_LEVELED_UP_FROM_SINK,
-    A_KILLED_20_WIZARDS,
-    A_ABOUT_TO_DIE,
-    A_STOCKED_SIX_PACK,
-    A_KILLED_WITH_BOTTLE,     /* #224 */
-    A_ATE_EVERY_OBJCLASS,
-    A_GENOCIDED_20_SPECIES,
-    A_EXTINCTED_NEWTS,
-    A_WALKED_ON_LAVA,
-    A_GOT_LICH_ATHAME,
+    A_KILLED_25_SPECIES,     /* Implemented. */
+    A_KILLED_50_SPECIES,     /* Implemented. */
+    A_KILLED_100_SPECIES     /* Implemented. */,
+    A_KILLED_200_SPECIES,    /* Implemented. */
+    A_KILLED_ALL_SPECIES,    /* Implemented. */
+    A_KILLED_A_Z_SPECIES,    /* Implemented, tested. */
+    A_ENGRAVED_WITH_ATHAME,  /* Implemented, tested. */
+    A_ONE_HIT_KO,            /* Implemented, tested. */
+    A_LEVELED_UP_FROM_SINK,  /* Implemented, tested. */
+    A_KILLED_20_WIZARDS,     /* Implemented, tested. */
+    A_ABOUT_TO_DIE,          /* Implemented, tested. */
+    A_STOCKED_SIX_PACK,      /* Implemented, tested. */
+    A_KILLED_WITH_BOTTLE,    /* Implemented, tested. */ /* #224 */
+    A_ATE_EVERY_OBJCLASS,    /* Implemented, tested. */
+    A_GENOCIDED_20_SPECIES,  /* Implemented, tested. */
+    A_EXTINCTED_NEWTS,       /* Implemented, tested. */
+    A_WALKED_ON_LAVA,        /* Implemented, tested. */
+    A_GOT_LICH_ATHAME,       /* Implemented, tested. */
     /* 229 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
@@ -735,6 +735,12 @@ enum dtquest_status {
     DTQUEST_COMPLETED
 };
 struct tnnt_globals_t {
+    /* The actual achievement bitfields which get written out to xlogfile and
+     * track whether or not you have achieved something.
+     * Since there are more than 64 achievements, we need multiple 64 bit ints.
+     */
+    uint64_t tnnt_achievements[4];
+
     /* Various achievement counters */
     unsigned char graffiti_found;
     unsigned char felines_tamed; /* redundant; for #tnntstats */
@@ -751,12 +757,12 @@ struct tnnt_globals_t {
 #define FOODMASK_GLOBS   0x000000780 /* all types of glob (only need one) */
     unsigned short genderflips;
     unsigned char wish_sources;
-#define WISHSRC_WAND 0x01
-#define WISHSRC_LAMP 0x02
+#define WISHSRC_WAND         0x01
+#define WISHSRC_LAMP         0x02
 #define WISHSRC_SMOKY_POTION 0x04
-#define WISHSRC_THRONE 0x08
-#define WISHSRC_WATER_DEMON 0x10
-#define WISHSRC_ALL 0x1F
+#define WISHSRC_THRONE       0x08
+#define WISHSRC_WATER_DEMON  0x10
+#define WISHSRC_ALL          0x1F
     boolean blew_up_ludios; /* blew up any of its land mines */
     unsigned short readables;
 #define RDBL_SCROLL  0x0001
@@ -768,9 +774,10 @@ struct tnnt_globals_t {
 #define RDBL_CARD    0x0040
 #define RDBL_COOKIE  0x0080
 #define RDBL_APRON   0x0100
+#define ALL_READABLE 0x01FF
     /* Book of the Dead and Orb of Fate are also readable items, but are not
      * counted towards the "read all readable items" achievement. */
-#define ALL_READABLE 0x01FF
+
     /* Macro for adding a readable and auto-achieving the readables achievement
      * if it has been obtained. */
 #define tnnt_read(rdbl)                                              \
@@ -780,18 +787,20 @@ struct tnnt_globals_t {
             tnnt_achieve(A_READ_ALL_READABLE);                       \
     } while(0)
 
-    /* The actual achievement bitfields which get written out to xlogfile and
-     * track whether or not you have achieved something.
-     * Since there are more than 64 achievements, we need multiple 64 bit ints.
-     */
-    uint64_t tnnt_achievements[4];
-
     /* Devteam quest */
     xchar missing_scroll_levels[NUM_MISSING_CODE_SCROLLS];
     xchar devteam_quest_status;
 
-    /* Cat Lady: ids of felines tamed */
-    unsigned feline_m_ids[MAX_TAMED_FELINES];
+    unsigned feline_m_ids[MAX_TAMED_FELINES]; /* Cat Lady: ids of tamed cats */
+    unsigned short wizards_killed;
+    /* Inedible object classes:
+     * RANDOM_CLASS, ILLOBJ_CLASS, VENOM_CLASS are obvious.
+     * GEM_CLASS and ROCK_CLASS have no edible items in them.
+     * POTION_CLASS... you don't *eat* potions...
+     * This variable is a bitmask: 0x1 = 1 << 0 = the 0th object class,
+     * 0x2 = 1 << 1 = the 1th object class, and so on. */
+#define ALL_EDIBLE_OCLASSES 0x19EFC
+    uint32_t objclasses_eaten;
 
     /* tnnt devs: add more as needed */
 };

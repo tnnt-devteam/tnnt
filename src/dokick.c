@@ -94,6 +94,10 @@ boolean clumsy;
     dmg += u.udaminc; /* add ring(s) of increase damage */
     if (dmg > 0)
         mon->mhp -= dmg;
+
+    if (dmg >= mon->mhpmax && dmg >= 10)
+        tnnt_achieve(A_ONE_HIT_KO);
+
     if (!DEADMONSTER(mon) && martial() && !bigmonst(mon->data) && !rn2(3)
         && mon->mcanmove && mon != u.ustuck && !mon->mtrapped) {
         /* see if the monster has a place to move into */

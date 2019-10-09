@@ -525,6 +525,7 @@ drinksink()
 {
     struct obj *otmp;
     struct monst *mtmp;
+    int oldlevel = u.ulevel;
 
     if (Levitation) {
         floating_above("sink");
@@ -627,6 +628,8 @@ drinksink()
             rn2(3) ? (rn2(2) ? "cold" : "warm") : "hot",
             hliquid("water"));
     }
+    if (u.ulevel > oldlevel)
+        tnnt_achieve(A_LEVELED_UP_FROM_SINK);
 }
 
 /*fountain.c*/

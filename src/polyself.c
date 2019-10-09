@@ -1411,6 +1411,8 @@ dogaze()
                         (void) destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
                     if (dmg)
                         mtmp->mhp -= dmg;
+                    if (dmg >= mtmp->mhpmax && dmg >= 10)
+                        tnnt_achieve(A_ONE_HIT_KO);
                     if (DEADMONSTER(mtmp))
                         killed(mtmp);
                 }
@@ -1572,7 +1574,10 @@ domindblast()
             You("lock in on %s %s.", s_suffix(mon_nam(mtmp)),
                 u_sen ? "telepathy"
                       : telepathic(mtmp->data) ? "latent telepathy" : "mind");
-            mtmp->mhp -= rnd(15);
+            int dmg = rnd(15);
+            mtmp->mhp -= dmg;
+            if (dmg >= mtmp->mhpmax && dmg >= 10)
+                tnnt_achieve(A_ONE_HIT_KO);
             if (DEADMONSTER(mtmp))
                 killed(mtmp);
         }

@@ -748,6 +748,8 @@ register struct monst *mtmp;
                 otmp->oerodeproof = 1;
             (void) mpickobj(mtmp, otmp);
         }
+        if ((otmp = m_carrying(mtmp, ATHAME)) != NULL)
+            otmp->lichathame = 1;
         break;
     case S_MUMMY:
         if (rn2(7))
@@ -959,6 +961,8 @@ boolean ghostly;
         }
         mvitals[mndx].mvflags |= G_EXTINCT;
         reset_rndmonst(mndx);
+        if (mndx == PM_NEWT)
+            tnnt_achieve(A_EXTINCTED_NEWTS);
     }
     /* TNNT - extinct armies
      * Unlike nazgul and erinyes, NOT necessary to kill all of them, only

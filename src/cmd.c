@@ -5404,6 +5404,7 @@ STATIC_PTR int
 dotnntstats(VOID_ARGS)
 {
     char buf[BUFSZ];
+    int i;
     en_win = create_nhwindow(NHW_MENU);
 
     /* mention overall #achievements display */
@@ -5412,7 +5413,6 @@ dotnntstats(VOID_ARGS)
     /* devteam quest progress */
     if (tnnt_globals.devteam_quest_status != DTQUEST_NOTSTARTED) {
         int found_scrolls = 0;
-        int i;
         for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
             if (tnnt_globals.missing_scroll_levels[i] == 0) {
                 found_scrolls++;
@@ -5507,7 +5507,24 @@ dotnntstats(VOID_ARGS)
     putstr(en_win, 0, buf);
     Sprintf(buf, "You have killed %d/3 erinyes.", mvitals[PM_ERINYS].died);
     putstr(en_win, 0, buf);
+    Sprintf(buf, "You have killed the Wizard of Yendor %d times.", tnnt_globals.wizards_killed);
+    putstr(en_win, 0, buf);
 
+    char eaten[16] = DUMMY;
+    char uneaten[16] = DUMMY;
+    for (i = 0; i < MAXOCLASSES; ++i) {
+        char ochar[2];
+        ochar[0] = def_oc_syms[i].sym;
+        ochar[1] = '\0';
+        if (!(ALL_EDIBLE_OCLASSES & (1 << i)))
+            continue; /* invalid class such as ILLOBJ_CLASS or VENOM_CLASS */
+        if ((tnnt_globals.objclasses_eaten >> i) & 0x1)
+            Strcat(eaten, ochar);
+        else
+            Strcat(uneaten, ochar);
+    }
+    Sprintf(buf, "Object classes eaten: %s Uneaten: %s", eaten, uneaten);
+    putstr(en_win, 0, buf);
     /* #snacks command already describes this, just reference it */
     putstr(en_win, 0, "Foods eaten not shown. To show them, use #snacks.");
     putstr(en_win, 0, "Species killed not shown. To show them, use #species.");

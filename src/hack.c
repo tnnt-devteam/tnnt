@@ -3013,6 +3013,7 @@ maybe_wail()
         You_hear(u.uhp == 1 ? "the wailing of the Banshee..."
                             : "the howling of the CwnAnnwn...");
     }
+    tnnt_achieve(A_ABOUT_TO_DIE);
 }
 
 void

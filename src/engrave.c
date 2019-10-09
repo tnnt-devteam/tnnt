@@ -1073,6 +1073,9 @@ doengrave()
         oep = (struct engr *) 0;
     }
 
+    if (otmp->otyp == ATHAME)
+        tnnt_achieve(A_ENGRAVED_WITH_ATHAME);
+
     /* Figure out how long it took to engrave, and if player has
      * engraved too much.
      */

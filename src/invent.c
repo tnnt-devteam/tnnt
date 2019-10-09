@@ -914,6 +914,8 @@ struct obj *obj;
         picked_container(obj); /* clear no_charge */
     obj_was_thrown = obj->was_thrown;
     obj->was_thrown = 0;       /* not meaningful for invent */
+    if (obj->otyp == ATHAME && obj->lichathame)
+        tnnt_achieve(A_GOT_LICH_ATHAME);
 
     addinv_core1(obj);
 

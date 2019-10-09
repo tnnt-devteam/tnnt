@@ -2532,6 +2532,11 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
     if (mons[m_idx].mlet == S_DRAGON) {
         tnnt_achieve(A_KILLED_DRAGON);
     }
+    if (mtmp->iswiz) {
+        tnnt_globals.wizards_killed++;
+        if (tnnt_globals.wizards_killed >= 20)
+            tnnt_achieve(A_KILLED_20_WIZARDS);
+    }
     switch (m_idx) {
     case PM_GHOST:
         tnnt_achieve(A_KILLED_GHOST);

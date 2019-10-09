@@ -2402,6 +2402,19 @@ register struct obj *obj;
             sellobj(obj, current_container->ox, current_container->oy);
         (void) add_to_container(current_container, obj);
         current_container->owt = weight(current_container);
+        if (Icebox) {
+            /* TNNT: check for six booze existing in the container. Can't just
+             * check the quan of the return value of add_to_container because
+             * they might not stack. */
+            struct obj* otmp;
+            int nbooze = 0;
+            for (otmp = current_container->cobj; otmp; otmp = otmp->nobj) {
+                if (otmp->otyp == POT_BOOZE)
+                    nbooze += otmp->quan;
+            }
+            if (nbooze >= 6)
+                tnnt_achieve(A_STOCKED_SIX_PACK);
+        }
     }
     /* gold needs this, and freeinv() many lines above may cause
      * the encumbrance to disappear from the status, so just always
@@ -2722,7 +2735,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
     if (!u_handsy())
         return 0;
 
-    /* not currently used, as the chest vanishes when finished. THis may change */
+    /* not currently used, as the chest vanishes when finished. This may change */
     if (obj->otyp == SWAP_CHEST && obj->swapitems == -1) {
         You_feel("%s is profoundly disinterested in your further fate.", the(xname(obj)));
         return 0;

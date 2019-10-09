@@ -472,7 +472,10 @@ register struct monst *mtmp;
                 if (3 + find_mac(mtmp) <= rnd(20)) {
                     pline("%s is hit by a falling piercer (you)!",
                           Monnam(mtmp));
-                    if ((mtmp->mhp -= d(3, 6)) < 1)
+                    int dmg = d(3, 6);
+                    if (dmg >= mtmp->mhpmax && dmg >= 10)
+                        tnnt_achieve(A_ONE_HIT_KO);
+                    if ((mtmp->mhp -= dmg) < 1)
                         killed(mtmp);
                 } else
                     pline("%s is almost hit by a falling piercer (you)!",
@@ -2953,6 +2956,8 @@ struct attack *mattk;
         tmp = 0;
 
  assess_dmg:
+    if (tmp >= mtmp->mhpmax && tmp >= 10)
+        tnnt_achieve(A_ONE_HIT_KO);
     if ((mtmp->mhp -= tmp) <= 0) {
         pline("%s dies!", Monnam(mtmp));
         xkilled(mtmp, XKILL_NOMSG);

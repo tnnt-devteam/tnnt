@@ -5374,8 +5374,9 @@ lava_effects()
         if (u.uhp > 1)
             losehp(!boil_away ? 1 : (u.uhp / 2), lava_killer,
                    KILLED_BY); /* lava damage */
+    } else if (Fire_resistance && Wwalking) {
+        tnnt_achieve(A_WALKED_ON_LAVA);
     }
-
 burn_stuff:
     destroy_item(SCROLL_CLASS, AD_FIRE);
     destroy_item(SPBOOK_CLASS, AD_FIRE);

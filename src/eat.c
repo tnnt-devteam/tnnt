@@ -2602,6 +2602,12 @@ doeat()
             docall(otmp);
         return 1;
     }
+
+    /* TNNT: eating various object classes achievement */
+    tnnt_globals.objclasses_eaten |= (1 << otmp->oclass);
+    if (tnnt_globals.objclasses_eaten == ALL_EDIBLE_OCLASSES)
+        tnnt_achieve(A_ATE_EVERY_OBJCLASS);
+
     if (otmp->oclass != FOOD_CLASS) {
         int material;
 

@@ -124,6 +124,7 @@ struct obj {
 #define record_achieve_special corpsenm
     int usecount;           /* overloaded for various things that tally */
 #define spestudied usecount /* # of times a spellbook has been studied */
+#define lichathame usecount /* athame created with a lich */
     unsigned oeaten;        /* nutrition left in food, if partly eaten */
     long age;               /* creation date */
     long owornmask;

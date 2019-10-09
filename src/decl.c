@@ -568,15 +568,15 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Gotta Kill 'em All", "Kill a member of all eligible monster species"},
   {"Learn the Alphabet", "Kill a member of each species from a to z"},
   {"Make your Mark", "Engrave with an athame"},
-  {"One Hit KO", "One-shot a monster with at least 10 HP damage"},
+  {"One Hit KO", "Deal a monster its maximum HP or more of damage (minimum 10)"},
   {"Drink It To The Next Level", "Level up by drinking from a sink"},
   {"Why Won't You DIE Already", "Kill the Wizard of Yendor 20 or more times"},
-  {"You're About To Die, You Scrub", "Get a special message saying you're about to die"},
+  {"You're About To Die, You Scrub", "Get a special message saying you're about to die, you scrub"},
   {"Six Pack", "Stock an ice box with 6 or more potions of booze"},
   {"Bar Brawler", "Kill a monster with HP damage by smashing a bottle on it"},
   {"Extreme Omnivore", "Eat an object from every common, edible object class"},
   {"Extinctionist Lite", "Genocide 20 or more monster species"},
-  {"Dudley's Hero", "Genocide or extinct newts"},
+  {"Dudley's Hero", "Extinct newts"},
   {"Ice Jesus", "Walk on top of lava unharmed"},
   {"Rare Loot", "Acquire an athame that was generated in the inventory of a lich"}
 };
