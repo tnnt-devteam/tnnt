@@ -76,11 +76,18 @@ MONSTER:(';',"giant eel"),(32,10)
 MONSTER:(';',"giant eel"),(33,13)
 
 # Pitfalls
-TRAP:"spiked pit",random
-TRAP:"spiked pit",random
-TRAP:"spiked pit",random
-TRAP:"spiked pit",random
-TRAP:"spiked pit",random
-TRAP:"spiked pit",random
+$arena = selection:floodfill(33,09)
+LOOP [4] {
+  TRAP:"spiked pit",rndcoord($arena)
+  TRAP:"bear",rndcoord($arena)
+  TRAP:"land mine",rndcoord($arena)
+}
+LOOP [2] {
+  TRAP:"rolling boulder",rndcoord($arena)
+  TRAP:"fire",rndcoord($arena)
+}
+TRAP:"sleep gas",rndcoord($arena)
+TRAP:"polymorph",rndcoord($arena)
+
 
 # end npcdeath.des
