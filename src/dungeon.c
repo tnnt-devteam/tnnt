@@ -693,6 +693,7 @@ struct level_map {
                   { "juiblex", &juiblex_level },
                   { "knox", &knox_level },
                   { "devteam", &devteam_level },
+                  { "npcdeath", &deathmatch_level },
                   { "medusa", &medusa_level },
                   { "oracle", &oracle_level },
                   { "orcus", &orcus_level },
