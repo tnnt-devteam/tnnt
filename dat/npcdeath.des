@@ -10,7 +10,8 @@
 MAZE:"npcdeath",' '
 FLAGS:nommap,noteleport,hardfloor
 MESSAGE: "Upon exiting the portal, you immediately feel on edge."
-MESSAGE: "You feel as if you've stumbled across something very dangerous.  You resist the urge to flee."
+MESSAGE: "You feel as if you've stumbled across something very dangerous."
+MESSAGE: "You resist the urge to flee."
 GEOMETRY:center,center
 
 #         1         2         3         4         5         6         7
