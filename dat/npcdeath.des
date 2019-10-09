@@ -40,6 +40,7 @@ ENDMAP
 
 BRANCH:(67,09,67,09),(0,0,0,0)
 REGION:(12,00,68,18),lit,"ordinary"
+TELEPORT_REGION:levregion(61,08,67,12),(0,0,0,0)
 NON_DIGGABLE:(0,0,75,19)
 
 ## Foyer
