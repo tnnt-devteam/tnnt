@@ -130,7 +130,8 @@ boolean resuming;
                     /* occasionally add another monster; since this takes
                        place after movement has been allotted, the new
                        monster effectively loses its first turn */
-                    if (!rn2(u.uevent.udemigod ? 25
+                    if (!Is_deathmatch_level(&u.uz) &&
+                        !rn2(u.uevent.udemigod ? 25
                              : (depth(&u.uz) > depth(&stronghold_level)) ? 50
                                : 70))
                         (void) makemon((struct permonst *) 0, 0, 0,
