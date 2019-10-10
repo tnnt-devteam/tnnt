@@ -2064,6 +2064,13 @@ struct mkroom *croom;
             container_obj[container_idx - 1] = NULL;
         }
     }
+    /* TNNT hack: transmute any statue of any player monster on the deathmatch
+     * level into a topten-named player monster statue. The player monster type
+     * specified in the des is discarded. */
+    if (Is_deathmatch_level(&u.uz) && otmp->otyp == STATUE
+        && is_mplayer(&mons[otmp->corpsenm])) {
+        otmp = tt_oname(otmp);
+    }
 }
 
 /*
