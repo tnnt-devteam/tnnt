@@ -889,8 +889,13 @@ register struct obj *otmp;
             }
         }
         if (Hallucination) {
-            You("are shocked back to your senses!");
-            (void) make_hallucinated(0L, FALSE, 0L);
+            if (u.uroleplay.hallu) {
+                You_feel("less groovy for a harsh second.");
+            }
+            else {
+                You("are shocked back to your senses!");
+                (void) make_hallucinated(0L, FALSE, 0L);
+            }
         }
         break;
     case POT_CONFUSION:

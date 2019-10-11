@@ -3262,6 +3262,10 @@ int final;
 
     if (u.uroleplay.blind)
         you_have_been("blind from birth");
+    if (u.uroleplay.deaf)
+        you_have_been("deaf from birth");
+    if (u.uroleplay.hallu)
+        you_have_been("hallucinating for your entire life");
     if (u.uroleplay.nudist)
         you_have_been("faithfully nudist");
 

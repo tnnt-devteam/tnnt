@@ -452,6 +452,10 @@ encodeconduct()
         e |= 1L << 20;
     if (u.uconduct.pets == 0)
         e |= 1L << 21;
+    if (u.uroleplay.deaf)
+        e |= 1L << 22;
+    if (u.uroleplay.hallu)
+        e |= 1L << 23;
 
     return e;
 }
