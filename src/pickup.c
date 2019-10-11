@@ -2549,6 +2549,7 @@ register struct obj *obj;
         makeknown(SWAP_CHEST);
         pline("%s snaps shut and backs away slightly.",  The(xname(current_container)));
         delete_swap_chest_contents(current_container);
+        u.uconduct.rmswapchest++;
     }
     /* <-- */
 

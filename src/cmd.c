@@ -3359,6 +3359,30 @@ int final;
                     " for any artifacts", "");
     }
 
+    /* TNNT: extra conducts */
+
+    if (u.umortality == 0)
+        you_have_never("died");
+
+    if (u.uconduct.rmswapchest == 0)
+        you_have_never("removed an item from a swap chest");
+
+    if (mvitals[urole.neminum].died == 0)
+        you_have_never("allowed your nemesis to die");
+
+    if (mvitals[PM_VLAD_THE_IMPALER].died == 0)
+        you_have_never("allowed Vlad to die");
+
+    if (mvitals[PM_WIZARD_OF_YENDOR].died == 0)
+        you_have_never("allowed the Wizard to die");
+
+    if (mvitals[PM_HIGH_PRIEST].died == 0)
+        you_have_never("allowed a high priest to die");
+
+    if (mvitals[PM_DEATH].died == 0 && mvitals[PM_PESTILENCE].died == 0
+        && mvitals[PM_FAMINE].died == 0)
+        you_have_never("allowed a Rider to die");
+
     /* Pop up the window and wait for a key */
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);

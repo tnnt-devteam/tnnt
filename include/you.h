@@ -94,6 +94,7 @@ struct u_conduct {     /* number of times... */
     long wishes;       /* used a wish */
     long wisharti;     /* wished for an artifact */
     long elbereth;     /* engraved Elbereth */
+    long rmswapchest;  /* got item out of swap chest */
     /* genocides already listed at end of game */
 };
 
