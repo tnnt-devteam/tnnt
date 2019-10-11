@@ -839,10 +839,12 @@ long timeout;
                 if ((yours && !silent)
                     || (carried(egg) && mon->data->mlet == S_DRAGON)) {
                     if (tamedog(mon, (struct obj *) 0)) {
-                        if (carried(egg) && mon->data->mlet != S_DRAGON)
+                        if (carried(egg) && mon->data->mlet != S_DRAGON) {
                             mon->mtame = 20;
-                        if (!egg->spe)
-                            tnnt_achieve(A_HATCHED_FOREIGN_EGG);
+                            u.uconduct.pets++;
+                            if (!egg->spe)
+                                tnnt_achieve(A_HATCHED_FOREIGN_EGG);
+                        }
                     }
                 }
                 if (mvitals[mnum].mvflags & G_EXTINCT)

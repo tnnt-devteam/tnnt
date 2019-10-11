@@ -448,6 +448,10 @@ encodeconduct()
     if (mvitals[PM_DEATH].died == 0 && mvitals[PM_PESTILENCE].died == 0
         && mvitals[PM_FAMINE].died == 0)
         e |= 1L << 19;
+    if (u.uconduct.artitouch == 0)
+        e |= 1L << 20;
+    if (u.uconduct.pets == 0)
+        e |= 1L << 21;
 
     return e;
 }

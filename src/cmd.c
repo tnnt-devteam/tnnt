@@ -3383,6 +3383,12 @@ int final;
         && mvitals[PM_FAMINE].died == 0)
         you_have_never("allowed a Rider to die");
 
+    if (u.uconduct.artitouch == 0)
+        you_have_never("touched an artifact");
+
+    if (u.uconduct.pets == 0)
+        you_have_never("had a pet");
+
     /* Pop up the window and wait for a key */
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);

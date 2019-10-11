@@ -846,6 +846,7 @@ gcrownu()
             obj = oname(obj, artiname(ART_EXCALIBUR));
             if (obj && obj->oartifact == ART_EXCALIBUR) {
                 u.ugifts++;
+                u.uconduct.artitouch++;
                 tnnt_achieve(A_GRANTED_ARTI);
             }
         }

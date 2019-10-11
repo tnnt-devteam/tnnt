@@ -93,9 +93,12 @@ struct u_conduct {     /* number of times... */
     long polyselfs;    /* transformed yourself */
     long wishes;       /* used a wish */
     long wisharti;     /* wished for an artifact */
+    /* genocides already listed at end of game */
+    /* TNNT-specific conducts */
     long elbereth;     /* engraved Elbereth */
     long rmswapchest;  /* got item out of swap chest */
-    /* genocides already listed at end of game */
+    long artitouch;    /* touched an artifact in any way */
+    long pets;         /* obtained a pet */
 };
 
 struct u_roleplay {
