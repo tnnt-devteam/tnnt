@@ -2139,7 +2139,7 @@ struct obj *obj;
             /* no wands of nothing. Maybe other stuff here too */
             if (obj->otyp == WAN_NOTHING)
                 return FALSE;
-            /* allow empty wands of wishing... */
+            /*  */
             return (obj->spe > 0 || obj->otyp == WAN_WISHING);
         case AMULET_CLASS:
             switch(obj->otyp) {

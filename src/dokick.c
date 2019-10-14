@@ -95,7 +95,7 @@ boolean clumsy;
     if (dmg > 0)
         mon->mhp -= dmg;
 
-    if (dmg >= mon->mhpmax && dmg >= 10)
+    if (dmg >= mon->mhpmax && dmg >= TNNT_OHKO_DMG)
         tnnt_achieve(A_ONE_HIT_KO);
 
     if (!DEADMONSTER(mon) && martial() && !bigmonst(mon->data) && !rn2(3)

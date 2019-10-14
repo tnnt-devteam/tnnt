@@ -1228,7 +1228,7 @@ int dieroll;
         }
     }
 
-    if (tmp >= mon->mhpmax && tmp >= 10)
+    if (tmp >= mon->mhpmax && tmp >= TNNT_OHKO_DMG)
         tnnt_achieve(A_ONE_HIT_KO);
     if (tmp >= mon->mhp && obj && obj->oclass == POTION_CLASS)
         tnnt_achieve(A_KILLED_WITH_BOTTLE);
@@ -1869,8 +1869,6 @@ int specialdmg; /* blessed and/or silver bonus against various things */
             int xtmp = d(2, 6);
 
             pline("%s suddenly seems weaker!", Monnam(mdef));
-            if (tmp >= mdef->mhpmax && tmp >= 10)
-                tnnt_achieve(A_ONE_HIT_KO);
             mdef->mhpmax -= xtmp;
             mdef->mhp -= xtmp;
             /* !m_lev: level 0 monster is killed regardless of hit points
@@ -2040,7 +2038,7 @@ int specialdmg; /* blessed and/or silver bonus against various things */
 
     mdef->mstrategy &= ~STRAT_WAITFORU; /* in case player is very fast */
     mdef->mhp -= tmp;
-    if (tmp >= mdef->mhpmax && tmp >= 10)
+    if (tmp >= mdef->mhpmax && tmp >= TNNT_OHKO_DMG)
         tnnt_achieve(A_ONE_HIT_KO);
     if (DEADMONSTER(mdef)) {
         if (mdef->mtame && !cansee(mdef->mx, mdef->my)) {
@@ -2336,7 +2334,7 @@ register struct attack *mattk;
             }
             end_engulf();
             mdef->mhp -= dam;
-            if (dam >= mdef->mhpmax && dam >= 10)
+            if (dam >= mdef->mhpmax && dam >= TNNT_OHKO_DMG)
                 tnnt_achieve(A_ONE_HIT_KO);
             if (DEADMONSTER(mdef)) {
                 killed(mdef);
@@ -3179,7 +3177,7 @@ int dmg;
     pline("%s %s!", Monnam(mon),
           (dmg > mon->mhp / 2) ? "wails in agony" : "cries out in pain");
     mon->mhp -= dmg;
-    if (dmg >= mon->mhpmax && dmg >= 10)
+    if (dmg >= mon->mhpmax && dmg >= TNNT_OHKO_DMG)
         tnnt_achieve(A_ONE_HIT_KO);
     wake_nearto(mon->mx, mon->my, 30);
     if (DEADMONSTER(mon)) {
