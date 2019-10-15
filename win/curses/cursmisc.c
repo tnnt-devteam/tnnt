@@ -518,7 +518,7 @@ curses_convert_glyph(boolean decgraphics, int ch, int glyph)
        Curses remaps the characters instead. */
     if (decgraphics) {
         /* the DEC line drawing characters use 0x5f through 0x7e instead
-           of the much more straightforward 0x60 though 0x7f, possibly
+           of the much more straightforward 0x60 through 0x7f, possibly
            because 0x7f is effectively a control character (Rubout);
            nethack ORs 0x80 to flag line drawing--that's stripped below */
         static int decchars[33]; /* for chars 0x5f through 0x7f (95..127) */
@@ -595,7 +595,7 @@ curses_convert_glyph(boolean decgraphics, int ch, int glyph)
             convindx = ch - 0x5f;
             /* if it's in the lower case block of ASCII (which includes
                a few punctuation characters), use the conversion table */
-            if (convindx >= 0 && convindx <= SIZE(decchars)) {
+            if (convindx >= 0 && convindx < SIZE(decchars)) {
                 ch = decchars[convindx];
                 /* in case ACS_foo maps to 0 when current terminal is unable
                    to handle a particular character; if so, revert to default
