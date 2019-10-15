@@ -374,6 +374,11 @@
 #define TNNT_SWAPCHEST_DIR HACKDIR "/swapchest"
 #endif
 
+/* File where we maintain the "last ascender" NPC data for the Deathmatch */
+#ifndef TNNT_NPC_FILE
+#define TNNT_NPC_FILE "npcdata"
+#endif
+
 /* Whether to enable the #tnntdebug command (and possibly, in the future, other
  * debugging / public beta testing stuff) outside of wizard mode. */
 #define TNNT_BETA

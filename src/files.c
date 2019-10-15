@@ -4633,4 +4633,77 @@ struct obj *o;
 
 #endif /* TNNT_SWAPCHEST_DIR */
 
+/* TNNT file operations on the NPC data for the Deathmatch */
+#ifdef TNNT_NPC_FILE
+
+/* Take the (presumed to be ascending) player, and encode all of their
+ * applicable stats and inventory into a data file which can be reloaded to
+ * provide the character for someone else's deathmatch.
+ *
+ * Additional gear stocking-up to cover deficiencies in the ascender is not done
+ * here; it is done when the NPC gets loaded into another game. However, any
+ * logic that might want to remove items for whatever reason goes here.
+ *
+ * This should only be called from really_done after urealtime.finish_time gets
+ * set.
+ */
+void
+write_npc_data(VOID_ARGS)
+{
+    FILE* npcfile = fopen(TNNT_NPC_FILE, "w");
+    if (!npcfile) {
+        impossible("Error writing player data to '%s' file", TNNT_NPC_FILE);
+        return;
+    }
+    // line 1: timestamp
+    fprintf(npcfile, "%ld\n", program_state.gameover ? urealtime.finish_time
+                                                     : time(NULL));
+    // line 2: player name
+    fprintf(npcfile, "%s\n", plname);
+    // line 3: player role index
+    fprintf(npcfile, "%d\n", flags.female ? urole.femalenum : urole.malenum);
+    // line 4: player experience level
+    fprintf(npcfile, "%d\n", u.ulevel);
+    /* line 5: player intrinsics, converted to mextrinsics format...
+     * fire cold shock sleep poison disintegration are the only ones that will
+     * actually do anything and that are obtainable by the player intrinsically
+     */
+    unsigned short mintrinsics = 0x0;
+    if (HFire_resistance & INTRINSIC)
+        mintrinsics |= MR_FIRE;
+    if (HCold_resistance & INTRINSIC)
+        mintrinsics |= MR_COLD;
+    if (HShock_resistance & INTRINSIC)
+        mintrinsics |= MR_ELEC;
+    if (HSleep_resistance & INTRINSIC)
+        mintrinsics |= MR_SLEEP;
+    if (HPoison_resistance & INTRINSIC)
+        mintrinsics |= MR_POISON;
+    if (HDisint_resistance & INTRINSIC)
+        mintrinsics |= MR_DISINT;
+    fprintf(npcfile, "0x%x\n", mintrinsics);
+    /* lines 6-end: carried objects, we preserve only certain fields because
+     * others would be pointless... */
+    struct obj* obj;
+    for (obj = invent; obj; obj = obj->nobj) {
+        fprintf(npcfile, "%d %ld %d %d %d %d %d %d %d %d %d %d 0x%lx\n",
+                obj->otyp,
+                obj->quan,
+                obj->spe,
+                obj->oclass,
+                obj->cursed,
+                obj->blessed,
+                obj->oerodeproof,
+                obj->recharged,
+                obj->greased,
+                obj->corpsenm,
+                obj->usecount,
+                obj->oeaten,
+                obj->owornmask);
+    }
+    fclose(npcfile);
+}
+
+#endif /* TNNT_NPC_FILE */
+
 /*files.c*/

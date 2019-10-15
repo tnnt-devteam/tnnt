@@ -862,7 +862,9 @@ E void FDECL(refresh_swap_chest_contents, (struct obj *));
 E boolean FDECL(delete_swapobj_file, (struct obj *));
 #endif
 
-
+#ifdef TNNT_NPC_FILE
+E void NDECL(write_npc_data);
+#endif
 
 /* ### fountain.c ### */
 
