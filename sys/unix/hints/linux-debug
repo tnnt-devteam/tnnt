@@ -9,25 +9,23 @@
 # for Ubuntu dapper.
 
 
-#PREFIX=/usr
-PREFIX=$(wildcard ~)/tnnth/install
-HACKDIR=$(PREFIX)/games/lib/$(GAME)dir
+PREFIX=/usr
+#PREFIX=$(wildcard ~)/tnnt/install
+HACKDIR=$(PREFIX)/games/lib/tnntdir
 SHELLDIR = $(PREFIX)/games
 INSTDIR=$(HACKDIR)
-VARDIR = $(HACKDIR)
-
+VARDIR = $(HACKDIR)/var
 
 
 POSTINSTALL=cp -n sys/unix/sysconf $(INSTDIR)/sysconf; $(CHOWN) $(GAMEUID) $(INSTDIR)/sysconf; $(CHGRP) $(GAMEGRP) $(INSTDIR)/sysconf; chmod $(VARFILEPERM) $(INSTDIR)/sysconf;
 
-CFLAGS=  -g -O0 -I../include -DNOTPARMDECL -DDLB
-CFLAGS+= -DGCC_WARN -Wall -Wextra -Wformat=2 -Werror # warnings are Serious Business
-CFLAGS+= -Wno-format-overflow # unfortunately vanilla overflows formats all over the place
-CFLAGS+= -Wno-format-nonliteral # generated format strings are fairly common
-CFLAGS+= -Wno-stringop-truncation # vanilla often strncpy's to overwrite a part of a string, deliberately not copying terminating \0
-CFLAGS+= -Wno-missing-field-initializers # many places, especially in the cmd.c commands list
-CFLAGS+= -Wimplicit-fallthrough=2 # 3 usually ok, but nice to have /* else FALLTHRU */
-CFLAGS+=-Wno-format-overflow -Wno-stringop-truncation
+CFLAGS= -g -O0 -I../include -DNOTPARMDECL -DDLB
+CFLAGS+=-DGCC_WARN -Wall -Wextra -Wformat=2 -Werror # warnings are Serious Business
+CFLAGS+=-Wno-format-overflow # unfortunately vanilla overflows formats all over the place
+CFLAGS+=-Wno-format-nonliteral # generated format strings are fairly common
+CFLAGS+=-Wno-stringop-truncation # vanilla often strncpy's to overwrite a part of a string, deliberately not copying terminating \0
+CFLAGS+=-Wno-missing-field-initializers # many places, especially in the cmd.c commands list
+CFLAGS+=-Wimplicit -Wreturn-type -Wunused -Wswitch -Wshadow -Wwrite-strings
 CFLAGS+=-DCOMPRESS=\"/bin/gzip\" -DCOMPRESS_EXTENSION=\".gz\"
 CFLAGS+=-DSYSCF -DSYSCF_FILE=\"$(HACKDIR)/sysconf\" -DSECURE
 CFLAGS+=-DTIMED_DELAY
