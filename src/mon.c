@@ -2115,7 +2115,6 @@ register struct monst *mtmp;
     if (bigrm || (orctown && mtmp->data->mlet == S_ORC)) {
         /* A_AVENGED_ORCTOWN: all orcs in Orctown (minetn-1) are dead */
         /* A_CLEARED_BIGROOM: all hostiles in Big Room are dead */
-        struct monst * mtmp;
         boolean didit = TRUE;
         for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
             if (DEADMONSTER(mtmp) || mtmp == &youmonst)

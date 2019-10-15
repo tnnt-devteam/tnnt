@@ -4286,10 +4286,11 @@ int bufsz;
 
 #ifdef EXTRAINFO_FN
 char *
-dump_format_str(char *str)
+dump_format_str(const char *str)
 {
     static char buf[512];
-    char *f, *p, *end;
+    const char *f, *end;
+    char *p;
     int ispercent = 0;
      buf[0] = '\0';
      if (!str) return NULL;
@@ -4391,7 +4392,7 @@ mk_dgl_extrainfo()
 void
 livelog_write_string(ll_type, buffer)
 unsigned int ll_type;
-char *buffer;
+const char *buffer;
 {
 #define LLOG_SEP '\t' /* livelog field separator */
     FILE* livelogfile;
@@ -4485,7 +4486,7 @@ write_swapobj_file(o,swapnum)
 struct obj *o;
 schar swapnum;
 {
-    static char *objnames[SWAP_ITEMS_MAX] = {
+    static const char *objnames[SWAP_ITEMS_MAX] = {
         /* this needs to be adjusted if SWAP_ITEMS_MAX changes */
         /* playername will be appended to the end */
         /* no spaces - underscores will be converted */

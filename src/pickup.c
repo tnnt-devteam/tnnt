@@ -2391,7 +2391,7 @@ register struct obj *obj;
         Strcpy(buf, the(xname(current_container)));
         You("put %s into %s.", doname(obj), buf);
         if (current_container->otyp == SWAP_CHEST) {
-            static char *chest_emotions[SWAP_ITEMS_MAX] = {
+            static const char *chest_emotions[SWAP_ITEMS_MAX] = {
                 "satisfied.", "grateful.", "very pleased!"
             };
             pline("Your offering is snatched from your hands!");
@@ -2463,7 +2463,7 @@ register struct obj *obj;
     int res, loadlev;
     long count;
 #define N_SWAPCHEST_FAILMSG 6
-    char *swapchest_failmsg[N_SWAPCHEST_FAILMSG] = {
+    const char *swapchest_failmsg[N_SWAPCHEST_FAILMSG] = {
         "The item turns out to be a hologram, and vanishes as your hand passes through it.",
         "The item vanishes in a puff of logic.",
         "You thought you felt something in your hand, but it disappears!",
