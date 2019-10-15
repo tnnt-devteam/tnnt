@@ -5353,44 +5353,71 @@ dotnntdebug(VOID_ARGS)
     char buf[BUFSZ];
     char buf2[BUFSZ];
     en_win = create_nhwindow(NHW_MENU);
-
-    // tnnt achievements
-    putstr(en_win, ATR_BOLD, "TNNT achievements (in hexadecimal):");
-    int i;
-    for (i = 0; i < SIZE(tnnt_globals.tnnt_achievements); ++i) {
-        Sprintf(buf, "tnntachieve%d: 0x%lx", i, tnnt_globals.tnnt_achievements[i]);
-        putstr(en_win, 0, buf);
+    menu_item* choice = NULL;
+    char response;
+    anything any;
+    any.a_char = 's';
+    add_menu(en_win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
+             "show debug stats", MENU_UNSELECTED);
+    any.a_char = 'w';
+    add_menu(en_win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
+             "write out a test npcdeath file", MENU_UNSELECTED);
+    end_menu(en_win, "What would you like to do?");
+    if (select_menu(en_win, PICK_ONE, &choice) > 0) {
+        response = choice->item.a_char;
+        free((genericptr_t) choice);
     }
-    putstr(en_win, 0, "");
-
-    // devteam quest info
-    putstr(en_win, ATR_BOLD, "Devteam Quest:");
-    Strcpy(buf, "Scroll levels:");
-    for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
-        if (tnnt_globals.missing_scroll_levels[i] == 0) {
-            Strcat(buf, " [DONE]");
-        }
-        else {
-            Sprintf(buf2, " %d", tnnt_globals.missing_scroll_levels[i]);
-            Strcat(buf, buf2);
-        }
+    else {
+        destroy_nhwindow(en_win);
+        return 0;
     }
-    putstr(en_win, 0, buf);
-    switch(tnnt_globals.devteam_quest_status) {
-        case DTQUEST_NOTSTARTED:
-            putstr(en_win, 0, "Quest not started yet.");
-            break;
-        case DTQUEST_INPROGRESS:
-            putstr(en_win, 0, "Quest in progress.");
-            break;
-        case DTQUEST_COMPLETED:
-            putstr(en_win, 0, "Quest completed.");
-            break;
-    }
-
-    display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
+
+    if (response == 's') {
+        en_win = create_nhwindow(NHW_MENU);
+        // tnnt achievements
+        putstr(en_win, ATR_BOLD, "TNNT achievements (in hexadecimal):");
+        int i;
+        for (i = 0; i < SIZE(tnnt_globals.tnnt_achievements); ++i) {
+            Sprintf(buf, "tnntachieve%d: 0x%lx", i, tnnt_globals.tnnt_achievements[i]);
+            putstr(en_win, 0, buf);
+        }
+        putstr(en_win, 0, "");
+
+        // devteam quest info
+        putstr(en_win, ATR_BOLD, "Devteam Quest:");
+        Strcpy(buf, "Scroll levels:");
+        for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
+            if (tnnt_globals.missing_scroll_levels[i] == 0) {
+                Strcat(buf, " [DONE]");
+            }
+            else {
+                Sprintf(buf2, " %d", tnnt_globals.missing_scroll_levels[i]);
+                Strcat(buf, buf2);
+            }
+        }
+        putstr(en_win, 0, buf);
+        switch(tnnt_globals.devteam_quest_status) {
+            case DTQUEST_NOTSTARTED:
+                putstr(en_win, 0, "Quest not started yet.");
+                break;
+            case DTQUEST_INPROGRESS:
+                putstr(en_win, 0, "Quest in progress.");
+                break;
+            case DTQUEST_COMPLETED:
+                putstr(en_win, 0, "Quest completed.");
+                break;
+        }
+
+        display_nhwindow(en_win, TRUE);
+        destroy_nhwindow(en_win);
+        en_win = WIN_ERR;
+    }
+    else if (response == 'w') {
+        write_npc_data();
+        pline("Finished writing your data as an NPC.");
+    }
     return 0;
 }
 
