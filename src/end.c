@@ -139,7 +139,7 @@ int sig_unused UNUSED;
 {
 #define SIG_MSG "\nSignal received.\n"
     int f2;
-    
+
     f2 = (int) write(2, SIG_MSG, sizeof SIG_MSG - 1);
     nhUse(f2);  /* what could we do if write to fd#2 (stderr) fails  */
     NH_abort(); /* ... and we're already in the process of quitting? */
@@ -1272,6 +1272,9 @@ int how;
         /* not an else if; getting 100000 nets both of these */
         tnnt_achieve(A_FINISHED_WITH_50000);
 
+    /* store ascender as an NPC */
+    if (how == ASCENDED)
+        write_npc_data();
     /* END TNNT code */
 
     dump_open_log(endtime);
