@@ -4661,7 +4661,8 @@ write_npc_data(VOID_ARGS)
     // line 2: player name
     fprintf(npcfile, "%s\n", plname);
     // line 3: player role index and gender
-    fprintf(npcfile, "%d %d\n", flags.female ? urole.femalenum : urole.malenum,
+    fprintf(npcfile, "%d %d\n", (flags.female && urole.femalenum != NON_PM) ?
+                                    urole.femalenum : urole.malenum,
                                 flags.female);
     // line 4: player experience level
     fprintf(npcfile, "%d\n", u.ulevel);
@@ -4706,6 +4707,7 @@ write_npc_data(VOID_ARGS)
                 obj->usecount,
                 obj->oeaten,
                 wornmask);
+        /* TODO: oname for non-artifacts? */
     }
     fclose(npcfile);
 }
