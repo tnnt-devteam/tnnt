@@ -864,6 +864,7 @@ E boolean FDECL(delete_swapobj_file, (struct obj *));
 
 #ifdef TNNT_NPC_FILE
 E void NDECL(write_npc_data);
+E struct monst* FDECL(create_tnnt_npc, (XCHAR_P, XCHAR_P));
 #endif
 
 /* ### fountain.c ### */

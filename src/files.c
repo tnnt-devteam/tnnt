@@ -4710,6 +4710,93 @@ write_npc_data(VOID_ARGS)
     fclose(npcfile);
 }
 
+
+/* Create the NPC and insert them into the game, reading from the data file for
+ * its attributes and inventory.
+ *
+ * By design, this only reads the contents out of the file. It does not delete
+ * the file after using it. The only way the current NPC data is intended to be
+ * destroyed is by being replaced with another NPC.
+ */
+struct monst*
+create_tnnt_npc(x, y)
+xchar x, y;
+{
+    FILE* npcfile = fopen(TNNT_NPC_FILE, "r");
+    struct monst* npc;
+    if (!npcfile) {
+        impossible("Error opening NPC file '%s' - creating generic mplayer instead", TNNT_NPC_FILE);
+        int mndx = rn1(PM_WIZARD - PM_ARCHEOLOGIST + 1, PM_ARCHEOLOGIST);
+        /* special = true better approximates an ascending character... */
+        npc = mk_mplayer(&mons[mndx], x, y, TRUE);
+        return npc;
+    }
+    /* Get base data from the file. */
+    char npcname[BUFSZ];
+    int pm_num, gender, level, hpmax;
+    unsigned short mintrinsics;
+    fgets(npcname, BUFSZ, npcfile); // eat up timestamp; game doesn't use it
+    fgets(npcname, BUFSZ, npcfile); // actually read in name this time
+    npcname[strlen(npcname)-1] = '\0'; // strip \n that was read in
+    fscanf(npcfile, "%d %d\n", &pm_num, &gender);  // get PM_* of correct player monster
+    fscanf(npcfile, "%d\n", &level);   // get ascender's XL
+    fscanf(npcfile, "%d\n", &hpmax);   // get ascender's hp max
+    fscanf(npcfile, "0x%hx\n", &mintrinsics); // get ascender's monster-format intrinsics
+
+    /* Make the monster normally and take care of all the boilerplate. */
+    const long int mmflags = NO_MINVENT | MM_NOCOUNTBIRTH | MM_ADJACENTOK | MM_ANGRY | MM_ASLEEP;
+    npc = makemon(&mons[pm_num], x, y, mmflags);
+
+    /* Setup! */
+    npc->m_lev = max(level, 14);
+    hpmax = min(hpmax, 500); // cap ascender's hpmax at this
+    hpmax = max(hpmax, d((int) npc->m_lev, 10) + 100 + rnd(30)); // beefed up mplayer formula
+    hpmax = max(hpmax, 200); // prevent low HP rolls
+    npc->mhp = npc->mhpmax = hpmax;
+    Strcat(npcname, " the ");
+    Strcat(npcname, rank_of((int) npc->m_lev, pm_num, gender));
+    npc = christen_monst(npc, npcname);
+    /* Minor issue: monsters in vanilla don't store true resistances;
+     * mextrinsics is meant to store extrinsic resistances from gear. If the NPC
+     * gets, say, poison resistance from this, they'll act as if they have
+     * innate poison resistance up until they put on and then take off an apron,
+     * which will lose the poison resistance.
+     */
+    npc->mextrinsics = mintrinsics;
+    npc->mpeaceful = 0;
+    set_malign(npc);
+
+    /* Inventory! */
+    struct obj* obj;
+    int otyp, quan, spe, cursed, blessed, oerodeproof, recharged, greased,
+        corpsenm, usecount, oeaten;
+    long unsigned int owornmask;
+    while (12 == fscanf(npcfile, "%d %d %d %d %d %d %d %d %d %d %d 0x%lx\n",
+                        &otyp, &quan, &spe, &cursed, &blessed, &oerodeproof, &recharged,
+                        &greased, &corpsenm, &usecount, &oeaten, &owornmask)) {
+        obj = mksobj(otyp, FALSE, FALSE);
+        obj->quan = quan;
+        obj->spe = spe;
+        obj->cursed = cursed;
+        obj->blessed = blessed;
+        obj->oerodeproof = oerodeproof;
+        obj->recharged = recharged;
+        obj->greased = greased;
+        obj->corpsenm = corpsenm;
+        obj->usecount = usecount;
+        obj->oeaten = oeaten;
+        /* TODO: setting owornmask directly means that the NPC is automatically
+         * equipping it in the same slot. Should this use m_dowear instead,
+         * which may result in them favoring different gear? */
+        obj->owornmask = owornmask;
+        mpickobj(npc, obj);
+    }
+    /* TODO: Rules for supplementing the monster with other gear. */
+
+    return npc;
+}
+
+
 #endif /* TNNT_NPC_FILE */
 
 /*files.c*/

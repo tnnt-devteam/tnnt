@@ -5362,6 +5362,9 @@ dotnntdebug(VOID_ARGS)
     any.a_char = 'w';
     add_menu(en_win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
              "write out a test npcdeath file", MENU_UNSELECTED);
+    any.a_char = 'c';
+    add_menu(en_win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
+             "create a NPC deathmatch monster", MENU_UNSELECTED);
     end_menu(en_win, "What would you like to do?");
     if (select_menu(en_win, PICK_ONE, &choice) > 0) {
         response = choice->item.a_char;
@@ -5417,6 +5420,10 @@ dotnntdebug(VOID_ARGS)
     else if (response == 'w') {
         write_npc_data();
         pline("Finished writing your data as an NPC.");
+    }
+    else if (response == 'c') {
+        pline("Summoning the NPC deathmatch monster.");
+        create_tnnt_npc(u.ux, u.uy);
     }
     return 0;
 }
