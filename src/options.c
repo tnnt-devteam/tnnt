@@ -2320,6 +2320,7 @@ boolean tinitial, tfrom_file;
             } else {
                 if (!initial && Is_rogue_level(&u.uz))
                     assign_graphics(ROGUESET);
+                symset[ROGUESET].fallback = FALSE;
                 need_redraw = TRUE;
             }
         } else
@@ -2344,6 +2345,7 @@ boolean tinitial, tfrom_file;
                 return FALSE;
             } else {
                 switch_symbols(symset[PRIMARY].name != (char *) 0);
+                symset[PRIMARY].fallback = FALSE;
                 need_redraw = TRUE;
             }
         } else
@@ -6079,8 +6081,10 @@ int which_set;
 
     if (read_sym_file(which_set)) {
         switch_symbols(TRUE);
+        symset[which_set].fallback = FALSE;
     } else {
         clear_symsetentry(which_set, TRUE);
+        symset[which_set].fallback = TRUE;
         return 0;
     }
     return 1;
