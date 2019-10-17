@@ -4660,11 +4660,14 @@ write_npc_data(VOID_ARGS)
                                                      : time(NULL));
     // line 2: player name
     fprintf(npcfile, "%s\n", plname);
-    // line 3: player role index
-    fprintf(npcfile, "%d\n", flags.female ? urole.femalenum : urole.malenum);
+    // line 3: player role index and gender
+    fprintf(npcfile, "%d %d\n", flags.female ? urole.femalenum : urole.malenum,
+                                flags.female);
     // line 4: player experience level
     fprintf(npcfile, "%d\n", u.ulevel);
-    /* line 5: player intrinsics, converted to mextrinsics format...
+    // line 5: player hit point maximum
+    fprintf(npcfile, "%d\n", u.uhpmax);
+    /* line 6: player intrinsics, converted to mextrinsics format...
      * fire cold shock sleep poison disintegration are the only ones that will
      * actually do anything and that are obtainable by the player intrinsically
      */
@@ -4682,15 +4685,18 @@ write_npc_data(VOID_ARGS)
     if (HDisint_resistance & INTRINSIC)
         mintrinsics |= MR_DISINT;
     fprintf(npcfile, "0x%x\n", mintrinsics);
-    /* lines 6-end: carried objects, we preserve only certain fields because
+    /* lines 7-end: carried objects, we preserve only certain fields because
      * others would be pointless... */
     struct obj* obj;
     for (obj = invent; obj; obj = obj->nobj) {
-        fprintf(npcfile, "%d %ld %d %d %d %d %d %d %d %d %d %d 0x%lx\n",
+        /* Before we encode owornmask: strip masks that are invalid on
+         * monsters and don't make the whitelist... */
+        long unsigned wornmask = obj->owornmask;
+        wornmask &= (W_ARMOR | W_WEP | W_AMUL);
+        fprintf(npcfile, "%d %ld %d %d %d %d %d %d %d %d %d 0x%lx\n",
                 obj->otyp,
                 obj->quan,
                 obj->spe,
-                obj->oclass,
                 obj->cursed,
                 obj->blessed,
                 obj->oerodeproof,
@@ -4699,7 +4705,7 @@ write_npc_data(VOID_ARGS)
                 obj->corpsenm,
                 obj->usecount,
                 obj->oeaten,
-                obj->owornmask);
+                wornmask);
     }
     fclose(npcfile);
 }
