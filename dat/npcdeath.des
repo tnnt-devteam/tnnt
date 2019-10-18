@@ -52,6 +52,9 @@ FOUNTAIN:(64,10)
 DOOR:closed,(53,09)
 
 # Statues of those before...
+# Note: the special level code sees a statue of a player monster and converts
+# it to a suitable player monster statue from the topten list. These don't all
+# actually come out as archeologists.
 OBJECT:"statue",(61,07),montype:"archeologist"
 OBJECT:"statue",(62,07),montype:"archeologist"
 OBJECT:"statue",(63,07),montype:"archeologist"
@@ -68,6 +71,11 @@ OBJECT:"statue",(66,11),montype:"archeologist"
 OBJECT:"statue",(67,11),montype:"archeologist"
 
 ## The Arena
+
+# The NPC themselves!
+# Note: the special level code converts any player monster specified on this
+# level into the NPC. It won't [necessarily] come out as an archeologist.
+MONSTER:"archeologist",(19,09)
 
 # What's in the moat...
 MONSTER:"giant eel",(32,05)
