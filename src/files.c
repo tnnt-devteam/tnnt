@@ -4690,11 +4690,7 @@ write_npc_data(VOID_ARGS)
      * others would be pointless... */
     struct obj* obj;
     for (obj = invent; obj; obj = obj->nobj) {
-        /* Before we encode owornmask: strip masks that are invalid on
-         * monsters and don't make the whitelist... */
-        long unsigned wornmask = obj->owornmask;
-        wornmask &= (W_ARMOR | W_WEP | W_AMUL);
-        fprintf(npcfile, "%d %ld %d %d %d %d %d %d %d %d %d 0x%lx\n",
+        fprintf(npcfile, "%d %ld %d %d %d %d %d %d %d %d %d\n",
                 obj->otyp,
                 obj->quan,
                 obj->spe,
@@ -4705,8 +4701,7 @@ write_npc_data(VOID_ARGS)
                 obj->greased,
                 obj->corpsenm,
                 obj->usecount,
-                obj->oeaten,
-                wornmask);
+                obj->oeaten);
         /* TODO: oname for non-artifacts? */
     }
     fclose(npcfile);
@@ -4772,10 +4767,9 @@ xchar x, y;
     struct obj* obj;
     int otyp, quan, spe, cursed, blessed, oerodeproof, recharged, greased,
         corpsenm, usecount, oeaten;
-    long unsigned int owornmask;
-    while (12 == fscanf(npcfile, "%d %d %d %d %d %d %d %d %d %d %d 0x%lx\n",
+    while (12 == fscanf(npcfile, "%d %d %d %d %d %d %d %d %d %d %d\n",
                         &otyp, &quan, &spe, &cursed, &blessed, &oerodeproof, &recharged,
-                        &greased, &corpsenm, &usecount, &oeaten, &owornmask)) {
+                        &greased, &corpsenm, &usecount, &oeaten)) {
         obj = mksobj(otyp, FALSE, FALSE);
         obj->quan = quan;
         obj->spe = spe;
@@ -4787,12 +4781,9 @@ xchar x, y;
         obj->corpsenm = corpsenm;
         obj->usecount = usecount;
         obj->oeaten = oeaten;
-        /* TODO: setting owornmask directly means that the NPC is automatically
-         * equipping it in the same slot. Should this use m_dowear instead,
-         * which may result in them favoring different gear? */
-        obj->owornmask = owornmask;
         mpickobj(npc, obj);
     }
+    m_dowear(npc, TRUE);
     /* TODO: Rules for supplementing the monster with other gear. */
 
     return npc;
