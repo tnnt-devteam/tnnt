@@ -38,12 +38,12 @@ MAP
                          ----------------                                  
 ENDMAP
 
-BRANCH:(67,09,67,09),(0,0,0,0)
 REGION:(12,00,68,18),lit,"ordinary"
 TELEPORT_REGION:levregion(61,08,67,12),(0,0,0,0)
 NON_DIGGABLE:(0,0,75,19)
 
 ## Foyer
+PORTAL:(66,09,66,09),(0,0,0,0),"medusa"
 ENGRAVING:(54,09),burn,"Point of no return."
 ENGRAVING:(60,09),burn,"Two players enter, one player leaves..."
 
