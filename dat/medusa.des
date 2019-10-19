@@ -43,8 +43,6 @@ TELEPORT_REGION:(26,04,50,15),(0,0,0,0),up
 # Stairs
 STAIR:(05,14),up
 STAIR:(36,10),down
-# TNNT: portal to npcdeath
-PORTAL:(57,10,57,10),(0,0,0,0),"npcdeath"
 # Doors
 DOOR:closed,(46,07)
 DOOR:locked,(38,08)
@@ -146,8 +144,6 @@ TELEPORT_REGION:(61,03,72,16),(0,0,0,0),up
 # Stairs
 STAIR:(04,09),up
 STAIR:(68,10),down
-# TNNT portal
-PORTAL:(71,08,72,11),(0,0,0,0),"npcdeath"
 # Doors
 DOOR:locked,(71,07)
 # Branch, not allowed on Medusa's island.
@@ -267,8 +263,6 @@ NON_DIGGABLE:(44,13,48,17)
 TELEPORT_REGION:(33,02,38,07),(0,0,0,0),down
 STAIR:(32,01,39,07),(0,0,0,0),up
 STAIR:$place[0],down
-# TNNT portal
-PORTAL:(68,15,68,15),(0,0,0,0),"npcdeath"
 DOOR:locked,(08,08)
 DOOR:locked,(64,05)
 DOOR:random,(50,13)
@@ -361,8 +355,6 @@ TELEPORT_REGION:(02,02,18,13),(0,0,0,0),up
 #
 STAIR:(67,01,74,20),(0,0,0,0),up
 STAIR:$place[0],down
-# TNNT portal
-PORTAL:(15,08,15,08),(0,0,0,0),"npcdeath"
 #
 DOOR:locked,(04,06)
 DOOR:locked,(04,10)
