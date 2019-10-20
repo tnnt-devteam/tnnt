@@ -3940,6 +3940,11 @@ boolean msg;      /* "The oldmon turns into a newmon!" */
            anomalous extinction feedback during final disclsoure */
         if (mbirth_limit(monsndx(olddata)) < MAXMONNO)
             return 0;
+        /* TNNT: player monsters in the Deathmatch Arena cannot polymorph, in
+         * order to prevent cheesy outcomes like turning them into a newt and
+         * stomping them. */
+        if (is_mplayer(olddata) && Is_deathmatch_level(&u.uz))
+            return 0;
         /* cancelled shapechangers become uncancelled prior
            to being given a new shape */
         if (mtmp->mcan && !Protection_from_shape_changers) {
