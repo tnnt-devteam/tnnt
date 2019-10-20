@@ -308,14 +308,16 @@ register struct monst *mtmp;
                   Amonnam(mtmp));
             livelog_printf(LL_UMONST, "bribed %s with %ld %s for safe passage",
                   Amonnam(mtmp), offer, currency(offer));
-            tnnt_achieve(A_BRIBED_DEMON_LORD);
+            if (offer >= 25000)
+                tnnt_achieve(A_BRIBED_DEMON_LORD);
         } else if (offer > 0L
                    && (long) rnd(5 * ACURR(A_CHA)) > (demand - offer)) {
             pline("%s scowls at you menacingly, then vanishes.",
                   Amonnam(mtmp));
             livelog_printf(LL_UMONST, "bribed %s with %ld %s for safe passage",
                   Amonnam(mtmp), offer, currency(offer));
-            tnnt_achieve(A_BRIBED_DEMON_LORD);
+            if (offer >= 25000)
+                tnnt_achieve(A_BRIBED_DEMON_LORD);
         } else {
             pline("%s gets angry...", Amonnam(mtmp));
             mtmp->mpeaceful = 0;
@@ -500,11 +502,17 @@ gain_guardian_angel()
                 pline("An angel appears near you.");
             else
                 You_feel("the presence of a friendly angel near you.");
-            /* guardian angel -- the one case mtame doesn't
-             * imply an edog structure, so we don't want to
-             * call tamedog().
-             */
-            mtmp->mtame = 10;
+            /* Too nasty for the game to unexpectedly break petless conduct on
+             * the final level of the game. The angel will still appear, but
+             * won't be tamed. */
+            if (u.uconduct.pets) {
+                /* guardian angel -- the one case mtame doesn't
+                 * imply an edog structure, so we don't want to
+                 * call tamedog().
+                 */
+                mtmp->mtame = 10;
+                u.uconduct.pets++;
+            }
             /* make him strong enough vs. endgame foes */
             mtmp->m_lev = rn1(8, 15);
             mtmp->mhp = mtmp->mhpmax =

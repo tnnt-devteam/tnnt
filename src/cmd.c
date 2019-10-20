@@ -3262,6 +3262,10 @@ int final;
 
     if (u.uroleplay.blind)
         you_have_been("blind from birth");
+    if (u.uroleplay.deaf)
+        you_have_been("deaf from birth");
+    if (u.uroleplay.hallu)
+        you_have_been("hallucinating for your entire life");
     if (u.uroleplay.nudist)
         you_have_been("faithfully nudist");
 
@@ -3358,6 +3362,36 @@ int final;
             enl_msg(You_, "have not wished", "did not wish",
                     " for any artifacts", "");
     }
+
+    /* TNNT: extra conducts */
+
+    if (u.umortality == 0)
+        you_have_never("died");
+
+    if (u.uconduct.rmswapchest == 0)
+        you_have_never("removed an item from a swap chest");
+
+    if (mvitals[urole.neminum].died == 0)
+        you_have_never("allowed your nemesis to die");
+
+    if (mvitals[PM_VLAD_THE_IMPALER].died == 0)
+        you_have_never("allowed Vlad to die");
+
+    if (mvitals[PM_WIZARD_OF_YENDOR].died == 0)
+        you_have_never("allowed the Wizard to die");
+
+    if (mvitals[PM_HIGH_PRIEST].died == 0)
+        you_have_never("allowed a high priest to die");
+
+    if (mvitals[PM_DEATH].died == 0 && mvitals[PM_PESTILENCE].died == 0
+        && mvitals[PM_FAMINE].died == 0)
+        you_have_never("allowed a Rider to die");
+
+    if (u.uconduct.artitouch == 0)
+        you_have_never("touched an artifact");
+
+    if (u.uconduct.pets == 0)
+        you_have_never("had a pet");
 
     /* Pop up the window and wait for a key */
     display_nhwindow(en_win, TRUE);

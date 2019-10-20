@@ -1,4 +1,4 @@
-/* NetHack 3.6	decl.c	$NHDT-Date: 1547025164 2019/01/09 09:12:44 $  $NHDT-Branch: NetHack-3.6.2-beta01 $:$NHDT-Revision: 1.141 $ */
+/* NetHack 3.6	decl.c	$NHDT-Date: 1571352532 2019/10/17 22:48:52 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.146 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Michael Allison, 2009. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -168,6 +168,7 @@ NEARDATA struct obj
 #ifdef TEXTCOLOR
 /*
  *  This must be the same order as used for buzz() in zap.c.
+ *  (They're only used in mapglyph.c so probably shouldn't be here.)
  */
 const int zapcolors[NUM_ZAP] = {
     HI_ZAP,     /* 0 - missile */
@@ -176,8 +177,10 @@ const int zapcolors[NUM_ZAP] = {
     HI_ZAP,     /* 3 - sleep */
     CLR_BLACK,  /* 4 - death */
     CLR_WHITE,  /* 5 - lightning */
-    CLR_YELLOW, /* 6 - poison gas */
-    CLR_GREEN,  /* 7 - acid */
+    /* 3.6.3: poison gas zap used to be yellow and acid zap was green,
+       which conflicted with the corresponding dragon colors */
+    CLR_GREEN,  /* 6 - poison gas */
+    CLR_YELLOW, /* 7 - acid */
 };
 #endif /* text color */
 
@@ -285,7 +288,7 @@ char *fqn_prefix[PREFIX_COUNT] = { (char *) 0, (char *) 0, (char *) 0,
                                    (char *) 0 };
 
 #ifdef PREFIXES_IN_USE
-char *fqn_prefix_names[PREFIX_COUNT] = {
+const char *fqn_prefix_names[PREFIX_COUNT] = {
     "hackdir",  "leveldir", "savedir",    "bonesdir",  "datadir",
     "scoredir", "lockdir",  "sysconfdir", "configdir", "troubledir"
 };
@@ -367,7 +370,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Orthodoxy", "Convert an altar"},
   {"Always Talk to the Wise Old Man", "Chat with Izchak"},
   {"Isaac Newton", "Get fruit by kicking a tree"},
-  {"Dungeon Economics", "Buy something at a shop"},
+  {"Dungeon Economics", "Buy or sell something at a shop"},
   {"Stop, Thief!", "Be chased by the Keystone Kops"},
   {"Wash it Clean", "Uncurse an item in a fountain"},
   {"Well-Read", "Learn a level 5+ spell"},
@@ -458,7 +461,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Potions of Booze Cost More Than That", "Get two bits for an ale from a priest"},
   {"Horatius at the Bridge", "Extinct soldiers or Keystone Kops"},
   {"Who's That Pretty Girl in the Mirror, There?", "Deflect a nymph with a mirror"},
-  {"Money Talks", "Bribe a demon lord"},
+  {"Money Talks", "Bribe a demon lord with at least 25000 gold"},
   {"Breaking and Entering", "Enter a vault"},
   {"Who Was That David Person Anyway?", "Enter a treasure zoo"},
   {"Absolute Monarchy", "Enter a throne room"},
@@ -568,7 +571,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Gotta Kill 'em All", "Kill a member of all eligible monster species"},
   {"Learn the Alphabet", "Kill a member of each species from a to z"},
   {"Make your Mark", "Engrave with an athame"},
-  {"One Hit KO", "Deal a monster its maximum HP or more of damage (minimum 10)"},
+  {"One Hit KO", "Deal a monster its maximum HP or more of damage (minimum 20)"},
   {"Drink It To The Next Level", "Level up by drinking from a sink"},
   {"Why Won't You DIE Already", "Kill the Wizard of Yendor 20 or more times"},
   {"You're About To Die, You Scrub", "Get a special message saying you're about to die, you scrub"},

@@ -1,4 +1,4 @@
-/* NetHack 3.6	pickup.c	$NHDT-Date: 1570142736 2019/10/03 22:45:36 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.234 $ */
+/* NetHack 3.6	pickup.c	$NHDT-Date: 1570566381 2019/10/08 20:26:21 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.235 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2012. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -1210,7 +1210,8 @@ int qflags;
         for (curr = olist; curr; curr = FOLLOW(curr, qflags)) {
             if (curr->oclass == *pack) {
                 if ((qflags & WORN_TYPES)
-                    && !(curr->owornmask & (W_ARMOR | W_ACCESSORY | W_WEAPON)))
+                    && !(curr->owornmask & (W_ARMOR | W_ACCESSORY
+                                            | W_WEAPONS)))
                     continue;
                 if (!counted_category) {
                     ccount++;
@@ -2135,13 +2136,16 @@ struct obj *obj;
         case RING_CLASS:
             return !obj->cursed;
         case WAND_CLASS:
-            /* no wands of nothing. Maybe other stuff here too */
-            if (obj->otyp == WAN_NOTHING)
-                return FALSE;
-            /* allow empty wands of wishing... */
-            return (obj->spe > 0 || obj->otyp == WAN_WISHING);
+            /* no wands of nothing or wishing. Maybe other stuff here too */
+            switch (obj->otyp) {
+                case WAN_NOTHING:
+                case WAN_WISHING:
+                    return FALSE;
+                default:
+                    return obj->spe > 0;
+            }
         case AMULET_CLASS:
-            switch(obj->otyp) {
+            switch (obj->otyp) {
                 case AMULET_OF_STRANGULATION:
                 case AMULET_OF_RESTFUL_SLEEP:
                 case FAKE_AMULET_OF_YENDOR: /* real one already checked */
@@ -2155,12 +2159,15 @@ struct obj *obj;
         case TOOL_CLASS:
             if (Has_contents(obj)) return FALSE; /* bags with stuff in them not allowed */
             switch (obj->otyp) {
+                case MAGIC_LAMP:
+                    return FALSE;
                 /* charged allowed tools - conveniently, these all work the same. */
                 case EXPENSIVE_CAMERA:
                 case TINNING_KIT:
                 case MAGIC_MARKER:
                     return (obj->spe > 10);
                 case STETHOSCOPE:
+                case OILSKIN_SACK:
                     return TRUE;
             }
             /* other tools only require at least 1 charge */
@@ -2261,6 +2268,15 @@ register struct obj *obj;
          * has the Amulet.  Ditto for the Candelabrum, the Bell and the Book.
          */
         pline("%s cannot be confined in such trappings.", The(xname(obj)));
+        return 0;
+    } else if (obj->otyp == WAN_WISHING
+               || obj->otyp == MAGIC_LAMP) {
+        /* Objects that grant wishes are not allow, otherwise it
+         * invalidates virtually every other object on the
+         * exclusion list.
+         */
+        pline("Such an item is too powerful to be placed inside %s.",
+              the(xname(current_container)));
         return 0;
     } else if (obj->otyp == LEASH && obj->leashmon != 0) {
         pline("%s attached to your pet.", Tobjnam(obj, "are"));
@@ -2390,7 +2406,7 @@ register struct obj *obj;
         Strcpy(buf, the(xname(current_container)));
         You("put %s into %s.", doname(obj), buf);
         if (current_container->otyp == SWAP_CHEST) {
-            static char *chest_emotions[SWAP_ITEMS_MAX] = {
+            static const char *chest_emotions[SWAP_ITEMS_MAX] = {
                 "satisfied.", "grateful.", "very pleased!"
             };
             pline("Your offering is snatched from your hands!");
@@ -2462,7 +2478,7 @@ register struct obj *obj;
     int res, loadlev;
     long count;
 #define N_SWAPCHEST_FAILMSG 6
-    char *swapchest_failmsg[N_SWAPCHEST_FAILMSG] = {
+    const char *swapchest_failmsg[N_SWAPCHEST_FAILMSG] = {
         "The item turns out to be a hologram, and vanishes as your hand passes through it.",
         "The item vanishes in a puff of logic.",
         "You thought you felt something in your hand, but it disappears!",
@@ -2549,6 +2565,7 @@ register struct obj *obj;
         makeknown(SWAP_CHEST);
         pline("%s snaps shut and backs away slightly.",  The(xname(current_container)));
         delete_swap_chest_contents(current_container);
+        u.uconduct.rmswapchest++;
     }
     /* <-- */
 

@@ -396,6 +396,9 @@ register struct obj *obj;
             obj->oerodeproof = TRUE;
             exercise(A_WIS, TRUE);
             tnnt_achieve(A_GOT_EXCALIBUR);
+            /* even if not wielded, it's assuming you're touching Excalibur to
+             * get it out of the water */
+            u.uconduct.artitouch++;
 	    livelog_write_string(LL_ARTIFACT, "received Excalibur");
         }
         update_inventory();

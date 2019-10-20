@@ -1872,7 +1872,7 @@ boolean confused, byu;
                           xname(helmet), mhim(mtmp));
             }
         }
-        if (mdmg >= mtmp->mhpmax && mdmg >= 10)
+        if (mdmg >= mtmp->mhpmax && mdmg >= TNNT_OHKO_DMG)
             tnnt_achieve(A_ONE_HIT_KO);
         mtmp->mhp -= mdmg;
         if (DEADMONSTER(mtmp)) {

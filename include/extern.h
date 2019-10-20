@@ -1,4 +1,4 @@
-/* NetHack 3.6	extern.h	$NHDT-Date: 1567213888 2019/08/31 01:11:28 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.728 $ */
+/* NetHack 3.6	extern.h	$NHDT-Date: 1571436000 2019/10/18 22:00:00 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.730 $ */
 /* Copyright (c) Steve Creps, 1988.				  */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -849,7 +849,7 @@ E boolean FDECL(debugcore, (const char *, BOOLEAN_P));
 E boolean FDECL(read_tribute, (const char *, const char *, int,
                                char *, int, unsigned));
 E boolean FDECL(Death_quote, (char *, int));
-E void FDECL(livelog_write_string, (unsigned int, char *));
+E void FDECL(livelog_write_string, (unsigned int, const char *));
 E void VDECL(livelog_printf, (unsigned int, const char *, ...)) PRINTF_F(2, 3);
 
 #ifdef EXTRAINFO_FN
@@ -1069,7 +1069,8 @@ E int FDECL(count_unpaid, (struct obj *));
 E int FDECL(count_buc, (struct obj *, int, boolean (*)(OBJ_P)));
 E void FDECL(tally_BUCX, (struct obj *, BOOLEAN_P,
                           int *, int *, int *, int *, int *));
-E long FDECL(count_contents, (struct obj *, BOOLEAN_P, BOOLEAN_P, BOOLEAN_P));
+E long FDECL(count_contents, (struct obj *,
+                              BOOLEAN_P, BOOLEAN_P, BOOLEAN_P, BOOLEAN_P));
 E void FDECL(carry_obj_effects, (struct obj *));
 E const char *FDECL(currency, (long));
 E void FDECL(silly_thing, (const char *, struct obj *));
@@ -1400,6 +1401,7 @@ E struct obj *FDECL(obj_nexto_xy, (struct obj *, int, int, BOOLEAN_P));
 E struct obj *FDECL(obj_absorb, (struct obj **, struct obj **));
 E struct obj *FDECL(obj_meld, (struct obj **, struct obj **));
 E void FDECL(pudding_merge_message, (struct obj *, struct obj *));
+E struct obj *FDECL(init_dummyobj, (struct obj *, SHORT_P, long));
 
 /* ### mkroom.c ### */
 

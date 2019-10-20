@@ -93,13 +93,19 @@ struct u_conduct {     /* number of times... */
     long polyselfs;    /* transformed yourself */
     long wishes;       /* used a wish */
     long wisharti;     /* wished for an artifact */
-    long elbereth;     /* engraved Elbereth */
     /* genocides already listed at end of game */
+    /* TNNT-specific conducts */
+    long elbereth;     /* engraved Elbereth */
+    long rmswapchest;  /* got item out of swap chest */
+    long artitouch;    /* touched an artifact in any way */
+    long pets;         /* obtained a pet */
 };
 
 struct u_roleplay {
     boolean blind;  /* permanently blind */
     boolean nudist; /* has not worn any armor, ever */
+    boolean hallu;  /* permanently hallucinating */
+    boolean deaf;   /* permanently deaf */
     long numbones;  /* # of bones files loaded  */
 };
 
