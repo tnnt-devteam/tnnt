@@ -4746,6 +4746,7 @@ xchar x, y;
         /* special = true better approximates an ascending character... */
         npc = mk_mplayer(&mons[mndx], x, y, TRUE);
         npc->mcloned = 1;
+        npc->msleeping = 1;
         return npc;
     }
     /* Get base data from the file. */
