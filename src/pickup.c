@@ -2269,15 +2269,6 @@ register struct obj *obj;
          */
         pline("%s cannot be confined in such trappings.", The(xname(obj)));
         return 0;
-    } else if (obj->otyp == WAN_WISHING
-               || obj->otyp == MAGIC_LAMP) {
-        /* Objects that grant wishes are not allow, otherwise it
-         * invalidates virtually every other object on the
-         * exclusion list.
-         */
-        pline("Such an item is too powerful to be placed inside %s.",
-              the(xname(current_container)));
-        return 0;
     } else if (obj->otyp == LEASH && obj->leashmon != 0) {
         pline("%s attached to your pet.", Tobjnam(obj, "are"));
         return 0;
