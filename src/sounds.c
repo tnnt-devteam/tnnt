@@ -70,14 +70,14 @@ struct obj* thrownscroll;
         int nscrolls_given = 0;
         struct obj* scroll = (thrownscroll ? thrownscroll : carrying(SCR_MISSING_CODE));
         while (scroll) {
-            int level = scroll->corpsenm;
-            if (level <= 0) {
+            int dt_level = scroll->corpsenm;
+            if (dt_level <= 0) {
                 // wizmode wished scroll?
                 impossible("scroll marked with bad level?");
                 return;
             }
             for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
-                if (tnnt_globals.missing_scroll_levels[i] == level) {
+                if (tnnt_globals.missing_scroll_levels[i] == dt_level) {
                     tnnt_globals.missing_scroll_levels[i] = 0;
                     nscrolls_given++;
                     if (thrownscroll)

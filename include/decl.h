@@ -409,7 +409,7 @@ E const char *const monexplain[], invisexplain[], *const oclass_names[];
 
 E char *fqn_prefix[PREFIX_COUNT];
 #ifdef PREFIXES_IN_USE
-E char *fqn_prefix_names[PREFIX_COUNT];
+E const char *fqn_prefix_names[PREFIX_COUNT];
 #endif
 
 E NEARDATA struct savefile_info sfcap, sfrestinfo, sfsaveinfo;
@@ -731,6 +731,7 @@ E struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS];
 #include <stdint.h> /* uint64_t */
 #define NUM_MISSING_CODE_SCROLLS 3
 #define MAX_TAMED_FELINES 7
+#define TNNT_OHKO_DMG 20
 enum dtquest_status {
     DTQUEST_NOTSTARTED = 0,
     DTQUEST_INPROGRESS,

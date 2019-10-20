@@ -2115,13 +2115,13 @@ register struct monst *mtmp;
     if (bigrm || (orctown && mtmp->data->mlet == S_ORC)) {
         /* A_AVENGED_ORCTOWN: all orcs in Orctown (minetn-1) are dead */
         /* A_CLEARED_BIGROOM: all hostiles in Big Room are dead */
-        struct monst * mtmp;
+        struct monst * mtmp2;
         boolean didit = TRUE;
-        for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-            if (DEADMONSTER(mtmp) || mtmp == &youmonst)
+        for (mtmp2 = fmon; mtmp2; mtmp2 = mtmp2->nmon) {
+            if (DEADMONSTER(mtmp2) || mtmp2 == &youmonst)
                 continue;
-            if ((bigrm && !mtmp->mpeaceful)
-                || (orctown && mtmp->data->mlet == S_ORC)) {
+            if ((bigrm && !mtmp2->mpeaceful)
+                || (orctown && mtmp2->data->mlet == S_ORC)) {
                 didit = FALSE;
                 break;
             }

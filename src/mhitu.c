@@ -473,8 +473,6 @@ register struct monst *mtmp;
                     pline("%s is hit by a falling piercer (you)!",
                           Monnam(mtmp));
                     int dmg = d(3, 6);
-                    if (dmg >= mtmp->mhpmax && dmg >= 10)
-                        tnnt_achieve(A_ONE_HIT_KO);
                     if ((mtmp->mhp -= dmg) < 1)
                         killed(mtmp);
                 } else
@@ -2956,7 +2954,7 @@ struct attack *mattk;
         tmp = 0;
 
  assess_dmg:
-    if (tmp >= mtmp->mhpmax && tmp >= 10)
+    if (tmp >= mtmp->mhpmax && tmp >= TNNT_OHKO_DMG)
         tnnt_achieve(A_ONE_HIT_KO);
     if ((mtmp->mhp -= tmp) <= 0) {
         pline("%s dies!", Monnam(mtmp));

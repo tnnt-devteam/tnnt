@@ -437,7 +437,7 @@ struct obj *otmp;
             shieldeff(mtmp->mx, mtmp->my);
         } else if (!resist(mtmp, otmp->oclass, dmg, NOTELL)
                    && !DEADMONSTER(mtmp)) {
-            if (dmg >= mtmp->mhpmax && dmg >= 10)
+            if (dmg >= mtmp->mhpmax && dmg >= TNNT_OHKO_DMG)
                 tnnt_achieve(A_ONE_HIT_KO);
             mtmp->mhp -= dmg;
             mtmp->mhpmax -= dmg;

@@ -1411,8 +1411,6 @@ dogaze()
                         (void) destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
                     if (dmg)
                         mtmp->mhp -= dmg;
-                    if (dmg >= mtmp->mhpmax && dmg >= 10)
-                        tnnt_achieve(A_ONE_HIT_KO);
                     if (DEADMONSTER(mtmp))
                         killed(mtmp);
                 }
@@ -1576,8 +1574,6 @@ domindblast()
                       : telepathic(mtmp->data) ? "latent telepathy" : "mind");
             int dmg = rnd(15);
             mtmp->mhp -= dmg;
-            if (dmg >= mtmp->mhpmax && dmg >= 10)
-                tnnt_achieve(A_ONE_HIT_KO);
             if (DEADMONSTER(mtmp))
                 killed(mtmp);
         }

@@ -540,6 +540,10 @@ long wp_mask;
          * that can print a message--need to guard against being printed
          * when restoring a game
          */
+        if (u.uroleplay.hallu && on) {
+            u.uroleplay.hallu = FALSE;
+            pline_The("world no longer makes any sense to you!");
+        }
         (void) make_hallucinated((long) !on, restoring ? FALSE : TRUE,
                                  wp_mask);
     }
@@ -661,6 +665,7 @@ struct monst *mon;
        will have to be extended to explicitly include quest artifacts */
     self_willed = ((oart->spfx & SPFX_INTEL) != 0);
     if (yours) {
+        u.uconduct.artitouch++;
         badclass = self_willed
                    && ((oart->role != NON_PM && !Role_if(oart->role))
                        || (oart->race != NON_PM && !Race_if(oart->race)));

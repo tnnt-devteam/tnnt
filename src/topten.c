@@ -430,8 +430,32 @@ encodeconduct()
         e |= 1L << 10;
     if (!num_genocides())
         e |= 1L << 11;
+    /* begin TNNT tracked conducts */
     if (!u.uconduct.elbereth)
         e |= 1L << 12;
+    if (u.umortality == 0)
+        e |= 1L << 13;
+    if (u.uconduct.rmswapchest == 0)
+        e |= 1L << 14;
+    if (mvitals[urole.neminum].died == 0)
+        e |= 1L << 15;
+    if (mvitals[PM_VLAD_THE_IMPALER].died == 0)
+        e |= 1L << 16;
+    if (mvitals[PM_WIZARD_OF_YENDOR].died == 0)
+        e |= 1L << 17;
+    if (mvitals[PM_HIGH_PRIEST].died == 0)
+        e |= 1L << 18;
+    if (mvitals[PM_DEATH].died == 0 && mvitals[PM_PESTILENCE].died == 0
+        && mvitals[PM_FAMINE].died == 0)
+        e |= 1L << 19;
+    if (u.uconduct.artitouch == 0)
+        e |= 1L << 20;
+    if (u.uconduct.pets == 0)
+        e |= 1L << 21;
+    if (u.uroleplay.deaf)
+        e |= 1L << 22;
+    if (u.uroleplay.hallu)
+        e |= 1L << 23;
 
     return e;
 }
