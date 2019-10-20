@@ -4726,6 +4726,7 @@ xchar x, y;
         int mndx = rn1(PM_WIZARD - PM_ARCHEOLOGIST + 1, PM_ARCHEOLOGIST);
         /* special = true better approximates an ascending character... */
         npc = mk_mplayer(&mons[mndx], x, y, TRUE);
+        npc->mcloned = 1;
         return npc;
     }
     /* Get base data from the file. */
@@ -4762,6 +4763,9 @@ xchar x, y;
     npc->mextrinsics = mintrinsics;
     npc->mpeaceful = 0;
     set_malign(npc);
+    /* Regular player monsters never use the mcloned flag, so this is a good way
+     * to put a special marker on the NPC. Plus they ARE sort of a clone. */
+    npc->mcloned = 1;
 
     /* Inventory! */
     struct obj* obj;

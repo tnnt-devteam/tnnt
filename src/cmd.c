@@ -5462,6 +5462,16 @@ dotnntstats(VOID_ARGS)
         }
     }
 
+    /* npc deathmatch status */
+    if (tnnt_globals.deathmatch_started) {
+        if (tnnt_globals.deathmatch_completed)
+            putstr(en_win, 0, "Deathmatch: Completed!");
+        else if (Is_deathmatch_level(&u.uz))
+            putstr(en_win, 0, "Deathmatch: Happening Now");
+        else /* fled the deathmatch */
+            putstr(en_win, 0, "Deathmatch: Bravely Ran Away");
+    }
+
     /* other counters for various things */
     Sprintf(buf, "You have found %d graffiti.", tnnt_globals.graffiti_found);
     putstr(en_win, 0, buf);

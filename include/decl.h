@@ -793,6 +793,10 @@ struct tnnt_globals_t {
     xchar missing_scroll_levels[NUM_MISSING_CODE_SCROLLS];
     xchar devteam_quest_status;
 
+    /* NPC Deathmatch */
+    boolean deathmatch_started;
+    boolean deathmatch_completed;
+
     unsigned feline_m_ids[MAX_TAMED_FELINES]; /* Cat Lady: ids of tamed cats */
     unsigned short wizards_killed;
     /* Inedible object classes:

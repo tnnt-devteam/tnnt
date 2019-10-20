@@ -2058,6 +2058,21 @@ switch_terrain()
     }
     if ((!Levitation ^ was_levitating) || (!Flying ^ was_flying))
         context.botl = TRUE; /* update Lev/Fly status condition */
+
+    /* TNNT: hacky test for entering the NPC Deathmatch Arena via moving over
+     * the door in the arena. In here rather than spoteffects() because you
+     * might jump over the door, or obliterate the door.
+     * Assumes that there is exactly one door in the arena. Also assumes that
+     * there's no way for a player to engineer the destruction of a door such
+     * that its typ doesn't remain set on DOOR. */
+    if (Is_deathmatch_level(&u.uz) && IS_DOOR(lev->typ)) {
+        if (!tnnt_globals.deathmatch_started) {
+            aggravate(); /* wake up the NPC */
+            pline("A voice echoes in the arena:");
+            verbalize("Thou art brave indeed, mortal! Now prove thy prowess!");
+        }
+        tnnt_globals.deathmatch_started = TRUE;
+    }
 }
 
 /* extracted from spoteffects; called by spoteffects to check for entering or

@@ -2133,6 +2133,10 @@ register struct monst *mtmp;
                 tnnt_achieve(A_AVENGED_ORCTOWN);
         }
     }
+    if (is_mplayer(mtmp->data) && mtmp->mcloned) {
+        /* cloned player monster == deathmatch NPC */
+        tnnt_globals.deathmatch_completed = TRUE;
+    }
 
     if (glyph_is_invisible(levl[mtmp->mx][mtmp->my].glyph))
         unmap_object(mtmp->mx, mtmp->my);
