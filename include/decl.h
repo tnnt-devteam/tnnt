@@ -796,6 +796,8 @@ struct tnnt_globals_t {
     /* NPC Deathmatch */
     boolean deathmatch_started;
     boolean deathmatch_completed;
+    /* cloned player monster == deathmatch NPC */
+#define is_deathmatch_opponent(mtmp) (is_mplayer((mtmp)->data) && (mtmp)->mcloned)
 
     unsigned feline_m_ids[MAX_TAMED_FELINES]; /* Cat Lady: ids of tamed cats */
     unsigned short wizards_killed;
