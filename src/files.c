@@ -4750,13 +4750,13 @@ xchar x, y;
     }
     /* Get base data from the file. */
     char npcname[BUFSZ];
-    int pm_num, gender, level, hpmax;
+    int pm_num, gender, npc_level, hpmax;
     unsigned short mintrinsics;
     fgets(npcname, BUFSZ, npcfile); // eat up timestamp; game doesn't use it
     fgets(npcname, BUFSZ, npcfile); // actually read in name this time
     npcname[strlen(npcname)-1] = '\0'; // strip \n that was read in
     fscanf(npcfile, "%d %d\n", &pm_num, &gender);  // get PM_* of correct player monster
-    fscanf(npcfile, "%d\n", &level);   // get ascender's XL
+    fscanf(npcfile, "%d\n", &npc_level);   // get ascender's XL
     fscanf(npcfile, "%d\n", &hpmax);   // get ascender's hp max
     fscanf(npcfile, "0x%hx\n", &mintrinsics); // get ascender's monster-format intrinsics
 
@@ -4765,7 +4765,7 @@ xchar x, y;
     npc = makemon(&mons[pm_num], x, y, mmflags);
 
     /* Setup! */
-    npc->m_lev = max(level, 14);
+    npc->m_lev = max(npc_level, 14);
     hpmax = min(hpmax, 500); // cap ascender's hpmax at this
     hpmax = max(hpmax, d((int) npc->m_lev, 10) + 100 + rnd(30)); // beefed up mplayer formula
     hpmax = max(hpmax, 200); // prevent low HP rolls
