@@ -1520,15 +1520,33 @@ struct obj *obj;
             int i, num_ok_dungeons, last_ok_dungeon = 0;
             d_level newlev;
             extern int n_dgns; /* from dungeon.c */
-            winid tmpwin = create_nhwindow(NHW_MENU);
+            winid tmpwin;
             anything any;
 
+            /* TNNT: player can't branchport out of the arena if the match is in
+             * progress. */
+            if (Is_deathmatch_level(&u.uz) && tnnt_globals.deathmatch_started
+                && !tnnt_globals.deathmatch_completed) {
+                pline("Somehow, %s seems unable to make a portal.", the(xname(obj)));
+                break;
+            }
+
+            tmpwin = create_nhwindow(NHW_MENU);
             any = zeroany; /* set all bits to zero */
             start_menu(tmpwin);
             /* use index+1 (cant use 0) as identifier */
             for (i = num_ok_dungeons = 0; i < n_dgns; i++) {
                 if (!dungeons[i].dunlev_ureached)
                     continue;
+
+                /* TNNT: player can't branchport back into the npcdeath arena if
+                 * they fled the deathmatch (wizard mode #wizlevelport ought to
+                 * work though since it doesn't go through here.) */
+                if (!strcmp(dungeons[i].dname, "Deathmatch Arena")
+                    && tnnt_globals.deathmatch_started
+                    && !tnnt_globals.deathmatch_completed)
+                    continue;
+
                 any.a_int = i + 1;
                 add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE,
                          dungeons[i].dname, MENU_UNSELECTED);
