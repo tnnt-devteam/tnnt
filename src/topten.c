@@ -469,6 +469,8 @@ encodeachieve()
         r |= 1L << 12;
     if (u.uroleplay.nudist)
         r |= 1L << 13;
+    if (tnnt_globals.deathmatch_completed)
+        r |= 1L << 14;
 
     return r;
 }
