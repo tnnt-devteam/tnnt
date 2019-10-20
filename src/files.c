@@ -4669,7 +4669,7 @@ struct obj *o;
 void
 write_npc_data(VOID_ARGS)
 {
-    FILE* npcfile = fopen(TNNT_NPC_FILE, "w");
+    FILE* npcfile = fopen_datafile(TNNT_NPC_FILE, "w", TRUE);
     if (!npcfile) {
         impossible("Error writing player data to '%s' file", TNNT_NPC_FILE);
         return;
@@ -4738,7 +4738,7 @@ struct monst*
 create_tnnt_npc(x, y)
 xchar x, y;
 {
-    FILE* npcfile = fopen(TNNT_NPC_FILE, "r");
+    FILE* npcfile = fopen_datafile(TNNT_NPC_FILE, "r", TRUE);
     struct monst* npc;
     if (!npcfile) {
         impossible("Error opening NPC file '%s' - creating generic mplayer instead", TNNT_NPC_FILE);
