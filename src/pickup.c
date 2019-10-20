@@ -2167,6 +2167,7 @@ struct obj *obj;
                 case MAGIC_MARKER:
                     return (obj->spe > 10);
                 case STETHOSCOPE:
+                case OILSKIN_SACK:
                     return TRUE;
             }
             /* other tools only require at least 1 charge */
