@@ -1027,6 +1027,8 @@ domagicportal(ttmp)
 register struct trap *ttmp;
 {
     struct d_level target_level;
+    int portal_flag = 1;
+    const char* msg = "You feel dizzy for a moment, but the sensation passes.";
 
     if (u.utrap && u.utraptype == TT_BURIEDBALL)
         buried_ball_to_punishment();
@@ -1053,9 +1055,19 @@ register struct trap *ttmp;
     }
 
     target_level = ttmp->dst;
-    schedule_goto(&target_level, FALSE, FALSE, 1,
-                  "You feel dizzy for a moment, but the sensation passes.",
-                  (char *) 0);
+
+    /* TNNT: if leaving the deathmatch before finishing it, that's fine - but
+     * you can never reenter. Delete the portal in the arena as you exit.
+     * Leaving the arena level prior to or after finishing the deathmatch does
+     * not destroy the portal. */
+    if (Is_deathmatch_level(&u.uz) && tnnt_globals.deathmatch_started
+        && !tnnt_globals.deathmatch_completed) {
+        deltrap(ttmp);    /* destroy this portal - maybe unnecessary */
+        portal_flag = -1; /* destroy corresponding portal */
+        msg = "Loud booing follows you out of the arena...";
+    }
+
+    schedule_goto(&target_level, FALSE, FALSE, portal_flag, msg, (char *) 0);
 }
 
 void
