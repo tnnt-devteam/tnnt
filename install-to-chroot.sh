@@ -98,8 +98,6 @@ chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/whereis"
 mkdir -p "$NAO_CHROOT/$NHSUBDIR/swapchest"
 chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/swapchest"
 
-touch "$NAO_CHROOT/$NHSUBDIR/npcdata"
-chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/npcdata"
 touch "$NAO_CHROOT/$NHSUBDIR/var/logfile"
 chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/logfile"
 touch "$NAO_CHROOT/$NHSUBDIR/var/perm"
