@@ -2136,13 +2136,16 @@ struct obj *obj;
         case RING_CLASS:
             return !obj->cursed;
         case WAND_CLASS:
-            /* no wands of nothing. Maybe other stuff here too */
-            if (obj->otyp == WAN_NOTHING)
-                return FALSE;
-            /*  */
-            return (obj->spe > 0 || obj->otyp == WAN_WISHING);
+            /* no wands of nothing or wishing. Maybe other stuff here too */
+            switch (obj->otyp) {
+                case WAN_NOTHING:
+                case WAN_WISHING:
+                    return FALSE;
+                default:
+                    return obj->spe > 0;
+            }
         case AMULET_CLASS:
-            switch(obj->otyp) {
+            switch (obj->otyp) {
                 case AMULET_OF_STRANGULATION:
                 case AMULET_OF_RESTFUL_SLEEP:
                 case FAKE_AMULET_OF_YENDOR: /* real one already checked */
@@ -2156,6 +2159,8 @@ struct obj *obj;
         case TOOL_CLASS:
             if (Has_contents(obj)) return FALSE; /* bags with stuff in them not allowed */
             switch (obj->otyp) {
+                case MAGIC_LAMP:
+                    return FALSE;
                 /* charged allowed tools - conveniently, these all work the same. */
                 case EXPENSIVE_CAMERA:
                 case TINNING_KIT:
@@ -2262,6 +2267,15 @@ register struct obj *obj;
          * has the Amulet.  Ditto for the Candelabrum, the Bell and the Book.
          */
         pline("%s cannot be confined in such trappings.", The(xname(obj)));
+        return 0;
+    } else if (obj->otyp == WAN_WISHING
+               || obj->otyp == MAGIC_LAMP) {
+        /* Objects that grant wishes are not allow, otherwise it
+         * invalidates virtually every other object on the
+         * exclusion list.
+         */
+        pline("Such an item is too powerful to be placed inside %s.",
+              the(xname(current_container)));
         return 0;
     } else if (obj->otyp == LEASH && obj->leashmon != 0) {
         pline("%s attached to your pet.", Tobjnam(obj, "are"));
