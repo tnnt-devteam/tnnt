@@ -4790,7 +4790,7 @@ xchar x, y;
     struct obj* obj;
     int otyp, quan, spe, cursed, blessed, oerodeproof, recharged, greased,
         corpsenm, usecount, oeaten;
-    while (12 == fscanf(npcfile, "%d %d %d %d %d %d %d %d %d %d %d\n",
+    while (11 == fscanf(npcfile, "%d %d %d %d %d %d %d %d %d %d %d\n",
                         &otyp, &quan, &spe, &cursed, &blessed, &oerodeproof, &recharged,
                         &greased, &corpsenm, &usecount, &oeaten)) {
         obj = mksobj(otyp, FALSE, FALSE);
