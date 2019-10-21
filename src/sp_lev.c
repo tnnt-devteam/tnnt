@@ -2073,6 +2073,10 @@ struct mkroom *croom;
      * specified in the des is discarded. */
     if (Is_deathmatch_level(&u.uz) && otmp->otyp == STATUE
         && is_mplayer(&mons[otmp->corpsenm])) {
+        /* Also, these should not have books in them.
+         * This case comes first in case tt_oname fails to find any topten
+         * entries and returns null. ,*/
+        delete_contents(otmp);
         otmp = tt_oname(otmp);
     }
 }
