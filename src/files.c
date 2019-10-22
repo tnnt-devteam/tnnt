@@ -4807,6 +4807,9 @@ xchar x, y;
         obj->oeaten = oeaten;
         mpickobj(npc, obj);
     }
+    m_dowear(npc, TRUE);
+    npc->weapon_check = strategy;
+    mon_wield_item(npc);
 
     /* Check to see if our NPC is missing gear, and if so,
      * provide them with ascension kit worthy items. */
@@ -4986,9 +4989,11 @@ xchar x, y;
     }
     /* Stoning defense */
     if (is_mplayer(npc->data)) {
-        obj = mkcorpstat(CORPSE, npc, &mons[PM_LIZARD], x, y, CORPSTAT_NONE);
-        obj->quan = (long) rn1(4, 2);
+        obj = mkcorpstat(CORPSE, NULL, &mons[PM_LIZARD], x, y, CORPSTAT_NONE);
+        obj->quan = (long) rn1(3, 8);
         obj->owt = weight(obj);
+        obj_extract_self(obj);
+        mpickobj(npc, obj);
     }
     m_dowear(npc, TRUE);
     npc->weapon_check = strategy;
