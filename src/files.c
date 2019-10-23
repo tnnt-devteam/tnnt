@@ -4709,6 +4709,14 @@ write_npc_data(VOID_ARGS)
      * others would be pointless... */
     struct obj* obj;
     for (obj = invent; obj; obj = obj->nobj) {
+        /* Items that should be excluded go here.
+         * We don't go into cobj, so a container with stuff in it turns into an
+         * empty container later. */
+        if (obj->otyp == WAN_WISHING || obj->otyp == MAGIC_LAMP /* no wishes */
+            || objects[obj->otyp].oc_unique)         /* no sequence breaking */
+            continue;
+        /* TODO: items that should be modified somehow (e.g. artifacts). */
+
         fprintf(npcfile, "%d %ld %d %d %d %d %d %d %d %d %d\n",
                 obj->otyp,
                 obj->quan,
