@@ -693,7 +693,7 @@ enum tnnt_achievements {
     A_GATED_IN_DEMON_LORD,   /* Implemented. */
     A_KILLED_25_SPECIES,     /* Implemented. */
     A_KILLED_50_SPECIES,     /* Implemented. */
-    A_KILLED_100_SPECIES     /* Implemented. */,
+    A_KILLED_100_SPECIES,    /* Implemented. */
     A_KILLED_200_SPECIES,    /* Implemented. */
     A_KILLED_ALL_SPECIES,    /* Implemented. */
     A_KILLED_A_Z_SPECIES,    /* Implemented, tested. */
