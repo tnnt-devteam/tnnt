@@ -1374,9 +1374,13 @@ int in_sight;
                 get_level(&tolevel, depth(&u.uz) + 1);
             }
         } else if (tt == MAGIC_PORTAL) {
-            if (In_endgame(&u.uz) && (mon_has_amulet(mtmp)
-                                      || is_home_elemental(mtmp->data)
-                                      || rn2(7))) {
+            if ((In_endgame(&u.uz) && (mon_has_amulet(mtmp)
+                                       || is_home_elemental(mtmp->data)
+                                       || rn2(7)))
+                /* TNNT: monsters are unable to use the portal to the deathmatch
+                 * level; only the player can use it */
+                || Is_deathmatch_level(&u.uz)
+                || on_level(&trap->dst, &deathmatch_level)) {
                 if (in_sight && mtmp->data->mlet != S_ELEMENTAL) {
                     pline("%s seems to shimmer for a moment.", Monnam(mtmp));
                     seetrap(trap);
