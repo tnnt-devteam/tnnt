@@ -4669,7 +4669,7 @@ struct obj *o;
 void
 write_npc_data(VOID_ARGS)
 {
-    FILE* npcfile = fopen(TNNT_NPC_FILE, "w");
+    FILE* npcfile = fopen_datafile(TNNT_NPC_FILE, "w", TRUE);
     if (!npcfile) {
         impossible("Error writing player data to '%s' file", TNNT_NPC_FILE);
         return;
@@ -4746,7 +4746,7 @@ struct monst*
 create_tnnt_npc(x, y)
 xchar x, y;
 {
-    FILE* npcfile = fopen(TNNT_NPC_FILE, "r");
+    FILE* npcfile = fopen_datafile(TNNT_NPC_FILE, "r", TRUE);
     struct monst* npc;
     if (!npcfile) {
         impossible("Error opening NPC file '%s' - creating generic mplayer instead", TNNT_NPC_FILE);
@@ -4759,13 +4759,13 @@ xchar x, y;
     }
     /* Get base data from the file. */
     char npcname[BUFSZ];
-    int pm_num, gender, level, hpmax;
+    int pm_num, gender, npc_level, hpmax;
     unsigned short mintrinsics;
     fgets(npcname, BUFSZ, npcfile); // eat up timestamp; game doesn't use it
     fgets(npcname, BUFSZ, npcfile); // actually read in name this time
     npcname[strlen(npcname)-1] = '\0'; // strip \n that was read in
     fscanf(npcfile, "%d %d\n", &pm_num, &gender);  // get PM_* of correct player monster
-    fscanf(npcfile, "%d\n", &level);   // get ascender's XL
+    fscanf(npcfile, "%d\n", &npc_level);   // get ascender's XL
     fscanf(npcfile, "%d\n", &hpmax);   // get ascender's hp max
     fscanf(npcfile, "0x%hx\n", &mintrinsics); // get ascender's monster-format intrinsics
 
@@ -4774,7 +4774,7 @@ xchar x, y;
     npc = makemon(&mons[pm_num], x, y, mmflags);
 
     /* Setup! */
-    npc->m_lev = max(level, 14);
+    npc->m_lev = max(npc_level, 14);
     hpmax = min(hpmax, 500); // cap ascender's hpmax at this
     hpmax = max(hpmax, d((int) npc->m_lev, 10) + 100 + rnd(30)); // beefed up mplayer formula
     hpmax = max(hpmax, 200); // prevent low HP rolls
@@ -4797,9 +4797,10 @@ xchar x, y;
 
     /* Inventory! */
     struct obj* obj;
+    int strategy = NEED_HTH_WEAPON;
     int otyp, quan, spe, cursed, blessed, oerodeproof, recharged, greased,
         corpsenm, usecount, oeaten;
-    while (12 == fscanf(npcfile, "%d %d %d %d %d %d %d %d %d %d %d\n",
+    while (11 == fscanf(npcfile, "%d %d %d %d %d %d %d %d %d %d %d\n",
                         &otyp, &quan, &spe, &cursed, &blessed, &oerodeproof, &recharged,
                         &greased, &corpsenm, &usecount, &oeaten)) {
         obj = mksobj(otyp, FALSE, FALSE);
@@ -4817,11 +4818,198 @@ xchar x, y;
         mpickobj(npc, obj);
     }
     m_dowear(npc, TRUE);
-    /* TODO: Rules for supplementing the monster with other gear. */
+    npc->weapon_check = strategy;
+    mon_wield_item(npc);
 
+    /* Check to see if our NPC is missing gear, and if so,
+     * provide them with ascension kit worthy items. */
+    /* Armor selection */
+    if (!which_armor(npc, W_ARM) && npc->data != &mons[PM_MONK]) {
+        obj = rn2(2) ? mksobj(GRAY_DRAGON_SCALE_MAIL, FALSE, FALSE)
+                     : mksobj(SILVER_DRAGON_SCALE_MAIL, FALSE, FALSE);
+        bless(obj);
+        obj->spe = rnd(2) + 3;
+        mpickobj(npc, obj);
+    }
+    if (!which_armor(npc, W_ARMC)) {
+        if (npc->data == &mons[PM_MONK])
+            obj = mksobj(ROBE, FALSE, FALSE);
+        else if (npc->data == &mons[PM_WIZARD])
+            obj = mksobj(CLOAK_OF_MAGIC_RESISTANCE, FALSE, FALSE);
+        else
+            obj = rn2(2) ? mksobj(CLOAK_OF_PROTECTION, FALSE, FALSE)
+                         : mksobj(CLOAK_OF_DISPLACEMENT, FALSE, FALSE);
+        bless(obj);
+        obj->spe = rnd(2) + 3;
+        obj->oerodeproof = 1;
+        mpickobj(npc, obj);
+    }
+    if (!which_armor(npc, W_ARMU)) {
+        if (npc->data == &mons[PM_TOURIST])
+            obj = mksobj(HAWAIIAN_SHIRT, FALSE, FALSE);
+        else
+            obj = mksobj(T_SHIRT, FALSE, FALSE);
+        bless(obj);
+        obj->spe = rnd(2) + 3;
+        obj->oerodeproof = 1;
+        mpickobj(npc, obj);
+    }
+    if (!which_armor(npc, W_ARMH)) {
+        if (npc->data == &mons[PM_WIZARD])
+            obj = mksobj(CORNUTHAUM, FALSE, FALSE);
+        else
+            obj = rn2(2) ? mksobj(HELM_OF_TELEPATHY, FALSE, FALSE)
+                         : mksobj(HELM_OF_BRILLIANCE, FALSE, FALSE);
+        bless(obj);
+        obj->spe = rnd(2) + 3;
+        obj->oerodeproof = 1;
+        mpickobj(npc, obj);
+    }
+    if (!which_armor(npc, W_ARMG)) {
+        if (npc->data != &mons[PM_WIZARD] || npc->data != &mons[PM_PRIEST]
+            || npc->data != &mons[PM_PRIESTESS] || npc->data != &mons[PM_HEALER])
+            obj = rn2(4) ? mksobj(GAUNTLETS_OF_POWER, FALSE, FALSE)
+                         : mksobj(LEATHER_GLOVES, FALSE, FALSE);
+        else
+            obj = rn2(4) ? mksobj(GAUNTLETS_OF_DEXTERITY, FALSE, FALSE)
+                         : mksobj(LEATHER_GLOVES, FALSE, FALSE);
+        bless(obj);
+        obj->spe = rnd(2) + 3;
+        obj->oerodeproof = 1;
+        mpickobj(npc, obj);
+    }
+    if (!which_armor(npc, W_ARMS) && npc->data != &mons[PM_MONK]
+        && npc->data != &mons[PM_WIZARD] && npc->data != &mons[PM_HEALER]
+        && npc->data != &mons[PM_PRIEST] && npc->data != &mons[PM_PRIESTESS]
+        && npc->data != &mons[PM_BARBARIAN]) {
+        obj = rn2(2) ? mksobj(SMALL_SHIELD, FALSE, FALSE)
+                     : mksobj(SHIELD_OF_REFLECTION, FALSE, FALSE);
+        bless(obj);
+        obj->spe = rnd(2) + 3;
+        mpickobj(npc, obj);
+    }
+    if (!which_armor(npc, W_ARMF)) {
+        obj = rn2(2) ? mksobj(SPEED_BOOTS, FALSE, FALSE)
+                     : mksobj(WATER_WALKING_BOOTS, FALSE, FALSE);
+        bless(obj);
+        obj->spe = rnd(2) + 3;
+        obj->oerodeproof = 1;
+        mpickobj(npc, obj);
+    }
+    /* Melee weapons selection */
+    if (!MON_WEP(npc) && npc->data != &mons[PM_MONK]) {
+        if (npc->data == &mons[PM_ARCHEOLOGIST]
+            || npc->data == &mons[PM_TOURIST])
+            obj = mksobj(SILVER_SABER, FALSE, FALSE);
+        else if (npc->data == &mons[PM_BARBARIAN])
+            obj = mksobj(BATTLE_AXE, FALSE, FALSE);
+        else if (npc->data == &mons[PM_CAVEMAN]
+                 || npc->data == &mons[PM_CAVEWOMAN]
+                 || npc->data == &mons[PM_PRIEST]
+                 || npc->data == &mons[PM_PRIESTESS])
+            obj = mksobj(MACE, FALSE, FALSE);
+        else if (npc->data == &mons[PM_HEALER]
+                 || npc->data == &mons[PM_WIZARD])
+            obj = mksobj(QUARTERSTAFF, FALSE, FALSE);
+        else if (npc->data == &mons[PM_KNIGHT]
+                 || npc->data == &mons[PM_VALKYRIE])
+            obj = mksobj(LONG_SWORD, FALSE, FALSE);
+        else if (npc->data == &mons[PM_RANGER]
+                 || npc->data == &mons[PM_ROGUE])
+            obj = mksobj(SHORT_SWORD, FALSE, FALSE);
+        else if (npc->data == &mons[PM_SAMURAI])
+            obj = mksobj(KATANA, FALSE, FALSE);
+        bless(obj);
+        obj->spe = rnd(3) + 4;
+        obj->oerodeproof = 1;
+        mpickobj(npc, obj);
+    }
+    /* Ranged weapons - NPC will spawn with these
+     * regardless of whether the last ascending player
+     * had ranged weapons or not */
+    if (npc->data == &mons[PM_ARCHEOLOGIST]
+        || npc->data == &mons[PM_CAVEMAN]
+        || npc->data == &mons[PM_CAVEWOMAN]) {
+        (void) mongets(npc, SLING);
+        obj = mksobj(FLINT, FALSE, FALSE);
+        bless(obj);
+        obj->spe = rnd(3) + 2;
+        obj->oerodeproof = 1;
+        obj->quan = (long) rn1(20, 10);
+        obj->owt = weight(obj);
+        mpickobj(npc, obj);
+        strategy = NEED_RANGED_WEAPON;
+    }
+    if (npc->data == &mons[PM_HEALER]
+        || npc->data == &mons[PM_PRIEST]
+        || npc->data == &mons[PM_PRIESTESS]
+        || npc->data == &mons[PM_TOURIST]
+        || npc->data == &mons[PM_WIZARD]) {
+        obj = mksobj(DART, FALSE, FALSE);
+        bless(obj);
+        obj->spe = rnd(3) + 2;
+        obj->oerodeproof = 1;
+        obj->quan = (long) rn1(20, 10);
+        obj->owt = weight(obj);
+        mpickobj(npc, obj);
+        strategy = NEED_RANGED_WEAPON;
+    }
+    if (npc->data == &mons[PM_SAMURAI]
+        || npc->data == &mons[PM_MONK]) {
+        obj = mksobj(SHURIKEN, FALSE, FALSE);
+        bless(obj);
+        obj->spe = rnd(3) + 2;
+        obj->oerodeproof = 1;
+        obj->quan = (long) rn1(20, 10);
+        obj->owt = weight(obj);
+        mpickobj(npc, obj);
+        strategy = NEED_RANGED_WEAPON;
+    }
+    if (npc->data == &mons[PM_BARBARIAN]
+        || npc->data == &mons[PM_KNIGHT]
+        || npc->data == &mons[PM_RANGER]) {
+        (void) mongets(npc, BOW);
+        obj = mksobj(ARROW, FALSE, FALSE);
+        bless(obj);
+        obj->spe = rnd(3) + 2;
+        obj->oerodeproof = 1;
+        obj->quan = (long) rn1(20, 10);
+        obj->owt = weight(obj);
+        mpickobj(npc, obj);
+        strategy = NEED_RANGED_WEAPON;
+    }
+    if (npc->data == &mons[PM_ROGUE]
+        || npc->data == &mons[PM_VALKYRIE]) {
+        obj = mksobj(DAGGER, FALSE, FALSE);
+        bless(obj);
+        obj->spe = rnd(3) + 2;
+        obj->oerodeproof = 1;
+        obj->quan = (long) rn1(10, 6);
+        obj->owt = weight(obj);
+        mpickobj(npc, obj);
+        strategy = NEED_RANGED_WEAPON;
+    }
+    /* Amulets */
+    if (!which_armor(npc, W_AMUL)) {
+        obj = rn2(5) ? mksobj(AMULET_OF_REFLECTION, FALSE, FALSE)
+                     : mksobj(AMULET_OF_LIFE_SAVING, FALSE, FALSE);
+        bless(obj);
+        obj->oerodeproof = 1;
+        mpickobj(npc, obj);
+    }
+    /* Stoning defense */
+    if (is_mplayer(npc->data)) {
+        obj = mkcorpstat(CORPSE, NULL, &mons[PM_LIZARD], x, y, CORPSTAT_NONE);
+        obj->quan = (long) rn1(3, 8);
+        obj->owt = weight(obj);
+        obj_extract_self(obj);
+        mpickobj(npc, obj);
+    }
+    m_dowear(npc, TRUE);
+    npc->weapon_check = strategy;
+    mon_wield_item(npc);
     return npc;
 }
-
 
 #endif /* TNNT_NPC_FILE */
 
