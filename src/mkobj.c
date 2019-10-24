@@ -448,6 +448,7 @@ long num;
     obj->owt = weight(obj);
     otmp->quan = num;
     otmp->owt = weight(otmp); /* -= obj->owt ? */
+    otmp->transient = obj->transient;
 
     context.objsplit.parent_oid = obj->o_id;
     context.objsplit.child_oid = otmp->o_id;

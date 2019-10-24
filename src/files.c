@@ -4813,6 +4813,7 @@ xchar x, y;
         obj->corpsenm = corpsenm;
         obj->usecount = usecount;
         obj->oeaten = oeaten;
+        obj->transient = 1;
         mpickobj(npc, obj);
     }
     m_dowear(npc, TRUE);

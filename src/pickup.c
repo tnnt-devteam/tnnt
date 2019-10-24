@@ -1475,6 +1475,86 @@ boolean telekinesis;
     return result;
 }
 
+/* TNNT: Recursively collect transient objects in containers and stick them into
+ * the olist of extracted objects.
+ * Doesn't assume that this has been checked for actually containing objects.
+ * Doesn't try to collect container itself if that is transient. */
+void
+collect_transient_within(container, olist)
+struct obj* container;
+struct obj** olist;
+{
+    struct obj* otmp;
+    for (otmp = container->cobj; otmp; otmp = otmp->nobj) {
+        if (otmp->cobj)
+            collect_transient_within(otmp);
+
+        if (otmp->transient) {
+            obj_extract_self(otmp);
+            otmp->nobj = *olist;
+            *olist = otmp;
+        }
+    }
+    container->owt = weight(container);
+}
+
+/* TNNT: Collect all transient objects on the level - floor, in monster
+ * inventories, everything in *your* inventory except the one object
+ * "exception".
+ * Return a list of objects that have been extracted and now exist only here. */
+struct obj*
+collect_all_transient(exception)
+struct obj* exception;
+{
+    int x, y;
+    struct obj *otmp, *next, *collected;
+    struct monst* mtmp;
+    collected = NULL;
+
+#define t_collect(obj)                             \
+    do {                                           \
+        if (Has_contents(obj))                     \
+            collect_transient_within(obj, &collected); \
+        if (obj->transient) {                      \
+            obj->owornmask = 0;                    \
+            obj_extract_self(obj);                 \
+            obj->nobj = collected;                 \
+            collected = obj;                       \
+        }                                          \
+    } while (0)
+
+    /* floor objects */
+    for (y = 0; y < ROWNO; ++y) {
+        for (x = 0; x < COLNO; ++x) {
+            for (otmp = level.objects[x][y]; otmp; otmp = next) {
+                next = otmp->nobj;
+                t_collect(otmp);
+            }
+        }
+    }
+    /* monster inventories */
+    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+        for (otmp = mtmp->minvent; otmp; otmp = next) {
+            next = otmp->nobj;
+            t_collect(otmp);
+        }
+    }
+    /* buried objects */
+    for (otmp = level.buriedobjlist; otmp; otmp = next) {
+        next = otmp->nobj;
+        t_collect(otmp);
+    }
+    /* your inventory - shouldn't be possible, but just in case */
+    for (otmp = invent; otmp; otmp = next) {
+        next = otmp->nobj;
+        if (otmp != exception) {
+            t_collect(otmp);
+        }
+    }
+#undef t_collect
+    return collected;
+}
+
 /*
  * Pick up <count> of obj from the ground and add it to the hero's inventory.
  * Returns -1 if caller should break out of its loop, 0 if nothing picked
@@ -1548,6 +1628,24 @@ boolean telekinesis; /* not picking it up directly by hand */
     prinv(nearload == SLT_ENCUMBER ? moderateloadmsg : (char *) 0, obj,
           count);
     mrg_to_wielded = FALSE;
+
+    /* TNNT: you're only allowed to remove one item from whatever the NPC drops
+     * when they die. Destroy all other transient objects on the level. */
+    if (obj->transient && tnnt_globals.deathmatch_completed) {
+        obj->transient = 0; /* don't collect later or run this block again */
+        tnnt_globals.deathmatch_prize_oid = obj->o_id;
+        struct obj *list, *next;
+        for (list = collect_all_transient(obj); list; list = next) {
+            next = list->nobj;
+            if (Has_contents(list))
+                delete_contents(list);
+            list->nobj = NULL;
+            /* list should consist only of OBJ_FREE objects */
+            obfree(list, NULL);
+        }
+        You_hear("a faint exhalation.");
+        return -1; /* stop trying to pick up other transient objects */
+    }
     return 1;
 }
 

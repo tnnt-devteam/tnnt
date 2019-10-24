@@ -115,6 +115,7 @@ struct obj {
     Bitfield(bypass, 1); /* mark this as an object to be skipped by bhito() */
     Bitfield(cknown, 1); /* contents of container assumed to be known */
     Bitfield(lknown, 1); /* locked/unlocked status is known */
+    Bitfield(transient, 1); /* property of NPC in deathmatch, vanishes easily */
     /* 4 free bits */
 
     int corpsenm;         /* type of corpse is mons[corpsenm] */

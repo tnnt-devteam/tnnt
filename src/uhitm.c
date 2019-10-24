@@ -1619,6 +1619,12 @@ struct attack *mattk;
         /* might have dropped otmp, and it might have broken or left level */
         if (!otmp || otmp->where != OBJ_INVENT)
             continue;
+        /* TNNT: you can't gain NPC's items via stealing */
+        if (otmp->transient) {
+            pline("But it turns to mist in your hands.");
+            useupall(otmp);
+            continue;
+        }
         if (theft_petrifies(otmp))
             break; /* stop thieving even though hero survived */
         /* more take-away handling, after theft message */

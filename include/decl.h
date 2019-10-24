@@ -797,6 +797,7 @@ struct tnnt_globals_t {
     /* NPC Deathmatch */
     boolean deathmatch_started;
     boolean deathmatch_completed;
+    int deathmatch_prize_oid;
     /* cloned player monster == deathmatch NPC */
 #define is_deathmatch_opponent(mtmp) (is_mplayer((mtmp)->data) && (mtmp)->mcloned)
 

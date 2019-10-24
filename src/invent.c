@@ -3658,6 +3658,10 @@ register struct obj *otmp, *obj;
     if (obj->otyp == SCR_MISSING_CODE)
         return FALSE;
 
+    /* TNNT: don't merge transient objects with nontransient */
+    if (obj->transient != otmp->transient)
+        return FALSE;
+
     if (obj->unpaid != otmp->unpaid || obj->spe != otmp->spe
         || obj->no_charge != otmp->no_charge || obj->obroken != otmp->obroken
         || obj->otrapped != otmp->otrapped || obj->lamplit != otmp->lamplit)

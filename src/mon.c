@@ -2135,6 +2135,15 @@ register struct monst *mtmp;
     }
     if (is_deathmatch_opponent(mtmp)) {
         tnnt_globals.deathmatch_completed = TRUE;
+        /* Gather all of the NPC's possessions in the spot of their death. */
+        struct obj* list = collect_all_transient(NULL);
+        struct obj* next;
+        if (list)
+            You_feel("a slight suction.");
+        for (; list; list = next) {
+            next = list->nobj;
+            place_object(list, mtmp->mx, mtmp->my);
+        }
     }
 
     if (glyph_is_invisible(levl[mtmp->mx][mtmp->my].glyph))

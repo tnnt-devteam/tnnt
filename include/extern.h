@@ -1921,6 +1921,7 @@ E int FDECL(loot_mon, (struct monst *, int *, boolean *));
 E int NDECL(dotip);
 E struct autopickup_exception *FDECL(check_autopickup_exceptions, (struct obj *));
 E boolean FDECL(autopick_testobj, (struct obj *, BOOLEAN_P));
+E struct obj *FDECL(collect_all_transient, (struct obj *));
 
 /* ### pline.c ### */
 
