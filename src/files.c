@@ -4814,7 +4814,6 @@ xchar x, y;
         obj->corpsenm = corpsenm;
         obj->usecount = usecount;
         obj->oeaten = oeaten;
-        obj->transient = 1;
         mpickobj(npc, obj);
     }
     m_dowear(npc, TRUE);
@@ -5008,6 +5007,11 @@ xchar x, y;
     m_dowear(npc, TRUE);
     npc->weapon_check = strategy;
     mon_wield_item(npc);
+
+    for (obj = npc->minvent; obj; obj = obj->nobj) {
+        obj->transient = TRUE;
+    }
+
     return npc;
 }
 
