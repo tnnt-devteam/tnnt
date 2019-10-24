@@ -1451,8 +1451,11 @@ boolean mon_notices;
     /* sleeping target is more likely to be hit */
     if (mon->msleeping) {
         tmp += 2;
-        if (mon_notices)
+        if (mon_notices) {
             mon->msleeping = 0;
+            if (is_deathmatch_opponent(mon))
+                npc_awakens();
+        }
     }
     /* ditto for immobilized target */
     if (!mon->mcanmove || !mon->data->mmove) {

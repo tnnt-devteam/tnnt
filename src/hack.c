@@ -2019,6 +2019,18 @@ invocation_message()
     }
 }
 
+/* TNNT: things that need to happen when the NPC wakes up and the Deathmatch
+ * begins. Assumes the caller is making the NPC wake up. */
+void
+npc_awakens()
+{
+    if (!tnnt_globals.deathmatch_started) {
+        pline("A voice echoes in the arena:");
+        verbalize("Thou art brave indeed, mortal! Now prove thy prowess!");
+    }
+    tnnt_globals.deathmatch_started = TRUE;
+}
+
 /* moving onto different terrain;
    might be going into solid rock, inhibiting levitation or flight,
    or coming back out of such, reinstating levitation/flying */
@@ -2067,11 +2079,9 @@ switch_terrain()
      * that its typ doesn't remain set on DOOR. */
     if (Is_deathmatch_level(&u.uz) && IS_DOOR(lev->typ)) {
         if (!tnnt_globals.deathmatch_started) {
-            aggravate(); /* wake up the NPC */
-            pline("A voice echoes in the arena:");
-            verbalize("Thou art brave indeed, mortal! Now prove thy prowess!");
+            aggravate();
+            npc_awakens();
         }
-        tnnt_globals.deathmatch_started = TRUE;
     }
 }
 

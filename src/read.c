@@ -1288,6 +1288,8 @@ struct obj *sobj; /* scroll, or fake spellbook object for scroll-like spell */
                 if (confused || scursed) {
                     mtmp->mflee = mtmp->mfrozen = mtmp->msleeping = 0;
                     mtmp->mcanmove = 1;
+                    if (is_deathmatch_opponent(mtmp))
+                        npc_awakens();
                 } else if (!resist(mtmp, sobj->oclass, 0, NOTELL))
                     monflee(mtmp, 0, FALSE, FALSE);
                 if (!mtmp->mtame)

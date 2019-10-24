@@ -310,6 +310,8 @@ register struct obj *gold;
         long umoney, value = gold->quan * objects[gold->otyp].oc_cost;
 
         mtmp->msleeping = 0;
+        if (is_deathmatch_opponent(mtmp))
+            npc_awakens();
         finish_meating(mtmp);
         if (!mtmp->isgd && !rn2(4)) /* not always pleasing */
             setmangry(mtmp, TRUE);

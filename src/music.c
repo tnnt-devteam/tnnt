@@ -71,6 +71,8 @@ int distance;
             mtmp->msleeping = 0;
             mtmp->mcanmove = 1;
             mtmp->mfrozen = 0;
+            if (is_deathmatch_opponent(mtmp))
+                npc_awakens();
             /* may scare some monsters -- waiting monsters excluded */
             if (!unique_corpstat(mtmp->data)
                 && (mtmp->mstrategy & STRAT_WAITMASK) != 0)
@@ -199,6 +201,8 @@ struct monst *bugler; /* monster that played instrument */
             mtmp->msleeping = 0;
             mtmp->mcanmove = 1;
             mtmp->mfrozen = 0;
+            if (is_deathmatch_opponent(mtmp))
+                npc_awakens();
             /* may scare some monsters -- waiting monsters excluded */
             if (!unique_corpstat(mtmp->data)
                 && (mtmp->mstrategy & STRAT_WAITMASK) != 0)

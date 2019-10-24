@@ -480,6 +480,8 @@ aggravate()
     boolean in_w_tower = In_W_tower(u.ux, u.uy, &u.uz);
 
     for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+        if (is_deathmatch_opponent(mtmp))
+            npc_awakens();
         if (DEADMONSTER(mtmp))
             continue;
         if (in_w_tower != In_W_tower(mtmp->mx, mtmp->my, &u.uz))

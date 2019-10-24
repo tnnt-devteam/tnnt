@@ -236,6 +236,8 @@ register struct monst *mtmp;
             || (!rn2(7) && M_AP_TYPE(mtmp) != M_AP_FURNITURE
                 && M_AP_TYPE(mtmp) != M_AP_OBJECT))) {
         mtmp->msleeping = 0;
+        if (is_deathmatch_opponent(mtmp))
+            npc_awakens();
         return 1;
     }
     return 0;
@@ -538,8 +540,11 @@ register struct monst *mtmp;
                 m2->mhp -= rnd(15);
                 if (DEADMONSTER(m2))
                     monkilled(m2, "", AD_DRIN);
-                else
+                else {
                     m2->msleeping = 0;
+                    if (is_deathmatch_opponent(m2))
+                        npc_awakens();
+                }
             }
         }
     }

@@ -3298,6 +3298,8 @@ register struct monst *mtmp;
 boolean via_attack;
 {
     mtmp->msleeping = 0;
+    if (is_deathmatch_opponent(mtmp))
+        npc_awakens();
     if (M_AP_TYPE(mtmp)) {
         seemimic(mtmp);
     } else if (context.forcefight && !context.mon_moving
@@ -3331,6 +3333,8 @@ int x, y, distance;
             /* sleep for N turns uses mtmp->mfrozen, but so does paralysis
                so we leave mfrozen monsters alone */
             mtmp->msleeping = 0; /* wake indeterminate sleep */
+            if (is_deathmatch_opponent(mtmp))
+                npc_awakens();
             if (!(mtmp->data->geno & G_UNIQ))
                 mtmp->mstrategy &= ~STRAT_WAITMASK; /* wake 'meditation' */
             if (context.mon_moving)
