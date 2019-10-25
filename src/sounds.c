@@ -429,6 +429,13 @@ dosounds()
         };
         You_hear1(devteambranch_msg[rn2(3 + hallu)]);
     }
+    if (at_dgn_entrance("Deathmatch Arena")) {
+        static const char* const arena_msg[] = {
+            "the roaring of a crowd.",
+            "the clash of steel on steel."
+        };
+        You_hear1(arena_msg[rn2(2)]);
+    }
 }
 
 static const char *const h_sounds[] = {
