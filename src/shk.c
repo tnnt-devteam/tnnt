@@ -4487,11 +4487,19 @@ struct monst *shkp;
             }
             else
                 pline(Izchak_speaks[rn2(SIZE(Izchak_speaks))], shkname(shkp));
-            tnnt_achieve(A_CHATTED_IZCHAK);
         }
     } else {
         if (!Deaf && !muteshk(shkp))
             pline("%s talks about the problem of shoplifters.", Shknam(shkp));
+    }
+
+    /* Achievement for chatting Izchak needs to be apart
+     * from all of the 'else if' above so that the
+     * achievement is earned no matter what state Izchak
+     * may happen to be in */
+    if (is_izchak(shkp, FALSE)) {
+        if (!Deaf && !muteshk(shkp))
+            tnnt_achieve(A_CHATTED_IZCHAK);
     }
 }
 

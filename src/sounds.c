@@ -424,7 +424,7 @@ dosounds()
         static const char* const devteambranch_msg[] = {
             "a nearby typing noise.",
             "people arguing about game balance.",
-            "a voice say \"3.6.2\".",
+            "a voice say \"3.6.3\".",
             "an infinite number of monkeys arguing about the script for Hamlet"
         };
         You_hear1(devteambranch_msg[rn2(3 + hallu)]);
@@ -1019,10 +1019,11 @@ register struct monst *mtmp;
                 { "mumbles something about X11 tty status.", 0},
                 { "We just come here to idle.", 1},
                 { "You can finally wish for oranges. Now go away.", 1},
+                { "If you see K2, tell him I have his ten bucks.", 1},
             };
             const struct devteam_msg patrmsgs[] = {
                 { "Thanks for that recent bug report.", 1},
-                { "indicates that 3.6.2 might be released soon.", 0},
+                { "indicates that 3.7 might be released soon.", 0},
                 { "To be honest, I'm surprised RGRN is still going.", 1},
             };
             const struct devteam_msg lorimermsgs[] = {
