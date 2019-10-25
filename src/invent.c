@@ -870,6 +870,8 @@ struct obj *obj;
         u.uachieve.finish_sokoban = 1;
         obj->record_achieve_special = NON_PM;
         obj->nomerge = 0;
+        if (tnnt_globals.soko_guilts == 0)
+            tnnt_achieve(A_DID_PURE_SOKOBAN);
     }
 }
 

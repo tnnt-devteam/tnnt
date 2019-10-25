@@ -581,7 +581,9 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Extinctionist Lite", "Genocide 20 or more monster species"},
   {"Dudley's Hero", "Extinct newts"},
   {"Ice Jesus", "Walk on top of lava unharmed"},
-  {"Rare Loot", "Acquire an athame that was generated in the inventory of a lich"}
+  {"Rare Loot", "Acquire an athame that was generated in the inventory of a lich"},
+  {"Boy Scout", "Complete Sokoban without incurring any penalties for rule-breaking"},
+  {"Sounds Hollow", "Reveal a secret door with a stethoscope"}
 };
 
 /* support for lint.h */

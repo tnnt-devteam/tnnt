@@ -709,7 +709,9 @@ enum tnnt_achievements {
     A_EXTINCTED_NEWTS,       /* Implemented, tested. */
     A_WALKED_ON_LAVA,        /* Implemented, tested. */
     A_GOT_LICH_ATHAME,       /* Implemented, tested. */
-    /* 229 achievements defined */
+    A_DID_PURE_SOKOBAN,      /* Implemented, tested. */
+    A_STETHOSCOPED_SDOOR,    /* Implemented, tested. */
+    /* 231 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more
@@ -780,6 +782,7 @@ struct tnnt_globals_t {
 #define ALL_READABLE 0x01FF
     /* Book of the Dead and Orb of Fate are also readable items, but are not
      * counted towards the "read all readable items" achievement. */
+    unsigned short soko_guilts;
 
     /* Macro for adding a readable and auto-achieving the readables achievement
      * if it has been obtained. */

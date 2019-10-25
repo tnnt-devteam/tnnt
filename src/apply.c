@@ -434,6 +434,7 @@ register struct obj *obj;
         You_hear(hollow_str, "door");
         cvt_sdoor_to_door(lev); /* ->typ = DOOR */
         feel_newsym(rx, ry);
+        tnnt_achieve(A_STETHOSCOPED_SDOOR);
         return res;
     case SCORR:
         You_hear(hollow_str, "passage");
