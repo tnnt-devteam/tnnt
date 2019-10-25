@@ -2107,6 +2107,10 @@ register struct monst *mtmp;
                 break;
         }
     }
+    else if (is_deathmatch_opponent(mtmp)) {
+        livelog_printf(LL_UMONST, "killed %s in a deathmatch",
+                       noit_mon_nam(mtmp));
+    }
 
     /* TNNT code for anything that triggers when a monster dies (NOT when the
      * player kills a monster) goes here. */
