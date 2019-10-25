@@ -657,22 +657,29 @@ enum tnnt_achievements {
     A_PARTIAL_POLYSELFLESS,  /* Implemented,tested. */
     A_PARTIAL_WISHLESS,      /* Implemented,tested. */
     A_PARTIAL_ARTIWISHLESS,  /* Implemented,tested. */
-    A_PARTIAL_ELBERETHLESS,  /* Implemented,tested. */
     A_PARTIAL_ZEN,           /* Implemented,tested. */
     A_PARTIAL_NUDIST,        /* Implemented,tested. */
     A_PARTIAL_GENOCIDELESS,  /* Implemented,tested. */
+    A_PARTIAL_ELBERETHLESS,  /* Implemented,tested. */
+    A_PARTIAL_PERMAHALLU,    /* Implemented. */
+    A_PARTIAL_PERMADEAF,     /* Implemented. */
+    A_PARTIAL_ARTIFACTLESS,  /* Implemented. */
+    A_PARTIAL_BONESLESS,     /* Implemented. */
+    A_PARTIAL_SWAPCHESTLESS, /* Implemented. */
+    A_PARTIAL_PETLESS,       /* Implemented. */
+    A_PARTIAL_SURVIVOR,      /* Implemented. */
     A_PUT_INTO_SWAPCHEST,    /* Implemented,tested. */
     A_TALKED_TO_DEVTEAM,     /* Implemented. */
     A_FINISHED_DEVTEAM_QUEST,/* Implemented. */
-    A_INSTAPOISONED,         /* Implemented. */
-    A_MULTI_GENDER_FLIP,     /* Implemented. */
+    A_INSTAPOISONED,         /* Implemented. */ /* #192 */
+    A_MULTI_GENDER_FLIP,     /* Implemented. */ /* begin tnntachieve3 here */
     A_DEATHLY_HALLOWS,       /* Implemented. */
     A_DISARMED_WITH_WHIP,    /* Implemented. */
     A_VISITED_ALL_ALTARS,    /* Implemented. */
     A_BROKE_WAND_WISHING,    /* Implemented. */
     A_KILLED_WITH_TRIDENT,   /* Implemented. */
-    A_STONED_A_MONSTER,      /* Implemented. */ /* #192 */
-    A_USED_PASSTUNE,         /* Implemented. */ /* begin tnntachieve3 here */
+    A_STONED_A_MONSTER,      /* Implemented. */
+    A_USED_PASSTUNE,         /* Implemented. */
     A_ID_DETECT_FOOD,        /* Implemented. */
     A_WISH_FROM_EVERYTHING,  /* Implemented. */
     A_KILLED_EYE_POLEARM,    /* Implemented. */
@@ -696,14 +703,14 @@ enum tnnt_achievements {
     A_KILLED_100_SPECIES,    /* Implemented. */
     A_KILLED_200_SPECIES,    /* Implemented. */
     A_KILLED_ALL_SPECIES,    /* Implemented. */
-    A_KILLED_A_Z_SPECIES,    /* Implemented, tested. */
+    A_KILLED_A_Z_SPECIES,    /* Implemented, tested. */ /* #224 */
     A_ENGRAVED_WITH_ATHAME,  /* Implemented, tested. */
     A_ONE_HIT_KO,            /* Implemented, tested. */
     A_LEVELED_UP_FROM_SINK,  /* Implemented, tested. */
     A_KILLED_20_WIZARDS,     /* Implemented, tested. */
     A_ABOUT_TO_DIE,          /* Implemented, tested. */
     A_STOCKED_SIX_PACK,      /* Implemented, tested. */
-    A_KILLED_WITH_BOTTLE,    /* Implemented, tested. */ /* #224 */
+    A_KILLED_WITH_BOTTLE,    /* Implemented, tested. */
     A_ATE_EVERY_OBJCLASS,    /* Implemented, tested. */
     A_GENOCIDED_20_SPECIES,  /* Implemented, tested. */
     A_EXTINCTED_NEWTS,       /* Implemented, tested. */

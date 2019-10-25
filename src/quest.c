@@ -272,14 +272,28 @@ tnnt_quest_checks()
     	tnnt_achieve(A_PARTIAL_WISHLESS);
     if (!u.uconduct.wisharti)
     	tnnt_achieve(A_PARTIAL_ARTIWISHLESS);
-    if (!u.uconduct.elbereth)
-    	tnnt_achieve(A_PARTIAL_ELBERETHLESS);
     if (u.uroleplay.blind)
     	tnnt_achieve(A_PARTIAL_ZEN);
     if (u.uroleplay.nudist)
     	tnnt_achieve(A_PARTIAL_NUDIST);
     if (num_genocides() == 0)
         tnnt_achieve(A_PARTIAL_GENOCIDELESS);
+    if (!u.uconduct.elbereth)
+        tnnt_achieve(A_PARTIAL_ELBERETHLESS);
+    if (u.uroleplay.hallu)
+        tnnt_achieve(A_PARTIAL_PERMAHALLU);
+    if (u.uroleplay.deaf)
+        tnnt_achieve(A_PARTIAL_PERMADEAF);
+    if (u.uconduct.artitouch == 0)
+        tnnt_achieve(A_PARTIAL_ARTIFACTLESS);
+    if (u.uroleplay.numbones == 0)
+        tnnt_achieve(A_PARTIAL_BONESLESS);
+    if (u.uconduct.rmswapchest == 0)
+        tnnt_achieve(A_PARTIAL_SWAPCHESTLESS);
+    if (u.uconduct.pets == 0)
+        tnnt_achieve(A_PARTIAL_PETLESS);
+    if (u.umortality == 0)
+        tnnt_achieve(A_PARTIAL_SURVIVOR);
 }
 
 STATIC_OVL void
