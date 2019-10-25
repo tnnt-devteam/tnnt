@@ -424,7 +424,7 @@ dosounds()
         static const char* const devteambranch_msg[] = {
             "a nearby typing noise.",
             "people arguing about game balance.",
-            "a voice say \"3.6.2\".",
+            "a voice say \"3.6.3\".",
             "an infinite number of monkeys arguing about the script for Hamlet"
         };
         You_hear1(devteambranch_msg[rn2(3 + hallu)]);
