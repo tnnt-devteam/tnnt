@@ -420,7 +420,7 @@ dosounds()
         return;
     }
     /* TNNT - clue the player in to the location of the devteam level */
-    if (Is_rogue_level(&u.uz) && !rn2(300)) {
+    if (Is_rogue_level(&u.uz) && !rn2(200)) {
         static const char* const devteambranch_msg[] = {
             "a nearby typing noise.",
             "people arguing about game balance.",
@@ -429,7 +429,7 @@ dosounds()
         };
         You_hear1(devteambranch_msg[rn2(3 + hallu)]);
     }
-    if (at_dgn_entrance("Deathmatch Arena")) {
+    if (at_dgn_entrance("Deathmatch Arena") && !rn2(200)) {
         static const char* const arena_msg[] = {
             "the roaring of a crowd.",
             "the clash of steel on steel."
