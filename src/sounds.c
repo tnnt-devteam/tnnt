@@ -76,16 +76,24 @@ struct obj* thrownscroll;
                 impossible("scroll marked with bad level?");
                 return;
             }
+            boolean matched = FALSE;
             for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
                 if (tnnt_globals.missing_scroll_levels[i] == dt_level) {
                     tnnt_globals.missing_scroll_levels[i] = 0;
                     nscrolls_given++;
-                    if (thrownscroll)
-                        obfree(scroll, NULL);
-                    else
-                        useup(scroll);
+                    matched = TRUE;
+                    break;
                 }
             }
+            if (!matched) {
+                impossible("don't remember sending a scroll to level %d?", dt_level);
+                nscrolls_given++; // treat it as accepted anyway
+            }
+
+            if (thrownscroll)
+                obfree(scroll, NULL);
+            else
+                useup(scroll);
             scroll = (thrownscroll ? NULL : carrying(SCR_MISSING_CODE));
         }
         xchar scrolls_remaining = 0;
