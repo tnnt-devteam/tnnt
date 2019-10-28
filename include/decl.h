@@ -718,7 +718,8 @@ enum tnnt_achievements {
     A_GOT_LICH_ATHAME,       /* Implemented, tested. */
     A_DID_PURE_SOKOBAN,      /* Implemented, tested. */
     A_STETHOSCOPED_SDOOR,    /* Implemented, tested. */
-    /* 231 achievements defined */
+    A_NPC_DEATHMATCH,        /* Implemented, tested. */
+    /* 239 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more

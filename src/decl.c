@@ -590,7 +590,8 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Ice Jesus", "Walk on top of lava unharmed"},
   {"Rare Loot", "Acquire an athame that was generated in the inventory of a lich"},
   {"Boy Scout", "Complete Sokoban without incurring any penalties for rule-breaking"},
-  {"Sounds Hollow", "Reveal a secret door with a stethoscope"}
+  {"Sounds Hollow", "Reveal a secret door with a stethoscope"},
+  {"DO YOU WANT TO DO THIS BRO? BECAUSE IT'S THUNDERDOME TIME!", "Defeat the NPC from the NPC Deathmatch quest"}
 };
 
 /* support for lint.h */
