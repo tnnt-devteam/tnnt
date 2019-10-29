@@ -752,6 +752,10 @@ boolean calc_costly;
     if (costly && !otmp->no_charge)
         return FALSE;
 
+    /* TNNT: no autopickup of NPC objects since the others will disappear */
+    if (otmp->transient)
+        return FALSE;
+
     /* check for pickup_types */
     pickit = (!*otypes || index(otypes, otmp->oclass));
 
