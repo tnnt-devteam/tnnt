@@ -456,6 +456,8 @@ encodeconduct()
         e |= 1L << 22;
     if (u.uroleplay.hallu)
         e |= 1L << 23;
+    if (u.uroleplay.numbones == 0)
+        e |= 1L << 24;
 
     return e;
 }
