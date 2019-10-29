@@ -2108,6 +2108,7 @@ register struct monst *mtmp;
         }
     }
     else if (is_deathmatch_opponent(mtmp)) {
+        tnnt_achieve(A_NPC_DEATHMATCH);
         livelog_printf(LL_UMONST, "killed %s in a deathmatch",
                        noit_mon_nam(mtmp));
     }
