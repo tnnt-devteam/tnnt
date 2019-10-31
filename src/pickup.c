@@ -1532,7 +1532,10 @@ struct obj* exception;
         for (x = 0; x < COLNO; ++x) {
             for (otmp = level.objects[x][y]; otmp; otmp = next) {
                 next = otmp->nobj;
+                xchar oldox = otmp->ox, oldoy = otmp->oy;
                 t_collect(otmp);
+                if (otmp->transient)
+                    newsym(oldox, oldoy);
             }
         }
     }
