@@ -1206,6 +1206,8 @@ struct obj *obj;
 
     if (context.bypasses && obj->bypass)
         return FALSE;
+    if (obj->transient)
+        return FALSE;
 
     if (obj->oclass == WAND_CLASS)
         zap_odds = 3; /* half-life = 2 zaps */
@@ -1432,6 +1434,9 @@ int id;
     boolean can_merge = (id == STRANGE_OBJECT);
     int obj_location = obj->where;
 
+    if (obj->transient)
+        /* TNNT - no polymorphing NPC gear */
+        return obj;
     if (obj->otyp == BOULDER)
         sokoban_guilt();
     if (id == STRANGE_OBJECT) { /* preserve symbol */
