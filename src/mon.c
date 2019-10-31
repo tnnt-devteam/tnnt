@@ -2217,6 +2217,9 @@ boolean was_swallowed; /* digestion */
     if (LEVEL_SPECIFIC_NOCORPSE(mdat))
         return FALSE;
 
+    if (is_deathmatch_opponent(mon))
+        return FALSE;
+
     if (((bigmonst(mdat) || mdat == &mons[PM_LIZARD]) && !mon->mcloned)
         || is_golem(mdat) || is_mplayer(mdat) || is_rider(mdat) || mon->isshk)
         return TRUE;
