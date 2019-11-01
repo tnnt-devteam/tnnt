@@ -365,7 +365,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"New Lease on Life", "Cure deathly illness"},
   {"The Royal Treatment", "Sit on a throne"},
   {"It'll Turn Up Later", "Drop a ring in a sink"},
-  {"Nine for Mortal Men Doomed to Die ... Again", "Kill all nine Nazgûl"},
+  {"Nine for Mortal Men Doomed to Die ... Again", "Kill all nine Nazgul"},
   {"Furious", "Kill all three erinyes"},
   {"Orthodoxy", "Convert an altar"},
   {"Always Talk to the Wise Old Man", "Chat with Izchak"},
