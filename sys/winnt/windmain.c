@@ -11,8 +11,25 @@
 #include <stdlib.h>
 #include <sys\stat.h>
 #include <errno.h>
+#ifndef __MINGW32__
 #include <appmodel.h>
+#endif
 #include <ShlObj.h>
+
+#ifdef __MINGW32__
+extern LONG GetCurrentPackageFullName(UINT32 *packageFullNameLength,
+                      PWSTR  packageFullName);
+extern HRESULT SHGetKnownFolderPath(REFKNOWNFOLDERID rfid,
+                      DWORD dwFlags, HANDLE hToken, PWSTR  *ppszPath);
+#ifdef INITGUID
+#define DEFINE_KNOWN_FOLDER(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) const GUID DECLSPEC_SELECTANY name = { l, w1, w2,{ b1, b2, b3, b4, b5, b6, b7, b8 } }
+#else
+#define DEFINE_KNOWN_FOLDER(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) const GUID name
+#endif
+DEFINE_KNOWN_FOLDER (FOLDERID_ProgramData, 0x62ab5d82, 0xfdc1, 0x4dc3, 0xa9, 0xdd, 0x07, 0x0d, 0x1d, 0x49, 0x5d, 0x97);
+DEFINE_KNOWN_FOLDER (FOLDERID_LocalAppData, 0xf1b32785, 0x6fba, 0x4fcf, 0x9d, 0x55, 0x7b, 0x8e, 0x7f, 0x15, 0x70, 0x91);
+DEFINE_KNOWN_FOLDER (FOLDERID_Profile, 0x5e6c858f, 0x0e22, 0x4760, 0x9a, 0xfe, 0xea, 0x33, 0x17, 0xb6, 0x71, 0x73);
+#endif
 
 #if 0
 #include "wintty.h"
@@ -284,7 +301,8 @@ update_file(
     const char * dst_folder,
     const char * dst_name,
     const char * src_folder,
-    const char * src_name)
+    const char * src_name,
+    BOOL save_copy)
 {
     char dst_path[MAX_PATH];
     strcpy(dst_path, dst_folder);
@@ -294,11 +312,19 @@ update_file(
     strcpy(src_path, src_folder);
     strcat(src_path, src_name);
 
+    char save_path[MAX_PATH];
+    strcpy(save_path, dst_folder);
+    strcat(save_path, dst_name);
+    strcat(save_path, ".save");
+
     if(!file_exists(src_path))
         error("Unable to copy file '%s' as it does not exist", src_path);
 
     if (!file_newer(src_path, dst_path))
         return;
+
+    if (file_exists(dst_path) && save_copy)
+        CopyFileA(dst_path, save_path, FALSE);
 
     BOOL success = CopyFileA(src_path, dst_path, FALSE);
     if(!success) error("Failed to update '%s' to '%s'", src_path, dst_path);
@@ -308,37 +334,39 @@ update_file(
 void copy_config_content()
 {
     /* Keep templates up to date */
-    update_file(fqn_prefix[CONFIGPREFIX], "defaults.tmp",
-        fqn_prefix[DATAPREFIX], "defaults.nh");
-    update_file(fqn_prefix[SYSCONFPREFIX], "sysconf.tmp",
-        fqn_prefix[DATAPREFIX], SYSCF_FILE);
+    /* TODO: Update the package to store config file as .nethackrc */
+    update_file(fqn_prefix[CONFIGPREFIX], CONFIG_TEMPLATE,
+        fqn_prefix[DATAPREFIX], CONFIG_FILE, FALSE);
+    update_file(fqn_prefix[SYSCONFPREFIX], SYSCF_TEMPLATE,
+        fqn_prefix[DATAPREFIX], SYSCF_FILE, FALSE);
 
     /* If the required early game file does not exist, copy it */
-    copy_file(fqn_prefix[CONFIGPREFIX], "defaults.nh",
-        fqn_prefix[DATAPREFIX], "defaults.nh");
+    /* NOTE: We never replace .nethackrc or sysconf */
+    copy_file(fqn_prefix[CONFIGPREFIX], CONFIG_FILE,
+        fqn_prefix[DATAPREFIX], CONFIG_FILE);
     copy_file(fqn_prefix[SYSCONFPREFIX], SYSCF_FILE,
         fqn_prefix[DATAPREFIX], SYSCF_FILE);
 
-    /* If a required game file does not exist, copy it */
+    /* Update symbols and save a copy if we are replacing */
     /* TODO: Can't HACKDIR be changed during option parsing
        causing us to perhaps be checking options against the wrong
        symbols file? */
-    copy_file(fqn_prefix[HACKPREFIX], SYMBOLS,
-        fqn_prefix[DATAPREFIX], SYMBOLS);
+    update_file(fqn_prefix[HACKPREFIX], SYMBOLS,
+        fqn_prefix[DATAPREFIX], SYMBOLS, TRUE);
 }
 
 void
 copy_hack_content()
 {
     /* Keep Guidebook and opthelp up to date */
-    update_file(fqn_prefix[HACKPREFIX], "Guidebook.txt",
-        fqn_prefix[DATAPREFIX], "Guidebook.txt");
-    update_file(fqn_prefix[HACKPREFIX], "opthelp",
-        fqn_prefix[DATAPREFIX], "opthelp");
+    update_file(fqn_prefix[HACKPREFIX], GUIDEBOOK_FILE,
+        fqn_prefix[DATAPREFIX], GUIDEBOOK_FILE, FALSE);
+    update_file(fqn_prefix[HACKPREFIX], OPTIONFILE,
+        fqn_prefix[DATAPREFIX], OPTIONFILE, FALSE);
 
     /* Keep templates up to date */
-    update_file(fqn_prefix[HACKPREFIX], "symbols.tmp",
-        fqn_prefix[DATAPREFIX], "symbols");
+    update_file(fqn_prefix[HACKPREFIX], SYMBOLS_TEMPLATE,
+        fqn_prefix[DATAPREFIX], SYMBOLS, FALSE);
 
 }
 
