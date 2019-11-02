@@ -503,7 +503,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Imitation Bones", "Step onto the Rogue level fake bones pile"},
   {"Replacement Goldfish", "Cast create familiar"},
   {"Pop the Question", "Give a ring of adornment to a succubus"},
-  {"No Soup For You!", "Get expelled from the Quest"},
+  {"No Soup For You!", "Get permanently expelled from the Quest"},
   {"Discerning Palate", "Gain intrinsic food appraisal"},
   {"Playerbanebane", "Kill a soldier ant"},
   {"Banishing Spells Not Included", "Summon a demon lord"},
