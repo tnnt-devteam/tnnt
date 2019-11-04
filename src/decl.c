@@ -349,6 +349,21 @@ const char *ARGV0;
 /* TNNT - initialization of tnnt_globals */
 struct tnnt_globals_t tnnt_globals = DUMMY;
 
+/* TNNT - vanilla achievement names and descriptions */
+struct tnnt_achvmt_data vanilla_achievements[NUM_VANILLA_ACHIEVEMENTS] = {
+  {"Ringing In My Ears", "Get the Bell of Opening"},
+  {"Feel The Burn", "Enter Gehennom"},
+  {"Emerging Into The Light", "Get the Candelabrum of Invocation"},
+  {"Weighing of the Heart", "Get the Book of the Dead"},
+  {"Bell, Book, and Candle", "Perform the Invocation Ritual"},
+  {"My Preciousss", "Get the Amulet of Yendor"},
+  {"From the Dungeon They Came", "Enter the Planes"},
+  {"The Halls of the Gods", "Enter the Astral Plane"},
+  {"Are You Feeling Lucky", "Get the luckstone from Mines' End"},
+  {"Boulder-Pusher", "Finish Sokoban"},
+  {"Anti-Stoner", "Kill Medusa"}
+};
+
 /* TNNT - achievement names and descriptions
  * The order of these MUST be the exact same as that of enum tnnt_achievements
  * found in decl.h! If you reorder these, you must reorder those. */

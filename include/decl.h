@@ -737,6 +737,11 @@ struct tnnt_achvmt_data {
 };
 E struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS];
 
+/* vanilla achievements - tracked separately for now; TODO: maybe merge them
+ * into tnnt_achievements for 2020 tournament */
+#define NUM_VANILLA_ACHIEVEMENTS 11
+E struct tnnt_achvmt_data vanilla_achievements[NUM_VANILLA_ACHIEVEMENTS];
+
 /* TNNT - generic globals that don't belong in you.h */
 #include <stdint.h> /* uint64_t */
 #define NUM_MISSING_CODE_SCROLLS 3

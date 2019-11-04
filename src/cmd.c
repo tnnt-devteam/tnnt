@@ -5657,6 +5657,34 @@ dotnntachievements(VOID_ARGS)
     putstr(win, ATR_BOLD, "(Use #tnntstats to check progress of certain ones)");
 
     int num_earned = 0;
+    /* Special handling for vanilla achievements which are not tracked in
+     * tnnt_achievements. This replicates the conditions in topten.c where they
+     * are added to the xlogfile. */
+    boolean vanilla_achieved[NUM_VANILLA_ACHIEVEMENTS] = {
+        (boolean) u.uachieve.bell,
+        (boolean) u.uachieve.enter_gehennom,
+        (boolean) u.uachieve.menorah,
+        (boolean) u.uachieve.book,
+        (boolean) u.uevent.invoked,
+        (boolean) u.uachieve.amulet,
+        In_endgame(&u.uz),
+        Is_astralevel(&u.uz),
+        (boolean) u.uachieve.mines_luckstone,
+        (boolean) u.uachieve.finish_sokoban,
+        (boolean) u.uachieve.killed_medusa
+    };
+    for (i = 0; i < NUM_VANILLA_ACHIEVEMENTS; ++i) {
+        boolean earned = vanilla_achieved[i];
+        if (earned)
+            num_earned++;
+        if (response == 'b' || earned == (response == 'e')) {
+            struct tnnt_achvmt_data* dat = &vanilla_achievements[i];
+            Sprintf(buf, "[%c] #V%02d \"%s\" - %s", (earned ? 'X' : ' '),
+                    i + 1, dat->name, dat->descr);
+            putstr(win, 0, buf);
+        }
+    }
+
     for (i = 0; i < NUM_TNNT_ACHIEVEMENTS; ++i) {
         /* a response of "both" unconditionally prints any achievement;
          * otherwise, only print the achievement if earned and response was
@@ -5664,17 +5692,15 @@ dotnntachievements(VOID_ARGS)
         boolean earned = tnnt_is_achieved(i);
         if (earned)
             num_earned++;
-        any.a_char = 'a';
         if (response == 'b' || earned == (response == 'e')) {
             struct tnnt_achvmt_data* dat = &tnnt_achievements[i];
             Sprintf(buf, "[%c] #%03d \"%s\" - %s", (earned ? 'X' : ' '),
                     i + 1, dat->name, dat->descr);
-            /* add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE, buf, MENU_UNSELECTED); */
-            /* break; */
             putstr(win, 0, buf);
         }
     }
-    Sprintf(buf, "%d/%d achievements earned in this game.", num_earned, NUM_TNNT_ACHIEVEMENTS);
+    Sprintf(buf, "%d/%d achievements earned in this game.", num_earned,
+            NUM_TNNT_ACHIEVEMENTS + NUM_VANILLA_ACHIEVEMENTS);
     putstr(win, 0, buf);
     display_nhwindow(win, TRUE);
     /* select_menu(win, PICK_ONE, &choice); */
