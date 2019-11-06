@@ -36,15 +36,17 @@ struct obj* thrownscroll;
     xchar qstatus = tnnt_globals.devteam_quest_status;
     boolean is_leader = !strcmp(MNAME(devteam), "Mike Stephenson");
 
-    if (thrownscroll && !(is_leader && qstatus == DTQUEST_INPROGRESS)) {
+    if (thrownscroll && !(is_leader && (Deaf || qstatus == DTQUEST_INPROGRESS))) {
         /* Throwing to leader with the quest in progress is OK and will make him
-         * accept the scroll. Any other scenario doesn't work, but won't anger
-         * the devteam. */
+         * accept the scroll. Throwing to leader while Deaf will make him accept
+         * the scroll even to begin the quest (because the player could be
+         * permadeaf and unable to #chat).
+         * Any other scenario doesn't work, but won't anger the devteam. */
         const char* annoyance[] = { "peeved", "indignant", "irritated" };
         pline_The("scroll bounces off %s's head and falls to the floor.", mon_nam(devteam));
         pline("%s looks %s.", Monnam(devteam), annoyance[rn2(SIZE(annoyance))]);
         place_object(thrownscroll, devteam->mx, devteam->my);
-        if (is_leader) {
+        if (is_leader && !Deaf) {
             verbalize("Why don't you just #chat to me like a normal adventurer?");
         }
         return;
@@ -53,10 +55,14 @@ struct obj* thrownscroll;
         /* Even if you manage to find all the scrolls before finding the actual
          * devteam, this will still only assign the quest and it requires a
          * second #chat to complete it. */
+        if (Deaf)
+            pline("%s signs:", Monnam(devteam));
         com_pager(QT_DEVTEAM_GIVENQUEST);
-        tnnt_globals.devteam_quest_status = DTQUEST_INPROGRESS;
+        qstatus = tnnt_globals.devteam_quest_status = DTQUEST_INPROGRESS;
     }
-    else if (qstatus == DTQUEST_INPROGRESS) {
+    /* not else if; starting the quest by throwing the scroll when Deaf could
+     * hit the if immediately above and then should go into this one */
+    if (qstatus == DTQUEST_INPROGRESS) {
         /* Fork over any scrolls of missing code.
          * Mark them as completed in missing_scroll_levs, by removing the
          * number.  See allmain.c - the scrolls SHOULD be all on different
@@ -125,12 +131,16 @@ struct obj* thrownscroll;
             }
             if (scrolls_remaining > 0) {
                 // TODO: make better.
+                if (Deaf)
+                    pline("%s signs:", Monnam(devteam));
                 verbalize("Thank you. There should only be %d more scroll%s.",
                           scrolls_remaining, (scrolls_remaining > 1 ? "s" : ""));
             }
             else {
                 // finished!!!
                 tnnt_globals.devteam_quest_status = DTQUEST_COMPLETED;
+                if (Deaf)
+                    pline("%s signs:", Monnam(devteam));
                 com_pager(QT_DEVTEAM_FINISHQUEST);
                 struct obj* reward = mksobj(T_SHIRT, FALSE, FALSE);
                 reward = oname(reward, artiname(ART_REALLY_COOL_SHIRT));
