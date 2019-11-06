@@ -503,7 +503,6 @@ gain_guardian_angel()
              * [Note: this predates mon->mextra which allows a monster
              * to have both emin and edog at the same time.]
              */
-            mtmp->mtame = 10;
             /* for 'hilite_pet'; after making tame, before next message */
             newsym(mtmp->mx, mtmp->my);
             if (!Blind)
