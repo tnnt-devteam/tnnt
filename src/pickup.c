@@ -1488,10 +1488,11 @@ collect_transient_within(container, olist)
 struct obj* container;
 struct obj** olist;
 {
-    struct obj* otmp;
-    for (otmp = container->cobj; otmp; otmp = otmp->nobj) {
+    struct obj *otmp, *next;
+    for (otmp = container->cobj; otmp; otmp = next) {
+        next = otmp->nobj;
         if (otmp->cobj)
-            collect_transient_within(otmp);
+            collect_transient_within(otmp, olist);
 
         if (otmp->transient) {
             obj_extract_self(otmp);
