@@ -2232,6 +2232,8 @@ do_class_genocide()
                 }
             }
         }
+        if (num_genocides() >= 20) 
+            tnnt_achieve(A_GENOCIDED_20_SPECIES);
         if (gameover || u.uhp == -1) {
             killer.format = KILLED_BY_AN;
             Strcpy(killer.name, "scroll of genocide");
