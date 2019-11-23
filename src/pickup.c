@@ -1488,10 +1488,11 @@ collect_transient_within(container, olist)
 struct obj* container;
 struct obj** olist;
 {
-    struct obj* otmp;
-    for (otmp = container->cobj; otmp; otmp = otmp->nobj) {
+    struct obj *otmp, *next;
+    for (otmp = container->cobj; otmp; otmp = next) {
+        next = otmp->nobj;
         if (otmp->cobj)
-            collect_transient_within(otmp);
+            collect_transient_within(otmp, olist);
 
         if (otmp->transient) {
             obj_extract_self(otmp);
@@ -2610,7 +2611,7 @@ register struct obj *obj;
             /* should not get to here if we haven't contributed to the chest */
             You_feel(current_container->swapitems == -1
                        ? "%s is no longer interested in dealing with you."
-                       : "%s wants someting from you, first.",
+                       : "%s wants something from you first.",
                      the(xname(current_container)));
             return -1;
         }

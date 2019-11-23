@@ -287,7 +287,8 @@ int cnt;
 
 void
 wipe_engr_at(x, y, cnt, magical)
-xchar x, y, cnt, magical;
+xchar x, y, cnt;
+boolean magical;
 {
     register struct engr *ep = engr_at(x, y);
 
@@ -762,7 +763,7 @@ doengrave()
                 }
                 Strcpy(post_engr_text,
                        (Blind && !Deaf)
-                          ? "You hear drilling!"
+                          ? "You hear drilling!"    /* Deaf-aware */
                           : Blind
                              ? "You feel tremors."
                              : IS_GRAVE(levl[u.ux][u.uy].typ)

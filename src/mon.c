@@ -2143,8 +2143,15 @@ register struct monst *mtmp;
         /* Gather all of the NPC's possessions in the spot of their death. */
         struct obj* list = collect_all_transient(NULL);
         struct obj* next;
-        if (list)
-            You_feel("a slight suction.");
+        if (list) {
+            if (Blind && !Deaf)
+                You("hear a rush of objects jumble together nearby.");
+            else if (Blind && Deaf)
+                You_feel("a jarring vibration nearby.");
+            else
+                You("see %s possessions coalesce into a large pile near you.",
+                    s_suffix(mon_nam(mtmp)));
+        }
         for (; list; list = next) {
             next = list->nobj;
             place_object(list, mtmp->mx, mtmp->my);
@@ -4047,6 +4054,9 @@ boolean msg;      /* "The oldmon turns into a newmon!" */
 
     /* take on the new form... */
     set_mon_data(mtmp, mdat);
+
+    if (mtmp->mleashed && !leashable(mtmp))
+        m_unleash(mtmp, TRUE);
 
     if (emits_light(olddata) != emits_light(mtmp->data)) {
         /* used to give light, now doesn't, or vice versa,

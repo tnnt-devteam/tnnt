@@ -1,4 +1,4 @@
-.\" $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.317 $ $NHDT-Date: 1572448817 2019/10/30 15:20:17 $
+.\" $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.325 $ $NHDT-Date: 1572735924 2019/11/02 23:05:24 $
 .\"
 .\" This is an excerpt from the 'roff' man page from the 'groff' package.
 .\" NetHack's Guidebook.mn currently does *not* adhere to these guidelines.
@@ -24,7 +24,7 @@
 .ds vr "NetHack 3.6
 .ds f0 "\*(vr
 .ds f1
-.ds f2 "October 27, 2019
+.ds f2 "November 2, 2019
 .
 .\" A note on some special characters:
 .\" \(lq = left double quote
@@ -2617,14 +2617,25 @@ Using a configuration file
 .hw .nethackrc defaults.nh nethack.exe nethackW.exe
 The default name of the configuration file varies on different
 operating systems.
-On MS-DOS and Windows, it is \(lqdefaults.nh\(rq
-in the same folder as nethack.exe or nethackW.exe.
+.pg
 On
 .UX ,
 Linux,
 and Mac OS X it is \(lq.nethackrc\(rq in the user's home directory.
 The file may not exist, but it is a normal ASCII text file and
 can be created with any text editor.
+.pg
+On Windows, it is \(lq.nethackrc\(rq in
+\(lq\\%USERPROFILE%\\NetHack\\3.6\(rq.  The file may not exist,
+but it is a normal ASCII text file can can be created with any
+text editor.
+After running NetHack for the first time, you should find a default
+template for the configuration file named \(lq.nethackrc.template\(rq
+in \(lq\\%USERPROFILE%\\NetHack\\3.6\(rq.
+If you had not created the configuration file, NetHack will create
+the configuration file for you using the default template file.
+.pg
+On MS-DOS, it is \(lqdefaults.nh\(rq in the same folder as nethack.exe.
 .pg
 Any line in the configuration file starting with \(oq#\(cq is treated
 as a comment.
@@ -2683,7 +2694,9 @@ HACKDIR, must be writable.
 .lp TROUBLEDIR
 The location that a record of game aborts and self-diagnosed game problems
 is kept. Defaults to HACKDIR, must be writable.
+.\"
 .\" config file entries beyond this point are shown alphabetically
+.\"
 .lp AUTOCOMPLETE
 Enable or disable an extended command autocompletion.
 Autocompletion has no effect for the X11 windowport.
@@ -2749,7 +2762,7 @@ See the \(lqModifying NetHack Symbols\(rq section.
 .lp ""
 Example:
 .sd
-\f(CR# replace small punctuation (tick marks) with easier to see digits\fP
+\f(CR# replace small punctuation (tick marks) with digits\fP
 \f(CRSYMBOLS=S_boulder:0,S_golem:7\fP
 .ed
 .lp WIZKIT
@@ -4287,7 +4300,7 @@ text to match against.
 .lp "*"
 \(lqalways\(rq will set the default attributes for that field.
 .lp "*"
-\(lqup\(rq and \(lqdown\(rq set the field attributes for when the field
+\(lqup\(rq, \(lqdown\(rq set the field attributes for when the field
 value changes upwards or downwards.
 This attribute times out after
 .op statushilites
@@ -4394,16 +4407,23 @@ The special prefix form \\m switches on the meta bit in the symbol value,
 and the \(ha prefix causes the following character to be treated as a
 control character.
 .pg
+.\" Table is centered.
+.\" First line (title) is left justified and spans second and third columns;
+.\" it used to be centered but tended to look as if too far to the right.
+.\" Remaining lines are left justified in each of three columns.  First
+.\" line (second overall) contains column labels; the first column has a
+.\" dummy label of two spaces.  (That used to be "Default" but it made all
+.\" the lines wider because of the label's width and caused several lines
+.\" to be too wide when generating plain text output.  Two spaces leaves
+.\" some room between the symbol character and name.)  Entries in first
+.\" column now use constant-width Roman font to approximate TeX tt font.
 .TS S
 center;
-c s s
-c1 l1 l.
+l s s
+l1fCR l1 l.
 .\"TABLE_START
-.\" because description is wide, centered title seems off, so pad it a bit
-.\" note that each backslash precedes one space of padding (including the
-.\" last one; in other words, there's a trailing space here)
-NetHack Symbols\ \ \ \ \ \ \ 
-Default	Symbol Name	Description
+NetHack Symbols
+\ \ 	Symbol Name	Description
 \_	\_	\_
 \ 	S_air	(air)
 \&_	S_altar	(altar)
@@ -4530,7 +4550,8 @@ s	S_spider	(arachnid or centipede)
 @	S_ss3	(magic shield 3 of 4)
 *	S_ss4	(magic shield 4 of 4)
 \(ha	S_statue_trap	(statue trap)
-\ 	S_stone	(dark part of a room)
+\ 	S_stone	(solid rock or unexplored terrain
+\ 	\ 	\ or dark part of a room)
 ]	S_strange_obj	(strange object)
 \-	S_sw_bc	(swallow bottom center)
 \\	S_sw_bl	(swallow bottom left)
@@ -4574,15 +4595,28 @@ v	S_vortex	(vortex)
 w	S_worm	(worm)
 \(ti	S_worm_tail	(long worm tail)
 W	S_wraith	(wraith)
-x	S_xan	(xan or other mythical/fantastic insect)
+x	S_xan	(xan or other extraordinary insect)
 X	S_xorn	(xorn)
 Y	S_yeti	(apelike creature)
 Z	S_zombie	(zombie)
 z	S_zruty	(zruty)
- 	S_pet_override	(pet override if sysconf accessibility is set)
- 	S_player_override	(player override if sysconf accessibility is set)
+\ 	S_pet_override	(any pet if ACCESSIBILITY=1 is set)
+\ 	S_player_override	(hero if ACCESSIBILITY=1 is set)
 .\"TABLE_END  Do not delete this line.
 .TE
+.\" don't hyphenate file name across lines
+.hw sysconf
+.pg
+Notes:  several symbols in this table appear to be blank.
+They are the space character, except for S_pet_override
+and S_player_override which don't have any default value
+and can only be used if enabled in the \(lqsysconf\(rq file.
+.pg
+S_rock is misleadingly named; rocks and stones use S_gem.
+Statues and boulders are the rock being referred to, but since
+version 3.6.0, statues are displayed as the monster they depict.
+So S_rock is only used for boulders and not used at all if
+overridden by the more specific S_boulder.
 .pg
 .hn 2
 Configuring NetHack for Play by the Blind
@@ -4629,7 +4663,8 @@ See the previous section for the special symbols S_pet_override
 to force a consistent symbol for all pets and
 S_player_override to force a unique symbol for the player character
 if \fBaccessibility\fP is enabled in the sysconf file.
-The most crucial settings to make the game accessible are:
+.pg
+The most crucial settings to make the game more accessible are:
 .pg
 .lp symset:NHAccess
 Load a symbol set appropriate for use by blind players.
@@ -4663,7 +4698,7 @@ of moving 8 units at a time.
 .lp nostatus_updates
 Prevent updates to the status lines at the bottom of the screen, if
 your screen-reader reads those lines. The same information can be
-seen via the #attributes command.
+seen via the \(lq#attributes\(rq command.
 .hn 2
 Global Configuration for System Administrators
 .pg
@@ -4921,7 +4956,7 @@ and \fBPaul Winner\fP, ported NetHack 3.1 to the PC.
 \fBMike Engber\fP, \fBDavid Hairston\fP, \fBMichael Hamel\fP,
 \fBJonathan Handler\fP, \fBJohnny Lee\fP, \fBTim Lennan\fP, \fBRob Menke\fP,
 and \fBAndy Swanson\fP, developed NetHack 3.1 for the Macintosh,
-porting it for MPW.  Building on their development, \fBBarton House\fP
+porting it for MPW.  Building on their development, \fBBart House\fP
 added a Think C port.
 .pg
 \fBTimo Hakulinen\fP ported NetHack 3.1 to OS/2.  \fBEric Smith\fP
@@ -5080,7 +5115,7 @@ flavors and maintained the X11 interface.
 \fBKen Lorber\fP, \fBHaoyang Wang\fP, \fBPat Rankin\fP, and \fBDean Luick\fP
 maintained the port of NetHack 3.6 for Mac OSX.
 .pg
-\fBMichael Allison\fP, \fBDavid Cohrs\fP, \fBBarton House\fP,
+\fBMichael Allison\fP, \fBDavid Cohrs\fP, \fBBart House\fP,
 \fBPasi Kallinen\fP, \fBAlex Kompel\fP, \fBDion Nicolaas\fP,
 \fBDerek S. Ray\fP and \fBYitzhak Sapir\fP maintained the port of
 NetHack 3.6 for Microsoft Windows.
@@ -5104,6 +5139,9 @@ The NetHack Development Team at the time of release of 3.6.1 consisted of
 .pg
 In early May 2019, another 320 bug fixes along with some enhancements and 
 the adopted curses window port, were released as 3.6.2.
+.pg
+\fBBart House\fP, who had contributed to the game as a porting team
+participant for decades, joined the NetHack Development Team in late May 2019.
 .pg
 The official NetHack web site is maintained by \fBKen Lorber\fP
 at
@@ -5131,49 +5169,50 @@ miscreants in this, the list of Dungeoneers:
 .
 .TS S
 center;
-c c c.
+c2 c2 c.
 .\"TABLE_START
-Adam Aronow	Janet Walz	Nathan Eady
-Alex Kompel	Janne Salmijarvi	Norm Meluch
-Alex Smith	Jean-Christophe Collet	Olaf Seibert
-Andreas Dorn	Jeff Bailey	Pasi Kallinen
-Andy Church	Jochen Erwied	Pat Rankin
-Andy Swanson	John Kallen	Patric Mueller
+Adam Aronow	J. Ali Harlow	Mikko Juola
+Alex Kompel	Janet Walz	Nathan Eady
+Alex Smith	Janne Salmijarvi	Norm Meluch
+Andreas Dorn	Jean-Christophe Collet	Olaf Seibert
+Andy Church	Jeff Bailey	Pasi Kallinen
+Andy Swanson	Jochen Erwied	Pat Rankin
+Andy Thomson	John Kallen	Patric Mueller
 Ari Huttunen	John Rupley	Paul Winner
-Barton House	John S. Bien	Pierre Martineau
+Bart House	John S. Bien	Pierre Martineau
 Benson I. Margulies	Johnny Lee	Ralf Brown
 Bill Dyer	Jon W{tte	Ray Chason
 Boudewijn Waijers	Jonathan Handler	Richard Addison
 Bruce Cox	Joshua Delahunty	Richard Beigel
 Bruce Holloway	Karl Garrison	Richard P. Hughey
 Bruce Mewborne	Keizo Yamamoto	Rob Menke
-Carl Schelin	Ken Arnold	Robin Bandy
-Chris Russo	Ken Arromdee	Robin Johnson
-David Cohrs	Ken Lorber	Roderick Schertler
-David Damerell	Ken Washikita	Roland McGrath
-David Gentzel	Kevin Darcy	Ron Van Iwaarden
-David Hairston	Kevin Hugo	Ronnen Miller
-Dean Luick	Kevin Sitze	Ross Brown
-Del Lamb	Kevin Smolkowski	Sascha Wostmann
-Derek S. Ray	Kevin Sweet	Scott Bigham
-Deron Meranda	Lars Huttar	Scott R. Turner
-Dion Nicolaas	Leon Arnott	Sean Hunt
-Dylan O'Donnell	M. Drew Streib	Stephen Spackman
-Eric Backus	Malcolm Ryan	Stefan Thielscher
-Eric Hendrickson	Mark Gooderum	Stephen White
-Eric R. Smith	Mark Modrall	Steve Creps
-Eric S. Raymond	Marvin Bressler	Steve Linhart
-Erik Andersen	Matthew Day	Steve VanDevender
-Frederick Roeber	Merlyn LeRoy	Teemu Suikki
-Gil Neiger	Michael Allison	Tim Lennan
-Greg Laskin	Michael Feir	Timo Hakulinen
-Greg Olson	Michael Hamel	Tom Almy
-Gregg Wonderly	Michael Sokolov	Tom West
-Hao-yang Wang	Mike Engber	Warren Cheung
-Helge Hafting	Mike Gallop	Warwick Allison
-Irina Rempt-Drijfhout	Mike Passaretti	Yitzhak Sapir
+Carl Schelin	Keith Simpson	Robin Bandy
+Chris Russo	Ken Arnold	Robin Johnson
+David Cohrs	Ken Arromdee	Roderick Schertler
+David Damerell	Ken Lorber	Roland McGrath
+David Gentzel	Ken Washikita	Ron Van Iwaarden
+David Hairston	Kevin Darcy	Ronnen Miller
+Dean Luick	Kevin Hugo	Ross Brown
+Del Lamb	Kevin Sitze	Sascha Wostmann
+Derek S. Ray	Kevin Smolkowski	Scott Bigham
+Deron Meranda	Kevin Sweet	Scott R. Turner
+Dion Nicolaas	Lars Huttar	Sean Hunt
+Dylan O'Donnell	Leon Arnott	Stephen Spackman
+Eric Backus	M. Drew Streib	Stefan Thielscher
+Eric Hendrickson	Malcolm Ryan	Stephen White
+Eric R. Smith	Mark Gooderum	Steve Creps
+Eric S. Raymond	Mark Modrall	Steve Linhart
+Erik Andersen	Marvin Bressler	Steve VanDevender
+Fredrik Ljungdahl	Matthew Day	Teemu Suikki
+Frederick Roeber	Merlyn LeRoy	Tim Lennan
+Gil Neiger	Michael Allison	Timo Hakulinen
+Greg Laskin	Michael Feir	Tom Almy
+Greg Olson	Michael Hamel	Tom West
+Gregg Wonderly	Michael Sokolov	Warren Cheung
+Hao-yang Wang	Mike Engber	Warwick Allison
+Helge Hafting	Mike Gallop	Yitzhak Sapir
+Irina Rempt-Drijfhout	Mike Passaretti
 Izchak Miller	Mike Stephenson
-J. Ali Harlow	Mikko Juola
 .\"TABLE_END  Do not delete this line.
 .TE
 .pg
