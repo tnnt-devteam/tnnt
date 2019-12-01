@@ -1,4 +1,4 @@
-/* NetHack 3.6	pager.c	$NHDT-Date: 1571531890 2019/10/20 00:38:10 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.157 $ */
+/* NetHack 3.6	pager.c	$NHDT-Date: 1574722864 2019/11/25 23:01:04 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.162 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2018. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -477,17 +477,24 @@ char *buf, *monbuf;
         Strcpy(buf, def_warnsyms[warnindx].explanation);
     } else if (!glyph_is_cmap(glyph)) {
         Strcpy(buf, "unexplored area");
-    } else
+    } else {
+        int amsk;
+        aligntyp algn;
+
         switch (glyph_to_cmap(glyph)) {
         case S_altar:
+            amsk = ((mtmp = m_at(x, y)) != 0 && has_mcorpsenm(mtmp)
+                    && M_AP_TYPE(mtmp) == M_AP_FURNITURE
+                    && mtmp->mappearance == S_altar) ? MCORPSENM(mtmp)
+                   : levl[x][y].altarmask;
+            algn = Amask2align(amsk & ~AM_SHRINE);
             Sprintf(buf, "%s %saltar",
                     /* like endgame high priests, endgame high altars
                        are only recognizable when immediately adjacent */
                     (Is_astralevel(&u.uz) && distu(x, y) > 2)
                         ? "aligned"
-                        : align_str(
-                              Amask2align(levl[x][y].altarmask & ~AM_SHRINE)),
-                    ((levl[x][y].altarmask & AM_SHRINE)
+                        : align_str(algn),
+                    ((amsk & AM_SHRINE) != 0
                      && (Is_astralevel(&u.uz) || Is_sanctum(&u.uz)))
                         ? "high "
                         : "");
@@ -522,7 +529,7 @@ char *buf, *monbuf;
             Strcpy(buf, defsyms[glyph_to_cmap(glyph)].explanation);
             break;
         }
-
+    }
     return (pm && !Hallucination) ? pm : (struct permonst *) 0;
 }
 
@@ -826,7 +833,7 @@ struct permonst **for_supplement;
 
         glyph = glyph_at(cc.x, cc.y);
         /* Convert glyph at selected position to a symbol for use below. */
-        (void) mapglyph(glyph, &sym, &oc, &os, cc.x, cc.y);
+        (void) mapglyph(glyph, &sym, &oc, &os, cc.x, cc.y, 0);
 
         Sprintf(prefix, "%s        ", encglyph(glyph));
     } else
@@ -1039,49 +1046,40 @@ struct permonst **for_supplement;
     for (j = SYM_OFF_X; j < SYM_MAX; ++j) {
         if (j == (SYM_INVISIBLE + SYM_OFF_X))
             continue;       /* already handled above */
-        tmpsym = Is_rogue_level(&u.uz) ? ov_rogue_syms[j] : ov_primary_syms[j];                    
+        tmpsym = Is_rogue_level(&u.uz) ? ov_rogue_syms[j]
+                                       : ov_primary_syms[j];
         if (tmpsym && sym == tmpsym) {
-            switch(j) {
-                case SYM_BOULDER + SYM_OFF_X:
-                        if (!found) {
-                            *firstmatch = "boulder";
-                            Sprintf(out_str, "%s%s", prefix, an(*firstmatch));
-                            found++;
-                        } else {
-                            found += append_str(out_str, "boulder");
-                        }
-                        break;
-                case SYM_PET_OVERRIDE + SYM_OFF_X:
-                        if (looked) {
-                            int oc = 0;
-                            unsigned os = 0;
-                            nhsym save_override;
+            switch (j) {
+            case SYM_BOULDER + SYM_OFF_X:
+                if (!found) {
+                    *firstmatch = "boulder";
+                    Sprintf(out_str, "%s%s", prefix, an(*firstmatch));
+                    found++;
+                } else {
+                    found += append_str(out_str, "boulder");
+                }
+                break;
+            case SYM_PET_OVERRIDE + SYM_OFF_X:
+                if (looked) {
+                    int oc = 0;
+                    unsigned os = 0;
 
-                            if (Is_rogue_level(&u.uz)) {
-                                save_override = ov_rogue_syms[SYM_PET_OVERRIDE + SYM_OFF_X];
-                                ov_rogue_syms[SYM_PET_OVERRIDE + SYM_OFF_X] = 0;
-                            } else {
-                                save_override = ov_primary_syms[SYM_PET_OVERRIDE + SYM_OFF_X];
-                                ov_primary_syms[SYM_PET_OVERRIDE + SYM_OFF_X] = 0;
-                            }
-                            /* convert to symbol without the override in effect */
-                            (void) mapglyph(glyph, &sym, &oc, &os, cc.x, cc.y);
-                            if (Is_rogue_level(&u.uz))
-                                ov_rogue_syms[SYM_PET_OVERRIDE + SYM_OFF_X] = save_override;
-                            else
-                                ov_primary_syms[SYM_PET_OVERRIDE + SYM_OFF_X] = save_override;
-                            goto check_monsters;
-                        }
-                        break;
-                case SYM_PLAYER_OVERRIDE + SYM_OFF_X:
-                        sym = showsyms[S_HUMAN + SYM_OFF_M];
-                        goto check_monsters;
+                    /* convert to symbol without override in effect */
+                    (void) mapglyph(glyph, &sym, &oc, &os,
+                                    cc.x, cc.y, MG_FLAG_NOOVERRIDE);
+                    goto check_monsters;
+                }
+                break;
+            case SYM_HERO_OVERRIDE + SYM_OFF_X:
+                sym = showsyms[S_HUMAN + SYM_OFF_M];
+                goto check_monsters;
             }
         }
     }
 #if 0
     /* handle optional boulder symbol as a special case */
-    if (o_syms[SYM_BOULDER + SYM_OFF_X] && sym == o_syms[SYM_BOULDER + SYM_OFF_X]) {
+    if (o_syms[SYM_BOULDER + SYM_OFF_X]
+        && sym == o_syms[SYM_BOULDER + SYM_OFF_X]) {
         if (!found) {
             *firstmatch = "boulder";
             Sprintf(out_str, "%s%s", prefix, an(*firstmatch));

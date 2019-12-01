@@ -154,7 +154,8 @@ boolean check_pit;
     if (u.usteed && P_SKILL(P_RIDING) < P_BASIC)
         return FALSE;
     if (check_pit && !Flying
-        && (t = t_at(u.ux, u.uy)) != 0 && uteetering_at_seen_pit(t))
+        && (t = t_at(u.ux, u.uy)) != 0
+        && (uteetering_at_seen_pit(t) || uescaped_shaft(t)))
         return FALSE;
 
     return (boolean) ((!Levitation || Is_airlevel(&u.uz)
@@ -800,7 +801,7 @@ doengrave()
                     doblind = TRUE;
                 } else
                     Strcpy(post_engr_text, !Deaf
-                                ? "You hear crackling!"
+                                ? "You hear crackling!"  /* Deaf-aware */
                                 : "Your hair stands up!");
                 break;
 

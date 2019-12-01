@@ -1,4 +1,4 @@
-/* NetHack 3.6	objnam.c	$NHDT-Date: 1571436005 2019/10/18 22:00:05 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.247 $ */
+/* NetHack 3.6	objnam.c	$NHDT-Date: 1573290418 2019/11/09 09:06:58 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.248 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2011. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -1059,7 +1059,7 @@ unsigned doname_flags;
             Strcat(bp, " (being worn)");
         break;
     case ARMOR_CLASS:
-        if (obj->owornmask & W_ARMOR)
+        if (obj->owornmask & W_ARMOR) {
             Strcat(bp, (obj == uskin) ? " (embedded in your skin)"
                        /* in case of perm_invent update while Wear/Takeoff
                           is in progress; check doffing() before donning()
@@ -1067,6 +1067,13 @@ unsigned doname_flags;
                        : doffing(obj) ? " (being doffed)"
                          : donning(obj) ? " (being donned)"
                            : " (being worn)");
+            /* slippery fingers is an intrinsic condition of the hero
+               rather than extrinsic condition of objects, but gloves
+               are described as slippery when hero has slippery fingers */
+            if (obj == uarmg && Glib) /* just appended "(something)",
+                                       * change to "(something; slippery)" */
+                Strcpy(rindex(bp, ')'), "; slippery)");
+        }
         /*FALLTHRU*/
     case WEAPON_CLASS:
         if (ispoisoned)
@@ -2198,7 +2205,11 @@ const char *const *alt_as_is; /* another set like as_is[] */
         }
     }
 
-    /* avoid false hit on one_off[].plur == "lice" or .sing == "goose";
+   /* Leave "craft" as a suffix as-is (aircraft, hovercraft);
+      "craft" itself is (arguably) not included in our likely context */
+   if ((baselen > 5) && (!BSTRCMPI(basestr, endstring - 5, "craft")))
+       return TRUE;
+   /* avoid false hit on one_off[].plur == "lice" or .sing == "goose";
        if more of these turn up, one_off[] entries will need to flagged
        as to which are whole words and which are matchable as suffices
        then matching in the loop below will end up becoming more complex */
@@ -2426,9 +2437,25 @@ const char *oldstr;
 
     lo_c = lowc(*spot);
 
+    /* codex/spadix/neocortex and the like */
+    if (len >= 5
+        && (!strcmpi(spot - 2, "dex")
+            ||!strcmpi(spot - 2, "dix")
+            ||!strcmpi(spot - 2, "tex"))
+           /* indices would have been ok too, but stick with indexes */
+        && (strcmpi(spot - 4,"index") != 0)) {
+        Strcasecpy(spot - 1, "ices"); /* ex|ix -> ices */
+        goto bottom;
+    }
     /* Ends in z, x, s, ch, sh; add an "es" */
     if (index("zxs", lo_c)
-        || (len >= 2 && lo_c == 'h' && index("cs", lowc(*(spot - 1))))
+        || (len >= 2 && lo_c == 'h' && index("cs", lowc(*(spot - 1)))
+            /* 21st century k-sound */
+            && !(len >= 4 &&
+                 ((lowc(*(spot - 2)) == 'e'
+                    && index("mt", lowc(*(spot - 3)))) ||
+                  (lowc(*(spot - 2)) == 'o'
+                    && index("lp", lowc(*(spot - 3)))))))
         /* Kludge to get "tomatoes" and "potatoes" right */
         || (len >= 4 && !strcmpi(spot - 2, "ato"))
         || (len >= 5 && !strcmpi(spot - 4, "dingo"))) {
@@ -4186,6 +4213,26 @@ struct obj *helmet;
      *      all other types of helmets          -> helm
      */
     return (helmet && !is_metallic(helmet)) ? "hat" : "helm";
+}
+
+/* gloves vs gauntlets; depends upon discovery state */
+const char *
+gloves_simple_name(gloves)
+struct obj *gloves;
+{
+    static const char gauntlets[] = "gauntlets";
+
+    if (gloves && gloves->dknown) {
+        int otyp = gloves->otyp;
+        struct objclass *ocl = &objects[otyp];
+        const char *actualn = OBJ_NAME(*ocl),
+                   *descrpn = OBJ_DESCR(*ocl);
+
+        if (strstri(objects[otyp].oc_name_known ? actualn : descrpn,
+                    gauntlets))
+            return gauntlets;
+    }
+    return "gloves";
 }
 
 const char *

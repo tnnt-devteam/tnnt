@@ -1,4 +1,4 @@
-/* NetHack 3.6	extern.h	$NHDT-Date: 1571436000 2019/10/18 22:00:00 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.730 $ */
+/* NetHack 3.6	extern.h	$NHDT-Date: 1573940539 2019/11/16 21:42:19 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.741 $ */
 /* Copyright (c) Steve Creps, 1988.				  */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -450,6 +450,7 @@ E char *FDECL(Amonnam, (struct monst *));
 E char *FDECL(a_monnam, (struct monst *));
 E char *FDECL(distant_monnam, (struct monst *, int, char *));
 E char *FDECL(mon_nam_too, (struct monst *, struct monst *));
+E char *FDECL(minimal_monnam, (struct monst *, BOOLEAN_P));
 E char *FDECL(rndmonnam, (char *));
 E const char *FDECL(hcolor, (const char *));
 E const char *NDECL(rndcolor);
@@ -474,6 +475,7 @@ E int NDECL(Helmet_on);
 E int FDECL(select_off, (struct obj *));
 E int NDECL(take_off);
 #endif
+E const char *FDECL(fingers_or_gloves, (BOOLEAN_P));
 E void FDECL(off_msg, (struct obj *));
 E void FDECL(set_wear, (struct obj *));
 E boolean FDECL(donning, (struct obj *));
@@ -851,6 +853,7 @@ E void FDECL(signal_whereis, (int));
 #ifdef DEBUG
 E boolean FDECL(debugcore, (const char *, BOOLEAN_P));
 #endif
+E void NDECL(reveal_paths);
 E boolean FDECL(read_tribute, (const char *, const char *, int,
                                char *, int, unsigned));
 E boolean FDECL(Death_quote, (char *, int));
@@ -1229,7 +1232,7 @@ E boolean FDECL(usmellmon, (struct permonst *));
 
 /* ### mapglyph.c ### */
 
-E int FDECL(mapglyph, (int, int *, int *, unsigned *, int, int));
+E int FDECL(mapglyph, (int, int *, int *, unsigned *, int, int, unsigned));
 E char *FDECL(encglyph, (int));
 E char *FDECL(decode_mixed, (char *, const char *));
 E void FDECL(genl_putmixed, (winid, int, const char *));
@@ -1774,6 +1777,7 @@ E int FDECL(rnd_class, (int, int));
 E const char *FDECL(suit_simple_name, (struct obj *));
 E const char *FDECL(cloak_simple_name, (struct obj *));
 E const char *FDECL(helm_simple_name, (struct obj *));
+E const char *FDECL(gloves_simple_name, (struct obj *));
 E const char *FDECL(mimic_obj_name, (struct monst *));
 E char *FDECL(safe_qbuf, (char *, const char *, const char *, struct obj *,
                           char *(*)(OBJ_P), char *(*)(OBJ_P), const char *));
@@ -1993,6 +1997,7 @@ E void FDECL(make_blinded, (long, BOOLEAN_P));
 E void NDECL(toggle_blindness);
 E boolean FDECL(make_hallucinated, (long, BOOLEAN_P, long));
 E void FDECL(make_deaf, (long, BOOLEAN_P));
+E void FDECL(make_glib, (int));
 E void NDECL(self_invis_message);
 E int NDECL(dodrink);
 E int FDECL(dopotion, (struct obj *));
@@ -2576,6 +2581,7 @@ E int FDECL(launch_obj, (SHORT_P, int, int, int, int, int));
 E boolean NDECL(launch_in_progress);
 E void NDECL(force_launch_placement);
 E boolean FDECL(uteetering_at_seen_pit, (struct trap *));
+E boolean FDECL(uescaped_shaft, (struct trap *));
 E boolean NDECL(lava_effects);
 E void NDECL(sink_into_lava);
 E void NDECL(sokoban_guilt);
@@ -2593,6 +2599,8 @@ E int FDECL(find_roll_to_hit, (struct monst *, UCHAR_P, struct obj *,
                                int *, int *));
 E boolean FDECL(attack, (struct monst *));
 E boolean FDECL(hmon, (struct monst *, struct obj *, int, int));
+E boolean FDECL(shade_miss, (struct monst *, struct monst *, struct obj *,
+                             BOOLEAN_P, BOOLEAN_P));
 E int FDECL(damageum, (struct monst *, struct attack *, int));
 E void FDECL(missum, (struct monst *, struct attack *, BOOLEAN_P));
 E int FDECL(passive, (struct monst *, struct obj *, BOOLEAN_P, int,
@@ -2889,10 +2897,13 @@ E void NDECL(nhwindows_hangup);
 #endif
 E void NDECL(genl_status_init);
 E void NDECL(genl_status_finish);
-E void FDECL(genl_status_enablefield,
-             (int, const char *, const char *, BOOLEAN_P));
-E void FDECL(genl_status_update, (int, genericptr_t, int, int, int, unsigned long *));
-
+E void FDECL(genl_status_enablefield, (int, const char *, const char *,
+                                       BOOLEAN_P));
+E void FDECL(genl_status_update, (int, genericptr_t, int, int, int,
+                                  unsigned long *));
+#ifdef DUMPLOG
+E char *FDECL(dump_fmtstr, (const char *, char *, BOOLEAN_P));
+#endif
 E void FDECL(dump_open_log, (time_t));
 E void NDECL(dump_close_log);
 E void FDECL(dump_redirect, (BOOLEAN_P));

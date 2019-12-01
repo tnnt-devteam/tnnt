@@ -90,7 +90,9 @@ struct window_procs mswin_procs = {
 #ifdef STATUS_HILITES
     WC2_HITPOINTBAR | WC2_FLUSH_STATUS | WC2_RESET_STATUS | WC2_HILITE_STATUS |
 #endif
-    0L, mswin_init_nhwindows, mswin_player_selection, mswin_askname,
+    0L,
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},   /* color availability */
+    mswin_init_nhwindows, mswin_player_selection, mswin_askname,
     mswin_get_nh_event, mswin_exit_nhwindows, mswin_suspend_nhwindows,
     mswin_resume_nhwindows, mswin_create_nhwindow, mswin_clear_nhwindow,
     mswin_display_nhwindow, mswin_destroy_nhwindow, mswin_curs, mswin_putstr,
@@ -3091,7 +3093,7 @@ mswin_status_update(int idx, genericptr_t ptr, int chg, int percent, int color, 
                 ochar = GOLD_SYM;
             else
                 mapglyph(objnum_to_glyph(GOLD_PIECE),
-                         &ochar, &ocolor, &ospecial, 0, 0);
+                         &ochar, &ocolor, &ospecial, 0, 0, 0);
             buf[0] = ochar;
             p = strchr(text, ':');
             if (p) {

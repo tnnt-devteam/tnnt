@@ -1,4 +1,4 @@
-/* NetHack 3.6	options.c	$NHDT-Date: 1572303730 2019/10/28 23:02:10 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.383 $ */
+/* NetHack 3.6	options.c	$NHDT-Date: 1574900826 2019/11/28 00:27:06 $  $NHDT-Branch: NetHack-3.6 $:$NHDT-Revision: 1.388 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Michael Allison, 2008. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -107,9 +107,9 @@ static struct Bool_Opt {
     { "clicklook", &iflags.clicklook, FALSE, SET_IN_GAME },
     { "cmdassist", &iflags.cmdassist, TRUE, SET_IN_GAME },
 #if defined(MICRO) || defined(WIN32) || defined(CURSES_GRAPHICS)
-    { "color", &iflags.wc_color, TRUE, SET_IN_GAME }, /*WC*/
+    { "color", &iflags.wc_color, TRUE, SET_IN_GAME }, /* on/off: use WC or not */
 #else /* systems that support multiple terminals, many monochrome */
-    { "color", &iflags.wc_color, FALSE, SET_IN_GAME }, /*WC*/
+    { "color", &iflags.wc_color, FALSE, SET_IN_GAME },
 #endif
     { "confirm", &flags.confirm, TRUE, SET_IN_GAME },
     { "dark_room", &flags.dark_room, TRUE, SET_IN_GAME },
@@ -675,7 +675,7 @@ initoptions()
 
     /* ... and _must_ parse correctly. */
     if (!read_config_file(SYSCF_FILE, SET_IN_SYS)) {
-        if (config_error_done())
+        if (config_error_done() && !iflags.initoptions_noterminate)
             nh_terminate(EXIT_FAILURE);
     }
     config_error_done();
@@ -1316,12 +1316,13 @@ STATIC_VAR const struct paranoia_opts {
        and "d"ie vs "d"eath, synonyms for each other so doesn't matter;
        (also "p"ray vs "P"aranoia, "pray" takes precedence since "Paranoia"
        is just a synonym for "Confirm"); "b"ones vs "br"eak-wand, the
-       latter requires at least two letters; "wand"-break vs "Were"-change,
+       latter requires at least two letters; "e"at vs "ex"plore,
+       "cont"inue eating vs "C"onfirm; "wand"-break vs "Were"-change,
        both require at least two letters during config processing and use
        case-senstivity for 'O's interactive menu */
     { PARANOID_CONFIRM, "Confirm", 1, "Paranoia", 2,
       "for \"yes\" confirmations, require \"no\" to reject" },
-    { PARANOID_QUIT, "quit", 1, "explore", 1,
+    { PARANOID_QUIT, "quit", 1, "explore", 2,
       "yes vs y to quit or to enter explore mode" },
     { PARANOID_DIE, "die", 1, "death", 2,
       "yes vs y to die (explore mode or debug mode)" },
@@ -1331,6 +1332,8 @@ STATIC_VAR const struct paranoia_opts {
       "yes vs y to attack a peaceful monster" },
     { PARANOID_BREAKWAND, "wand-break", 2, "break-wand", 2,
       "yes vs y to break a wand via (a)pply" },
+    { PARANOID_EATING, "eat", 1, "continue", 4,
+      "yes vs y to continue eating after first bite when satiated" },
     { PARANOID_WERECHANGE, "Were-change", 2, (const char *) 0, 0,
       "yes vs y to change form when lycanthropy is controllable" },
     { PARANOID_PRAY, "pray", 1, 0, 0,
@@ -4205,14 +4208,12 @@ boolean tinitial, tfrom_file;
         }
     }
 
-#if 0
     /* Is it a symbol? */
     if (strstr(opts, "S_") == opts && parsesymbols(opts, PRIMARY)) {
         switch_symbols(TRUE);
         check_gold_symbol();
         return retval;
     }
-#endif
 
     /* out of valid options */
     config_error_add("Unknown option '%s'", opts);
@@ -5503,44 +5504,6 @@ boolean setinitial, setfromfile;
             tmpwin = create_nhwindow(NHW_MENU);
             start_menu(tmpwin);
             any = zeroany;
-#ifdef CURSES_GRAPHICS /* this ought to be handled within curses... */
-            /*
-             * Symbol sets are formatted in two columns, "name description",
-             * on selectable lines.  curses bases menu width on the length
-             * of non-selectable lines (main header, separators if present,
-             * with trailing spaces ignored) and defaults to half the map.
-             * Without something like this separator (shown after the menu
-             * title and a blank line which follows that) to force a wider
-             * menu, entries with long descriptions wrap.  That would be
-             * ok if wrapping operated on the same two columns, but the
-             * menu doesn't know anything about those and the description
-             * is wrapping into the next line's name column, making long
-             * descriptions--and menus containing them--hard to read.
-             */
-            if (WINDOWPORT("curses")) {
-                char tmp1[BUFSZ], tmp2[BUFSZ], bigbuf[BUFSZ + 1 + BUFSZ];
-
-                /* 4: room for space+letter+paren+space, fake selector;
-                   2: added to 'biggest' when constructing 'fmtstr';
-                   1: space between symset name+2 and symset description */
-                if (4 + biggest + 2 + 1 > (int) sizeof tmp1 - 1)
-                    biggest = (int) sizeof tmp1 - 1 - (4 + 2 + 1);
-                (void) memset((genericptr_t) tmp1, '-', biggest);
-                tmp1[biggest] = '\0';
-                if (big_desc > (int) sizeof tmp2 - 1)
-                    big_desc = (int) sizeof tmp2 - 1;
-                (void) memset((genericptr_t) tmp2, '-', big_desc);
-                tmp2[big_desc] = '\0';
-                Sprintf(bigbuf, "%4s", "");
-                Sprintf(eos(bigbuf), fmtstr, tmp1, tmp2);
-                bigbuf[BUFSZ - 1] = '\0';
-                any.a_int = 0;
-                add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE,
-                         bigbuf, MENU_UNSELECTED);
-            }
-#else
-            nhUse(big_desc);
-#endif
             any.a_int = 1; /* -1 + 2 [see 'if (sl->name) {' below]*/
             if (!symset_name)
                 defindx = any.a_int;
