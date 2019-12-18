@@ -89,6 +89,9 @@ sys_early_init()
     sysopt.seduce = 1; /* if it's compiled in, default to on */
     sysopt_seduce_set(sysopt.seduce);
     sysopt.accessibility = 0;
+#ifdef WIN32
+    sysopt.portable_device_paths = 0;
+#endif
     return;
 }
 
