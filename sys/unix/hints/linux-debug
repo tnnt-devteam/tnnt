@@ -19,25 +19,28 @@ VARDIR = $(HACKDIR)/var
 
 POSTINSTALL=cp -n sys/unix/sysconf $(INSTDIR)/sysconf; $(CHOWN) $(GAMEUID) $(INSTDIR)/sysconf; $(CHGRP) $(GAMEGRP) $(INSTDIR)/sysconf; chmod $(VARFILEPERM) $(INSTDIR)/sysconf;
 
-CFLAGS= -g -O0 -I../include -DNOTPARMDECL -DDLB
-CFLAGS+=-DGCC_WARN -Wall -Wextra -Wformat=2 # -Werror # warnings are Serious Business
-CFLAGS+=-Wno-format-overflow # unfortunately vanilla overflows formats all over the place
-CFLAGS+=-Wno-format-nonliteral # generated format strings are fairly common
-CFLAGS+=-Wno-stringop-truncation # vanilla often strncpy's to overwrite a part of a string, deliberately not copying terminating \0
-CFLAGS+=-Wno-missing-field-initializers # many places, especially in the cmd.c commands list
-CFLAGS+=-Wimplicit -Wreturn-type -Wunused -Wswitch -Wshadow -Wwrite-strings
+CFLAGS=-g -O0 -I../include -DNOTPARMDECL -fno-common
+CFLAGS+=-DDLB
 CFLAGS+=-DCOMPRESS=\"/bin/gzip\" -DCOMPRESS_EXTENSION=\".gz\"
+CFLAGS+=-DGCC_WARN -Wall -Wextra -Wformat=2 #-Werror
+CFLAGS+=-Wimplicit -Wreturn-type -Wunused -Wswitch -Wshadow -Wwrite-strings
+CFLAGS+=-Wno-format-nonliteral
+CFLAGS+=-Wno-stringop-truncation
+CFLAGS+=-Wno-missing-field-initializers
+CFLAGS+=-Wno-format-overflow
 CFLAGS+=-DSYSCF -DSYSCF_FILE=\"$(HACKDIR)/sysconf\" -DSECURE
 CFLAGS+=-DTIMED_DELAY
 CFLAGS+=-DHACKDIR=\"$(HACKDIR)\"
 CFLAGS+=-DVAR_PLAYGROUND=\"$(HACKDIR)/var\"
 CFLAGS+=-DCONFIG_ERROR_SECURE=FALSE
-CFLAGS+=-DEXTRA_SANITY_CHECKS
-#CFLAGS+=-DEDIT_GETLIN
-#CFLAGS+=-DSCORE_ON_BOTL
-#CFLAGS+=-DMSGHANDLER
-#CFLAGS+=-DTTY_TILES_ESCCODES
-#CFLAGS+=-DDLB
+CFLAGS+=-DCURSES_GRAPHICS
+CFLAGS+=-DPANICLOG_FMT2
+CFLAGS+=-DTTY_TILES_ESCCODES
+CFLAGS+=-DSCORE_ON_BOTL
+CFLAGS+=-DDGAMELAUNCH
+CFLAGS+=-DLIVELOG_ENABLE
+CFLAGS+=-DDUMPLOG
+CFLAGS+=-DDUMPHTML
 
 LINK=$(CC)
 # Only needed for GLIBC stack trace:
@@ -51,10 +54,10 @@ WINLIB = $(WINTTYLIB) $(WINCURSESLIB)
 WINSRC += tile.c
 WINOBJ += tile.o
 
-WINTTYLIB=-lcurses
+WINTTYLIB=-lcurses -ltinfo
 
-CHOWN=chown
-CHGRP=chgrp
+CHOWN=true
+CHGRP=true
 
 GAMEUID=games
 GAMEGRP=bin
