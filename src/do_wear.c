@@ -77,7 +77,8 @@ struct obj *otmp;
         if (otmp->otyp == TOWEL)
             Sprintf(how, " around your %s", body_part(HEAD));
         You("are now wearing %s%s.",
-            obj_is_pname(otmp) ? the(otmp_name) : an(otmp_name), how);
+            otmp->oartifact ? doname(otmp) : obj_is_pname(otmp)
+                                           ? the(otmp_name) : an(otmp_name), how);
     }
 }
 
