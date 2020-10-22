@@ -1031,6 +1031,10 @@ register struct monst *mtmp;
                 { "discusses the merits of HTML dumplogs.", 0},
                 { "Denial is a valid bug resolution technique.", 1},
                 { "UnNetHack5 > NetHack4. Just ask any sorting algorithm.", 1},
+                { "I hate secret doors.", 1},
+                { "The Gods are not deaf and can get annoyed by constant mortal lamentations.", 1},
+                { "You can lead players to variants but you can't make them play.", 1},
+                { "Denial is a valid bug resolution technique.", 1},
             };
             const struct devteam_msg paxedmsgs[] = {
                 { "asks you if you've seen dtype.", 0},
