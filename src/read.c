@@ -1431,6 +1431,8 @@ struct obj *sobj; /* scroll, or fake spellbook object for scroll-like spell */
                 uwep->oerodeproof = 1;
                 costly_alteration(uwep, COST_DEGRD);
             }
+            if (new_erodeproof)
+                tnnt_achieve(A_ERODEPROOFED_ITEM);
             uwep->oerodeproof = new_erodeproof ? 1 : 0;
             break;
         }
@@ -2232,7 +2234,7 @@ do_class_genocide()
                 }
             }
         }
-        if (num_genocides() >= 20) 
+        if (num_genocides() >= 20)
             tnnt_achieve(A_GENOCIDED_20_SPECIES);
         if (gameover || u.uhp == -1) {
             killer.format = KILLED_BY_AN;

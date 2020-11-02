@@ -209,8 +209,10 @@ struct monst *bugler; /* monster that played instrument */
                 && (mtmp->mstrategy & STRAT_WAITMASK) != 0)
                 mtmp->mstrategy &= ~STRAT_WAITMASK;
             else if (distm < distance / 3
-                     && !resist(mtmp, TOOL_CLASS, 0, NOTELL))
+                     && !resist(mtmp, TOOL_CLASS, 0, NOTELL)) {
                 monflee(mtmp, 0, FALSE, TRUE);
+                tnnt_achieve(A_SCARED_WITH_MUSIC);
+            }
         }
     }
 }
