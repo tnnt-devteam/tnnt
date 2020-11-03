@@ -1370,9 +1370,14 @@ boolean at_stairs, falling, portal;
     u.ustuck = 0; /* idem */
     u.uinwater = 0;
     u.uundetected = 0; /* not hidden, even if means are available */
-    /* TNNT: pets/followers can't use the portal to the arena */
+    /* TNNT: pets/steeds/followers can't use the portal to the arena */
+    if (Is_deathmatch_level(&u.uz) || on_level(newlevel, &deathmatch_level)) {
+        u.usteed = 0;
+        u.ugallop = 0L;
+    }
     if (!(Is_deathmatch_level(&u.uz) || on_level(newlevel, &deathmatch_level)))
         keepdogs(FALSE);
+    /* end TNNT */
     if (u.uswallow) /* idem */
         u.uswldtim = u.uswallow = 0;
     recalc_mapseen(); /* recalculate map overview before we leave the level */
