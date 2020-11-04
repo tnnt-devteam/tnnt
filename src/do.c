@@ -1371,12 +1371,14 @@ boolean at_stairs, falling, portal;
     u.uinwater = 0;
     u.uundetected = 0; /* not hidden, even if means are available */
     /* TNNT: pets/steeds/followers can't use the portal to the arena */
-    if (Is_deathmatch_level(&u.uz) || on_level(newlevel, &deathmatch_level)) {
-        u.usteed = 0;
+    if (!(Is_deathmatch_level(&u.uz) || on_level(newlevel, &deathmatch_level))) {
+        keepdogs(FALSE);
+    }
+    else if (u.usteed) {
+        pline("Your steed refuses to follow you!");
+        dismount_steed(DISMOUNT_GENERIC);
         u.ugallop = 0L;
     }
-    if (!(Is_deathmatch_level(&u.uz) || on_level(newlevel, &deathmatch_level)))
-        keepdogs(FALSE);
     /* end TNNT */
     if (u.uswallow) /* idem */
         u.uswldtim = u.uswallow = 0;
