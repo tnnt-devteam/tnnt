@@ -1915,7 +1915,8 @@ struct monst *mtmp, *victim;
     }
 
     if (is_starting_pet(mtmp) && mtmp->mtame
-        && (ptr == &mons[PM_LARGE_CAT] || ptr == &mons[PM_LARGE_DOG]))
+        && (ptr == &mons[PM_LARGE_CAT] || ptr == &mons[PM_LARGE_DOG]
+            || ptr == &mons[PM_WARHORSE]))
         tnnt_achieve(A_FULLY_RAISED_PET);
 
     /* sanity checks */
