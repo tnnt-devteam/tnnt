@@ -4212,14 +4212,22 @@ disarm_landmine(ttmp) /* Helge Hafting */
 struct trap *ttmp;
 {
     int fails = try_disarm(ttmp, FALSE);
+    boolean yours = ttmp->madeby_u;
 
     if (fails < 2)
         return fails;
     You("disarm %s land mine.", the_your[ttmp->madeby_u]);
     cnv_trap_obj(LAND_MINE, 1, ttmp, FALSE);
-    if (Is_knox(&u.uz) && !tnnt_globals.blew_up_ludios) {
+
+    /* Only check this when the hero is disarming a naturally-generated land
+     * mine. Otherwise it's a little too easy to have monsters roam around the
+     * treasure room indiscriminately blowing everything up (which deliberately
+     * doesn't set blew_up_ludios for fairness), then go set a different one and
+     * disarm it again. */
+    if (Is_knox(&u.uz) && !yours && !tnnt_globals.blew_up_ludios) {
         for (ttmp = ftrap; ttmp; ttmp = ttmp->ntrap) {
-            if (ttmp->ttyp == LAND_MINE)
+            /* Also don't check for player-created land mines here. */
+            if (ttmp->ttyp == LAND_MINE && !ttmp->madeby_u)
                 break;
         }
         if (!ttmp) {
