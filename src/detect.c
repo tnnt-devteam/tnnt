@@ -516,6 +516,8 @@ register struct obj *sobj;
             } else
                 strange_feeling(sobj, buf);
         }
+        if (u.uedibility)
+            tnnt_achieve(A_GOT_FOOD_APPRAISAL);
         return !stale;
     } else if (!ct) {
         known = TRUE;
