@@ -464,7 +464,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"How Much Wood?", "Kill or tame a woodchuck"},
   {"Storm the Gates of Heaven", "Kill an Archon"},
   {"Shifty", "Tame a shapeshifter in any way"},
-  {"Cat Lady", "Tame seven “f” in the course of one game"},
+  {"Cat Lady", "Tame seven \"f\" in the course of one game"},
   {"Collapse the Wavefunction", "Open the box containing Schroedinger's Cat"},
   {"I'm Free! I'm Free!", "Free a prisoner"},
   {"Pet Rescue", "Free a pet from a trap that you didn't create yourself"},
