@@ -5518,7 +5518,8 @@ dotnntstats(VOID_ARGS)
     Sprintf(buf, "You have found %d graffiti.", tnnt_globals.graffiti_found);
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have tamed %d feline(s).", tnnt_globals.felines_tamed);
+    Sprintf(buf, "You have tamed %d%s feline(s).", tnnt_globals.felines_tamed,
+            (tnnt_globals.felines_tamed >= MAX_TAMED_FELINES ? "+" : ""));
     putstr(en_win, 0, buf);
 
     Sprintf(buf, "You have changed gender %d time(s).",
