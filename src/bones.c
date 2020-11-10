@@ -133,6 +133,14 @@ boolean restore;
                 free_oname(otmp);
             }
 
+            /* TNNT: The Really Cool Shirt is only ever obtained from the
+             * devteam, and cannot be found in bones. (Otherwise, you can either
+             * get a duplicate of it, or the devteam quest fails to give you
+             * it upon completion, depending on how it'd be implemented.) */
+            if (otmp->oartifact == ART_REALLY_COOL_SHIRT) {
+                free_oname(otmp);
+            }
+
             if (otmp->otyp == SLIME_MOLD) {
                 goodfruit(otmp->spe);
 #ifdef MAIL
