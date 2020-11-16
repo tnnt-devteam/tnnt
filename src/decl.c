@@ -570,7 +570,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"The Deathly Hallows", "Wield a wand of death while wearing an invisibility cloak and amulet of life saving"},
   {"Indiana Jones", "Disarm a monster with a bullwhip"},
   {"Pilgrim", "Visit every type of aligned altar"},
-  {"Wanton Waste", "Break an identified, charged wand of wishing"},
+  {"Wanton Waste", "Break an identified wand of wishing with at least 1 charge"},
   {"Poseidon", "Kill a sea monster with a trident"},
   {"It's 4:20 Somewhere", "Stone a monster"},
   {"Orpheus", "Activate a drawbridge with the passtune"},
