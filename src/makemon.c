@@ -1225,6 +1225,10 @@ int mmflags;
     set_mon_data(mtmp, ptr); /* mtmp->data = ptr; */
     if (ptr->msound == MS_LEADER && quest_info(MS_LEADER) == mndx)
         quest_status.leader_m_id = mtmp->m_id;
+    /* TNNT: track deathmatch opponent's monster id */
+    if (Is_deathmatch_level(&u.uz) && in_mklev && is_mplayer(ptr)) {
+        tnnt_globals.deathmatch_m_id = mtmp->m_id;
+    }
     mtmp->mnum = mndx;
 
     /* set up level and hit points */
