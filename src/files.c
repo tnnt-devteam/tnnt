@@ -5171,8 +5171,8 @@ xchar x, y;
         mpickobj(npc, obj);
     }
     if (!which_armor(npc, W_ARMG)) {
-        if (npc->data != &mons[PM_WIZARD] || npc->data != &mons[PM_PRIEST]
-            || npc->data != &mons[PM_PRIESTESS] || npc->data != &mons[PM_HEALER])
+        if (npc->data != &mons[PM_WIZARD] && npc->data != &mons[PM_PRIEST]
+            && npc->data != &mons[PM_PRIESTESS] && npc->data != &mons[PM_HEALER])
             obj = rn2(4) ? mksobj(GAUNTLETS_OF_POWER, FALSE, FALSE)
                          : mksobj(LEATHER_GLOVES, FALSE, FALSE);
         else
