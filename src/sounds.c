@@ -117,7 +117,7 @@ struct obj* thrownscroll;
             /* make them actually find the first one... no message when none
              * have been found yet. */
             if (scrolls_remaining < NUM_MISSING_CODE_SCROLLS) {
-                verbalize("Paxed thinks that there might be a scroll on level %d...",
+                verbalize("Paxed thinks a scroll might have ended up on level %d...",
                         nextlevel);
             }
         }
