@@ -2250,6 +2250,7 @@ struct obj *otmp;
     /* this is highly unstable and relies on TRIPE_RATION being the
      * first defined food */
     tnnt_globals.foods_eaten |= 1L << (otmp->otyp - TRIPE_RATION);
+    tnnt_check_foodseaten();
 
     switch (otmp->otyp) {
     case SPRIG_OF_WOLFSBANE:
