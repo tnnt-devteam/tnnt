@@ -4814,8 +4814,8 @@ schar swapnum;
         /* playername will be appended to the end */
         /* no spaces - underscores will be converted */
         "a_token_from",
-        "altruistically_donated_by",
-        "bestowed_unto_you_through_the_boundless_generosity_of"
+        "kindly_donated_by",
+        "generously_bestowed_by"
     };
     char *filename = make_swapobj_filename(o);
     if (!filename) return FALSE;
