@@ -2151,13 +2151,25 @@ register struct monst *mtmp;
         struct obj* list = collect_all_transient(NULL);
         struct obj* next;
         if (list) {
-            if (Blind && !Deaf)
-                You("hear a rush of objects jumble together nearby.");
-            else if (Blind && Deaf)
-                You_feel("a jarring vibration nearby.");
-            else
-                You("see %s possessions coalesce into a large pile near you.",
-                    s_suffix(mon_nam(mtmp)));
+            /* first we tell the news to folks who can hear */
+            if (!Deaf) {
+                pline("A voice echoes in the arena:");
+                verbalize("Choose thy trophy from the spoils!");
+            }
+            if (list->nobj) { /* these messages don't make sense if there's only
+                                 1 item */
+                /* then we noisily pile the objects together */
+                if (cansee(mtmp->mx, mtmp->my))
+                    You("see %s possessions coalesce into a pile near you.",
+                        s_suffix(mon_nam(mtmp)));
+                /* then we describe that noisy pile if they couldn't see it */
+                else if (!Deaf)
+                    You("hear a pile of objects jumble together nearby.");
+                /* finally a vague sensation if traditional senses aren't
+                 * available */
+                else
+                    You_feel("a jarring vibration nearby.");
+            }
         }
         for (; list; list = next) {
             next = list->nobj;
