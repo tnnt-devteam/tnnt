@@ -1417,6 +1417,8 @@ dosacrifice()
                 pline_The("altar is stained with %s blood.", urace.adj);
                 levl[u.ux][u.uy].altarmask = AM_CHAOTIC;
                 angry_priest();
+                if (u.ualign.type == A_CHAOTIC)
+                    tnnt_achieve(A_CONVERTED_ALTAR);
             } else {
                 struct monst *dmon;
                 const char *demonless_msg;
