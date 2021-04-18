@@ -2050,6 +2050,7 @@ npc_awakens()
             verbalize("Thou art brave indeed, mortal! Now prove thy prowess!");
     }
     tnnt_globals.deathmatch_started = TRUE;
+    livelog_printf(LL_UMONST, "has entered the Arena");
 }
 
 /* moving onto different terrain;
