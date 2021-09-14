@@ -2043,11 +2043,12 @@ void
 npc_awakens()
 {
     if (!tnnt_globals.deathmatch_started) {
-        if (Deaf)
+        if (Deaf) {
             pline("The ground shakes a bit.");
-        else
+        } else {
             pline("A voice echoes in the arena:");
-            verbalize("Thou art brave indeed, mortal! Now prove thy prowess!");
+            verbalize("Thou art brave indeed, mortal!  Now prove thy prowess!");
+        }
     }
     tnnt_globals.deathmatch_started = TRUE;
     livelog_printf(LL_UMONST, "has entered the Arena");
