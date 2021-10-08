@@ -2151,6 +2151,9 @@ register struct monst *mtmp;
         struct obj* list = collect_all_transient(NULL);
         struct obj* next;
         if (list) {
+            /* TNNT TODO: post 3.7 merge, we should probably stick a string in
+             * quest.lua for these arena messages, so they can be printed as a
+             * single large block of text. */
             /* first we tell the news to folks who can hear */
             if (!Deaf) {
                 pline("A voice echoes in the arena:");
