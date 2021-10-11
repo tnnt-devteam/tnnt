@@ -1173,8 +1173,10 @@ dokick()
                                    MM_ANGRY))
                         made++;
                 }
-                if (made)
+                if (made) {
                     pline("You've attracted the tree's former occupants!");
+                    tnnt_achieve(A_GOT_BEES_FROM_TREE);
+                }
                 else
                     You("smell stale honey.");
                 maploc->looted |= TREE_SWARM;

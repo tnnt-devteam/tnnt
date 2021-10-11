@@ -1367,6 +1367,8 @@ int dieroll;
             tnnt_achieve(A_KILLED_WITH_TRIDENT);
         if (obj && is_pole(obj) && mdat == &mons[PM_FLOATING_EYE])
             tnnt_achieve(A_KILLED_EYE_POLEARM);
+        if (obj && obj->otyp == TOWEL && obj->spe)
+            tnnt_achieve(A_KILLED_WITH_TOWEL);
 
     } else if (u.umconf && hand_to_hand) {
         nohandglow(mon);

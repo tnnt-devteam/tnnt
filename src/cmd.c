@@ -5526,6 +5526,24 @@ dotnntstats(VOID_ARGS)
             tnnt_globals.genderflips);
     putstr(en_win, 0, buf);
 
+    Sprintf(buf, "You have eaten %d artifacts.", tnnt_globals.artis_eaten);
+    putstr(en_win, 0, buf);
+
+    Sprintf(buf, "You have been sent back %d levels by the mysterious force.",
+            tnnt_globals.mysterious_forced_back);
+    putstr(en_win, 0, buf);
+
+    Sprintf(buf, "You have had a door resist %d consecutive times.",
+            tnnt_globals.consecutive_door_resists);
+    putstr(en_win, 0, buf);
+
+    for (i = 0; i < TNNT_LITROOM_GOAL; ++i) {
+        if (tnnt_globals.dark_rooms_lit[i].ledgerno == 0)
+            break;
+    }
+    Sprintf(buf, "You have lit up %d dark rooms in Dungeons levels.", i);
+    putstr(en_win, 0, buf);
+
 #define print_visited(altars)    \
     if ((altars) == 0)           \
         Strcat(buf, " none");    \
@@ -5585,6 +5603,27 @@ dotnntstats(VOID_ARGS)
         Strcat(buf, " cookie");
     putstr(en_win, 0, buf);
 
+    Strcpy(buf, "Traps #untrapped:");
+    if (tnnt_globals.untrapped_types == 0)
+        Strcat(buf, " none");
+    if (tnnt_globals.untrapped_types & TNNT_UNTRAP_ARROW)
+        Strcat(buf, " arrow");
+    if (tnnt_globals.untrapped_types & TNNT_UNTRAP_DART)
+        Strcat(buf, " dart");
+    if (tnnt_globals.untrapped_types & TNNT_UNTRAP_BOARD)
+        Strcat(buf, " squeaky board");
+    if (tnnt_globals.untrapped_types & TNNT_UNTRAP_BEARTRAP)
+        Strcat(buf, " bear");
+    if (tnnt_globals.untrapped_types & TNNT_UNTRAP_LANDMINE)
+        Strcat(buf, " landmine");
+    if (tnnt_globals.untrapped_types & TNNT_UNTRAP_WEB)
+        Strcat(buf, " web");
+    if (tnnt_globals.untrapped_types & TNNT_UNTRAP_DOOR)
+        Strcat(buf, " door");
+    if (tnnt_globals.untrapped_types & TNNT_UNTRAP_CONT)
+        Strcat(buf, " box");
+    putstr(en_win, 0, buf);
+
     Sprintf(buf, "You have %sblown up a land mine in Fort Ludios.",
             tnnt_globals.blew_up_ludios ? "" : "not ");
     putstr(en_win, 0, buf);
@@ -5594,8 +5633,14 @@ dotnntstats(VOID_ARGS)
     putstr(en_win, 0, buf);
     Sprintf(buf, "You have killed %d/3 erinyes.", mvitals[PM_ERINYS].died);
     putstr(en_win, 0, buf);
-    Sprintf(buf, "You have killed the Wizard of Yendor %d times.", tnnt_globals.wizards_killed);
+    Sprintf(buf, "You have killed the Wizard of Yendor %d times.",
+            tnnt_globals.wizards_killed);
     putstr(en_win, 0, buf);
+    Sprintf(buf, "Home plane elementals killed: %d/4 %d/4 %d/4 %d/4",
+            tnnt_globals.elementals_killed_on_planes[0],
+            tnnt_globals.elementals_killed_on_planes[1],
+            tnnt_globals.elementals_killed_on_planes[2],
+            tnnt_globals.elementals_killed_on_planes[3]);
 
     char eaten[16] = DUMMY;
     char uneaten[16] = DUMMY;
@@ -5780,7 +5825,8 @@ dotnntspecies(VOID_ARGS)
 {
     int i, total = 0, numeligible = 0;
     char buf[BUFSZ];
-    char lets[27] = "                          "; /* 26 spaces */
+    char lowercaselets[27] = "                          "; /* 26 spaces */
+    char uppercaselets[27] = "        *                 "; /* same, no 'I' */
     en_win = create_nhwindow(NHW_MENU);
     putstr(en_win, ATR_BOLD, "Eligible species you have personally killed at least 1 member of:");
 
@@ -5796,14 +5842,20 @@ dotnntspecies(VOID_ARGS)
                  * as. S_ANT is 1, for instance. */
                 char mlet = mons[i].mlet - S_ANT + 'a';
                 if (mlet >= 'a' && mlet <= 'z') {
-                    lets[mlet - 'a'] = mlet;
+                    lowercaselets[mlet - 'a'] = mlet;
+                }
+                mlet = mons[i].mlet - S_ANGEL + 'A';
+                if (mlet >= 'A' && mlet <= 'Z') {
+                    uppercaselets[mlet - 'A'] = mlet;
                 }
             }
         }
     }
     Sprintf(buf, "%d/%d eligible species killed.", total, numeligible);
     putstr(en_win, 0, buf);
-    Sprintf(buf, "Lowercase-letter species killed: [%s]", lets);
+    Sprintf(buf, "Lowercase-letter species killed: [%s]", lowercaselets);
+    putstr(en_win, 0, buf);
+    Sprintf(buf, "Uppercase-letter species killed: [%s]", uppercaselets);
     putstr(en_win, 0, buf);
 
     display_nhwindow(en_win, TRUE);

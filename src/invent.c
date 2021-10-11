@@ -1114,6 +1114,8 @@ boolean maybe_unpaid; /* false if caller handles shop billing */
     obj->spe -= 1;
     if (obj->known)
         update_inventory();
+    if (obj->otyp == TINNING_KIT && obj->spe == 0)
+        tnnt_achieve(A_USED_UP_TINNING_KIT);
 }
 
 /*

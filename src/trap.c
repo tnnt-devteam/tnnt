@@ -38,6 +38,7 @@ STATIC_DCL void FDECL(join_adjacent_pits, (struct trap *));
 STATIC_DCL boolean FDECL(thitm, (int, struct monst *, struct obj *, int,
                                  BOOLEAN_P));
 STATIC_DCL void NDECL(maybe_finish_sokoban);
+STATIC_DCL void FDECL(tnnt_add_untrap, (unsigned int));
 
 /* mintrap() should take a flags argument, but for time being we use this */
 STATIC_VAR int force_mintrap = 0;
@@ -634,6 +635,10 @@ int *fail_reason;
                                : AS_NO_MON;
         return (struct monst *) 0;
     }
+
+    if ((statue->spe & STATUE_HISTORIC) && mptr == &mons[PM_KNIGHT]
+        && has_oname(statue) && !strcmp(ONAME(statue), "Perseus"))
+        tnnt_achieve(A_REVIVED_PERSEUS);
 
     /* a non-montraits() statue might specify gender */
     if (statue->spe & STATUE_MALE)
@@ -4198,9 +4203,11 @@ struct trap *ttmp;
         if (ttmp->ttyp == BEAR_TRAP) {
             You("disarm %s bear trap.", the_your[ttmp->madeby_u]);
             cnv_trap_obj(BEARTRAP, 1, ttmp, FALSE);
+            tnnt_add_untrap(TNNT_UNTRAP_BEARTRAP);
         } else /* if (ttmp->ttyp == WEB) */ {
             You("succeed in removing %s web.", the_your[ttmp->madeby_u]);
             deltrap(ttmp);
+            tnnt_add_untrap(TNNT_UNTRAP_WEB);
         }
     }
     newsym(u.ux + u.dx, u.uy + u.dy);
@@ -4218,6 +4225,7 @@ struct trap *ttmp;
         return fails;
     You("disarm %s land mine.", the_your[ttmp->madeby_u]);
     cnv_trap_obj(LAND_MINE, 1, ttmp, FALSE);
+    tnnt_add_untrap(TNNT_UNTRAP_LANDMINE);
 
     /* Only check this when the hero is disarming a naturally-generated land
      * mine. Otherwise it's a little too easy to have monsters roam around the
@@ -4271,6 +4279,7 @@ struct trap *ttmp;
     }
     You("repair the squeaky board."); /* no madeby_u */
     deltrap(ttmp);
+    tnnt_add_untrap(TNNT_UNTRAP_BOARD);
     newsym(u.ux + u.dx, u.uy + u.dy);
     more_experienced(1, 5);
     newexplevel();
@@ -4289,6 +4298,7 @@ int otyp;
         return fails;
     You("disarm %s trap.", the_your[ttmp->madeby_u]);
     cnv_trap_obj(otyp, 50 - rnl(50), ttmp, FALSE);
+    tnnt_add_untrap(otyp == DART ? TNNT_UNTRAP_DART : TNNT_UNTRAP_ARROW);
     return 1;
 }
 
@@ -4578,6 +4588,7 @@ boolean force;
                             } else {
                                 You("disarm it!");
                                 otmp->otrapped = 0;
+                                tnnt_add_untrap(TNNT_UNTRAP_CONT);
                             }
                         } else
                             pline("That %s was not trapped.", xname(otmp));
@@ -4640,6 +4651,7 @@ boolean force;
             } else {
                 You("disarm it!");
                 levl[x][y].doormask &= ~D_TRAPPED;
+                tnnt_add_untrap(TNNT_UNTRAP_DOOR);
             }
         } else
             pline("This door was not trapped.");
@@ -4904,6 +4916,7 @@ boolean disarm;
 
             pline("%s!", Tobjnam(obj, "explode"));
             Sprintf(buf, "exploding %s", xname(obj));
+            tnnt_achieve(A_EXPLODED_LARGE_BOX);
 
             if (costly)
                 loss += stolen_value(obj, ox, oy, (boolean) shkp->mpeaceful,
@@ -5221,6 +5234,8 @@ int bodypart;
     if (bodypart)
         exercise(A_CON, FALSE);
     make_stunned((HStun & TIMEOUT) + (long) dmg, TRUE);
+    if (!strcmp(item, "tin"))
+        tnnt_achieve(A_BOOBY_TRAPPED_TIN);
 }
 
 /* Monster is hit by trap. */
@@ -5512,6 +5527,17 @@ maybe_finish_sokoban()
                (perhaps say "congratulations" in Japanese?) */
         }
     }
+}
+
+/* TNNT: player has just disarmed one of the types of traps. Add it and check to
+ * see if they earned the achievement. */
+STATIC_OVL void
+tnnt_add_untrap(mask)
+unsigned int mask; /* one of the TNNT_UNTRAP_* */
+{
+    tnnt_globals.untrapped_types |= mask;
+    if (tnnt_globals.untrapped_types & ALL_UNTRAPPABLE_TRAPTYPES)
+        tnnt_achieve(A_UNTRAPPED_ALL_TRAPS);
 }
 
 /*trap.c*/

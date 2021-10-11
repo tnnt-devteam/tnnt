@@ -1325,6 +1325,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
                 if (Hallucination && !flags.female)
                     pline("Good job Henry, but that wasn't Anne.");
                 otmp->dknown = TRUE;
+                tnnt_achieve(A_DECAPITATED_ENEMY);
                 return TRUE;
             } else {
                 if (!has_head(youmonst.data)) {

@@ -2509,7 +2509,8 @@ int mndx;
     /* Count the number of monster species that have had at least 1 monster
      * killed. */
     int i, ct = 0;
-    int32_t lowercase_killed = 0x0;
+    int32_t lowercase_killed = 0x0,
+            uppercase_killed = 0x0;
     boolean missedany = FALSE;
     for (i = LOW_PM; i < SPECIAL_PM; ++i) {
         /* Certain species don't count */
@@ -2532,7 +2533,16 @@ int mndx;
                 xchar offset = (mons[i].mlet - S_ANT);
                 lowercase_killed |= (1 << offset);
                 if (lowercase_killed == 0x03FFFFFF) /* low 26 bits */
-                    tnnt_achieve(A_KILLED_A_Z_SPECIES);
+                    tnnt_achieve(A_KILLED_A_Z_LOWERCASE);
+            }
+            /* A to Z achievement */
+            if (mons[i].mlet >= S_ANGEL && mons[i].mlet <= S_ZOMBIE) {
+                xchar offset = (mons[i].mlet - S_ANGEL);
+                uppercase_killed |= (1 << offset);
+                /* low 26 bits, EXCEPT the one for 'I' since that is not a
+                 * monster class. (Bit for 'I' is 1 << ('I'-'A') = 0x100) */
+                if (uppercase_killed == 0x03FFFEFF)
+                    tnnt_achieve(A_KILLED_A_Z_UPPERCASE);
             }
         }
         else {
@@ -2585,6 +2595,9 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
         tnnt_globals.wizards_killed++;
         if (tnnt_globals.wizards_killed >= 20)
             tnnt_achieve(A_KILLED_20_WIZARDS);
+        tnnt_globals.wizkills_this_action++;
+        if (tnnt_globals.wizkills_this_action >= 2)
+            tnnt_achieve(A_WIZ_DOUBLE_KILL);
     }
     switch (m_idx) {
     case PM_GHOST:
@@ -2611,6 +2624,24 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
     case PM_ERINYS:
         if (mvitals[PM_ERINYS].ukilled == 3)
             tnnt_achieve(A_KILLED_3_ERINYES);
+        break;
+    case PM_EARTH_ELEMENTAL:
+    case PM_AIR_ELEMENTAL:
+    case PM_FIRE_ELEMENTAL:
+    case PM_WATER_ELEMENTAL:
+        if (is_home_elemental(mtmp->data)) {
+            /* depth is -1 (earth) thru -4 (water); turn this into positive
+             * number starting at 0 */
+            int index = -depth(&u.uz) - 1;
+            const int thr = TNNT_ELEMENTAL_KILL_THRESHOLD;
+            tnnt_globals.elementals_killed_on_planes[index]++;
+            if (tnnt_globals.elementals_killed_on_planes[0] >= thr
+                && tnnt_globals.elementals_killed_on_planes[1] >= thr
+                && tnnt_globals.elementals_killed_on_planes[2] >= thr
+                && tnnt_globals.elementals_killed_on_planes[3] >= thr) {
+                tnnt_achieve(A_KILLED_4X4_ELEMENTALS);
+            }
+        }
         break;
     case PM_ASMODEUS:   tnnt_achieve(A_KILLED_ASMODEUS);   break;
     case PM_BAALZEBUB:  tnnt_achieve(A_KILLED_BAALZEBUB);  break;

@@ -2158,6 +2158,8 @@ find_ac()
         u.uac = uac;
         context.botl = 1;
     }
+    if (u.uac >= 30)
+        tnnt_achieve(A_GOT_30_AC);
 }
 
 void

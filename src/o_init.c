@@ -462,11 +462,27 @@ int otyp;
         lastobj = WAN_LIGHTNING;
         achvmt = A_IDENTIFIED_ALL_WANDS;
         break;
-    case GEM_CLASS:
-        firstobj = DILITHIUM_CRYSTAL;
-        lastobj = JADE;
-        achvmt = A_IDENTIFIED_ALL_GEMS;
+    case GEM_CLASS: {
+        if (otyp >= LUCKSTONE && otyp <= FLINT) {
+            firstobj = LUCKSTONE;
+            lastobj = FLINT;
+            achvmt = A_IDENTIFIED_ALL_STONES;
+        }
+        /* Ugh, this is a bad condition, it relies on glass coming after gems
+         * and before gray stones in objects[], but they don't get constants
+         * defined for them so there's no better way... */
+        else if (otyp > LAST_GEM && otyp < LUCKSTONE) {
+            firstobj = LAST_GEM + 1;
+            lastobj = LUCKSTONE - 1;
+            achvmt = A_IDENTIFIED_ALL_GLASS;
+        }
+        else {
+            firstobj = DILITHIUM_CRYSTAL;
+            lastobj = JADE;
+            achvmt = A_IDENTIFIED_ALL_GEMS;
+        }
         break;
+    }
     default:
         /* RANDOM_CLASS, CHAIN_CLASS, WEAPON_CLASS, ... */
         return;

@@ -116,6 +116,8 @@ int drinking;
         else
             pline("Water sprays all over you.");
     }
+    else
+        tnnt_achieve(A_WATER_GUSH_FORTH);
 }
 
 STATIC_PTR void

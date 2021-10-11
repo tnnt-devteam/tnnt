@@ -21,6 +21,7 @@ STATIC_PTR int NDECL(forcelock);
 STATIC_DCL const char *NDECL(lock_action);
 STATIC_DCL boolean FDECL(obstructed, (int, int, BOOLEAN_P));
 STATIC_DCL void FDECL(chest_shatter_msg, (struct obj *));
+STATIC_DCL void FDECL(tnnt_door_resists, (xchar, xchar));
 
 boolean
 picking_lock(x, y)
@@ -738,9 +739,12 @@ int x, y;
             door->doormask = D_ISOPEN;
         feel_newsym(cc.x, cc.y); /* the hero knows she opened it */
         unblock_point(cc.x, cc.y); /* vision: new see through there */
+        /* TNNT: opening a door resets this counter */
+        tnnt_globals.consecutive_door_resists = 0;
     } else {
         exercise(A_STR, TRUE);
         pline_The("door resists!");
+        tnnt_door_resists(cc.x, cc.y);
     }
 
     return 1;
@@ -868,9 +872,12 @@ doclose()
             door->doormask = D_CLOSED;
             feel_newsym(x, y); /* the hero knows she closed it */
             block_point(x, y); /* vision:  no longer see there */
+            /* TNNT: closing a door resets this counter */
+            tnnt_globals.consecutive_door_resists = 0;
         } else {
             exercise(A_STR, TRUE);
             pline_The("door resists!");
+            tnnt_door_resists(x, y);
         }
     }
 
@@ -1122,6 +1129,31 @@ struct obj *otmp;
         break;
     }
     pline("%s %s!", An(thing), disposition);
+}
+
+/* TNNT - a door at this point is resisting (either from opening or closing).
+ * Update accordingly and maybe award achievement. */
+STATIC_OVL void
+tnnt_door_resists(x, y)
+xchar x, y;
+{
+    /* The resists don't necessarily have to happen all at once (e.g. player can
+     * be having the door resist, walk away to fight a monster, and come back to
+     * resume trying the door), but getting a resist from another door will
+     * break the streak on the previous door */
+    if (tnnt_globals.door_attempt_ledger == ledger_no(&u.uz)
+        && tnnt_globals.door_attempt_x == x
+        && tnnt_globals.door_attempt_y == y) {
+        tnnt_globals.consecutive_door_resists++;
+        if (tnnt_globals.consecutive_door_resists >= TNNT_DOOR_RESIST_GOAL)
+            tnnt_achieve(A_DOOR_RESIST_8X);
+    }
+    else { /* new door */
+        tnnt_globals.door_attempt_ledger = ledger_no(&u.uz);
+        tnnt_globals.door_attempt_x = x;
+        tnnt_globals.door_attempt_y = y;
+        tnnt_globals.consecutive_door_resists = 1;
+    }
 }
 
 /*lock.c*/

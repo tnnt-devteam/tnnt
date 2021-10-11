@@ -2208,12 +2208,16 @@ int depthin;
     if ((Is_mbag(obj) || obj->otyp == WAN_CANCELLATION)
         && (rn2(1 << (depthin > 7 ? 7 : depthin)) <= depthin))
         return TRUE;
-    else if (Has_contents(obj)) {
-        struct obj *otmp;
+    else {
+        if (obj->otyp == BAG_OF_HOLDING)
+            tnnt_achieve(A_NESTED_BOH);
+        if (Has_contents(obj)) {
+            struct obj *otmp;
 
-        for (otmp = obj->cobj; otmp; otmp = otmp->nobj)
-            if (mbag_explodes(otmp, depthin + 1))
-                return TRUE;
+            for (otmp = obj->cobj; otmp; otmp = otmp->nobj)
+                if (mbag_explodes(otmp, depthin + 1))
+                    return TRUE;
+        }
     }
     return FALSE;
 }

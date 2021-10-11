@@ -925,6 +925,10 @@ struct monst *mtmp;
                 return 0;
             if (vismon)
                 pline("%s escapes the dungeon!", Monnam(mtmp));
+            if (mtmp->data->difficulty >= 5)
+                tnnt_achieve(A_MAKE_MON_ESCAPE);
+            if (is_dlord(mtmp->data) || is_dprince(mtmp->data))
+                tnnt_achieve(A_MAKE_DLORD_ESCAPE);
             mongone(mtmp);
             return 2;
         }

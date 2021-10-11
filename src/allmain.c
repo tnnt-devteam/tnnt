@@ -196,6 +196,28 @@ boolean resuming;
                     if (flags.time && !context.run)
                         iflags.time_botl = TRUE;
 
+                    /* TNNT: check watchmen in Minetown
+                     * Note that it's possible that the achievement doesn't
+                     * trigger for a turn after the last watchman is gone due to
+                     * them being able to fall down a hole or die to conflict on
+                     * their own, but putting it in movemon() might be a little
+                     * too intensive. */
+                    {
+                        s_level *slev = Is_special(&u.uz);
+                        if (slev && !strcmp(slev->proto, "minetn")
+                            && !tnnt_is_achieved(A_GOT_RID_OF_WATCH)) {
+                            boolean has_watch = FALSE;
+                            for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+                                if (mtmp->data == &mons[PM_WATCH_CAPTAIN]
+                                    || mtmp->data == &mons[PM_WATCHMAN]) {
+                                    has_watch = TRUE;
+                                    break;
+                                }
+                            }
+                            if (!has_watch)
+                                tnnt_achieve(A_GOT_RID_OF_WATCH);
+                        }
+                    }
 #ifdef EXTRAINFO_FN
                     if ((prev_dgl_extrainfo == 0) || (prev_dgl_extrainfo < (moves + 250))) {
                         prev_dgl_extrainfo = moves;
@@ -426,6 +448,8 @@ boolean resuming;
 #endif
 
         u.umoved = FALSE;
+        /* TNNT: reset number of wizards killed (by player) this action */
+        tnnt_globals.wizkills_this_action = 0;
 
         if (multi > 0) {
             lookaround();

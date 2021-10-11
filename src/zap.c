@@ -818,12 +818,16 @@ boolean by_hero;
         mtmp = montraits(corpse, &xy, FALSE);
         if (mtmp && mtmp->mtame && !mtmp->isminion)
             wary_dog(mtmp, TRUE);
+        if (mtmp && mtmp->mtame) /* test if still tame after wary_dog... */
+            tnnt_achieve(A_RESURRECTED_PET_TAME);
     } else {
         /* make a new monster */
         mtmp = makemon(mptr, x, y, NO_MINVENT | MM_NOWAIT | MM_NOCOUNTBIRTH);
     }
     if (!mtmp)
         return (struct monst *) 0;
+    if (mtmp->data == &mons[PM_WIZARD_OF_YENDOR] && !context.mon_moving)
+        tnnt_achieve(A_RESURRECTED_WIZARD);
 
     /* hiders shouldn't already be re-hidden when they revive */
     if (mtmp->mundetected) {

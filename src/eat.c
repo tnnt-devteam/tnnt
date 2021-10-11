@@ -1034,6 +1034,7 @@ int pm;
         /*FALLTHRU*/
     case PM_BAT:
         make_stunned((HStun & TIMEOUT) + 30L, FALSE);
+        tnnt_achieve(A_STUNNED_BAT_MEAT);
         break;
     case PM_GIANT_MIMIC:
         tmp += 10;
@@ -2202,6 +2203,13 @@ eatspecial()
         /* chewable vitamin for kids based on "The Flintstones" TV cartoon */
         pline("Yabba-dabba delicious!");
         exercise(A_CON, TRUE);
+    }
+
+    /* TNNT - eating non food stuff goes here */
+    if (otmp->oartifact) {
+        tnnt_globals.artis_eaten++;
+        if (tnnt_globals.artis_eaten >= 3)
+            tnnt_achieve(A_ATE_3_ARTIFACTS);
     }
 
     if (otmp == uwep && otmp->quan == 1L)

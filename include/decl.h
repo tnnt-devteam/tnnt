@@ -706,7 +706,7 @@ enum tnnt_achievements {
     A_KILLED_100_SPECIES,    /* Implemented. */
     A_KILLED_200_SPECIES,    /* Implemented. */
     A_KILLED_ALL_SPECIES,    /* Implemented. */
-    A_KILLED_A_Z_SPECIES,    /* Implemented, tested. */ /* #224 */
+    A_KILLED_A_Z_LOWERCASE,  /* Implemented, tested. */ /* #224 */
     A_ENGRAVED_WITH_ATHAME,  /* Implemented, tested. */
     A_ONE_HIT_KO,            /* Implemented, tested. */
     A_LEVELED_UP_FROM_SINK,  /* Implemented, tested. */
@@ -722,7 +722,44 @@ enum tnnt_achievements {
     A_DID_PURE_SOKOBAN,      /* Implemented, tested. */
     A_STETHOSCOPED_SDOOR,    /* Implemented, tested. */
     A_NPC_DEATHMATCH,        /* Implemented, tested. */
-    /* 239 achievements defined */
+    A_PLANES_VIA_QUAFFING,   /* Implemented, tested. */
+    A_WATER_GUSH_FORTH,      /* Implemented, tested. */
+    A_IDENTIFIED_ALL_STONES, /* Implemented, tested. */
+    A_IDENTIFIED_ALL_GLASS,  /* Implemented, tested. */
+    A_PURPLE_RAIN,           /* Implemented, tested. */
+    A_STUNNED_BAT_MEAT,      /* Implemented, tested. */
+    A_ATE_3_ARTIFACTS,       /* Implemented, tested. */
+    A_BOOBY_TRAPPED_TIN,     /* Implemented, tested. */
+    A_KILLED_4X4_ELEMENTALS, /* Implemented, tested. */
+    A_VISION_FROM_THRONE,    /* Implemented, tested. */
+    A_DECAPITATED_ENEMY,     /* Implemented, tested. */
+    A_EXPLODED_LARGE_BOX,    /* Implemented, tested. */
+    A_BOUGHT_UNID_GEM,       /* Implemented, tested. */
+    A_RESURRECTED_WIZARD,    /* Implemented, tested. */
+    A_PERMAKILLED_RIDER,     /* Implemented, tested. */
+    A_GIFT_ON_ASTRAL,        /* Implemented, tested. */
+    A_BRIBED_WITH_1,         /* Implemented, tested. */ /* #256 */
+    A_REVIVED_PERSEUS,       /* Implemented, tested. */ /* begin tnntachieve4 here */
+    A_LIT_20_ROOMS,          /* Implemented, tested. */
+    A_KILLED_A_Z_UPPERCASE,  /* Implemented, tested. */
+    A_MFORCE_15_LEVELS,      /* Implemented, tested. */
+    A_PET_THROUGH_PLANES,    /* Implemented, tested. */
+    A_KILLED_WITH_TOWEL,     /* Implemented, tested. */
+    A_GOT_RID_OF_WATCH,      /* Implemented, tested. */
+    A_NESTED_BOH,            /* Implemented, tested. */
+    A_UNTRAPPED_ALL_TRAPS,   /* Implemented, tested. */
+    A_MAKE_MON_ESCAPE,       /* Implemented, tested. */
+    A_MAKE_DLORD_ESCAPE,     /* Implemented, tested. */
+    A_WIZ_DOUBLE_KILL,       /* Implemented, tested. */
+    A_MJOLLNIR_THROW_KILL,   /* Implemented, tested. */
+    A_RESURRECTED_PET_TAME,  /* Implemented, tested. */
+    A_GOT_30_AC,             /* Implemented, tested. */
+    A_GOT_BEES_FROM_TREE,    /* Implemented, tested. */
+    A_MVM_PROJECTILE_KILL,   /* Implemented, tested. */
+    A_DOOR_RESIST_8X,        /* Implemented, tested. */
+    A_USED_UP_TINNING_KIT,   /* Implemented, tested. */
+    A_TINNED_UNIQUE_MON,     /* Implemented, tested. */
+    /* 276 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more
@@ -760,7 +797,7 @@ struct tnnt_globals_t {
      * track whether or not you have achieved something.
      * Since there are more than 64 achievements, we need multiple 64 bit ints.
      */
-    uint64_t tnnt_achievements[4];
+    uint64_t tnnt_achievements[5];
 
     /* Various achievement counters */
     unsigned char graffiti_found;
@@ -830,6 +867,46 @@ struct tnnt_globals_t {
      * 0x2 = 1 << 1 = the 1th object class, and so on. */
 #define ALL_EDIBLE_OCLASSES 0x19EFC
     uint32_t objclasses_eaten;
+    unsigned int astral_worm_gulps;
+    unsigned short artis_eaten;
+    /* amount of each elemental needed to kill on home plane for achievement */
+#define TNNT_ELEMENTAL_KILL_THRESHOLD 4
+    /* ordered by plane: earth, air, fire, water */
+    unsigned short elementals_killed_on_planes[4];
+#define TNNT_LITROOM_GOAL 20
+    /* 20 entries of ledger_no and roomno */
+    struct {
+        unsigned short ledgerno;
+        unsigned short roomno;
+    } dark_rooms_lit[TNNT_LITROOM_GOAL];
+#define TNNT_MFORCE_GOAL 15
+    unsigned short mysterious_forced_back;
+    unsigned short num_planes_pets;
+    unsigned int* planes_pet_m_ids; /* dynamically allocated entering Earth */
+    /* #untrap-able trap types: arrow, dart, squeaky board, bear, landmine, web.
+     * Also door and container traps.
+     * There are ways to get rid of others but these are the only ones you can
+     * actually use #untrap to get rid of. Helping a monster out of a trap is
+     * not the point of this achievement, either, so doing that on pits and such
+     * don't count. */
+#define TNNT_UNTRAP_ARROW    0x0001
+#define TNNT_UNTRAP_DART     0x0002
+#define TNNT_UNTRAP_BOARD    0x0004
+#define TNNT_UNTRAP_BEARTRAP 0x0008
+#define TNNT_UNTRAP_LANDMINE 0x0010
+#define TNNT_UNTRAP_WEB      0x0020
+#define TNNT_UNTRAP_DOOR     0x0040
+#define TNNT_UNTRAP_CONT     0x0080
+#define ALL_UNTRAPPABLE_TRAPTYPES 0x00FF
+    uint16_t untrapped_types;
+    unsigned char wizkills_this_action;
+    /* mthrowu.c tracks an 'archer' variable, but for some reason only for a
+     * monster deliberately shooting at another monster. This does the same for
+     * monster shooting at the player, for the "friendly fire" achievement. */
+    struct monst *psuedo_archer;
+#define TNNT_DOOR_RESIST_GOAL 8
+    unsigned char consecutive_door_resists;
+    xchar door_attempt_x, door_attempt_y, door_attempt_ledger;
 
     /* tnnt devs: add more as needed */
 };

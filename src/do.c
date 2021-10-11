@@ -1316,6 +1316,12 @@ boolean at_stairs, falling, portal;
             }
             if (diff == 0)
                 assign_level(newlevel, &u.uz);
+            else {
+                tnnt_globals.mysterious_forced_back +=
+                    (newlevel->dlevel - u.uz.dlevel);
+                if (tnnt_globals.mysterious_forced_back >= TNNT_MFORCE_GOAL)
+                    tnnt_achieve(A_MFORCE_15_LEVELS);
+            }
 
             new_ledger = ledger_no(newlevel);
 
@@ -1378,6 +1384,45 @@ boolean at_stairs, falling, portal;
         pline("Your steed refuses to follow you!");
         dismount_steed(DISMOUNT_GENERIC);
         u.ugallop = 0L;
+    }
+    /* more TNNT: check mydogs list when entering Earth/Astral for pets that
+     * entered Earth entering Astral */
+    if (Is_earthlevel(newlevel)) {
+        int i = 0;
+        tnnt_globals.num_planes_pets = 0;
+        /* count number of pets being brought */
+        for (mtmp = mydogs; mtmp; mtmp = mtmp->nmon) {
+            tnnt_globals.num_planes_pets++;
+        }
+        tnnt_globals.planes_pet_m_ids = (unsigned int *)
+            alloc(tnnt_globals.num_planes_pets * sizeof(unsigned int));
+        for (mtmp = mydogs; mtmp; mtmp = mtmp->nmon) {
+            tnnt_globals.planes_pet_m_ids[i] = mtmp->m_id;
+            i++;
+        }
+    }
+    if (Is_astralevel(newlevel)) {
+        int i;
+        for (i = 0; i < tnnt_globals.num_planes_pets; ++i) {
+            if (find_mid(tnnt_globals.planes_pet_m_ids[i],
+                         FM_MYDOGS | FM_MIGRATE)) {
+                /* Assumption: if the pet entered with you into Earth (i.e. is
+                 * in planes_pet_m_ids) and is on the migrating monster list at
+                 * the time you enter the portal to Astral, it must also be
+                 * migrating to Astral; we don't need to check this manually.
+                 * This is because there is no way for the player or monsters to
+                 * move backwards through the Planes; all monster migrations
+                 * must be strictly to the next plane and happen before the
+                 * player reaches the portal. */
+                tnnt_achieve(A_PET_THROUGH_PLANES);
+                break;
+            }
+        }
+        /* This is technically a memory leak if the player dies on the Planes
+         * before getting to astral, but the game will be ending anyway so it's
+         * not that important. */
+        free((genericptr_t) tnnt_globals.planes_pet_m_ids);
+        tnnt_globals.planes_pet_m_ids = (unsigned int *) 0;
     }
     /* end TNNT */
     if (u.uswallow) /* idem */
@@ -1927,8 +1972,11 @@ long timeout UNUSED;
                 if (!rn2(3))
                     break;
         } else { /* rot this corpse away */
-            if (!is_rider(mptr))
-                /* must be troll */
+            if (is_rider(mptr))
+                tnnt_achieve(A_PERMAKILLED_RIDER);
+            else
+                /* must be troll, TNNT TODO: in 3.7 this will NOT be the case
+                 * since zombies can revive */
                 tnnt_achieve(A_BLOCKED_TROLL_REVIVAL);
             You_feel("%sless hassled.", is_rider(mptr) ? "much " : "");
             action = ROT_CORPSE;

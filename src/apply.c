@@ -1895,6 +1895,8 @@ struct obj *obj;
 
         if (mons[corpse->corpsenm].mlet == S_TROLL)
             tnnt_achieve(A_BLOCKED_TROLL_REVIVAL);
+        if (unique_corpstat(&mons[corpse->corpsenm]))
+            tnnt_achieve(A_TINNED_UNIQUE_MON);
 
         can->corpsenm = corpse->corpsenm;
         can->cursed = obj->cursed;

@@ -1103,6 +1103,8 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
             impaired = (Confusion || Stunned || Blind
                         || Hallucination || Fumbling),
             tethered_weapon = (obj->otyp == AKLYS && (wep_mask & W_WEP) != 0);
+    /* TNNT: throwing Mjollnir for a kill */
+    int prethrow_census;
 
     notonhead = FALSE; /* reset potentially stale value */
     if ((obj->cursed || obj->greased) && (u.dx || u.dy) && !rn2(7)) {
@@ -1149,6 +1151,9 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
                                                     : (genericptr_t) 0;
     /* NOTE:  No early returns after this point or returning_missile
        will be left with a stale pointer. */
+    /* TNNT: track throwing Mjollnir for a kill */
+    if (iflags.returning_missile && obj->oartifact == ART_MJOLLNIR)
+        prethrow_census = monster_census(FALSE);
 
     if (u.uswallow) {
         if (obj == uball) {
@@ -1437,6 +1442,11 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
     }
 
  throwit_return:
+    /* TNNT: check if Mjollnir was thrown, that it returned successfully and
+     * there are now fewer monsters on the level */
+    if (iflags.returning_missile && obj && obj->oartifact == ART_MJOLLNIR
+        && obj == uwep && prethrow_census > monster_census(FALSE))
+        tnnt_achieve(A_MJOLLNIR_THROW_KILL);
     iflags.returning_missile = (genericptr_t) 0;
     if (clear_thrownobj)
         thrownobj = (struct obj *) 0;

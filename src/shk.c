@@ -1669,6 +1669,9 @@ boolean itemize;
                   consumed ? "paid for %s at a cost of %ld gold piece%s.%s"
                            : "bought %s for %ld gold piece%s.%s",
                   ltmp, "");
+    if (obj->oclass == GEM_CLASS && obj->otyp != ROCK && !is_graystone(obj)
+        && !objects[obj->otyp].oc_name_known)
+        tnnt_achieve(A_BOUGHT_UNID_GEM);
     obj->quan = save_quan; /* restore original count */
     /* quan => amount just bought, save_quan => remaining unpaid count */
     if (consumed) {

@@ -922,6 +922,11 @@ register struct attack *mattk;
         if (flags.verbose && !Deaf)
             verbalize("Burrrrp!");
         tmp = mdef->mhp;
+        if (Is_astralevel(&u.uz) && magr->data == &mons[PM_PURPLE_WORM]) {
+            tnnt_globals.astral_worm_gulps++;
+            if (tnnt_globals.astral_worm_gulps >= 20)
+                tnnt_achieve(A_PURPLE_RAIN);
+        }
         /* Use up amulet of life saving */
         if (!!(obj = mlifesaver(mdef)))
             m_useup(mdef, obj);

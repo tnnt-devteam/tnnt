@@ -1792,6 +1792,8 @@ dosacrifice()
                     u.ublesscnt = rnz(300 + (50 * nartifacts));
                     exercise(A_WIS, TRUE);
                     tnnt_achieve(A_GRANTED_ARTI);
+                    if (Is_astralevel(&u.uz))
+                        tnnt_achieve(A_GIFT_ON_ASTRAL);
                     livelog_printf (LL_DIVINEGIFT|LL_ARTIFACT,
                             "had %s bestowed upon %s by %s",
                             artiname(otmp->oartifact),

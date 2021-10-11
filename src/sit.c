@@ -250,6 +250,7 @@ dosit()
                     HSee_invisible |= FROMOUTSIDE;
                     newsym(u.ux, u.uy);
                 }
+                tnnt_achieve(A_VISION_FROM_THRONE);
                 break;
             case 11:
                 if (Luck < 0) {

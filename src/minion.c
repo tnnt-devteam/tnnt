@@ -312,22 +312,22 @@ register struct monst *mtmp;
                   Amonnam(mtmp));
             livelog_printf(LL_UMONST, "bribed %s with %ld %s for safe passage",
                   Amonnam(mtmp), offer, currency(offer));
-            if (offer >= 25000)
-                tnnt_achieve(A_BRIBED_DEMON_LORD);
         } else if (offer > 0L
                    && (long) rnd(5 * ACURR(A_CHA)) > (demand - offer)) {
             pline("%s scowls at you menacingly, then vanishes.",
                   Amonnam(mtmp));
             livelog_printf(LL_UMONST, "bribed %s with %ld %s for safe passage",
                   Amonnam(mtmp), offer, currency(offer));
-            if (offer >= 25000)
-                tnnt_achieve(A_BRIBED_DEMON_LORD);
         } else {
             pline("%s gets angry...", Amonnam(mtmp));
             mtmp->mpeaceful = 0;
             set_malign(mtmp);
             return 0;
         }
+        if (offer >= 25000)
+            tnnt_achieve(A_BRIBED_DEMON_LORD);
+        else if (offer == 1)
+            tnnt_achieve(A_BRIBED_WITH_1);
     }
     mongone(mtmp);
     return 1;

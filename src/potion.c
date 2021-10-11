@@ -984,6 +984,7 @@ register struct obj *otmp;
                 if (ledger_no(&u.uz) == 1) {
                     You(riseup, ceiling(u.ux, u.uy));
                     goto_level(&earth_level, FALSE, FALSE, FALSE);
+                    tnnt_achieve(A_PLANES_VIA_QUAFFING);
                 } else {
                     register int newlev = depth(&u.uz) - 1;
                     d_level newlevel;
@@ -1066,6 +1067,8 @@ register struct obj *otmp;
                     || (sstairs.up && u.ux == sstairs.sx && u.uy == sstairs.sy)
                     || (xupladder && u.ux == xupladder && u.uy == yupladder)) {
                 (void) doup();
+                if (on_level(&u.uz, &earth_level))
+                    tnnt_achieve(A_PLANES_VIA_QUAFFING);
                 /* in case we're already Levitating, which would have
                    resulted in incrementing 'nothing' */
                 nothing = 0; /* not nothing after all */

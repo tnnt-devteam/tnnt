@@ -433,6 +433,11 @@ boolean verbose;    /* give message(s) even when you can't see what happened */
                     xkilled(mtmp, XKILL_NOMSG);
                 else
                     mondied(mtmp);
+                if (((archer && !archer->mpeaceful)
+                     || (tnnt_globals.psuedo_archer
+                         && !tnnt_globals.psuedo_archer->mpeaceful))
+                    && !mtmp->mpeaceful)
+                    tnnt_achieve(A_MVM_PROJECTILE_KILL);
             }
         }
 
@@ -947,7 +952,9 @@ struct monst *mtmp;
         return;
 
     mwep = MON_WEP(mtmp); /* wielded weapon */
+    tnnt_globals.psuedo_archer = mtmp;
     monshoot(mtmp, otmp, mwep); /* multishot shooting or throwing */
+    tnnt_globals.psuedo_archer = (struct monst *) 0;
     nomul(0);
 }
 
