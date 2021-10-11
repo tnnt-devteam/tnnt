@@ -483,282 +483,282 @@ struct early_opt {
  * enum. Makes it harder to verify we have as many achievements as we think :>
  */
 enum tnnt_achievements {
-    A_FOUND_MINES_ALTAR = 0, /* Implemented,tested. */ /* begin tnntachieve0 */
-    A_CONSULTED_ORACLE,      /* Implemented,tested. */
-    A_STARTED_QUEST,         /* Implemented,tested. */
-    A_LEARNED_PASSTUNE,      /* Implemented,tested. */
-    A_BOUGHT_PROTECTION,     /* Implemented,tested. */
-    A_CURED_STONING,         /* Implemented,tested. */
-    A_CURED_SLIMING,         /* Implemented,tested. */
-    A_SURVIVED_DROWNING,     /* Implemented,tested. */
-    A_CURED_LYCANTHROPY,     /* Implemented,tested. */
-    A_CURED_ILLNESS,         /* Implemented,tested. */
-    A_USED_THRONE,           /* Implemented,tested. */
-    A_DROPPED_RING_IN_SINK,  /* Implemented,tested. */
-    A_KILLED_9_NAZGUL,       /* Implemented,tested. */
-    A_KILLED_3_ERINYES,      /* Implemented,tested. */
-    A_CONVERTED_ALTAR,       /* Implemented,tested. */
-    A_CHATTED_IZCHAK,        /* Implemented,tested. */
-    A_KICKED_FRUIT_TREE,     /* Implemented,tested. */
-    A_PURCHASED,             /* Implemented,tested. */
-    A_ROBBED,                /* Implemented,tested. */
-    A_UNCURSED_IN_FOUNTAIN,  /* Implemented,tested. */
-    A_LEARNED_LV5_SPELL,     /* Implemented,tested. */
-    A_TAMED_BY_FOOD,         /* Implemented,tested. */
-    A_TAMED_NOT_BY_FOOD,     /* Implemented,tested. */
-    A_CROWNED,               /* Implemented,tested. */
-    A_GRANTED_ARTI,          /* Implemented,tested. */
-    A_GOT_EXCALIBUR,         /* Implemented,tested. */
-    A_CREATED_DSM,           /* Implemented,tested. */
-    A_ROBBED_BY_NYMPH,       /* Implemented,tested. */
-    A_ROBBED_BY_LEPRECHAUN,  /* Implemented,tested. */
-    A_ENCOUNTERED_FOOCUBUS,  /* Implemented,tested. */
-    A_TRAPPED_MONSTER,       /* Implemented,tested. */
-    A_AVENGED_ORCTOWN,       /* Implemented,tested. */ /* #32 */
-    A_CLEARED_BIGROOM,       /* Implemented,tested. */
-    A_GOT_UNPUNISHED,        /* Implemented,tested. */
-    A_FELL_ONTO_SINK,        /* Implemented,tested. */
-    A_USED_TOUCHSTONE,       /* Implemented,tested. */
-    A_WROTE_SCROLL,          /* Implemented. */
-    A_WROTE_SPELLBOOK,       /* Implemented. */
-    A_RODE_DRAGON,           /* Implemented. */
-    A_LAID_EGG,              /* Implemented. */
-    A_ERODEPROOFED_ITEM,     /* Implemented. */
-    A_THREW_UNICORN_GEM,     /* Implemented. */
-    A_BLOCKED_TROLL_REVIVAL, /* Implemented. */
-    A_KILLED_GHOST,          /* Implemented. */
-    A_REVIVIFIED_CORPSE,     /* Implemented. */
-    A_DESTROYED_VIA_TURN,    /* Implemented. */
-    A_ATE_MILITARY_RATION,   /* Implemented. */
-    A_BLEW_UP_DRAWBRIDGE,    /* Implemented. */
-    A_GOT_LIFESAVED,         /* Implemented. */
-    A_USED_CORRECT_BANE,     /* Implemented. */
-    A_DUG_UP_GRAVE,          /* Implemented. */
-    A_KILLED_MOLOCH_PRIEST,  /* Implemented. */
-    A_CAUSED_EARTHQUAKE,     /* Implemented. */
-    A_CHARMED_SNAKE,         /* Implemented. */
-    A_KILLED_DRAGON,         /* Implemented. */
-    A_EVADED_BRAINSUCK,      /* Implemented. */
-    A_HIT_WITH_BOOMERANG,    /* Implemented. */
-    A_DEALT_SILVER_DAMAGE,   /* Implemented. */
-    A_MADE_CRYSKNIFE,        /* Implemented. */
-    A_KILLED_WITH_HOSE,      /* Implemented. */
-    A_WIZ_WORE_CORNUTHAUM,   /* Implemented. */
-    A_WORE_MITHRIL_COAT,     /* Implemented. */
-    A_FOUND_3_GRAFFITI,      /* Implemented. */
-    A_SPLIT_A_PUDDING,       /* Implemented,tested. */ /* #64 */
-    A_WORE_MEAT_RING,        /* Implemented,tested. */ /* begin tnntachieve1 here */
-    A_LOOTED_ICE_BOX,        /* Implemented,tested. */
-    A_ANIMATED_FIGURINE,     /* Implemented,tested. */
-    A_NERD,                  /* Implemented,tested. */
-    A_CHARGED_AN_OBJECT,     /* Implemented,tested. */
-    A_KICKED_EMBEDDED_ITEM,  /* Implemented,tested. */
-    A_SNAGGED_WITH_HOOK,     /* Implemented,tested. */
-    A_REFILLED_CANDELABRUM,  /* Implemented,tested. */
-    A_ATE_ALL_PRODUCE,       /* Implemented,tested. */
-    A_ATE_ALL_FOODS,         /* Implemented,tested. */
-    A_REFILLED_OIL_LAMP,     /* Implemented,tested. */
-    A_LIT_OIL_POTION,        /* Implemented,tested. */
-    A_LIT_UP_GREMLIN,        /* Implemented,tested. */
-    A_ALCHEMIZED,            /* Implemented,tested. */
-    A_GASSED_MONSTER,        /* Implemented,tested. */
-    A_READ_NOVEL,            /* Implemented,tested. */
-    A_TALKED_TO_DEATH,       /* Implemented,tested. */
-    A_IDENTIFIED_ALL_GEMS,   /* Implemented,tested. */
-    A_GOT_SPBOOK_FROM_STATUE,/* Implemented,tested. */
-    A_SUMMONED_NYMPH,        /* Implemented,tested. */
-    A_FULLY_RAISED_PET,      /* Implemented,tested. */
-    A_GOT_OBJECT_UNDERWATER, /* Implemented,tested. */
-    A_RODE_WUMPUS_OVER_WATER,/* Implemented,tested. */
-    A_KILLED_TAMED_WOODCHUCK,/* Implemented,tested. */
-    A_KILLED_ARCHON,         /* Implemented,tested. */
-    A_TAMED_SHAPECHANGER,    /* Implemented,tested. */
-    A_TAMED_7_CATS,          /* Implemented,tested. */
-    A_OPENED_SCHROEDINGERS,  /* Implemented,tested. */
-    A_FREED_PRISONER,        /* Implemented,tested. */
-    A_UNTRAPPED_PET,         /* Implemented,tested. */
-    A_READ_MAIL,             /* Implemented,tested. */
-    A_ATE_ROYAL_JELLY,       /* Implemented,tested. */ /* #96 */
-    A_GOT_CORPSE_INTRINSIC,  /* Implemented,tested. */
-    A_BANKRUPTED_SHOPKEEPER, /* Implemented,tested. */
-    A_POLYED_PET_ON_TRAP,    /* Implemented,tested. */
-    A_CHANGED_GENDER,        /* Implemented,tested. */
-    A_HATCHED_FOREIGN_EGG,   /* Implemented,tested. */
-    A_HEALED_BY_NURSE,       /* Implemented,tested. */
-    A_KILLED_WHILE_IN_PIT,   /* Implemented,tested. */
-    A_KILLED_INVISIBLE,      /* Implemented,tested. */
-    A_FELL_DOWN_SHAFT,       /* Implemented,tested. */
-    A_GOT_TWO_BITS,          /* Implemented,tested. */
-    A_EXTINCTED_ARMY_OR_KOPS,/* Implemented,tested. */
-    A_DEFLECTED_NYMPH,       /* Implemented,tested. */
-    A_BRIBED_DEMON_LORD,     /* Implemented,tested. */
-    A_ENTERED_VAULT,         /* Implemented,tested. */
-    A_ENTERED_ZOO,           /* Implemented,tested. */
-    A_ENTERED_THRONE_ROOM,   /* Implemented,tested. */
-    A_ENTERED_LEP_HALL,      /* Implemented,tested. */
-    A_ENTERED_BEEHIVE,       /* Implemented,tested. */
-    A_ENTERED_GRAVEYARD,     /* Implemented,tested. */
-    A_ENTERED_ANTHOLE,       /* Implemented,tested. */
-    A_ENTERED_BARRACKS,      /* Implemented,tested. */
-    A_ENTERED_SWAMP,         /* Implemented,tested. */
-    A_ENTERED_COCKNEST,      /* Implemented,tested. */
-    A_KILLED_ASMODEUS,       /* Implemented,tested. */
-    A_KILLED_BAALZEBUB,      /* Implemented,tested. */
-    A_KILLED_ORCUS,          /* Implemented,tested. */
-    A_KILLED_JUIBLEX,        /* Implemented,tested. */
-    A_KILLED_DEMOGORGON,     /* Implemented,tested. */
-    A_KILLED_YEENOGHU,       /* Implemented,tested. */
-    A_KILLED_GERYON,         /* Implemented,tested. */
-    A_KILLED_DISPATER,       /* Implemented,tested. */
-    A_KILLED_DEATH,          /* Implemented,tested. */ /* #128 */
-    A_KILLED_PESTILENCE,     /* Implemented,tested. */ /* begin tnntachieve2 here */
-    A_KILLED_FAMINE,         /* Implemented,tested. */
-    A_CHANGED_ALIGNMENT,     /* Implemented. */
-    A_HEISENBERG,            /* Implemented. */
-    A_SCARED_BY_GHOST,       /* Implemented. */
-    A_REVISITED_LOST_LEVEL,  /* Implemented. */
-    A_DIPPED_IN_UNHOLY,      /* Implemented. */
-    A_DISSOLVED_IRONBARS,    /* Implemented. */
-    A_BROKE_WAN_NOTHING,     /* Implemented. */
-    A_CANCELED_MONSTER,      /* Implemented. */
-    A_INTRINSIC_FROM_JEWELRY,/* Implemented. */
-    A_KILLED_WITH_AKLYS,     /* Implemented. */
-    A_NEUTRALIZED_POTION,    /* Implemented. */
-    A_KILLED_WITH_IRONBALL,  /* Implemented. */
-    A_FINISHED_WITH_50000,   /* Implemented. */
-    A_FINISHED_WITH_100000,  /* Implemented. */
-    A_APPLIED_CRYSTAL_BALL,  /* Implemented. */
-    A_MAXED_ATTRIBUTES,      /* Implemented. */
-    A_FOUND_BONES_PILE,      /* Implemented. */
-    A_FOUND_ROGUE_BONES_PILE,/* Implemented,tested. */
-    A_CREATED_FAMILIAR,      /* Implemented. */
-    A_GAVE_ADORNMENT,        /* Implemented. */
-    A_EXPELLED_FROM_QUEST,   /* Implemented. */
-    A_GOT_FOOD_APPRAISAL,    /* Implemented. */
-    A_KILLED_SOLDIER_ANT,    /* Implemented. */
-    A_SUMMONED_DEMON_LORD,   /* Implemented. */
-    A_TASTED_COCKATRICE,     /* Implemented. */
-    A_WRESTED_WOW,           /* Implemented. */
-    A_AMETHYST_BOOZE,        /* Implemented. */
-    A_SCARED_OF_SKELETON,    /* Implemented,tested. */
-    A_ENTERED_LUDIOS,        /* Implemented,tested. */
-    A_KILLED_CROESUS,        /* Implemented,tested. */ /* #160 */
-    A_LIED_TO_GUARD,         /* Implemented,tested. */
-    A_GOT_13_LUCK,           /* Implemented,tested. */
-    A_GOT_NEGATIVE_13_LUCK,  /* Implemented,tested. */
-    A_GREASED_ARMOR,         /* Implemented,tested. */
-    A_REACHED_VIBRATING_SQ,  /* Implemented,tested. */
-    A_VISITED_HIGH_ALTARS,   /* Implemented,tested. */
-    A_PARTIAL_VEGETARIAN,    /* Implemented,tested. */
-    A_PARTIAL_VEGAN,         /* Implemented,tested. */
-    A_PARTIAL_FOODLESS,      /* Implemented,tested. */
-    A_PARTIAL_ATHEIST,       /* Implemented,tested. */
-    A_PARTIAL_WEAPONLESS,    /* Implemented,tested. */
-    A_PARTIAL_PACIFIST,      /* Implemented,tested. */
-    A_PARTIAL_ILLITERATE,    /* Implemented,tested. */
-    A_PARTIAL_POLYPILELESS,  /* Implemented,tested. */
-    A_PARTIAL_POLYSELFLESS,  /* Implemented,tested. */
-    A_PARTIAL_WISHLESS,      /* Implemented,tested. */
-    A_PARTIAL_ARTIWISHLESS,  /* Implemented,tested. */
-    A_PARTIAL_ZEN,           /* Implemented,tested. */
-    A_PARTIAL_NUDIST,        /* Implemented,tested. */
-    A_PARTIAL_GENOCIDELESS,  /* Implemented,tested. */
-    A_PARTIAL_ELBERETHLESS,  /* Implemented,tested. */
-    A_PARTIAL_PERMAHALLU,    /* Implemented. */
-    A_PARTIAL_PERMADEAF,     /* Implemented. */
-    A_PARTIAL_ARTIFACTLESS,  /* Implemented. */
-    A_PARTIAL_BONESLESS,     /* Implemented. */
-    A_PARTIAL_SWAPCHESTLESS, /* Implemented. */
-    A_PARTIAL_PETLESS,       /* Implemented. */
-    A_PARTIAL_SURVIVOR,      /* Implemented. */
-    A_PUT_INTO_SWAPCHEST,    /* Implemented,tested. */
-    A_TALKED_TO_DEVTEAM,     /* Implemented. */
-    A_FINISHED_DEVTEAM_QUEST,/* Implemented. */
-    A_INSTAPOISONED,         /* Implemented. */ /* #192 */
-    A_MULTI_GENDER_FLIP,     /* Implemented. */ /* begin tnntachieve3 here */
-    A_DEATHLY_HALLOWS,       /* Implemented. */
-    A_DISARMED_WITH_WHIP,    /* Implemented. */
-    A_VISITED_ALL_ALTARS,    /* Implemented. */
-    A_BROKE_WAND_WISHING,    /* Implemented. */
-    A_KILLED_WITH_TRIDENT,   /* Implemented. */
-    A_STONED_A_MONSTER,      /* Implemented. */
-    A_USED_PASSTUNE,         /* Implemented. */
-    A_ID_DETECT_FOOD,        /* Implemented. */
-    A_WISH_FROM_EVERYTHING,  /* Implemented. */
-    A_KILLED_EYE_POLEARM,    /* Implemented. */
-    A_IDENTIFIED_ALL_RINGS,  /* Implemented. */
-    A_IDENTIFIED_ALL_WANDS,  /* Implemented. */
-    A_IDENTIFIED_ALL_AMULETS,/* Implemented. */
-    A_IDENTIFIED_ALL_BOOKS,  /* Implemented. */
-    A_IDENTIFIED_ALL_SCROLLS,/* Implemented. */
-    A_IDENTIFIED_ALL_POTIONS,/* Implemented. */
-    A_IDENTIFIED_ACCESSORIES,/* Implemented. */
-    A_DISARMED_LUDIOS_MINES, /* Implemented. */
-    A_READ_ALL_READABLE,     /* Implemented. */
-    A_OPENED_TIN_PROPERLY,   /* Implemented. */
-    A_UNLOCKED_CREDIT_CARD,  /* Implemented, tested. */
-    A_RELEASED_CAMERA_DEMON, /* Implemented. */
-    A_SCARED_WITH_MUSIC,     /* Implemented. */
-    A_READ_FORTUNE_FOODLESS, /* Implemented. */
-    A_GATED_IN_DEMON_LORD,   /* Implemented. */
-    A_KILLED_25_SPECIES,     /* Implemented. */
-    A_KILLED_50_SPECIES,     /* Implemented. */
-    A_KILLED_100_SPECIES,    /* Implemented. */
-    A_KILLED_200_SPECIES,    /* Implemented. */
-    A_KILLED_ALL_SPECIES,    /* Implemented. */
-    A_KILLED_A_Z_LOWERCASE,  /* Implemented, tested. */ /* #224 */
-    A_ENGRAVED_WITH_ATHAME,  /* Implemented, tested. */
-    A_ONE_HIT_KO,            /* Implemented, tested. */
-    A_LEVELED_UP_FROM_SINK,  /* Implemented, tested. */
-    A_KILLED_20_WIZARDS,     /* Implemented, tested. */
-    A_ABOUT_TO_DIE,          /* Implemented, tested. */
-    A_STOCKED_SIX_PACK,      /* Implemented, tested. */
-    A_KILLED_WITH_BOTTLE,    /* Implemented, tested. */
-    A_ATE_EVERY_OBJCLASS,    /* Implemented, tested. */
-    A_GENOCIDED_20_SPECIES,  /* Implemented, tested. */
-    A_EXTINCTED_NEWTS,       /* Implemented, tested. */
-    A_WALKED_ON_LAVA,        /* Implemented, tested. */
-    A_GOT_LICH_ATHAME,       /* Implemented, tested. */
-    A_DID_PURE_SOKOBAN,      /* Implemented, tested. */
-    A_STETHOSCOPED_SDOOR,    /* Implemented, tested. */
-    A_NPC_DEATHMATCH,        /* Implemented, tested. */
-    A_PLANES_VIA_QUAFFING,   /* Implemented, tested. */
-    A_WATER_GUSH_FORTH,      /* Implemented, tested. */
-    A_IDENTIFIED_ALL_STONES, /* Implemented, tested. */
-    A_IDENTIFIED_ALL_GLASS,  /* Implemented, tested. */
-    A_PURPLE_RAIN,           /* Implemented, tested. */
-    A_STUNNED_BAT_MEAT,      /* Implemented, tested. */
-    A_ATE_3_ARTIFACTS,       /* Implemented, tested. */
-    A_BOOBY_TRAPPED_TIN,     /* Implemented, tested. */
-    A_KILLED_4X4_ELEMENTALS, /* Implemented, tested. */
-    A_VISION_FROM_THRONE,    /* Implemented, tested. */
-    A_DECAPITATED_ENEMY,     /* Implemented, tested. */
-    A_EXPLODED_LARGE_BOX,    /* Implemented, tested. */
-    A_BOUGHT_UNID_GEM,       /* Implemented, tested. */
-    A_RESURRECTED_WIZARD,    /* Implemented, tested. */
-    A_PERMAKILLED_RIDER,     /* Implemented, tested. */
-    A_GIFT_ON_ASTRAL,        /* Implemented, tested. */
-    A_BRIBED_WITH_1,         /* Implemented, tested. */ /* #256 */
-    A_REVIVED_PERSEUS,       /* Implemented, tested. */ /* begin tnntachieve4 here */
-    A_LIT_20_ROOMS,          /* Implemented, tested. */
-    A_KILLED_A_Z_UPPERCASE,  /* Implemented, tested. */
-    A_MFORCE_15_LEVELS,      /* Implemented, tested. */
-    A_PET_THROUGH_PLANES,    /* Implemented, tested. */
-    A_KILLED_WITH_TOWEL,     /* Implemented, tested. */
-    A_GOT_RID_OF_WATCH,      /* Implemented, tested. */
-    A_NESTED_BOH,            /* Implemented, tested. */
-    A_UNTRAPPED_ALL_TRAPS,   /* Implemented, tested. */
-    A_MAKE_MON_ESCAPE,       /* Implemented, tested. */
-    A_MAKE_DLORD_ESCAPE,     /* Implemented, tested. */
-    A_WIZ_DOUBLE_KILL,       /* Implemented, tested. */
-    A_MJOLLNIR_THROW_KILL,   /* Implemented, tested. */
-    A_RESURRECTED_PET_TAME,  /* Implemented, tested. */
-    A_GOT_30_AC,             /* Implemented, tested. */
-    A_GOT_BEES_FROM_TREE,    /* Implemented, tested. */
-    A_MVM_PROJECTILE_KILL,   /* Implemented, tested. */
-    A_DOOR_RESIST_8X,        /* Implemented, tested. */
-    A_USED_UP_TINNING_KIT,   /* Implemented, tested. */
-    A_TINNED_UNIQUE_MON,     /* Implemented, tested. */
+    A_FOUND_MINES_ALTAR = 0,  /* begin tnntachieve0 */
+    A_CONSULTED_ORACLE,
+    A_STARTED_QUEST,
+    A_LEARNED_PASSTUNE,
+    A_BOUGHT_PROTECTION,
+    A_CURED_STONING,
+    A_CURED_SLIMING,
+    A_SURVIVED_DROWNING,
+    A_CURED_LYCANTHROPY,
+    A_CURED_ILLNESS,
+    A_USED_THRONE,
+    A_DROPPED_RING_IN_SINK,
+    A_KILLED_9_NAZGUL,
+    A_KILLED_3_ERINYES,
+    A_CONVERTED_ALTAR,
+    A_CHATTED_IZCHAK,
+    A_KICKED_FRUIT_TREE,
+    A_PURCHASED,
+    A_ROBBED,
+    A_UNCURSED_IN_FOUNTAIN,
+    A_LEARNED_LV5_SPELL,
+    A_TAMED_BY_FOOD,
+    A_TAMED_NOT_BY_FOOD,
+    A_CROWNED,
+    A_GRANTED_ARTI,
+    A_GOT_EXCALIBUR,
+    A_CREATED_DSM,
+    A_ROBBED_BY_NYMPH,
+    A_ROBBED_BY_LEPRECHAUN,
+    A_ENCOUNTERED_FOOCUBUS,
+    A_TRAPPED_MONSTER,
+    A_AVENGED_ORCTOWN,        /* #32 */
+    A_CLEARED_BIGROOM,
+    A_GOT_UNPUNISHED,
+    A_FELL_ONTO_SINK,
+    A_USED_TOUCHSTONE,
+    A_WROTE_SCROLL,
+    A_WROTE_SPELLBOOK,
+    A_RODE_DRAGON,
+    A_LAID_EGG,
+    A_ERODEPROOFED_ITEM,
+    A_THREW_UNICORN_GEM,
+    A_BLOCKED_TROLL_REVIVAL,
+    A_KILLED_GHOST,
+    A_REVIVIFIED_CORPSE,
+    A_DESTROYED_VIA_TURN,
+    A_ATE_MILITARY_RATION,
+    A_BLEW_UP_DRAWBRIDGE,
+    A_GOT_LIFESAVED,
+    A_USED_CORRECT_BANE,
+    A_DUG_UP_GRAVE,
+    A_KILLED_MOLOCH_PRIEST,
+    A_CAUSED_EARTHQUAKE,
+    A_CHARMED_SNAKE,
+    A_KILLED_DRAGON,
+    A_EVADED_BRAINSUCK,
+    A_HIT_WITH_BOOMERANG,
+    A_DEALT_SILVER_DAMAGE,
+    A_MADE_CRYSKNIFE,
+    A_KILLED_WITH_HOSE,
+    A_WIZ_WORE_CORNUTHAUM,
+    A_WORE_MITHRIL_COAT,
+    A_FOUND_3_GRAFFITI,
+    A_SPLIT_A_PUDDING,        /* #64 */
+    A_WORE_MEAT_RING,         /* begin tnntachieve1 here */
+    A_LOOTED_ICE_BOX,
+    A_ANIMATED_FIGURINE,
+    A_NERD,
+    A_CHARGED_AN_OBJECT,
+    A_KICKED_EMBEDDED_ITEM,
+    A_SNAGGED_WITH_HOOK,
+    A_REFILLED_CANDELABRUM,
+    A_ATE_ALL_PRODUCE,
+    A_ATE_ALL_FOODS,
+    A_REFILLED_OIL_LAMP,
+    A_LIT_OIL_POTION,
+    A_LIT_UP_GREMLIN,
+    A_ALCHEMIZED,
+    A_GASSED_MONSTER,
+    A_READ_NOVEL,
+    A_TALKED_TO_DEATH,
+    A_IDENTIFIED_ALL_GEMS,
+    A_GOT_SPBOOK_FROM_STATUE,
+    A_SUMMONED_NYMPH,
+    A_FULLY_RAISED_PET,
+    A_GOT_OBJECT_UNDERWATER,
+    A_RODE_WUMPUS_OVER_WATER,
+    A_KILLED_TAMED_WOODCHUCK,
+    A_KILLED_ARCHON,
+    A_TAMED_SHAPECHANGER,
+    A_TAMED_7_CATS,
+    A_OPENED_SCHROEDINGERS,
+    A_FREED_PRISONER,
+    A_UNTRAPPED_PET,
+    A_READ_MAIL,
+    A_ATE_ROYAL_JELLY,        /* #96 */
+    A_GOT_CORPSE_INTRINSIC,
+    A_BANKRUPTED_SHOPKEEPER,
+    A_POLYED_PET_ON_TRAP,
+    A_CHANGED_GENDER,
+    A_HATCHED_FOREIGN_EGG,
+    A_HEALED_BY_NURSE,
+    A_KILLED_WHILE_IN_PIT,
+    A_KILLED_INVISIBLE,
+    A_FELL_DOWN_SHAFT,
+    A_GOT_TWO_BITS,
+    A_EXTINCTED_ARMY_OR_KOPS,
+    A_DEFLECTED_NYMPH,
+    A_BRIBED_DEMON_LORD,
+    A_ENTERED_VAULT,
+    A_ENTERED_ZOO,
+    A_ENTERED_THRONE_ROOM,
+    A_ENTERED_LEP_HALL,
+    A_ENTERED_BEEHIVE,
+    A_ENTERED_GRAVEYARD,
+    A_ENTERED_ANTHOLE,
+    A_ENTERED_BARRACKS,
+    A_ENTERED_SWAMP,
+    A_ENTERED_COCKNEST,
+    A_KILLED_ASMODEUS,
+    A_KILLED_BAALZEBUB,
+    A_KILLED_ORCUS,
+    A_KILLED_JUIBLEX,
+    A_KILLED_DEMOGORGON,
+    A_KILLED_YEENOGHU,
+    A_KILLED_GERYON,
+    A_KILLED_DISPATER,
+    A_KILLED_DEATH,           /* #128 */
+    A_KILLED_PESTILENCE,      /* begin tnntachieve2 here */
+    A_KILLED_FAMINE,
+    A_CHANGED_ALIGNMENT,
+    A_HEISENBERG,
+    A_SCARED_BY_GHOST,
+    A_REVISITED_LOST_LEVEL,
+    A_DIPPED_IN_UNHOLY,
+    A_DISSOLVED_IRONBARS,
+    A_BROKE_WAN_NOTHING,
+    A_CANCELED_MONSTER,
+    A_INTRINSIC_FROM_JEWELRY,
+    A_KILLED_WITH_AKLYS,
+    A_NEUTRALIZED_POTION,
+    A_KILLED_WITH_IRONBALL,
+    A_FINISHED_WITH_50000,
+    A_FINISHED_WITH_100000,
+    A_APPLIED_CRYSTAL_BALL,
+    A_MAXED_ATTRIBUTES,
+    A_FOUND_BONES_PILE,
+    A_FOUND_ROGUE_BONES_PILE,
+    A_CREATED_FAMILIAR,
+    A_GAVE_ADORNMENT,
+    A_EXPELLED_FROM_QUEST,
+    A_GOT_FOOD_APPRAISAL,
+    A_KILLED_SOLDIER_ANT,
+    A_SUMMONED_DEMON_LORD,
+    A_TASTED_COCKATRICE,
+    A_WRESTED_WOW,
+    A_AMETHYST_BOOZE,
+    A_SCARED_OF_SKELETON,
+    A_ENTERED_LUDIOS,
+    A_KILLED_CROESUS,         /* #160 */
+    A_LIED_TO_GUARD,
+    A_GOT_13_LUCK,
+    A_GOT_NEGATIVE_13_LUCK,
+    A_GREASED_ARMOR,
+    A_REACHED_VIBRATING_SQ,
+    A_VISITED_HIGH_ALTARS,
+    A_PARTIAL_VEGETARIAN,
+    A_PARTIAL_VEGAN,
+    A_PARTIAL_FOODLESS,
+    A_PARTIAL_ATHEIST,
+    A_PARTIAL_WEAPONLESS,
+    A_PARTIAL_PACIFIST,
+    A_PARTIAL_ILLITERATE,
+    A_PARTIAL_POLYPILELESS,
+    A_PARTIAL_POLYSELFLESS,
+    A_PARTIAL_WISHLESS,
+    A_PARTIAL_ARTIWISHLESS,
+    A_PARTIAL_ZEN,
+    A_PARTIAL_NUDIST,
+    A_PARTIAL_GENOCIDELESS,
+    A_PARTIAL_ELBERETHLESS,
+    A_PARTIAL_PERMAHALLU,
+    A_PARTIAL_PERMADEAF,
+    A_PARTIAL_ARTIFACTLESS,
+    A_PARTIAL_BONESLESS,
+    A_PARTIAL_SWAPCHESTLESS,
+    A_PARTIAL_PETLESS,
+    A_PARTIAL_SURVIVOR,
+    A_PUT_INTO_SWAPCHEST,
+    A_TALKED_TO_DEVTEAM,
+    A_FINISHED_DEVTEAM_QUEST,
+    A_INSTAPOISONED,          /* #192 */
+    A_MULTI_GENDER_FLIP,      /* begin tnntachieve3 here */
+    A_DEATHLY_HALLOWS,
+    A_DISARMED_WITH_WHIP,
+    A_VISITED_ALL_ALTARS,
+    A_BROKE_WAND_WISHING,
+    A_KILLED_WITH_TRIDENT,
+    A_STONED_A_MONSTER,
+    A_USED_PASSTUNE,
+    A_ID_DETECT_FOOD,
+    A_WISH_FROM_EVERYTHING,
+    A_KILLED_EYE_POLEARM,
+    A_IDENTIFIED_ALL_RINGS,
+    A_IDENTIFIED_ALL_WANDS,
+    A_IDENTIFIED_ALL_AMULETS,
+    A_IDENTIFIED_ALL_BOOKS,
+    A_IDENTIFIED_ALL_SCROLLS,
+    A_IDENTIFIED_ALL_POTIONS,
+    A_IDENTIFIED_ACCESSORIES,
+    A_DISARMED_LUDIOS_MINES,
+    A_READ_ALL_READABLE,
+    A_OPENED_TIN_PROPERLY,
+    A_UNLOCKED_CREDIT_CARD,
+    A_RELEASED_CAMERA_DEMON,
+    A_SCARED_WITH_MUSIC,
+    A_READ_FORTUNE_FOODLESS,
+    A_GATED_IN_DEMON_LORD,
+    A_KILLED_25_SPECIES,
+    A_KILLED_50_SPECIES,
+    A_KILLED_100_SPECIES,
+    A_KILLED_200_SPECIES,
+    A_KILLED_ALL_SPECIES,
+    A_KILLED_A_Z_LOWERCASE,   /* #224 */
+    A_ENGRAVED_WITH_ATHAME,
+    A_ONE_HIT_KO,
+    A_LEVELED_UP_FROM_SINK,
+    A_KILLED_20_WIZARDS,
+    A_ABOUT_TO_DIE,
+    A_STOCKED_SIX_PACK,
+    A_KILLED_WITH_BOTTLE,
+    A_ATE_EVERY_OBJCLASS,
+    A_GENOCIDED_20_SPECIES,
+    A_EXTINCTED_NEWTS,
+    A_WALKED_ON_LAVA,
+    A_GOT_LICH_ATHAME,
+    A_DID_PURE_SOKOBAN,
+    A_STETHOSCOPED_SDOOR,
+    A_NPC_DEATHMATCH,
+    A_PLANES_VIA_QUAFFING,
+    A_WATER_GUSH_FORTH,
+    A_IDENTIFIED_ALL_STONES,
+    A_IDENTIFIED_ALL_GLASS,
+    A_PURPLE_RAIN,
+    A_STUNNED_BAT_MEAT,
+    A_ATE_3_ARTIFACTS,
+    A_BOOBY_TRAPPED_TIN,
+    A_KILLED_4X4_ELEMENTALS,
+    A_VISION_FROM_THRONE,
+    A_DECAPITATED_ENEMY,
+    A_EXPLODED_LARGE_BOX,
+    A_BOUGHT_UNID_GEM,
+    A_RESURRECTED_WIZARD,
+    A_PERMAKILLED_RIDER,
+    A_GIFT_ON_ASTRAL,
+    A_BRIBED_WITH_1,          /* #256 */
+    A_REVIVED_PERSEUS,        /* begin tnntachieve4 here */
+    A_LIT_20_ROOMS,
+    A_KILLED_A_Z_UPPERCASE,
+    A_MFORCE_15_LEVELS,
+    A_PET_THROUGH_PLANES,
+    A_KILLED_WITH_TOWEL,
+    A_GOT_RID_OF_WATCH,
+    A_NESTED_BOH,
+    A_UNTRAPPED_ALL_TRAPS,
+    A_MAKE_MON_ESCAPE,
+    A_MAKE_DLORD_ESCAPE,
+    A_WIZ_DOUBLE_KILL,
+    A_MJOLLNIR_THROW_KILL,
+    A_RESURRECTED_PET_TAME,
+    A_GOT_30_AC,
+    A_GOT_BEES_FROM_TREE,
+    A_MVM_PROJECTILE_KILL,
+    A_DOOR_RESIST_8X,
+    A_USED_UP_TINNING_KIT,
+    A_TINNED_UNIQUE_MON,
     /* 276 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
@@ -857,6 +857,8 @@ struct tnnt_globals_t {
     unsigned int deathmatch_m_id;
 #define is_deathmatch_opponent(mtmp) (mtmp->m_id == tnnt_globals.deathmatch_m_id)
 
+    /* TODO: probably move this above, or the other achievements below, the
+     * devteam/npc side quests */
     unsigned feline_m_ids[MAX_TAMED_FELINES]; /* Cat Lady: ids of tamed cats */
     unsigned short wizards_killed;
     /* Inedible object classes:
