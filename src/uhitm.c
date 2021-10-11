@@ -702,6 +702,7 @@ int dieroll;
                             || (thrown == HMON_APPLIED && is_pole(uwep)));
     /* TNNT */
     boolean artibane = FALSE;
+    boolean potion_hit = FALSE;
 
     int jousting = 0;
     long silverhit = 0L;
@@ -896,6 +897,7 @@ int dieroll;
             /* in case potion effect causes transformation */
             mdat = mon->data;
             tmp = (mdat == &mons[PM_SHADE]) ? 0 : 1;
+            potion_hit = TRUE;
         } else {
             if (mdat == &mons[PM_SHADE] && !shade_aware(obj)) {
                 tmp = 0;
@@ -1220,8 +1222,6 @@ int dieroll;
 
     if (tmp >= mon->mhpmax && tmp >= TNNT_OHKO_DMG)
         tnnt_achieve(A_ONE_HIT_KO);
-    if (tmp >= mon->mhp && obj && obj->oclass == POTION_CLASS)
-        tnnt_achieve(A_KILLED_WITH_BOTTLE);
     if (!already_killed)
         mon->mhp -= tmp;
     /* adjustments might have made tmp become less than what
@@ -1357,18 +1357,27 @@ int dieroll;
             killed(mon); /* takes care of most messages */
         if (artibane)
             tnnt_achieve(A_USED_CORRECT_BANE);
-        if (obj && obj->otyp == RUBBER_HOSE)
-            tnnt_achieve(A_KILLED_WITH_HOSE);
-        if (obj && obj->otyp == HEAVY_IRON_BALL)
-            tnnt_achieve(A_KILLED_WITH_IRONBALL);
-        if (obj && obj->otyp == AKLYS && thrown == HMON_THROWN)
-            tnnt_achieve(A_KILLED_WITH_AKLYS);
-        if (obj && obj->otyp == TRIDENT && mdat->mlet == S_EEL)
-            tnnt_achieve(A_KILLED_WITH_TRIDENT);
-        if (obj && is_pole(obj) && mdat == &mons[PM_FLOATING_EYE])
-            tnnt_achieve(A_KILLED_EYE_POLEARM);
-        if (obj && obj->otyp == TOWEL && obj->spe)
-            tnnt_achieve(A_KILLED_WITH_TOWEL);
+        /* Weird bug: the vanilla code does not set obj to null after hitting
+         * with a potion (which has already been freed). We use potion_hit to
+         * track whether that happens (in fear that setting obj to null could
+         * result in segfaults because the rest of this giant function may not
+         * be prepared for that). */
+        if (potion_hit)
+            tnnt_achieve(A_KILLED_WITH_BOTTLE);
+        else {
+            if (obj && obj->otyp == RUBBER_HOSE)
+                tnnt_achieve(A_KILLED_WITH_HOSE);
+            if (obj && obj->otyp == HEAVY_IRON_BALL)
+                tnnt_achieve(A_KILLED_WITH_IRONBALL);
+            if (obj && obj->otyp == AKLYS && thrown == HMON_THROWN)
+                tnnt_achieve(A_KILLED_WITH_AKLYS);
+            if (obj && obj->otyp == TRIDENT && mdat->mlet == S_EEL)
+                tnnt_achieve(A_KILLED_WITH_TRIDENT);
+            if (obj && is_pole(obj) && mdat == &mons[PM_FLOATING_EYE])
+                tnnt_achieve(A_KILLED_EYE_POLEARM);
+            if (obj && obj->otyp == TOWEL && obj->spe)
+                tnnt_achieve(A_KILLED_WITH_TOWEL);
+        }
 
     } else if (u.umconf && hand_to_hand) {
         nohandglow(mon);
