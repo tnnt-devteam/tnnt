@@ -2612,6 +2612,9 @@ doeat()
     }
 
     /* TNNT: eating various object classes achievement */
+    /* Note: ideally this should go when eating is finished, not begun, but
+     * there are a number of different code paths for eating being finished.
+     * This works well enough for the time being. */
     tnnt_globals.objclasses_eaten |= (1 << otmp->oclass);
     if (tnnt_globals.objclasses_eaten == ALL_EDIBLE_OCLASSES)
         tnnt_achieve(A_ATE_EVERY_OBJCLASS);
