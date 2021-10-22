@@ -1378,6 +1378,7 @@ boolean at_stairs, falling, portal;
     u.uundetected = 0; /* not hidden, even if means are available */
     /* TNNT: pets/steeds/followers can't use the portal to the arena */
     if (!(Is_deathmatch_level(&u.uz) || on_level(newlevel, &deathmatch_level))) {
+        unleash_all();
         keepdogs(FALSE);
     }
     else if (u.usteed) {
