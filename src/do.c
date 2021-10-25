@@ -1379,11 +1379,13 @@ boolean at_stairs, falling, portal;
     /* TNNT: pets/steeds/followers can't use the portal to the arena */
     if (!(Is_deathmatch_level(&u.uz) || on_level(newlevel, &deathmatch_level))) {
         keepdogs(FALSE);
-    }
-    else if (u.usteed) {
-        pline("Your steed refuses to follow you!");
-        dismount_steed(DISMOUNT_GENERIC);
-        u.ugallop = 0L;
+    } else {
+        unleash_all();
+        if (u.usteed) {
+            pline("Your steed refuses to follow you!");
+            dismount_steed(DISMOUNT_GENERIC);
+            u.ugallop = 0L;
+        }
     }
     /* more TNNT: check mydogs list when entering Earth/Astral for pets that
      * entered Earth entering Astral */

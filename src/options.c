@@ -3825,7 +3825,7 @@ boolean tinitial, tfrom_file;
             /* non-curses windowports will not use this flag anyway
              * but the above will not compile if we don't have curses.
              * Just set it to a sensible default: */
-            iflags.wc2_petattr = ATR_INVERSE
+            iflags.wc2_petattr = ATR_INVERSE;
 #endif
         } else if (negated) bad_negation(fullname, TRUE);
         return retval;

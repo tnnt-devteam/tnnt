@@ -1582,7 +1582,7 @@ create_monster(m, croom)
 monster *m;
 struct mkroom *croom;
 {
-    struct monst *mtmp;
+    struct monst *mtmp = (struct monst *) 0;
     schar x, y;
     char class;
     aligntyp amask;
