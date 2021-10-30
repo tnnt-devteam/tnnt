@@ -384,6 +384,30 @@ botl_score()
 #endif /* SCORE_ON_BOTL */
 
 #ifdef REALTIME_ON_BOTL
+/* Returns a human readable formatted duration (e.g. 2h:03m:ss). */
+char *
+format_duration_with_units(seconds)
+long seconds;
+{
+    static char buf_fmt_duration[BUFSZ];
+    long minutes = seconds / 60;
+    long hours = minutes / 60;
+    long days = hours / 24;
+
+    seconds = seconds % 60;
+    minutes = minutes % 60;
+    hours = hours % 24;
+
+    if (days > 0) {
+        Sprintf(buf_fmt_duration, "%ldd:%2.2ldh:%2.2ldm:%2.2lds", days, hours, minutes, seconds);
+    } else if (hours > 0) {
+        Sprintf(buf_fmt_duration, "%ldh:%2.2ldm:%2.2lds", hours, minutes, seconds);
+    } else {
+        Sprintf(buf_fmt_duration, "%ldm:%2.2lds", minutes, seconds);
+    }
+    return buf_fmt_duration;
+}
+
 const char *
 botl_realtime(void)
 {
@@ -409,8 +433,7 @@ botl_realtime(void)
         Sprintf(buf, "%ld:%2.2ld", currenttime / 3600, (currenttime % 3600) / 60);
         break;
 
-    case 'u':
-    default: {
+    case 'f': {
         long ss, mm, hh;
         ss = currenttime % 60;
         currenttime /= 60;
@@ -418,6 +441,15 @@ botl_realtime(void)
         currenttime /= 60;
         hh = currenttime;
         Sprintf(buf, "%02ld:%02ld:%02ld", hh, mm, ss);
+        break;
+    }
+
+    case 'u':
+    default: {
+        char *duration = format_duration_with_units(currenttime);
+        /* only show 2 time units */
+        *(strchr(duration, ':')+4) = '\0';
+        Sprintf(buf, "%s", duration);
     }
     }
     return buf;

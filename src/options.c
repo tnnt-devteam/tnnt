@@ -52,7 +52,8 @@ static const char* realtime_type_strings[] = {
 static const char* realtime_format_strings[] = {
     "seconds (s)",
     "condensed (h:mm)",
-    "units (hh:mm:ss)",
+    "fixed units (hh:mm:ss)",
+    "units (xxh:xxm)",
 };
 
 /*
@@ -6009,6 +6010,7 @@ char *buf;
     } else if (!strcmp(optname, "realtime_format")) {
         const char *desc = iflags.realtime_format == 's' ? "seconds" :
                            iflags.realtime_format == 'c' ? "condensed" :
+                           iflags.realtime_format == 'f' ? "fixed units" :
                            iflags.realtime_format == 'u' ? "units" : "";
         Sprintf(buf, "%s", desc);
 #endif
