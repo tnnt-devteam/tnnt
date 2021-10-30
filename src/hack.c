@@ -2042,13 +2042,15 @@ invocation_message()
 void
 npc_awakens()
 {
-    if (!tnnt_globals.deathmatch_started) {
-        if (Deaf) {
-            pline("The ground shakes a bit.");
-        } else {
-            pline("A voice echoes in the arena:");
-            verbalize("Thou art brave indeed, mortal!  Now prove thy prowess!");
-        }
+    if (tnnt_globals.deathmatch_started) {
+        return;
+    }
+
+    if (Deaf) {
+        pline("The ground shakes a bit.");
+    } else {
+        pline("A voice echoes in the arena:");
+        verbalize("Thou art brave indeed, mortal!  Now prove thy prowess!");
     }
     tnnt_globals.deathmatch_started = TRUE;
     livelog_printf(LL_UMONST, "has entered the Arena");
@@ -2102,8 +2104,7 @@ switch_terrain()
      * that its typ doesn't remain set on DOOR. */
     if (Is_deathmatch_level(&u.uz) && IS_DOOR(lev->typ)) {
         if (!tnnt_globals.deathmatch_started) {
-            aggravate();
-            npc_awakens();
+            aggravate(); /* this will call npc_awakens() */
         }
     }
 }
