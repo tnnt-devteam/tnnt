@@ -442,8 +442,8 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Friendly Fire", "Get a hostile monster killed by another hostile monster's projectile weapon"},
   {"It's 4:20 Somewhere", "Stone a monster"},
   /* "survive a hazard" group */
-  {"Part-time Statue", "Survive stoning"},
-  {"The Blob", "Survive sliming"},
+  {"Part-time Statue", "Cure stoning"},
+  {"The Blob", "Cure sliming"},
   {"Captain Ahab", "Survive being grabbed by a sea monster"},
   {"Furry Little Problem", "Cure lycanthropy"},
   {"New Lease on Life", "Cure deathly illness"},
