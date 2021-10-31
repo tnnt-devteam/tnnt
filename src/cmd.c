@@ -5541,12 +5541,24 @@ dotnntdebug(VOID_ARGS)
 STATIC_PTR int
 dotnntstats(VOID_ARGS)
 {
+    return show_tnnt_stats(FALSE);
+}
+
+int
+show_tnnt_stats(final)
+boolean final;
+{
     char buf[BUFSZ];
     int i;
     en_win = create_nhwindow(NHW_MENU);
 
     /* mention overall #achievements display */
-    putstr(en_win, 0, "To view complete or incomplete achievements, use #achievements.");
+    if (final) {
+        putstr(en_win, 0, "TNNT statistics:");
+    }
+    else {
+        putstr(en_win, 0, "To view complete or incomplete achievements, use #achievements.");
+    }
 
     /* devteam quest progress */
     if (tnnt_globals.devteam_quest_status != DTQUEST_NOTSTARTED) {
@@ -5577,6 +5589,8 @@ dotnntstats(VOID_ARGS)
     }
 
     /* other counters for various things */
+    /* these _could_ be made to respect final (e.g. leave out the "have"), but I
+     * rather doubt anyone cares about the grammar that much */
     Sprintf(buf, "You have found %d graffiti.", tnnt_globals.graffiti_found);
     putstr(en_win, 0, buf);
 
@@ -5720,8 +5734,10 @@ dotnntstats(VOID_ARGS)
     Sprintf(buf, "Object classes eaten: %s Uneaten: %s", eaten, uneaten);
     putstr(en_win, 0, buf);
     /* #snacks command already describes this, just reference it */
-    putstr(en_win, 0, "Foods eaten not shown. To show them, use #snacks.");
-    putstr(en_win, 0, "Species killed not shown. To show them, use #species.");
+    if (!final) {
+        putstr(en_win, 0, "Foods eaten not shown. To show them, use #snacks.");
+        putstr(en_win, 0, "Species killed not shown. To show them, use #species.");
+    }
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
@@ -5733,30 +5749,42 @@ dotnntstats(VOID_ARGS)
 STATIC_PTR int
 dotnntachievements(VOID_ARGS)
 {
+    return show_tnnt_achievements(FALSE);
+}
+
+int
+show_tnnt_achievements(final)
+boolean final;
+{
     menu_item* choice = NULL;
     winid win = create_nhwindow(NHW_MENU);
     start_menu(win);
     char response;
-    anything any;
-    any.a_char = 'e';
-    add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-             "show only achievements earned this game", MENU_UNSELECTED);
-    any.a_char = 'u';
-    add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-             "show only achievements not yet earned this game", MENU_UNSELECTED);
-    any.a_char = 'b';
-    add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-             "show all achievements, marked as earned or not", MENU_UNSELECTED);
-    end_menu(win, "Which achievements do you want a list of?");
-    if (select_menu(win, PICK_ONE, &choice) > 0) {
-        response = choice->item.a_char;
-        free((genericptr_t) choice);
+    if (!final) {
+        anything any;
+        any.a_char = 'e';
+        add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
+                "show only achievements earned this game", MENU_UNSELECTED);
+        any.a_char = 'u';
+        add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
+                "show only achievements not yet earned this game", MENU_UNSELECTED);
+        any.a_char = 'b';
+        add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
+                "show all achievements, marked as earned or not", MENU_UNSELECTED);
+        end_menu(win, "Which achievements do you want a list of?");
+        if (select_menu(win, PICK_ONE, &choice) > 0) {
+            response = choice->item.a_char;
+            free((genericptr_t) choice);
+        }
+        else {
+            destroy_nhwindow(win);
+            return 0;
+        }
+        destroy_nhwindow(win);
     }
     else {
-        destroy_nhwindow(win);
-        return 0;
+        response = 'e'; /* dumplog: show only achievements earned */
     }
-    destroy_nhwindow(win);
     /* TODO: will need NHW_MENU if we can get paging to work in tty */
     win = create_nhwindow(NHW_TEXT);
     char buf[BUFSZ];
@@ -5765,11 +5793,13 @@ dotnntachievements(VOID_ARGS)
         putstr(win, ATR_BOLD, "All achievements:");
     }
     else {
-        Sprintf(buf, "Achievements %searned so far:",
-                response == 'e' ? "" : "not ");
+        Sprintf(buf, "Achievements %searned%s:",
+                response == 'e' ? "" : "not ", final ? "" : " so far");
         putstr(win, ATR_BOLD, buf);
     }
-    putstr(win, ATR_BOLD, "(Use #tnntstats to check progress of certain ones)");
+    if (!final) {
+        putstr(win, ATR_BOLD, "(Use #tnntstats to check progress of certain ones.)");
+    }
 
     int num_earned = 0;
     /* Special handling for vanilla achievements which are not tracked in

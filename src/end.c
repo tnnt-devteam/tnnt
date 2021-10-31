@@ -797,6 +797,11 @@ time_t when; /* date+time at end of game */
     putstr(NHW_DUMPTXT, 0, "");
     show_overview((how >= PANICKED) ? 1 : 2, how);
     putstr(NHW_DUMPTXT, 0, "");
+    /* TNNT: show stats and achievements */
+    show_tnnt_stats(TRUE);
+    putstr(NHW_DUMPTXT, 0, "");
+    show_tnnt_achievements(TRUE);
+    putstr(NHW_DUMPTXT, 0, "");
     dump_redirect(FALSE);
 #else
     nhUse(how);
