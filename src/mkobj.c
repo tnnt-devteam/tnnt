@@ -512,6 +512,7 @@ struct obj *obj;
     case OBJ_ONBILL:
     case OBJ_MIGRATING:
     case OBJ_BURIED:
+    case OBJ_INSWAP:
     default:
         return (struct obj *) 0;
     case OBJ_INVENT:
