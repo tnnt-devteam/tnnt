@@ -2531,7 +2531,11 @@ const char *mesg;
         /* catch direct cycle to avoid unbounded recursion */
         if (obj == container)
             panic("failed sanity check: container holds itself");
-        if (obj->where != OBJ_CONTAINED)
+        if (obj->where == OBJ_INSWAP)
+            ; /* valid contained object, but ocontainer isn't usable
+                 (it has swapobj_filename instead) so the following tests
+                 don't apply */
+        else if (obj->where != OBJ_CONTAINED)
             insane_object(obj, "%s obj %s %s: %s", mesg, (struct monst *) 0);
         else if (obj->ocontainer != container)
             impossible("%s obj %s in container %s, not %s", mesg,
