@@ -246,6 +246,8 @@ E int FDECL(getdir, (const char *));
 E void NDECL(confdir);
 E const char *FDECL(directionname, (int));
 E int FDECL(isok, (int, int));
+E int FDECL(show_tnnt_stats, (BOOLEAN_P));
+E int FDECL(show_tnnt_achievements, (BOOLEAN_P));
 E int FDECL(get_adjacent_loc,
             (const char *, const char *, XCHAR_P, XCHAR_P, coord *));
 E const char *FDECL(click_to_cmd, (int, int, int));
