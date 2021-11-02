@@ -5536,7 +5536,8 @@ tnnt_add_untrap(mask)
 unsigned int mask; /* one of the TNNT_UNTRAP_* */
 {
     tnnt_globals.untrapped_types |= mask;
-    if (tnnt_globals.untrapped_types & ALL_UNTRAPPABLE_TRAPTYPES)
+    if ((tnnt_globals.untrapped_types & ALL_UNTRAPPABLE_TRAPTYPES)
+        == ALL_UNTRAPPABLE_TRAPTYPES)
         tnnt_achieve(A_UNTRAPPED_ALL_TRAPS);
 }
 
