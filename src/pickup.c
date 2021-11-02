@@ -2614,7 +2614,8 @@ register struct obj *obj;
     if ((res = lift_object(obj, current_container, &count, FALSE)) <= 0)
         return res;
 
-    if (obj->quan != count && obj->otyp != LOADSTONE)
+    if (obj->quan != count && obj->otyp != LOADSTONE
+        && current_container->otyp != SWAP_CHEST)
         obj = splitobj(obj, count);
 
     /* TNNT swap chest --> */
@@ -3224,7 +3225,8 @@ boolean put_in;
             for (i = 0; i < n; i++) {
                 otmp = pick_list[i].item.a_obj;
                 count = pick_list[i].count;
-                if (count > 0 && count < otmp->quan) {
+                if (count > 0 && count < otmp->quan
+                    && current_container->otyp != SWAP_CHEST) {
                     otmp = splitobj(otmp, count);
                     /* special split case also handled by askchain() */
                 }
