@@ -2430,9 +2430,9 @@ struct monst *mtmp;
                without an engulf attack) from immediately re-engulfing */
             if (attacktype(mtmp->data, AT_ENGL) && !mtmp->mspec_used)
                 mtmp->mspec_used = rnd(2);
-        }
-        if (is_pool(mtmp->mx, mtmp->my))
+        } else if (is_pool(mtmp->mx, mtmp->my)) {
             tnnt_achieve(A_SURVIVED_DROWNING);
+        }
         u.ustuck = 0;
     }
 }
