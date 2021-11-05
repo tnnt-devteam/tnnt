@@ -5058,6 +5058,7 @@ pick_npc_file(VOID_ARGS)
     DIR *d = opendir(TNNT_NPC_DIR);
     int chance = 0;
     struct dirent *de;
+    npcpath[0] = '\0';
     while ((de = readdir(d)) != NULL) {
         if (!strncmp(de->d_name, "NPC-", 4)
             && !rn2(++chance)) {
@@ -5083,13 +5084,19 @@ xchar x, y;
     int pm_num, gender, npc_level, hpmax;
     unsigned short mintrinsics;
     char npcname[BUFSZ], path[BUFSZ];
+    char *npcfilename = pick_npc_file();
     struct monst* npc;
-    Sprintf(path, "%s/%s", TNNT_NPC_DIR, pick_npc_file());
-    npcfile = fopen(path, "r");
-    if (!npcfile) {
-        impossible(
-             "Error opening NPC file '%s' - creating generic mplayer instead",
-                   path);
+    Sprintf(path, "%s/%s", TNNT_NPC_DIR, npcfilename);
+    if (!*npcfilename || !(npcfile = fopen(path, "r"))) {
+        /* NB: in the actual tournament the directory should be stocked with
+         * NPC file(s) in advance, so that users will not see this error even
+         * if they enter the arena before anyone has ascended. */
+        if (!*npcfilename)
+            impossible("No NPC files available - creating mplayer instead");
+        else
+            impossible(
+                     "Error opening NPC file '%s' - creating mplayer instead",
+                       path);
         int mndx = rn1(PM_WIZARD - PM_ARCHEOLOGIST + 1, PM_ARCHEOLOGIST);
         /* special = true better approximates an ascending character... */
         npc = mk_mplayer(&mons[mndx], x, y, TRUE);
