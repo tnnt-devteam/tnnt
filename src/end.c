@@ -1283,9 +1283,11 @@ int how;
         /* not an else if; getting 100000 nets both of these */
         tnnt_achieve(A_FINISHED_WITH_50000);
 
+#ifdef TNNT_NPC_DIR
     /* store ascender as an NPC */
     if (how == ASCENDED)
         write_npc_data();
+#endif
     /* END TNNT code */
 
     dump_open_log(endtime);
