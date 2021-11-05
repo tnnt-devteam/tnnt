@@ -235,6 +235,9 @@ STATIC_DCL boolean FDECL(copy_bytes, (int, int));
 #ifdef HOLD_LOCKFILE_OPEN
 STATIC_DCL int FDECL(open_levelfile_exclusively, (const char *, int, int));
 #endif
+#ifdef TNNT_NPC_DIR
+STATIC_DCL char *NDECL(pick_npc_file);
+#endif
 
 
 static char *config_section_chosen = (char *) 0;
@@ -4807,7 +4810,7 @@ struct obj *o;
 {
     /* needs to be big enough for full path */
     static char buf[BUFSZ];
-    sprintf(buf,"%s/SW-%ld-%s-%x", TNNT_SWAPCHEST_DIR, time(NULL), plname, o->o_id);
+    Sprintf(buf,"%s/SW-%ld-%s-%x", TNNT_SWAPCHEST_DIR, time(NULL), plname, o->o_id);
     return strdup(buf);
 }
 
@@ -4856,7 +4859,7 @@ char *filename;
     FILE *f;
     struct obj *o;
     int tmp_bitfield;
-    sprintf(buf, "%s/%s", TNNT_SWAPCHEST_DIR, filename);
+    Sprintf(buf, "%s/%s", TNNT_SWAPCHEST_DIR, filename);
     f = fopen(buf,"r");
     if (!f) return NULL;
 
@@ -4954,7 +4957,7 @@ delete_swapobj_file(o)
 struct obj *o;
 {
     char path[BUFSZ];
-    sprintf(path, "%s/%s", TNNT_SWAPCHEST_DIR, o->swapobj_filename);
+    Sprintf(path, "%s/%s", TNNT_SWAPCHEST_DIR, o->swapobj_filename);
     if (unlink(path) == -1) {
         if (errno != ENOENT) impossible("delete_swapobj_file %d", errno);
         return FALSE; /* someone else deleted it first */
@@ -4965,7 +4968,7 @@ struct obj *o;
 #endif /* TNNT_SWAPCHEST_DIR */
 
 /* TNNT file operations on the NPC data for the Deathmatch */
-#ifdef TNNT_NPC_FILE
+#ifdef TNNT_NPC_DIR
 
 /* Take the (presumed to be ascending) player, and encode all of their
  * applicable stats and inventory into a data file which can be reloaded to
@@ -4981,9 +4984,12 @@ struct obj *o;
 void
 write_npc_data(VOID_ARGS)
 {
-    FILE* npcfile = fopen_datafile(TNNT_NPC_FILE, "w", TRUE);
+    FILE *npcfile;
+    char buf[BUFSZ];
+    Sprintf(buf, "%s/NPC-%s", TNNT_NPC_DIR, plname);
+    npcfile = fopen(buf, "w");
     if (!npcfile) {
-        impossible("Error writing player data to '%s' file", TNNT_NPC_FILE);
+        impossible("Error writing player data to '%s' file", buf);
         return;
     }
     // line 1: timestamp
@@ -5047,6 +5053,22 @@ write_npc_data(VOID_ARGS)
     fclose(npcfile);
 }
 
+STATIC_OVL char *
+pick_npc_file(VOID_ARGS)
+{
+    static char npcpath[BUFSZ];
+    DIR *d = opendir(TNNT_NPC_DIR);
+    int chance = 0;
+    struct dirent *de;
+    while ((de = readdir(d)) != NULL) {
+        if (!strncmp(de->d_name, "NPC-", 4)
+            && !rn2(++chance)) {
+            Strcpy(npcpath, de->d_name);
+        }
+    }
+    closedir(d);
+    return npcpath;
+}
 
 /* Create the NPC and insert them into the game, reading from the data file for
  * its attributes and inventory.
@@ -5059,10 +5081,17 @@ struct monst*
 create_tnnt_npc(x, y)
 xchar x, y;
 {
-    FILE* npcfile = fopen_datafile(TNNT_NPC_FILE, "r", TRUE);
+    FILE* npcfile;
+    int pm_num, gender, npc_level, hpmax;
+    unsigned short mintrinsics;
+    char npcname[BUFSZ], path[BUFSZ];
     struct monst* npc;
+    Sprintf(path, "%s/%s", TNNT_NPC_DIR, pick_npc_file());
+    npcfile = fopen(path, "r");
     if (!npcfile) {
-        impossible("Error opening NPC file '%s' - creating generic mplayer instead", TNNT_NPC_FILE);
+        impossible(
+             "Error opening NPC file '%s' - creating generic mplayer instead",
+                   path);
         int mndx = rn1(PM_WIZARD - PM_ARCHEOLOGIST + 1, PM_ARCHEOLOGIST);
         /* special = true better approximates an ascending character... */
         npc = mk_mplayer(&mons[mndx], x, y, TRUE);
@@ -5071,9 +5100,6 @@ xchar x, y;
         return npc;
     }
     /* Get base data from the file. */
-    char npcname[BUFSZ];
-    int pm_num, gender, npc_level, hpmax;
-    unsigned short mintrinsics;
     fgets(npcname, BUFSZ, npcfile); // eat up timestamp; game doesn't use it
     fgets(npcname, BUFSZ, npcfile); // actually read in name this time
     npcname[strlen(npcname)-1] = '\0'; // strip \n that was read in

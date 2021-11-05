@@ -876,7 +876,7 @@ E void FDECL(refresh_swap_chest_contents, (struct obj *));
 E boolean FDECL(delete_swapobj_file, (struct obj *));
 #endif
 
-#ifdef TNNT_NPC_FILE
+#ifdef TNNT_NPC_DIR
 E void NDECL(write_npc_data);
 E struct monst* FDECL(create_tnnt_npc, (XCHAR_P, XCHAR_P));
 #endif
