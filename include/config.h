@@ -367,9 +367,10 @@
 #define TNNT_SWAPCHEST_DIR HACKDIR "/swapchest"
 #endif
 
-/* File where we maintain the "last ascender" NPC data for the Deathmatch */
-#ifndef TNNT_NPC_FILE
-#define TNNT_NPC_FILE "npcdata"
+/* Directory where we maintain NPC data files for the Deathmatch, one per
+ * ascended player */
+#ifndef TNNT_NPC_DIR
+#define TNNT_NPC_DIR HACKDIR "/npcfiles"
 #endif
 
 /* Whether to enable the #tnntdebug command (and possibly, in the future, other

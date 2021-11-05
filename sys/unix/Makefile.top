@@ -267,17 +267,21 @@ install: rootcheck $(GAME) recover $(VARDAT) dungeon spec_levs
 		mkdir -p $(SHELLDIR); fi
 	rm -rf $(INSTDIR) $(VARDIR)
 	-mkdir -p $(INSTDIR) $(INSTDIR)/swapchest
+	-mkdir -p $(INSTDIR) $(VARDIR) $(VARDIR)/npcfiles
 	-mkdir -p $(INSTDIR) $(VARDIR) $(VARDIR)/save
 	-mkdir -p $(INSTDIR) $(VARDIR) $(VARDIR)/whereis
 	if test -d ./-p; then rmdir ./-p; fi
 	-$(CHOWN) $(GAMEUID) $(INSTDIR) $(INSTDIR)/swapchest
 	$(CHGRP) $(GAMEGRP) $(INSTDIR) $(INSTDIR)/swapchest
+	-$(CHOWN) $(GAMEUID) $(INSTDIR) $(VARDIR) $(VARDIR)/npcfiles
+	$(CHGRP) $(GAMEGRP) $(INSTDIR) $(VARDIR) $(VARDIR)/npcfiles
 	-$(CHOWN) $(GAMEUID) $(INSTDIR) $(VARDIR) $(VARDIR)/save
 	$(CHGRP) $(GAMEGRP) $(INSTDIR) $(VARDIR) $(VARDIR)/save
 	-$(CHOWN) $(GAMEUID) $(INSTDIR) $(VARDIR) $(VARDIR)/whereis
 	$(CHGRP) $(GAMEGRP) $(INSTDIR) $(VARDIR) $(VARDIR)/whereis
 # order counts here:
 	chmod $(DIRPERM) $(INSTDIR) $(INSTDIR)/swapchest
+	chmod $(VARDIRPERM) $(VARDIR) $(VARDIR)/npcfiles
 	chmod $(VARDIRPERM) $(VARDIR) $(VARDIR)/save
 	chmod $(VARDIRPERM) $(VARDIR) $(VARDIR)/whereis
 # set up the game files
