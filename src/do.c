@@ -1428,6 +1428,10 @@ boolean at_stairs, falling, portal;
         if (tnnt_globals.num_planes_pets)
             free((genericptr_t) tnnt_globals.planes_pet_m_ids);
         tnnt_globals.planes_pet_m_ids = (unsigned int *) 0;
+        /* Assumption: we strictly use num_planes_pets for tracking the amount
+         * of elements in planes_pet_m_ids, and nothing else. So it would be
+         * incorrect to leave it as a nonzero value here. */
+        tnnt_globals.num_planes_pets = 0;
     }
     /* end TNNT */
     if (u.uswallow) /* idem */

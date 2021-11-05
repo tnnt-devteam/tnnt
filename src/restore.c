@@ -690,6 +690,15 @@ unsigned int *stuckid, *steedid;
     mread(fd, (genericptr_t) spl_book, (MAXSPELL + 1) * sizeof (struct spell));
     /* TNNT - restore globals */
     mread(fd, (genericptr_t) &tnnt_globals, sizeof tnnt_globals);
+#ifdef TNNT_2022_SAVEBREAKS
+    /* TNNT - restore dynamically allocated things */
+    if (tnnt_globals.num_planes_pets > 0) {
+        size_t buflen = sizeof(unsigned int) * tnnt_globals.num_planes_pets;
+        tnnt_globals.planes_pet_m_ids = alloc(buflen);
+        mread(fd, (genericptr_t) tnnt_globals.planes_pet_m_ids, buflen);
+    }
+#endif
+    /* end TNNT */
     restore_artifacts(fd);
     restore_oracles(fd);
     if (u.ustuck)
