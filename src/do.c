@@ -1396,11 +1396,13 @@ boolean at_stairs, falling, portal;
         for (mtmp = mydogs; mtmp; mtmp = mtmp->nmon) {
             tnnt_globals.num_planes_pets++;
         }
-        tnnt_globals.planes_pet_m_ids = (unsigned int *)
-            alloc(tnnt_globals.num_planes_pets * sizeof(unsigned int));
-        for (mtmp = mydogs; mtmp; mtmp = mtmp->nmon) {
-            tnnt_globals.planes_pet_m_ids[i] = mtmp->m_id;
-            i++;
+        if (tnnt_globals.num_planes_pets) {
+            tnnt_globals.planes_pet_m_ids = (unsigned int *)
+                alloc(tnnt_globals.num_planes_pets * sizeof(unsigned int));
+            for (mtmp = mydogs; mtmp; mtmp = mtmp->nmon) {
+                tnnt_globals.planes_pet_m_ids[i] = mtmp->m_id;
+                i++;
+            }
         }
     }
     if (Is_astralevel(newlevel)) {
@@ -1423,7 +1425,8 @@ boolean at_stairs, falling, portal;
         /* This is technically a memory leak if the player dies on the Planes
          * before getting to astral, but the game will be ending anyway so it's
          * not that important. */
-        free((genericptr_t) tnnt_globals.planes_pet_m_ids);
+        if (tnnt_globals.num_planes_pets)
+            free((genericptr_t) tnnt_globals.planes_pet_m_ids);
         tnnt_globals.planes_pet_m_ids = (unsigned int *) 0;
     }
     /* end TNNT */
