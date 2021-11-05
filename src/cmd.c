@@ -5521,6 +5521,7 @@ dotnntdebug(VOID_ARGS)
         destroy_nhwindow(en_win);
         en_win = WIN_ERR;
     }
+#ifdef TNNT_NPC_DIR
     else if (response == 'w') {
         write_npc_data();
         pline("Finished writing your data as an NPC.");
@@ -5529,6 +5530,11 @@ dotnntdebug(VOID_ARGS)
         pline("Summoning the NPC deathmatch monster.");
         create_tnnt_npc(u.ux, u.uy);
     }
+#else
+    else {
+        pline("NPC arena monsters not supported in this build.");
+    }
+#endif
     return 0;
 }
 

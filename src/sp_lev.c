@@ -1643,9 +1643,11 @@ struct mkroom *croom;
     if (m->align != -(MAX_REGISTERS + 2))
         mtmp = mk_roamer(pm, Amask2align(amask), x, y, m->peaceful);
     else if (PM_ARCHEOLOGIST <= m->id && m->id <= PM_WIZARD) {
+#ifdef TNNT_NPC_DIR
         if (Is_deathmatch_level(&u.uz))
-            create_tnnt_npc(x, y);
+            mtmp = create_tnnt_npc(x, y);
         else
+#endif
             mtmp = mk_mplayer(pm, x, y, FALSE);
     }
     else
