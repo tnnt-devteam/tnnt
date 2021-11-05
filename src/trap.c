@@ -4235,7 +4235,7 @@ struct trap *ttmp;
     if (Is_knox(&u.uz) && !yours && !tnnt_globals.blew_up_ludios) {
         for (ttmp = ftrap; ttmp; ttmp = ttmp->ntrap) {
             /* Also don't check for player-created land mines here. */
-            if (ttmp->ttyp == LAND_MINE && !ttmp->madeby_u)
+            if (ttmp->ttyp == LANDMINE && !ttmp->madeby_u)
                 break;
         }
         if (!ttmp) {
