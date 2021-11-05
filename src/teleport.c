@@ -323,7 +323,7 @@ boolean allow_drag;
             }
         }
     }
-    if (u.ustuck && is_pool(u.ustuck->mx, u.ustuck->my))
+    if (u.ustuck && !u.uswallow && is_pool(u.ustuck->mx, u.ustuck->my))
         tnnt_achieve(A_SURVIVED_DROWNING);
     reset_utrap(FALSE);
     u.ustuck = 0;
