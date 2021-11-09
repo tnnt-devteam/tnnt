@@ -4836,11 +4836,9 @@ schar swapnum;
                o->cursed, o->blessed, o->oeroded, o->oeroded2, o->oerodeproof,
                o->recharged, o->greased, o->usecount, o->corpsenm, objnames[swapnum], plname);
     /* the second line is just for humans to read what the object is, for debugging */
-    o->known = 1;
-    o->dknown = 1;
-    o->bknown = 1;
-    o->rknown = 1;
-    fprintf(f, "%s\n", killer_xname(o));
+    iflags.override_ID = 1;
+    fprintf(f, "%s\n", doname(o));
+    iflags.override_ID = 0;
     fclose(f);
     return TRUE;
 }
