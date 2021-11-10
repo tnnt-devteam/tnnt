@@ -5717,6 +5717,7 @@ boolean final;
             tnnt_globals.elementals_killed_on_planes[1],
             tnnt_globals.elementals_killed_on_planes[2],
             tnnt_globals.elementals_killed_on_planes[3]);
+    putstr(en_win, 0, buf);
 
     char eaten[16] = DUMMY;
     char uneaten[16] = DUMMY;
