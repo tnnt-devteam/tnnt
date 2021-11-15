@@ -116,6 +116,7 @@ struct qtlists {
 
 #define QT_DEVTEAM_GIVENQUEST 80
 #define QT_DEVTEAM_FINISHQUEST 81
+#define QT_DEVTEAM_END 82
 #endif /***** !MAKEDEFS *****/
 
 #endif /* QTEXT_H */

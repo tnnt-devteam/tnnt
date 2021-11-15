@@ -3502,6 +3502,11 @@ certainly be able to release the next version before long. In exchange,
 allow me to present you with this T-shirt, which you may find helpful in
 your quest."
 %E [You have recovered all the missing code, and are given a T-shirt.]
+%Cp - 00082
+With a DevTeam member dead, the world starts to destabilize...
+Light fails, the floor shakes, and the air grows hot.
+The remaining members look at you reproachfully, and then vanish from the world.
+%E
 #
 #	TEST PATTERN
 #
