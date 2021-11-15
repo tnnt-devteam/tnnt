@@ -6677,7 +6677,7 @@ Z = (195, 195, 195)
   ....BPPPPPPE....
   ................
 }
-# tile 350 (devteam member)
+# tile 350 (DevTeam member)
 {
   .............EE.
   .....CCC.....E.E

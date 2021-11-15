@@ -42,12 +42,12 @@ REGION:(00,00,57,16),lit,"ordinary"
 NON_DIGGABLE:(0,0,57,16)
 
 #The Devteam
-MONSTER:"devteam member",(29,06),peaceful,"bhaak"
-MONSTER:"devteam member",(38,06),peaceful,"paxed"
-MONSTER:"devteam member",(29,12),peaceful,"lorimer"
-MONSTER:"devteam member",(38,12),peaceful,"ais"
-MONSTER:"devteam member",(43,07),peaceful,"PatR"
-MONSTER:"devteam member",(44,12),peaceful,"Mike Stephenson"
+MONSTER:"DevTeam member",(29,06),peaceful,"bhaak"
+MONSTER:"DevTeam member",(38,06),peaceful,"paxed"
+MONSTER:"DevTeam member",(29,12),peaceful,"lorimer"
+MONSTER:"DevTeam member",(38,12),peaceful,"ais"
+MONSTER:"DevTeam member",(43,07),peaceful,"PatR"
+MONSTER:"DevTeam member",(44,12),peaceful,"Mike Stephenson"
 
 #THE OFFICE
 FOUNTAIN:(13,09)

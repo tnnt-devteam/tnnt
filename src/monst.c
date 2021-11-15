@@ -2833,7 +2833,7 @@ struct permonst _mons2[] = {
      * aosdict had a better method - make the one, and then can
      * name it after each DT member in the .des file.
      */
-    MON("devteam member", S_HUMAN, LVL(120, 12, -20, 127, 20), (G_NOGEN),
+    MON("DevTeam member", S_HUMAN, LVL(120, 12, -20, 127, 20), (G_NOGEN),
         A(ATTK(AT_WEAP, AD_PHYS, 8, 8), ATTK(AT_WEAP, AD_STUN, 8, 8),
         NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
         SIZ(WT_HUMAN, 400, MS_DEVTEAM, MZ_HUMAN),
