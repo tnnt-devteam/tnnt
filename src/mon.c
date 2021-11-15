@@ -10,6 +10,7 @@
 
 #include "hack.h"
 #include "mfndpos.h"
+#include "qtext.h" /* TNNT - for com_pager constants */
 #include <ctype.h>
 
 STATIC_VAR boolean vamp_rise_msg, disintegested;
@@ -2803,9 +2804,7 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
     /* TNNT - killing the DevTeam is VERY BAD */
     if (mndx == PM_DEVTEAM_MEMBER) {
         struct monst *mon;
-        pline("With a DevTeam member dead, the world starts to destabilize...");
-        pline("Light fails, the floor shakes, and the air grows hot.");
-        pline("The remaining members look at you reproachfully, and then vanish out of this world.");
+        com_pager(QT_DEVTEAM_END);
         for (mon = fmon; mon; mon = mon->nmon) {
             if (DEADMONSTER(mon))
                 continue;
@@ -2813,7 +2812,7 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
                 mongone(mon); /* vanish out of this world indeed */
         }
         pline("Fissures open up, and the realm collapses in on itself.");
-        pline("You die...");
+        You("die...");
         Strcpy(killer.name, "collapsing dungeon");
         done(CRUSHING);
         // life saving?
