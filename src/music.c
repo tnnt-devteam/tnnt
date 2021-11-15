@@ -75,6 +75,8 @@ int distance;
                 npc_awakens();
             /* may scare some monsters -- waiting monsters excluded */
             if (!unique_corpstat(mtmp->data)
+                /* TNNT: treat devteam like unique mons when waiting */
+                && mtmp->mnum != PM_DEVTEAM_MEMBER
                 && (mtmp->mstrategy & STRAT_WAITMASK) != 0)
                 mtmp->mstrategy &= ~STRAT_WAITMASK;
             else if (distm < distance / 3
@@ -206,6 +208,8 @@ struct monst *bugler; /* monster that played instrument */
                 npc_awakens();
             /* may scare some monsters -- waiting monsters excluded */
             if (!unique_corpstat(mtmp->data)
+                /* TNNT: treat devteam like unique mons when waiting */
+                && mtmp->mnum != PM_DEVTEAM_MEMBER
                 && (mtmp->mstrategy & STRAT_WAITMASK) != 0)
                 mtmp->mstrategy &= ~STRAT_WAITMASK;
             else if (distm < distance / 3

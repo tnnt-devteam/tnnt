@@ -3280,28 +3280,34 @@ boolean via_attack;
     }
 
     /* attacking your own quest leader will anger his or her guardians */
+    /* TNNT: attacking a dev will likewise anger other devteam members */
     if (!context.mon_moving /* should always be the case here */
-        && mtmp->data == &mons[quest_info(MS_LEADER)]) {
+        && (mtmp->data == &mons[quest_info(MS_LEADER)]
+            || mtmp->mnum == PM_DEVTEAM_MEMBER)) {
+        boolean is_devteam = (mtmp->mnum == PM_DEVTEAM_MEMBER);
         struct monst *mon;
-        struct permonst *q_guardian = &mons[quest_info(MS_GUARDIAN)];
+        struct permonst *target = is_devteam ? &mons[PM_DEVTEAM_MEMBER]
+                                             : &mons[quest_info(MS_GUARDIAN)];
         int got_mad = 0;
 
         /* guardians will sense this attack even if they can't see it */
         for (mon = fmon; mon; mon = mon->nmon) {
             if (DEADMONSTER(mon))
                 continue;
-            if (mon->data == q_guardian && mon->mpeaceful) {
+            if (mon->data == target && mon != mtmp && mon->mpeaceful) {
                 mon->mpeaceful = 0;
+                mon->mstrategy &= ~STRAT_WAITMASK;
                 if (canseemon(mon))
                     ++got_mad;
             }
         }
         if (got_mad && !Hallucination) {
-            const char *who = q_guardian->mname;
+            const char *who = target->mname;
 
             if (got_mad > 1)
                 who = makeplural(who);
-            pline_The("%s %s to be angry too...",
+            pline_The("%s%s %s to be angry too...",
+                      is_devteam ? "other " : "",
                       who, vtense(who, "appear"));
         }
     }
@@ -3412,7 +3418,8 @@ int x, y, distance;
             mtmp->msleeping = 0; /* wake indeterminate sleep */
             if (is_deathmatch_opponent(mtmp))
                 npc_awakens();
-            if (!(mtmp->data->geno & G_UNIQ))
+            if (!(mtmp->data->geno & G_UNIQ)
+                && mtmp->mnum != PM_DEVTEAM_MEMBER)
                 mtmp->mstrategy &= ~STRAT_WAITMASK; /* wake 'meditation' */
             if (context.mon_moving)
                 continue;
