@@ -5705,9 +5705,9 @@ boolean final;
     putstr(en_win, 0, buf);
 
     /* kill a certain number of foo */
-    Sprintf(buf, "You have killed %d/9 Nazgul.", mvitals[PM_NAZGUL].died);
+    Sprintf(buf, "You have killed %d/9 Nazgul.", mvitals[PM_NAZGUL].ukilled);
     putstr(en_win, 0, buf);
-    Sprintf(buf, "You have killed %d/3 erinyes.", mvitals[PM_ERINYS].died);
+    Sprintf(buf, "You have killed %d/3 erinyes.", mvitals[PM_ERINYS].ukilled);
     putstr(en_win, 0, buf);
     Sprintf(buf, "You have killed the Wizard of Yendor %d times.",
             tnnt_globals.wizards_killed);
