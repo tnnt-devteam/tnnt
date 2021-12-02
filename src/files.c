@@ -5098,6 +5098,8 @@ xchar x, y;
      * gets, say, poison resistance from this, they'll act as if they have
      * innate poison resistance up until they put on and then take off an apron,
      * which will lose the poison resistance.
+     * TODO: In 3.7, revisit this, because monster intrinsic interactions have
+     * changed.
      */
     npc->mextrinsics = mintrinsics;
     npc->mpeaceful = 0;
