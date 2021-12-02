@@ -1523,16 +1523,16 @@ struct obj* exception;
     struct monst* mtmp;
     collected = NULL;
 
-#define t_collect(obj)                             \
-    do {                                           \
-        if (Has_contents(obj))                     \
+#define t_collect(obj)                                 \
+    do {                                               \
+        if (Has_contents(obj))                         \
             collect_transient_within(obj, &collected); \
-        if (obj->transient) {                      \
-            obj->owornmask = 0;                    \
-            obj_extract_self(obj);                 \
-            obj->nobj = collected;                 \
-            collected = obj;                       \
-        }                                          \
+        if (obj->transient) {                          \
+            obj->owornmask = 0;                        \
+            obj_extract_self(obj);                     \
+            obj->nobj = collected;                     \
+            collected = obj;                           \
+        }                                              \
     } while (0)
 
     /* floor objects */
@@ -1551,6 +1551,11 @@ struct obj* exception;
     for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
         for (otmp = mtmp->minvent; otmp; otmp = next) {
             next = otmp->nobj;
+            if (otmp->transient && otmp->oclass == ARMOR_CLASS) {
+                mtmp->misc_worn_check &= ~otmp->owornmask;
+                if (otmp->owornmask)
+                    update_mon_intrinsics(mtmp, otmp, FALSE, FALSE);
+            }
             t_collect(otmp);
         }
     }
@@ -1559,10 +1564,12 @@ struct obj* exception;
         next = otmp->nobj;
         t_collect(otmp);
     }
-    /* your inventory - shouldn't be possible, but just in case */
+    /* your inventory */
     for (otmp = invent; otmp; otmp = next) {
         next = otmp->nobj;
         if (otmp != exception) {
+            if (otmp->transient && otmp->owornmask)
+                setnotworn(otmp);
             t_collect(otmp);
         }
     }
@@ -1652,8 +1659,6 @@ boolean telekinesis; /* not picking it up directly by hand */
         struct obj *list, *next;
         for (list = collect_all_transient(obj); list; list = next) {
             next = list->nobj;
-            if (Has_contents(list))
-                delete_contents(list);
             list->nobj = NULL;
             /* list should consist only of OBJ_FREE objects */
             obfree(list, NULL);

@@ -1061,15 +1061,30 @@ register struct trap *ttmp;
 
     target_level = ttmp->dst;
 
-    /* TNNT: if leaving the deathmatch before finishing it, that's fine - but
-     * you can never reenter. Delete the portal in the arena as you exit.
-     * Leaving the arena level prior to or after finishing the deathmatch does
-     * not destroy the portal. */
-    if (Is_deathmatch_level(&u.uz) && tnnt_globals.deathmatch_started
-        && !tnnt_globals.deathmatch_completed) {
-        deltrap(ttmp);    /* destroy this portal - maybe unnecessary */
-        portal_flag = -1; /* destroy corresponding portal */
-        msg = "Loud booing follows you out of the arena...";
+    /* TNNT: need to handle some extra things if exiting the deathmatch */
+    if (Is_deathmatch_level(&u.uz) && tnnt_globals.deathmatch_started) {
+        /* You're either exiting victorious (in which case you've probably taken
+         * your trophy, which is now non-transient) or fleeing for your life (in
+         * which case you deserve nothing). Safe to delete all the NPC's
+         * transient possessions. This closes any possibility the hero has of
+         * escaping with multiple acquired transient items.
+         * If you won and are leaving without having taken anything, they'll
+         * vanish, but them's the breaks. */
+        struct obj *list, *nobj;
+        for (list = collect_all_transient(NULL); list; list = nobj) {
+            nobj = list->nobj;
+            list->nobj = NULL;
+            obfree(list, NULL);
+        }
+        /* if leaving the deathmatch before finishing it, that's fine - but you
+         * can never reenter. Delete the portal in the arena as you exit.
+         * Leaving the arena level prior to or after finishing the deathmatch
+         * does not destroy the portal. */
+        if (!tnnt_globals.deathmatch_completed) {
+            deltrap(ttmp);    /* destroy this portal - maybe unnecessary */
+            portal_flag = -1; /* destroy corresponding portal */
+            msg = "Loud booing follows you out of the arena...";
+        }
     }
 
     schedule_goto(&target_level, FALSE, FALSE, portal_flag, msg, (char *) 0);
