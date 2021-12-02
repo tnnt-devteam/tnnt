@@ -380,12 +380,13 @@ long mask; /* nonzero if resistance status should change by mask */
         else
             EHalluc_resistance &= ~mask;
     } else {
-        if (!EHalluc_resistance && (!!HHallucination != !!xtime))
+        if (!EHalluc_resistance && (!!HHallucination != !!xtime)
+            && !u.uroleplay.hallu)
             changed = TRUE;
         set_itimeout(&HHallucination, xtime);
 
         /* clearing temporary hallucination without toggling vision */
-        if (!changed && !HHallucination && old && talk) {
+        if (!changed && !Hallucination && old && talk) {
             if (!haseyes(youmonst.data)) {
                 strange_feeling((struct obj *) 0, (char *) 0);
             } else if (Blind) {
