@@ -948,8 +948,6 @@ register struct obj *obj;
         /* `obj' is now obsolete */
         tnnt_achieve(A_TAMED_BY_FOOD);
     }
-    else
-        tnnt_achieve(A_TAMED_NOT_BY_FOOD);
 
     if (mtmp->data == &mons[PM_WOODCHUCK])
         tnnt_achieve(A_KILLED_TAMED_WOODCHUCK);

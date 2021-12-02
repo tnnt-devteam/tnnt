@@ -300,14 +300,19 @@ struct obj *book2;
                 && cansee(mtmp->mx, mtmp->my)) {
                 mtmp->mpeaceful = TRUE;
                 if (sgn(mtmp->data->maligntyp) == sgn(u.ualign.type)
-                    && distu(mtmp->mx, mtmp->my) < 4)
+                    && distu(mtmp->mx, mtmp->my) < 4) {
                     if (mtmp->mtame) {
                         if (mtmp->mtame < 20)
                             mtmp->mtame++;
-                    } else
+                    } else {
+                        int was_tame = mtmp->mtame;
                         (void) tamedog(mtmp, (struct obj *) 0);
-                else
+                        if (!was_tame && mtmp->mtame)
+                            tnnt_achieve(A_TAMED_NOT_BY_FOOD);
+                    }
+                } else {
                     monflee(mtmp, 0, FALSE, TRUE);
+                }
             }
         }
     } else {

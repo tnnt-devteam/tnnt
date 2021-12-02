@@ -979,6 +979,8 @@ struct obj *sobj;
             make_happy_shk(mtmp, FALSE);
         else if (!resist(mtmp, sobj->oclass, 0, NOTELL))
             (void) tamedog(mtmp, (struct obj *) 0);
+        if (!was_tame && mtmp->mtame)
+            tnnt_achieve(A_TAMED_NOT_BY_FOOD);
         if ((!was_peaceful && mtmp->mpeaceful) || (!was_tame && mtmp->mtame))
             return 1;
     }

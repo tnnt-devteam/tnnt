@@ -3306,8 +3306,12 @@ domagictrap()
                     if (!isok(u.ux + i, u.uy + j))
                         continue;
                     mtmp = m_at(u.ux + i, u.uy + j);
-                    if (mtmp)
+                    if (mtmp) {
+                        int was_tame = mtmp->mtame;
                         (void) tamedog(mtmp, (struct obj *) 0);
+                        if (!was_tame && mtmp->mtame)
+                            tnnt_achieve(A_TAMED_NOT_BY_FOOD);
+                    }
                 }
             break;
         }
