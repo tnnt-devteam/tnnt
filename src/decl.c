@@ -424,7 +424,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Learn the Alphabet", "Kill a monster of each class from a to z"},
   {"LEARN THE ALPHABET", "Kill a monster of each class from A to Z (except I)"},
   /* "kill things in specific circumstances" group */
-  {"What It Was Made For", "Kill a appropriate monster with a Bane weapon"},
+  {"What It Was Made For", "Kill an appropriate monster with a Bane weapon"},
   {"Kop Training Program", "Kill a monster with a rubber hose"},
   {"Buffy", "Destroy an undead with #turn"},
   {"Bright Light, Bright Light", "Kill a gremlin with any light source"},
