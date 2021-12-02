@@ -162,7 +162,8 @@ stealarm(VOID_ARGS)
                         subfrombill(otmp, shop_keeper(*u.ushops));
                     freeinv(otmp);
                     pline("%s steals %s!", Monnam(mtmp), doname(otmp));
-                    tnnt_achieve(A_ROBBED_BY_NYMPH);
+                    if (mtmp->data->mlet == S_NYMPH)
+                        tnnt_achieve(A_ROBBED_BY_NYMPH);
                     (void) mpickobj(mtmp, otmp); /* may free otmp */
                     /* Implies seduction, "you gladly hand over ..."
                        so we don't set mavenge bit here. */
@@ -471,7 +472,8 @@ char *objnambuf;
           doname(otmp));
     could_petrify = (otmp->otyp == CORPSE
                      && touch_petrifies(&mons[otmp->corpsenm]));
-    tnnt_achieve(A_ROBBED_BY_NYMPH);
+    if (mtmp->data->mlet == S_NYMPH)
+        tnnt_achieve(A_ROBBED_BY_NYMPH);
     (void) mpickobj(mtmp, otmp); /* may free otmp */
     if (could_petrify && !(mtmp->misc_worn_check & W_ARMG)) {
         minstapetrify(mtmp, TRUE);
