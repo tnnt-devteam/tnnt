@@ -4831,10 +4831,12 @@ schar swapnum;
     if (!f) return FALSE;
     fprintf(f, "o_id=%x\totyp=%d\towt=%d\tquan=%ld\tspe=%d\toclass=%d\t"
                "cursed=%d\tblessed=%d\toeroded=%d\toeroded2=%d\toerodeproof=%d\t"
-               "recharged=%d\tgreased=%d\tusecount=%d\tcorpsenm=%d\tname=%s_%s\n",
+               "recharged=%d\tgreased=%d\topoisoned=%d\tusecount=%d\t"
+               "corpsenm=%d\tname=%s_%s\n",
                o->o_id, o->otyp, o->owt, o->quan, o->spe, o->oclass,
                o->cursed, o->blessed, o->oeroded, o->oeroded2, o->oerodeproof,
-               o->recharged, o->greased, o->usecount, o->corpsenm, objnames[swapnum], plname);
+               o->recharged, o->greased, o->opoisoned, o->usecount,
+               o->corpsenm, objnames[swapnum], plname);
     /* the second line is just for humans to read what the object is, for debugging */
     iflags.override_ID = 1;
     fprintf(f, "%s\n", doname(o));
@@ -4903,6 +4905,10 @@ char *filename;
         }
         if (sscanf(buf, "greased=%d", &tmp_bitfield) == 1) {
             o->greased = tmp_bitfield;
+            continue;
+        }
+        if (sscanf(buf, "opoisoned=%d", &tmp_bitfield) == 1) {
+            o->opoisoned = tmp_bitfield;
             continue;
         }
         if (sscanf(buf, "usecount=%d", &(o->usecount)) == 1) continue;
