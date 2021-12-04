@@ -447,7 +447,8 @@ dosounds()
         };
         You_hear1(devteambranch_msg[rn2(3 + hallu)]);
     }
-    if (at_dgn_entrance("Deathmatch Arena") && !rn2(200)) {
+    if (at_dgn_entrance("Deathmatch Arena") && !rn2(200)
+        && !tnnt_globals.deathmatch_started) {
         static const char* const arena_msg[] = {
             "the roaring of a crowd.",
             "the clash of steel on steel."
