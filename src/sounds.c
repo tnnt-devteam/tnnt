@@ -150,6 +150,7 @@ struct obj* thrownscroll;
                 dropy(reward);
                 pickup_object(reward, 1, FALSE);
                 tnnt_achieve(A_FINISHED_DEVTEAM_QUEST);
+                livelog_printf(LL_ACHIEVE, "completed the DevTeam Quest");
             }
         }
     }
