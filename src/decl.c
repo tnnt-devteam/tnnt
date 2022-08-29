@@ -665,6 +665,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"What Have I Unleashed", "Make a demon lord escape the dungeon"},
   {"Walking Bullseye", "Have +30 AC"},
   {"Doorstopper", "Have a door resist 8 consecutive times when trying to open or close it"},
+  {"Look the Other Way", "Successfully bribe a mercenary"},
 };
 
 /* support for lint.h */

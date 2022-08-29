@@ -759,6 +759,8 @@ enum tnnt_achievements {
     A_MAKE_DLORD_ESCAPE,
     A_GOT_30_AC,
     A_DOOR_RESIST_8X,
+    A_BRIBED_MERC,
+    /* 43 free bits in tnntachieve4 */
     /* 277 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
