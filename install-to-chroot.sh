@@ -9,11 +9,6 @@
 # autonamed chroot directory. Can rename.
 DATESTAMP=`date +%Y%m%d-%H%M%S`
 NAO_CHROOT="/opt/nethack/chroot"
-#NAO_CHROOT=/opt/nethack/chroot
-# config outside of chroot
-DGL_CONFIG="/opt/nethack/dgamelaunch.conf"
-# already compiled versions of dgl and nethack
-DGL_GIT="/home/build/dgamelaunch"
 NETHACK_GIT="/home/build/tnnt"
 # the user & group from dgamelaunch config file.
 USRGRP="games:games"
@@ -26,8 +21,6 @@ NH_BRANCH="master"
 NHSUBDIR="tnnt"
 # VAR_PLAYGROUND from include/unixconf.h
 NH_VAR_PLAYGROUND="/tnnt/var/"
-# only define this if dgl was configured with --enable-sqlite
-SQLITE_DBFILE="/dgldir/dgamelaunch.db"
 # END OF CONFIG
 ##############################################################################
 
@@ -97,6 +90,8 @@ mkdir -p "$NAO_CHROOT/$NHSUBDIR/var/whereis"
 chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/whereis"
 mkdir -p "$NAO_CHROOT/$NHSUBDIR/swapchest"
 chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/swapchest"
+mkdir -p "$NAO_CHROOT/$NHSUBDIR/npcfiles"
+chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/npcfiles"
 
 touch "$NAO_CHROOT/$NHSUBDIR/var/logfile"
 chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/logfile"
