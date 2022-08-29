@@ -229,12 +229,17 @@ charm_monsters(distance)
 int distance;
 {
     struct monst *mtmp, *mtmp2;
+    int was_tame;
 
     if (u.uswallow) {
+        was_tame = u.ustuck->mtame;
         if (!resist(u.ustuck, TOOL_CLASS, 0, NOTELL))
             (void) tamedog(u.ustuck, (struct obj *) 0);
+        if (!was_tame && u.ustuck->mtame)
+            tnnt_achieve(A_TAMED_NOT_BY_FOOD);
     } else {
         for (mtmp = fmon; mtmp; mtmp = mtmp2) {
+            was_tame = mtmp->mtame;
             mtmp2 = mtmp->nmon;
             if (DEADMONSTER(mtmp))
                 continue;
@@ -242,6 +247,8 @@ int distance;
             if (distu(mtmp->mx, mtmp->my) <= distance) {
                 if (!resist(mtmp, TOOL_CLASS, 0, NOTELL))
                     (void) tamedog(mtmp, (struct obj *) 0);
+                if (!was_tame && mtmp->mtame)
+                    tnnt_achieve(A_TAMED_NOT_BY_FOOD);
             }
         }
     }

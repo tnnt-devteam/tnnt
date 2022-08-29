@@ -34,6 +34,7 @@ STATIC_DCL int FDECL(maybe_tame, (struct monst *, struct obj *));
 STATIC_DCL boolean FDECL(get_valid_stinking_cloud_pos, (int, int));
 STATIC_DCL boolean FDECL(is_valid_stinking_cloud_pos, (int, int, BOOLEAN_P));
 STATIC_PTR void FDECL(display_stinking_cloud_positions, (int));
+STATIC_PTR void FDECL(tnnt_roomlit_credit, (int, int));
 STATIC_PTR void FDECL(set_lit, (int, int, genericptr));
 STATIC_DCL void NDECL(do_class_genocide);
 
@@ -978,6 +979,8 @@ struct obj *sobj;
             make_happy_shk(mtmp, FALSE);
         else if (!resist(mtmp, sobj->oclass, 0, NOTELL))
             (void) tamedog(mtmp, (struct obj *) 0);
+        if (!was_tame && mtmp->mtame)
+            tnnt_achieve(A_TAMED_NOT_BY_FOOD);
         if ((!was_peaceful && mtmp->mpeaceful) || (!was_tame && mtmp->mtame))
             return 1;
     }
@@ -1954,6 +1957,41 @@ int chg; /* recharging */
     exercise(A_STR, FALSE);
 }
 
+/* TNNT: give credit for lighting a position in a previously-unlit room.  */
+STATIC_PTR void
+tnnt_roomlit_credit(x, y)
+int x, y;
+{
+    /* The dnum hack is ugly, and assumes the Dungeons of Doom will remain
+     * dnum 0 for the foreseeable future (probably a safe bet). But dungeon.c
+     * doesn't provide any API that allows us to check. */
+    if (levl[x][y].lit == 0 && u.uz.dnum == 0
+        && (levl[x][y].roomno >= ROOMOFFSET || Is_bigroom(&u.uz))
+        && !tnnt_is_achieved(A_LIT_20_ROOMS)) {
+        int i;
+        for (i = 0; i < TNNT_LITROOM_GOAL; ++i) {
+            if (tnnt_globals.dark_rooms_lit[i].ledgerno > 0) {
+                /* hope this doesn't interact weirdly with SHARED */
+                unsigned short lno = tnnt_globals.dark_rooms_lit[i].ledgerno,
+                               rno = tnnt_globals.dark_rooms_lit[i].roomno;
+                if (lno == ledger_no(&u.uz) && rno == levl[x][y].roomno)
+                    /* already credited for lighting this room */
+                    break;
+                /* else if index i already stores a room, but it's not the
+                 * current room, just move on and check the next one */
+                continue;
+            }
+            /* this is a new room we're lighting! */
+            tnnt_globals.dark_rooms_lit[i].ledgerno = ledger_no(&u.uz);
+            tnnt_globals.dark_rooms_lit[i].roomno = levl[x][y].roomno;
+            if (i == TNNT_LITROOM_GOAL - 1)
+                tnnt_achieve(A_LIT_20_ROOMS);
+            break;
+        }
+    }
+}
+
+
 /* used to collect gremlins being hit by light so that they can be processed
    after vision for the entire lit area has been brought up to date */
 struct litmon {
@@ -1974,6 +2012,8 @@ genericptr_t val;
     struct litmon *gremlin;
 
     if (val) {
+        /* TNNT: potentially track this room as lit */
+        tnnt_roomlit_credit(x, y);
         levl[x][y].lit = 1;
         if ((mtmp = m_at(x, y)) != 0 && mtmp->data == &mons[PM_GREMLIN]) {
             gremlin = (struct litmon *) alloc(sizeof *gremlin);
@@ -1994,7 +2034,6 @@ struct obj *obj;
 {
     char is_lit; /* value is irrelevant; we use its address
                     as a `not null' flag for set_lit() */
-    boolean was_dark = !levl[u.ux][u.uy].lit;
 
     /* first produce the text (provided you're not blind) */
     if (!on) {
@@ -2090,33 +2129,6 @@ struct obj *obj;
             light_hits_gremlin(gremlin->mon, rnd(5));
             free((genericptr_t) gremlin);
         } while (gremlins);
-    }
-    /* TNNT: potentially track this room as lit
-     * The dnum hack is ugly, and assumes the Dungeons of Doom will remain dnum
-     * 0 for the foreseeable future (probably a safe bet). But dungeon.c doesn't
-     * provide any API that allows us to check. */
-    if (on && was_dark && u.uz.dnum == 0
-        && levl[u.ux][u.uy].typ == ROOM && !tnnt_is_achieved(A_LIT_20_ROOMS)) {
-        int i;
-        for (i = 0; i < TNNT_LITROOM_GOAL; ++i) {
-            if (tnnt_globals.dark_rooms_lit[i].ledgerno > 0) {
-                /* hope this doesn't interact weirdly with SHARED */
-                if (tnnt_globals.dark_rooms_lit[i].ledgerno == ledger_no(&u.uz)
-                    && tnnt_globals.dark_rooms_lit[i].roomno
-                        == levl[u.ux][u.uy].roomno)
-                    /* we've already gotten credit for lighting this room */
-                    break;
-                /* else if index i already stores a room, but it's not the
-                 * current room, just move on and check the next one*/
-                continue;
-            }
-            /* this is a new room we're lighting! */
-            tnnt_globals.dark_rooms_lit[i].ledgerno = ledger_no(&u.uz);
-            tnnt_globals.dark_rooms_lit[i].roomno = levl[u.ux][u.uy].roomno;
-            if (i == TNNT_LITROOM_GOAL - 1)
-                tnnt_achieve(A_LIT_20_ROOMS);
-            break;
-        }
     }
 }
 
