@@ -460,7 +460,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Fashionista", "Identify all non-obvious cloaks, helms, boots, and gloves"},
   {"Mineralogist", "Identify every type of valuable gemstone"},
   {"Geologist", "Identify all gray stones"},
-  {"Glass Collector", "Identify all worthless glass"},
+  {"Glass Menagerie", "Identify all worthless glass"},
   /* involving maintaining a conduct up to Quest */
   {"Friends Not Food", "Receive the Quest with vegetarian conduct intact"},
   {"Animal Rights Activist", "Receive the Quest with vegan conduct intact"},
