@@ -1539,8 +1539,8 @@ struct obj* exception;
     for (y = 0; y < ROWNO; ++y) {
         for (x = 0; x < COLNO; ++x) {
             for (otmp = level.objects[x][y]; otmp; otmp = next) {
-                next = otmp->nobj;
                 xchar oldox = otmp->ox, oldoy = otmp->oy;
+                next = otmp->nobj;
                 t_collect(otmp);
                 if (otmp->transient)
                     newsym(oldox, oldoy);
@@ -1654,9 +1654,9 @@ boolean telekinesis; /* not picking it up directly by hand */
     /* TNNT: you're only allowed to remove one item from whatever the NPC drops
      * when they die. Destroy all other transient objects on the level. */
     if (obj->transient && tnnt_globals.deathmatch_completed) {
+        struct obj *list, *next;
         obj->transient = 0; /* don't collect later or run this block again */
         tnnt_globals.deathmatch_prize_oid = obj->o_id;
-        struct obj *list, *next;
         for (list = collect_all_transient(obj); list; list = next) {
             next = list->nobj;
             list->nobj = NULL;

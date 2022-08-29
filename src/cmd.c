@@ -5456,11 +5456,11 @@ dotnntdebug(VOID_ARGS)
 {
     char buf[BUFSZ];
     char buf2[BUFSZ];
-    en_win = create_nhwindow(NHW_MENU);
-    menu_item* choice = NULL;
+    menu_item *choice = NULL;
     char response;
     anything any;
     any.a_char = 's';
+    en_win = create_nhwindow(NHW_MENU);
     add_menu(en_win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
              "show debug stats", MENU_UNSELECTED);
     any.a_char = 'w';
@@ -5482,17 +5482,18 @@ dotnntdebug(VOID_ARGS)
     en_win = WIN_ERR;
 
     if (response == 's') {
-        en_win = create_nhwindow(NHW_MENU);
-        // tnnt achievements
-        putstr(en_win, ATR_BOLD, "TNNT achievements (in hexadecimal):");
         int i;
+        en_win = create_nhwindow(NHW_MENU);
+        /* tnnt achievements */
+        putstr(en_win, ATR_BOLD, "TNNT achievements (in hexadecimal):");
         for (i = 0; i < SIZE(tnnt_globals.tnnt_achievements); ++i) {
-            Sprintf(buf, "tnntachieve%d: 0x%lx", i, tnnt_globals.tnnt_achievements[i]);
+            Sprintf(buf, "tnntachieve%d: 0x%llx", i,
+                    tnnt_globals.tnnt_achievements[i]);
             putstr(en_win, 0, buf);
         }
         putstr(en_win, 0, "");
 
-        // devteam quest info
+        /* devteam quest info */
         putstr(en_win, ATR_BOLD, "Devteam Quest:");
         Strcpy(buf, "Scroll levels:");
         for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
@@ -5556,6 +5557,8 @@ boolean final;
 {
     char buf[BUFSZ];
     int i;
+    char eaten[16] = DUMMY;
+    char uneaten[16] = DUMMY;
     en_win = create_nhwindow(NHW_MENU);
 
     /* mention overall #achievements display */
@@ -5725,8 +5728,6 @@ boolean final;
             tnnt_globals.elementals_killed_on_planes[3]);
     putstr(en_win, 0, buf);
 
-    char eaten[16] = DUMMY;
-    char uneaten[16] = DUMMY;
     for (i = 0; i < MAXOCLASSES; ++i) {
         char ochar[2];
         ochar[0] = def_oc_syms[i].sym;
@@ -5763,10 +5764,29 @@ int
 show_tnnt_achievements(final)
 boolean final;
 {
-    menu_item* choice = NULL;
+    menu_item *choice = NULL;
     winid win = create_nhwindow(NHW_MENU);
+    char response, buf[BUFSZ];
+    int i, num_earned = 0;
+
+    /* Special handling for vanilla achievements which are not tracked in
+     * tnnt_achievements. This replicates the conditions in topten.c where they
+     * are added to the xlogfile. */
+    boolean vanilla_achieved[NUM_VANILLA_ACHIEVEMENTS] = {
+        (boolean) u.uachieve.bell,
+        (boolean) u.uachieve.enter_gehennom,
+        (boolean) u.uachieve.menorah,
+        (boolean) u.uachieve.book,
+        (boolean) u.uevent.invoked,
+        (boolean) u.uachieve.amulet,
+        In_endgame(&u.uz),
+        Is_astralevel(&u.uz),
+        (boolean) u.uachieve.mines_luckstone,
+        (boolean) u.uachieve.finish_sokoban,
+        (boolean) u.uachieve.killed_medusa
+    };
+
     start_menu(win);
-    char response;
     if (!final) {
         anything any;
         any.a_char = 'e';
@@ -5794,8 +5814,6 @@ boolean final;
     }
     /* TODO: will need NHW_MENU if we can get paging to work in tty */
     win = create_nhwindow(NHW_TEXT);
-    char buf[BUFSZ];
-    int i;
     if (response == 'b') {
         putstr(win, ATR_BOLD, "All achievements:");
     }
@@ -5807,24 +5825,6 @@ boolean final;
     if (!final) {
         putstr(win, ATR_BOLD, "(Use #tnntstats to check progress of certain ones.)");
     }
-
-    int num_earned = 0;
-    /* Special handling for vanilla achievements which are not tracked in
-     * tnnt_achievements. This replicates the conditions in topten.c where they
-     * are added to the xlogfile. */
-    boolean vanilla_achieved[NUM_VANILLA_ACHIEVEMENTS] = {
-        (boolean) u.uachieve.bell,
-        (boolean) u.uachieve.enter_gehennom,
-        (boolean) u.uachieve.menorah,
-        (boolean) u.uachieve.book,
-        (boolean) u.uevent.invoked,
-        (boolean) u.uachieve.amulet,
-        In_endgame(&u.uz),
-        Is_astralevel(&u.uz),
-        (boolean) u.uachieve.mines_luckstone,
-        (boolean) u.uachieve.finish_sokoban,
-        (boolean) u.uachieve.killed_medusa
-    };
     for (i = 0; i < NUM_VANILLA_ACHIEVEMENTS; ++i) {
         boolean earned = vanilla_achieved[i];
         if (earned)
@@ -5936,10 +5936,11 @@ dotnntspecies(VOID_ARGS)
             putstr(en_win, 0, buf);
             numeligible++;
             if (killed) {
+                char mlet;
                 total++;
                 /* note that mons[].mlet isn't the actual character it displays
                  * as. S_ANT is 1, for instance. */
-                char mlet = mons[i].mlet - S_ANT + 'a';
+                mlet = mons[i].mlet - S_ANT + 'a';
                 if (mlet >= 'a' && mlet <= 'z') {
                     lowercaselets[mlet - 'a'] = mlet;
                 }

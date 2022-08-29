@@ -470,9 +470,9 @@ register struct monst *mtmp;
                      helm_simple_name(obj));
             } else {
                 if (3 + find_mac(mtmp) <= rnd(20)) {
+                    int dmg = d(3, 6);
                     pline("%s is hit by a falling piercer (you)!",
                           Monnam(mtmp));
-                    int dmg = d(3, 6);
                     if ((mtmp->mhp -= dmg) < 1)
                         killed(mtmp);
                 } else
@@ -1477,8 +1477,8 @@ register struct attack *mattk;
         }
         if (!uwep && !uarmu && !uarm && !uarmc
             && !uarms && !uarmg && !uarmf && !uarmh) {
-            tnnt_achieve(A_HEALED_BY_NURSE);
             boolean goaway = FALSE;
+            tnnt_achieve(A_HEALED_BY_NURSE);
 
             pline("%s hits!  (I hope you don't mind.)", Monnam(mtmp));
             if (Upolyd) {

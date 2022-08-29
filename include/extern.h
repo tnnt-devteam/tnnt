@@ -871,7 +871,7 @@ E void NDECL(mk_dgl_extrainfo);
 #endif
 
 #ifdef TNNT_SWAPCHEST_DIR
-E boolean FDECL(write_swapobj_file, (struct obj *, schar));
+E boolean FDECL(write_swapobj_file, (struct obj *, SCHAR_P));
 E void FDECL(refresh_swap_chest_contents, (struct obj *));
 E boolean FDECL(delete_swapobj_file, (struct obj *));
 #endif

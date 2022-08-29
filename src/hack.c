@@ -581,8 +581,8 @@ dosinkfall()
         You((innate_lev || blockd_lev) ? "wobble unsteadily for a moment."
                                        : "gain control of your flight.");
     } else {
-        tnnt_achieve(A_FELL_ONTO_SINK);
         long save_ELev = ELevitation, save_HLev = HLevitation;
+        tnnt_achieve(A_FELL_ONTO_SINK);
 
         /* fake removal of levitation in advance so that final
            disclosure will be right in case this turns out to
@@ -2545,7 +2545,7 @@ register boolean newlev;
         switch (rt) {
         case VAULT:
             tnnt_achieve(A_ENTERED_VAULT);
-            rt = 0; // don't unmake vault
+            rt = 0; /* don't unmake vault */
             break;
         case ZOO:
             tnnt_achieve(A_ENTERED_ZOO);

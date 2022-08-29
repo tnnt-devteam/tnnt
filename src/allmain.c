@@ -669,23 +669,23 @@ newgame()
     /* Create the lost Scrolls of Missing Code, then send them to various places
      * in the Dungeons of Doom. */
     for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
-        struct obj* scroll = mksobj(SCR_MISSING_CODE, FALSE, FALSE);
+        struct obj *scroll = mksobj(SCR_MISSING_CODE, FALSE, FALSE);
+        xchar castle_depth = stronghold_level.dlevel;
+        xchar dest;
+        boolean samelevel;
 
         /* TODO: More fine-grained control over where these end up.
          * Currently they just get sent to random levels. */
         tnnt_globals.missing_scroll_levels[i] = 0;
-        xchar castle_depth = stronghold_level.dlevel;
-        xchar dest;
-        boolean samelevel;
         do {
-            // We don't want to put it on dungeon level 1, the Castle, or
-            // Medusa. Since level 1 and the Castle are the extremes, we can
-            // eliminate them in here, though.
+            int j;
+            /* We don't want to put it on dungeon level 1, the Castle, or
+               Medusa. Since level 1 and the Castle are the extremes, we can
+               eliminate them in here, though. */
             dest = rnd(castle_depth - 2) + 1;
 
-            // Don't put two scrolls on the same level.
-            // TODO: This may not be needed.
-            int j;
+            /* Don't put two scrolls on the same level. */
+            /* TODO: This may not be needed. */
             samelevel = FALSE;
             for (j = 0; j < i; ++j) {
                 if (dest == tnnt_globals.missing_scroll_levels[j]) {
@@ -697,7 +697,7 @@ newgame()
         tnnt_globals.missing_scroll_levels[i] = dest;
 
         scroll->owornmask = MIGR_RANDOM;
-        scroll->ox = u.uz.dnum; // should always be DoD
+        scroll->ox = u.uz.dnum; /* should always be DoD */
         scroll->oy = dest;
         /* For devteam feedback on where to find scrolls: store the dest in
          * corpsenm, so we know not to send the hero chasing after a scroll that

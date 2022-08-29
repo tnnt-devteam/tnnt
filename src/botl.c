@@ -412,6 +412,7 @@ const char *
 botl_realtime(void)
 {
     time_t currenttime;
+    static char buf[BUFSZ] = DUMMY;
 
     if (iflags.show_realtime == 'p') {
         /* play time */
@@ -423,7 +424,6 @@ botl_realtime(void)
         return "";
     }
 
-    static char buf[BUFSZ] = { 0 };
     switch (iflags.realtime_format) {
     case 's':
         Sprintf(buf, "%ld", currenttime);

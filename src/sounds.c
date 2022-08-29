@@ -3,7 +3,7 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "qtext.h" // TNNT - for com_pager constants
+#include "qtext.h" /* TNNT - for com_pager constants */
 
 STATIC_DCL boolean FDECL(mon_is_gecko, (struct monst *));
 STATIC_DCL int FDECL(domonnoise, (struct monst *));
@@ -74,15 +74,20 @@ struct obj* thrownscroll;
          */
         int i;
         int nscrolls_given = 0;
+        xchar scrolls_remaining = 0,
+              nextlevel; /* they tell you where to look next */
         struct obj* scroll = (thrownscroll ? thrownscroll : carrying(SCR_MISSING_CODE));
         while (scroll) {
             int dt_level = scroll->corpsenm;
+            boolean matched;
+
             if (dt_level <= 0) {
-                // wizmode wished scroll?
+                /* wizmode wished scroll? */
                 impossible("scroll marked with bad level?");
                 return;
             }
-            boolean matched = FALSE;
+
+            matched = FALSE;
             for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
                 if (tnnt_globals.missing_scroll_levels[i] == dt_level) {
                     tnnt_globals.missing_scroll_levels[i] = 0;
@@ -93,7 +98,7 @@ struct obj* thrownscroll;
             }
             if (!matched) {
                 impossible("don't remember sending a scroll to level %d?", dt_level);
-                nscrolls_given++; // treat it as accepted anyway
+                nscrolls_given++; /* treat it as accepted anyway */
             }
 
             if (thrownscroll)
@@ -102,12 +107,9 @@ struct obj* thrownscroll;
                 useup(scroll);
             scroll = (thrownscroll ? NULL : carrying(SCR_MISSING_CODE));
         }
-        xchar scrolls_remaining = 0;
-        xchar nextlevel; // they tell you where to look next
         for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
             if (tnnt_globals.missing_scroll_levels[i] != 0) {
-                // there are still scrolls out there that haven't been handed
-                // over
+                /* still scrolls out there that haven't been handed over */
                 scrolls_remaining++;
                 nextlevel = tnnt_globals.missing_scroll_levels[i];
             }
@@ -117,8 +119,9 @@ struct obj* thrownscroll;
             /* make them actually find the first one... no message when none
              * have been found yet. */
             if (scrolls_remaining < NUM_MISSING_CODE_SCROLLS) {
-                verbalize("Paxed thinks a scroll might have ended up on level %d...",
-                        nextlevel);
+                verbalize(
+                   "Paxed thinks a scroll might have ended up on level %d...",
+                          nextlevel);
             }
         }
         else {
@@ -130,23 +133,24 @@ struct obj* thrownscroll;
                     (nscrolls_given > 1 ? "s" : ""));
             }
             if (scrolls_remaining > 0) {
-                // TODO: make better.
+                /* TODO: make better. */
                 if (Deaf)
                     pline("%s signs:", Monnam(devteam));
                 verbalize("Thank you. There should only be %d more scroll%s.",
                           scrolls_remaining, (scrolls_remaining > 1 ? "s" : ""));
             }
             else {
-                // finished!!!
+                /* finished!!! */
+                struct obj *reward;
                 tnnt_globals.devteam_quest_status = DTQUEST_COMPLETED;
                 if (Deaf)
                     pline("%s signs:", Monnam(devteam));
                 com_pager(QT_DEVTEAM_FINISHQUEST);
-                struct obj* reward = mksobj(T_SHIRT, FALSE, FALSE);
+                reward = mksobj(T_SHIRT, FALSE, FALSE);
                 reward = oname(reward, artiname(ART_REALLY_COOL_SHIRT));
-                // player should have just given up at least one scroll, so
-                // should have room for this in inventory, but might get
-                // encumbered and want to decline :d
+                /* player should have just given up at least one scroll, so
+                   should have room for this in inventory, but might get
+                   encumbered and want to decline :d */
                 dropy(reward);
                 pickup_object(reward, 1, FALSE);
                 tnnt_achieve(A_FINISHED_DEVTEAM_QUEST);
@@ -1008,19 +1012,6 @@ register struct monst *mtmp;
     /* The Devteam */
     case MS_DEVTEAM:
         if (mtmp->mpeaceful) {
-            tnnt_achieve(A_TALKED_TO_DEVTEAM);
-            if (!strcmpi(MNAME(mtmp), "Mike Stephenson")) {
-                devteam_quest(mtmp, NULL);
-                break;
-            }
-            /* TODO: stuff here that gives you valid in-game information */
-            if (!mtmp->mcan) {
-                // break;
-            }
-            if (carrying(SCR_MISSING_CODE)) {
-                verbalize("Oh, neat! Show this scroll to Mike Stephenson!");
-                break;
-            }
             struct devteam_msg {
                 const char* msg;
                 boolean verbl; /* 1 = verbalize directly */
@@ -1061,13 +1052,26 @@ register struct monst *mtmp;
                 { "NetHack is just a mound of special cases taped together by global variables.", 1},
                 { "You know, you really don't need most items to ascend.", 1},
             };
-            /* This probably won't be needed.
+            /* This shouldn't be needed, but silences a warning (and adds some
+             * extra bulletproofing). */
             const struct devteam_msg genericmsgs[] = {
                 { "asks you about your day.", 0},
                 { "LOUD NOISES!!", 1}
             };
-            */
             struct devteam_msg chosenmsg;
+            tnnt_achieve(A_TALKED_TO_DEVTEAM);
+            if (!strcmpi(MNAME(mtmp), "Mike Stephenson")) {
+                devteam_quest(mtmp, NULL);
+                break;
+            }
+            /* TODO: stuff here that gives you valid in-game information */
+            if (!mtmp->mcan) {
+                /* break; */
+            }
+            if (carrying(SCR_MISSING_CODE)) {
+                verbalize("Oh, neat! Show this scroll to Mike Stephenson!");
+                break;
+            }
             if (!strcmpi(MNAME(mtmp), "bhaak")) {
                 chosenmsg = bhaakmsgs[rn2(SIZE(bhaakmsgs))];
             }
@@ -1082,6 +1086,9 @@ register struct monst *mtmp;
             }
             else if (!strcmpi(MNAME(mtmp), "lorimer")) {
                 chosenmsg = lorimermsgs[rn2(SIZE(lorimermsgs))];
+            }
+            else { /* silence "maybe uninitialized" warning */
+                chosenmsg = genericmsgs[rn2(SIZE(genericmsgs))];
             }
             if (chosenmsg.verbl)
                 verbl_msg = chosenmsg.msg;
