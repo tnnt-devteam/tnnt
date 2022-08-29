@@ -2124,7 +2124,8 @@ register struct monst *mtmp;
     /* TNNT code for anything that triggers when a monster dies (NOT when the
      * player kills a monster) goes here. */
     bigrm = (slev && !strcmp(slev->proto, "bigrm"));
-    orctown = (slev && !strcmp(slev->proto, "minetn") && slev->which_level == 1);
+    orctown = (slev && !strcmp(slev->proto, "minetn")
+               && slev->which_level == 1);
     if (bigrm || (orctown && mtmp->data->mlet == S_ORC)) {
         /* A_AVENGED_ORCTOWN: all orcs in Orctown (minetn-1) are dead */
         /* A_CLEARED_BIGROOM: all hostiles in Big Room are dead */

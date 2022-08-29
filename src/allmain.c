@@ -205,6 +205,7 @@ boolean resuming;
                     {
                         s_level *slev = Is_special(&u.uz);
                         if (slev && !strcmp(slev->proto, "minetn")
+                            && slev->which_level != 1 /* not orctown */
                             && !tnnt_is_achieved(A_GOT_RID_OF_WATCH)) {
                             boolean has_watch = FALSE;
                             for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
