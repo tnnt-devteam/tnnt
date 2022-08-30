@@ -760,8 +760,9 @@ enum tnnt_achievements {
     A_GOT_30_AC,
     A_DOOR_RESIST_8X,
     A_BRIBED_MERC,
-    /* 43 free bits in tnntachieve4 */
-    /* 277 achievements defined */
+    A_LONG_TIMEOUT,
+    /* 42 free bits in tnntachieve4 */
+    /* 278 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more

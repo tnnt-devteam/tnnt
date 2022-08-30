@@ -666,6 +666,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Walking Bullseye", "Have +30 AC"},
   {"Doorstopper", "Have a door resist 8 consecutive times when trying to open or close it"},
   {"Look the Other Way", "Successfully bribe a mercenary"},
+  {"Practically Permanent", "Have more than 10,000 turns of a temporary intrinsic"},
 };
 
 /* support for lint.h */

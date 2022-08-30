@@ -44,8 +44,11 @@ void
 set_itimeout(which, val)
 long *which, val;
 {
+    long time = itimeout(val);
+    if (time > 10000L)
+        tnnt_achieve(A_LONG_TIMEOUT);
     *which &= ~TIMEOUT;
-    *which |= itimeout(val);
+    *which |= time;
 }
 
 /* increment the timeout field of intrinsic `which' */
