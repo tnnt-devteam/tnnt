@@ -626,7 +626,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Dust to Dust", "Wrest one last charge from a wand of wishing"},
   {"Teetotaler", "Neutralize a potion of booze with an amethyst"},
   {"Spooky Scary Skeletons", "Get scared by the rattling of a skeleton"},
-  {"Gullible", "Lie to a vault guard about your name"},
+  {"Gullible", "Get out of trouble by successfully lying to a vault guard"},
   {"Luck of the Grasshopper", "Reach +13 Luck"},
   {"Murphy's Law", "Reach -13 Luck"},
   {"Looking Slick", "Grease a piece of armor"},

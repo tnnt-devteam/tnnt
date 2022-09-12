@@ -311,6 +311,7 @@ invault()
     struct monst *guard;
     boolean gsensed;
     int trycount, vaultroom = (int) vault_occupied(u.urooms);
+    boolean lied_about_name; /* TNNT */
 
     if (!vaultroom) {
         u.uinvault = 0;
@@ -449,9 +450,10 @@ invault()
             (void) mungspaces(buf);
         } while (!buf[0] && --trycount > 0);
 
+        lied_about_name = FALSE;
         /* ignore trailing text, in case player includes rank */
         if (strncmpi(buf, plname, (int) strlen(plname)) != 0) {
-            tnnt_achieve(A_LIED_TO_GUARD);
+            lied_about_name = TRUE;
             if (u.ualign.type == A_LAWFUL) {
                 adjalign(-1); /* Liar! */
             }
@@ -460,6 +462,10 @@ invault()
         if (!strcmpi(buf, "Croesus") || !strcmpi(buf, "Kroisos")
             || !strcmpi(buf, "Creosote")) { /* Discworld */
             if (!mvitals[PM_CROESUS].died) {
+                /* check to make sure this is really a lie before awarding the
+                   achievement -- the player could really be named Croesus */
+                if (lied_about_name)
+                    tnnt_achieve(A_LIED_TO_GUARD);
                 if (Deaf) {
                     if (!Blind)
                         pline("%s waves goodbye.", noit_Monnam(guard));
