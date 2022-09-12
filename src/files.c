@@ -4791,7 +4791,7 @@ VA_DECL2(unsigned int, ll_type, const char *, fmt)
 void
 livelog_write_string(log_type, buffer)
 unsigned int log_type UNUSED;
-char *buffer UNUSED;
+const char *buffer UNUSED;
 {
 }
 
@@ -4828,10 +4828,13 @@ schar swapnum;
         "generously_bestowed_by"
     };
     char *filename = make_swapobj_filename(o);
-    if (!filename) return FALSE;
-    FILE *f = fopen(filename,"w");
+    FILE *f;
+    if (!filename)
+        return FALSE;
+    f = fopen(filename,"w");
     free(filename);
-    if (!f) return FALSE;
+    if (!f)
+        return FALSE;
     fprintf(f, "o_id=%x\totyp=%d\towt=%d\tquan=%ld\tspe=%d\toclass=%d\t"
                "cursed=%d\tblessed=%d\toeroded=%d\toeroded2=%d\toerodeproof=%d\t"
                "recharged=%d\tgreased=%d\topoisoned=%d\tusecount=%d\t"
@@ -4990,30 +4993,32 @@ write_npc_data(VOID_ARGS)
 {
     FILE *npcfile;
     char buf[BUFSZ];
+    unsigned short mintrinsics;
+    struct obj *obj;
     Sprintf(buf, "%s/NPC-%s", TNNT_NPC_DIR, plname);
     npcfile = fopen(buf, "w");
     if (!npcfile) {
         impossible("Error writing player data to '%s' file", buf);
         return;
     }
-    // line 1: timestamp
+    /* line 1: timestamp */
     fprintf(npcfile, "%ld\n", program_state.gameover ? urealtime.finish_time
                                                      : time(NULL));
-    // line 2: player name
+    /* line 2: player name */
     fprintf(npcfile, "%s\n", plname);
-    // line 3: player role index and gender
+    /* line 3: player role index and gender */
     fprintf(npcfile, "%d %d\n", (flags.female && urole.femalenum != NON_PM) ?
                                     urole.femalenum : urole.malenum,
                                 flags.female);
-    // line 4: player experience level
+    /* line 4: player experience level */
     fprintf(npcfile, "%d\n", u.ulevel);
-    // line 5: player hit point maximum
+    /* line 5: player hit point maximum */
     fprintf(npcfile, "%d\n", u.uhpmax);
     /* line 6: player intrinsics, converted to mextrinsics format...
      * fire cold shock sleep poison disintegration are the only ones that will
      * actually do anything and that are obtainable by the player intrinsically
      */
-    unsigned short mintrinsics = 0x0;
+    mintrinsics = 0x0;
     if (HFire_resistance & INTRINSIC)
         mintrinsics |= MR_FIRE;
     if (HCold_resistance & INTRINSIC)
@@ -5029,7 +5034,6 @@ write_npc_data(VOID_ARGS)
     fprintf(npcfile, "0x%x\n", mintrinsics);
     /* lines 7-end: carried objects, we preserve only certain fields because
      * others would be pointless... */
-    struct obj* obj;
     for (obj = invent; obj; obj = obj->nobj) {
         /* Items that should be excluded go here.
          * We don't go into cobj, so a container with stuff in it turns into an
@@ -5091,9 +5095,15 @@ xchar x, y;
     unsigned short mintrinsics;
     char npcname[BUFSZ], path[BUFSZ];
     char *npcfilename = pick_npc_file();
-    struct monst* npc;
+    const long int mmflags = (NO_MINVENT | MM_NOCOUNTBIRTH | MM_ADJACENTOK
+                              | MM_ANGRY | MM_ASLEEP);
+    struct obj *obj;
+    int strategy, otyp, quan, spe, cursed, blessed, oerodeproof, recharged,
+        greased, corpsenm, usecount, oeaten;
+    struct monst *npc;
     Sprintf(path, "%s/%s", TNNT_NPC_DIR, npcfilename);
     if (!*npcfilename || !(npcfile = fopen(path, "r"))) {
+        int mndx;
         /* NB: in the actual tournament the directory should be stocked with
          * NPC file(s) in advance, so that users will not see this error even
          * if they enter the arena before anyone has ascended. */
@@ -5103,7 +5113,7 @@ xchar x, y;
             impossible(
                      "Error opening NPC file '%s' - creating mplayer instead",
                        path);
-        int mndx = rn1(PM_WIZARD - PM_ARCHEOLOGIST + 1, PM_ARCHEOLOGIST);
+        mndx = rn1(PM_WIZARD - PM_ARCHEOLOGIST + 1, PM_ARCHEOLOGIST);
         /* special = true better approximates an ascending character... */
         npc = mk_mplayer(&mons[mndx], x, y, TRUE);
         npc->mcloned = 1;
@@ -5111,23 +5121,22 @@ xchar x, y;
         return npc;
     }
     /* Get base data from the file. */
-    fgets(npcname, BUFSZ, npcfile); // eat up timestamp; game doesn't use it
-    fgets(npcname, BUFSZ, npcfile); // actually read in name this time
-    npcname[strlen(npcname)-1] = '\0'; // strip \n that was read in
-    fscanf(npcfile, "%d %d\n", &pm_num, &gender);  // get PM_* of correct player monster
-    fscanf(npcfile, "%d\n", &npc_level);   // get ascender's XL
-    fscanf(npcfile, "%d\n", &hpmax);   // get ascender's hp max
-    fscanf(npcfile, "0x%hx\n", &mintrinsics); // get ascender's monster-format intrinsics
+    fgets(npcname, BUFSZ, npcfile); /* eat up timestamp; game doesn't use it */
+    fgets(npcname, BUFSZ, npcfile); /* actually read in name this time */
+    npcname[strlen(npcname)-1] = '\0'; /* strip \n that was read in */
+    fscanf(npcfile, "%d %d\n", &pm_num, &gender);  /* get PM_* of correct player monster */
+    fscanf(npcfile, "%d\n", &npc_level);   /* get ascender's XL */
+    fscanf(npcfile, "%d\n", &hpmax);   /* get ascender's hp max */
+    fscanf(npcfile, "0x%hx\n", &mintrinsics); /* get ascender's monster-format intrinsics */
 
     /* Make the monster normally and take care of all the boilerplate. */
-    const long int mmflags = NO_MINVENT | MM_NOCOUNTBIRTH | MM_ADJACENTOK | MM_ANGRY | MM_ASLEEP;
     npc = makemon(&mons[pm_num], x, y, mmflags);
 
     /* Setup! */
     npc->m_lev = max(npc_level, 14);
-    hpmax = min(hpmax, 500); // cap ascender's hpmax at this
-    hpmax = max(hpmax, d((int) npc->m_lev, 10) + 100 + rnd(30)); // beefed up mplayer formula
-    hpmax = max(hpmax, 200); // prevent low HP rolls
+    hpmax = min(hpmax, 500); /* cap ascender's hpmax at this */
+    hpmax = max(hpmax, d((int) npc->m_lev, 10) + 100 + rnd(30)); /* beefed up mplayer formula */
+    hpmax = max(hpmax, 200); /* prevent low HP rolls */
     npc->mhp = npc->mhpmax = hpmax;
     Strcat(npcname, " the ");
     Strcat(npcname, rank_of((int) npc->m_lev, pm_num, gender));
@@ -5148,10 +5157,7 @@ xchar x, y;
     npc->mcloned = 1;
 
     /* Inventory! */
-    struct obj* obj;
-    int strategy = NEED_HTH_WEAPON;
-    int otyp, quan, spe, cursed, blessed, oerodeproof, recharged, greased,
-        corpsenm, usecount, oeaten;
+    strategy = NEED_HTH_WEAPON;
     while (11 == fscanf(npcfile, "%d %d %d %d %d %d %d %d %d %d %d\n",
                         &otyp, &quan, &spe, &cursed, &blessed, &oerodeproof, &recharged,
                         &greased, &corpsenm, &usecount, &oeaten)) {

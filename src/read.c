@@ -163,7 +163,7 @@ char *buf;
     const char* rumor;
     if (tshirt->oartifact == ART_REALLY_COOL_SHIRT && rn2(50)
         && (rumor = getrumor(bcsign(tshirt), buf, TRUE)) && *rumor)
-        ; // actually do nothing here
+        ; /* actually do nothing here */
     else
         Strcpy(buf, shirt_msgs[tshirt->o_id % SIZE(shirt_msgs)]);
     return erode_obj_text(tshirt, buf);
@@ -2135,7 +2135,7 @@ struct obj *obj;
 STATIC_OVL void
 do_class_genocide()
 {
-    int i, j, immunecnt, gonecnt, goodcnt, class, feel_dead, ll_done = 0;
+    int i, j, immunecnt, gonecnt, goodcnt, class, feel_dead = 0, ll_done = 0;
     char buf[BUFSZ] = DUMMY;
     boolean gameover = FALSE; /* true iff killed self */
 

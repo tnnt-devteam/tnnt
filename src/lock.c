@@ -21,7 +21,7 @@ STATIC_PTR int NDECL(forcelock);
 STATIC_DCL const char *NDECL(lock_action);
 STATIC_DCL boolean FDECL(obstructed, (int, int, BOOLEAN_P));
 STATIC_DCL void FDECL(chest_shatter_msg, (struct obj *));
-STATIC_DCL void FDECL(tnnt_door_resists, (xchar, xchar));
+STATIC_DCL void FDECL(tnnt_door_resists, (XCHAR_P, XCHAR_P));
 
 boolean
 picking_lock(x, y)

@@ -2147,10 +2147,9 @@ register struct monst *mtmp;
         }
     }
     if (is_deathmatch_opponent(mtmp)) {
+        struct obj *list = collect_all_transient(NULL), *next;
         tnnt_globals.deathmatch_completed = TRUE;
         /* Gather all of the NPC's possessions in the spot of their death. */
-        struct obj* list = collect_all_transient(NULL);
-        struct obj* next;
         if (list) {
             /* TNNT TODO: post 3.7 merge, we should probably stick a string in
              * quest.lua for these arena messages, so they can be printed as a
@@ -2496,6 +2495,9 @@ void
 tnnt_update_ukilled(mndx)
 int mndx;
 {
+    int i, ct = 0;
+    int32_t lowercase_killed = 0x0, uppercase_killed = 0x0;
+    boolean missedany = FALSE;
     /* First: translate monsters that exist in multiple forms. */
     if (mndx == PM_WERERAT)
         mndx = PM_HUMAN_WERERAT;
@@ -2509,10 +2511,6 @@ int mndx;
 
     /* Count the number of monster species that have had at least 1 monster
      * killed. */
-    int i, ct = 0;
-    int32_t lowercase_killed = 0x0,
-            uppercase_killed = 0x0;
-    boolean missedany = FALSE;
     for (i = LOW_PM; i < SPECIAL_PM; ++i) {
         /* Certain species don't count */
         if (!tnnt_common_monst(i))
@@ -2569,7 +2567,7 @@ xkilled(mtmp, xkill_flags)
 struct monst *mtmp;
 int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
 {
-    int tmp, mndx, x = mtmp->mx, y = mtmp->my;
+    int tmp, mndx, x = mtmp->mx, y = mtmp->my, m_idx;
     struct permonst *mdat;
     struct obj *otmp;
     struct trap *t;
@@ -2586,7 +2584,7 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
 
     /* TNNT code for anything that triggers when the player kills a monster
      * goes here. */
-    int m_idx = (mtmp->cham != NON_PM) ? mtmp->cham : monsndx(mtmp->data);
+    m_idx = (mtmp->cham != NON_PM) ? mtmp->cham : monsndx(mtmp->data);
     tnnt_update_ukilled(m_idx); /* killing groups of monsters achievements */
 
     if (mons[m_idx].mlet == S_DRAGON) {
@@ -2815,10 +2813,10 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
         You("die...");
         Strcpy(killer.name, "collapsing dungeon");
         done(CRUSHING);
-        // life saving?
+        /* life saving? */
         pline("Unfortunately, you are still buried under tons of rock...");
         done(CRUSHING);
-        // wizards can refuse to die twice, I guess.
+        /* wizards can refuse to die twice, I guess. */
     }
 
     /* adjust alignment points */
@@ -2861,8 +2859,7 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
     /* malign was already adjusted for u.ualign.type and randomization */
     adjalign(mtmp->malign);
 
-    if (mtmp->data == &mons[PM_GHOST] && mtmp->former_rank
-        && strlen(mtmp->former_rank) > 0) {
+    if (mtmp->data == &mons[PM_GHOST] && strlen(mtmp->former_rank) > 0) {
         livelog_printf(LL_UMONST, "destroyed %s, the former %s",
                        livelog_mon_nam(mtmp), mtmp->former_rank);
     }

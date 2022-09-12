@@ -1202,10 +1202,10 @@ xchar x, y; /* location */
      */
     br = br->next;
     while (br) {
-        // this logic is stolen from Is_branchlev in dungeon.c
+        /* this logic is stolen from Is_branchlev in dungeon.c */
         if (on_level(&u.uz, &br->end1) || on_level(&u.uz, &br->end2)) {
-            // x=0, y=0 causes the second branch to be randomly placed... this
-            // is fine for TNNT but is not extensible.
+            /* x=0, y=0 causes the second branch to be randomly placed... this 
+               is fine for TNNT but is not extensible. */
             place_branch(br, 0, 0);
         }
         br = br->next;
