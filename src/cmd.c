@@ -5487,7 +5487,7 @@ dotnntdebug(VOID_ARGS)
         /* tnnt achievements */
         putstr(en_win, ATR_BOLD, "TNNT achievements (in hexadecimal):");
         for (i = 0; i < SIZE(tnnt_globals.tnnt_achievements); ++i) {
-            Sprintf(buf, "tnntachieve%d: 0x%llx", i,
+            Sprintf(buf, "tnntachieve%d: 0x%lx", i,
                     tnnt_globals.tnnt_achievements[i]);
             putstr(en_win, 0, buf);
         }
