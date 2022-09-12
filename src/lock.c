@@ -1154,6 +1154,8 @@ xchar x, y;
         tnnt_globals.door_attempt_y = y;
         tnnt_globals.consecutive_door_resists = 1;
     }
+    if (tnnt_globals.consecutive_door_resists > tnnt_globals.door_resist_max)
+        tnnt_globals.door_resist_max = tnnt_globals.consecutive_door_resists;
 }
 
 /*lock.c*/

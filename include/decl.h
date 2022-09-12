@@ -913,6 +913,7 @@ struct tnnt_globals_t {
     struct monst *psuedo_archer;
 #define TNNT_DOOR_RESIST_GOAL 8
     unsigned char consecutive_door_resists;
+    unsigned char door_resist_max;
     xchar door_attempt_x, door_attempt_y, door_attempt_ledger;
 
     /* tnnt devs: add more as needed */

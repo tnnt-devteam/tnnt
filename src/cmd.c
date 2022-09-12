@@ -5611,22 +5611,25 @@ boolean final;
             tnnt_globals.genderflips);
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have eaten %d artifacts.", tnnt_globals.artis_eaten);
+    Sprintf(buf, "You have eaten %d artifact(s).", tnnt_globals.artis_eaten);
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have been sent back %d levels by the mysterious force.",
+    Sprintf(buf, "You have been sent back %d level(s) by the mysterious force.",
             tnnt_globals.mysterious_forced_back);
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have had a door resist %d consecutive times.",
-            tnnt_globals.consecutive_door_resists);
+    Sprintf(buf, "You have had a door resist %d consecutive time(s).",
+            tnnt_globals.door_resist_max);
+    if (tnnt_globals.consecutive_door_resists)
+        Sprintf(eos(buf), " (current streak: %d)",
+                tnnt_globals.consecutive_door_resists);
     putstr(en_win, 0, buf);
 
     for (i = 0; i < TNNT_LITROOM_GOAL; ++i) {
         if (tnnt_globals.dark_rooms_lit[i].ledgerno == 0)
             break;
     }
-    Sprintf(buf, "You have lit up %d dark rooms in Dungeons levels.", i);
+    Sprintf(buf, "You have lit up %d dark room(s) in Dungeons levels.", i);
     putstr(en_win, 0, buf);
 
 #define print_visited(altars)    \
