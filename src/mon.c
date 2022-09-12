@@ -2643,6 +2643,11 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
             }
         }
         break;
+    case PM_MIND_FLAYER:
+    case PM_MASTER_MIND_FLAYER:
+        if (In_mines(&u.uz))
+            tnnt_achieve(A_KILLED_FLAYER_IN_MINES);
+        break;
     case PM_ASMODEUS:   tnnt_achieve(A_KILLED_ASMODEUS);   break;
     case PM_BAALZEBUB:  tnnt_achieve(A_KILLED_BAALZEBUB);  break;
     case PM_ORCUS:      tnnt_achieve(A_KILLED_ORCUS);      break;
