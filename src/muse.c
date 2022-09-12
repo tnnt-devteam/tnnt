@@ -1434,6 +1434,8 @@ struct monst *mtmp;
              (otmp->otyp == WAN_MAGIC_MISSILE) ? 2 : 6, mtmp->mx, mtmp->my,
              sgn(mtmp->mux - mtmp->mx), sgn(mtmp->muy - mtmp->my));
         m_using = FALSE;
+        if (DEADMONSTER(mtmp))
+            tnnt_achieve(A_M_KILLED_BY_OWN_WAND);
         return (DEADMONSTER(mtmp)) ? 1 : 2;
     case MUSE_FIRE_HORN:
     case MUSE_FROST_HORN:

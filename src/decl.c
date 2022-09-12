@@ -668,6 +668,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Look the Other Way", "Successfully bribe a mercenary"},
   {"Practically Permanent", "Have more than 10,000 turns of a temporary intrinsic"},
   {"Minesflayer", "Kill a mind flayer or master mind flayer in the Gnomish Mines"},
+  {"Hoist With Its Own Petard", "Have a monster kill itself with its own wand zap"},
 };
 
 /* support for lint.h */
