@@ -2417,6 +2417,7 @@ recalc_mapseen()
     struct cemetery *bp, **bonesaddr;
     unsigned i, ridx;
     int x, y, ltyp, count, atmp;
+    uchar lvl_bones_found = 0; /* TNNT */
 
     /* Should not happen in general, but possible if in the process
      * of being booted from the quest.  The mapseen object gets
@@ -2663,10 +2664,17 @@ recalc_mapseen()
        current hero has seen the map location where each old one died */
     for (bp = mptr->final_resting_place; bp; bp = bp->next)
         if (lastseentyp[bp->frpx][bp->frpy]) {
+            if (!bp->bonesknown)
+                tnnt_globals.bones_piles_found++;
             bp->bonesknown = TRUE;
             mptr->flags.knownbones = 1;
+            lvl_bones_found++;
             tnnt_achieve(A_FOUND_BONES_PILE);
         }
+    if (lvl_bones_found >= 2)
+        tnnt_achieve(A_DOUBLE_BONES);
+    if (tnnt_globals.bones_piles_found >= 4)
+        tnnt_achieve(A_FOUND_FOUR_BONES);
 }
 
 /*ARGUSED*/

@@ -763,8 +763,10 @@ enum tnnt_achievements {
     A_LONG_TIMEOUT,
     A_KILLED_FLAYER_IN_MINES,
     A_M_KILLED_BY_OWN_WAND,
-    /* 40 free bits in tnntachieve4 */
-    /* 280 achievements defined */
+    A_DOUBLE_BONES,
+    A_FOUND_FOUR_BONES,
+    /* 38 free bits in tnntachieve4 */
+    /* 282 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more
@@ -915,6 +917,7 @@ struct tnnt_globals_t {
     unsigned char consecutive_door_resists;
     unsigned char door_resist_max;
     xchar door_attempt_x, door_attempt_y, door_attempt_ledger;
+    unsigned char bones_piles_found;
 
     /* tnnt devs: add more as needed */
 };
