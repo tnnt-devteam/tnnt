@@ -984,8 +984,12 @@ int pm;
 
             u.uen += rnd(3);
             if (u.uen > u.uenmax) {
-                if (!rn2(3))
+                if (!rn2(3)) {
                     u.uenmax++;
+                    if (++tnnt_globals.maxpw_from_corpses >= 5)
+                        tnnt_achieve(A_5_MAXPW_FROM_NEWTS);
+                }
+
                 u.uen = u.uenmax;
             }
             if (old_uen != u.uen) {

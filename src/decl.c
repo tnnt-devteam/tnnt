@@ -671,6 +671,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Hoist With Its Own Petard", "Have a monster kill itself with its own wand zap"},
   {"Double Bones", "Encounter two bones piles on a single level"},
   {"Mr. Bones' Wild Ride", "Find the bones of four former heroes in one game"},
+  {"Buzzing With Energy", "Gain at least 5 max Pw by eating corpses"},
 };
 
 /* support for lint.h */
