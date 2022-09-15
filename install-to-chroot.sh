@@ -8,7 +8,7 @@
 
 # autonamed chroot directory. Can rename.
 DATESTAMP=`date +%Y%m%d-%H%M%S`
-NAO_CHROOT="/opt/nethack/chroot"
+TNNT_CHROOT="/opt/nethack/chroot"
 NETHACK_GIT="/home/build/tnnt"
 # the user & group from dgamelaunch config file.
 USRGRP="games:games"
@@ -45,13 +45,13 @@ set -e
 umask 022
 
 echo "Creating inprogress and extrainfo directories"
-mkdir -p "$NAO_CHROOT/dgldir/inprogress-tnnt"
-chown "$USRGRP" "$NAO_CHROOT/dgldir/inprogress-tnnt"
-mkdir -p "$NAO_CHROOT/dgldir/extrainfo-tnnt"
-chown "$USRGRP" "$NAO_CHROOT/dgldir/extrainfo-tnnt"
+mkdir -p "$TNNT_CHROOT/dgldir/inprogress-tnnt"
+chown "$USRGRP" "$TNNT_CHROOT/dgldir/inprogress-tnnt"
+mkdir -p "$TNNT_CHROOT/dgldir/extrainfo-tnnt"
+chown "$USRGRP" "$TNNT_CHROOT/dgldir/extrainfo-tnnt"
 
-echo "Making $NAO_CHROOT/$NHSUBDIR"
-mkdir -p "$NAO_CHROOT/$NHSUBDIR"
+echo "Making $TNNT_CHROOT/$NHSUBDIR"
+mkdir -p "$TNNT_CHROOT/$NHSUBDIR"
 
 NETHACKBIN="$NETHACK_GIT/src/nethack"
 if [ -n "$NETHACKBIN" -a ! -e "$NETHACKBIN" ]; then
@@ -60,68 +60,70 @@ fi
 
 if [ -n "$NETHACKBIN" -a -e "$NETHACKBIN" ]; then
   echo "Copying $NETHACKBIN"
-  cd "$NAO_CHROOT/$NHSUBDIR"
+  cd "$TNNT_CHROOT/$NHSUBDIR"
   NHBINFILE="`basename $NETHACKBIN`-$DATESTAMP"
   cp "$NETHACKBIN" "$NHBINFILE"
   ln -fs "$NHBINFILE" nethack
   LIBS="$LIBS `findlibs $NETHACKBIN`"
-  cd "$NAO_CHROOT"
+  cd "$TNNT_CHROOT"
 fi
 
 echo "Copying NetHack playground stuff"
-cp "$NETHACK_GIT/dat/nhdat" "$NAO_CHROOT/$NHSUBDIR"
-chmod 644 "$NAO_CHROOT/$NHSUBDIR/nhdat"
-cp "$NETHACK_GIT/dat/symbols" "$NAO_CHROOT/$NHSUBDIR"
-chmod 644 "$NAO_CHROOT/$NHSUBDIR/symbols"
-cp "$NETHACK_GIT/dat/NHdump.css" "$NAO_CHROOT/$NHSUBDIR"
-chmod 644 "$NAO_CHROOT/$NHSUBDIR/NHdump.css"
+cp "$NETHACK_GIT/dat/nhdat" "$TNNT_CHROOT/$NHSUBDIR"
+chmod 644 "$TNNT_CHROOT/$NHSUBDIR/nhdat"
+cp "$NETHACK_GIT/dat/symbols" "$TNNT_CHROOT/$NHSUBDIR"
+chmod 644 "$TNNT_CHROOT/$NHSUBDIR/symbols"
+cp "$NETHACK_GIT/dat/NHdump.css" "$TNNT_CHROOT/$NHSUBDIR"
+chmod 644 "$TNNT_CHROOT/$NHSUBDIR/NHdump.css"
 
 echo "Copying sysconf file"
-SYSCF="$NAO_CHROOT/$NHSUBDIR/sysconf"
+SYSCF="$TNNT_CHROOT/$NHSUBDIR/sysconf"
 cp "$NETHACK_GIT/sys/unix/sysconf" "$SYSCF"
 chmod 644 $SYSCF
 
 echo "Creating NetHack variable dir stuff."
-mkdir -p "$NAO_CHROOT/$NHSUBDIR/var"
-chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var"
-mkdir -p "$NAO_CHROOT/$NHSUBDIR/var/save"
-chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/save"
-mkdir -p "$NAO_CHROOT/$NHSUBDIR/var/whereis"
-chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/whereis"
-mkdir -p "$NAO_CHROOT/$NHSUBDIR/swapchest"
-chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/swapchest"
-mkdir -p "$NAO_CHROOT/$NHSUBDIR/npcfiles"
-chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/npcfiles"
+mkdir -p "$TNNT_CHROOT/$NHSUBDIR/var"
+chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var"
+mkdir -p "$TNNT_CHROOT/$NHSUBDIR/var/save"
+chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var/save"
+mkdir -p "$TNNT_CHROOT/$NHSUBDIR/var/save/backup"
+chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var/save/backup"
+mkdir -p "$TNNT_CHROOT/$NHSUBDIR/var/whereis"
+chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var/whereis"
+mkdir -p "$TNNT_CHROOT/$NHSUBDIR/swapchest"
+chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/swapchest"
+mkdir -p "$TNNT_CHROOT/$NHSUBDIR/npcfiles"
+chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/npcfiles"
 
-touch "$NAO_CHROOT/$NHSUBDIR/var/logfile"
-chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/logfile"
-touch "$NAO_CHROOT/$NHSUBDIR/var/perm"
-chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/perm"
-touch "$NAO_CHROOT/$NHSUBDIR/var/record"
-chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/record"
-touch "$NAO_CHROOT/$NHSUBDIR/var/xlogfile"
-chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/xlogfile"
-touch "$NAO_CHROOT/$NHSUBDIR/var/livelog"
-chown -R "$USRGRP" "$NAO_CHROOT/$NHSUBDIR/var/livelog"
+touch "$TNNT_CHROOT/$NHSUBDIR/var/logfile"
+chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var/logfile"
+touch "$TNNT_CHROOT/$NHSUBDIR/var/perm"
+chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var/perm"
+touch "$TNNT_CHROOT/$NHSUBDIR/var/record"
+chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var/record"
+touch "$TNNT_CHROOT/$NHSUBDIR/var/xlogfile"
+chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var/xlogfile"
+touch "$TNNT_CHROOT/$NHSUBDIR/var/livelog"
+chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var/livelog"
 
 RECOVER="$NETHACK_GIT/util/recover"
 
 if [ -n "$RECOVER" -a -e "$RECOVER" ]; then
   echo "Copying $RECOVER"
-  cp "$RECOVER" "$NAO_CHROOT/$NHSUBDIR/var"
+  cp "$RECOVER" "$TNNT_CHROOT/$NHSUBDIR/var"
   LIBS="$LIBS `findlibs $RECOVER`"
-  cd "$NAO_CHROOT"
+  cd "$TNNT_CHROOT"
 fi
 
 LIBS=`for lib in $LIBS; do echo $lib; done | sort | uniq`
 echo "Copying libraries:" $LIBS
 for lib in $LIBS; do
-        mkdir -p "$NAO_CHROOT`dirname $lib`"
-        if [ -f "$NAO_CHROOT$lib" ]
+        mkdir -p "$TNNT_CHROOT`dirname $lib`"
+        if [ -f "$TNNT_CHROOT$lib" ]
 	then
-		echo "$NAO_CHROOT$lib already exists - skipping."
+		echo "$TNNT_CHROOT$lib already exists - skipping."
 	else
-		cp $lib "$NAO_CHROOT$lib"
+		cp $lib "$TNNT_CHROOT$lib"
 	fi
 done
 
