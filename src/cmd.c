@@ -6,6 +6,7 @@
 #include "hack.h"
 #include "lev.h"
 #include "func_tab.h"
+#include "integer.h"
 
 /* Macros for meta and ctrl modifiers:
  *   M and C return the meta/ctrl code for the given character;
@@ -5487,7 +5488,7 @@ dotnntdebug(VOID_ARGS)
         /* tnnt achievements */
         putstr(en_win, ATR_BOLD, "TNNT achievements (in hexadecimal):");
         for (i = 0; i < SIZE(tnnt_globals.tnnt_achievements); ++i) {
-            Sprintf(buf, "tnntachieve%d: 0x%lx", i,
+            Sprintf(buf, "tnntachieve%d: 0x%" PRIx64, i,
                     tnnt_globals.tnnt_achievements[i]);
             putstr(en_win, 0, buf);
         }

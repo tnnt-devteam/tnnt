@@ -52,6 +52,7 @@
 
 #ifdef HAS_STDINT_H
 #include <stdint.h>
+#include <inttypes.h> /* for PRIx64 */
 #define SKIP_STDINT_WORKAROUND
 #else /*!stdint*/
 #ifdef HAS_INTTYPES_H
@@ -87,6 +88,8 @@ typedef unsigned int uint32_t;
    inhibited and it won't matter what the int64_t and uint64_t lines are. */
 typedef long long int int64_t;
 typedef unsigned long long int uint64_t;
+
+#define PRIx64 "llx"
 
 #endif /* !C99 */
 
