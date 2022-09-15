@@ -30,6 +30,8 @@ static NEARDATA const char bullets[] = { ALLOW_COUNT, COIN_CLASS, ALL_CLASSES,
 
 extern boolean notonhead; /* for long worms */
 
+static int killed_by_volley; /* TNNT: num mons killed by a multishot volley */
+
 /* Throw the selected object, asking for direction */
 STATIC_OVL int
 throw_obj(obj, shotlimit)
@@ -213,6 +215,7 @@ int shotlimit;
     wep_mask = obj->owornmask;
     m_shot.o = obj->otyp;
     m_shot.n = multishot;
+    killed_by_volley = 0;
     for (m_shot.i = 1; m_shot.i <= m_shot.n; m_shot.i++) {
         twoweap = u.twoweap;
         /* split this object off from its slot if necessary */
@@ -226,6 +229,8 @@ int shotlimit;
         freeinv(otmp);
         throwit(otmp, wep_mask, twoweap);
     }
+    if (killed_by_volley >= 4)
+        tnnt_achieve(A_MULTISHOT_4_KILLED);
     m_shot.n = m_shot.i = 0;
     m_shot.o = STRANGE_OBJECT;
     m_shot.s = FALSE;
@@ -1712,6 +1717,8 @@ register struct obj *obj; /* thrownobj or kickedobj or uwep */
             if (hmon(mon, obj, hmode, dieroll)) { /* mon still alive */
                 if (mon->wormno)
                     cutworm(mon, bhitpos.x, bhitpos.y, chopper);
+            } else {
+                killed_by_volley++;
             }
             exercise(A_DEX, TRUE);
             /* if hero was swallowed and projectile killed the engulfer,
@@ -1762,6 +1769,7 @@ register struct obj *obj; /* thrownobj or kickedobj or uwep */
 
             exercise(A_DEX, TRUE);
             if (!hmon(mon, obj, hmode, dieroll)) { /* mon killed */
+                killed_by_volley++;
                 if (was_swallowed && !u.uswallow && obj == uball)
                     return 1; /* already did placebc() */
             }
@@ -1773,7 +1781,8 @@ register struct obj *obj; /* thrownobj or kickedobj or uwep */
         exercise(A_STR, TRUE);
         if (tmp >= dieroll) {
             exercise(A_DEX, TRUE);
-            (void) hmon(mon, obj, hmode, dieroll);
+            if (!hmon(mon, obj, hmode, dieroll))
+                killed_by_volley++;
         } else {
             tmiss(obj, mon, TRUE);
         }
@@ -1781,7 +1790,8 @@ register struct obj *obj; /* thrownobj or kickedobj or uwep */
     } else if ((otyp == EGG || otyp == CREAM_PIE || otyp == BLINDING_VENOM
                 || otyp == ACID_VENOM)
                && (guaranteed_hit || ACURR(A_DEX) > rnd(25))) {
-        (void) hmon(mon, obj, hmode, dieroll);
+        if (!hmon(mon, obj, hmode, dieroll))
+            killed_by_volley++;
         return 1; /* hmon used it up */
 
     } else if (obj->oclass == POTION_CLASS
