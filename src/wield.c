@@ -842,6 +842,8 @@ register int amount;
         /* update shop bill to reflect new higher price */
         if (uwep->unpaid)
             alter_cost(uwep, 0L);
+        if (uwep->spe >= 8)
+            tnnt_achieve(A_ENCHANT_WEP_TO_8);
     }
 
     /*

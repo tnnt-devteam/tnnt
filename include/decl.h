@@ -768,8 +768,9 @@ enum tnnt_achievements {
     A_5_MAXPW_FROM_NEWTS,
     A_MULTISHOT_4_KILLED,
     A_MON_GREW_TO_HIPRIEST,
-    /* 35 free bits in tnntachieve4 */
-    /* 285 achievements defined */
+    A_ENCHANT_WEP_TO_8,
+    /* 34 free bits in tnntachieve4 */
+    /* 286 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more
