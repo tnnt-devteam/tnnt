@@ -4948,6 +4948,14 @@ struct obj *swapchest;
     struct obj *otmp;
     delete_swap_chest_contents(swapchest);
     d = opendir(TNNT_SWAPCHEST_DIR);
+    if (!d) {
+        const char *errormsg;
+        if (!(errormsg = strerror(errno)))
+            errormsg = "unknown error";
+        impossible("can't open swap chest directory at %s (%s)",
+                   TNNT_SWAPCHEST_DIR, errormsg);
+        return;
+    }
     while ((de = readdir(d)) != NULL) {
         if (!strncmp(de->d_name, "SW-", 3)) {
             otmp = mkswapobj(swapchest, de->d_name);
@@ -5068,6 +5076,14 @@ pick_npc_file(VOID_ARGS)
     DIR *d = opendir(TNNT_NPC_DIR);
     int chance = 0;
     struct dirent *de;
+    if (!d) {                                                   
+        const char *errormsg;                                   
+        if (!(errormsg = strerror(errno)))                      
+            errormsg = "unknown error";                         
+        impossible("can't open NPC directory at %s (%s)",
+                   TNNT_NPC_DIR, errormsg);               
+        return (char *) 0;                                                 
+    }
     npcpath[0] = '\0';
     while ((de = readdir(d)) != NULL) {
         if (!strncmp(de->d_name, "NPC-", 4)
