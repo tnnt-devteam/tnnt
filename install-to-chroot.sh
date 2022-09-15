@@ -91,7 +91,7 @@ chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var/save/backup"
 mkdir -p "$TNNT_CHROOT/$NHSUBDIR/var/whereis"
 chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var/whereis"
 mkdir -p "$TNNT_CHROOT/$NHSUBDIR/swapchest"
-chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/swapchest"
+# chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/swapchest"
 mkdir -p "$TNNT_CHROOT/$NHSUBDIR/npcfiles"
 chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/npcfiles"
 
