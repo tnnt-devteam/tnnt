@@ -673,6 +673,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Mr. Bones' Wild Ride", "Find the bones of four former heroes in one game"},
   {"Buzzing With Energy", "Gain at least 5 max Pw by eating corpses"},
   {"Quadruple Kill", "Kill 4 monsters with a single volley of missiles"},
+  {"Fumata Bianca", "Get a priest to grow up into a high priest"},
 };
 
 /* support for lint.h */

@@ -1894,6 +1894,8 @@ struct monst *mtmp, *victim;
         } else if (canspotmon(mtmp)) {
             char buf[BUFSZ];
 
+            if (newtype == PM_HIGH_PRIEST)
+                tnnt_achieve(A_MON_GREW_TO_HIPRIEST);
             /* 3.6.1:
              * Temporary (?) hack to fix growing into opposite gender.
              */
