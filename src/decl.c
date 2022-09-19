@@ -675,6 +675,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Quadruple Kill", "Kill 4 monsters with a single volley of missiles"},
   {"Fumata Bianca", "Get a priest to grow up into a high priest"},
   {"This One Goes To +8", "Successfully enchant a weapon to +8 or higher"},
+  {"Kill the Rainbow", "Kill each color of adult dragon"},
 };
 
 /* support for lint.h */

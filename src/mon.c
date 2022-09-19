@@ -2498,6 +2498,7 @@ int mndx;
 {
     int i, ct = 0;
     int32_t lowercase_killed = 0x0, uppercase_killed = 0x0;
+    uint16_t dragons_killed = 0x0;
     boolean missedany = FALSE;
     /* First: translate monsters that exist in multiple forms. */
     if (mndx == PM_WERERAT)
@@ -2543,6 +2544,14 @@ int mndx;
                  * monster class. (Bit for 'I' is 1 << ('I'-'A') = 0x100) */
                 if (uppercase_killed == 0x03FFFEFF)
                     tnnt_achieve(A_KILLED_A_Z_UPPERCASE);
+            }
+            /* Kill all dragons achievement */
+            if (i >= PM_GRAY_DRAGON && i <= PM_YELLOW_DRAGON) {
+                xchar offset = i - PM_GRAY_DRAGON;
+                dragons_killed |= (1 << offset);
+                if (dragons_killed == 0x1ff)
+                    tnnt_achieve(A_KILLED_ALL_DRAGONS);
+
             }
         }
         else {
