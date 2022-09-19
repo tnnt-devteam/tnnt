@@ -637,6 +637,22 @@ struct tnnt_globals_t {
     int genocides; /* # of times genocide was done, rather than number of
                       species */
 
+#define ALL_POTS_DRUNK 0x1ffffff
+/* harmful: confusion, blindness, paralysis, hallucination, sleep, booze,
+ * sickness, acid */
+#define HARMFUL_DRUNK 0x0b2009c
+#define FIRST_POTION POT_GAIN_ABILITY
+    uint32_t potions_drunk;
+#define tnnt_drink(typ)                                            \
+    do {                                                           \
+        tnnt_globals.potions_drunk |= 1 << ((typ) - FIRST_POTION); \
+        if ((tnnt_globals.potions_drunk & HARMFUL_DRUNK)           \
+            == HARMFUL_DRUNK)                                      \
+            tnnt_achieve(A_DRANK_HARMFUL_POTS);                    \
+    } while (0)
+    /* could easily add A_DRANK_ALL_POTS to this, but it may be more fitting
+       if A_READ_ALL_SCROLLS, etc, are added at the same time */
+
     /* tnnt devs: add more as needed */
 };
 E struct tnnt_globals_t tnnt_globals;

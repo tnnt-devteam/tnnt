@@ -541,7 +541,9 @@ ACH("Leeroy Jenkins",
     "Cross the Castle drawbridge threshold within 30 turns of entering the level",
     ENTERED_CASTLE_QUICKLY),
 ACH("Chocoban", "Acquire a candy bar generated in Sokoban", GOT_SOKO_CANDY),
-/* 14 free bits in tnntachieve4 */
-/* 306 achievements defined */
+ACH("Thirst For Punishment", "Drink all harmful types of potion",
+    DRANK_HARMFUL_POTS),
+/* 13 free bits in tnntachieve4 */
+/* 307 achievements defined */
 
 #undef ACH

@@ -571,6 +571,7 @@ dodrink()
             return 1;
         }
     }
+    tnnt_drink(otmp->otyp);
     return dopotion(otmp);
 }
 
