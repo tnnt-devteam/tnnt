@@ -5719,6 +5719,30 @@ boolean final;
         Strcat(buf, " box");
     putstr(en_win, 0, buf);
 
+    Strcpy(buf, "Harmful potions drunk:");
+    if ((tnnt_globals.potions_drunk & HARMFUL_DRUNK) == 0L) {
+        Strcat(buf, " none");
+    } else {
+        const int harmful_pots[] = {
+            POT_CONFUSION,
+            POT_BLINDNESS,
+            POT_PARALYSIS,
+            POT_HALLUCINATION,
+            POT_SLEEPING,
+            POT_BOOZE,
+            POT_SICKNESS,
+            POT_ACID,
+        };
+        for (i = 0; i < SIZE(harmful_pots); i++) {
+            int potnm = harmful_pots[i];
+            if (tnnt_globals.potions_drunk & (1 << (potnm - FIRST_POTION))) {
+                Strcat(buf, " ");
+                Strcat(buf, obj_descr[objects[potnm].oc_name_idx].oc_name);
+            }
+        }
+    }
+    putstr(en_win, 0, buf);
+
     Sprintf(buf, "You have %sblown up a land mine in Fort Ludios.",
             tnnt_globals.blew_up_ludios ? "" : "not ");
     putstr(en_win, 0, buf);
