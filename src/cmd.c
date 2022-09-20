@@ -5556,6 +5556,7 @@ int
 show_tnnt_stats(final)
 boolean final;
 {
+#define maybe_s(n) ((n) == 1 ? "" : "s")
     char buf[BUFSZ];
     int i;
     char eaten[16] = DUMMY;
@@ -5604,23 +5605,27 @@ boolean final;
     Sprintf(buf, "You have found %d graffiti.", tnnt_globals.graffiti_found);
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have tamed %d%s feline(s).", tnnt_globals.felines_tamed,
-            (tnnt_globals.felines_tamed >= MAX_TAMED_FELINES ? "+" : ""));
+    Sprintf(buf, "You have tamed %d%s feline%s.", tnnt_globals.felines_tamed,
+            (tnnt_globals.felines_tamed >= MAX_TAMED_FELINES ? "+" : ""),
+            maybe_s(tnnt_globals.felines_tamed));
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have changed gender %d time(s).",
-            tnnt_globals.genderflips);
+    Sprintf(buf, "You have changed gender %d time%s.",
+            tnnt_globals.genderflips, maybe_s(tnnt_globals.genderflips));
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have eaten %d artifact(s).", tnnt_globals.artis_eaten);
+    Sprintf(buf, "You have eaten %d artifact%s.", tnnt_globals.artis_eaten,
+            maybe_s(tnnt_globals.artis_eaten));
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have been sent back %d level(s) by the mysterious force.",
-            tnnt_globals.mysterious_forced_back);
+    Sprintf(buf, "You have been sent back %d level%s by the mysterious force.",
+            tnnt_globals.mysterious_forced_back,
+            maybe_s(tnnt_globals.mysterious_forced_back));
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have had a door resist %d consecutive time(s).",
-            tnnt_globals.door_resist_max);
+    Sprintf(buf, "You have had a door resist %d consecutive time%s.",
+            tnnt_globals.door_resist_max,
+            maybe_s(tnnt_globals.door_resist_max));
     if (tnnt_globals.consecutive_door_resists)
         Sprintf(eos(buf), " (current streak: %d)",
                 tnnt_globals.consecutive_door_resists);
@@ -5630,7 +5635,8 @@ boolean final;
         if (tnnt_globals.dark_rooms_lit[i].ledgerno == 0)
             break;
     }
-    Sprintf(buf, "You have lit up %d dark room(s) in Dungeons levels.", i);
+    Sprintf(buf, "You have lit up %d dark room%s in Dungeons levels.", i,
+            maybe_s(i));
     putstr(en_win, 0, buf);
 
 #define print_visited(altars)    \
@@ -5754,6 +5760,7 @@ boolean final;
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
     return 0;
+#undef maybe_s
 }
 
 /* TNNT: #achievements command. Ask whether they want to see achievements earned
