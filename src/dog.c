@@ -934,6 +934,9 @@ register struct obj *obj;
     if (mtmp->m_id == quest_status.leader_m_id)
         return FALSE;
 
+    if (obj && obj->otyp == BANANA && mtmp->data->mlet == S_YETI)
+        tnnt_achieve(A_BANANA_TAMED_Y);
+
     /* add the pet extension */
     newedog(mtmp);
     initedog(mtmp);
