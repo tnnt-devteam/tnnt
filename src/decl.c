@@ -513,7 +513,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Superfood", "Gain strength by eating royal jelly"},
   {"You Are What You Eat", "Gain an intrinsic by eating a corpse (or tin or glob)"},
   {"Magivore", "Gain a magical intrinsic by eating a piece of jewelry"},
-  {"Batty", "Get stunned by eating bat meat"},
+  {"Stunning Flavor", "Get stunned by eating bat meat"},
   /* involving taming and pets */
   {"Pet Whisperer", "Tame a monster by feeding it"},
   {"Beast Master", "Tame a monster without using food"},
