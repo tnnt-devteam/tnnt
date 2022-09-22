@@ -794,7 +794,7 @@ boolean playing; /**< True if game is running.  */
 	        0L,
 #endif
 	        u.uhave.amulet ? 1 : 0,
-	        u.uevent.ascended ? 2 : killer.name ? 1 : 0,
+	        u.uevent.ascended ? 2 : killer.name[0] ? 1 : 0,
 	        playing);
  	fp = fopen_datafile(whereis_file,"w",LEVELPREFIX);
 	if (fp) {
@@ -5076,13 +5076,13 @@ pick_npc_file(VOID_ARGS)
     DIR *d = opendir(TNNT_NPC_DIR);
     int chance = 0;
     struct dirent *de;
-    if (!d) {                                                   
-        const char *errormsg;                                   
-        if (!(errormsg = strerror(errno)))                      
-            errormsg = "unknown error";                         
+    if (!d) {
+        const char *errormsg;
+        if (!(errormsg = strerror(errno)))
+            errormsg = "unknown error";
         impossible("can't open NPC directory at %s (%s)",
-                   TNNT_NPC_DIR, errormsg);               
-        return (char *) 0;                                                 
+                   TNNT_NPC_DIR, errormsg);
+        return (char *) 0;
     }
     npcpath[0] = '\0';
     while ((de = readdir(d)) != NULL) {
