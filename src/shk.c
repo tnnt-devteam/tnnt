@@ -498,7 +498,7 @@ struct monst *shkp;
     You("stole %ld %s worth of merchandise.", total, currency(total));
     if (!Role_if(PM_ROGUE)) /* stealing is unlawful */
         adjalign(-sgn(u.ualign.type));
-    tnnt_achieve(A_ROBBED);
+    tnnt_achieve(A_ROBBED_SHOP);
 
     hot_pursuit(shkp);
     return TRUE;
@@ -4925,7 +4925,7 @@ struct obj *obj_absorber, *obj_absorbed;
 
         if (bp_absorber) {
             /* the absorber has a billing record */
-            bp_absorber->price += amount;           
+            bp_absorber->price += amount;
         } else {
             /* the absorber has no billing record */
             ;
@@ -4933,7 +4933,7 @@ struct obj *obj_absorber, *obj_absorbed;
         return;
     }
     /**************************************************************
-     * Scenario 2. Player-owned glob absorbing into shop-owned glob 
+     * Scenario 2. Player-owned glob absorbing into shop-owned glob
      **************************************************************/
     if (!bp_absorber && !bp && !obj_absorber->no_charge) {
         /* there are no billing records */
