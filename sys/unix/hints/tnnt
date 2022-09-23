@@ -41,6 +41,7 @@ CFLAGS+=-DDGAMELAUNCH
 CFLAGS+=-DLIVELOG_ENABLE
 CFLAGS+=-DDUMPLOG
 CFLAGS+=-DDUMPHTML
+#CFLAGS+=-DTNNT_BETA
 # server location - comment out the ones that don't apply
 CFLAGS+=-DSERVER_LOCATION=\"au.hardfought.org\"
 #CFLAGS+=-DSERVER_LOCATION=\"eu.hardfought.org\"
