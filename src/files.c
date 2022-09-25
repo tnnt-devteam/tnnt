@@ -5076,15 +5076,15 @@ pick_npc_file(VOID_ARGS)
     DIR *d = opendir(TNNT_NPC_DIR);
     int chance = 0;
     struct dirent *de;
+    npcpath[0] = '\0';
     if (!d) {
         const char *errormsg;
         if (!(errormsg = strerror(errno)))
             errormsg = "unknown error";
         impossible("can't open NPC directory at %s (%s)",
                    TNNT_NPC_DIR, errormsg);
-        return (char *) 0;
+        return npcpath; /* with leading \0 */
     }
-    npcpath[0] = '\0';
     while ((de = readdir(d)) != NULL) {
         if (!strncmp(de->d_name, "NPC-", 4)
             && !rn2(++chance)) {

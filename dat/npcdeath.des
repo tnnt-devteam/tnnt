@@ -47,8 +47,6 @@ NON_DIGGABLE:(0,0,75,19)
 ENGRAVING:(54,09),burn,"Point of no return"
 ENGRAVING:(60,09),burn,"Two players enter, one player leaves..."
 
-FOUNTAIN:(64,08)
-FOUNTAIN:(64,10)
 DOOR:closed,(53,09)
 
 # Statues of those before...

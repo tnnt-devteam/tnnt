@@ -1084,6 +1084,7 @@ register struct trap *ttmp;
             deltrap(ttmp);    /* destroy this portal - maybe unnecessary */
             portal_flag = -1; /* destroy corresponding portal */
             msg = "Loud booing follows you out of the arena...";
+            livelog_printf(LL_UMONST, "cowardly fled from the Arena");
         }
     }
 
