@@ -508,6 +508,8 @@ enum tnnt_achievements {
     A_KILLED_FAMINE,
     A_KILLED_20_WIZARDS,
     A_WIZ_DOUBLE_KILL,
+    A_KILLED_MEDUSA_PHYSICALLY,
+    A_DECAPITATED_MEDUSA,
     A_KILLED_CROESUS,
     A_KILLED_MOLOCH_PRIEST,
     A_KILLED_9_NAZGUL,
@@ -546,7 +548,7 @@ enum tnnt_achievements {
     A_KILLED_WITH_TOWEL,
     A_MJOLLNIR_THROW_KILL,
     A_MVM_PROJECTILE_KILL,
-    A_M_KILLED_BY_OWN_WAND, /* #64 - end tnntachieve0 */
+    A_M_KILLED_BY_OWN_WAND,
     A_PURPLE_RAIN,
     A_DECAPITATED_ENEMY,
     A_STONED_A_MONSTER,
@@ -610,7 +612,7 @@ enum tnnt_achievements {
     A_ATE_ALL_FOODS,
     A_ATE_EVERY_OBJCLASS,
     A_GRANTED_ARTI,
-    A_GIFT_ON_ASTRAL, /* #128 - end tnntachieve1 */
+    A_GIFT_ON_ASTRAL,
     A_GOT_EXCALIBUR,
     A_ATE_ROYAL_JELLY,
     A_GOT_CORPSE_INTRINSIC,
@@ -674,7 +676,7 @@ enum tnnt_achievements {
     A_WROTE_SPELLBOOK,
     A_RODE_DRAGON,
     A_ERODEPROOFED_ITEM,
-    A_THREW_UNICORN_GEM, /* #192 - end tnntachieve2 */
+    A_THREW_UNICORN_GEM,
     A_DUG_UP_GRAVE,
     A_CAUSED_EARTHQUAKE,
     A_CHARMED_SNAKE,
@@ -738,7 +740,7 @@ enum tnnt_achievements {
     A_GOT_NEGATIVE_13_LUCK,
     A_GREASED_ARMOR,
     A_DEATHLY_HALLOWS,
-    A_DISARMED_WITH_WHIP,  /* #256 - end tnntachieve3 */
+    A_DISARMED_WITH_WHIP,
     A_DISARMED_LUDIOS_MINES,
     A_UNLOCKED_CREDIT_CARD,
     A_RELEASED_CAMERA_DEMON,
@@ -771,8 +773,8 @@ enum tnnt_achievements {
     A_LONG_TIMEOUT,
     A_MON_GREW_TO_HIPRIEST,
     A_ENCHANT_WEP_TO_8,
-    /* 32 free bits in tnntachieve4 */
-    /* 288 achievements defined */
+    /* 34 free bits in tnntachieve4 */
+    /* 290 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more

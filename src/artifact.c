@@ -1326,6 +1326,8 @@ int dieroll; /* needed for Magicbane and vorpal blades */
                     pline("Good job Henry, but that wasn't Anne.");
                 otmp->dknown = TRUE;
                 tnnt_achieve(A_DECAPITATED_ENEMY);
+                if (mdef->data == &mons[PM_MEDUSA])
+                    tnnt_achieve(A_DECAPITATED_MEDUSA);
                 return TRUE;
             } else {
                 if (!has_head(youmonst.data)) {

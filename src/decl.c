@@ -358,7 +358,7 @@ struct tnnt_globals_t tnnt_globals = DUMMY;
 /* TNNT - vanilla achievement names and descriptions */
 struct tnnt_achvmt_data vanilla_achievements[NUM_VANILLA_ACHIEVEMENTS] = {
   {"Ringing In My Ears", "Get the Bell of Opening"},
-  {"Feel The Burn", "Enter Gehennom"},
+  {"We Need To Go Deeper", "Enter Gehennom"},
   {"Emerging Into The Light", "Get the Candelabrum of Invocation"},
   {"Weighing of the Heart", "Get the Book of the Dead"},
   {"Bell, Book, and Candle", "Perform the Invocation Ritual"},
@@ -404,6 +404,8 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Feeder of Famine", "Kill Famine"},
   {"Why Won't You DIE Already", "Kill the Wizard of Yendor 20 or more times"},
   {"Double Whammy", "Kill the Wizard of Yendor twice in one action"},
+  {"Actual Perseus", "Kill Medusa with physical damage"},
+  {"Actual Actual Perseus", "Decapitate Medusa"},
   {"I Did It For The Money", "Kill Croesus"},
   {"Holy War", "Kill a priest of Moloch"},
   {"Nine for Mortal Men Doomed to Die ... Again", "Kill all nine Nazgul"},
@@ -612,7 +614,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Near Death Experience", "#chat to Death while carrying a Terry Pratchett novel"},
   {"Prize Inside!", "Get a spellbook by breaking a randomly-generated statue"},
   {"Ding-a-Ling", "Summon a nymph by ringing a cursed bell"},
-  {"Diver", "Dive into a moat or pool and retrieve an item from the bottom"},
+  {"Diver Down", "Dive into a moat or pool and retrieve an item from the bottom"},
   {"Ceiling Clinging Commute", "Ride a wumpus over water"},
   {"Collapse the Wavefunction", "Open the box containing Schroedinger's Cat"},
   {"I'm Free! I'm Free!", "Free a prisoner"},

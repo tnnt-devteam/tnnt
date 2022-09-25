@@ -1357,6 +1357,8 @@ int dieroll;
             killed(mon); /* takes care of most messages */
         if (artibane)
             tnnt_achieve(A_USED_CORRECT_BANE);
+        if (mdat == &mons[PM_MEDUSA])
+            tnnt_achieve(A_KILLED_MEDUSA_PHYSICALLY);
         /* Weird bug: the vanilla code does not set obj to null after hitting
          * with a potion (which has already been freed). We use potion_hit to
          * track whether that happens (in fear that setting obj to null could
