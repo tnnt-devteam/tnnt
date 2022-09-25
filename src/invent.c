@@ -873,6 +873,24 @@ struct obj *obj;
         if (tnnt_globals.soko_guilts == 0)
             tnnt_achieve(A_DID_PURE_SOKOBAN);
     }
+    /* TNNT: general checks for "acquired certain items" go here */
+    if (obj->otyp == ATHAME && obj->lichathame)
+        tnnt_achieve(A_GOT_LICH_ATHAME);
+    if (obj->otyp == RIN_INVISIBILITY && obj->nazgul_ring
+        && !tnnt_is_achieved(A_GOT_9_NAZGUL_RINGS)) {
+        int i;
+        for (i = 0; i < 9; ++i) {
+            if (tnnt_globals.nazgul_ring_o_ids[i] == obj->o_id)
+                break; /* we have already found this one */
+            else if (tnnt_globals.nazgul_ring_o_ids[i] == 0) {
+                tnnt_globals.nazgul_ring_o_ids[i] = obj->o_id;
+                if (i == 8)
+                    tnnt_achieve(A_GOT_9_NAZGUL_RINGS);
+                break;
+            }
+        }
+        /* else there is some other o_id ring at [i]; continue */
+    }
 }
 
 /*
@@ -916,8 +934,6 @@ struct obj *obj;
         picked_container(obj); /* clear no_charge */
     obj_was_thrown = obj->was_thrown;
     obj->was_thrown = 0;       /* not meaningful for invent */
-    if (obj->otyp == ATHAME && obj->lichathame)
-        tnnt_achieve(A_GOT_LICH_ATHAME);
 
     addinv_core1(obj);
 

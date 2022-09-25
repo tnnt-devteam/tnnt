@@ -5724,7 +5724,11 @@ boolean final;
     putstr(en_win, 0, buf);
 
     /* kill a certain number of foo */
-    Sprintf(buf, "You have killed %d/9 Nazgul.", mvitals[PM_NAZGUL].ukilled);
+    for (i = 0; i < 9; ++i) {
+        if (tnnt_globals.nazgul_ring_o_ids[i] == 0)
+            break;
+    }
+    Sprintf(buf, "You have collected %d/9 Nazgul rings.", i);
     putstr(en_win, 0, buf);
     Sprintf(buf, "You have killed %d/3 erinyes.", mvitals[PM_ERINYS].ukilled);
     putstr(en_win, 0, buf);

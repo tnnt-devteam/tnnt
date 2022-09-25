@@ -638,6 +638,7 @@ struct tnnt_globals_t {
     xchar door_attempt_x, door_attempt_y, door_attempt_ledger;
     unsigned char bones_piles_found;
     unsigned char maxpw_from_corpses;
+    unsigned nazgul_ring_o_ids[9];
 
     /* tnnt devs: add more as needed */
 };

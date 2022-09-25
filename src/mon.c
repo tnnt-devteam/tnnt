@@ -2628,10 +2628,6 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
     case PM_SOLDIER_ANT:
         tnnt_achieve(A_KILLED_SOLDIER_ANT);
         break;
-    case PM_NAZGUL:
-        if (mvitals[PM_NAZGUL].ukilled == 9)
-            tnnt_achieve(A_KILLED_9_NAZGUL);
-        break;
     case PM_ERINYS:
         if (mvitals[PM_ERINYS].ukilled == 3)
             tnnt_achieve(A_KILLED_3_ERINYES);

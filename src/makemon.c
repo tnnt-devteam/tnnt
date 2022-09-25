@@ -730,6 +730,7 @@ register struct monst *mtmp;
         if (ptr == &mons[PM_NAZGUL]) {
             otmp = mksobj(RIN_INVISIBILITY, FALSE, FALSE);
             curse(otmp);
+            otmp->nazgul_ring = 1;
             (void) mpickobj(mtmp, otmp);
         }
         break;
