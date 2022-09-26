@@ -6,6 +6,9 @@
 #error Bad inclusion of tnnt_achievements.h
 #endif
 
+/* starting around 2021 achievements are organized into sort of groups based
+ * around common themes */
+/* "vanilla-ish milestones" group */
 ACH("Back to Civilisation", "Step onto the Minetown altar", FOUND_MINES_ALTAR),
 ACH("Sage Advice", "Consult the Oracle", CONSULTED_ORACLE),
 ACH("The Archetypal Hero", "Get admitted to the Quest", STARTED_QUEST),
@@ -263,8 +266,7 @@ ACH("Shafted", "Fall down a shaft", FELL_DOWN_SHAFT),
 ACH("Horatius at the Bridge", "Extinct soldiers or Keystone Kops", EXTINCTED_ARMY_OR_KOPS),
 ACH("Who's That Pretty Girl in the Mirror, There?", "Deflect a nymph with a mirror", DEFLECTED_NYMPH),
 ACH("Under New Management", "Change your alignment by any means", CHANGED_ALIGNMENT),
-/* TNNT TODO: this is impossible in 3.7 */
-ACH("Groundhog Day", "Return to a forgotten level", REVISITED_LOST_LEVEL),
+ACH("Groundhog Day", "Return to a forgotten level", REVISITED_LOST_LEVEL), /* TNNT TODO: this is impossible in 3.7 */
 ACH("Tainted", "Dip an item in unholy water", DIPPED_IN_UNHOLY),
 ACH("Hydrochloric", "Dissolve iron bars with acid", DISSOLVED_IRONBARS),
 ACH("Predictably, Nothing Happens", "Break an identified wand of nothing", BROKE_WAN_NOTHING),

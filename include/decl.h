@@ -485,8 +485,6 @@ struct early_opt {
 #define TNNT_ACH_ENUM
 enum tnnt_achievements {
 #include "tnnt_achievements.h"
-    /* 23 free bits in tnntachieve4 */
-    /* 297 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more
