@@ -213,23 +213,6 @@ dosave0()
     }
 #endif /* MFLOPPY */
 
-#ifndef TNNT_2022_SAVEBREAKS
-    /* TNNT SHIM FOR 2021 ONLY: if the player saved, we don't want
-     * planes_pet_m_ids to be restored as an invalid pointer. Zero those fields.
-     * (If the player is nowhere near the Planes yet, this won't have any
-     * effect.)
-     * This is in dosave0 because savegamestate gets called in other places like
-     * any time levels change. It must come BEFORE savegamestate is called, so
-     * that tnnt_globals doesn't get saved with the non-zero pointer value.
-     * Remove this for the 2022 tournament (and enable the TNNT_2022_SAVEBREAKS
-     * code). */
-    if (tnnt_globals.num_planes_pets > 0) {
-        free((genericptr_t) tnnt_globals.planes_pet_m_ids);
-        tnnt_globals.planes_pet_m_ids = (unsigned int *) 0;
-        tnnt_globals.num_planes_pets = 0;
-    }
-#endif
-
     store_version(fd);
     store_savefileinfo(fd);
     store_plname_in_file(fd);
@@ -361,11 +344,9 @@ register int fd, mode;
            sizeof(struct spell) * (MAXSPELL + 1));
     /* TNNT - save globals */
     bwrite(fd, (genericptr_t) &tnnt_globals, sizeof tnnt_globals);
-#ifdef TNNT_2022_SAVEBREAKS
     /* TNNT - save dynamically allocated things */
     bwrite(fd, (genericptr_t) tnnt_globals.planes_pet_m_ids,
            sizeof(unsigned int) * tnnt_globals.num_planes_pets);
-#endif
     /* end TNNT */
     save_artifacts(fd);
     save_oracles(fd, mode);
