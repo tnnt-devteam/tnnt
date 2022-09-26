@@ -690,6 +690,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"This One Goes To +8", "Successfully enchant a weapon to +8 or higher"},
   {"Sword Plus Plus", "Successfully increase the enchantment on your weapon"},
   {"Blasters' Handbook", "Blow up a boulder with a land mine"},
+  {"Po-Loew-morph", "Create a golem from a pile of objects"},
 };
 
 /* support for lint.h */

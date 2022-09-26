@@ -1363,6 +1363,9 @@ int okind;
     mtmp = makemon(mdat, obj->ox, obj->oy, NO_MM_FLAGS);
     polyuse(obj, okind, (int) mons[pm_index].cwt);
 
+    if (mtmp)
+        tnnt_achieve(A_POLY_MADE_GOLEM);
+
     if (mtmp && cansee(mtmp->mx, mtmp->my)) {
         pline("Some %sobjects meld, and %s arises from the pile!", material,
               a_monnam(mtmp));
