@@ -216,9 +216,11 @@
    (whose name can be overridden via #define in global.h if desired) */
 #define LOGFILE  "logfile"  /* larger file for debugging purposes */
 #define XLOGFILE "xlogfile" /* even larger logfile */
-/*#define SERVER_LOCATION "us.hardfought.org" */ /* FQDN of the server */
 #define NEWS     "news"     /* the file containing the latest hack news */
 #define PANICLOG "paniclog" /* log of panic and impossible events */
+#ifndef SERVER_LOCATION
+#define SERVER_LOCATION "localhost" /* FQDN of the server */
+#endif
 
 /* alternative paniclog format, better suited for public servers with
    many players, as it saves the player name and the game start time */

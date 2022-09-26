@@ -693,7 +693,7 @@ unsigned int *stuckid, *steedid;
     /* TNNT - restore dynamically allocated things */
     if (tnnt_globals.num_planes_pets > 0) {
         size_t buflen = sizeof(unsigned int) * tnnt_globals.num_planes_pets;
-        tnnt_globals.planes_pet_m_ids = alloc(buflen);
+        tnnt_globals.planes_pet_m_ids = (unsigned int *) alloc(buflen);
         mread(fd, (genericptr_t) tnnt_globals.planes_pet_m_ids, buflen);
     }
     /* end TNNT */
