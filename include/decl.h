@@ -662,9 +662,12 @@ enum tnnt_achievements {
     A_SCARED_BY_GHOST,
     A_HEISENBERG,
     A_BOUGHT_PROTECTION,
+    A_CONVERTED_ALTAR,
+    A_GOT_TWO_BITS,
+    A_MON_GREW_TO_HIPRIEST,
+    A_BUC_FROM_ALTAR,
     A_USED_THRONE,
     A_DROPPED_RING_IN_SINK,
-    A_CONVERTED_ALTAR,
     A_KICKED_FRUIT_TREE,
     A_GOT_BEES_FROM_TREE,
     A_UNCURSED_IN_FOUNTAIN,
@@ -713,7 +716,6 @@ enum tnnt_achievements {
     A_LAID_EGG,
     A_HATCHED_FOREIGN_EGG,
     A_FELL_DOWN_SHAFT,
-    A_GOT_TWO_BITS,
     A_EXTINCTED_ARMY_OR_KOPS,
     A_DEFLECTED_NYMPH,
     A_CHANGED_ALIGNMENT,
@@ -772,11 +774,11 @@ enum tnnt_achievements {
     A_GOT_30_AC,
     A_DOOR_RESIST_8X,
     A_LONG_TIMEOUT,
-    A_MON_GREW_TO_HIPRIEST,
     A_ENCHANT_WEP_TO_8,
+    A_ENCHANT_WEAPON,
     A_BLEW_UP_BOULDER,
-    /* 28 free bits in tnntachieve4 */
-    /* 292 achievements defined */
+    /* 26 free bits in tnntachieve4 */
+    /* 294 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more

@@ -296,6 +296,7 @@ register struct obj *obj;
         if (obj->oclass != COIN_CLASS)
             obj->bknown = 1; /* ok to bypass set_bknown() */
     }
+    tnnt_achieve(A_BUC_FROM_ALTAR);
 }
 
 STATIC_OVL void

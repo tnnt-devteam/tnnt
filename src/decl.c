@@ -572,11 +572,15 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Tin Foil Hat", "Dodge a brainsucking attack"},
   {"Who You Gonna Call?", "Get scared by a ghost"},
   {"Heisenberg", "Become uncertain about your position or velocity"},
-  /* unsorted */
+  /* involving gods and religion */
   {"Indulgences", "Buy protection from a priest"},
+  {"Orthodoxy", "Convert an altar"},
+  {"Potions of Booze Cost More Than That", "Get two bits for an ale from a priest"},
+  {"Fumata Bianca", "Get a priest to grow up into a high priest"},
+  {"Flashy", "Learn an item's BUC status from an altar"},
+  /* unsorted */
   {"The Royal Treatment", "Sit on a throne"},
   {"It'll Turn Up Later", "Drop a ring in a sink"},
-  {"Orthodoxy", "Convert an altar"},
   {"Isaac Newton", "Get fruit by kicking a tree"},
   {"Not The Bees", "Get bees by kicking a tree"},
   {"Wash it Clean", "Uncurse an item in a fountain"},
@@ -625,7 +629,6 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Motherhood", "Lay an egg"},
   {"Father Figure", "Hatch an egg not laid by you and have it come out tame"},
   {"Shafted", "Fall down a shaft"},
-  {"Potions of Booze Cost More Than That", "Get two bits for an ale from a priest"},
   {"Horatius at the Bridge", "Extinct soldiers or Keystone Kops"},
   {"Who's That Pretty Girl in the Mirror, There?", "Deflect a nymph with a mirror"},
   {"Under New Management", "Change your alignment by any means"},
@@ -684,8 +687,8 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Walking Bullseye", "Have +30 AC"},
   {"Doorstopper", "Have a door resist 8 consecutive times when trying to open or close it"},
   {"Practically Permanent", "Have more than 10,000 turns of a temporary intrinsic"},
-  {"Fumata Bianca", "Get a priest to grow up into a high priest"},
   {"This One Goes To +8", "Successfully enchant a weapon to +8 or higher"},
+  {"Sword Plus Plus", "Successfully increase the enchantment on your weapon"},
   {"Blasters' Handbook", "Blow up a boulder with a land mine"},
 };
 
