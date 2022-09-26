@@ -325,7 +325,9 @@ ACH("This One Goes To +8", "Successfully enchant a weapon to +8 or higher", ENCH
 ACH("Sword Plus Plus", "Successfully increase the enchantment on your weapon", ENCHANT_WEAPON),
 ACH("Blasters' Handbook", "Blow up a boulder with a land mine", BLEW_UP_BOULDER),
 ACH("Po-Loew-morph", "Create a golem from a pile of objects", POLY_MADE_GOLEM),
-/* 23 free bits in tnntachieve4 */
-/* 297 achievements defined */
+ACH("Never Tell Me the Odds", "Successfully cast a spell with a failure rate of 95% or greater", CAST_LOCHANCE_SPELL),
+ACH("Archmage", "Successfully cast a level 7 spell", CAST_LV7_SPELL),
+/* 21 free bits in tnntachieve4 */
+/* 299 achievements defined */
 
 #undef ACH

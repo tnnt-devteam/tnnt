@@ -1037,6 +1037,11 @@ boolean atme;
         return 1;
     }
 
+    if (chance <= 5)
+        tnnt_achieve(A_CAST_LOCHANCE_SPELL);
+    if (spellev(spell) >= 7)
+        tnnt_achieve(A_CAST_LV7_SPELL);
+
     u.uen -= energy;
     context.botl = 1;
     exercise(A_WIS, TRUE);
