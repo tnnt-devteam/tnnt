@@ -449,6 +449,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Purple Rain", "Get at least 20 enemies eaten by purple worms on the Astral Plane"},
   {"Off With Her Head!", "Decapitate an enemy with Vorpal Blade"},
   {"It's 4:20 Somewhere", "Stone a monster"},
+  {"On Thin Ice", "Drown a monster by melting the ice beneath it"},
   /* "survive a hazard" group */
   {"Part-time Statue", "Cure stoning"},
   {"The Blob", "Cure sliming"},

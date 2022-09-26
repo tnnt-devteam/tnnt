@@ -552,6 +552,7 @@ enum tnnt_achievements {
     A_PURPLE_RAIN,
     A_DECAPITATED_ENEMY,
     A_STONED_A_MONSTER,
+    A_MELTED_ICE_KILL,
     A_CURED_STONING,
     A_CURED_SLIMING,
     A_SURVIVED_DROWNING,
@@ -778,8 +779,8 @@ enum tnnt_achievements {
     A_ENCHANT_WEAPON,
     A_BLEW_UP_BOULDER,
     A_POLY_MADE_GOLEM,
-    /* 25 free bits in tnntachieve4 */
-    /* 295 achievements defined */
+    /* 24 free bits in tnntachieve4 */
+    /* 296 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more

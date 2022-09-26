@@ -4387,10 +4387,12 @@ const char *msg;
         } while (is_pool(x, y) && (otmp = sobj_at(BOULDER, x, y)) != 0);
         newsym(x, y);
     }
-    if (x == u.ux && y == u.uy)
+    if (x == u.ux && y == u.uy) {
         spoteffects(TRUE); /* possibly drown, notice objects */
-    else if (is_pool(x, y) && (mtmp = m_at(x, y)) != 0)
-        (void) minliquid(mtmp);
+    } else if (is_pool(x, y) && (mtmp = m_at(x, y)) != 0) {
+        if (minliquid(mtmp) && !context.mon_moving)
+            tnnt_achieve(A_MELTED_ICE_KILL);
+    }
 }
 
 #define MIN_ICE_TIME 50
