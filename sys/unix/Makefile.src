@@ -504,7 +504,8 @@ HACKINCL = align.h amiconf.h artifact.h artilist.h attrib.h beconf.h botl.h \
 	os2conf.h patchlevel.h pcconf.h permonst.h prop.h rect.h region.h \
 	rm.h sp_lev.h spell.h sys.h system.h tcap.h timeout.h tosconf.h \
 	tradstdc.h trampoli.h trap.h unixconf.h vision.h vmsconf.h wintty.h \
-	wincurs.h winX.h winprocs.h wintype.h you.h youprop.h
+	wincurs.h winX.h winprocs.h wintype.h you.h youprop.h \
+	tnnt_achievements.h
 
 HSOURCES = $(HACKINCL) date.h onames.h pm.h vis_tab.h \
 		lev_comp.h dgn_comp.h dgn_file.h
@@ -748,7 +749,8 @@ $(HACK_H): ../include/hack.h $(CONFIG_H) ../include/lint.h ../include/align.h \
 		../include/flag.h ../include/rm.h ../include/vision.h \
 		../include/display.h ../include/engrave.h ../include/rect.h \
 		../include/region.h ../include/winprocs.h ../include/botl.h \
-		../include/sys.h ../include/wintty.h ../include/trampoli.h
+		../include/sys.h ../include/wintty.h ../include/trampoli.h \
+		../include/tnnt_achievements.h
 	touch $(HACK_H)
 #
 tos.o: ../sys/atari/tos.c $(HACK_H) ../include/tcap.h
@@ -995,7 +997,7 @@ bones.o: bones.c $(HACK_H) ../include/lev.h
 botl.o: botl.c $(HACK_H)
 cmd.o: cmd.c $(HACK_H) ../include/lev.h ../include/func_tab.h
 dbridge.o: dbridge.c $(HACK_H)
-decl.o: decl.c $(HACK_H)
+decl.o: decl.c $(HACK_H) ../include/tnnt_achievements.h
 detect.o: detect.c $(HACK_H) ../include/artifact.h
 dig.o: dig.c $(HACK_H)
 display.o: display.c $(HACK_H)
