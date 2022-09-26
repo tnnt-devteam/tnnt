@@ -526,6 +526,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Tastes Like Chicken", "Eat chickatrice or cockatrice meat"},
   {"Heroes' Feast", "Eat at least 3 artifacts"},
   {"Buzzing With Energy", "Gain at least 5 max Pw by eating corpses"},
+  {"Culinary Experience", "Gain a level by eating a tripe ration"},
   /* involving taming and pets */
   {"Pet Whisperer", "Tame a monster by feeding it"},
   {"Beast Master", "Tame a monster without using food"},

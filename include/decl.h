@@ -622,6 +622,7 @@ enum tnnt_achievements {
     A_TASTED_COCKATRICE,
     A_ATE_3_ARTIFACTS,
     A_5_MAXPW_FROM_NEWTS,
+    A_LEVEL_FROM_TRIPE,
     A_TAMED_BY_FOOD,
     A_TAMED_NOT_BY_FOOD,
     A_TAMED_SHAPECHANGER,
@@ -773,8 +774,8 @@ enum tnnt_achievements {
     A_LONG_TIMEOUT,
     A_MON_GREW_TO_HIPRIEST,
     A_ENCHANT_WEP_TO_8,
-    /* 34 free bits in tnntachieve4 */
-    /* 290 achievements defined */
+    /* 29 free bits in tnntachieve4 */
+    /* 291 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more

@@ -1869,9 +1869,12 @@ struct obj *otmp;
             pline(Hallucination ? "Tastes great!  Less filling!"
                                 : "Mmm, tripe... not bad!");
         } else {
+            int oldlvl = u.ulevel;
             pline("Yak - dog food!");
             more_experienced(1, 0);
             newexplevel();
+            if (u.ulevel > oldlvl)
+                tnnt_achieve(A_LEVEL_FROM_TRIPE);
             /* not cannibalism, but we use similar criteria
                for deciding whether to be sickened by this meal */
             if (rn2(2) && !CANNIBAL_ALLOWED())
