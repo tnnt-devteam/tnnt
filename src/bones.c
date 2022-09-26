@@ -152,7 +152,11 @@ boolean restore;
                     otmp->spe = 1;
 #endif
             } else if (otmp->otyp == SCR_MISSING_CODE) {
+#ifdef MAIL
                 otmp->otyp = SCR_MAIL;
+#else
+                otmp->otyp = SCR_BLANK_PAPER;
+#endif
                 otmp->spe = 1;
             } else if (otmp->otyp == EGG) {
                 otmp->spe = 0; /* not "laid by you" in next game */

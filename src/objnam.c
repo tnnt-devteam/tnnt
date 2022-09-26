@@ -3827,7 +3827,11 @@ struct obj *no_wish;
             typ = CHEST;
             break;
         case SCR_MISSING_CODE:
+#ifdef MAIL
             typ = SCR_MAIL;
+#else
+            typ = SCR_BLANK_PAPER;
+#endif
             break;
         default:
             /* catch any other non-wishable objects (venom) */

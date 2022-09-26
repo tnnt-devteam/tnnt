@@ -2479,7 +2479,9 @@ int mndx;
         case PM_ELF:
         case PM_ORC:
         case PM_HUMAN:
+#ifdef MAIL
         case PM_MAIL_DAEMON:
+#endif
             return FALSE;
         /* There used to be a Rule 5 about not counting baby versions of
          * monsters at separate species, but we currently have it as
