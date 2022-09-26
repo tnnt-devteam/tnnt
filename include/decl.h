@@ -774,8 +774,9 @@ enum tnnt_achievements {
     A_LONG_TIMEOUT,
     A_MON_GREW_TO_HIPRIEST,
     A_ENCHANT_WEP_TO_8,
-    /* 29 free bits in tnntachieve4 */
-    /* 291 achievements defined */
+    A_BLEW_UP_BOULDER,
+    /* 28 free bits in tnntachieve4 */
+    /* 292 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more

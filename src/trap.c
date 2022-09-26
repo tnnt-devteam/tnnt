@@ -1920,6 +1920,7 @@ int style;
                         place_object(singleobj, bhitpos.x, bhitpos.y);
                         singleobj->otrapped = 0;
                         fracture_rock(singleobj);
+                        tnnt_achieve(A_BLEW_UP_BOULDER);
                         (void) scatter(bhitpos.x, bhitpos.y, 4,
                                        MAY_DESTROY | MAY_HIT | MAY_FRACTURE
                                            | VIS_EFFECTS,

@@ -686,6 +686,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Practically Permanent", "Have more than 10,000 turns of a temporary intrinsic"},
   {"Fumata Bianca", "Get a priest to grow up into a high priest"},
   {"This One Goes To +8", "Successfully enchant a weapon to +8 or higher"},
+  {"Blasters' Handbook", "Blow up a boulder with a land mine"},
 };
 
 /* support for lint.h */
