@@ -345,8 +345,10 @@ register int fd, mode;
     /* TNNT - save globals */
     bwrite(fd, (genericptr_t) &tnnt_globals, sizeof tnnt_globals);
     /* TNNT - save dynamically allocated things */
-    bwrite(fd, (genericptr_t) tnnt_globals.planes_pet_m_ids,
-           sizeof(unsigned int) * tnnt_globals.num_planes_pets);
+    if (tnnt_globals.num_planes_pets > 0) {
+        bwrite(fd, (genericptr_t) tnnt_globals.planes_pet_m_ids,
+               sizeof(unsigned int) * tnnt_globals.num_planes_pets);
+    }
     /* end TNNT */
     save_artifacts(fd);
     save_oracles(fd, mode);
