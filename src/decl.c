@@ -573,6 +573,7 @@ struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
   {"Tin Foil Hat", "Dodge a brainsucking attack"},
   {"Who You Gonna Call?", "Get scared by a ghost"},
   {"Heisenberg", "Become uncertain about your position or velocity"},
+  {"Yoink!", "Have the Amulet of Yendor stolen from you"},
   /* involving gods and religion */
   {"Indulgences", "Buy protection from a priest"},
   {"Orthodoxy", "Convert an altar"},

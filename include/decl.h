@@ -662,6 +662,7 @@ enum tnnt_achievements {
     A_EVADED_BRAINSUCK,
     A_SCARED_BY_GHOST,
     A_HEISENBERG,
+    A_AMULET_WAS_STOLEN,
     A_BOUGHT_PROTECTION,
     A_CONVERTED_ALTAR,
     A_GOT_TWO_BITS,
@@ -779,8 +780,8 @@ enum tnnt_achievements {
     A_ENCHANT_WEAPON,
     A_BLEW_UP_BOULDER,
     A_POLY_MADE_GOLEM,
-    /* 24 free bits in tnntachieve4 */
-    /* 296 achievements defined */
+    /* 23 free bits in tnntachieve4 */
+    /* 297 achievements defined */
     /* NOTE: There is another achievement that is the combination of all
      * A_PARTIAL_* achievements. That is NOT defined here, because we already
      * have the bits for it, but it means that there are actually more

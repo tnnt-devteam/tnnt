@@ -474,6 +474,8 @@ char *objnambuf;
                      && touch_petrifies(&mons[otmp->corpsenm]));
     if (mtmp->data->mlet == S_NYMPH)
         tnnt_achieve(A_ROBBED_BY_NYMPH);
+    if (otmp->otyp == AMULET_OF_YENDOR)
+        tnnt_achieve(A_AMULET_WAS_STOLEN);
     (void) mpickobj(mtmp, otmp); /* may free otmp */
     if (could_petrify && !(mtmp->misc_worn_check & W_ARMG)) {
         minstapetrify(mtmp, TRUE);
@@ -610,6 +612,8 @@ struct monst *mtmp;
         pline("%s steals %s!", Monnam(mtmp), buf);
         if (can_teleport(mtmp->data) && !tele_restrict(mtmp))
             (void) rloc(mtmp, TRUE);
+        if (otmp->otyp == AMULET_OF_YENDOR)
+            tnnt_achieve(A_AMULET_WAS_STOLEN);
     }
 }
 
