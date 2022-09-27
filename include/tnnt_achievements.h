@@ -411,7 +411,7 @@ ACH("Who's That Pretty Girl in the Mirror, There?",
     "Deflect a nymph with a mirror", DEFLECTED_NYMPH),
 ACH("Under New Management", "Change your alignment by any means",
     CHANGED_ALIGNMENT),
-/* TODO: Groundhog Day is impossible in 3.7 */
+/* TNNT TODO FOR 3.7: Groundhog Day is impossible in 3.7 */
 ACH("Groundhog Day", "Return to a forgotten level", REVISITED_LOST_LEVEL),
 ACH("Tainted", "Dip an item in unholy water", DIPPED_IN_UNHOLY),
 ACH("Hydrochloric", "Dissolve iron bars with acid", DISSOLVED_IRONBARS),

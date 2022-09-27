@@ -2152,9 +2152,9 @@ register struct monst *mtmp;
         tnnt_globals.deathmatch_completed = TRUE;
         /* Gather all of the NPC's possessions in the spot of their death. */
         if (list) {
-            /* TNNT TODO: post 3.7 merge, we should probably stick a string in
-             * quest.lua for these arena messages, so they can be printed as a
-             * single large block of text. */
+            /* TNNT TODO FOR 3.7: We should probably stick a string in quest.lua
+             * for these arena messages, so they can be printed as a single
+             * large block of text. */
             /* first we tell the news to folks who can hear */
             if (!Deaf) {
                 pline("A voice echoes in the arena:");
