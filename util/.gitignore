@@ -20,6 +20,7 @@ gif2txt
 txt2ppm
 tile2img.ttp
 xpm2ppm.ttp
+tnnt_ach_to_yaml
 # dev tool for analyzing data collected by nethack's #define MONITOR_HEAP
 heaputil
 heaputil.c

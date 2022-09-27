@@ -183,7 +183,8 @@ SPLEVSRC = lev_yacc.c lev_lex.c lev_main.c
 DGNCOMPSRC = dgn_yacc.c dgn_lex.c dgn_main.c
 RECOVSRC = recover.c
 DLBSRC = dlb_main.c
-UTILSRCS = $(MAKESRC) panic.c $(SPLEVSRC) $(DGNCOMPSRC) $(RECOVSRC) $(DLBSRC)
+ACHSRC = tnnt_ach_to_yaml.c
+UTILSRCS = $(MAKESRC) panic.c $(SPLEVSRC) $(DGNCOMPSRC) $(RECOVSRC) $(DLBSRC) $(ACHSRC)
 
 # files that define all monsters and objects
 CMONOBJ = ../src/monst.c ../src/objects.c
@@ -209,6 +210,9 @@ RECOVOBJS = recover.o
 
 # object files for the data librarian
 DLBOBJS = dlb_main.o $(OBJDIR)/dlb.o $(OALLOC)
+
+# object files for TNNT achievements yaml generator
+ACHOBJS = tnnt_ach_to_yaml.o
 
 # flags for creating distribution versions of sys/share/*_lex.c, using
 # a more portable flex skeleton, which is not included in the distribution.
@@ -357,7 +361,15 @@ dlb:	$(DLBOBJS)
 dlb_main.o: dlb_main.c $(CONFIG_H) ../include/dlb.h ../include/date.h
 	$(CC) $(CFLAGS) -c dlb_main.c
 
+#	dependencies for generating yaml file of TNNT achievements
+#
+tnnt_ach_to_yaml: $(ACHOBJS)
+	$(CC) $(LFLAGS) -o tnnt_ach_to_yaml $(ACHOBJS) $(LIBS)
 
+tnnt_ach_to_yaml.o: tnnt_ach_to_yaml.c ../include/tnnt_achievements.h
+
+tnnt_achievements.yaml: tnnt_ach_to_yaml
+	./tnnt_ach_to_yaml >tnnt_achievements.yaml
 
 #	dependencies for tile utilities
 #

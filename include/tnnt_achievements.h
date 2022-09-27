@@ -2,7 +2,7 @@
 #define ACH(nam, desc, id) A_##id
 #elif defined (TNNT_ACH_NAMES)
 #define ACH(nam, desc, id) {nam, desc}
-#else
+#elif !defined(ACH)
 #error Bad inclusion of tnnt_achievements.h
 #endif
 
