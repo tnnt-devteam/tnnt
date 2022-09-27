@@ -2433,7 +2433,7 @@ struct obj *tstone;
             makeknown(TOUCHSTONE);
             makeknown(obj->otyp);
             prinv((char *) 0, obj, 0L);
-            if (objects[obj->otyp].oc_material == GLASS)
+            if (objects[obj->otyp].oc_material != GLASS)
                 tnnt_achieve(A_USED_TOUCHSTONE);
             return;
         } else {
