@@ -1893,8 +1893,6 @@ struct obj *obj;
     if ((can = mksobj(TIN, FALSE, FALSE)) != 0) {
         static const char you_buy_it[] = "You tin it, you bought it!";
 
-        if (mons[corpse->corpsenm].mlet == S_TROLL)
-            tnnt_achieve(A_BLOCKED_TROLL_REVIVAL);
         if (unique_corpstat(&mons[corpse->corpsenm]))
             tnnt_achieve(A_TINNED_UNIQUE_MON);
 
