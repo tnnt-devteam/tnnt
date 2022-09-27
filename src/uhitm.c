@@ -776,8 +776,13 @@ int dieroll;
                         tmp++;
                 }
             } else {
-                if (obj->otyp == BOOMERANG) {
-                    /* guaranteed not hitting in melee */
+                /* test that the monster is not in the first 2 spaces of the
+                 * flight path (which would be a direct strike); in this else
+                 * clause, we already know we are not hitting in melee */
+                if (obj->otyp == BOOMERANG
+                    && !(((mon->mx == u.ux + u.dx) && (mon->my == u.uy + u.dy))
+                         || ((mon->mx == u.ux + u.dx * 2)
+                             && (mon->my == u.uy + u.dy * 2)))) {
                     tnnt_achieve(A_HIT_WITH_BOOMERANG);
                 }
                 tmp = dmgval(obj, mon);
