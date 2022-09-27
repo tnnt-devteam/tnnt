@@ -370,9 +370,7 @@ struct tnnt_achvmt_data vanilla_achievements[NUM_VANILLA_ACHIEVEMENTS] = {
   {"Anti-Stoner", "Kill Medusa"}
 };
 
-/* TNNT - achievement names and descriptions
- * The order of these MUST be the exact same as that of enum tnnt_achievements
- * found in decl.h! If you reorder these, you must reorder those. */
+/* TNNT - custom tournament achievement names and descriptions */
 #define TNNT_ACH_NAMES
 struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
 #include "tnnt_achievements.h"

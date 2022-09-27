@@ -485,12 +485,6 @@ struct early_opt {
 #define TNNT_ACH_ENUM
 enum tnnt_achievements {
 #include "tnnt_achievements.h"
-    /* NOTE: There is another achievement that is the combination of all
-     * A_PARTIAL_* achievements. That is NOT defined here, because we already
-     * have the bits for it, but it means that there are actually more
-     * achievements in the tournament than are defined here. This was already
-     * sort of the case with achievements that use the regular achieve bitfield.
-     */
     NUM_TNNT_ACHIEVEMENTS
 };
 #undef TNNT_ACH_ENUM
