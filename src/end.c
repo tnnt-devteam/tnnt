@@ -734,7 +734,7 @@ time_t when; /* date+time at end of game */
     init_symbols(); /* revert to default symbol set */
 
     /* let folks know this was a TNNT game */
-    Sprintf(pbuf, "The November NetHack Tournament (2021)");
+    Sprintf(pbuf, "The November NetHack Tournament (2022)");
     /* putstr(0, 0, pbuf); */
     putstr(0, ATR_SUBHEAD, pbuf);
     putstr(NHW_DUMPTXT, 0, "");
