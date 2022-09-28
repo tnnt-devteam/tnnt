@@ -1058,6 +1058,14 @@ register struct trap *ttmp;
         You_feel("dizzy for a moment, but nothing happens...");
         return;
     }
+    else if (is_illegal_deathmatch(&ttmp->dst)) {
+        /* TNNT - Don't give someone a chance to go through the portal, drop
+         * invocation items in the arena, then run away, making the game
+         * unwinnable. */
+        You1(shudder_for_moment);
+        pline("Something in your inventory seems to be anchoring you here.");
+        return;
+    }
 
     target_level = ttmp->dst;
 
@@ -1615,6 +1623,28 @@ boolean give_feedback;
     else
         (void) rloc(mtmp, TRUE);
     return TRUE;
+}
+
+/* TNNT - is newlev hero is traveling to the deathmatch, and illegal at this
+ * moment because it might let them render the game unwinnable by leaving items
+ * needed to win the game in the sealed-off deathmatch? */
+boolean
+is_illegal_deathmatch(newlev)
+d_level *newlev;
+{
+    if (!on_level(newlev, &deathmatch_level))
+        return FALSE; /* these rules apply only to entering deathmatch */
+    if (tnnt_globals.deathmatch_completed)
+        return FALSE; /* the branch will never get sealed off */
+
+    if (u.uhave.amulet)
+        return TRUE;
+    if (u.uevent.invoked)
+        return FALSE; /* invocation items are fine to bring in if you have
+                         already used them for the invocation */
+    if (u.uhave.bell || u.uhave.menorah || u.uhave.book)
+        return TRUE;
+    return FALSE;
 }
 
 /*teleport.c*/

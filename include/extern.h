@@ -2481,6 +2481,7 @@ E int FDECL(mlevel_tele_trap, (struct monst *, struct trap *,
 E boolean FDECL(rloco, (struct obj *));
 E int NDECL(random_teleport_level);
 E boolean FDECL(u_teleport_mon, (struct monst *, BOOLEAN_P));
+E boolean FDECL(is_illegal_deathmatch, (d_level *));
 
 /* ### tile.c ### */
 #ifdef USE_TILES

@@ -1593,6 +1593,12 @@ struct obj *obj;
             if (u.uhave.amulet || In_endgame(&u.uz) || In_endgame(&newlev)
                 || newlev.dnum == u.uz.dnum || !next_to_u()) {
                 You_feel("very disoriented for a moment.");
+            } else if (is_illegal_deathmatch(&newlev)) {
+                /* TNNT - Don't give someone a chance to go through the portal,
+                 * drop invocation items in the arena, then run away, making the
+                 * game unwinnable. */
+                You1(shudder_for_moment);
+                pline("Something in your inventory seems to be anchoring you here.");
             } else {
                 if (!Blind)
                     You("are surrounded by a shimmering sphere!");
