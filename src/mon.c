@@ -2874,9 +2874,13 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
     /* malign was already adjusted for u.ualign.type and randomization */
     adjalign(mtmp->malign);
 
-    if (mtmp->data == &mons[PM_GHOST] && strlen(mtmp->former_rank) > 0) {
-        livelog_printf(LL_UMONST, "destroyed %s, the former %s",
-                       livelog_mon_nam(mtmp), mtmp->former_rank);
+    if (mtmp->former_rank.mnum != NON_PM) {
+        livelog_printf(LL_UMONST, "destroyed %s, %s former %s",
+                       livelog_mon_nam(mtmp),
+                       (mtmp->data == &mons[PM_GHOST]) ? "the" : "and",
+                       rank_of(mtmp->former_rank.lev,
+                               mtmp->former_rank.mnum,
+                               mtmp->former_rank.female));
     }
 }
 

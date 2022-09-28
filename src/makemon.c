@@ -1231,6 +1231,7 @@ int mmflags;
         tnnt_globals.deathmatch_m_id = mtmp->m_id;
     }
     mtmp->mnum = mndx;
+    mtmp->former_rank.mnum = NON_PM;
 
     /* set up level and hit points */
     newmonhp(mtmp, mndx);
