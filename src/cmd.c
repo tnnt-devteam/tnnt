@@ -5810,7 +5810,7 @@ boolean final;
         any.a_char = 'u';
         add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
                 "show only achievements not yet earned this game", MENU_UNSELECTED);
-        any.a_char = 'b';
+        any.a_char = 'a';
         add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
                 "show all achievements, marked as earned or not", MENU_UNSELECTED);
         end_menu(win, "Which achievements do you want a list of?");
@@ -5829,7 +5829,7 @@ boolean final;
     }
     /* TODO: will need NHW_MENU if we can get paging to work in tty */
     win = create_nhwindow(NHW_TEXT);
-    if (response == 'b') {
+    if (response == 'a') {
         putstr(win, ATR_BOLD, "All achievements:");
     }
     else {
@@ -5844,7 +5844,7 @@ boolean final;
         boolean earned = vanilla_achieved[i];
         if (earned)
             num_earned++;
-        if (response == 'b' || earned == (response == 'e')) {
+        if (response == 'a' || earned == (response == 'e')) {
             struct tnnt_achvmt_data* dat = &vanilla_achievements[i];
             Sprintf(buf, "[%c] #V%02d \"%s\" - %s", (earned ? 'X' : ' '),
                     i + 1, dat->name, dat->descr);
@@ -5859,7 +5859,7 @@ boolean final;
         boolean earned = tnnt_is_achieved(i);
         if (earned)
             num_earned++;
-        if (response == 'b' || earned == (response == 'e')) {
+        if (response == 'a' || earned == (response == 'e')) {
             struct tnnt_achvmt_data* dat = &tnnt_achievements[i];
             Sprintf(buf, "[%c] #%03d \"%s\" - %s", (earned ? 'X' : ' '),
                     i + 1, dat->name, dat->descr);
