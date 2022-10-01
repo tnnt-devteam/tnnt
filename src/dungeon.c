@@ -1211,6 +1211,13 @@ int x, y;
        stale values from previous level */
     if (!on_level(&u.uz, &u.uz0))
         u.ux0 = u.ux, u.uy0 = u.uy;
+    /* TNNT: position related achievements (note that this is NOT the only place
+     * ux and uy can get updated)
+     * TNNT TODO FOR 3.7: check if this assumption holds or if the Castle can be
+     * level flipped and appear in a slightly different position */
+    if (Is_stronghold(&u.uz) && u.ux == 15 && u.uy == 11
+        && moves <= tnnt_globals.entered_castle_time + TNNT_CASTLE_TURNS)
+        tnnt_achieve(A_ENTERED_CASTLE_QUICKLY);
 }
 
 /* place you on a random location when arriving on a level */

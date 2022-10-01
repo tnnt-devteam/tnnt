@@ -2160,6 +2160,8 @@ find_ac()
     }
     if (u.uac >= 30)
         tnnt_achieve(A_GOT_30_AC);
+    if (u.uac <= -50)
+        tnnt_achieve(A_GOT_MINUS_50_AC);
 }
 
 void

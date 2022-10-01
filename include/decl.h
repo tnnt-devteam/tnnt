@@ -633,6 +633,9 @@ struct tnnt_globals_t {
     unsigned char bones_piles_found;
     unsigned char maxpw_from_corpses;
     unsigned nazgul_ring_o_ids[9];
+    boolean nemesis_got_a_move;
+#define TNNT_CASTLE_TURNS 30
+    long entered_castle_time;
 
     /* tnnt devs: add more as needed */
 };

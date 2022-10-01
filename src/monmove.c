@@ -412,6 +412,10 @@ register struct monst *mtmp;
         return 0;
     }
 
+    /* TNNT: monster is getting an action at this point */
+    if (mtmp->data->msound == MS_NEMESIS)
+        tnnt_globals.nemesis_got_a_move = 1;
+
     /* not frozen or sleeping: wipe out texts written in the dust */
     wipe_engr_at(mtmp->mx, mtmp->my, 1, FALSE);
 

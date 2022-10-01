@@ -331,7 +331,9 @@ found:
     useup(paper);
 
     /* success */
-    if (new_obj->oclass == SPBOOK_CLASS) {
+    /* TNNT TODO FOR 3.7: Writing novels is no longer possible, so it should no
+     * longer be necessary to check for that here. */
+    if (new_obj->oclass == SPBOOK_CLASS && new_obj->otyp != SPE_NOVEL) {
         /* acknowledge the change in the object's description... */
         pline_The("spellbook warps strangely, then turns %s.",
                   new_book_description(new_obj->otyp, namebuf));

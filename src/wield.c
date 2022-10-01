@@ -193,12 +193,54 @@ struct obj *wep;
         }
         setuwep(wep);
 
+        /* TNNT: checks for "wield foo while satisfying other conditions" go
+         * here */
         if (wep->otyp == WAN_DEATH && objects[WAN_DEATH].oc_name_known
             && uamul && uamul->otyp == AMULET_OF_LIFE_SAVING
             && objects[AMULET_OF_LIFE_SAVING].oc_name_known
             && uarmc && uarmc->otyp == CLOAK_OF_INVISIBILITY
             && objects[CLOAK_OF_INVISIBILITY].oc_name_known) {
             tnnt_achieve(A_DEATHLY_HALLOWS);
+        }
+        if (wep->otyp == KNIFE && uarmc && uarmc->otyp == ALCHEMY_SMOCK
+            && !tnnt_is_achieved(A_OMELET_OF_YENDOR)) {
+            struct obj *otmp;
+            int n_eggs; /* could have multiple named stacks */
+            boolean spinach = FALSE,
+                    eucalyptus = FALSE,
+                    wolfsbane = FALSE,
+                    garlic = FALSE,
+                    mushroom = FALSE,
+                    oil = FALSE,
+                    fryingpan = FALSE;
+            for (otmp = invent; otmp; otmp = otmp->nobj) {
+                if (otmp->otyp == EGG)
+                    n_eggs += otmp->quan;
+                /* require tins to be known so someone can't leak whether their
+                 * tin is spinach by checking to see if they got this
+                 * achievement or not */
+                if (otmp->otyp == TIN && otmp->known) {
+                    if (otmp->spe == 1)
+                        spinach = TRUE;
+                    if (otmp->corpsenm == PM_VIOLET_FUNGUS)
+                        mushroom = TRUE;
+                }
+                if (otmp->otyp == CORPSE && otmp->corpsenm == PM_VIOLET_FUNGUS)
+                    mushroom = TRUE;
+                if (otmp->otyp == POT_OIL && objects[POT_OIL].oc_name_known)
+                    oil = TRUE;
+                if (otmp->otyp == EUCALYPTUS_LEAF)
+                    eucalyptus = TRUE;
+                if (otmp->otyp == SPRIG_OF_WOLFSBANE)
+                    wolfsbane = TRUE;
+                if (otmp->otyp == CLOVE_OF_GARLIC)
+                    garlic = TRUE;
+                if (otmp->otyp == DENTED_POT)
+                    fryingpan = TRUE;
+            }
+            if (n_eggs >= 3 && fryingpan && spinach && mushroom && wolfsbane &&
+                garlic && eucalyptus && oil)
+                tnnt_achieve(A_OMELET_OF_YENDOR);
         }
 
         /* KMH -- Talking artifacts are finally implemented */

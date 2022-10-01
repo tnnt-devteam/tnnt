@@ -1434,6 +1434,9 @@ boolean at_stairs, falling, portal;
          * incorrect to leave it as a nonzero value here. */
         tnnt_globals.num_planes_pets = 0;
     }
+    if (Is_stronghold(newlevel)) {
+        tnnt_globals.entered_castle_time = moves;
+    }
     /* end TNNT */
     if (u.uswallow) /* idem */
         u.uswldtim = u.uswallow = 0;

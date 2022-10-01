@@ -2084,8 +2084,11 @@ register struct monst *mtmp;
     }
     if (mtmp->iswiz)
         wizdead();
-    if (mtmp->data->msound == MS_NEMESIS)
+    if (mtmp->data->msound == MS_NEMESIS) {
         nemdead();
+        if (!tnnt_globals.nemesis_got_a_move)
+            tnnt_achieve(A_ONE_SIDED_NEMESIS_KILL);
+    }
     /* Medusa falls into two livelog categories,
      * we log one message flagged for both categories.
      */

@@ -1782,6 +1782,12 @@ domove_core()
         exercise_steed();
     }
 
+    /* TNNT TODO FOR 3.7: check if the Castle is still static or if level
+     * flipping allows it to move */
+    if (Is_stronghold(&u.uz) && u.ux == 15 && u.uy == 11
+        && moves <= tnnt_globals.entered_castle_time + TNNT_CASTLE_TURNS)
+        tnnt_achieve(A_ENTERED_CASTLE_QUICKLY);
+
     /*
      * If safepet at destination then move the pet to the hero's
      * previous location using the same conditions as in attack().
