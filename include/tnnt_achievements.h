@@ -536,7 +536,7 @@ ACH("Archmage", "Successfully cast a level 7 spell", CAST_LV7_SPELL),
 ACH("Leeroy Jenkins",
     "Cross the Castle drawbridge threshold within 30 turns of entering the level",
     ENTERED_CASTLE_QUICKLY),
-/* 21 free bits in tnntachieve4 */
-/* 299 achievements defined */
+/* 17 free bits in tnntachieve4 */
+/* 303 achievements defined */
 
 #undef ACH

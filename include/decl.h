@@ -477,10 +477,6 @@ struct early_opt {
 /* TNNT specific achievements.
  * Does not contain achievements which will be in TNNT but are already
  * represented in the 'achieve' xlogfile field, such as killing Medusa.
- * The order of these MUST be the exact same as that of tnnt_achievements in
- * decl.c! If you reorder these, also reorder those.
- * Also, avoid inserting blank lines or comment lines in the middle of this
- * enum. Makes it harder to verify we have as many achievements as we think :>
  */
 #define TNNT_ACH_ENUM
 enum tnnt_achievements {
