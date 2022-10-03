@@ -2,9 +2,9 @@
 
 #define SIZE(x) (int) (sizeof (x) / sizeof (x[0]))
 
-#define ACH(nam, desc, id) { #nam, #desc }
+#define ACH(nam, desc, id) { nam, desc }
 struct ach_info {
-const char *name, *desc;
+    const char *name, *desc;
 } ach_list[] = {
 #include "tnnt_achievements.h"
 };
@@ -19,7 +19,7 @@ main(void)
         int lfnum = i / 64, lfbit = i % 64;
         printf("- model: scoreboard.achievement\n  fields:\n");
         printf("    name: %s\n    description: %s\n", ach.name, ach.desc);
-        printf("    xlogfield: \"tnntachieve%d\"\n    bit: %d\n", lfnum,
+        printf("    xlogfield: tnntachieve%d\n    bit: %d\n", lfnum,
                lfbit);
     }
 
