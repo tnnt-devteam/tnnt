@@ -378,6 +378,74 @@ boolean credit_hero;
     }
 }
 
+/* TNNT: would identifying otyp count towards an "identify multiple items of a
+ * set" achievement? If so, return that achivement; if not, return
+ * NO_ACHIEVEMENT.
+ * The only collisions currently are from the "both detect food sources" with
+ * "all scrolls" and "all spellbooks". This only returns the latter. */
+#define NO_ACHIEVEMENT -1
+#define FIRST_GEM DILITHIUM_CRYSTAL /* same as in end.c */
+static int
+tnnt_id_achvmt(otyp)
+short otyp;
+{
+    /* for performance, catch all the specific items that do NOT count towards
+     * anything first */
+    switch (otyp) {
+    case AMULET_OF_YENDOR:
+    case FAKE_AMULET_OF_YENDOR:
+    case POT_WATER:
+    case SCR_BLANK_PAPER:
+    case SCR_MISSING_CODE:
+#ifdef MAIL
+    case SCR_MAIL:
+#endif
+    case SPE_BLANK_PAPER:
+    case SPE_NOVEL:
+    case ROCK:
+        return NO_ACHIEVEMENT;
+    }
+
+    switch (objects[otyp].oc_class) {
+    case ARMOR_CLASS:
+        /* Fashionista has a lot of ranges, unfortunately. */
+        if ((otyp >= CORNUTHAUM && otyp <= DUNCE_CAP)
+            || (otyp >= HELMET && otyp <= HELM_OF_TELEPATHY)
+            || (otyp >= CLOAK_OF_PROTECTION && otyp <= CLOAK_OF_DISPLACEMENT)
+            || (otyp >= LEATHER_GLOVES && otyp <= GAUNTLETS_OF_DEXTERITY)
+            || (otyp >= SPEED_BOOTS && otyp <= LEVITATION_BOOTS))
+            return A_IDENTIFIED_ACCESSORIES;
+        break;
+    case RING_CLASS:
+        return A_IDENTIFIED_ALL_RINGS; /* no exceptions */
+    case WAND_CLASS:
+        return A_IDENTIFIED_ALL_WANDS; /* no exceptions */
+    case AMULET_CLASS:
+        return A_IDENTIFIED_ALL_AMULETS;
+    case POTION_CLASS:
+        return A_IDENTIFIED_ALL_POTIONS;
+    case SCROLL_CLASS:
+        if (OBJ_NAME(objects[otyp]) == 0) /* exclude random shuffled names */
+            return NO_ACHIEVEMENT;
+        else
+            return A_IDENTIFIED_ALL_SCROLLS;
+    case SPBOOK_CLASS:
+        return A_IDENTIFIED_ALL_BOOKS;
+    case GEM_CLASS:
+        if (otyp >= LUCKSTONE && otyp <= FLINT)
+            return A_IDENTIFIED_ALL_STONES;
+        else if (otyp > LAST_GEM && otyp < LUCKSTONE)
+            /* Ugh, this is a bad condition, it relies on glass coming after gems
+             * and before gray stones in objects[], but they don't get constants
+             * defined for them so there's no better way... */
+            return A_IDENTIFIED_ALL_GLASS;
+        else if (otyp >= FIRST_GEM && otyp <= LAST_GEM)
+            return A_IDENTIFIED_ALL_GEMS;
+        break;
+    }
+    return NO_ACHIEVEMENT;
+}
+
 /* TNNT: various checks for if the player has identified all of some set of
  * objects to earn an achievement.
  * This used to be checked at end-of-game, but there are some reasons for doing
@@ -389,8 +457,9 @@ STATIC_OVL void
 tnnt_check_identifications(otyp)
 int otyp;
 {
-    int firstobj, lastobj, i;
-    unsigned short achvmt;
+    const char oclass = objects[otyp].oc_class;
+    int tmp_otyp;
+    int this_achvmt;
     if (otyp == SPE_DETECT_FOOD || otyp == SCR_FOOD_DETECTION) {
         /* special case: identify both of these for an achievement.
          * Note that it is possible to start the game (e.g. as a Wizard) with
@@ -405,95 +474,21 @@ int otyp;
         }
         /* don't return; check scroll/spellbook class for completion */
     }
-    /* If the objects[] array ever gets more of these or they get reordered,
-     * this will need to change... */
-    switch(objects[otyp].oc_class) {
-    case ARMOR_CLASS: {
-        /* This is not identifying all armor. It is identifying certain subsets
-         * of randomized / non-obvious armor, which are annoyingly entangled. */
-        int firstobjs[] = { CORNUTHAUM, HELMET, CLOAK_OF_PROTECTION,
-                            LEATHER_GLOVES, SPEED_BOOTS };
-        int lastobjs[] =  { DUNCE_CAP, HELM_OF_TELEPATHY, CLOAK_OF_DISPLACEMENT,
-                            GAUNTLETS_OF_DEXTERITY, LEVITATION_BOOTS };
-        int octr;
-        for (octr = 0; octr < SIZE(firstobjs); octr++) {
-            firstobj = firstobjs[octr];
-            lastobj = lastobjs[octr];
-            for (i = firstobj; i <= lastobj; ++i) {
-                /* luckily for performance cornuthaums and dunce caps are likely
-                 * going to be some of the last to be identified... */
-                if (!objects[i].oc_name_known)
-                    return;
-            }
-        }
-        tnnt_achieve(A_IDENTIFIED_ACCESSORIES);
+
+    this_achvmt = tnnt_id_achvmt(otyp);
+    if (this_achvmt == NO_ACHIEVEMENT)
         return;
-    }
-    case RING_CLASS:
-        firstobj = RIN_ADORNMENT;
-        lastobj = RIN_PROTECTION_FROM_SHAPE_CHAN;
-        achvmt = A_IDENTIFIED_ALL_RINGS;
-        break;
-    case AMULET_CLASS:
-        /* does not require Amulet of Yendor or fakes... */
-        firstobj = AMULET_OF_ESP;
-        lastobj = AMULET_OF_MAGICAL_BREATHING;
-        achvmt = A_IDENTIFIED_ALL_AMULETS;
-        break;
-    case POTION_CLASS:
-        firstobj = POT_GAIN_ABILITY;
-        lastobj = POT_WATER;
-        achvmt = A_IDENTIFIED_ALL_POTIONS;
-        break;
-    case SCROLL_CLASS:
-        /* no requirements for mail or missing code or blank paper */
-        firstobj = SCR_ENCHANT_ARMOR;
-        lastobj = SCR_STINKING_CLOUD;
-        achvmt = A_IDENTIFIED_ALL_SCROLLS;
-        break;
-    case SPBOOK_CLASS:
-        /* no requirement for blank book or novel */
-        firstobj = SPE_DIG;
-        lastobj = SPE_STONE_TO_FLESH;
-        achvmt = A_IDENTIFIED_ALL_BOOKS;
-        break;
-    case WAND_CLASS:
-        firstobj = WAN_LIGHT;
-        lastobj = WAN_LIGHTNING;
-        achvmt = A_IDENTIFIED_ALL_WANDS;
-        break;
-    case GEM_CLASS: {
-        if (otyp >= LUCKSTONE && otyp <= FLINT) {
-            firstobj = LUCKSTONE;
-            lastobj = FLINT;
-            achvmt = A_IDENTIFIED_ALL_STONES;
-        }
-        /* Ugh, this is a bad condition, it relies on glass coming after gems
-         * and before gray stones in objects[], but they don't get constants
-         * defined for them so there's no better way... */
-        else if (otyp > LAST_GEM && otyp < LUCKSTONE) {
-            firstobj = LAST_GEM + 1;
-            lastobj = LUCKSTONE - 1;
-            achvmt = A_IDENTIFIED_ALL_GLASS;
-        }
-        else {
-            firstobj = DILITHIUM_CRYSTAL;
-            lastobj = JADE;
-            achvmt = A_IDENTIFIED_ALL_GEMS;
-        }
-        break;
-    }
-    default:
-        /* RANDOM_CLASS, CHAIN_CLASS, WEAPON_CLASS, ... */
-        return;
-    }
-    for (i = firstobj; i <= lastobj; ++i) {
-        if (!objects[i].oc_name_known)
+
+    for (tmp_otyp = bases[(int) oclass]; tmp_otyp < bases[oclass + 1];
+         ++tmp_otyp) {
+        if (tnnt_id_achvmt(tmp_otyp) == this_achvmt
+            && !objects[tmp_otyp].oc_name_known)
             return;
     }
-    tnnt_achieve(achvmt);
+    /* if we got here, we must have oc_name_known on all objects which map to
+     * this_achvmt */
+    tnnt_achieve(this_achvmt);
 }
-
 
 /* if a class name has been cleared, we may need to purge it from disco[] */
 void
@@ -573,6 +568,12 @@ dodiscovered() /* free after Robert Viduya */
         (void) strkitten(classes, VENOM_CLASS); /* append char to string */
 
     for (s = classes; *s; s++) {
+        /* TNNT: count up number of items in this class that count towards
+         * achievement (note: this currently does not do GEM_CLASS because it
+         * has multiple subranges that qualify for different achievements) */
+        int tnnt_disc = 0;
+        int tnnt_tot = 0;
+        int tnnt_ach = NO_ACHIEVEMENT;
         oclass = *s;
         prev_class = oclass + 1; /* forced different from oclass */
         for (i = bases[(int) oclass];
@@ -589,6 +590,32 @@ dodiscovered() /* free after Robert Viduya */
                         obj_typename(dis));
                 putstr(tmpwin, 0, buf);
             }
+            int tmp_tnnt_ach = tnnt_id_achvmt(i);
+            if (tmp_tnnt_ach != NO_ACHIEVEMENT) {
+                if (tnnt_ach != NO_ACHIEVEMENT && tmp_tnnt_ach != tnnt_ach) {
+                    /* found multiple different achievements inside the same
+                     * object class; this is used for the 3 gem identification
+                     * achievements */
+                    if (tnnt_disc > 0 && tnnt_tot > 0) {
+                        Sprintf(buf, "  (%s: %d/%d)",
+                                tnnt_achievements[tnnt_ach].name,
+                                tnnt_disc, tnnt_tot);
+                        putstr(tmpwin, 0, buf);
+                    }
+                    tnnt_disc = tnnt_tot = 0;
+                }
+                tnnt_ach = tmp_tnnt_ach;
+                tnnt_tot++;
+                if (objects[i].oc_name_known)
+                    tnnt_disc++;
+            }
+        }
+        if (tnnt_disc > 0 && tnnt_tot > 0) {
+            /* same printing code as a few lines above */
+            Sprintf(buf, "  (%s: %d/%d)",
+                    tnnt_achievements[tnnt_ach].name,
+                    tnnt_disc, tnnt_tot);
+            putstr(tmpwin, 0, buf);
         }
     }
     if (ct == 0) {
