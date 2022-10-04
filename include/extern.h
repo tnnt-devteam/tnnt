@@ -642,6 +642,7 @@ E boolean FDECL(Can_rise_up, (int, int, d_level *));
 E boolean FDECL(has_ceiling, (d_level *));
 E boolean FDECL(In_quest, (d_level *));
 E boolean FDECL(In_mines, (d_level *));
+E boolean FDECL(In_dungeons_of_doom, (d_level *));
 E branch *FDECL(dungeon_branch, (const char *));
 E boolean FDECL(at_dgn_entrance, (const char *));
 E boolean FDECL(In_hell, (d_level *));

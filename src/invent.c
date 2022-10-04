@@ -876,6 +876,8 @@ struct obj *obj;
     /* TNNT: general checks for "acquired certain items" go here */
     if (obj->otyp == ATHAME && obj->lichathame)
         tnnt_achieve(A_GOT_LICH_ATHAME);
+    if (obj->otyp == CANDY_BAR && obj->soko_candy)
+        tnnt_achieve(A_GOT_SOKO_CANDY);
     if (obj->otyp == RIN_INVISIBILITY && obj->nazgul_ring
         && !tnnt_is_achieved(A_GOT_9_NAZGUL_RINGS)) {
         int i;

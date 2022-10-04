@@ -875,6 +875,11 @@ boolean artif;
             case KELP_FROND:
                 otmp->quan = (long) rnd(2);
                 break;
+            case CANDY_BAR:
+                /* track candy that generated in Sokoban */
+                if (In_sokoban(&u.uz) && in_mklev)
+                    otmp->soko_candy = 1;
+                break;
             }
             if (Is_pudding(otmp)) {
                 otmp->quan = 1L; /* for emphasis; glob quantity is always 1 */

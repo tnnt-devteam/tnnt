@@ -545,6 +545,9 @@ char *enterstring;
     if (!*enterstring)
         return;
 
+    if (In_dungeons_of_doom(&u.uz) && depth(&u.uz) >= 20)
+        tnnt_achieve(A_VISITED_DEEP_SHOP);
+
     if (!(shkp = shop_keeper(*enterstring))) {
         if (!index(empty_shops, *enterstring)
             && in_rooms(u.ux, u.uy, SHOPBASE)

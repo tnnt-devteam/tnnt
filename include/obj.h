@@ -127,6 +127,7 @@ struct obj {
 #define spestudied usecount /* # of times a spellbook has been studied */
 #define lichathame usecount /* TNNT: athame created with a lich */
 #define nazgul_ring usecount /* TNNT: ring of invisibility is from a Nazgul */
+#define soko_candy usecount /* TNNT: candy bar generated during mklev in Sokoban */
     unsigned oeaten;        /* nutrition left in food, if partly eaten */
     long age;               /* creation date */
     long owornmask;

@@ -1962,10 +1962,7 @@ STATIC_PTR void
 tnnt_roomlit_credit(x, y)
 int x, y;
 {
-    /* The dnum hack is ugly, and assumes the Dungeons of Doom will remain
-     * dnum 0 for the foreseeable future (probably a safe bet). But dungeon.c
-     * doesn't provide any API that allows us to check. */
-    if (levl[x][y].lit == 0 && u.uz.dnum == 0
+    if (levl[x][y].lit == 0 && In_dungeons_of_doom(&u.uz)
         && (levl[x][y].roomno >= ROOMOFFSET || Is_bigroom(&u.uz))
         && !tnnt_is_achieved(A_LIT_20_ROOMS)) {
         int i;
@@ -2274,8 +2271,9 @@ do_class_genocide()
                 }
             }
         }
-        if (num_genocides() >= 20)
-            tnnt_achieve(A_GENOCIDED_20_SPECIES);
+        tnnt_globals.genocides++;
+        if (tnnt_globals.genocides >= 5)
+            tnnt_achieve(A_GENOCIDED_5_TIMES);
         if (gameover || u.uhp == -1) {
             killer.format = KILLED_BY_AN;
             Strcpy(killer.name, "scroll of genocide");
@@ -2392,8 +2390,9 @@ int how;
         else
             livelog_printf(LL_GENOCIDE, "genocided %s", buf);
 
-        if (ngeno >= 19) /* will become 20 after the rest of this block */
-            tnnt_achieve(A_GENOCIDED_20_SPECIES);
+        tnnt_globals.genocides++;
+        if (tnnt_globals.genocides >= 5)
+            tnnt_achieve(A_GENOCIDED_5_TIMES);
 
         /* setting no-corpse affects wishing and random tin generation */
         mvitals[mndx].mvflags |= (G_GENOD | G_NOCORPSE);

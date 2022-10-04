@@ -70,6 +70,7 @@ E struct dgn_topology { /* special dungeon levels for speed */
     xchar d_tower_dnum;
     xchar d_sokoban_dnum;
     xchar d_mines_dnum, d_quest_dnum;
+    xchar d_dungeons_dnum; /* for TNNT "in main dungeon" achievements */
     d_level d_qstart_level, d_qlocate_level, d_nemesis_level;
     d_level d_knox_level;
     d_level d_devteam_level;
@@ -100,6 +101,7 @@ E struct dgn_topology { /* special dungeon levels for speed */
 #define air_level               (dungeon_topology.d_air_level)
 #define astral_level            (dungeon_topology.d_astral_level)
 #define tower_dnum              (dungeon_topology.d_tower_dnum)
+#define dungeons_dnum           (dungeon_topology.d_dungeons_dnum)
 #define sokoban_dnum            (dungeon_topology.d_sokoban_dnum)
 #define mines_dnum              (dungeon_topology.d_mines_dnum)
 #define quest_dnum              (dungeon_topology.d_quest_dnum)
@@ -632,6 +634,8 @@ struct tnnt_globals_t {
     boolean nemesis_got_a_move;
 #define TNNT_CASTLE_TURNS 30
     long entered_castle_time;
+    int genocides; /* # of times genocide was done, rather than number of
+                      species */
 
     /* tnnt devs: add more as needed */
 };

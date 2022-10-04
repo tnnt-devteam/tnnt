@@ -2316,6 +2316,8 @@ register struct monst *mtmp;
                         || mptr == &mons[PM_BUGBEAR])
                         You_hear("the roaring of an angry bear!");
                 }
+                if (trap->madeby_u)
+                    tnnt_achieve(A_TRAPPED_BEAR_IN_BEAR_TRAP);
             } else if (force_mintrap) {
                 if (in_sight) {
                     pline("%s evades %s bear trap!", Monnam(mtmp),

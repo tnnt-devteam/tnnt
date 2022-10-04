@@ -960,6 +960,8 @@ init_dungeons()
     sokoban_dnum = dname_to_dnum("Sokoban");
     mines_dnum = dname_to_dnum("The Gnomish Mines");
     tower_dnum = dname_to_dnum("Vlad's Tower");
+    /* not used by vanilla but used for TNNT */
+    dungeons_dnum = dname_to_dnum("The Dungeons of Doom");
 
     /* one special fixup for dummy surface level */
     if ((x = find_level("dummy")) != 0) {
@@ -1426,6 +1428,14 @@ In_mines(lev)
 d_level *lev;
 {
     return (boolean) (lev->dnum == mines_dnum);
+}
+
+/* TNNT: are you in the main non-Gehennom dungeon? */
+boolean
+In_dungeons_of_doom(lev)
+d_level *lev;
+{
+    return (boolean) (lev->dnum == dungeons_dnum);
 }
 
 /*
