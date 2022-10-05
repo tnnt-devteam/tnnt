@@ -5719,10 +5719,8 @@ boolean final;
         Strcat(buf, " box");
     putstr(en_win, 0, buf);
 
-    Strcpy(buf, "Harmful potions drunk:");
-    if ((tnnt_globals.potions_drunk & HARMFUL_DRUNK) == 0L) {
-        Strcat(buf, " none");
-    } else {
+    Strcpy(buf, "Known harmful potions drunk:");
+    {
         const int harmful_pots[] = {
             POT_CONFUSION,
             POT_BLINDNESS,
@@ -5733,13 +5731,18 @@ boolean final;
             POT_SICKNESS,
             POT_ACID,
         };
+        int known = 0;
         for (i = 0; i < SIZE(harmful_pots); i++) {
             int potnm = harmful_pots[i];
-            if (tnnt_globals.potions_drunk & (1 << (potnm - FIRST_POTION))) {
+            if ((tnnt_globals.potions_drunk & (1 << (potnm - FIRST_POTION)))
+                && objects[potnm].oc_name_known) {
                 Strcat(buf, " ");
                 Strcat(buf, obj_descr[objects[potnm].oc_name_idx].oc_name);
+                known++;
             }
         }
+        if (known == 0)
+            Strcat(buf, " none");
     }
     putstr(en_win, 0, buf);
 
