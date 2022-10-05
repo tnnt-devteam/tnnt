@@ -205,7 +205,7 @@ struct obj *wep;
         if (wep->otyp == KNIFE && uarmc && uarmc->otyp == ALCHEMY_SMOCK
             && !tnnt_is_achieved(A_OMELET_OF_YENDOR)) {
             struct obj *otmp;
-            int n_eggs; /* could have multiple named stacks */
+            int n_eggs = 0; /* could have multiple named stacks */
             boolean spinach = FALSE,
                     eucalyptus = FALSE,
                     wolfsbane = FALSE,
