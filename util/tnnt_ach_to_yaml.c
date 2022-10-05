@@ -23,6 +23,7 @@ main(void)
         printf("- model: scoreboard.achievement\n  fields:\n");
         printf("    name: \"%s\"\n", escape_string(ach.name));
         printf("    description: \"%s\"\n", escape_string(ach.desc));
+        printf("    ingameid: \"%03d\"\n", i + 1);
         printf("    xlogfield: \"tnntachieve%d\"\n    bit: %d\n", lfnum,
                lfbit);
     }
