@@ -2306,17 +2306,18 @@ register struct monst *mtmp;
         case BEAR_TRAP:
             if (mptr->msize > MZ_SMALL && !amorphous(mptr) && !is_flyer(mptr)
                 && !is_whirly(mptr) && !unsolid(mptr)) {
+                boolean is_bear = (mptr == &mons[PM_OWLBEAR]
+                                   || mptr == &mons[PM_BUGBEAR]);
                 mtmp->mtrapped = 1;
                 if (in_sight) {
                     pline("%s is caught in %s bear trap!", Monnam(mtmp),
                           a_your[trap->madeby_u]);
                     seetrap(trap);
                 } else {
-                    if (mptr == &mons[PM_OWLBEAR]
-                        || mptr == &mons[PM_BUGBEAR])
+                    if (is_bear)
                         You_hear("the roaring of an angry bear!");
                 }
-                if (trap->madeby_u)
+                if (is_bear && trap->madeby_u)
                     tnnt_achieve(A_TRAPPED_BEAR_IN_BEAR_TRAP);
             } else if (force_mintrap) {
                 if (in_sight) {
