@@ -643,15 +643,6 @@ struct tnnt_globals_t {
 #define HARMFUL_DRUNK 0x0b2009c
 #define FIRST_POTION POT_GAIN_ABILITY
     uint32_t potions_drunk;
-#define tnnt_drink(typ)                                            \
-    do {                                                           \
-        tnnt_globals.potions_drunk |= 1 << ((typ) - FIRST_POTION); \
-        if ((tnnt_globals.potions_drunk & HARMFUL_DRUNK)           \
-            == HARMFUL_DRUNK)                                      \
-            tnnt_achieve(A_DRANK_HARMFUL_POTS);                    \
-    } while (0)
-    /* could easily add A_DRANK_ALL_POTS to this, but it may be more fitting
-       if A_READ_ALL_SCROLLS, etc, are added at the same time */
 
     /* tnnt devs: add more as needed */
 };

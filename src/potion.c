@@ -571,7 +571,14 @@ dodrink()
             return 1;
         }
     }
-    tnnt_drink(otmp->otyp);
+    /* TNNT - harmful potions drunk achievement */
+    /* could easily add A_DRANK_ALL_POTS to this, but it may be more fitting
+       if A_READ_ALL_SCROLLS, etc, are added at the same time */
+    tnnt_globals.potions_drunk |= 1 << (otmp->otyp - FIRST_POTION);
+    if ((tnnt_globals.potions_drunk & HARMFUL_DRUNK) == HARMFUL_DRUNK) {
+        tnnt_achieve(A_DRANK_HARMFUL_POTS);
+    }
+
     return dopotion(otmp);
 }
 
