@@ -5462,6 +5462,7 @@ dotnntdebug(VOID_ARGS)
     anything any;
     any.a_char = 's';
     en_win = create_nhwindow(NHW_MENU);
+    start_menu(en_win);
     add_menu(en_win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
              "show debug stats", MENU_UNSELECTED);
     any.a_char = 'w';
