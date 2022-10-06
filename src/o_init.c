@@ -578,6 +578,7 @@ dodiscovered() /* free after Robert Viduya */
         prev_class = oclass + 1; /* forced different from oclass */
         for (i = bases[(int) oclass];
              i < NUM_OBJECTS && objects[i].oc_class == oclass; i++) {
+            int tmp_tnnt_ach;
             if ((dis = disco[i]) != 0 && interesting_to_discover(dis)) {
                 ct++;
                 if (oclass != prev_class) {
@@ -590,7 +591,7 @@ dodiscovered() /* free after Robert Viduya */
                         obj_typename(dis));
                 putstr(tmpwin, 0, buf);
             }
-            int tmp_tnnt_ach = tnnt_id_achvmt(i);
+            tmp_tnnt_ach = tnnt_id_achvmt(i);
             if (tmp_tnnt_ach != NO_ACHIEVEMENT) {
                 if (tnnt_ach != NO_ACHIEVEMENT && tmp_tnnt_ach != tnnt_ach) {
                     /* found multiple different achievements inside the same

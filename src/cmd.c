@@ -5719,6 +5719,28 @@ boolean final;
         Strcat(buf, " box");
     putstr(en_win, 0, buf);
 
+    Strcpy(buf, "Known harmful potions drunk:");
+    {
+        int known = 0;
+        for (i = bases[POTION_CLASS]; objects[i].oc_class == POTION_CLASS;
+             i++) {
+            if (!tnnt_pot_is_harmful(i))
+                continue;
+            if ((tnnt_globals.pots_drunk & (1 << (i - bases[POTION_CLASS])))
+                && objects[i].oc_name_known) {
+#define SHORTNAMLEN 5
+                Strcat(buf, " ");
+                (void) strncat(buf, obj_descr[objects[i].oc_name_idx].oc_name,
+                               SHORTNAMLEN);
+                known++;
+#undef SHORTNAMLEN
+            }
+        }
+        if (known == 0)
+            Strcat(buf, " none");
+    }
+    putstr(en_win, 0, buf);
+
     Sprintf(buf, "You have %sblown up a land mine in Fort Ludios.",
             tnnt_globals.blew_up_ludios ? "" : "not ");
     putstr(en_win, 0, buf);

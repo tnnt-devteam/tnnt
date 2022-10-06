@@ -636,6 +636,13 @@ struct tnnt_globals_t {
     long entered_castle_time;
     int genocides; /* # of times genocide was done, rather than number of
                       species */
+#define ALL_POTS_DRUNK 0x1ffffff /* not currently used */
+/* considered harmful: confusion, blindness, paralysis, hallucination, sleep,
+ * booze, sickness, acid */
+#define HARMFUL_DRUNK  0x0b2009c
+    uint32_t pots_drunk;
+#define tnnt_pot_is_harmful(otyp) \
+    ((HARMFUL_DRUNK & (1 << ((otyp) - bases[POTION_CLASS]))) != 0UL)
 
     /* tnnt devs: add more as needed */
 };
