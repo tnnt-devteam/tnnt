@@ -32,7 +32,7 @@ extern void FDECL(exit, (int));
 #define OBJ_GLYPH 2
 #define OTH_GLYPH 3 /* fortunately unnecessary */
 
-#define EXTRA_SCROLL_DESCR_COUNT ((SCR_BLANK_PAPER - SCR_STINKING_CLOUD) - 1)
+#define EXTRA_SCROLL_DESCR_COUNT ((SCR_BLANK_PAPER - SCR_STINKING_CLOUD) - 2)
 
 /* note that the ifdefs here should be the opposite sense from monst.c/
  * objects.c/rm.h
