@@ -515,7 +515,7 @@ struct tnnt_globals_t {
      * track whether or not you have achieved something.
      * Since there are more than 64 achievements, we need multiple 64 bit ints.
      */
-    uint64_t tnnt_achievements[5];
+    uint64_t tnnt_achievements[NUM_TNNT_ACHIEVEMENTS / 64 + 1];
 
     /* Various achievement counters */
     unsigned char graffiti_found;

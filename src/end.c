@@ -815,6 +815,8 @@ boolean taken;
     char c = '\0', defquery;
     char qbuf[QBUFSZ];
     boolean ask = FALSE;
+    boolean achieved;
+    int i;
 
     if (invent && !done_stopprint) {
         if (taken)
@@ -875,6 +877,28 @@ boolean taken;
                 : defquery;
         if (c == 'y')
             show_overview((how >= PANICKED) ? 1 : 2, how);
+        if (c == 'q')
+            done_stopprint++;
+    }
+
+    /* TNNT - show achievements */
+    /* '*((unsigned *) &u.uachieve) != 0U' was deemed too stupid to use :( */
+    achieved = (u.uachieve.bell || u.uachieve.enter_gehennom
+                || u.uachieve.menorah || u.uachieve.book || u.uevent.invoked
+                || u.uachieve.amulet || In_endgame(&u.uz)
+                || Is_astralevel(&u.uz) || u.uachieve.mines_luckstone
+                || u.uachieve.finish_sokoban || u.uachieve.killed_medusa);
+    for (i = 0; !achieved && i < SIZE(tnnt_globals.tnnt_achievements); i++) {
+        if (tnnt_globals.tnnt_achievements[i] != 0ULL)
+            achieved = TRUE;
+    }
+    if (achieved && !done_stopprint) {
+        ask = should_query_disclose_option('t', &defquery);
+        c = ask ? yn_function("Do you want to see your earned achievements?",
+                              ynqchars, defquery)
+                : defquery;
+        if (c == 'y')
+            show_tnnt_achievements(TRUE);
         if (c == 'q')
             done_stopprint++;
     }

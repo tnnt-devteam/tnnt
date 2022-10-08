@@ -111,7 +111,7 @@ struct flag {
     int pile_limit;    /* controls feedback when walking over objects */
     char inv_order[MAXOCLASSES];
     char pickup_types[MAXOCLASSES];
-#define NUM_DISCLOSURE_OPTIONS 6 /* i,a,v,g,c,o (decl.c) */
+#define NUM_DISCLOSURE_OPTIONS 7 /* i,a,v,g,c,o,t (decl.c) */
 #define DISCLOSE_PROMPT_DEFAULT_YES 'y'
 #define DISCLOSE_PROMPT_DEFAULT_NO 'n'
 #define DISCLOSE_PROMPT_DEFAULT_SPECIAL '?' /* v, default a */

@@ -4994,6 +4994,7 @@ boolean setinitial, setfromfile;
         static const char *disclosure_names[] = {
             "inventory", "attributes", "vanquished",
             "genocides", "conduct",    "overview",
+            "achievements",
         };
         int disc_cat[NUM_DISCLOSURE_OPTIONS];
         int pick_cnt, pick_idx, opt_idx;
@@ -5004,7 +5005,7 @@ boolean setinitial, setfromfile;
         start_menu(tmpwin);
         any = zeroany;
         for (i = 0; i < NUM_DISCLOSURE_OPTIONS; i++) {
-            Sprintf(buf, "%-12s[%c%c]", disclosure_names[i],
+            Sprintf(buf, "%-14s[%c%c]", disclosure_names[i],
                     flags.end_disclose[i], disclosure_options[i]);
             any.a_int = i + 1;
             add_menu(tmpwin, NO_GLYPH, &any, disclosure_options[i], 0,

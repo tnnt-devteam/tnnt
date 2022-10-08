@@ -5722,6 +5722,9 @@ boolean final;
 
     Strcpy(buf, "Known harmful potions drunk:");
     {
+        /* we can't check '!(pots_drunk & HARMFUL_DRUNK)' to print "none"
+         * right away (some bits set may be from unIDed pots that shouldn't be
+         * revealed) so need to count them individually with 'known' */
         int known = 0;
         for (i = bases[POTION_CLASS]; objects[i].oc_class == POTION_CLASS;
              i++) {
@@ -5742,8 +5745,9 @@ boolean final;
     putstr(en_win, 0, buf);
 
     Strcpy(buf, "Polearms collected:");
-    {
-        int known = 0;
+    if (!tnnt_globals.polearms_found) {
+        Strcat(buf, " none");
+    } else {
         for (i = FIRST_POLEARM; i <= LAST_POLEARM; i++) {
             if (objects[i].oc_skill != P_POLEARMS)
                 continue;
@@ -5751,11 +5755,8 @@ boolean final;
                 Strcat(buf, " ");
                 /* 3 characters should be sufficient for polearms */
                 (void) strncat(buf, OBJ_NAME(objects[i]), 3);
-                known++;
             }
         }
-        if (known == 0)
-            Strcat(buf, " none");
     }
     putstr(en_win, 0, buf);
 
