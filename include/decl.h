@@ -632,18 +632,26 @@ struct tnnt_globals_t {
     unsigned char maxpw_from_corpses;
     unsigned nazgul_ring_o_ids[9];
     boolean nemesis_got_a_move;
-#define TNNT_CASTLE_TURNS 30
-    long entered_castle_time;
     int genocides; /* # of times genocide was done, rather than number of
                       species */
+
+#define TNNT_CASTLE_TURNS 30
+    long entered_castle_time;
+
 #define ALL_POTS_DRUNK 0x1ffffff /* not currently used */
-/* considered harmful: confusion, blindness, paralysis, hallucination, sleep,
- * booze, sickness, acid */
+    /* considered harmful: confusion, blindness, paralysis, hallucination,
+     * sleep, booze, sickness, acid */
 #define HARMFUL_DRUNK  0x0b2009c
     uint32_t pots_drunk;
 #define tnnt_pot_is_harmful(otyp) \
     ((HARMFUL_DRUNK & (1 << ((otyp) - bases[POTION_CLASS]))) != 0UL)
 
+#define FIRST_POLEARM PARTISAN
+#define LAST_POLEARM BEC_DE_CORBIN
+    /* Polearms (as we count them for this achievement) are not a contiguous
+     * block, hence why this does not have all lower bits set. */
+#define ALL_POLEARMS_FOUND 0x00003EEF
+    uint32_t polearms_found;
     /* tnnt devs: add more as needed */
 };
 E struct tnnt_globals_t tnnt_globals;

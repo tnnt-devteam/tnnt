@@ -242,6 +242,14 @@ struct obj *wep;
                 garlic && eucalyptus && oil)
                 tnnt_achieve(A_OMELET_OF_YENDOR);
         }
+        if (is_elven_weapon(wep) && wep->spe >= 7
+            && uarmh && is_elven_armor(uarmh) && uarmh->spe >= 7
+            && uarm && is_elven_armor(uarm) && uarm->spe >= 7
+            && uarmc && is_elven_armor(uarmc) && uarmc->spe >= 7
+            && uarms && is_elven_armor(uarms) && uarms->spe >= 7
+            && uarmf && is_elven_armor(uarmf) && uarmf->spe >= 7) {
+            tnnt_achieve(A_EQUIPPED_ALL_ELVEN_GEAR);
+        }
 
         /* KMH -- Talking artifacts are finally implemented */
         arti_speak(wep);

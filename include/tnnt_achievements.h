@@ -241,6 +241,9 @@ ACH("Smorgasbord", "Eat every type of food in the game", ATE_ALL_FOODS),
 ACH("Extreme Omnivore",
     "Eat an object from every common, edible object class",
     ATE_EVERY_OBJCLASS),
+ACH("Ultimate Polearm Geek",
+    "Collect one of each of the 12 types of polearm",
+    COLLECTED_ALL_POLEARMS),
 /* involving artifact gifts */
 ACH("Go Forth and Smite", "Receive an artifact gift from your deity",
     GRANTED_ARTI),
@@ -544,7 +547,13 @@ ACH("Chocoban", "Acquire a candy bar generated in Sokoban", GOT_SOKO_CANDY),
 ACH("Thirst For Punishment", "Drink all harmful types of potion (conf, blind,"
     " paral, hallu, sleep, booze, sick, acid)",
     DRANK_HARMFUL_POTS),
-/* 13 free bits in tnntachieve4 */
-/* 307 achievements defined */
+ACH("The Full Elven",
+    "Deck yourself out in 5 pieces of +7 elven armor, then wield a +7 elven weapon",
+    EQUIPPED_ALL_ELVEN_GEAR),
+ACH("Drained and Regained",
+    "Restore at least 3 lost levels with a single potion",
+    RESTORED_3_LEVELS),
+/* 10 free bits in tnntachieve4 */
+/* 310 achievements defined */
 
 #undef ACH

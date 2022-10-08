@@ -890,8 +890,16 @@ struct obj *obj;
                     tnnt_achieve(A_GOT_9_NAZGUL_RINGS);
                 break;
             }
+            /* else there is some other o_id ring at [i]; continue */
         }
-        /* else there is some other o_id ring at [i]; continue */
+    }
+    /* not using is_pole; that adds lances */
+    if (obj->oclass == WEAPON_CLASS
+        && objects[obj->otyp].oc_skill == P_POLEARMS) {
+        tnnt_globals.polearms_found |= (1 << (obj->otyp - FIRST_POLEARM));
+        if ((tnnt_globals.polearms_found & ALL_POLEARMS_FOUND) ==
+            ALL_POLEARMS_FOUND)
+            tnnt_achieve(A_COLLECTED_ALL_POLEARMS);
     }
 }
 

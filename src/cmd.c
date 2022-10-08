@@ -5729,12 +5729,29 @@ boolean final;
                 continue;
             if ((tnnt_globals.pots_drunk & (1 << (i - bases[POTION_CLASS])))
                 && objects[i].oc_name_known) {
-#define SHORTNAMLEN 5
                 Strcat(buf, " ");
-                (void) strncat(buf, obj_descr[objects[i].oc_name_idx].oc_name,
-                               SHORTNAMLEN);
+                /* chop the potion name at 5 characters to avoid overly long
+                 * line */
+                (void) strncat(buf, OBJ_NAME(objects[i]), 5);
                 known++;
-#undef SHORTNAMLEN
+            }
+        }
+        if (known == 0)
+            Strcat(buf, " none");
+    }
+    putstr(en_win, 0, buf);
+
+    Strcpy(buf, "Polearms collected:");
+    {
+        int known = 0;
+        for (i = FIRST_POLEARM; i <= LAST_POLEARM; i++) {
+            if (objects[i].oc_skill != P_POLEARMS)
+                continue;
+            if (tnnt_globals.polearms_found & (1 << (i - FIRST_POLEARM))) {
+                Strcat(buf, " ");
+                /* 3 characters should be sufficient for polearms */
+                (void) strncat(buf, OBJ_NAME(objects[i]), 3);
+                known++;
             }
         }
         if (known == 0)
