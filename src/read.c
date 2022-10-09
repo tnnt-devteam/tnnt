@@ -505,10 +505,10 @@ int curse_bless;
 {
     register int n;
     boolean is_cursed, is_blessed;
+    boolean obj_was_chargeable = TRUE;
 
     is_cursed = curse_bless < 0;
     is_blessed = curse_bless > 0;
-    tnnt_achieve(A_CHARGED_AN_OBJECT);
 
     if (obj->oclass == WAND_CLASS) {
         int lim = (obj->otyp == WAN_WISHING)
@@ -537,6 +537,7 @@ int curse_bless;
         if (n > 0 && (obj->otyp == WAN_WISHING
                       || (n * n * n > rn2(7 * 7 * 7)))) { /* recharge_limit */
             wand_explode(obj, rnd(lim));
+            tnnt_achieve(A_CHARGED_AN_OBJECT);
             return;
         }
         /* didn't explode, so increment the recharge count */
@@ -556,6 +557,7 @@ int curse_bless;
                 obj->spe++;
             if (obj->otyp == WAN_WISHING && obj->spe > 3) {
                 wand_explode(obj, 1);
+                tnnt_achieve(A_CHARGED_AN_OBJECT);
                 return;
             }
             if (obj->spe >= lim)
@@ -746,7 +748,11 @@ int curse_bless;
     } else {
     not_chargable:
         You("have a feeling of loss.");
+        obj_was_chargeable = FALSE;
     }
+
+    if (obj_was_chargeable && !is_cursed)
+        tnnt_achieve(A_CHARGED_AN_OBJECT);
 }
 
 /* Forget known information about this object type. */
