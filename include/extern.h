@@ -882,6 +882,11 @@ E void NDECL(write_npc_data);
 E struct monst* FDECL(create_tnnt_npc, (XCHAR_P, XCHAR_P));
 #endif
 
+#ifdef TNNT_ACHIEVEMENTS_DIR
+E void NDECL(erase_temp_achievements_file);
+#endif
+E void FDECL(tnnt_achieve, (SHORT_P));
+
 /* ### fountain.c ### */
 
 E void FDECL(floating_above, (const char *));

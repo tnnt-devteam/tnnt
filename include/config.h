@@ -375,6 +375,11 @@
 #define TNNT_NPC_DIR HACKDIR "/npcfiles"
 #endif
 
+/* Directory where temporary in-progress achievements get recorded */
+#ifndef TNNT_ACHIEVEMENTS_DIR
+#define TNNT_ACHIEVEMENTS_DIR HACKDIR "/temp_achievements"
+#endif
+
 /* Whether to enable the #tnntdebug command (and possibly, in the future, other
  * debugging / public beta testing stuff) outside of wizard mode. */
 /* #define TNNT_BETA */
