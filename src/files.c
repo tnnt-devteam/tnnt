@@ -158,6 +158,8 @@ static int lockptr;
 extern void FDECL(amii_set_text_font, (char *, int));
 #endif
 
+#include <inttypes.h> /* PRIx64 */
+
 #if defined(WIN32) || defined(MSDOS)
 static int lockptr;
 #ifdef MSDOS
@@ -5390,5 +5392,66 @@ xchar x, y;
 }
 
 #endif /* TNNT_NPC_FILE */
+
+/* TNNT in-progress achievement data */
+
+#ifdef TNNT_ACHIEVEMENTS_DIR
+static char*
+get_temp_achfile_path(void)
+{
+    static char buf[BUFSZ];
+    /* ubirthday serves as a game identifier
+     * TODO: Should this also involve SERVER_LOCATION or some other server
+     * identifier? It is possible that someone starts two games at the same
+     * second on two different servers. */
+    Sprintf(buf, "%s/%s.%ld.", TNNT_ACHIEVEMENTS_DIR, plname, ubirthday);
+#ifdef SERVER_LOCATION
+    /* hardfought specific assumption: SERVER_LOCATION is "us.hardfought.org" or
+     * "eu" or "au"
+     * general assumption: SERVER_LOCATION contains no characters invalid for
+     * file paths */
+    strncat(buf, SERVER_LOCATION, 2);
+    Strcat(buf, ".");
+#endif
+    Strcat(buf, "txt");
+    return buf;
+}
+
+void
+erase_temp_achievements_file(void)
+{
+    char *fname = get_temp_achfile_path();
+    if (unlink(fname) == -1 && errno != ENOENT)
+        impossible("can't unlink temp achievements file (%d)", errno);
+}
+#endif
+
+/* This used to be a macro that just set the bit in tnnt_achievements, but now
+ * we also write out to a file. */
+void
+tnnt_achieve(achvmt)
+unsigned short achvmt;
+{
+    char* fname;
+    FILE *achfile;
+    int i;
+    if (tnnt_is_achieved(achvmt))
+        return; /* nothing to update */
+
+    tnnt_globals.tnnt_achievements[(achvmt) / 64] |= 1L << ((achvmt) % 64);
+
+#ifdef TNNT_ACHIEVEMENTS_DIR
+    fname = get_temp_achfile_path();
+    achfile = fopen(fname, "w");
+    if (!achfile) {
+        impossible("Error writing player achievements data to '%s' file", fname);
+        return;
+    }
+    for (i = 0; i < SIZE(tnnt_globals.tnnt_achievements); ++i) {
+        fprintf(achfile, "%" PRIx64 "\n", tnnt_globals.tnnt_achievements[i]);
+    }
+    fclose(achfile);
+#endif /* TNNT_ACHIEVEMENTS_DIR */
+}
 
 /*files.c*/

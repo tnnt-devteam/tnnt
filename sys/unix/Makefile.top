@@ -268,6 +268,7 @@ install: rootcheck $(GAME) recover $(VARDAT) dungeon spec_levs
 	rm -rf $(INSTDIR) $(VARDIR)
 	-mkdir -p $(INSTDIR) $(INSTDIR)/swapchest
 	-mkdir -p $(INSTDIR) $(INSTDIR)/npcfiles
+	-mkdir -p $(INSTDIR) $(INSTDIR)/temp_achievements
 	-mkdir -p $(INSTDIR) $(VARDIR) $(VARDIR)/save
 	-mkdir -p $(INSTDIR) $(VARDIR) $(VARDIR)/whereis
 	if test -d ./-p; then rmdir ./-p; fi
@@ -275,6 +276,8 @@ install: rootcheck $(GAME) recover $(VARDAT) dungeon spec_levs
 	$(CHGRP) $(GAMEGRP) $(INSTDIR) $(INSTDIR)/swapchest
 	-$(CHOWN) $(GAMEUID) $(INSTDIR) $(INSTDIR)/npcfiles
 	$(CHGRP) $(GAMEGRP) $(INSTDIR) $(INSTDIR)/npcfiles
+	-$(CHOWN) $(GAMEUID) $(INSTDIR) $(INSTDIR)/temp_achievements
+	$(CHGRP) $(GAMEGRP) $(INSTDIR) $(INSTDIR)/temp_achievements
 	-$(CHOWN) $(GAMEUID) $(INSTDIR) $(VARDIR) $(VARDIR)/save
 	$(CHGRP) $(GAMEGRP) $(INSTDIR) $(VARDIR) $(VARDIR)/save
 	-$(CHOWN) $(GAMEUID) $(INSTDIR) $(VARDIR) $(VARDIR)/whereis
@@ -282,6 +285,7 @@ install: rootcheck $(GAME) recover $(VARDAT) dungeon spec_levs
 # order counts here:
 	chmod $(DIRPERM) $(INSTDIR) $(INSTDIR)/swapchest
 	chmod $(DIRPERM) $(INSTDIR) $(INSTDIR)/npcfiles
+	chmod $(DIRPERM) $(INSTDIR) $(INSTDIR)/temp_achievements
 	chmod $(VARDIRPERM) $(VARDIR) $(VARDIR)/save
 	chmod $(VARDIRPERM) $(VARDIR) $(VARDIR)/whereis
 # set up the game files
