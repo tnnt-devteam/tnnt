@@ -481,6 +481,7 @@ struct early_opt {
  * represented in the 'achieve' xlogfile field, such as killing Medusa.
  */
 #define TNNT_ACH_ENUM
+#define NO_TNNT_ACHIEVEMENT -1
 enum tnnt_achievements {
 #include "tnnt_achievements.h"
     NUM_TNNT_ACHIEVEMENTS

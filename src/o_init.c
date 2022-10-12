@@ -380,10 +380,9 @@ boolean credit_hero;
 
 /* TNNT: would identifying otyp count towards an "identify multiple items of a
  * set" achievement? If so, return that achivement; if not, return
- * NO_ACHIEVEMENT.
+ * NO_TNNT_ACHIEVEMENT.
  * The only collisions currently are from the "both detect food sources" with
  * "all scrolls" and "all spellbooks". This only returns the latter. */
-#define NO_ACHIEVEMENT -1
 #define FIRST_GEM DILITHIUM_CRYSTAL /* same as in end.c */
 static int
 tnnt_id_achvmt(otyp)
@@ -403,7 +402,7 @@ short otyp;
     case SPE_BLANK_PAPER:
     case SPE_NOVEL:
     case ROCK:
-        return NO_ACHIEVEMENT;
+        return NO_TNNT_ACHIEVEMENT;
     }
 
     switch (objects[otyp].oc_class) {
@@ -426,7 +425,7 @@ short otyp;
         return A_IDENTIFIED_ALL_POTIONS;
     case SCROLL_CLASS:
         if (OBJ_NAME(objects[otyp]) == 0) /* exclude random shuffled names */
-            return NO_ACHIEVEMENT;
+            return NO_TNNT_ACHIEVEMENT;
         else
             return A_IDENTIFIED_ALL_SCROLLS;
     case SPBOOK_CLASS:
@@ -443,7 +442,7 @@ short otyp;
             return A_IDENTIFIED_ALL_GEMS;
         break;
     }
-    return NO_ACHIEVEMENT;
+    return NO_TNNT_ACHIEVEMENT;
 }
 
 /* TNNT: various checks for if the player has identified all of some set of
@@ -476,7 +475,7 @@ int otyp;
     }
 
     this_achvmt = tnnt_id_achvmt(otyp);
-    if (this_achvmt == NO_ACHIEVEMENT)
+    if (this_achvmt == NO_TNNT_ACHIEVEMENT)
         return;
 
     for (tmp_otyp = bases[(int) oclass]; tmp_otyp < bases[oclass + 1];
@@ -573,7 +572,7 @@ dodiscovered() /* free after Robert Viduya */
          * has multiple subranges that qualify for different achievements) */
         int tnnt_disc = 0;
         int tnnt_tot = 0;
-        int tnnt_ach = NO_ACHIEVEMENT;
+        int tnnt_ach = NO_TNNT_ACHIEVEMENT;
         oclass = *s;
         prev_class = oclass + 1; /* forced different from oclass */
         for (i = bases[(int) oclass];
@@ -592,8 +591,9 @@ dodiscovered() /* free after Robert Viduya */
                 putstr(tmpwin, 0, buf);
             }
             tmp_tnnt_ach = tnnt_id_achvmt(i);
-            if (tmp_tnnt_ach != NO_ACHIEVEMENT) {
-                if (tnnt_ach != NO_ACHIEVEMENT && tmp_tnnt_ach != tnnt_ach) {
+            if (tmp_tnnt_ach != NO_TNNT_ACHIEVEMENT) {
+                if (tnnt_ach != NO_TNNT_ACHIEVEMENT
+                    && tmp_tnnt_ach != tnnt_ach) {
                     /* found multiple different achievements inside the same
                      * object class; this is used for the 3 gem identification
                      * achievements */
