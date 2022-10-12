@@ -2095,6 +2095,7 @@ register struct monst *mtmp;
     if (mtmp->data == &mons[PM_MEDUSA]) {
         u.uachieve.killed_medusa = 1;
         livelog_write_string(LL_ACHIEVE|LL_UMONST, "killed Medusa");
+        tnnt_achieve(NO_TNNT_ACHIEVEMENT);
     } else if (unique_corpstat(mtmp->data)) {
         switch(mvitals[tmp].died) {
             case 1:

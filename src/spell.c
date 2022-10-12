@@ -259,6 +259,7 @@ struct obj *book2;
             /* successful invocation */
             mkinvokearea();
             u.uevent.invoked = 1;
+            tnnt_achieve(NO_TNNT_ACHIEVEMENT);
             /* in case you haven't killed the Wizard yet, behave as if
                you just did */
             u.uevent.udemigod = 1; /* wizdead() */

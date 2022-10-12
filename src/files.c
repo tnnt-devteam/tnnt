@@ -5427,18 +5427,23 @@ erase_temp_achievements_file(void)
 #endif
 
 /* This used to be a macro that just set the bit in tnnt_achievements, but now
- * we also write out to a file. */
+ * we also write out to a file.
+ * This may be called with NO_TNNT_ACHIEVEMENT when a vanilla achievement has
+ * just been updated. */
 void
 tnnt_achieve(achvmt)
-unsigned short achvmt;
+short achvmt;
 {
     char* fname;
     FILE *achfile;
     int i;
-    if (tnnt_is_achieved(achvmt))
-        return; /* nothing to update */
 
-    tnnt_globals.tnnt_achievements[(achvmt) / 64] |= 1L << ((achvmt) % 64);
+    if (achvmt != NO_TNNT_ACHIEVEMENT) {
+        if (tnnt_is_achieved(achvmt))
+            return; /* nothing to update */
+
+        tnnt_globals.tnnt_achievements[(achvmt) / 64] |= 1L << ((achvmt) % 64);
+    }
 
 #ifdef TNNT_ACHIEVEMENTS_DIR
     fname = get_temp_achfile_path();
@@ -5447,8 +5452,9 @@ unsigned short achvmt;
         impossible("Error writing player achievements data to '%s' file", fname);
         return;
     }
+    fprintf(achfile, "0x%lx\n", encodeachieve());
     for (i = 0; i < SIZE(tnnt_globals.tnnt_achievements); ++i) {
-        fprintf(achfile, "%" PRIx64 "\n", tnnt_globals.tnnt_achievements[i]);
+        fprintf(achfile, "0x%" PRIx64 "\n", tnnt_globals.tnnt_achievements[i]);
     }
     fclose(achfile);
 #endif /* TNNT_ACHIEVEMENTS_DIR */
