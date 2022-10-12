@@ -2539,6 +2539,7 @@ E void FDECL(topten, (int, time_t));
 E void FDECL(prscore, (int, char **));
 E struct toptenentry *NDECL(get_rnd_toptenentry);
 E struct obj *FDECL(tt_oname, (struct obj *));
+E long NDECL(encodeachieve); /* TNNT - externified */
 
 /* ### track.c ### */
 
