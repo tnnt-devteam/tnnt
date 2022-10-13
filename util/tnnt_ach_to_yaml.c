@@ -6,9 +6,9 @@
 
 const char *escape_string(const char *s);
 
-#define ACH(nam, desc, id) { nam, desc }
+#define ACH(nam, desc, id) { nam, desc, #id }
 struct ach_info {
-    const char *name, *desc;
+    const char *name, *desc, *id;
 } ach_list[] = {
 #include "tnnt_achievements.h"
 };
@@ -24,6 +24,7 @@ main(void)
         printf("    name: \"%s\"\n", escape_string(ach.name));
         printf("    description: \"%s\"\n", escape_string(ach.desc));
         printf("    ingameid: \"%03d\"\n", i + 1);
+        printf("    define: \"A_%s\"\n", ach.id);
         printf("    xlogfield: \"tnntachieve%d\"\n    bit: %d\n", lfnum,
                lfbit);
     }
