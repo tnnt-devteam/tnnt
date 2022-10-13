@@ -4819,7 +4819,11 @@ struct obj *o;
      * crobjob will transfer them periodically. */
     pfx = prefixes[rn2(SIZE(prefixes))];
     Sprintf(buf, "%s/%sSW-%ld-%s-%x", TNNT_SWAPCHEST_DIR,
+#ifndef LOCAL_SWAPCHESTS
             strncmpi(SERVER_LOCATION, pfx, 3) ? pfx : "",
+#else
+            "",
+#endif
             time(NULL), plname, o->o_id);
     return strdup(buf);
 }
