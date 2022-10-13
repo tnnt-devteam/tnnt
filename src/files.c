@@ -4810,9 +4810,17 @@ char *
 make_swapobj_filename(o)
 struct obj *o;
 {
+    static const char *const prefixes[] = { "eu.", "us.", "au." };
     /* needs to be big enough for full path */
     static char buf[BUFSZ];
-    Sprintf(buf,"%s/SW-%ld-%s-%x", TNNT_SWAPCHEST_DIR, time(NULL), plname, o->o_id);
+    const char *pfx;
+    /* swap chest files go to one of the three servers randomly; we mark them
+     * with a prefix if they are going to a server other than this one. a
+     * crobjob will transfer them periodically. */
+    pfx = prefixes[rn2(SIZE(prefixes))];
+    Sprintf(buf, "%s/%sSW-%ld-%s-%x", TNNT_SWAPCHEST_DIR,
+            strncmpi(SERVER_LOCATION, pfx, 3) ? pfx : "",
+            time(NULL), plname, o->o_id);
     return strdup(buf);
 }
 
