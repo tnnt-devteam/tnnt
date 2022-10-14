@@ -5720,7 +5720,7 @@ boolean final;
         Strcat(buf, " box");
     putstr(en_win, 0, buf);
 
-    Strcpy(buf, "Known harmful potions drunk:");
+    Sprintf(buf, "%sarmful potions drunk:", !final ? "Known h" : "H");
     {
         /* we can't check '!(pots_drunk & HARMFUL_DRUNK)' to print "none"
          * right away (some bits set may be from unIDed pots that shouldn't be
@@ -5731,7 +5731,7 @@ boolean final;
             if (!tnnt_pot_is_harmful(i))
                 continue;
             if ((tnnt_globals.pots_drunk & (1 << (i - bases[POTION_CLASS])))
-                && objects[i].oc_name_known) {
+                && (final || objects[i].oc_name_known)) {
                 Strcat(buf, " ");
                 /* chop the potion name at 5 characters to avoid overly long
                  * line */
