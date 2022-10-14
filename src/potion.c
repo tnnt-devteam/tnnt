@@ -650,7 +650,7 @@ register struct obj *otmp;
                in that it can restore all of them, not just half, and a
                blessed potion restores them all at once */
             if (otmp->otyp == POT_RESTORE_ABILITY && u.ulevel < u.ulevelmax) {
-                if (u.ulevelmax - u.ulevel >= 3)
+                if (u.ulevelmax - u.ulevel >= 3 && otmp->blessed)
                     tnnt_achieve(A_RESTORED_3_LEVELS);
                 do {
                     pluslvl(FALSE);
