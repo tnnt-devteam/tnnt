@@ -4837,7 +4837,8 @@ schar swapnum;
 {
     static const char *objnames[SWAP_ITEMS_MAX] = {
         /* this needs to be adjusted if SWAP_ITEMS_MAX changes */
-        /* playername will be appended to the end */
+        /* playername will be appended to the end, and there is code elsewhere
+         * that assumes playername is ALWAYS at the end of the name */
         /* no spaces - underscores will be converted */
         "a_token_from",
         "kindly_donated_by",
@@ -4994,6 +4995,41 @@ struct obj *o;
         return FALSE; /* someone else deleted it first */
     }
     return TRUE;
+}
+
+#define TNNT_DONOR_FILE HACKDIR "/donors"
+void
+credit_swapobj_donor(otmp)
+struct obj *otmp;
+{
+    /* Assumption: otmp has just come from a swap chest and the player hasn't
+     * had a chance to rename it yet, so the donor name saved as part of the
+     * object name is still valid.
+     * Assumption: object name is "words words ... plname", key part is a space
+     * before the donor name */
+    const char *donor;
+    const char *oname;
+    FILE *donorfile;
+    if (!has_oname(otmp)) {
+        impossible("swapchest obj with no name?");
+        return;
+    }
+    oname = ONAME(otmp);
+    donor = eos((char *) oname);
+    while (donor >= oname && *donor != ' ') {
+        donor--;
+    }
+    donor++; /* don't include the leading space */
+    if (!strcmp(donor, plname)) {
+        return; /* you don't get credit for removing your own items */
+    }
+    donorfile = fopen(TNNT_DONOR_FILE, "a");
+    if (!donorfile) {
+        impossible("Error writing donor data to file %s", TNNT_DONOR_FILE);
+        return;
+    }
+    fprintf(donorfile, "%s\n", donor);
+    fclose(donorfile);
 }
 
 #endif /* TNNT_SWAPCHEST_DIR */
