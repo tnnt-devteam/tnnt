@@ -4818,13 +4818,15 @@ struct obj *o;
      * with a prefix if they are going to a server other than this one. a
      * crobjob will transfer them periodically. */
     pfx = prefixes[rn2(SIZE(prefixes))];
-    Sprintf(buf, "%s/%sSW-%ld-%s-%x", TNNT_SWAPCHEST_DIR,
 #ifndef LOCAL_SWAPCHESTS
+    Sprintf(buf, "%s/%sSW-%ld-%s-%x", TNNT_SWAPCHEST_DIR,
             strncmpi(SERVER_LOCATION, pfx, 3) ? pfx : "",
-#else
-            "",
-#endif
             time(NULL), plname, o->o_id);
+#else
+    Sprintf(buf, "%s/SW-%ld-%s-%x", TNNT_SWAPCHEST_DIR,
+            time(NULL), plname, o->o_id);
+    nhUse(pfx);
+#endif
     return strdup(buf);
 }
 
