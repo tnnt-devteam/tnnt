@@ -4485,15 +4485,21 @@ struct monst *shkp;
               Shknam(shkp),
               (!Deaf && !muteshk(shkp)) ? "says" : "indicates");
     } else if (is_izchak(shkp, FALSE)) {
-        if (!Deaf && !muteshk(shkp)) {
-            /* TNNT - hint about the Devteam Office if player brings him missing
-             * code scrolls */
-            if (carrying(SCR_MISSING_CODE)) {
-                pline("Izchak peers at your scroll.");
-                verbalize("That looks familiar. You should show it to my colleagues in the Devteam Office.");
+        struct obj *otmp;
+        /* TNNT - hint about the Devteam Office if the player brings Izchak
+         * missing code scrolls */
+        if (shkp->mcansee && (otmp = carrying(SCR_MISSING_CODE))) {
+            if (!Blind)
+                pline("Izchak peers at %s.", yname(otmp));
+            if (!Deaf && !muteshk(shkp)) {
+                verbalize("That looks familiar.");
+                verbalize(
+                "You should show it to my colleagues in the Devteam Office.");
+            } else if (!Blind) {
+                pline("He appears to recognize it.");
             }
-            else
-                pline(Izchak_speaks[rn2(SIZE(Izchak_speaks))], shkname(shkp));
+        } else if (!Deaf && !muteshk(shkp)) {
+            pline(Izchak_speaks[rn2(SIZE(Izchak_speaks))], shkname(shkp));
         }
     } else {
         if (!Deaf && !muteshk(shkp))
