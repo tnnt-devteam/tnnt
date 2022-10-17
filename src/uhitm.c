@@ -516,8 +516,12 @@ int dieroll;
             }
             if (mon->wormno && *mhit)
                 cutworm(mon, bhitpos.x, bhitpos.y, slice_or_chop);
+        } else {
+            /* monster was killed by the attack */
+            if (mon->data->mlet == S_LIGHT)
+                tnnt_achieve(A_KILLED_LIGHT_MELEE);
         }
-        if(u.uconduct.weaphit && !oldweaphit)
+        if (u.uconduct.weaphit && !oldweaphit)
             livelog_write_string(LL_CONDUCT,
                     "hit with a wielded weapon for the first time");
     }
