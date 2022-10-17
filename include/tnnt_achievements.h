@@ -555,7 +555,7 @@ ACH("The Full Elven",
 ACH("Drained and Regained",
     "Restore at least 3 lost levels with a single potion",
     RESTORED_3_LEVELS),
-/* 10 free bits in tnntachieve4 */
-/* 310 achievements defined */
+/* 9 free bits in tnntachieve4 */
+/* 311 achievements defined */
 
 #undef ACH
