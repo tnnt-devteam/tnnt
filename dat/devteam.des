@@ -41,6 +41,8 @@ BRANCH:(01,09,01,09),(0,0,0,0)
 REGION:(00,00,57,16),lit,"ordinary"
 NON_DIGGABLE:(0,0,57,16)
 
+ENGRAVING:(02,09),burn,"This is my program. There are many programs like it, but this one is mine..."
+
 #The Devteam
 MONSTER:"DevTeam member",(29,06),peaceful,"bhaak"
 MONSTER:"DevTeam member",(38,06),peaceful,"paxed"
@@ -76,24 +78,25 @@ CONTAINER: ('`', "statue"), (33,09), montype:"balrog",5,name:"The RNG" {
 # Chest with identify scrolls.
 CONTAINER: ('(', "chest"), (53,09) {
     OBJECT: ('?', "identify"),blessed
-    OBJECT: ('?', "identify"),uncursed
-    OBJECT: ('?', "identify"),uncursed
+    OBJECT: '?',uncursed
+    [50%]: OBJECT: '?',uncursed
 }
+ENGRAVING:(47,09),burn,"Beware - PEBCAK disposal area"
 
 # Some devs have books lying around.
 $devbooks = { (45,11),(45,12),(43,06) }
 $booknames = { "grep", "ls", "htop" }
 SHUFFLE: $devbooks
 SHUFFLE: $booknames
-OBJECT:('+', "detect monsters"),$devbooks[0],uncursed,name:$booknames[0]
-OBJECT:('+', "light"),$devbooks[1],blessed,name:$booknames[1]
-OBJECT:('+', "detect unseen"),$devbooks[2],uncursed,name:$booknames[2]
+[30%]: OBJECT:('+', "detect monsters"),$devbooks[0],uncursed,name:$booknames[0]
+[30%]: OBJECT:('+', "light"),$devbooks[1],uncursed,name:$booknames[1]
+[30%]: OBJECT:('+', "detect unseen"),$devbooks[2],uncursed,name:$booknames[2]
 
 # janitor closet
 DOOR:locked,(29,16)
-OBJECT:"grappling hook",(30,17)
-OBJECT:"rubber hose",(30,17)
-OBJECT:"tin opener",(30,17)
+[30%]: OBJECT:"grappling hook",(30,17)
+[30%]: OBJECT:"rubber hose",(30,17)
+[30%]: OBJECT:"tin opener",(30,17)
 
 # snack area
 $snackrack = { (32,01),(33,01),(34,01) }
@@ -104,19 +107,16 @@ OBJECT:"banana",$snackrack[2],quantity:1d4
 ENGRAVING:(33,03),burn,"Due to snack theft, lava has been installed."
 
 # novel
-OBJECT:"novel",(11,03),uncursed
+[20%]: OBJECT:"novel",(11,03),uncursed
 
 # Funny bits that makes K2 chuckle
-MONSTER:"woodchuck",(46,03),peaceful,"Carl"
-MONSTER:"kitten",(46,15),peaceful,"Poes"
-MONSTER:"little dog",(46,02),peaceful,"Yermak"
-MONSTER:"kitten",(46,04),peaceful,"Micka"
-MONSTER:"little dog",(46,16),peaceful,"Fudd"
-MONSTER:"kitten",(46,14),peaceful,"Pierre"
-MONSTER:"lizard",random,peaceful,"the Lizard of Yendor"
-MONSTER:"troll",random,peaceful,"MR SHOUTY"
-
-ENGRAVING:(02,09),burn,"This is my program. There are many programs like it, but this one is mine..."
-ENGRAVING:(47,09),burn,"Beware - PEBCAK disposal area"
+[20%]: MONSTER:"woodchuck",(46,03),peaceful,"Carl"
+[20%]: MONSTER:"kitten",(46,15),peaceful,"Poes"
+[20%]: MONSTER:"little dog",(46,02),peaceful,"Yermak"
+[20%]: MONSTER:"kitten",(46,04),peaceful,"Micka"
+[20%]: MONSTER:"little dog",(46,16),peaceful,"Fudd"
+[20%]: MONSTER:"little dog",(46,14),peaceful,"Rocky"
+[20%]: MONSTER:"lizard",random,peaceful,"the Lizard of Yendor"
+[20%]: MONSTER:"troll",random,peaceful,"MR SHOUTY"
 
 # end devteam.des
