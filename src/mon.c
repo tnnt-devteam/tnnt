@@ -2504,7 +2504,7 @@ int mndx;
 {
     int i, ct = 0;
     int32_t lowercase_killed = 0x0, uppercase_killed = 0x0;
-    uint16_t dragons_killed = 0x0;
+    uint16_t dragons_killed = 0x0, baby_dragons_killed = 0x0;
     boolean missedany = FALSE;
     /* First: translate monsters that exist in multiple forms. */
     if (mndx == PM_WERERAT)
@@ -2551,13 +2551,22 @@ int mndx;
                 if (uppercase_killed == 0x03FFFEFF)
                     tnnt_achieve(A_KILLED_A_Z_UPPERCASE);
             }
+            /* Kill all baby dragons achievement */
+            if (i >= PM_BABY_GRAY_DRAGON && i <= PM_BABY_YELLOW_DRAGON) {
+                xchar offset = i - PM_BABY_GRAY_DRAGON;
+                baby_dragons_killed |= (1 << offset);
+                /* TNNT TODO FOR 3.7: with the introduction of gold dragons,
+                 * 0x1ff will change to 0x3ff, both for this one and for
+                 * A_KILLED_ALL_DRAGONS a couple lines down */
+                if (baby_dragons_killed == 0x1ff)
+                    tnnt_achieve(A_KILLED_ALL_BABY_DRAGONS);
+            }
             /* Kill all dragons achievement */
             if (i >= PM_GRAY_DRAGON && i <= PM_YELLOW_DRAGON) {
                 xchar offset = i - PM_GRAY_DRAGON;
                 dragons_killed |= (1 << offset);
                 if (dragons_killed == 0x1ff)
                     tnnt_achieve(A_KILLED_ALL_DRAGONS);
-
             }
         }
         else {

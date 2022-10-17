@@ -62,6 +62,8 @@ ACH("Kill it Twice", "Destroy a ghost", KILLED_GHOST),
 ACH("Dragonslayer", "Kill a dragon", KILLED_DRAGON),
 ACH("Kill the Rainbow", "Kill every color of adult dragon",
     KILLED_ALL_DRAGONS),
+ACH("Kill the Rainbow, Jr.", "Kill every color of baby dragon",
+    KILLED_ALL_BABY_DRAGONS),
 ACH("Playerbanebane", "Kill a soldier ant", KILLED_SOLDIER_ANT),
 ACH("How Much Wood?", "Kill or tame a woodchuck", KILLED_TAMED_WOODCHUCK),
 ACH("Storm the Gates of Heaven", "Kill an Archon", KILLED_ARCHON),
@@ -555,7 +557,7 @@ ACH("The Full Elven",
 ACH("Drained and Regained",
     "Restore at least 3 lost levels with a single potion",
     RESTORED_3_LEVELS),
-/* 9 free bits in tnntachieve4 */
-/* 311 achievements defined */
+/* 8 free bits in tnntachieve4 */
+/* 312 achievements defined */
 
 #undef ACH
