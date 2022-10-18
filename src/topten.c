@@ -1251,23 +1251,27 @@ pickentry:
     return tt;
 }
 
+/* does a monster on the level already has this name?  used to ensure player
+ * monster names from the high score list aren't reused on Astral */
 STATIC_OVL boolean
 tnnt_name_unused_on_lvl(name)
 const char *name;
 {
     int namlen = strlen(name);
-    char nbuf[NAMSZ + 2];
+    char plus_space[NAMSZ + 2];
     struct monst *mtmp;
 
-    Strcpy(nbuf, name);
-    Strcat(nbuf, " ");
+    Strcpy(plus_space, name);
+    Strcat(plus_space, " ");
 
     for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
         const char *mnam;
         if (!has_mname(mtmp))
             continue;
         mnam = MNAME(mtmp);
-        if (!strncmpi(nbuf, mnam, namlen + 1)) {
+        /* normal mplayer will typically be named like "<name> the <title>",
+         * so check for starting with "<name> " in addition to a full match */
+        if (!strncmpi(plus_space, mnam, namlen + 1) || !strcmpi(name, mnam)) {
             return FALSE;
         }
     }
