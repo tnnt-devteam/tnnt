@@ -143,23 +143,31 @@ struct obj* thrownscroll;
                 /* finished!!! */
                 struct obj *reward;
                 tnnt_globals.devteam_quest_status = DTQUEST_COMPLETED;
-                if (Deaf)
-                    pline("%s signs:", Monnam(devteam));
-                com_pager(QT_DEVTEAM_FINISHQUEST);
-                reward = mksobj(T_SHIRT, FALSE, FALSE);
-                reward = oname(reward, artiname(ART_REALLY_COOL_SHIRT));
-                /* player should have just given up at least one scroll, so
-                   should have room for this in inventory, but might get
-                   encumbered and want to decline :d */
-                dropy(reward);
-                pickup_object(reward, 1, FALSE);
                 tnnt_achieve(A_FINISHED_DEVTEAM_QUEST);
+                if (tnnt_globals.killed_izchak) {
+                    /* credit for finishing the quest, but no reward */
+                    com_pager(QT_DEVTEAM_BADFINISH);
+                }
+                else {
+                    if (Deaf)
+                        pline("%s signs:", Monnam(devteam));
+                    com_pager(QT_DEVTEAM_FINISHQUEST);
+                    reward = mksobj(T_SHIRT, FALSE, FALSE);
+                    reward = oname(reward, artiname(ART_REALLY_COOL_SHIRT));
+                    /* player should have just given up at least one scroll, so
+                       should have room for this in inventory, but might get
+                       encumbered and want to decline :d */
+                    dropy(reward);
+                    pickup_object(reward, 1, FALSE);
+                }
                 livelog_printf(LL_ACHIEVE, "completed the DevTeam Quest");
             }
         }
     }
     else if (qstatus == DTQUEST_COMPLETED) {
-        verbalize("Thank you again for finding our lost code.");
+        if (!tnnt_globals.killed_izchak) {
+            verbalize("Thank you again for finding our lost code.");
+        }
         return;
     }
     else {

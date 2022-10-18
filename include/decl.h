@@ -653,6 +653,7 @@ struct tnnt_globals_t {
      * block, hence why this does not have all lower bits set. */
 #define ALL_POLEARMS_FOUND 0x00003EEF
     uint32_t polearms_found;
+    boolean killed_izchak;
     /* tnnt devs: add more as needed */
 };
 E struct tnnt_globals_t tnnt_globals;

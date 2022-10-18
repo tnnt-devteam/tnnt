@@ -2682,6 +2682,10 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
     case PM_PESTILENCE: tnnt_achieve(A_KILLED_PESTILENCE); break;
     case PM_FAMINE:     tnnt_achieve(A_KILLED_FAMINE);     break;
     case PM_CROESUS:    tnnt_achieve(A_KILLED_CROESUS);    break;
+    case PM_SHOPKEEPER:
+        if (!strcmp(shkname(mtmp), "Izchak")) {
+            tnnt_globals.killed_izchak = TRUE;
+        }
     }
 
     if (mtmp->minvis && !See_invisible)
