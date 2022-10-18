@@ -4831,19 +4831,9 @@ struct obj *o;
 }
 
 boolean
-write_swapobj_file(o,swapnum)
+write_swapobj_file(o)
 struct obj *o;
-schar swapnum;
 {
-    static const char *objnames[SWAP_ITEMS_MAX] = {
-        /* this needs to be adjusted if SWAP_ITEMS_MAX changes */
-        /* playername will be appended to the end, and there is code elsewhere
-         * that assumes playername is ALWAYS at the end of the name */
-        /* no spaces - underscores will be converted */
-        "a_token_from",
-        "kindly_donated_by",
-        "generously_bestowed_by"
-    };
     char *filename = make_swapobj_filename(o);
     FILE *f;
     if (!filename)
@@ -4855,11 +4845,11 @@ schar swapnum;
     fprintf(f, "o_id=%x\totyp=%d\towt=%d\tquan=%ld\tspe=%d\toclass=%d\t"
                "cursed=%d\tblessed=%d\toeroded=%d\toeroded2=%d\toerodeproof=%d\t"
                "recharged=%d\tgreased=%d\topoisoned=%d\tusecount=%d\t"
-               "corpsenm=%d\tname=%s_%s\n",
+               "corpsenm=%d\tname=%s\n",
                o->o_id, o->otyp, o->owt, o->quan, o->spe, o->oclass,
                o->cursed, o->blessed, o->oeroded, o->oeroded2, o->oerodeproof,
                o->recharged, o->greased, o->opoisoned, o->usecount,
-               o->corpsenm, objnames[swapnum], plname);
+               o->corpsenm, plname);
     /* the second line is just for humans to read what the object is, for debugging */
     iflags.override_ID = 1;
     fprintf(f, "%s\n", doname(o));
@@ -4868,27 +4858,36 @@ schar swapnum;
     return TRUE;
 }
 
+#define MKSWAPOBJ_SUCCESS   0 /* nothing went wrong, put the object in chest */
+#define MKSWAPOBJ_ERROR     1 /* something went wrong */
+#define MKSWAPOBJ_IGNOREOBJ 2 /* nothing went wrong but we should suppress this
+                                 object from appearing in the swap chest */
+
 /* Create object from file and add to swapchest */
-struct obj *
-mkswapobj(swapchest, filename)
+static struct obj *
+mkswapobj(swapchest, filename, rcode)
 struct obj *swapchest;
 char *filename;
+short *rcode;
 {
     char buf[BUFSZ]; /* multi-use */
-    char *p;
+    char *donorname;
     FILE *f;
     struct obj *o;
     int tmp_bitfield;
+    *rcode = MKSWAPOBJ_ERROR;
     Sprintf(buf, "%s/%s", TNNT_SWAPCHEST_DIR, filename);
     f = fopen(buf,"r");
-    if (!f) return NULL;
+    if (!f)
+        return (struct obj *) 0;
 
     /* there is no nice way to do this... */
     o = newobj();
     *o = zeroobj;
     o->age = monstermoves;
     o->o_id = context.ident++;
-    if (!o->o_id) o->o_id = context.ident++; /* overflow */
+    if (!o->o_id)
+        o->o_id = context.ident++; /* overflow */
     o->corpsenm = NON_PM;
     o->known = 1;
     o->dknown = 1;
@@ -4897,11 +4896,16 @@ char *filename;
 
     /* this only works because we separate fields with whitespace */
     while (fscanf(f,"%s",buf) == 1) {
-        if (sscanf(buf, "otyp=%hd", &(o->otyp)) == 1) continue;
-        if (sscanf(buf, "owt=%d", &(o->owt)) == 1) continue;
-        if (sscanf(buf, "quan=%ld", &(o->quan)) == 1) continue;
-        if (sscanf(buf, "spe=%hhd", &(o->spe)) == 1) continue;
-        if (sscanf(buf, "oclass=%hhd", &(o->oclass)) == 1) continue;
+        if (sscanf(buf, "otyp=%hd", &(o->otyp)) == 1)
+            continue;
+        if (sscanf(buf, "owt=%d", &(o->owt)) == 1)
+            continue;
+        if (sscanf(buf, "quan=%ld", &(o->quan)) == 1)
+            continue;
+        if (sscanf(buf, "spe=%hhd", &(o->spe)) == 1)
+            continue;
+        if (sscanf(buf, "oclass=%hhd", &(o->oclass)) == 1)
+            continue;
         if (sscanf(buf, "cursed=%d", &tmp_bitfield) == 1) {
             o->cursed = tmp_bitfield;
             continue;
@@ -4934,25 +4938,42 @@ char *filename;
             o->opoisoned = tmp_bitfield;
             continue;
         }
-        if (sscanf(buf, "usecount=%d", &(o->usecount)) == 1) continue;
-        if (sscanf(buf, "corpsenm=%d", &(o->corpsenm)) == 1) continue;
-        if (sscanf(buf, "name=%ms", &p) == 1) {
-            if (!o->oextra) o->oextra = newoextra();
-            o->oextra->oname = p;
-            for (; *p; p++) {
-                if (*p == '_') *p = ' ';
+        if (sscanf(buf, "usecount=%d", &(o->usecount)) == 1)
+            continue;
+        if (sscanf(buf, "corpsenm=%d", &(o->corpsenm)) == 1)
+            continue;
+        if (sscanf(buf, "name=%ms", &donorname) == 1) {
+            char new_name[BUFSZ];
+            static const char *swprefixes[] = {
+                /* this needs to be adjusted if SWAP_ITEMS_MAX changes */
+                /* playername will be appended to the end, and there is code
+                 * elsewhere that assumes playername is ALWAYS at the end of the
+                 * name */
+                "a token from",
+                "kindly donated by",
+                "generously bestowed by"
+            };
+            if (!strcmp(donorname, plname)) {
+                /* The player doesn't get to see their own items. */
+                *rcode = MKSWAPOBJ_IGNOREOBJ;
+                return (struct obj *) 0;
             }
+            Sprintf(new_name, "%s %s", swprefixes[rn2(SIZE(swprefixes))],
+                    donorname);
+            o = oname(o, new_name);
         }
     }
     fclose(f);
     if (!o->otyp) {
-        if (o->oextra) dealloc_oextra(o);
+        if (o->oextra)
+            dealloc_oextra(o);
         free(o);
-        return NULL;
+        return (struct obj *) 0;
     }
     add_to_container(swapchest, o);
     o->where = OBJ_INSWAP;
     o->swapobj_filename = strdup(filename);
+    *rcode = MKSWAPOBJ_SUCCESS;
     return o;
 }
 
@@ -4975,8 +4996,9 @@ struct obj *swapchest;
     }
     while ((de = readdir(d)) != NULL) {
         if (!strncmp(de->d_name, "SW-", 3)) {
-            otmp = mkswapobj(swapchest, de->d_name);
-            if (!otmp) {
+            short rcode;
+            otmp = mkswapobj(swapchest, de->d_name, &rcode);
+            if (!otmp && rcode == MKSWAPOBJ_ERROR) {
                 impossible("Swapchest obj not read from %s", de->d_name);
             }
         }
@@ -4991,7 +5013,8 @@ struct obj *o;
     char path[BUFSZ];
     Sprintf(path, "%s/%s", TNNT_SWAPCHEST_DIR, o->swapobj_filename);
     if (unlink(path) == -1) {
-        if (errno != ENOENT) impossible("delete_swapobj_file %d", errno);
+        if (errno != ENOENT)
+            impossible("delete_swapobj_file %d", errno);
         return FALSE; /* someone else deleted it first */
     }
     return TRUE;
