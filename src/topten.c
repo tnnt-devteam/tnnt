@@ -1280,18 +1280,50 @@ char *
 tnnt_get_rnd_tt_name(unique)
 boolean unique; /* don't accept a name that's already in use on the level */
 {
-    int tries = 15;
+    int rank, i, tries;
+    FILE *rfile;
+    struct toptenentry *tt;
+    static struct toptenentry tt_buf;
 
-    do {
-        struct toptenentry *tt = get_rnd_toptenentry();
-        if (!tt) /* high score file is empty */
-            return (char *) 0;
-        if (unique && !tnnt_name_unused_on_lvl(tt->name))
-            continue;
-        return tt->name;
-    } while (--tries > 0);
+    rfile = fopen_datafile(RECORD, "r", SCOREPREFIX);
+    if (!rfile) {
+        impossible("get_rnd_tt_name: Cannot open record file!");
+        return (char *) 0;
+    }
 
-    return (char *) 0;
+    tt = &tt_buf;
+    rank = rnd(sysopt.tt_oname_maxrank);
+pickentry:
+    for (i = rank; i; i--) {
+        readentry(rfile, tt);
+        if (tt->points == 0)
+            break;
+    }
+
+    tries = min(20, sysopt.tt_oname_maxrank - rank);
+    if (unique && tries > 0 && tt->points > 0) {
+        /* continue reading entries until we hit one that's unique (or we run
+         * out of tries, hit the sysopt max rank, or run out of entries) */
+        while (!tnnt_name_unused_on_lvl(tt->name)) {
+            readentry(rfile, tt);
+            if (tt->points == 0)
+                break;
+            if (--tries == 0)
+                break;
+        }
+    }
+
+    if (tries == 0 || tt->points == 0) {
+        if (rank > 1) {
+            rank = 1;
+            rewind(rfile);
+            goto pickentry;
+        }
+        tt = NULL;
+    }
+
+    (void) fclose(rfile);
+    return tt ? tt->name : (char *) 0;
 }
 
 /*
