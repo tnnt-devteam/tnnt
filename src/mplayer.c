@@ -73,10 +73,15 @@ register struct monst *mtmp;
 char *nam;
 {
     boolean fmlkind = is_female(mtmp->data);
-    const char *devnam;
+    const char *devnam, *ttnam;
 
     devnam = dev_name();
-    if (!devnam)
+    /* TNNT: use name from the high score list, if we can; otherwise fall back
+     * to using a developer name as in vanilla */
+    ttnam = tnnt_get_rnd_tt_name();
+    if (ttnam) 
+        Strcpy(nam, ttnam);
+    else if (!devnam)
         Strcpy(nam, fmlkind ? "Eve" : "Adam");
     else if (fmlkind && !!strcmp(devnam, "Janet"))
         Strcpy(nam, rn2(2) ? "Maud" : "Eve");

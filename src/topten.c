@@ -1250,6 +1250,16 @@ pickentry:
     return tt;
 }
 
+/* get random player name from the high score list; used for naming player
+ * monsters on the Astral plane */
+char *
+tnnt_get_rnd_tt_name()
+{
+    struct toptenentry *tt = get_rnd_toptenentry();
+    if (!tt)
+        return (char *) 0;
+    return tt->name;
+}
 
 /*
  * Attach random player name and class from high score list
