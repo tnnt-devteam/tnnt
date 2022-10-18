@@ -75,6 +75,7 @@ STATIC_DCL long NDECL(encodeconduct);
 #endif
 STATIC_DCL void FDECL(free_ttlist, (struct toptenentry *));
 STATIC_DCL int FDECL(classmon, (char *, BOOLEAN_P));
+STATIC_DCL boolean FDECL(tnnt_name_unused_on_lvl, (const char *));
 STATIC_DCL int FDECL(score_wanted, (BOOLEAN_P, int, struct toptenentry *, int,
                                     const char **, int));
 #ifdef NO_SCAN_BRACK
@@ -1250,15 +1251,47 @@ pickentry:
     return tt;
 }
 
+STATIC_OVL boolean
+tnnt_name_unused_on_lvl(name)
+const char *name;
+{
+    int namlen = strlen(name);
+    char nbuf[NAMSZ + 2];
+    struct monst *mtmp;
+
+    Strcpy(nbuf, name);
+    Strcat(nbuf, " ");
+
+    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+        const char *mnam;
+        if (!has_mname(mtmp))
+            continue;
+        mnam = MNAME(mtmp);
+        if (!strncmpi(nbuf, mnam, namlen + 1)) {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
 /* get random player name from the high score list; used for naming player
  * monsters on the Astral plane */
 char *
-tnnt_get_rnd_tt_name()
+tnnt_get_rnd_tt_name(unique)
+boolean unique; /* don't accept a name that's already in use on the level */
 {
-    struct toptenentry *tt = get_rnd_toptenentry();
-    if (!tt)
-        return (char *) 0;
-    return tt->name;
+    int tries = 15;
+
+    do {
+        struct toptenentry *tt = get_rnd_toptenentry();
+        if (!tt) /* high score file is empty */
+            return (char *) 0;
+        if (unique && !tnnt_name_unused_on_lvl(tt->name))
+            continue;
+        return tt->name;
+    } while (--tries > 0);
+
+    return (char *) 0;
 }
 
 /*

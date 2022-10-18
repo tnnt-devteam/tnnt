@@ -78,7 +78,7 @@ char *nam;
     devnam = dev_name();
     /* TNNT: use name from the high score list, if we can; otherwise fall back
      * to using a developer name as in vanilla */
-    ttnam = tnnt_get_rnd_tt_name();
+    ttnam = tnnt_get_rnd_tt_name(TRUE);
     if (ttnam) 
         Strcpy(nam, ttnam);
     else if (!devnam)
