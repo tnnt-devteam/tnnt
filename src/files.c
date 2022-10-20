@@ -4831,8 +4831,9 @@ struct obj *o;
 }
 
 boolean
-write_swapobj_file(o)
+write_swapobj_file(o, swapnum)
 struct obj *o;
+xchar swapnum;
 {
     char *filename = make_swapobj_filename(o);
     FILE *f;
@@ -4845,11 +4846,11 @@ struct obj *o;
     fprintf(f, "o_id=%x\totyp=%d\towt=%d\tquan=%ld\tspe=%d\toclass=%d\t"
                "cursed=%d\tblessed=%d\toeroded=%d\toeroded2=%d\toerodeproof=%d\t"
                "recharged=%d\tgreased=%d\topoisoned=%d\tusecount=%d\t"
-               "corpsenm=%d\tname=%s\n",
+               "corpsenm=%d\tswapnum=%d\tname=%s\n",
                o->o_id, o->otyp, o->owt, o->quan, o->spe, o->oclass,
                o->cursed, o->blessed, o->oeroded, o->oeroded2, o->oerodeproof,
                o->recharged, o->greased, o->opoisoned, o->usecount,
-               o->corpsenm, plname);
+               o->corpsenm, swapnum, plname);
     /* the second line is just for humans to read what the object is, for debugging */
     iflags.override_ID = 1;
     fprintf(f, "%s\n", doname(o));
@@ -4870,8 +4871,11 @@ struct obj *swapchest;
 char *filename;
 short *rcode;
 {
+#define _N2STR(n) #n
+#define N2STR(n) _N2STR(n)
     char buf[BUFSZ]; /* multi-use */
-    char *donorname;
+    char donorname[PL_NSIZ + 1];
+    int swapnum = -1;
     FILE *f;
     struct obj *o;
     int tmp_bitfield;
@@ -4942,24 +4946,28 @@ short *rcode;
             continue;
         if (sscanf(buf, "corpsenm=%d", &(o->corpsenm)) == 1)
             continue;
-        if (sscanf(buf, "name=%ms", &donorname) == 1) {
+        if (sscanf(buf, "swapnum=%d", &swapnum) == 1)
+            continue;
+        if (sscanf(buf, "name=%" N2STR(PL_NSIZ) "s", donorname) == 1) {
             char new_name[BUFSZ];
-            static const char *swprefixes[] = {
+            static const char *swprefixes[SWAP_ITEMS_MAX] = {
                 /* this needs to be adjusted if SWAP_ITEMS_MAX changes */
                 /* playername will be appended to the end, and there is code
-                 * elsewhere that assumes playername is ALWAYS at the end of the
-                 * name */
+                 * elsewhere that assumes playername is ALWAYS at the end of
+                 * the name */
                 "a token from",
                 "kindly donated by",
                 "generously bestowed by"
             };
+            const char *pfx = (swapnum >= 0 && swapnum < SWAP_ITEMS_MAX)
+                                ? swprefixes[swapnum] : "a gift from";
+
             if (!strcmp(donorname, plname)) {
                 /* The player doesn't get to see their own items. */
                 *rcode = MKSWAPOBJ_IGNOREOBJ;
                 return (struct obj *) 0;
             }
-            Sprintf(new_name, "%s %s", swprefixes[rn2(SIZE(swprefixes))],
-                    donorname);
+            Sprintf(new_name, "%s %s", pfx, donorname);
             o = oname(o, new_name);
         }
     }
@@ -4975,6 +4983,8 @@ short *rcode;
     o->swapobj_filename = strdup(filename);
     *rcode = MKSWAPOBJ_SUCCESS;
     return o;
+#undef N2STR
+#undef _N2STR
 }
 
 void

@@ -2446,7 +2446,7 @@ register struct obj *obj;
 
     /* TNNT make sure file is written before freeinv() */
     if (current_container->otyp == SWAP_CHEST) {
-        if (!write_swapobj_file(obj)) {
+        if (!write_swapobj_file(obj, current_container->swapitems)) {
             impossible("Could not write swapchest file");
             return -1;
         }
