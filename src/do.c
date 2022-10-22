@@ -1436,9 +1436,6 @@ boolean at_stairs, falling, portal;
          * incorrect to leave it as a nonzero value here. */
         tnnt_globals.num_planes_pets = 0;
     }
-    if (Is_stronghold(newlevel)) {
-        tnnt_globals.entered_castle_time = moves;
-    }
     /* end TNNT */
     if (u.uswallow) /* idem */
         u.uswldtim = u.uswallow = 0;
@@ -1515,6 +1512,10 @@ boolean at_stairs, falling, portal;
     (void) memset((genericptr_t) &dndest, 0, sizeof dndest);
 
     if (!(level_info[new_ledger].flags & LFILE_EXISTS)) {
+        /* TNNT - track when the hero first entered the castle level */
+        if (Is_stronghold(newlevel)) {
+            tnnt_globals.entered_castle_time = moves;
+        }
         /* entering this level for first time; make it now */
         if (level_info[new_ledger].flags & (FORGOTTEN | VISITED)) {
             impossible("goto_level: returning to discarded level?");
