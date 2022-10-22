@@ -545,9 +545,8 @@ ACH("Never Tell Me the Odds",
     "Successfully cast a spell with a failure rate of 95% or greater",
     CAST_LOCHANCE_SPELL),
 ACH("Archmage", "Successfully cast a level 7 spell", CAST_LV7_SPELL),
-ACH("Leeroy Jenkins",
-    "Cross the Castle drawbridge threshold within 30 turns of entering the level",
-    ENTERED_CASTLE_QUICKLY),
+ACH("Leeroy Jenkins", "Cross the Castle drawbridge threshold within 30 turns"
+    " of entering the level for the first time", ENTERED_CASTLE_QUICKLY),
 ACH("Chocoban", "Acquire a candy bar generated in Sokoban", GOT_SOKO_CANDY),
 ACH("Thirst For Punishment", "Drink all harmful types of potion (conf, blind,"
     " paral, hallu, sleep, booze, sick, acid)",
