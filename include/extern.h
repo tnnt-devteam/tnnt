@@ -2604,6 +2604,7 @@ E boolean FDECL(uescaped_shaft, (struct trap *));
 E boolean NDECL(lava_effects);
 E void NDECL(sink_into_lava);
 E void NDECL(sokoban_guilt);
+E void FDECL(tnnt_add_untrap, (unsigned int));
 
 /* ### u_init.c ### */
 

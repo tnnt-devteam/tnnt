@@ -38,7 +38,6 @@ STATIC_DCL void FDECL(join_adjacent_pits, (struct trap *));
 STATIC_DCL boolean FDECL(thitm, (int, struct monst *, struct obj *, int,
                                  BOOLEAN_P));
 STATIC_DCL void NDECL(maybe_finish_sokoban);
-STATIC_DCL void FDECL(tnnt_add_untrap, (unsigned int));
 
 /* mintrap() should take a flags argument, but for time being we use this */
 STATIC_VAR int force_mintrap = 0;
@@ -5539,7 +5538,7 @@ maybe_finish_sokoban()
 
 /* TNNT: player has just disarmed one of the types of traps. Add it and check to
  * see if they earned the achievement. */
-STATIC_OVL void
+void
 tnnt_add_untrap(mask)
 unsigned int mask; /* one of the TNNT_UNTRAP_* */
 {

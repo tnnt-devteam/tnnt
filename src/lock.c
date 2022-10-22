@@ -128,10 +128,12 @@ picklock(VOID_ARGS)
                 xlock.door->doormask &= ~D_TRAPPED;
                 what = "door";
                 alreadyunlocked = !(xlock.door->doormask & D_LOCKED);
+                tnnt_add_untrap(TNNT_UNTRAP_DOOR);
             } else {
                 xlock.box->otrapped = 0;
                 what = (xlock.box->otyp == CHEST) ? "chest" : "box";
                 alreadyunlocked = !xlock.box->olocked;
+                tnnt_add_untrap(TNNT_UNTRAP_CONT);
             }
             You("succeed in disarming the trap.  The %s is still %slocked.",
                 what, alreadyunlocked ? "un" : "");
