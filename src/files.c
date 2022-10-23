@@ -5135,7 +5135,8 @@ write_npc_data(VOID_ARGS)
             || obj->otyp == SCR_MISSING_CODE        /* no devteam quest help */
             || objects[obj->otyp].oc_unique)         /* no sequence breaking */
             continue;
-        /* TODO: items that should be modified somehow (e.g. artifacts). */
+        /* TNNT TODO: handling for items that shouldn't be excluded entirely,
+         * but should be modified somehow (e.g. artifacts). */
 
         fprintf(npcfile, "%d %ld %d %d %d %d %d %d %d %d %d\n",
                 obj->otyp,
@@ -5149,7 +5150,7 @@ write_npc_data(VOID_ARGS)
                 obj->corpsenm,
                 obj->usecount,
                 obj->oeaten);
-        /* TODO: oname for non-artifacts? */
+        /* TNNT TODO: oname for non-artifacts? */
     }
     fclose(npcfile);
 }
@@ -5247,8 +5248,8 @@ xchar x, y;
      * gets, say, poison resistance from this, they'll act as if they have
      * innate poison resistance up until they put on and then take off an apron,
      * which will lose the poison resistance.
-     * TODO: In 3.7, revisit this, because monster intrinsic interactions have
-     * changed.
+     * TNNT TODO FOR 3.7: revisit this, because monster intrinsic interactions
+     * will have changed.
      */
     npc->mextrinsics = mintrinsics;
     npc->mpeaceful = 0;
@@ -5484,9 +5485,9 @@ get_temp_achfile_path(void)
 {
     static char buf[BUFSZ];
     /* ubirthday serves as a game identifier
-     * TODO: Should this also involve SERVER_LOCATION or some other server
-     * identifier? It is possible that someone starts two games at the same
-     * second on two different servers. */
+     * TNNT TODO: Should this also involve SERVER_LOCATION or some other
+     * server identifier? It is possible that someone starts two games at the
+     * same second on two different servers. */
     Sprintf(buf, "%s/%s.%ld.", TNNT_ACHIEVEMENTS_DIR, plname, ubirthday);
 #ifdef SERVER_LOCATION
     /* hardfought specific assumption: SERVER_LOCATION is "us.hardfought.org" or

@@ -675,7 +675,7 @@ newgame()
         xchar dest;
         boolean samelevel;
 
-        /* TODO: More fine-grained control over where these end up.
+        /* TNNT TODO: More fine-grained control over where these end up.
          * Currently they just get sent to random levels. */
         tnnt_globals.missing_scroll_levels[i] = 0;
         do {
@@ -686,7 +686,7 @@ newgame()
             dest = rnd(castle_depth - 2) + 1;
 
             /* Don't put two scrolls on the same level. */
-            /* TODO: This may not be needed. */
+            /* TNNT TODO: This may not be needed. */
             samelevel = FALSE;
             for (j = 0; j < i; ++j) {
                 if (dest == tnnt_globals.missing_scroll_levels[j]) {

@@ -133,7 +133,7 @@ struct obj* thrownscroll;
                     (nscrolls_given > 1 ? "s" : ""));
             }
             if (scrolls_remaining > 0) {
-                /* TODO: make better. */
+                /* TNNT TODO: make better. */
                 if (Deaf)
                     pline("%s signs:", Monnam(devteam));
                 verbalize("Thank you. There should only be %d more scroll%s.",
@@ -1074,7 +1074,7 @@ register struct monst *mtmp;
                 devteam_quest(mtmp, NULL);
                 break;
             }
-            /* TODO: stuff here that gives you valid in-game information */
+            /* TNNT TODO: stuff here that gives you valid in-game info */
             if (!mtmp->mcan) {
                 /* break; */
             }

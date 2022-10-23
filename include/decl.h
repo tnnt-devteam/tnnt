@@ -496,8 +496,8 @@ struct tnnt_achvmt_data {
 };
 E struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS];
 
-/* vanilla achievements - tracked separately for now; TODO: maybe merge them
- * into tnnt_achievements for 2020 tournament */
+/* vanilla achievements - tracked separately for now; TNNT TODO: maybe merge
+ * them into tnnt_achievements for 2020 tournament */
 #define NUM_VANILLA_ACHIEVEMENTS 11
 E struct tnnt_achvmt_data vanilla_achievements[NUM_VANILLA_ACHIEVEMENTS];
 
@@ -576,8 +576,8 @@ struct tnnt_globals_t {
     unsigned int deathmatch_m_id;
 #define is_deathmatch_opponent(mtmp) (mtmp->m_id == tnnt_globals.deathmatch_m_id)
 
-    /* TODO: probably move this above, or the other achievements below, the
-     * devteam/npc side quests */
+    /* TNNT TODO: probably move this above, or the other achievements below,
+     * the devteam/npc side quests */
     unsigned feline_m_ids[MAX_TAMED_FELINES]; /* Cat Lady: ids of tamed cats */
     unsigned short wizards_killed;
     /* Inedible object classes:

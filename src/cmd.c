@@ -5868,7 +5868,7 @@ boolean final;
     else {
         response = 'e'; /* dumplog: show only achievements earned */
     }
-    /* TODO: will need NHW_MENU if we can get paging to work in tty */
+    /* TNNT TODO: will need NHW_MENU if we can get paging to work in tty */
     win = create_nhwindow(NHW_TEXT);
     if (response == 'a') {
         putstr(win, ATR_BOLD, "All achievements:");
