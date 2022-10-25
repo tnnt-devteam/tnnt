@@ -5566,7 +5566,7 @@ boolean final;
 
     /* mention overall #achievements display */
     if (final) {
-        putstr(en_win, 0, "TNNT statistics:");
+        putstr(en_win, ATR_HEADING, "TNNT statistics:");
     }
     else {
         putstr(en_win, 0, "To view complete or incomplete achievements, use #achievements.");
@@ -5871,12 +5871,12 @@ boolean final;
     /* TNNT TODO: will need NHW_MENU if we can get paging to work in tty */
     win = create_nhwindow(NHW_TEXT);
     if (response == 'a') {
-        putstr(win, ATR_BOLD, "All achievements:");
+        putstr(win, ATR_HEADING, "All achievements:");
     }
     else {
         Sprintf(buf, "Achievements %searned%s:",
                 response == 'e' ? "" : "not ", final ? "" : " so far");
-        putstr(win, ATR_BOLD, buf);
+        putstr(win, ATR_HEADING, buf);
     }
     if (!final) {
         putstr(win, ATR_BOLD, "(Use #tnntstats to check progress of certain ones.)");
