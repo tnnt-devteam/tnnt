@@ -233,9 +233,10 @@ int distance;
 
     if (u.uswallow) {
         was_tame = u.ustuck->mtame;
+        mtmp = u.ustuck; /* TNNT: save ustuck, tamedog can cause expulsion */
         if (!resist(u.ustuck, TOOL_CLASS, 0, NOTELL))
             (void) tamedog(u.ustuck, (struct obj *) 0);
-        if (!was_tame && u.ustuck->mtame)
+        if (!was_tame && mtmp->mtame)
             tnnt_achieve(A_TAMED_NOT_BY_FOOD);
     } else {
         for (mtmp = fmon; mtmp; mtmp = mtmp2) {
