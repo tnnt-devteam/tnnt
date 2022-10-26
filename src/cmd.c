@@ -5558,6 +5558,7 @@ show_tnnt_stats(final)
 boolean final;
 {
 #define maybe_s(n) ((n) == 1 ? "" : "s")
+#define maybe_have(final) (!final ? "have " : "")
     char buf[BUFSZ];
     int i;
     char eaten[16] = DUMMY;
@@ -5603,31 +5604,34 @@ boolean final;
     /* other counters for various things */
     /* these _could_ be made to respect final (e.g. leave out the "have"), but I
      * rather doubt anyone cares about the grammar that much */
-    Sprintf(buf, "You have found %d graffiti.", tnnt_globals.graffiti_found);
+    Sprintf(buf, "You %sfound %d graffiti.", maybe_have(final),
+            tnnt_globals.graffiti_found);
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have tamed %d%s feline%s.", tnnt_globals.felines_tamed,
+    Sprintf(buf, "You %stamed %d%s feline%s.",
+            maybe_have(final), tnnt_globals.felines_tamed,
             (tnnt_globals.felines_tamed >= MAX_TAMED_FELINES ? "+" : ""),
             maybe_s(tnnt_globals.felines_tamed));
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have changed gender %d time%s.",
+    Sprintf(buf, "You %schanged gender %d time%s.", maybe_have(final),
             tnnt_globals.genderflips, maybe_s(tnnt_globals.genderflips));
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have eaten %d artifact%s.", tnnt_globals.artis_eaten,
-            maybe_s(tnnt_globals.artis_eaten));
+    Sprintf(buf, "You %s %d artifact%s.", !final ? "have eaten" : "ate",
+            tnnt_globals.artis_eaten, maybe_s(tnnt_globals.artis_eaten));
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have been sent back %d level%s by the mysterious force.",
+    Sprintf(buf, "You %s sent back %d level%s by the mysterious force.",
+            !final ? "have been" : "were",
             tnnt_globals.mysterious_forced_back,
             maybe_s(tnnt_globals.mysterious_forced_back));
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have had a door resist %d consecutive time%s.",
-            tnnt_globals.door_resist_max,
+    Sprintf(buf, "You %shad a door resist %d consecutive time%s.",
+            maybe_have(final), tnnt_globals.door_resist_max,
             maybe_s(tnnt_globals.door_resist_max));
-    if (tnnt_globals.consecutive_door_resists)
+    if (tnnt_globals.consecutive_door_resists && !final)
         Sprintf(eos(buf), " (current streak: %d)",
                 tnnt_globals.consecutive_door_resists);
     putstr(en_win, 0, buf);
@@ -5636,8 +5640,8 @@ boolean final;
         if (tnnt_globals.dark_rooms_lit[i].ledgerno == 0)
             break;
     }
-    Sprintf(buf, "You have lit up %d dark room%s in Dungeons levels.", i,
-            maybe_s(i));
+    Sprintf(buf, "You %slit up %d dark room%s in Dungeons levels.",
+            maybe_have(final), i, maybe_s(i));
     putstr(en_win, 0, buf);
 
 #define print_visited(altars)    \
@@ -5658,7 +5662,7 @@ boolean final;
     putstr(en_win, 0, buf);
 #undef print_visited
 
-    Strcpy(buf, "You have received wishes from:");
+    Sprintf(buf, "You %sreceived wishes from:", maybe_have(final));
     if (tnnt_globals.wish_sources == 0) {
         Strcat(buf, " nothing");
     }
@@ -5676,7 +5680,7 @@ boolean final;
     }
     putstr(en_win, 0, buf);
 
-    Strcpy(buf, "Things you have read:");
+    Sprintf(buf, "Things you %sread:", maybe_have(final));
     if (tnnt_globals.readables == 0)
         Strcat(buf, " nothing");
     if ((tnnt_globals.readables & RDBL_SCROLL) != 0)
@@ -5760,8 +5764,10 @@ boolean final;
     }
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You have %sblown up a land mine in Fort Ludios.",
-            tnnt_globals.blew_up_ludios ? "" : "not ");
+    Sprintf(buf, "You %s%s%s up a land mine in Fort Ludios.",
+            maybe_have(final),
+            tnnt_globals.blew_up_ludios ? "" : (!final ? "not " : "never "),
+            !final ? "blown" : "blew");
     putstr(en_win, 0, buf);
 
     /* kill a certain number of foo */
@@ -5769,12 +5775,14 @@ boolean final;
         if (tnnt_globals.nazgul_ring_o_ids[i] == 0)
             break;
     }
-    Sprintf(buf, "You have collected %d/9 Nazgul rings.", i);
+    Sprintf(buf, "You %scollected %d/9 Nazgul rings.", maybe_have(final),
+            i);
     putstr(en_win, 0, buf);
-    Sprintf(buf, "You have killed %d/3 erinyes.", mvitals[PM_ERINYS].ukilled);
+    Sprintf(buf, "You %skilled %d/3 erinyes.", maybe_have(final),
+            mvitals[PM_ERINYS].ukilled);
     putstr(en_win, 0, buf);
-    Sprintf(buf, "You have killed the Wizard of Yendor %d times.",
-            tnnt_globals.wizards_killed);
+    Sprintf(buf, "You %skilled the Wizard of Yendor %d times.",
+            maybe_have(final), tnnt_globals.wizards_killed);
     putstr(en_win, 0, buf);
     Sprintf(buf, "Home plane elementals killed: %d/4 %d/4 %d/4 %d/4",
             tnnt_globals.elementals_killed_on_planes[0],
@@ -5805,6 +5813,7 @@ boolean final;
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
     return 0;
+#undef maybe_final
 #undef maybe_s
 }
 
