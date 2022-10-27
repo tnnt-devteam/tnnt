@@ -1190,7 +1190,8 @@ do_mname()
             verbalize("I'm %s, not %s.",
                       (mtmp->isshk ? shkname(mtmp) : MNAME(mtmp)), buf);
     } else if (mtmp->ispriest || mtmp->isminion || mtmp->isshk
-               || is_deathmatch_opponent(mtmp)) {
+               || is_deathmatch_opponent(mtmp)
+               || mtmp->former_rank.mnum != NON_PM) {
         if (!alreadynamed(mtmp, monnambuf, buf))
             pline("%s will not accept the name %s.", upstart(monnambuf), buf);
     } else
