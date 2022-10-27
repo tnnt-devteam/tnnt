@@ -1759,7 +1759,7 @@ boolean called;
         if (mdat == &mons[PM_GHOST]) {
             Sprintf(eos(buf), "%s ghost", s_suffix(name));
             name_at_start = TRUE;
-        } else if (is_undead(mdat)) {
+        } else if (is_undead(mdat) || mdat == &mons[PM_GREEN_SLIME]) {
             Sprintf(eos(buf), "%s the %s", name, pm_name);
             name_at_start = TRUE;
         } else if (called) {
