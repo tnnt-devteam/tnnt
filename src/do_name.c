@@ -1757,9 +1757,11 @@ boolean called;
         char *name = MNAME(mtmp);
 
         if (mdat == &mons[PM_GHOST]) {
+            /* applies to all ghosts */
             Sprintf(eos(buf), "%s ghost", s_suffix(name));
             name_at_start = TRUE;
-        } else if (is_undead(mdat) || mdat == &mons[PM_GREEN_SLIME]) {
+        } else if (mtmp->former_rank.mnum != NON_PM) {
+            /* special rules for non-ghost former heroes */
             Sprintf(eos(buf), "%s the %s", name, pm_name);
             name_at_start = TRUE;
         } else if (called) {
