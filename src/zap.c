@@ -726,6 +726,7 @@ boolean by_hero;
     xchar x, y;
     boolean one_of;
     int montype, container_nesting = 0;
+    boolean use_corpse_name = TRUE;
 
     if (corpse->otyp != CORPSE) {
         impossible("Attempting to revive %s?", xname(corpse));
@@ -908,6 +909,14 @@ boolean by_hero;
             }
             /* was ghost, now alive, it's all very confusing */
             mtmp->mconf = 1;
+            /* TNNT - copy over bones monster info to newly revived "hero" */
+            if (has_mname(ghost)) { /* should always be true but for safety */
+                mtmp = christen_monst(mtmp, MNAME(ghost));
+                /* don't let player-provided name of corpse override actual
+                 * name of ex-hero */
+                use_corpse_name = FALSE;
+            }
+            mtmp->former_rank = ghost->former_rank;
             /* separate ghost monster no longer exists */
             mongone(ghost);
         }
@@ -915,7 +924,7 @@ boolean by_hero;
     }
 
     /* monster retains its name */
-    if (has_oname(corpse) && !unique_corpstat(mtmp->data))
+    if (has_oname(corpse) && !unique_corpstat(mtmp->data) && use_corpse_name)
         mtmp = christen_monst(mtmp, ONAME(corpse));
     /* partially eaten corpse yields wounded monster */
     if (corpse->oeaten)
