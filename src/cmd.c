@@ -5604,8 +5604,9 @@ boolean final;
     /* other counters for various things */
     /* these _could_ be made to respect final (e.g. leave out the "have"), but I
      * rather doubt anyone cares about the grammar that much */
-    Sprintf(buf, "You %sfound %d graffiti.", maybe_have(final),
-            tnnt_globals.graffiti_found);
+    Sprintf(buf, "You %sfound %d graffit%c.", maybe_have(final),
+            tnnt_globals.graffiti_found,
+            tnnt_globals.graffiti_found == 1 ? 'o' : 'i');
     putstr(en_win, 0, buf);
 
     Sprintf(buf, "You %stamed %d%s feline%s.",
