@@ -5644,6 +5644,10 @@ boolean final;
             maybe_have(final), i, maybe_s(i));
     putstr(en_win, 0, buf);
 
+    Sprintf(buf, "You %sgained %d max Pw from eating corpses.",
+            maybe_have(final), tnnt_globals.maxpw_from_corpses);
+    putstr(en_win, 0, buf);
+
 #define print_visited(altars)    \
     if ((altars) == 0)           \
         Strcat(buf, " none");    \
