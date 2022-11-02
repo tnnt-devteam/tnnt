@@ -357,16 +357,16 @@ struct tnnt_globals_t tnnt_globals = DUMMY;
 
 /* TNNT - vanilla achievement names and descriptions */
 struct tnnt_achvmt_data vanilla_achievements[NUM_VANILLA_ACHIEVEMENTS] = {
-  {"Ringing In My Ears", "Get the Bell of Opening"},
+  {"Ringing in My Ears", "Get the Bell of Opening"},
   {"We Need To Go Deeper", "Enter Gehennom"},
-  {"Emerging Into The Light", "Get the Candelabrum of Invocation"},
+  {"Emerging Into the Light", "Get the Candelabrum of Invocation"},
   {"Weighing of the Heart", "Get the Book of the Dead"},
-  {"Bell, Book, and Candle", "Perform the Invocation Ritual"},
+  {"Bell, Book and Candle", "Perform the invocation ritual"},
   {"My Preciousss", "Get the Amulet of Yendor"},
-  {"From the Dungeon They Came", "Enter the Planes"},
+  {"From the Dungeon They Came", "Enter the Elemental Planes"},
   {"The Halls of the Gods", "Enter the Astral Plane"},
   {"Are You Feeling Lucky", "Get the luckstone from Mines' End"},
-  {"Boulder-Pusher", "Finish Sokoban"},
+  {"Boulder Pusher", "Finish Sokoban"},
   {"Anti-Stoner", "Kill Medusa"}
 };
 
