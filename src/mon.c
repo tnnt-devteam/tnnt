@@ -2844,9 +2844,12 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
         pline("Fissures open up, and the realm collapses in on itself.");
         You("die...");
         Strcpy(killer.name, "collapsing dungeon");
+        killer.format = KILLED_BY_AN;
         done(CRUSHING);
         /* life saving? */
         pline("Unfortunately, you are still buried under tons of rock...");
+        Strcpy(killer.name, "dungeon debris");
+        killer.format = KILLED_BY;
         done(CRUSHING);
         /* wizards can refuse to die twice, I guess. */
     }
