@@ -5557,7 +5557,6 @@ int
 show_tnnt_stats(final)
 boolean final;
 {
-#define maybe_s(n) ((n) == 1 ? "" : "s")
 #define maybe_have(final) (!final ? "have " : "")
     char buf[BUFSZ];
     int i;
@@ -5612,26 +5611,26 @@ boolean final;
     Sprintf(buf, "You %stamed %d%s feline%s.",
             maybe_have(final), tnnt_globals.felines_tamed,
             (tnnt_globals.felines_tamed >= MAX_TAMED_FELINES ? "+" : ""),
-            maybe_s(tnnt_globals.felines_tamed));
+            plur(tnnt_globals.felines_tamed));
     putstr(en_win, 0, buf);
 
     Sprintf(buf, "You %schanged gender %d time%s.", maybe_have(final),
-            tnnt_globals.genderflips, maybe_s(tnnt_globals.genderflips));
+            tnnt_globals.genderflips, plur(tnnt_globals.genderflips));
     putstr(en_win, 0, buf);
 
     Sprintf(buf, "You %s %d artifact%s.", !final ? "have eaten" : "ate",
-            tnnt_globals.artis_eaten, maybe_s(tnnt_globals.artis_eaten));
+            tnnt_globals.artis_eaten, plur(tnnt_globals.artis_eaten));
     putstr(en_win, 0, buf);
 
     Sprintf(buf, "You %s sent back %d level%s by the mysterious force.",
             !final ? "have been" : "were",
             tnnt_globals.mysterious_forced_back,
-            maybe_s(tnnt_globals.mysterious_forced_back));
+            plur(tnnt_globals.mysterious_forced_back));
     putstr(en_win, 0, buf);
 
     Sprintf(buf, "You %shad a door resist %d consecutive time%s.",
             maybe_have(final), tnnt_globals.door_resist_max,
-            maybe_s(tnnt_globals.door_resist_max));
+            plur(tnnt_globals.door_resist_max));
     if (tnnt_globals.consecutive_door_resists && !final)
         Sprintf(eos(buf), " (current streak: %d)",
                 tnnt_globals.consecutive_door_resists);
@@ -5642,7 +5641,7 @@ boolean final;
             break;
     }
     Sprintf(buf, "You %slit up %d dark room%s in Dungeons levels.",
-            maybe_have(final), i, maybe_s(i));
+            maybe_have(final), i, plur(i));
     putstr(en_win, 0, buf);
 
     Sprintf(buf, "You %sgained %d max Pw from eating corpses.",
@@ -5818,8 +5817,7 @@ boolean final;
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
     return 0;
-#undef maybe_final
-#undef maybe_s
+#undef maybe_have
 }
 
 /* TNNT: #achievements command. Ask whether they want to see achievements earned
