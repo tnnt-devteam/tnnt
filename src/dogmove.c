@@ -697,7 +697,8 @@ int    maxdist;
             } else {
                 /* Quest leaders and guardians are always seen */
                 if (pal->data->msound == MS_LEADER
-                    || pal->data->msound == MS_GUARDIAN)
+                    || pal->data->msound == MS_GUARDIAN
+                    || pal->data->msound == MS_DEVTEAM)
                     return 1;
             }
         }
@@ -717,7 +718,8 @@ struct monst *mtmp, *mtarg;
 
     /* Give 1 in 3 chance of safe breathing even if pet is confused or
      * if you're on the quest start level */
-    if (!mtmp->mconf || !rn2(3) || Is_qstart(&u.uz)) {
+    if (!mtmp->mconf || !rn2(3) || Is_qstart(&u.uz)
+        || Is_devteam(&u.uz)) {
         int mtmp_lev;
         aligntyp align1 = A_NONE, align2 = A_NONE; /* For priests, minions */
         boolean faith1 = TRUE,  faith2 = TRUE;
@@ -737,7 +739,8 @@ struct monst *mtmp, *mtarg;
 
         /* Never target quest friendlies */
         if (mtarg->data->msound == MS_LEADER
-            || mtarg->data->msound == MS_GUARDIAN)
+            || mtarg->data->msound == MS_GUARDIAN
+            || mtarg->data->msound == MS_DEVTEAM)
             return -5000L;
         /* D: Fixed angelic beings using gaze attacks on coaligned priests */
         if (faith1 && faith2 && align1 == align2 && mtarg->mpeaceful) {
@@ -1011,6 +1014,7 @@ int after; /* this is extra fast monster movement */
                 || (mtmp2->data == &mons[PM_GELATINOUS_CUBE] && rn2(10))
                 || (max_passive_dmg(mtmp2, mtmp) >= mtmp->mhp)
                 || ((mtmp->mhp * 4 < mtmp->mhpmax
+                     || mtmp2->data->msound == MS_DEVTEAM
                      || mtmp2->data->msound == MS_GUARDIAN
                      || mtmp2->data->msound == MS_LEADER) && mtmp2->mpeaceful
                     && !Conflict)
