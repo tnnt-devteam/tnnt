@@ -2060,6 +2060,28 @@ register struct monst *mtmp;
     if (mvitals[tmp].died < 255)
         mvitals[tmp].died++;
 
+    /* TNNT - killing the DevTeam is VERY BAD */
+    if (tmp == PM_DEVTEAM_MEMBER) {
+        struct monst *mon;
+        com_pager(QT_DEVTEAM_END);
+        for (mon = fmon; mon; mon = mon->nmon) {
+            if (DEADMONSTER(mon))
+                continue;
+            if (mon->mnum == PM_DEVTEAM_MEMBER)
+                mongone(mon); /* vanish out of this world indeed */
+        }
+        pline("Fissures open up, and the realm collapses in on itself.");
+        You("die...");
+        Strcpy(killer.name, "collapsing dungeon");
+        killer.format = KILLED_BY_AN;
+        done(CRUSHING);
+        /* life saving? */
+        pline("Unfortunately, you are still buried under tons of rock...");
+        Strcpy(killer.name, "dungeon debris");
+        killer.format = KILLED_BY;
+        done(CRUSHING);
+        /* wizards can refuse to die twice, I guess. */
+    }
     /* if it's a (possibly polymorphed) quest leader, mark him as dead */
     if (mtmp->m_id == quest_status.leader_m_id)
         quest_status.leader_is_dead = TRUE;
@@ -2830,29 +2852,6 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
     tmp = experience(mtmp, (int) mvitals[mndx].died);
     more_experienced(tmp, 0);
     newexplevel(); /* will decide if you go up */
-
-    /* TNNT - killing the DevTeam is VERY BAD */
-    if (mndx == PM_DEVTEAM_MEMBER) {
-        struct monst *mon;
-        com_pager(QT_DEVTEAM_END);
-        for (mon = fmon; mon; mon = mon->nmon) {
-            if (DEADMONSTER(mon))
-                continue;
-            if (mon->mnum == PM_DEVTEAM_MEMBER)
-                mongone(mon); /* vanish out of this world indeed */
-        }
-        pline("Fissures open up, and the realm collapses in on itself.");
-        You("die...");
-        Strcpy(killer.name, "collapsing dungeon");
-        killer.format = KILLED_BY_AN;
-        done(CRUSHING);
-        /* life saving? */
-        pline("Unfortunately, you are still buried under tons of rock...");
-        Strcpy(killer.name, "dungeon debris");
-        killer.format = KILLED_BY;
-        done(CRUSHING);
-        /* wizards can refuse to die twice, I guess. */
-    }
 
     /* adjust alignment points */
     if (mtmp->m_id == quest_status.leader_m_id) { /* REAL BAD! */
