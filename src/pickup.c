@@ -1555,6 +1555,8 @@ struct obj* exception;
                 mtmp->misc_worn_check &= ~otmp->owornmask;
                 if (otmp->owornmask)
                     update_mon_intrinsics(mtmp, otmp, FALSE, FALSE);
+            } else if ((otmp->owornmask & W_WEP) != 0L) {
+                mtmp->mw = (struct obj *) 0;
             }
             t_collect(otmp);
         }

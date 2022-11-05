@@ -1078,6 +1078,9 @@ register struct trap *ttmp;
          * escaping with multiple acquired transient items.
          * If you won and are leaving without having taken anything, they'll
          * vanish, but them's the breaks. */
+        /* TNNT TODO - should the entire level just be deleted at this
+         * point, as the dungeons are when entering the planes, in addition to
+         * deleting all transient items? */
         struct obj *list, *nobj;
         for (list = collect_all_transient(NULL); list; list = nobj) {
             nobj = list->nobj;
