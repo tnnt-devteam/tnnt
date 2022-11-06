@@ -199,6 +199,7 @@ moverock()
                         pline("KAABLAMM!!!  %s %s land mine.",
                               Tobjnam(otmp, "trigger"),
                               ttmp->madeby_u ? "your" : "a");
+                        tnnt_achieve(A_BLEW_UP_BOULDER);
                         blow_up_landmine(ttmp);
                         /* if the boulder remains, it should fill the pit */
                         fill_pit(u.ux, u.uy);
