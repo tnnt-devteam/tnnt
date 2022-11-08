@@ -989,13 +989,28 @@ struct monst *mtmp;
         otmp2 = otmp->nexthere;
         /* TNNT swap chest - these are not part of a gelcube's diet */
         if (otmp->otyp == SWAP_CHEST) {
-
-            if (cansee(mtmp->mx, mtmp->my) && flags.verbose) {
+            /* TNNT TODO FOR 3.7: will need to integrate this into the new
+             * hugely complex system of bitfields for 'verbose' */
+            if (!flags.verbose) {
+                /* simpler message: don't leave the monster's sudden
+                 * disappearance from the map entirely unexplained */
+                if (canspotmon(mtmp) && cansee(mtmp->mx, mtmp->my))
+                    pline("%s eats %s, but then explodes into bits!",
+                           Monnam(mtmp), the(xname(otmp)));
+            } else if (canspotmon(mtmp) && cansee(mtmp->mx, mtmp->my)) {
                 pline("%s eats %s.", Monnam(mtmp), the(xname(otmp)));
-                pline("%s shudders briefly and explodes into a million tiny globs of goo as %s bursts out of it!",
-                      Monnam(mtmp), the(xname(otmp)));
-            } else if (flags.verbose) {
-                You_hear("a loud SPLAT!");
+                pline(
+       "%s shudders briefly, then explodes into a million tiny globs of goo!",
+                      Monnam(mtmp));
+                pline("%s lands heavily back on the %s.",
+                      The(xname(otmp)), surface(mtmp->mx, mtmp->my));
+            } else if (cansee(mtmp->mx, mtmp->my)) {
+                pline("%s disappears momentarily, then reappears%s!",
+                      The(xname(otmp)), !Deaf ? " with a loud splat" : "");
+            } else {
+                You_hear("a loud SPLAT %s!",
+                         (distu(mtmp->mx, mtmp->my) < 4 * 4
+                            ? "nearby" : "in the distance"));
             }
             mondead(mtmp);
             return 0;
