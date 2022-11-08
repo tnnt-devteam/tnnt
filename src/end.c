@@ -1693,14 +1693,6 @@ int how;
     if (have_windows && !iflags.toptenwin)
         exit_nhwindows((char *) 0), have_windows = FALSE;
     topten(how, endtime);
-#ifdef TNNT_ACHIEVEMENTS_DIR
-    /* Do this here, after the xlogfile is written, rather than where the NPC
-     * file is written above, because if the file is erased up there and then
-     * they take a long time lingering on the end of game disclosure, we don't
-     * want the temporary achievements reported on the site to look like they
-     * vanished with no explanation. */
-    erase_temp_achievements_file();
-#endif /* TNNT_ACHIEVEMENTS_DIR */
     if (have_windows)
         exit_nhwindows((char *) 0);
 
