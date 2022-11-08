@@ -5488,7 +5488,7 @@ get_temp_achfile_path(void)
      * TNNT TODO: Should this also involve SERVER_LOCATION or some other
      * server identifier? It is possible that someone starts two games at the
      * same second on two different servers. */
-    Sprintf(buf, "%s/%s.%ld.", TNNT_ACHIEVEMENTS_DIR, plname, ubirthday);
+    Sprintf(buf, "%s/%s.tach.", TNNT_ACHIEVEMENTS_DIR, plname);
 #ifdef SERVER_LOCATION
     /* hardfought specific assumption: SERVER_LOCATION is "us.hardfought.org" or
      * "eu" or "au"
