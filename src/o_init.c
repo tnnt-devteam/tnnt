@@ -376,6 +376,17 @@ boolean credit_hero;
             update_inventory();
         }
     }
+    /* SHIM for 2022 broken wand identification achievement - TODO: REMOVE THIS
+     * FOR 2023 TOURNAMENT
+     * copy of code above that doesn't require a new object to be identified, if
+     * it's a wand; this is because some players earned the identify all wands
+     * achievement but were not credited, and would never get credit since the
+     * above code only triggers when something is newly identified */
+    if (moves > 1L && !program_state.gameover
+        && objects[oindx].oc_class == WAND_CLASS && mark_as_known
+        && credit_hero) {
+        tnnt_check_identifications(oindx);
+    }
 }
 
 /* TNNT: would identifying otyp count towards an "identify multiple items of a
@@ -418,7 +429,10 @@ short otyp;
     case RING_CLASS:
         return A_IDENTIFIED_ALL_RINGS; /* no exceptions */
     case WAND_CLASS:
-        return A_IDENTIFIED_ALL_WANDS; /* no exceptions */
+        if (OBJ_NAME(objects[otyp]) == 0) /* exclude random shuffled names */
+            return NO_TNNT_ACHIEVEMENT;
+        else
+            return A_IDENTIFIED_ALL_WANDS;
     case AMULET_CLASS:
         return A_IDENTIFIED_ALL_AMULETS;
     case POTION_CLASS:
