@@ -539,9 +539,11 @@ static short uniq_objs[] = {
 int
 dodiscovered() /* free after Robert Viduya */
 {
+#define TNNT_MAX_MULTI_ACH 5
     register int i, dis;
     int ct = 0;
     char *s, oclass, prev_class, classes[MAXOCLASSES], buf[BUFSZ];
+    char multiprogress[TNNT_MAX_MULTI_ACH][BUFSZ];
     winid tmpwin;
 
     tmpwin = create_nhwindow(NHW_MENU);
@@ -568,11 +570,11 @@ dodiscovered() /* free after Robert Viduya */
 
     for (s = classes; *s; s++) {
         /* TNNT: count up number of items in this class that count towards
-         * achievement (note: this currently does not do GEM_CLASS because it
-         * has multiple subranges that qualify for different achievements) */
+         * achievement */
         int tnnt_disc = 0;
         int tnnt_tot = 0;
         int tnnt_ach = NO_TNNT_ACHIEVEMENT;
+        int j, tnnt_ach_multi = 0;
         oclass = *s;
         prev_class = oclass + 1; /* forced different from oclass */
         for (i = bases[(int) oclass];
@@ -597,11 +599,14 @@ dodiscovered() /* free after Robert Viduya */
                     /* found multiple different achievements inside the same
                      * object class; this is used for the 3 gem identification
                      * achievements */
-                    if (tnnt_disc > 0 && tnnt_tot > 0) {
-                        Sprintf(buf, "  (%s: %d/%d)",
+                    if (tnnt_disc > 0 && tnnt_tot > 0
+                        && tnnt_ach_multi < TNNT_MAX_MULTI_ACH) {
+                        /* store the line so we can print it at the end of the
+                         * category */
+                        Sprintf(multiprogress[tnnt_ach_multi++],
+                                "  (%s: %d/%d)",
                                 tnnt_achievements[tnnt_ach].name,
                                 tnnt_disc, tnnt_tot);
-                        putstr(tmpwin, 0, buf);
                     }
                     tnnt_disc = tnnt_tot = 0;
                 }
@@ -611,8 +616,13 @@ dodiscovered() /* free after Robert Viduya */
                     tnnt_disc++;
             }
         }
+        /* for classes with multiple achievements, print any lines that we may
+         * have prepared while traversing the category */
+        for (j = 0; j < tnnt_ach_multi; j++) {
+            putstr(tmpwin, 0, multiprogress[j]);
+        }
         if (tnnt_disc > 0 && tnnt_tot > 0) {
-            /* same printing code as a few lines above */
+            /* similar printing code as a few lines above */
             Sprintf(buf, "  (%s: %d/%d)",
                     tnnt_achievements[tnnt_ach].name,
                     tnnt_disc, tnnt_tot);
