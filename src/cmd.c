@@ -5785,8 +5785,9 @@ boolean final;
     Sprintf(buf, "You %skilled %d/3 erinyes.", maybe_have(final),
             mvitals[PM_ERINYS].ukilled);
     putstr(en_win, 0, buf);
-    Sprintf(buf, "You %skilled the Wizard of Yendor %d times.",
-            maybe_have(final), tnnt_globals.wizards_killed);
+    Sprintf(buf, "You %skilled the Wizard of Yendor %d time%s.",
+            maybe_have(final), tnnt_globals.wizards_killed,
+            plur(tnnt_globals.wizards_killed));
     putstr(en_win, 0, buf);
     Sprintf(buf, "Home plane elementals killed: %d/4 %d/4 %d/4 %d/4",
             tnnt_globals.elementals_killed_on_planes[0],
