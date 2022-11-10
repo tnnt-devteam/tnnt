@@ -376,8 +376,9 @@ boolean credit_hero;
             update_inventory();
         }
     }
-    /* SHIM for 2022 broken wand identification achievement - TODO: REMOVE THIS
-     * FOR 2023 TOURNAMENT
+#ifndef TNNT_DISABLE_2022_MIKADO_SHIM
+    /* SHIM for 2022 broken wand identification achievement 
+     * TNNT TODO: REMOVE THIS (and the one in learnwand) FOR 2023 TOURNAMENT
      * copy of code above that doesn't require a new object to be identified, if
      * it's a wand; this is because some players earned the identify all wands
      * achievement but were not credited, and would never get credit since the
@@ -387,6 +388,7 @@ boolean credit_hero;
         && credit_hero) {
         tnnt_check_identifications(oindx);
     }
+#endif
 }
 
 /* TNNT: would identifying otyp count towards an "identify multiple items of a

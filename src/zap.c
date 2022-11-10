@@ -115,6 +115,15 @@ struct obj *obj;
            even if hero is currently blinded (skips redundant makeknown) */
         if (objects[obj->otyp].oc_name_known) {
             obj->dknown = 1; /* will usually be set already */
+#ifndef TNNT_DISABLE_2022_MIKADO_SHIM
+            /* SHIM for 2022 broken wand identification achievement -- further
+             * explanation in discover_object.  This one is necessary because
+             * otherwise we'll never hit discover_object from zapping a known
+             * wand.
+             * TNNT TODO: Remove this (and the one in discover_object) for
+             * 2023 */
+            makeknown(obj->otyp);
+#endif
 
         /* otherwise discover it if item itself has been or can be seen */
         } else {
