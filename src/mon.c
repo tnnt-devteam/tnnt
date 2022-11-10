@@ -2646,7 +2646,7 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
          * If the guard is permanently removed this (and tnntstats) should
          * just use mvitals[PM_WIZARD_OF_YENDOR].ukilled.
          */
-        tnnt_globals.wizards_killed++;
+        tnnt_globals.wizards_killed = mvitals[PM_WIZARD_OF_YENDOR].ukilled;
         if (tnnt_globals.wizards_killed >= 20)
             tnnt_achieve(A_KILLED_20_WIZARDS);
 
