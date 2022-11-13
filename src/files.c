@@ -5128,6 +5128,7 @@ write_npc_data(VOID_ARGS)
     /* lines 7-end: carried objects, we preserve only certain fields because
      * others would be pointless... */
     for (obj = invent; obj; obj = obj->nobj) {
+        boolean clear_usecount = FALSE;
         /* Items that should be excluded go here.
          * We don't go into cobj, so a container with stuff in it turns into an
          * empty container later. */
@@ -5135,6 +5136,14 @@ write_npc_data(VOID_ARGS)
             || obj->otyp == SCR_MISSING_CODE        /* no devteam quest help */
             || objects[obj->otyp].oc_unique)         /* no sequence breaking */
             continue;
+        /* Clear fields for items marked as TNNT-special for one achievement or
+         * another, to prevent people e.g. getting the "athame generated in a
+         * lich's inventory" achivement just by taking one out of the swap
+         * chest. */
+        if ((obj->otyp == ATHAME && obj->lichathame)
+            || (obj->otyp == RIN_INVISIBILITY && obj->nazgul_ring)
+            || (obj->otyp == CANDY_BAR && obj->soko_candy))
+            clear_usecount = TRUE;
         /* TNNT TODO: handling for items that shouldn't be excluded entirely,
          * but should be modified somehow (e.g. artifacts). */
 
@@ -5148,7 +5157,7 @@ write_npc_data(VOID_ARGS)
                 obj->recharged,
                 obj->greased,
                 obj->corpsenm,
-                obj->usecount,
+                (clear_usecount ? 0 : obj->usecount),
                 obj->oeaten);
         /* TNNT TODO: oname for non-artifacts? */
     }

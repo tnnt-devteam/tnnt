@@ -128,6 +128,9 @@ struct obj {
 #define lichathame usecount /* TNNT: athame created with a lich */
 #define nazgul_ring usecount /* TNNT: ring of invisibility is from a Nazgul */
 #define soko_candy usecount /* TNNT: candy bar generated during mklev in Sokoban */
+    /* TNNT: When adding new tracking fields that overload usecount or some
+     * other field, remember you may need to add it as a special case in
+     * write_swapobj_file so that it doesn't get preserved in the swap chest. */
     unsigned oeaten;        /* nutrition left in food, if partly eaten */
     long age;               /* creation date */
     long owornmask;
