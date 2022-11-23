@@ -1081,7 +1081,8 @@ register struct obj *obj;
         if (obj->spe != ((obj->oclass == WAND_CLASS) ? -1 : 0)
             && otyp != WAN_CANCELLATION /* can't cancel cancellation */
             && otyp != MAGIC_LAMP /* cancelling doesn't remove djinni */
-            && otyp != CANDELABRUM_OF_INVOCATION) {
+            && otyp != CANDELABRUM_OF_INVOCATION
+            && otyp != SWAP_CHEST) {
             costly_alteration(obj, COST_CANCEL);
             obj->spe = (obj->oclass == WAND_CLASS) ? -1 : 0;
         }
