@@ -1809,7 +1809,7 @@ struct mkroom *croom;
         if (m->cancelled)
             mtmp->mcan = 1;
         if (m->revived)
-            mtmp->mrevived = 1;
+            mtmp->mrevived = REVIVED;
         if (m->avenge)
             mtmp->mavenge = 1;
         if (m->stunned)

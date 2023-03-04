@@ -640,7 +640,7 @@ resurrect()
         mtmp = makemon(&mons[PM_WIZARD_OF_YENDOR], u.ux, u.uy, MM_NOWAIT);
         /* affects experience; he's not coming back from a corpse
            but is subject to repeated killing like a revived corpse */
-        if (mtmp) mtmp->mrevived = 1;
+        if (mtmp) mtmp->mrevived = REVIVED;
     } else {
         /* look for a migrating Wizard */
         verb = "elude";

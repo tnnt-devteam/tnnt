@@ -2638,17 +2638,12 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
         tnnt_achieve(A_KILLED_DRAGON);
     }
     if (mtmp->iswiz) {
-        /* TNNT TODO: consider if there is a way to restrict this to "100%
-         * all-natural wizard spawns" and exclude repeated stoning/unstoning.
-         * Checking mrevived doesn't work because all the "thought thou
-         * couldst kill me" spawns set that too, thus many false positives.
-         *
-         * If the guard is permanently removed this (and tnntstats) should
-         * just use mvitals[PM_WIZARD_OF_YENDOR].ukilled.
-         */
-        tnnt_globals.wizards_killed = mvitals[PM_WIZARD_OF_YENDOR].ukilled;
-        if (tnnt_globals.wizards_killed >= 20)
-            tnnt_achieve(A_KILLED_20_WIZARDS);
+        /* prevent cheap stoning and unstoning */
+        if ((mtmp->mrevived & REVIVED_BY_HERO) == 0) {
+            tnnt_globals.wizards_killed++;
+            if (tnnt_globals.wizards_killed >= 20)
+                tnnt_achieve(A_KILLED_20_WIZARDS);
+        }
 
         tnnt_globals.wizkills_this_action++;
         if (tnnt_globals.wizkills_this_action >= 2)

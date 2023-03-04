@@ -605,6 +605,8 @@ int *fail_reason;
         /* restore a petrified monster */
         cc.x = x, cc.y = y;
         mon = montraits(statue, &cc, (cause == ANIMATE_SPELL));
+        if (cause == ANIMATE_SPELL)
+            mon->mrevived |= REVIVED_BY_HERO;
         if (mon && mon->mtame && !mon->isminion)
             wary_dog(mon, TRUE);
     } else {
