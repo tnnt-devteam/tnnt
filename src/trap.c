@@ -605,8 +605,6 @@ int *fail_reason;
         /* restore a petrified monster */
         cc.x = x, cc.y = y;
         mon = montraits(statue, &cc, (cause == ANIMATE_SPELL));
-        if (cause == ANIMATE_SPELL)
-            mon->mrevived |= REVIVED_BY_HERO;
         if (mon && mon->mtame && !mon->isminion)
             wary_dog(mon, TRUE);
     } else {
@@ -655,6 +653,8 @@ int *fail_reason;
     else
         mon->mundetected = FALSE;
     mon->msleeping = 0;
+    if (mon->mrevived && cause == ANIMATE_SPELL)
+        mon->mrevived |= REVIVED_BY_HERO;
     if (cause == ANIMATE_NORMAL || cause == ANIMATE_SHATTER) {
         /* trap always releases hostile monster */
         mon->mtame = 0; /* (might be petrified pet tossed onto trap) */
