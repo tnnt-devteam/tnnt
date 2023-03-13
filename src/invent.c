@@ -927,6 +927,23 @@ struct obj *obj;
          * for correct calculation */
         set_moreluck();
     }
+    /* TNNT: achievements for carrying a certain amount of gold; check when
+     * adding more gold to inventory */
+    if (obj->oclass == COIN_CLASS) {
+        long umoney = money_cnt(invent);
+        /* TNNT TODO FOR 3.7(?): with the new param for hidden_gold, can
+         * include it without leaking info on !cknown bags. if this is done,
+         * `if (oclass == COIN_CLASS)` needs `|| Has_contents(obj)` added. */
+        /* umoney += hidden_gold(); */
+        if (umoney >= 100000L) {
+            tnnt_achieve(A_CARRIED_100000_GOLD);
+        }
+        if (umoney >= 50000L) {
+            /* not an else if; getting 100000 nets both of these */
+            tnnt_achieve(A_CARRIED_50000_GOLD);
+        }
+    }
+    /* end TNNT code */
 }
 
 /*
