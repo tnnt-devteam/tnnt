@@ -1204,6 +1204,7 @@ int ochance, achance; /* percent chance for ordinary objects, artifacts */
         || obj->otyp == SPE_BOOK_OF_THE_DEAD
         || obj->otyp == CANDELABRUM_OF_INVOCATION
         || obj->otyp == BELL_OF_OPENING
+        || obj->otyp == SWAP_CHEST /* TNNT - preserve swap chest */
         || (obj->otyp == CORPSE && is_rider(&mons[obj->corpsenm]))) {
         return TRUE;
     } else {
@@ -1950,8 +1951,8 @@ struct obj *obj, *otmp;
             obj->dknown = 1;
             if (Is_container(obj) || obj->otyp == STATUE) {
                 if (obj->otyp == SWAP_CHEST) {
-                    pline ("The contents of %s seem to be in a state of flux",
-                           the(xname(obj)));
+                    pline_The("contents of %s seem to be in a state of flux.",
+                          the(xname(obj)));
                     res = 1;
                     learn_it = TRUE;
                     break;
