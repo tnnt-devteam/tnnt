@@ -5738,7 +5738,7 @@ boolean final;
              i++) {
             if (!tnnt_pot_is_harmful(i))
                 continue;
-            if ((tnnt_globals.pots_drunk & (1 << (i - bases[POTION_CLASS])))
+            if ((tnnt_globals.pots_drunk & (1UL << (i - bases[POTION_CLASS])))
                 && (final || objects[i].oc_name_known)) {
                 Strcat(buf, " ");
                 /* chop the potion name at 5 characters to avoid overly long
@@ -5759,7 +5759,7 @@ boolean final;
         for (i = FIRST_POLEARM; i <= LAST_POLEARM; i++) {
             if (objects[i].oc_skill != P_POLEARMS)
                 continue;
-            if (tnnt_globals.polearms_found & (1 << (i - FIRST_POLEARM))) {
+            if (tnnt_globals.polearms_found & (1UL << (i - FIRST_POLEARM))) {
                 Strcat(buf, " ");
                 /* 3 characters should be sufficient for polearms */
                 (void) strncat(buf, OBJ_NAME(objects[i]), 3);

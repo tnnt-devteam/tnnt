@@ -645,7 +645,7 @@ struct tnnt_globals_t {
 #define HARMFUL_DRUNK  0x0b2009c
     uint32_t pots_drunk;
 #define tnnt_pot_is_harmful(otyp) \
-    ((HARMFUL_DRUNK & (1 << ((otyp) - bases[POTION_CLASS]))) != 0UL)
+    ((HARMFUL_DRUNK & (1UL << ((otyp) - bases[POTION_CLASS]))) != 0UL)
 
 #define FIRST_POLEARM PARTISAN
 #define LAST_POLEARM BEC_DE_CORBIN
