@@ -5715,7 +5715,7 @@ boolean final;
     if (tnnt_globals.untrapped_types & TNNT_UNTRAP_DART)
         Strcat(buf, " dart");
     if (tnnt_globals.untrapped_types & TNNT_UNTRAP_BOARD)
-        Strcat(buf, " squeaky board");
+        Strcat(buf, " board");
     if (tnnt_globals.untrapped_types & TNNT_UNTRAP_BEARTRAP)
         Strcat(buf, " bear");
     if (tnnt_globals.untrapped_types & TNNT_UNTRAP_LANDMINE)
