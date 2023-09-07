@@ -2426,13 +2426,15 @@ register struct obj *obj;
     /* TNNT swap chest --> */
     } else if (current_container->otyp == SWAP_CHEST) {
         if (current_container->swapitems >= SWAP_ITEMS_MAX) {
-            pline("%s refuses to impose further on your generosity, and encourages you to take something and be on your way.",
+            pline("%s refuses to impose further on your generosity.",
                   The(xname(current_container)));
+            pline("It encourages you to take something and be on your way.");
             return -1;
         }
         if (!swap_chest_eligible(obj)) {
             Strcpy(buf, xname(obj));
-            pline("%s spits out your %s disdainfully.", The(xname(current_container)), buf);
+            pline("%s spits out your %s disdainfully.",
+                  The(xname(current_container)), buf);
             return 0;
         }
         tnnt_achieve(A_PUT_INTO_SWAPCHEST);
@@ -2553,7 +2555,13 @@ register struct obj *obj;
                 "satisfied.", "grateful.", "very pleased!"
             };
             pline("Your offering is snatched from your hands!");
-            You_feel("that %s is %s",buf, chest_emotions[current_container->swapitems-1]);
+            You_feel("that %s is %s", buf,
+                     chest_emotions[current_container->swapitems - 1]);
+            /* since hero's own swap items aren't actually visible to her,
+               don't even bother putting them into swapchest->cobj since it'll
+               do nothing but mess up the item count.  just free & return. */
+            delobj(obj);
+            return 1;
         }
 
         /* gold in container always needs to be added to credit */
@@ -2565,7 +2573,7 @@ register struct obj *obj;
             /* TNNT: check for six booze existing in the container. Can't just
              * check the quan of the return value of add_to_container because
              * they might not stack. */
-            struct obj* otmp;
+            struct obj *otmp;
             int nbooze = 0;
             for (otmp = current_container->cobj; otmp; otmp = otmp->nobj) {
                 if (otmp->otyp == POT_BOOZE)
