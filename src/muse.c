@@ -2099,6 +2099,11 @@ struct obj *obj;
             return TRUE;
         break;
     case TOOL_CLASS:
+        /* TNNT TODO FOR 3.7: exclude the swap chest from the list of
+           containers monsters will pick up, so players can't exploit it to
+           get the swap chest onto another level and die/leave bones,
+           producing a 3-swap-chest game for whatever other player gets that
+           bones level. */
         if (typ == PICK_AXE)
             return (boolean) needspick(mon->data);
         if (typ == UNICORN_HORN)
