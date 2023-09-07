@@ -5216,13 +5216,12 @@ xchar x, y;
     FILE* npcfile;
     int pm_num, gender, npc_level, hpmax;
     unsigned short mintrinsics;
-    char npcname[BUFSZ], path[BUFSZ];
+    char npcname[BUFSZ], path[BUFSZ], line[BUFSZ];
     char *npcfilename = pick_npc_file();
     const long int mmflags = (NO_MINVENT | MM_NOCOUNTBIRTH | MM_ADJACENTOK
                               | MM_ANGRY | MM_ASLEEP);
     struct obj *obj;
-    int strategy, otyp, quan, spe, cursed, blessed, oerodeproof, recharged,
-        greased, corpsenm, usecount, oeaten;
+    int strategy;
     struct monst *npc;
     Sprintf(path, "%s/%s", TNNT_NPC_DIR, npcfilename);
     if (!*npcfilename || !(npcfile = fopen(path, "r"))) {
@@ -5281,21 +5280,30 @@ xchar x, y;
 
     /* Inventory! */
     strategy = NEED_HTH_WEAPON;
-    while (11 == fscanf(npcfile, "%d %d %d %d %d %d %d %d %d %d %d\n",
-                        &otyp, &quan, &spe, &cursed, &blessed, &oerodeproof, &recharged,
-                        &greased, &corpsenm, &usecount, &oeaten)) {
-        obj = mksobj(otyp, FALSE, FALSE);
-        obj->quan = quan;
-        obj->spe = spe;
-        obj->cursed = cursed;
-        obj->blessed = blessed;
-        obj->oerodeproof = oerodeproof;
-        obj->recharged = recharged;
-        obj->greased = greased;
-        obj->corpsenm = corpsenm;
-        obj->usecount = usecount;
-        obj->oeaten = oeaten;
-        mpickobj(npc, obj);
+    while (fgets(line, BUFSZ, npcfile) != NULL) {
+        char objnam[BUFSZ];
+        int n, otyp, quan, spe, cursed, blessed, oerodeproof, recharged,
+            greased, corpsenm, usecount, oeaten;
+        n = sscanf(line, "%d %d %d %d %d %d %d %d %d %d %d %[^\n]",
+                   &otyp, &quan, &spe, &cursed, &blessed, &oerodeproof,
+                   &recharged, &greased, &corpsenm, &usecount, &oeaten,
+                   objnam);
+        if (n >= 11) {
+            obj = mksobj(otyp, FALSE, FALSE);
+            obj->quan = quan;
+            obj->spe = spe;
+            obj->cursed = cursed;
+            obj->blessed = blessed;
+            obj->oerodeproof = oerodeproof;
+            obj->recharged = recharged;
+            obj->greased = greased;
+            obj->corpsenm = corpsenm;
+            obj->usecount = usecount;
+            obj->oeaten = oeaten;
+            if (n == 12)
+                obj = oname(obj, objnam);
+            mpickobj(npc, obj);
+        }
     }
     m_dowear(npc, TRUE);
     npc->weapon_check = strategy;
