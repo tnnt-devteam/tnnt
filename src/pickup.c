@@ -2258,102 +2258,129 @@ struct obj *obj;
         return FALSE;
     switch (obj->oclass) {
         case RING_CLASS:
-            return !obj->cursed;
+            /* reject cursed rings and chargeable rings at +0 or worse */
+            if ((objects[obj->otyp].oc_charged && obj->spe <= 0)
+                || obj->cursed)
+                return FALSE;
+            return TRUE;
         case WAND_CLASS:
             /* no wands of nothing or wishing. Maybe other stuff here too */
             switch (obj->otyp) {
-                case WAN_NOTHING:
-                case WAN_WISHING:
-                    return FALSE;
-                default:
-                    return obj->spe > 0;
+            case WAN_NOTHING:
+            case WAN_WISHING:
+                return FALSE;
+            default:
+                return obj->spe > 0;
             }
         case AMULET_CLASS:
             switch (obj->otyp) {
-                case AMULET_OF_STRANGULATION:
-                case AMULET_OF_RESTFUL_SLEEP:
-                case FAKE_AMULET_OF_YENDOR: /* real one already checked */
-                    return FALSE;
-                default:
-                    return !obj->cursed;
+            case AMULET_OF_STRANGULATION:
+            case AMULET_OF_RESTFUL_SLEEP:
+            case FAKE_AMULET_OF_YENDOR: /* real one already checked */
+                return FALSE;
+            default:
+                return !obj->cursed;
             }
         case POTION_CLASS:
-            if (objects[obj->otyp].oc_magic) return TRUE;
+            if (objects[obj->otyp].oc_magic)
+                return TRUE;
             return (obj->otyp == POT_WATER) && (obj->blessed || obj->cursed);
         case TOOL_CLASS:
-            if (Has_contents(obj)) return FALSE; /* bags with stuff in them not allowed */
+            if (Has_contents(obj))
+                return FALSE; /* bags with stuff in them not allowed */
             switch (obj->otyp) {
-                case MAGIC_LAMP:
-                    return FALSE;
-                /* charged allowed tools - conveniently, these all work the same. */
-                case EXPENSIVE_CAMERA:
-                case TINNING_KIT:
-                case MAGIC_MARKER:
-                    return (obj->spe > 10);
-                case STETHOSCOPE:
-                case OILSKIN_SACK:
-                    return TRUE;
+            case MAGIC_LAMP:
+                return FALSE;
+            /* charged allowed tools: conveniently, these all work the same */
+            case EXPENSIVE_CAMERA:
+            case TINNING_KIT:
+            case MAGIC_MARKER:
+                return (obj->spe > 10);
+            /* useful non-magical tools */
+            case STETHOSCOPE:
+            case OILSKIN_SACK:
+            case BUGLE:
+            case TOOLED_HORN:
+            case LEATHER_DRUM:
+                return TRUE;
             }
             /* other tools only require at least 1 charge */
             if (!is_weptool(obj) && objects[obj->otyp].oc_charged)
                 return (obj->spe > 0);
-            if (objects[obj->otyp].oc_magic) return TRUE; /* magic things including empty BoH ok */
+            if (objects[obj->otyp].oc_magic)
+                return TRUE; /* magic things including empty BoH ok */
             return FALSE;
         case WEAPON_CLASS:
-            if (obj->cursed) return FALSE;
-            return (obj->otyp == SILVER_SABER || obj->otyp == SILVER_SPEAR
-                    || obj->otyp == SILVER_DAGGER || obj->spe > 2);
-        case ARMOR_CLASS:
-            if (obj->cursed) return FALSE;
+            if (obj->cursed)
+                return FALSE;
+            /* permit silver weapons (saber, spear, dagger), athame suitable
+               for fast semi-permanent engraving, and any other >=+3 weapon */
             switch (obj->otyp) {
-                case DUNCE_CAP:
-                case FUMBLE_BOOTS:
-                case GAUNTLETS_OF_FUMBLING:
-                    return FALSE;
-                case GRAY_DRAGON_SCALES:
-                case SILVER_DRAGON_SCALES:
-                case RED_DRAGON_SCALES:
-                case ORANGE_DRAGON_SCALES:
-                case WHITE_DRAGON_SCALES:
-                case BLACK_DRAGON_SCALES:
-                case BLUE_DRAGON_SCALES:
-                case GREEN_DRAGON_SCALES:
-                case YELLOW_DRAGON_SCALES:
-                    return TRUE;
-                default:
-                    return (objects[obj->otyp].oc_magic || obj->spe > 2);
+            case SILVER_SABER:
+            case SILVER_DAGGER:
+            case SILVER_SPEAR:
+                return TRUE;
+            /* allow athame as long as it's not so dull it can't engrave */
+            case ATHAME:
+                return (obj->spe > -3);
+            default:
+                return (obj->spe > 2);
+            }
+        case ARMOR_CLASS:
+            if (obj->cursed)
+                return FALSE;
+            switch (obj->otyp) {
+            case DUNCE_CAP:
+            case FUMBLE_BOOTS:
+            case GAUNTLETS_OF_FUMBLING:
+                return FALSE;
+            case GRAY_DRAGON_SCALES:
+            case SILVER_DRAGON_SCALES:
+            case RED_DRAGON_SCALES:
+            case ORANGE_DRAGON_SCALES:
+            case WHITE_DRAGON_SCALES:
+            case BLACK_DRAGON_SCALES:
+            case BLUE_DRAGON_SCALES:
+            case GREEN_DRAGON_SCALES:
+            case YELLOW_DRAGON_SCALES:
+                return TRUE;
+            default:
+                return (objects[obj->otyp].oc_magic || obj->spe > 2);
             }
         case SPBOOK_CLASS:
-            if (obj->cursed) return FALSE;
-            if (obj->otyp == SPE_BLANK_PAPER || obj->otyp == SPE_NOVEL) return FALSE;
-            if (obj->spestudied > MAX_SPELL_STUDY-1) return FALSE; /* this probably allows 2 more readings */
-
+            if (!objects[obj->otyp].oc_magic)
+                return FALSE;
+            if (obj->cursed)
+                return FALSE;
+            if (obj->spestudied > MAX_SPELL_STUDY - 1)
+                return FALSE; /* this probably allows 2 more readings */
             return TRUE;
         case SCROLL_CLASS:
-            if (!objects[obj->otyp].oc_magic) return FALSE;
+            if (!objects[obj->otyp].oc_magic)
+                return FALSE;
             switch (obj->otyp) {
-                case SCR_AMNESIA:
-                case SCR_PUNISHMENT:
-                    return FALSE;
-                default:
-                    return TRUE;
+            case SCR_AMNESIA:
+            case SCR_PUNISHMENT:
+                return FALSE;
+            default:
+                return TRUE;
             }
         case FOOD_CLASS:
             switch(obj->otyp) {
-                case LUMP_OF_ROYAL_JELLY:
-                case SPRIG_OF_WOLFSBANE:
+            case LUMP_OF_ROYAL_JELLY:
+            case SPRIG_OF_WOLFSBANE:
+                return TRUE;
+            case TIN:
+                /* spinach only; currently not allowing other potentially-
+                   useful tins (like dragon) */
+                if (obj->spe == 1)
                     return TRUE;
-                case TIN:
-                    /* spinach only; currently not allowing other tins like dragons */
-                    if (obj->spe == 1)
-                        return TRUE;
-                    /* FALLTHRU */
-                default:
-                    return FALSE;
+                /* FALLTHRU */
+            default:
+                return FALSE;
             }
-        default: /* food, gems, boulders, statues, iron chains, etc */
+        default: /* gems, boulders, statues, iron chains, etc */
             return FALSE;
-
     }
 }
 
