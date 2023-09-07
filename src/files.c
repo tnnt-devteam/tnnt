@@ -4810,22 +4810,34 @@ char *
 make_swapobj_filename(o)
 struct obj *o;
 {
-    static const char *const prefixes[] = { "eu.", "us.", "au." };
     /* needs to be big enough for full path */
     static char buf[BUFSZ];
-    const char *pfx;
-    /* swap chest files go to one of the three servers randomly; we mark them
-     * with a prefix if they are going to a server other than this one. a
-     * crobjob will transfer them periodically. */
-    pfx = prefixes[rn2(SIZE(prefixes))];
 #ifndef LOCAL_SWAPCHESTS
+    static const char *const prefixes[] = { "eu.", "us.", "au." };
+    const char *pfx = (const char *) 0;
+    const schar num_servers = SIZE(prefixes);
+    /* swap chest files go to one of the three servers, weighted so the most
+     * likely destination is the current/source server (currently weighted at
+     * 60% for the source server, 20% for the other two -- this should be
+     * reevaluated after it's been tested a bit).
+     * we mark the swap item files with a prefix if they are going to a server
+     * other than this one. a crobjob will transfer them periodically. */
+#define LOCAL_RETENTION_WEIGHT 60
+    if (rn2(100) >= LOCAL_RETENTION_WEIGHT) {
+        schar destination = rn2(num_servers);
+        /* if we select the current server, pick some other one.  this should
+         * never select the same server a second time. */
+        if (!strncmpi(SERVER_LOCATION, prefixes[destination], 3)) {
+            destination += rn1(num_servers - 2, 1);
+            destination %= num_servers;
+        }
+        pfx = prefixes[destination];
+    }
     Sprintf(buf, "%s/%sSW-%ld-%s-%x", TNNT_SWAPCHEST_DIR,
-            strncmpi(SERVER_LOCATION, pfx, 3) ? pfx : "",
-            time(NULL), plname, o->o_id);
+            pfx ? pfx : "", time(NULL), plname, o->o_id);
 #else
     Sprintf(buf, "%s/SW-%ld-%s-%x", TNNT_SWAPCHEST_DIR,
             time(NULL), plname, o->o_id);
-    nhUse(pfx);
 #endif
     return strdup(buf);
 }
