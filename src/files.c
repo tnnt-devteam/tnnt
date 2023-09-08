@@ -5159,7 +5159,7 @@ write_npc_data(VOID_ARGS)
         /* TNNT TODO: handling for items that shouldn't be excluded entirely,
          * but should be modified somehow (e.g. artifacts). */
 
-        fprintf(npcfile, "%d %ld %d %d %d %d %d %d %d %d %d\n",
+        fprintf(npcfile, "%d %ld %d %d %d %d %d %d %d %d %d",
                 obj->otyp,
                 obj->quan,
                 obj->spe,
@@ -5171,7 +5171,15 @@ write_npc_data(VOID_ARGS)
                 obj->corpsenm,
                 (clear_usecount ? 0 : obj->usecount),
                 obj->oeaten);
-        /* TNNT TODO: oname for non-artifacts? */
+        if (has_oname(obj)) {
+            if (obj->oartifact) {
+                /* TNNT TODO: maybe scuff the name a bit like in
+                 * do_name.c:1271, rather than leave it completely off? */
+            } else {
+                fprintf(npcfile, " %s", ONAME(obj));
+            }
+        }
+        fprintf(npcfile, "\n");
     }
     fclose(npcfile);
 }
