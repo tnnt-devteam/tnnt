@@ -5172,12 +5172,18 @@ write_npc_data(VOID_ARGS)
                 (clear_usecount ? 0 : obj->usecount),
                 obj->oeaten);
         if (has_oname(obj)) {
+            char nambuf[BUFSZ], *namep = nambuf;
+            Strcpy(nambuf, ONAME(obj));
             if (obj->oartifact) {
-                /* TNNT TODO: maybe scuff the name a bit like in
-                 * do_name.c:1271, rather than leave it completely off? */
-            } else {
-                fprintf(npcfile, " %s", ONAME(obj));
+                /* scuff up the artifact name so it's recognizable but not
+                 * actually an artiname, like "slippage" in do_name.c */
+                if (!strncmpi(namep, "the ", 4))
+                    namep += 4;
+                do {
+                    wipeout_text(namep, 1 + rn2_on_display_rng(2), 0U);
+                } while (!strcmp(nambuf, ONAME(obj)));
             }
+            fprintf(npcfile, " %s", namep);
         }
         fprintf(npcfile, "\n");
     }
