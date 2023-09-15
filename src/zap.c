@@ -918,6 +918,7 @@ boolean by_hero;
             mtmp->former_rank = ghost->former_rank;
             /* separate ghost monster no longer exists */
             mongone(ghost);
+            tnnt_achieve(A_RECORPOREALIZED_GHOST);
         }
         free_omid(corpse);
     }
