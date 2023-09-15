@@ -950,6 +950,14 @@ cobra
 	hood to keep the sun off Brahm as he slept.  Look, and be
 	afraid!'
 		[ Rikki-tikki-tavi, by Rudyard Kipling ]
+*missing code
+code
+	A program may reside in one or more source files.  Source files
+	may be compiled separately and loaded together, along with
+	previously compiled functions from libraries.  We will not go
+	into that process here, however, since the details vary from
+	system to system.
+	    [ The C Programming Language, by Kernighan and Ritchie ]
 c*ckatrice
 	Once in a great while, when the positions of the stars are
 	just right, a seven-year-old rooster will lay an egg.  Then,
