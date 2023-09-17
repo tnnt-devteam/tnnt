@@ -1399,6 +1399,8 @@ long flag;
             if (nx == x && ny == y)
                 continue;
             ntyp = levl[nx][ny].typ;
+            if (ntyp == NKI)
+                continue;
             if (IS_ROCK(ntyp)
                 && !((flag & ALLOW_WALL) && may_passwall(nx, ny))
                 && !((IS_TREE(ntyp) ? treeok : rockok) && may_dig(nx, ny)))

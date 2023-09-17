@@ -133,6 +133,7 @@ moverock()
         }
         if (isok(rx, ry) && !IS_ROCK(levl[rx][ry].typ)
             && levl[rx][ry].typ != IRONBARS
+            && levl[rx][ry].typ != NKI
             && (!IS_DOOR(levl[rx][ry].typ) || !(u.dx && u.dy)
                 || doorless_door(rx, ry)) && !sobj_at(BOULDER, rx, ry)) {
             ttmp = t_at(rx, ry);
@@ -664,6 +665,8 @@ boolean
 may_passwall(x, y)
 register xchar x, y;
 {
+    if (levl[x][y].typ == NKI)
+        return FALSE;
     return (boolean) !(IS_STWALL(levl[x][y].typ)
                        && (levl[x][y].wall_info & W_NONPASSWALL));
 }
@@ -719,6 +722,36 @@ xchar x, y;
                       && x == inv_pos.x && y == inv_pos.y);
 }
 
+void
+tnnt_rfk_move(x, y)
+int x, y;
+{
+    if (!Is_rfk_level(&u.uz))
+        return;
+
+    if (x == tnnt_globals.kitten_loc.x && y == tnnt_globals.kitten_loc.y) {
+        struct monst *kitten;
+
+        if (tnnt_is_achieved(A_FOUND_KITTEN))
+            impossible("found more than one kitten?");
+
+        pline("You found kitten!  Way to go!");
+        tnnt_globals.kitten_loc.x = tnnt_globals.kitten_loc.y = 0;
+        levl[x][y].typ = ROOM;
+        kitten = makemon(&mons[PM_KITTEN], x, y, MM_NOGRP);
+        if (u.uconduct.pets) {
+            tamedog(kitten, (struct obj *) 0);
+        } else {
+            kitten->mpeaceful = 1;
+            set_malign(kitten);
+        }
+        tnnt_achieve(A_FOUND_KITTEN);
+    } else {
+        char buf[BUFSZ];
+        pline1(tnnt_get_nki_text(buf, x, y));
+    }
+}
+
 /* return TRUE if (dx,dy) is an OK place to move
  * mode is one of DO_MOVE, TEST_MOVE, TEST_TRAV, or TEST_TRAP
  */
@@ -736,7 +769,7 @@ int mode;
     /*
      *  Check for physical obstacles.  First, the place we are going.
      */
-    if (IS_ROCK(tmpr->typ) || tmpr->typ == IRONBARS) {
+    if (IS_ROCK(tmpr->typ) || tmpr->typ == IRONBARS || tmpr->typ == NKI) {
         if (Blind && mode == DO_MOVE)
             feel_location(x, y);
         if (Passes_walls && may_passwall(x, y)) {
@@ -748,6 +781,10 @@ int mode;
                "there" being somewhere the player isn't sure of */
             if (mode == DO_MOVE)
                 pline("There is an obstacle there.");
+            return FALSE;
+        } else if (tmpr->typ == NKI) {    
+            if (mode == DO_MOVE)
+                tnnt_rfk_move(x, y);
             return FALSE;
         } else if (tmpr->typ == IRONBARS) {
             if ((dmgtype(youmonst.data, AD_RUST)

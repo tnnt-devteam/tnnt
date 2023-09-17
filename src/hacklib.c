@@ -1219,4 +1219,16 @@ strbuf_t *strbuf;
     }
 }
 
+unsigned int
+tnnt_coord_hash(int x, int y, int z)
+{
+    const int magic_number = 0x45d9f3b;
+    /* use Cantor pairing to reduce (x,y) to a unique number */
+    unsigned int a = ((x+y) * (x+y+1) / 2) + x + z + ubirthday;
+    a = a * magic_number;
+    a = ((a >> 16) ^ a) * magic_number;
+    a = ((a >> 16) ^ a);
+    return a;
+}
+
 /*hacklib.c*/

@@ -572,4 +572,51 @@ const char *filename;
     program_state.something_worth_saving = save_something;
 }
 
+char *
+tnnt_get_nki_text(buf, x, y)
+char *buf;
+xchar x, y;
+{
+    dlb *fh;
+
+    buf[0] = '\0';
+    fh = dlb_fopen(TNNT_NKIFILE, "r");
+    if (fh) {
+        long sizetxt = 0L, starttxt = 0L, endtxt = 0L, tidbit = 0L;
+        char *endp, line[BUFSZ], xbuf[BUFSZ];
+        unsigned int seed = tnnt_coord_hash(x, y, ledger_no(&u.uz));
+
+        /* skip "don't edit" comment */
+        (void) dlb_fgets(line, sizeof line, fh);
+
+        (void) dlb_fseek(fh, 0L, SEEK_CUR);
+        starttxt = dlb_ftell(fh);
+        (void) dlb_fseek(fh, 0L, SEEK_END);
+        endtxt = dlb_ftell(fh);
+        sizetxt = endtxt - starttxt;
+        /* might be zero (only if file is empty); should complain in that
+           case but if could happen over and over, also the suggestion
+           that save and restore might fix the problem wouldn't be useful */
+        if (sizetxt < 1L)
+            return buf;
+        tidbit = seed % sizetxt;
+
+        (void) dlb_fseek(fh, starttxt + tidbit, SEEK_SET);
+        (void) dlb_fgets(line, sizeof line, fh);
+        if (!dlb_fgets(line, sizeof line, fh)) {
+            (void) dlb_fseek(fh, starttxt, SEEK_SET);
+            (void) dlb_fgets(line, sizeof line, fh);
+        }
+        if ((endp = index(line, '\n')) != 0)
+            *endp = 0;
+        Strcat(buf, xcrypt(line, xbuf));
+        (void) dlb_fclose(fh);
+    } else {
+        couldnt_open_file(TNNT_NKIFILE);
+    }
+
+    return buf;
+}
+
+
 /*rumors.c*/

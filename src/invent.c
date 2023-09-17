@@ -3466,6 +3466,8 @@ char *buf;
         cmap = S_tree; /* "tree" */
     else if (ltyp == IRONBARS)
         dfeature = "set of iron bars";
+    else if (ltyp == NKI)
+        dfeature = "a mysterious thing";
 
     if (cmap >= 0)
         dfeature = defsyms[cmap].explanation;

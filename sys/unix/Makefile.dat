@@ -9,7 +9,7 @@ NHSROOT=..
 # SHELL=E:/GEMINI2/MUPFEL.TTP
 # UUDECODE=uudecode
 
-VARDAT = bogusmon data engrave epitaph rumors quest.dat oracles options
+VARDAT = bogusmon data engrave epitaph nki rumors quest.dat oracles options
 
 all:	$(VARDAT) spec_levs quest_levs dungeon
 
@@ -115,6 +115,9 @@ oracles:	oracles.txt ../util/makedefs
 engrave:	engrave.txt ../util/makedefs
 	../util/makedefs -s
 
+nki:	nki.txt ../util/makedefs
+	../util/makedefs -s
+
 epitaph:	epitaph.txt ../util/makedefs
 	../util/makedefs -s
 
@@ -128,7 +131,8 @@ options:	../util/makedefs
 
 spec_levs: ../util/lev_comp \
 	bigroom.des castle.des endgame.des gehennom.des knox.des medusa.des \
-	mines.des oracle.des sokoban.des tower.des yendor.des devteam.des npcdeath.des
+	mines.des oracle.des sokoban.des tower.des yendor.des devteam.des \
+	npcdeath.des robotfindskitn.des
 	../util/lev_comp bigroom.des
 	../util/lev_comp castle.des
 	../util/lev_comp endgame.des
@@ -136,6 +140,7 @@ spec_levs: ../util/lev_comp \
 	../util/lev_comp knox.des
 	../util/lev_comp devteam.des
 	../util/lev_comp npcdeath.des
+	../util/lev_comp robotfindskitn.des
 	../util/lev_comp medusa.des
 	../util/lev_comp mines.des
 	../util/lev_comp oracle.des

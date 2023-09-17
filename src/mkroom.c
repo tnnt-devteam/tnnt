@@ -976,6 +976,9 @@ int sym;
     case S_water:
         typ = WATER;
         break;
+    case S_nki:
+        typ = NKI;
+        break;
     default:
         break; /* not a cmap symbol? */
     }

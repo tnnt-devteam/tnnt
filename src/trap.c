@@ -2007,6 +2007,11 @@ int style;
                 unblock_point(bhitpos.x, bhitpos.y);
         }
 
+        if (dist > 0 && isok(bhitpos.x + dx, bhitpos.y + dy)
+            && levl[bhitpos.x + dx][bhitpos.y + dy].typ == NKI) {
+            x2 = bhitpos.x, y2 = bhitpos.y; /* object stops here */
+            break;
+        }
         /* if about to hit iron bars, do so now */
         if (dist > 0 && isok(bhitpos.x + dx, bhitpos.y + dy)
             && levl[bhitpos.x + dx][bhitpos.y + dy].typ == IRONBARS) {

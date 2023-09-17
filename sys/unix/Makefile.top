@@ -57,7 +57,7 @@ DIRPERM  = 0755
 # for Gnome
 # VARDATND = x11tiles pet_mark.xbm pilemark.xbm rip.xpm mapbg.xpm
 
-VARDATD = bogusmon data engrave epitaph oracles options quest.dat rumors
+VARDATD = bogusmon data engrave epitaph nki oracles options quest.dat rumors
 VARDAT = $(VARDATD) $(VARDATND)
 
 # Some versions of make use the SHELL environment variable as the shell
@@ -87,7 +87,7 @@ SPEC_LEVS = asmodeus.lev baalz.lev bigrm-*.lev castle.lev fakewiz?.lev \
 	juiblex.lev knox.lev medusa-?.lev minend-?.lev minefill.lev \
 	minetn-?.lev oracle.lev orcus.lev sanctum.lev soko?-?.lev \
 	tower?.lev valley.lev wizard?.lev devteam.lev npcdeath.lev \
-	astral.lev air.lev earth.lev fire.lev water.lev
+	robotfindskitn.lev astral.lev air.lev earth.lev fire.lev water.lev
 QUEST_LEVS = ???-goal.lev ???-fil?.lev ???-loca.lev ???-strt.lev
 
 DATNODLB = $(VARDATND) license symbols $(CSS)
@@ -121,6 +121,10 @@ bogusmon: $(GAME)
 
 epitaph: $(GAME)
 	( cd dat ; $(MAKE) epitaph )
+
+# TNNT: nki file
+nki: $(GAME)
+	( cd dat ; $(MAKE) nki )
 
 rumors: $(GAME)
 	( cd dat ; $(MAKE) rumors )

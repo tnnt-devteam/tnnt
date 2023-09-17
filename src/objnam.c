@@ -3784,6 +3784,10 @@ struct obj *no_wish;
             lev->typ = IRONBARS;
             pline("Iron bars.");
             madeterrain = TRUE;
+        } else if (!BSTRCMPI(bp, p - 3, "nki")) {
+            lev->typ = NKI;
+            pline("A non-kitten item.");
+            madeterrain = TRUE;
         }
 
         if (madeterrain) {

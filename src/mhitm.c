@@ -721,7 +721,8 @@ struct monst *magr, *mdef;
     lev = &levl[dx][dy];
     if (IS_ROCK(lev->typ) || closed_door(dx, dy) || IS_TREE(lev->typ)
         /* not passes_bars(); engulfer isn't squeezing through */
-        || (lev->typ == IRONBARS && !is_whirly(magr->data)))
+        || (lev->typ == IRONBARS && !is_whirly(magr->data))
+        || lev->typ == NKI)
         return FALSE;
 
     return TRUE;

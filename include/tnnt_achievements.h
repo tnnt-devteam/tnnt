@@ -23,6 +23,7 @@ ACH("Watch Your Footing", "Step onto the vibrating square",
 /* "TNNT custom content" group */
 ACH("It's Dangerous To Go Alone! Take This", "Put an item into a swap chest",
     PUT_INTO_SWAPCHEST),
+ACH("Paw Patrol", "Find kitten", FOUND_KITTEN),
 ACH("The True Dungeon Masters", "Chat with an active devteam member",
     TALKED_TO_DEVTEAM),
 ACH("There Is No Spoon", "Finish the task the devteam requires of you",

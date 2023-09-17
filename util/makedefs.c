@@ -378,6 +378,9 @@ char *options;
             do_rnd_access_file(BOGUSMONFILE,
                 /* default bogusmon:  iconic monster that isn't in nethack */
                                "grue");
+            /* TNNT: robotfindskitten */
+            do_rnd_access_file(TNNT_NKIFILE, "A puppy.");
+
             break;
         case 'h':
         case 'H':

@@ -182,6 +182,7 @@ const struct symdef defsyms[MAXPCHARS] = {
        { ' ', "air", C(CLR_CYAN) },                  /* open air */
 /*40*/ { '#', "cloud", C(CLR_GRAY) },                /* [part of] a cloud */
        { '}', "water", C(CLR_BLUE) },                /* under water */
+       { '#', "mystery item", C(CLR_GRAY) },         /* TNNT NKI */
        { '^', "arrow trap", C(HI_METAL) },           /* trap */
        { '^', "dart trap", C(HI_METAL) },            /* trap */
        { '^', "falling rock trap", C(CLR_GRAY) },    /* trap */
@@ -682,6 +683,7 @@ struct symparse loadsyms[] = {
     { SYM_PCHAR, S_hcdbridge, "S_hcdbridge" },
     { SYM_PCHAR, S_air, "S_air" },
     { SYM_PCHAR, S_cloud, "S_cloud" },
+    { SYM_PCHAR, S_nki, "S_nki" },
     { SYM_PCHAR, S_poisoncloud, "S_poisoncloud" },
     { SYM_PCHAR, S_water, "S_water" },
     { SYM_PCHAR, S_arrow_trap, "S_arrow_trap" },

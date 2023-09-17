@@ -785,6 +785,8 @@ const char *kickobjnam;
         what = "a ladder";
     else if (maploc->typ == IRONBARS)
         what = "an iron bar";
+    else if (maploc->typ == NKI)
+        what = "a mysterious thing";
     else
         what = "something weird";
     return strcat(strcpy(buf, "kicking "), what);
@@ -1124,7 +1126,7 @@ dokick()
             }
             return 1;
         }
-        if (maploc->typ == IRONBARS)
+        if (maploc->typ == IRONBARS || maploc->typ == NKI)
             goto ouch;
         if (IS_TREE(maploc->typ)) {
             struct obj *treefruit;

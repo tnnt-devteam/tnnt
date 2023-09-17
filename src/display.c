@@ -1786,6 +1786,9 @@ xchar x, y;
     case WATER:
         idx = S_water;
         break;
+    case NKI:
+        idx = S_nki;
+        break;
     case DBWALL:
         idx = (ptr->horizontal) ? S_hcdbridge : S_vcdbridge;
         break;
@@ -1969,7 +1972,7 @@ static const char *type_names[MAX_TYPE] = {
     "SDOOR", "SCORR", "POOL", "MOAT", "WATER", "DRAWBRIDGE_UP", "LAVAPOOL",
     "IRON_BARS", "DOOR", "CORR", "ROOM", "STAIRS", "LADDER", "FOUNTAIN",
     "THRONE", "SINK", "GRAVE", "ALTAR", "ICE", "DRAWBRIDGE_DOWN", "AIR",
-    "CLOUD"
+    "CLOUD", "NKI"
 };
 
 static const char *

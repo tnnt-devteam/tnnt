@@ -824,7 +824,8 @@ const char **firstmatch;
 struct permonst **for_supplement;
 {
     static const char mon_interior[] = "the interior of a monster",
-                      unreconnoitered[] = "unreconnoitered";
+                      unreconnoitered[] = "unreconnoitered",
+                      tnnt_rfkdescr[] = "something unclear and mysterious";
     static char look_buf[BUFSZ];
     char prefix[BUFSZ];
     int i, alt_i, j, glyph = NO_GLYPH,
@@ -870,6 +871,11 @@ struct permonst **for_supplement;
     x_str = 0;
     if (!looked) {
         ; /* skip special handling */
+    } else if (levl[cc.x][cc.y].typ == NKI) {
+        /* TNNT robotfindskitten -- hide "item" info from a distance */
+        Sprintf(out_str, "It's hard to tell from a distance what that is.");
+        *firstmatch = tnnt_rfkdescr;
+        return 1;
     } else if (((u.uswallow || submerged) && distu(cc.x, cc.y) > 2)
                /* detection showing some category, so mostly background */
                || ((iflags.terrainmode & (TER_DETECT | TER_MAP)) == TER_DETECT

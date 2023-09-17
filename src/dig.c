@@ -1674,6 +1674,8 @@ char *msg;
         else if (ltyp == DRAWBRIDGE_DOWN   /* "lowered drawbridge" */
                  || ltyp == DBWALL)        /* "raised drawbridge" */
             supporting = "drawbridge";
+        else if (ltyp == NKI)
+            supporting = "mysterious item";
 
         if (supporting) {
             Sprintf(msg, "The %s%ssupporting structures remain intact.",

@@ -457,7 +457,7 @@ dosounds()
     }
     /* TNNT - clue the player in to the location of the devteam level */
     if (Is_rogue_level(&u.uz) && !rn2(200)) {
-        static const char* const devteambranch_msg[] = {
+        static const char *const devteambranch_msg[] = {
             "a nearby typing noise.",
             "people arguing about game balance.",
             "a voice say \"3.7.0\".",
@@ -467,11 +467,15 @@ dosounds()
     }
     if (at_dgn_entrance("Deathmatch Arena") && !rn2(200)
         && !tnnt_globals.deathmatch_started) {
-        static const char* const arena_msg[] = {
+        static const char *const arena_msg[] = {
             "the roaring of a crowd.",
             "the clash of steel on steel."
         };
         You_hear1(arena_msg[rn2(2)]);
+    }
+    if (at_dgn_entrance("robotfindskitten")
+        && !tnnt_is_achieved(A_FOUND_KITTEN) && !rn2(200)) {
+        You_hear1("a plaintive meow.");
     }
 }
 

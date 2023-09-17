@@ -600,6 +600,10 @@ int x, y;
                               && (levl[x][y].doormask & D_ISOPEN)
                               && (u.ux - x) && (u.uy - y));
 
+        if (levl[x][y].typ == NKI) {
+            You("Stop moving.");
+            return FALSE;
+        }
         if (IS_ROCK(levl[x][y].typ) || closed_door(x, y) || odoor_diag) {
             const char *s;
 

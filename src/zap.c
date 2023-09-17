@@ -3326,9 +3326,10 @@ struct obj **pobj; /* object tossed/used, set to NULL
 
         /* iron bars will block anything big enough and break some things */
         if (weapon == THROWN_WEAPON || weapon == KICKED_WEAPON) {
-            if (typ == IRONBARS
-                && hits_bars(pobj, x - ddx, y - ddy, bhitpos.x, bhitpos.y,
-                             point_blank ? 0 : !rn2(5), 1)) {
+            if ((typ == IRONBARS
+                 && (hits_bars(pobj, x - ddx, y - ddy, bhitpos.x, bhitpos.y,
+                               point_blank ? 0 : !rn2(5), 1)))
+                || typ == NKI) {
                 /* caveat: obj might now be null... */
                 obj = *pobj;
                 bhitpos.x -= ddx;

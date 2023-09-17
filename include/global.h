@@ -46,6 +46,7 @@
 #define EPITAPHFILE "epitaph"   /* random epitaphs on graves */
 #define ENGRAVEFILE "engrave"   /* random engravings on the floor */
 #define BOGUSMONFILE "bogusmon" /* hallucinatory monsters */
+#define TNNT_NKIFILE "nki"      /* TNNT: robotfindskitten non-kitten items */
 #define TRIBUTEFILE "tribute"   /* 3.6 tribute to Terry Pratchett */
 #define LEV_EXT ".lev"          /* extension for special level files */
 

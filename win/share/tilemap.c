@@ -567,6 +567,7 @@ struct {
 {S_hcdbridge, "horizontal closed drawbridge", "raised drawbridge"},
 {S_air,      "air", "air"},
 {S_cloud,    "cloud", "cloud"},
+{S_nki,      "non-kitten item", "mystery item"},
 {S_water,    "water", "water"},
 {S_arrow_trap,           "arrow trap", "arrow trap"},
 {S_dart_trap,            "dart trap", "dart trap"},

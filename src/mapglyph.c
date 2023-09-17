@@ -115,7 +115,11 @@ unsigned mgflags;
         explode_color(offset / MAXEXPCHARS);
     } else if ((offset = (glyph - GLYPH_CMAP_OFF)) >= 0) { /* cmap */
         idx = offset + SYM_OFF_P;
-        if (has_rogue_color && iflags.use_color) {
+        if (idx == S_nki && Is_rfk_level(&u.uz)) {
+            unsigned int hash = tnnt_coord_hash(x, y, 0);
+            idx = (hash % (VENOM_CLASS - 2)) + SYM_OFF_O + 1;
+            color = hash % CLR_MAX;
+        } else if (has_rogue_color && iflags.use_color) {
             if (offset >= S_vwall && offset <= S_hcdoor)
                 color = CLR_BROWN;
             else if (offset >= S_arrow_trap && offset <= S_polymorph_trap)
