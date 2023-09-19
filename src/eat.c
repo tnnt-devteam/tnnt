@@ -1038,7 +1038,8 @@ int pm;
         /*FALLTHRU*/
     case PM_BAT:
         make_stunned((HStun & TIMEOUT) + 30L, FALSE);
-        tnnt_achieve(A_STUNNED_BAT_MEAT);
+        if (pm == PM_BAT)
+            tnnt_achieve(A_STUNNED_BAT_MEAT);
         break;
     case PM_GIANT_MIMIC:
         tmp += 10;
