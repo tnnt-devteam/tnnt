@@ -4974,7 +4974,7 @@ short *rcode;
             const char *pfx = (swapnum >= 0 && swapnum < SWAP_ITEMS_MAX)
                                 ? swprefixes[swapnum] : "a gift from";
 
-            if (!strcmp(donorname, plname)) {
+            if (!strcmp(donorname, plname) && !wizard) {
                 /* The player doesn't get to see their own items. */
                 *rcode = MKSWAPOBJ_IGNOREOBJ;
                 return (struct obj *) 0;
