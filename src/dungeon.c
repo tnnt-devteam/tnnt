@@ -2686,7 +2686,10 @@ recalc_mapseen()
             bp->bonesknown = TRUE;
             mptr->flags.knownbones = 1;
             lvl_bones_found++;
-            tnnt_achieve(A_FOUND_BONES_PILE);
+            if (strncmp(plname, bp->who, strlen(plname)))
+                /* this one is only for someone else's bones, though the other
+                 * ones below don't care */
+                tnnt_achieve(A_FOUND_BONES_PILE);
         }
     if (lvl_bones_found >= 2)
         tnnt_achieve(A_DOUBLE_BONES);
