@@ -36,13 +36,8 @@ struct obj *thrownscroll;
     xchar qstatus = tnnt_globals.devteam_quest_status;
     boolean is_leader = !strcmp(MNAME(devteam), "Mike Stephenson");
 
-    if (u.uhave.amulet && !thrownscroll) {
-        if (qstatus == DTQUEST_COMPLETED) {
-            com_pager(QT_DEVTEAM_AOY_REACTION);
-        } else {
-            verbalize("Are you trying to sic the wizard on us?");
-            verbalize("Get the Amulet out of here and we can talk.");
-        }
+    if (u.uhave.amulet && !thrownscroll && qstatus == DTQUEST_COMPLETED) {
+        com_pager(QT_DEVTEAM_AOY_REACTION);
         return;
     }
 
@@ -1079,8 +1074,26 @@ register struct monst *mtmp;
                 { "LOUD NOISES!!", 1}
             };
             struct devteam_msg chosenmsg;
+            boolean is_leader = !strcmpi(MNAME(mtmp), "Mike Stephenson");
+
             tnnt_achieve(A_TALKED_TO_DEVTEAM);
-            if (!strcmpi(MNAME(mtmp), "Mike Stephenson")) {
+            if (u.uhave.amulet && !Deaf
+                && (tnnt_globals.devteam_quest_status != DTQUEST_COMPLETED
+                    || !is_leader)) {
+                const char *const aoy_responses[] = {
+                    "Are you trying to sic Rodney on us?",
+                    "Get that thing away from me!",
+                    "Why on earth did you bring that here!?",
+                };
+                pline(
+             "Upon seeing the Amulet of Yendor, %s recoils in apparent fear.",
+                      Monnam(mtmp));
+                verbalize("%s", aoy_responses[rn2(SIZE(aoy_responses))]);
+                if (is_leader)
+                    verbalize("We can talk more once you get it out of here.");
+                break;
+            }
+            if (is_leader) {
                 devteam_quest(mtmp, NULL);
                 break;
             }
