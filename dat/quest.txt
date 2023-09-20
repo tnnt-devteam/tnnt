@@ -3514,6 +3514,19 @@ With a DevTeam member dead, the world starts to destabilize...
 Light fails, the floor shakes, and the air grows hot.
 The remaining members look at you reproachfully, and then vanish from the world.
 %E
+%Cc - 00084
+Mike Stephenson looks at you with faint distaste.
+
+    "The Amulet of Yendor?  You're on your own with that mess.  We came
+    here to locate our missing code, not to step in and interfere with
+    the careers of individual heroes."
+
+He shifts uncomfortably from side to side.
+
+    "And frankly, it makes us all a little nervous to be around it.
+    Now get out of here, and take the Amulet with you -- you're late
+    enough for the Planes as it is."
+%E [You are encouraged to hurry up and take the Amulet to its destination.]
 #
 #	TEST PATTERN
 #

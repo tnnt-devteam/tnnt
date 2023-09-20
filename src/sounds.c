@@ -30,11 +30,21 @@ int rmtyp;
  * devteam member. */
 void
 devteam_quest(devteam, thrownscroll)
-struct monst* devteam;
-struct obj* thrownscroll;
+struct monst *devteam;
+struct obj *thrownscroll;
 {
     xchar qstatus = tnnt_globals.devteam_quest_status;
     boolean is_leader = !strcmp(MNAME(devteam), "Mike Stephenson");
+
+    if (u.uhave.amulet && !thrownscroll) {
+        if (qstatus == DTQUEST_COMPLETED) {
+            com_pager(QT_DEVTEAM_AOY_REACTION);
+        } else {
+            verbalize("Are you trying to sic the wizard on us?");
+            verbalize("Get the Amulet out of here and we can talk.");
+        }
+        return;
+    }
 
     if (thrownscroll && !(is_leader && (Deaf || qstatus == DTQUEST_INPROGRESS))) {
         /* Throwing to leader with the quest in progress is OK and will make him
