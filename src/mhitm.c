@@ -147,8 +147,7 @@ register struct monst *mtmp;
                 if (!u.uswallow && (mtmp == u.ustuck)) {
                     if (!rn2(4)) {
                         pline("%s releases you!", Monnam(mtmp));
-                        if (is_pool(mtmp->mx, mtmp->my))
-                            tnnt_achieve(A_SURVIVED_DROWNING);
+                        tnnt_maybe_grant_ahab();
                         u.ustuck = 0;
                     } else
                         break;

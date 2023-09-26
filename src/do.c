@@ -1376,6 +1376,7 @@ boolean at_stairs, falling, portal;
         unplacebc();
     reset_utrap(FALSE); /* needed in level_tele */
     fill_pit(u.ux, u.uy);
+    tnnt_maybe_grant_ahab();
     u.ustuck = 0; /* idem */
     u.uinwater = 0;
     u.uundetected = 0; /* not hidden, even if means are available */

@@ -323,9 +323,8 @@ boolean allow_drag;
             }
         }
     }
-    if (u.ustuck && !u.uswallow && is_pool(u.ustuck->mx, u.ustuck->my))
-        tnnt_achieve(A_SURVIVED_DROWNING);
     reset_utrap(FALSE);
+    tnnt_maybe_grant_ahab();
     u.ustuck = 0;
     u.ux0 = u.ux;
     u.uy0 = u.uy;

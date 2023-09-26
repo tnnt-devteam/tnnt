@@ -1533,8 +1533,7 @@ domove_core()
         if (u.ustuck && (x != u.ustuck->mx || y != u.ustuck->my)) {
             if (distu(u.ustuck->mx, u.ustuck->my) > 2) {
                 /* perhaps it fled (or was teleported or ... ) */
-                if (is_pool(x, y))
-                    tnnt_achieve(A_SURVIVED_DROWNING);
+                tnnt_maybe_grant_ahab();
                 u.ustuck = 0;
             } else if (sticks(youmonst.data)) {
                 /* When polymorphed into a sticking monster,
@@ -1558,8 +1557,7 @@ domove_core()
                 case 2:
  pull_free:
                     You("pull free from %s.", mon_nam(u.ustuck));
-                    if (is_pool(u.ustuck->mx, u.ustuck->my))
-                        tnnt_achieve(A_SURVIVED_DROWNING);
+                    tnnt_maybe_grant_ahab();
                     u.ustuck = 0;
                     break;
                 case 3:
@@ -3265,6 +3263,24 @@ struct obj *otmp;
         otmp = otmp->nobj;
     }
     return 0L;
+}
+
+/* Grant the "Captain Ahab" achievement (A_SURVIVED_DROWNING) if the hero is
+ * being grabbed by a sea monster with a drowning attack.  This function is
+ * called just before zeroing out u.ustuck. */
+void
+tnnt_maybe_grant_ahab()
+{
+    if (u.ustuck && !u.uswallow && !sticks(youmonst.data)
+        && u.ustuck->data->mlet == S_EEL
+#if 0
+        /* unnecessary I think because no other scenario but attempted
+         * drowning would lead to a sea monster becoming u.ustuck(?) */
+        && dmgtype(u.ustuck->data, AD_WRAP)
+#endif
+        ) {
+        tnnt_achieve(A_SURVIVED_DROWNING);
+    }
 }
 
 /*hack.c*/

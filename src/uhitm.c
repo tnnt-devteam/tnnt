@@ -502,8 +502,7 @@ int dieroll;
                 monflee(mon, !rn2(3) ? rnd(100) : 0, FALSE, TRUE);
 
                 if (u.ustuck == mon && !u.uswallow && !sticks(youmonst.data)) {
-                    if (is_pool(mon->mx, mon->my))
-                        tnnt_achieve(A_SURVIVED_DROWNING);
+                    tnnt_maybe_grant_ahab();
                     u.ustuck = 0;
                 }
             }

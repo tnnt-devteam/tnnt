@@ -3018,8 +3018,7 @@ long hmask, emask; /* might cancel timeout */
             else {
                 pline("Startled, %s can no longer hold you!",
                       mon_nam(u.ustuck));
-                if (is_pool(u.ustuck->mx, u.ustuck->my))
-                    tnnt_achieve(A_SURVIVED_DROWNING);
+                tnnt_maybe_grant_ahab();
             }
             u.ustuck = 0;
         }
