@@ -1748,14 +1748,16 @@ tnnt_setup_rfk_level()
     xchar x, y;
     int i, tryct;
     /* place kitten */
-    tryct = 50;
-    do {
-        tnnt_globals.kitten_loc.x = x = rnd(COLNO - 1);
-        tnnt_globals.kitten_loc.y = y = rn2(ROWNO);
-    } while ((!goodpos(x, y, (struct monst *) 0, 0)
-              || t_at(x, y) != (struct trap *) 0)
-             && --tryct > 0);
-    levl[x][y].typ = NKI;
+    if (!tnnt_is_achieved(A_FOUND_KITTEN)) { /* in case of #wizmakemap */
+        tryct = 50;
+        do {
+            tnnt_globals.kitten_loc.x = x = rnd(COLNO - 1);
+            tnnt_globals.kitten_loc.y = y = rn2(ROWNO);
+        } while ((!goodpos(x, y, (struct monst *) 0, 0)
+                || t_at(x, y) != (struct trap *) 0)
+                && --tryct > 0);
+        levl[x][y].typ = NKI;
+    }
 
     /* place non-kitten items */
     for (i = 0; i < NUM_NKI; i++) {
