@@ -2422,7 +2422,9 @@ register struct obj *obj;
         return 0;
     /* TNNT swap chest --> */
     } else if (current_container->otyp == SWAP_CHEST) {
-        if (current_container->swapitems >= SWAP_ITEMS_MAX) {
+        if (current_container->swapitems >= SWAP_ITEMS_MAX
+            /* shouldn't happen but just to be safe */
+            || current_container->swapitems == SWAP_CHEST_USED_UP) {
             pline("%s refuses to impose further on your generosity.",
                   The(xname(current_container)));
             pline("It encourages you to take something and be on your way.");
@@ -2712,7 +2714,8 @@ register struct obj *obj;
         /* items from chest come pre-identified */
         makeknown(otmp->otyp);
         makeknown(SWAP_CHEST);
-        pline("%s snaps shut and backs away slightly.",  The(xname(current_container)));
+        pline("%s snaps shut and backs away slightly.",
+              The(xname(current_container)));
         delete_swap_chest_contents(current_container);
         credit_swapobj_donor(otmp);
         u.uconduct.rmswapchest++;
@@ -3085,6 +3088,15 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
                 used |= (menu_loot(0, FALSE) > 0);
             add_valid_menu_class(0);
         }
+    }
+
+    /* make sure we don't go to loot_in with SWAP_CHEST_USED_UP -- that could
+     * happen with 'b' ("take out, then put in") */
+    if (current_container->otyp == SWAP_CHEST
+        && current_container->swapitems == SWAP_CHEST_USED_UP) {
+        /* no special message: the "snaps shut and backs away" message must
+         * have just been printed and will suffice */
+        goto containerdone;
     }
 
     if ((loot_in || stash_one)
