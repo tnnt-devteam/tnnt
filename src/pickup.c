@@ -3041,7 +3041,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
                     pline("%s refuses to reveal its contents.",
                           The(xname(current_container)));
                     You_feel(like_it_wants_sth);
-                    return 0;
+                    goto containerdone;
                 }
                 refresh_swap_chest_contents(current_container);
                 current_container->cknown = 0;
@@ -3129,7 +3129,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
                 pline("%s resists your attempt to rummage through it.",
                       The(xname(current_container)));
                 You_feel(like_it_wants_sth);
-                return 0;
+                goto containerdone;
             }
             refresh_swap_chest_contents(current_container);
         }
