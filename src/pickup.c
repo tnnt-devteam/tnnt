@@ -2994,7 +2994,8 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
      * <The/Your/Shk's container> is empty.  Do what with it? [:irs nq or ?]
      */
     for (;;) { /* repeats iff '?' or ':' gets chosen */
-        outmaybe = (outokay || !current_container->cknown);
+        outmaybe = (outokay || !current_container->cknown
+                    || current_container->otyp != SWAP_CHEST);
         if (!outmaybe)
             (void) safe_qbuf(qbuf, (char *) 0, " is empty.  Do what with it?",
                              current_container, Yname2, Ysimple_name2,
@@ -3077,7 +3078,8 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
             pline1(emptymsg); /* <whatever> is empty. */
             if (!current_container->cknown)
                 used = 1;
-            current_container->cknown = 1;
+            if (current_container->otyp != SWAP_CHEST)
+                current_container->cknown = 1;
         } else {
             add_valid_menu_class(0); /* reset */
             if (flags.menu_style == MENU_TRADITIONAL)
@@ -3138,7 +3140,8 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
             pline1(emptymsg); /* <whatever> is empty. */
             if (!current_container->cknown)
                 used = 1;
-            current_container->cknown = 1;
+            if (current_container->otyp != SWAP_CHEST)
+                current_container->cknown = 1;
         } else {
             add_valid_menu_class(0); /* reset */
             if (flags.menu_style == MENU_TRADITIONAL)
@@ -3242,7 +3245,7 @@ boolean put_in;
     if (loot_everything) {
         if (!put_in) {
             if (current_container->otyp != SWAP_CHEST)
-            current_container->cknown = 1;
+                current_container->cknown = 1;
             for (otmp = current_container->cobj; otmp; otmp = otmp2) {
                 otmp2 = otmp->nobj;
                 res = out_container(otmp);
