@@ -2896,6 +2896,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
     boolean quantum_cat, cursed_mbag, loot_out, loot_in, loot_in_first,
         stash_one, inokay, outokay, outmaybe;
     char c, emptymsg[BUFSZ], qbuf[QBUFSZ], pbuf[QBUFSZ], xbuf[QBUFSZ];
+    const char *const like_it_wants_sth = "like it wants something from you.";
     int used = 0;
     long loss;
 
@@ -2907,7 +2908,8 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
 
     /* not currently used, as the chest vanishes when finished. This may change */
     if (obj->otyp == SWAP_CHEST && obj->swapitems == -1) {
-        You_feel("%s is profoundly disinterested in your further fate.", the(xname(obj)));
+        You_feel("%s is profoundly disinterested in your further fate.",
+                 the(xname(obj)));
         return 0;
     }
     if (!obj->lknown) { /* do this in advance */
@@ -3038,8 +3040,9 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
             /* TNNT Swap chest --> */
             if (current_container->otyp == SWAP_CHEST) {
                 if (current_container->swapitems < SWAP_ITEMS_MIN) {
-                    pline("%s refuses to reveal its contents.", The(xname(current_container)));
-                    You_feel("like it wants something from you.");
+                    pline("%s refuses to reveal its contents.",
+                          The(xname(current_container)));
+                    You_feel(like_it_wants_sth);
                     return 0;
                 }
                 refresh_swap_chest_contents(current_container);
@@ -3064,21 +3067,18 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
 
     /* out-only or out before in */
     if (loot_out && !loot_in_first) {
+        if (current_container->otyp == SWAP_CHEST) {
+            if (current_container->swapitems < SWAP_ITEMS_MIN) {
+                goto swapchest_no_loot_out; /* early return */
+            }
+            refresh_swap_chest_contents(current_container);
+        }
         if (!Has_contents(current_container)) {
             pline1(emptymsg); /* <whatever> is empty. */
             if (!current_container->cknown)
                 used = 1;
             current_container->cknown = 1;
         } else {
-            if (current_container->otyp == SWAP_CHEST) {
-                if (current_container->swapitems < SWAP_ITEMS_MIN) {
-                    pline("%s resists your attempt to rummage through it.", The(xname(current_container)));
-                    You_feel("like it wants something from you.");
-                    return 0;
-                }
-                refresh_swap_chest_contents(current_container);
-                current_container->cknown = 0;
-            }
             add_valid_menu_class(0); /* reset */
             if (flags.menu_style == MENU_TRADITIONAL)
                 used |= traditional_loot(FALSE);
@@ -3125,6 +3125,13 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
     /* out after in */
     if (loot_out && loot_in_first) {
         if (current_container->otyp == SWAP_CHEST) {
+            if (current_container->swapitems < SWAP_ITEMS_MIN) {
+ swapchest_no_loot_out:
+                pline("%s resists your attempt to rummage through it.",
+                      The(xname(current_container)));
+                You_feel(like_it_wants_sth);
+                return 0;
+            }
             refresh_swap_chest_contents(current_container);
         }
         if (!Has_contents(current_container)) {
