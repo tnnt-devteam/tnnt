@@ -58,8 +58,9 @@ struct obj {
                /* for swapchest n_items hero has put in.
                   starts at 0, becomes -1 when item is removed */
 #define swapitems spe
-#define SWAP_ITEMS_MIN 1     /* you must put this many in, to take one out */
-#define SWAP_ITEMS_MAX 3     /* you can put this many in, but only take one out */
+#define SWAP_CHEST_USED_UP -1 /* swap chest is closed for business */
+#define SWAP_ITEMS_MIN 1 /* you must put this many in, to take one out */
+#define SWAP_ITEMS_MAX 3 /* you can put this many in, but only take one out */
     char oclass;    /* object class */
     char invlet;    /* designation in inventory */
     char oartifact; /* artifact array index */

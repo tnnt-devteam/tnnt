@@ -9,10 +9,6 @@
 
 #include "hack.h"
 
-/* TNNT - swap chest related */
-#define SWAP_ITEMS_MIN 1     /* you must put this many in, to take one out */
-#define SWAP_ITEMS_MAX 3     /* you can put this many in, but only take one out */
-
 #define CONTAINED_SYM '>' /* from invent.c */
 
 STATIC_DCL void FDECL(simple_look, (struct obj *, BOOLEAN_P));
@@ -1873,8 +1869,9 @@ int cindex, ccount; /* index of this container (1..N), number of them (N) */
 
     if (cobj->otyp == ICE_BOX)
         tnnt_achieve(A_LOOTED_ICE_BOX);
-    if (cobj->otyp != SWAP_CHEST || cobj->swapitems != -1) {
-        You("%sopen %s...", (!cobj->cknown || !cobj->lknown) ? "carefully " : "",
+    if (cobj->otyp != SWAP_CHEST || cobj->swapitems != SWAP_CHEST_USED_UP) {
+        You("%sopen %s...",
+            (!cobj->cknown || !cobj->lknown) ? "carefully " : "",
             the(xname(cobj)));
     }
     return use_container(cobjp, 0, (boolean) (cindex < ccount));
@@ -2664,7 +2661,7 @@ register struct obj *obj;
     if (current_container->otyp == SWAP_CHEST) {
         if (current_container->swapitems < SWAP_ITEMS_MIN) {
             /* should not get to here if we haven't contributed to the chest */
-            You_feel(current_container->swapitems == -1
+            You_feel(current_container->swapitems == SWAP_CHEST_USED_UP
                        ? "%s is no longer interested in dealing with you."
                        : "%s wants something from you first.",
                      the(xname(current_container)));
@@ -2711,7 +2708,7 @@ register struct obj *obj;
     /* TNNT swap chest --> */
     /* Chest becomes "dormant" after successful removal of item */
     if (current_container->otyp == SWAP_CHEST) {
-        current_container->swapitems = -1;
+        current_container->swapitems = SWAP_CHEST_USED_UP;
         /* items from chest come pre-identified */
         makeknown(otmp->otyp);
         makeknown(SWAP_CHEST);
@@ -2907,7 +2904,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
         return 0;
 
     /* not currently used, as the chest vanishes when finished. This may change */
-    if (obj->otyp == SWAP_CHEST && obj->swapitems == -1) {
+    if (obj->otyp == SWAP_CHEST && obj->swapitems == SWAP_CHEST_USED_UP) {
         You_feel("%s is profoundly disinterested in your further fate.",
                  the(xname(obj)));
         return 0;
