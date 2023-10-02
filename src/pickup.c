@@ -2627,15 +2627,14 @@ register struct obj *obj;
     boolean is_gold = (obj->oclass == COIN_CLASS);
     int res, loadlev;
     long count;
-#define N_SWAPCHEST_FAILMSG 6
-    const char *swapchest_failmsg[N_SWAPCHEST_FAILMSG] = {
-        "The item turns out to be a hologram, and vanishes as your hand passes through it.",
-        "The item vanishes in a puff of logic.",
-        "You thought you felt something in your hand, but it disappears!",
-        "The item suddenly polymporphs into a bowl of petunias, and says 'Oh No, not again!' as it slips from your hands and smashes on the ground.",
-        "The object disintegrates into a swarm of giant cockroaches, that scurry off in different directions.",
+    const char *const swapchest_failmsg[] = {
+        "your hand passes right through it",
+        "it vanishes in a puff of logic",
+        "it disappears just as you touch it",
+        "it disintegrates into a swarm of giant cockroaches",
+        "it slips out of your grasp and shatters",
         /* this one is the most accurate description: */
-        "As you reach for the item, a hand reaches in from another dimension, and snatches it away!"
+        "a hand snatches it away to another dimension"
         };
 
     if (!current_container) {
@@ -2671,7 +2670,9 @@ register struct obj *obj;
         }
         if (!delete_swapobj_file(obj)) {
             /* fails if file already doesn't exist */
-            pline(swapchest_failmsg[rn2(N_SWAPCHEST_FAILMSG)], "%s");
+            pline("You reach for %s, but %s!",
+                  the(simple_typename(obj->otyp)),
+                  swapchest_failmsg[rn2(SIZE(swapchest_failmsg))]);
             return -1;
         }
         free(obj->swapobj_filename);
