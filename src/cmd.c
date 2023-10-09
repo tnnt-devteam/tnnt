@@ -5559,7 +5559,7 @@ boolean final;
 {
 #define maybe_have(final) (!final ? "have " : "")
     char buf[BUFSZ];
-    int i;
+    int i, count, total;
     char eaten[16] = DUMMY;
     char uneaten[16] = DUMMY;
     en_win = create_nhwindow(NHW_MENU);
@@ -5809,11 +5809,33 @@ boolean final;
     }
     Sprintf(buf, "Object classes eaten: %s Uneaten: %s", eaten, uneaten);
     putstr(en_win, 0, buf);
-    /* #snacks command already describes this, just reference it */
-    if (!final) {
-        putstr(en_win, 0, "Foods eaten not shown. To show them, use #snacks.");
-        putstr(en_win, 0, "Species killed not shown. To show them, use #species.");
+    /* brief summary of (and pointer to) #snacks */
+    count = 0;
+    for (i = TRIPE_RATION; i <= TIN; ++i) {
+        int foodidx = i - TRIPE_RATION;
+        if (tnnt_globals.foods_eaten & (1L << foodidx)) {
+            count++;
+        }
     }
+    total = 1 + TIN - TRIPE_RATION;
+    Sprintf(buf, "You %s %d/%d foods.", !final ? "have eaten" : "ate",
+            count, total);
+    if (!final)
+        Strcat(buf, "  For details, use #snacks.");
+    putstr(en_win, 0, buf);
+    /* ditto for #species */
+    count = total = 0;
+    for (i = LOW_PM; i < SPECIAL_PM; ++i) {
+        if (tnnt_common_monst(i)) {
+            count += (mvitals[i].ukilled > 0);
+            total++;
+        }
+    }
+    Sprintf(buf, "You %skilled %d/%d eligible species.", maybe_have(final),
+            count, total);
+    if (!final)
+        Strcat(buf, "  For details, use #species.");
+    putstr(en_win, 0, buf);
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
