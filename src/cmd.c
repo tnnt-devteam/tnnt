@@ -5795,6 +5795,9 @@ boolean final;
             tnnt_globals.elementals_killed_on_planes[2],
             tnnt_globals.elementals_killed_on_planes[3]);
     putstr(en_win, 0, buf);
+    Sprintf(buf, "Monsters on Astral eaten by purple worms: %d",
+            tnnt_globals.astral_worm_gulps);
+    putstr(en_win, 0, buf);
 
     for (i = 0; i < MAXOCLASSES; ++i) {
         char ochar[2];
