@@ -118,7 +118,6 @@ int msgflg; /* positive => no message, zero => message, and */
     int old_acurr, old_abase, old_amax, decr;
     boolean abonflg;
     const char *attrstr;
-    int itr, flag = 1;
 
     if (Fixed_abil || !incr)
         return FALSE;
@@ -141,12 +140,6 @@ int msgflg; /* positive => no message, zero => message, and */
         }
         attrstr = plusattr[ndx];
         abonflg = (ABON(ndx) < 0);
-        for (itr = A_MAX; itr > 0; itr--) {
-            if (ACURR(itr) < 18)
-                flag = 0;
-        }
-        if (flag)
-            tnnt_achieve(A_MAXED_ATTRIBUTES);
     } else { /* incr is negative */
         if (ABASE(ndx) < ATTRMIN(ndx)) {
             /*
