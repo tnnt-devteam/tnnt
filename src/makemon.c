@@ -965,9 +965,8 @@ boolean ghostly;
     /* TNNT - extinct armies
      * Unlike nazgul and erinyes, NOT necessary to kill all of them, only
      * necessary to have officially extincted them. */
-    if ((mndx == PM_SOLDIER  || mndx == PM_KEYSTONE_KOP)
-        && (mvitals[mndx].mvflags & G_EXTINCT))
-        tnnt_achieve(A_EXTINCTED_ARMY_OR_KOPS);
+    if (mndx == PM_SOLDIER && (mvitals[mndx].mvflags & G_EXTINCT))
+        tnnt_achieve(A_EXTINCTED_ARMY);
     return result;
 }
 
