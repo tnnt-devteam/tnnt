@@ -5820,7 +5820,8 @@ boolean final;
             count++;
         }
     }
-    total = 1 + TIN - TRIPE_RATION;
+    total = (1 + TIN - TRIPE_RATION
+             - (GLOB_OF_BLACK_PUDDING - GLOB_OF_GRAY_OOZE));
     Sprintf(buf, "You %s %d/%d foods.", !final ? "have eaten" : "ate",
             count, total);
     if (!final)
