@@ -1528,14 +1528,6 @@ unsigned trflags;
             exercise(A_DEX, FALSE);
         }
         blow_up_landmine(trap);
-        /* TNNT - only in this codepath for blowing up mines: blowing up a mine
-         * in Ludios will necessarily prevent them from achieving "disarm all
-         * mines in Ludios", so track that here. Since a monster triggering a
-         * land mine does not set this flag, the player could theoretically blow
-         * up *most* of Ludios by letting monsters do it, but that is harder
-         * than just disarming the traps manually. */
-        if (Is_knox(&u.uz))
-            tnnt_globals.blew_up_ludios = TRUE;
         if (steed_mid && saddle && !u.usteed)
             (void) keep_saddle_with_steedcorpse(steed_mid, fobj, saddle);
         newsym(u.ux, u.uy); /* update trap symbol */
@@ -1688,6 +1680,11 @@ struct trap *trap;
 {
     int x = trap->tx, y = trap->ty, dbx, dby;
     struct rm *lev = &levl[x][y];
+
+    /* TNNT - blowing up a mine in Ludios will necessarily prevent them from
+     * achieving "disarm all mines in Ludios", so track that here. */
+    if (Is_knox(&u.uz))
+        tnnt_globals.blew_up_ludios = TRUE;
 
     (void) scatter(x, y, 4,
                    MAY_DESTROY | MAY_HIT | MAY_FRACTURE | VIS_EFFECTS,
@@ -4240,11 +4237,8 @@ struct trap *ttmp;
     cnv_trap_obj(LAND_MINE, 1, ttmp, FALSE);
     tnnt_add_untrap(TNNT_UNTRAP_LANDMINE);
 
-    /* Only check this when the hero is disarming a naturally-generated land
-     * mine. Otherwise it's a little too easy to have monsters roam around the
-     * treasure room indiscriminately blowing everything up (which deliberately
-     * doesn't set blew_up_ludios for fairness), then go set a different one and
-     * disarm it again. */
+    /* TNNT: check for "Minesweeper" completion.  Only check this when the
+     * hero is disarming a naturally-generated land mine. */
     if (Is_knox(&u.uz) && !yours && !tnnt_globals.blew_up_ludios) {
         for (ttmp = ftrap; ttmp; ttmp = ttmp->ntrap) {
             /* Also don't check for player-created land mines here. */
