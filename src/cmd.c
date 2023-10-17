@@ -5644,7 +5644,7 @@ boolean final;
             maybe_have(final), i, plur(i));
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You %sgained %d max Pw from eating corpses.",
+    Sprintf(buf, "You %sgained %d max Pw from eating corpses or tins.",
             maybe_have(final), tnnt_globals.maxpw_from_corpses);
     putstr(en_win, 0, buf);
 
