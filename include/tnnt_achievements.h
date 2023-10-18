@@ -274,8 +274,8 @@ ACH("Buzzing With Energy", "Gain at least 5 max Pw by eating corpses or tins",
 ACH("Culinary Experience", "Gain a level by eating a tripe ration",
     LEVEL_FROM_TRIPE),
 ACH("The Omelet of Yendor",
-    "With 3 eggs, spinach, wolfsbane, garlic, eucalyptus, violet fungus, oil, "
-    "and a dented pot all at once, put on an apron and wield a knife",
+    "While carrying 3 eggs, spinach, wolfsbane, garlic, eucalyptus, violet "
+    "fungus, oil, and a dented pot, put on an apron and wield a knife",
     OMELET_OF_YENDOR),
 /* involving taming and pets */
 ACH("Pet Whisperer", "Tame a monster by feeding it", TAMED_BY_FOOD),
