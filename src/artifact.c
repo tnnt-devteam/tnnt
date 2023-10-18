@@ -1531,11 +1531,12 @@ struct obj *obj;
             winid tmpwin;
             anything any;
 
-            /* TNNT: player can't branchport out of the arena if the match is in
-             * progress. */
+            /* TNNT: player can't branchport out of the arena if the match is
+             * in progress. */
             if (Is_deathmatch_level(&u.uz) && tnnt_globals.deathmatch_started
                 && !tnnt_globals.deathmatch_completed) {
-                pline("Somehow, %s seems unable to make a portal.", the(xname(obj)));
+                pline("Somehow, %s seems unable to make a portal.",
+                      the(xname(obj)));
                 break;
             }
 
@@ -1547,9 +1548,9 @@ struct obj *obj;
                 if (!dungeons[i].dunlev_ureached)
                     continue;
 
-                /* TNNT: player can't branchport back into the npcdeath arena if
-                 * they fled the deathmatch (wizard mode #wizlevelport ought to
-                 * work though since it doesn't go through here.) */
+                /* TNNT: player can't branchport back into the npcdeath arena
+                 * if they fled the deathmatch (wizard mode #wizlevelport
+                 * ought to work though since it doesn't go through here.) */
                 if (!strcmp(dungeons[i].dname, "Deathmatch Arena")
                     && tnnt_globals.deathmatch_started
                     && !tnnt_globals.deathmatch_completed)

@@ -790,7 +790,11 @@ level_tele()
 
     if (iflags.debug_fuzzer)
         goto random_levtport;
-    if ((u.uhave.amulet || In_endgame(&u.uz) || In_sokoban(&u.uz))
+    if ((u.uhave.amulet || In_endgame(&u.uz) || In_sokoban(&u.uz)
+         /* TNNT: player must exit ongoing deathmatch via portal, since it's
+          * infeasible to seal the level otherwise */
+         || (Is_deathmatch_level(&u.uz) && tnnt_globals.deathmatch_started
+             && !tnnt_globals.deathmatch_completed))
         && !wizard) {
         You_feel("very disoriented for a moment.");
         return;
