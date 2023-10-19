@@ -167,7 +167,7 @@ char *buf;
             /* do nothing: getrumor has already inserted result into buf */
         } else {
             Strcpy(buf,
- "I explored the Dungeons of Doom and all I got was this Really Cool Shirt!");
+ "I explored the Dungeons of Doom, and all I got was this Really Cool Shirt!");
         }
     } else {
         Strcpy(buf, shirt_msgs[tshirt->o_id % SIZE(shirt_msgs)]);
