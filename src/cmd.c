@@ -5816,6 +5816,9 @@ boolean final;
     count = 0;
     for (i = TRIPE_RATION; i <= TIN; ++i) {
         int foodidx = i - TRIPE_RATION;
+        if (i >= GLOB_OF_GRAY_OOZE && i <= GLOB_OF_BLACK_PUDDING) {
+            i = GLOB_OF_BLACK_PUDDING; /* count only one glob */
+        }
         if (tnnt_globals.foods_eaten & (1L << foodidx)) {
             count++;
         }
