@@ -3044,7 +3044,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
                 if (current_container->swapitems < SWAP_ITEMS_MIN) {
                     pline("%s refuses to reveal its contents.",
                           The(xname(current_container)));
-                    You_feel(like_it_wants_sth);
+                    You_feel("%s", like_it_wants_sth);
                     goto containerdone;
                 }
                 refresh_swap_chest_contents(current_container);
@@ -3141,7 +3141,7 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
  swapchest_no_loot_out:
                 pline("%s resists your attempt to rummage through it.",
                       The(xname(current_container)));
-                You_feel(like_it_wants_sth);
+                You_feel("%s", like_it_wants_sth);
                 goto containerdone;
             }
             refresh_swap_chest_contents(current_container);
