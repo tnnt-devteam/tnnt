@@ -160,12 +160,18 @@ char *buf;
     };
 
     /* TNNT - The Really Cool Shirt has ever-shifting text */
-    const char* rumor;
-    if (tshirt->oartifact == ART_REALLY_COOL_SHIRT && rn2(50)
-        && (rumor = getrumor(bcsign(tshirt), buf, TRUE)) && *rumor)
-        ; /* actually do nothing here */
-    else
+    if (tshirt->oartifact == ART_REALLY_COOL_SHIRT) {
+        const char *rumor;
+        if (rn2(50) && (rumor = getrumor(bcsign(tshirt), buf, TRUE))
+            && *rumor) {
+            /* do nothing: getrumor has already inserted result into buf */
+        } else {
+            Strcpy(buf,
+ "I explored the Dungeons of Doom and all I got was this Really Cool Shirt!");
+        }
+    } else {
         Strcpy(buf, shirt_msgs[tshirt->o_id % SIZE(shirt_msgs)]);
+    }
     return erode_obj_text(tshirt, buf);
 }
 
