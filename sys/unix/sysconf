@@ -32,6 +32,10 @@ EXPLORERS=nobody
 # Uses the same syntax as the WIZARDS and EXPLORERS options above.
 #SHELLERS=
 
+# Users allowed to access #tnntdebug when TNNT_BETA is defined.  Outside
+# of beta mode, #tnntdebug is a wizard-mode-only command.
+#TNNTDEVS=
+
 # If the user name is found in this list, prompt for username instead.
 # Uses the same syntax as the WIZARDS option above.
 # A public server should probably disable this.

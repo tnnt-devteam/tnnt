@@ -46,6 +46,7 @@ sys_early_init()
     sysopt.env_dbgfl = 0; /* haven't checked getenv("DEBUGFILES") yet */
     sysopt.shellers = (char *) 0;
     sysopt.explorers = (char *) 0;
+    sysopt.tnnt_devs = (char *) 0;
     sysopt.genericusers = (char *) 0;
     sysopt.maxplayers = 0; /* XXX eventually replace MAX_NR_OF_PLAYERS */
     sysopt.bones_pools = 0;
@@ -108,6 +109,8 @@ sysopt_release()
         free((genericptr_t) sysopt.explorers), sysopt.explorers = (char *) 0;
     if (sysopt.shellers)
         free((genericptr_t) sysopt.shellers), sysopt.shellers = (char *) 0;
+    if (sysopt.tnnt_devs)
+        free((genericptr_t) sysopt.tnnt_devs), sysopt.tnnt_devs = (char *) 0;
     if (sysopt.debugfiles)
         free((genericptr_t) sysopt.debugfiles),
         sysopt.debugfiles = (char *) 0;

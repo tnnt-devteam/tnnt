@@ -13,6 +13,7 @@ struct sysopt {
                                or "one or two" or "one, two, or three", &c */
     char *explorers;  /* like wizards, but for access to explore mode */
     char *shellers;   /* like wizards, for ! command (-DSHELL); also ^Z */
+    char *tnnt_devs;  /* like wizards, but access to #tnntdebug during beta */
     char *genericusers; /* usernames that prompt for user name */
     char *debugfiles; /* files to show debugplines in. '*' is all. */
 #ifdef DUMPLOG

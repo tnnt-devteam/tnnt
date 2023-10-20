@@ -2566,6 +2566,10 @@ char *origbuf;
         if (sysopt.explorers)
             free((genericptr_t) sysopt.explorers);
         sysopt.explorers = dupstr(bufp);
+    } else if (src == SET_IN_SYS && match_varname(buf, "TNNTDEVS", 8)) {
+        if (sysopt.tnnt_devs)
+            free((genericptr_t) sysopt.tnnt_devs);
+        sysopt.tnnt_devs = dupstr(bufp);
     } else if (src == SET_IN_SYS && match_varname(buf, "DEBUGFILES", 5)) {
         /* if showdebug() has already been called (perhaps we've added
            some debugpline() calls to option processing) and has found

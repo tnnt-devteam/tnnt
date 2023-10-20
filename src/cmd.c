@@ -3621,9 +3621,9 @@ struct ext_func_tab extcmdlist[] = {
     { '\0', "tnntdebug", "display TNNT debug information",
             dotnntdebug,
 #ifdef TNNT_BETA
-            IFBURIED | AUTOCOMPLETE },
+            IFBURIED },
 #else
-            IFBURIED | AUTOCOMPLETE | WIZMODECMD },
+            IFBURIED | WIZMODECMD },
 #endif
     { '\0', "tnntstats", "display TNNT statistics in-game", dotnntstats,
             IFBURIED | AUTOCOMPLETE }, /* this one is for regular play */
@@ -5460,6 +5460,14 @@ dotnntdebug(VOID_ARGS)
     menu_item *choice = NULL;
     char response;
     anything any;
+#ifdef SYSCF
+    if (!wizard
+        && (!sysopt.tnnt_devs || !sysopt.tnnt_devs[0]
+            || !check_user_string(sysopt.tnnt_devs))) {
+        Norep(cmdnotavail, "#tnntdebug");
+        return 0;
+    }
+#endif
     any.a_char = 's';
     en_win = create_nhwindow(NHW_MENU);
     start_menu(en_win);
