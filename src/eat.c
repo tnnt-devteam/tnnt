@@ -99,6 +99,12 @@ register struct obj *obj;
     /* above also prevents the Amulet from being eaten, so we must never
        allow fake amulets to be eaten either [which is already the case] */
 
+    /* TNNT: don't allow player in gelcube form to eat the swapchest -- that's
+     * already impossible when it has contents (see below), but still could
+     * grief by eating Valley chest and leaving bones with no swapchest */
+    if (obj->otyp == SWAP_CHEST)
+        return FALSE;
+
     if (metallivorous(youmonst.data) && is_metallic(obj)
         && (youmonst.data != &mons[PM_RUST_MONSTER] || is_rustprone(obj)))
         return TRUE;
