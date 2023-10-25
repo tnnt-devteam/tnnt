@@ -5531,14 +5531,10 @@ static char*
 get_temp_achfile_path(void)
 {
     static char buf[BUFSZ];
-    /* ubirthday serves as a game identifier
-     * TNNT TODO: Should this also involve SERVER_LOCATION or some other
-     * server identifier? It is possible that someone starts two games at the
-     * same second on two different servers. */
     Sprintf(buf, "%s/%s.tach.", TNNT_ACHIEVEMENTS_DIR, plname);
 #ifdef SERVER_LOCATION
-    /* hardfought specific assumption: SERVER_LOCATION is "us.hardfought.org" or
-     * "eu" or "au"
+    /* hardfought specific assumption: SERVER_LOCATION is "us.hardfought.org"
+     * or "eu" or "au"
      * general assumption: SERVER_LOCATION contains no characters invalid for
      * file paths */
     strncat(buf, SERVER_LOCATION, 2);
