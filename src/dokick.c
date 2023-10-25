@@ -623,7 +623,8 @@ xchar x, y;
         if (kickedobj->swapitems != SWAP_CHEST_USED_UP) {
             pline("%s reveals hundreds of little legs and stomps on you!",
                   The(xname(kickedobj)));
-            losehp(rn1(10,5), "trampled to death by an angry box",
+            losehp(Maybe_Half_Phys(rn1(10, 5)),
+                   "trampled to death by an angry box",
                    NO_KILLER_PREFIX);
             return 1;
         } else {
