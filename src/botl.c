@@ -236,20 +236,6 @@ bot()
 {
     /* dosave() flags completion by setting u.uhp to -1 */
     if ((u.uhp != -1) && youmonst.data && iflags.status_updates) {
-        /* TNNT: check for maxed attributes.  This used to be in adjattrib but
-         * things that temporarily modify attributes (e.g. rings) don't use
-         * it, which could lead to circumstances where the hero had maxed
-         * attributes but the achievement wasn't awarded. */
-        if (!tnnt_is_achieved(A_MAXED_ATTRIBUTES)) {
-            int itr, flag = 1;
-            for (itr = A_MAX; itr > 0; itr--) {
-                if (ACURR(itr) < 18)
-                    flag = 0;
-            }
-            if (flag)
-                tnnt_achieve(A_MAXED_ATTRIBUTES);
-        }
-        /* end TNNT */
         if (VIA_WINDOWPORT()) {
             bot_via_windowport();
         } else {
@@ -259,6 +245,21 @@ bot()
             putmixed(WIN_STATUS, 0, do_statusline2());
         }
     }
+    /* TNNT: check for maxed attributes.  This used to be in adjattrib but
+     * things that temporarily modify attributes (e.g. rings) don't use it,
+     * which could lead to circumstances where the hero had maxed attributes
+     * but the achievement wasn't awarded. */
+    if (u.uhp != -1 && youmonst.data
+        && !tnnt_is_achieved(A_MAXED_ATTRIBUTES)) {
+        int itr, flag = 1;
+        for (itr = A_MAX; itr > 0; itr--) {
+            if (ACURR(itr) < 18)
+                flag = 0;
+        }
+        if (flag)
+            tnnt_achieve(A_MAXED_ATTRIBUTES);
+    }
+    /* end TNNT */
     context.botl = context.botlx = iflags.time_botl = FALSE;
 }
 
