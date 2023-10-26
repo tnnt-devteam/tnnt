@@ -239,7 +239,7 @@ static struct Bool_Opt {
 #else
     { "timed_delay", (boolean *) 0, FALSE, SET_IN_GAME },
 #endif
-    { "tnnt_notify", &flags.notify_achievements, FALSE, SET_IN_GAME },
+    { "tnnt_notify", &flags.notify_achievements, TRUE, SET_IN_GAME },
     { "tombstone", &flags.tombstone, TRUE, SET_IN_GAME },
     { "toptenwin", &iflags.toptenwin, FALSE, SET_IN_GAME },
     { "travel", &flags.travelcmd, TRUE, SET_IN_GAME },
