@@ -5570,6 +5570,16 @@ short achvmt;
             return; /* nothing to update */
 
         tnnt_globals.tnnt_achievements[(achvmt) / 64] |= 1L << ((achvmt) % 64);
+        if (flags.notify_achievements) {
+            const char *achnam = tnnt_achievements[achvmt].name,
+                       *endpunct = "";
+            int ln = (int) strlen(achnam);
+            /* some achievements have their own punctuation, so only append
+             * additional punctuation if that isn't the case */
+            if (ln > 0 && !index(".!?", achnam[ln - 1]))
+                endpunct = ".";
+            pline("TNNT achievement unlocked: \"%s\"%s", achnam, endpunct);
+        }
     }
 
 #ifdef TNNT_ACHIEVEMENTS_DIR

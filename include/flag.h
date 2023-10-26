@@ -39,6 +39,7 @@ struct flag {
     boolean legacy;          /* print game entry "story" */
     boolean lit_corridor;    /* show a dark corr as lit if it is in sight */
     boolean nap;             /* `timed_delay' option for display effects */
+    boolean notify_achievements; /* print message when completeing an ach */
     boolean null;            /* OK to send nulls to the terminal */
     boolean p__obsolete;     /* [3.6.2: perm_invent moved to iflags] */
     boolean pickup;          /* whether you pickup or move and look */
