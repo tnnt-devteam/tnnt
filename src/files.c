@@ -4838,8 +4838,9 @@ struct obj *o;
         pfx = prefixes[destination];
     }
 #endif
-    Sprintf(buf, "%s/%sSW-%ld-%s-%x", TNNT_SWAPCHEST_DIR,
-            pfx ? pfx : "", time(NULL), plname, o->o_id);
+    Sprintf(buf, "%s/%sSW-%ld-%s-%x-%x", TNNT_SWAPCHEST_DIR,
+            pfx ? pfx : "", time(NULL), plname, (unsigned) ubirthday,
+            o->o_id);
     return strdup(buf);
 }
 
