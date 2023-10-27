@@ -4981,6 +4981,7 @@ short *rcode;
             if (!strcmp(donorname, plname) && !wizard) {
                 /* The player doesn't get to see their own items. */
                 *rcode = MKSWAPOBJ_IGNOREOBJ;
+                free(o);
                 return (struct obj *) 0;
             }
             Sprintf(new_name, "%s %s", pfx, donorname);
