@@ -73,6 +73,8 @@ cp "$NETHACK_GIT/dat/nhdat" "$TNNT_CHROOT/$NHSUBDIR"
 chmod 644 "$TNNT_CHROOT/$NHSUBDIR/nhdat"
 cp "$NETHACK_GIT/dat/symbols" "$TNNT_CHROOT/$NHSUBDIR"
 chmod 644 "$TNNT_CHROOT/$NHSUBDIR/symbols"
+cp "$NETHACK_GIT/dat/license" "$TNNT_CHROOT/$NHSUBDIR"
+chmod 644 "$TNNT_CHROOT/$NHSUBDIR/license"
 cp "$NETHACK_GIT/dat/NHdump.css" "$TNNT_CHROOT/$NHSUBDIR"
 chmod 644 "$TNNT_CHROOT/$NHSUBDIR/NHdump.css"
 
