@@ -2907,7 +2907,6 @@ boolean more_containers; /* True iff #loot multiple and this isn't last one */
     if (!u_handsy())
         return 0;
 
-    /* not currently used, as the chest vanishes when finished. This may change */
     if (obj->otyp == SWAP_CHEST && obj->swapitems == SWAP_CHEST_USED_UP) {
         You_feel("%s is profoundly disinterested in your further fate.",
                  the(xname(obj)));

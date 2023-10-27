@@ -4816,9 +4816,9 @@ struct obj *o;
 {
     /* needs to be big enough for full path */
     static char buf[BUFSZ];
+    const char *pfx = (const char *) 0;
 #ifndef LOCAL_SWAPCHESTS
     static const char *const prefixes[] = { "eu.", "us.", "au." };
-    const char *pfx = (const char *) 0;
     const schar num_servers = SIZE(prefixes);
     /* swap chest files go to one of the three servers, weighted so the most
      * likely destination is the current/source server (currently weighted at
@@ -4837,12 +4837,9 @@ struct obj *o;
         }
         pfx = prefixes[destination];
     }
+#endif
     Sprintf(buf, "%s/%sSW-%ld-%s-%x", TNNT_SWAPCHEST_DIR,
             pfx ? pfx : "", time(NULL), plname, o->o_id);
-#else
-    Sprintf(buf, "%s/SW-%ld-%s-%x", TNNT_SWAPCHEST_DIR,
-            time(NULL), plname, o->o_id);
-#endif
     return strdup(buf);
 }
 
@@ -4853,6 +4850,7 @@ xchar swapnum;
 {
     char *filename = make_swapobj_filename(o);
     FILE *f;
+    char playmode = wizard ? 'D' : discover ? 'X' : '-';
     if (!filename)
         return FALSE;
     f = fopen(filename,"w");
@@ -4862,11 +4860,11 @@ xchar swapnum;
     fprintf(f, "o_id=%x\totyp=%d\towt=%d\tquan=%ld\tspe=%d\toclass=%d\t"
                "cursed=%d\tblessed=%d\toeroded=%d\toeroded2=%d\toerodeproof=%d\t"
                "recharged=%d\tgreased=%d\topoisoned=%d\tusecount=%d\t"
-               "corpsenm=%d\tswapnum=%d\tname=%s\n",
+               "corpsenm=%d\tswapnum=%d\tplaymode=%c\tname=%s\n",
                o->o_id, o->otyp, o->owt, o->quan, o->spe, o->oclass,
                o->cursed, o->blessed, o->oeroded, o->oeroded2, o->oerodeproof,
                o->recharged, o->greased, o->opoisoned, o->usecount,
-               o->corpsenm, swapnum, plname);
+               o->corpsenm, swapnum, playmode, plname);
     /* the second line is just for humans to read what the object is, for debugging */
     iflags.override_ID = 1;
     fprintf(f, "%s\n", doname(o));
@@ -4892,6 +4890,7 @@ short *rcode;
     char buf[BUFSZ]; /* multi-use */
     char donorname[PL_NSIZ + 1];
     int swapnum = -1;
+    char o_playmode = '-', playmode;
     FILE *f;
     struct obj *o;
     int tmp_bitfield;
@@ -4964,6 +4963,8 @@ short *rcode;
             continue;
         if (sscanf(buf, "swapnum=%d", &swapnum) == 1)
             continue;
+        if (sscanf(buf, "playmode=%c", &o_playmode) == 1)
+            continue;
         if (sscanf(buf, "name=%" N2STR(PL_NSIZ) "s", donorname) == 1) {
             char new_name[BUFSZ];
             static const char *swprefixes[SWAP_ITEMS_MAX] = {
@@ -4978,18 +4979,27 @@ short *rcode;
             const char *pfx = (swapnum >= 0 && swapnum < SWAP_ITEMS_MAX)
                                 ? swprefixes[swapnum] : "a gift from";
 
-            if (!strcmp(donorname, plname) && !wizard) {
-                /* The player doesn't get to see their own items. */
+            if (!strcmp(donorname, plname) && !wizard && !discover) {
+                /* The player doesn't get to see their own items, unless in
+                 * wizard or explore mode. */
                 *rcode = MKSWAPOBJ_IGNOREOBJ;
-                free(o);
-                return (struct obj *) 0;
+                goto free_swapobj;
             }
             Sprintf(new_name, "%s %s", pfx, donorname);
             o = oname(o, new_name);
         }
     }
     fclose(f);
+    /* Each mode (other than wizard mode) can only see/remove objects donated
+     * in that playmode.  If the current playmode doesn't match the one in the
+     * file, we'll throw away the object. */
+    playmode = wizard ? 'D' : discover ? 'X' : '-';
+    if (!wizard && o_playmode != playmode) {
+        *rcode = MKSWAPOBJ_IGNOREOBJ;
+        goto free_swapobj;
+    }
     if (!o->otyp) {
+ free_swapobj:
         if (o->oextra)
             dealloc_oextra(o);
         free(o);
