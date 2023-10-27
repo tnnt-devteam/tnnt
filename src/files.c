@@ -5582,6 +5582,10 @@ short achvmt;
         }
     }
 
+    /* don't write temp achievements file for explore-mode games */
+    if (discover)
+        return;
+
 #ifdef TNNT_ACHIEVEMENTS_DIR
     fname = get_temp_achfile_path();
     achfile = fopen(fname, "w");
