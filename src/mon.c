@@ -1273,6 +1273,9 @@ struct obj *otmp;
 
     if (notake(mdat))
         return 0; /* can't carry anything */
+    
+    if (otyp == SWAP_CHEST)
+        return 0; /* TNNT: monsters can't pick up the swap chest */
 
     if (otyp == CORPSE && touch_petrifies(&mons[otmp->corpsenm])
         && !(mtmp->misc_worn_check & W_ARMG) && !resists_ston(mtmp))
