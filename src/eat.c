@@ -888,7 +888,8 @@ register struct permonst *ptr;
     if (ptr->mlevel <= rn2(chance))
         return; /* failed die roll */
 
-    tnnt_achieve(A_GOT_CORPSE_INTRINSIC);
+    if (!(u.uprops[type].intrinsic & FROMOUTSIDE))
+        tnnt_achieve(A_GOT_CORPSE_INTRINSIC);
 
     switch (type) {
     case FIRE_RES:
