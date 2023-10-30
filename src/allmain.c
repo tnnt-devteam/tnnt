@@ -376,6 +376,23 @@ boolean resuming;
             /* when/if hero escapes from lava, he can't just stay there */
             else if (!u.umoved)
                 (void) pooleffects(FALSE);
+            /* TNNT: check for maxed attributes.  This used to be in adjattrib
+             * but things that temporarily modify attributes (e.g. rings)
+             * don't use it, which could lead to circumstances where the hero
+             * had maxed attributes but the achievement wasn't awarded. */
+            if (!tnnt_is_achieved(A_MAXED_ATTRIBUTES)) {
+                boolean maxed = TRUE;
+                int atr;
+                for (atr = A_CHA; atr >= A_STR; atr--) {
+                    if (ACURR(atr) < 18) {
+                        maxed = FALSE;
+                        break;
+                    }
+                }
+                if (maxed)
+                    tnnt_achieve(A_MAXED_ATTRIBUTES);
+            }
+            /* end TNNT */
 
         } /* actual time passed */
 
