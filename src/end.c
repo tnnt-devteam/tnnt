@@ -726,6 +726,7 @@ time_t when; /* date+time at end of game */
 {
 #if defined(DUMPLOG) || defined(DUMPHTML)
     char pbuf[BUFSZ], datetimebuf[24]; /* [24]: room for 64-bit bogus value */
+    long year = yyyymmss(ubirthday) / 10000L;
 
     dump_redirect(TRUE);
     if (!iflags.in_dumplog)
@@ -734,7 +735,10 @@ time_t when; /* date+time at end of game */
     init_symbols(); /* revert to default symbol set */
 
     /* let folks know this was a TNNT game */
-    Sprintf(pbuf, "The November NetHack Tournament (2022)");
+    Sprintf(pbuf, "The November NetHack Tournament %ld", year);
+#ifdef TNNT_BETA
+    Strcat(pbuf, " (BETA)");
+#endif
     /* putstr(0, 0, pbuf); */
     putstr(0, ATR_SUBHEAD, pbuf);
     putstr(NHW_DUMPTXT, 0, "");
