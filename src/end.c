@@ -726,7 +726,7 @@ time_t when; /* date+time at end of game */
 {
 #if defined(DUMPLOG) || defined(DUMPHTML)
     char pbuf[BUFSZ], datetimebuf[24]; /* [24]: room for 64-bit bogus value */
-    long year = yyyymmss(ubirthday) / 10000L;
+    long year = yyyymmdd(ubirthday) / 10000L;
 
     dump_redirect(TRUE);
     if (!iflags.in_dumplog)
