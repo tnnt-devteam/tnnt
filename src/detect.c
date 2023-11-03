@@ -1914,6 +1914,12 @@ int default_glyph, which_subset;
                 }
             }
         }
+        /* TNNT: player said that because NKIs weren't hidden by #terrain's
+         * "hide monsters and objects" option, it was impossible to locate the
+         * portal again.  So treat them as an object in this context, even
+         * though they are really a type of terrain internally. */
+        if (glyph == cmap_to_glyph(S_nki) && !keep_objs)
+            glyph = cmap_to_glyph(S_room);
     }
     if (glyph == cmap_to_glyph(S_darkroom))
         glyph = cmap_to_glyph(S_room); /* FIXME: dirty hack */
