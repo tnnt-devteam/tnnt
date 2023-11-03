@@ -233,6 +233,8 @@ int x, y;
                && (ttmp || is_pool_or_lava(x, y))) {
         /* digging by player handles pools separately */
         return FALSE;
+    } else if (levl[x][y].typ == NKI) {
+        return FALSE;
     }
     return TRUE;
 }
