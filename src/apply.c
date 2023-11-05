@@ -2432,10 +2432,11 @@ struct obj *tstone;
                        || (!tstone->cursed && (Role_if(PM_ARCHEOLOGIST)
                                                || Race_if(PM_GNOME))))) {
             makeknown(TOUCHSTONE);
+            if (!objects[obj->otyp].oc_name_known
+                && objects[obj->otyp].oc_material == GEMSTONE)
+                tnnt_achieve(A_USED_TOUCHSTONE);
             makeknown(obj->otyp);
             prinv((char *) 0, obj, 0L);
-            if (objects[obj->otyp].oc_material != GLASS)
-                tnnt_achieve(A_USED_TOUCHSTONE);
             return;
         } else {
             /* either a ring or the touchstone was not effective */
