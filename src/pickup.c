@@ -2293,6 +2293,14 @@ struct obj *obj;
             case TINNING_KIT:
             case MAGIC_MARKER:
                 return (obj->spe > 10);
+            /* magical instruments act like their mundane counterparts when
+             * empty, so if we accept the mundane version accept the magical
+             * one regardless of charges.  that they may have charges (and
+             * could be recharged) is just lagniappe. */
+            case FROST_HORN:
+            case FIRE_HORN:
+            case DRUM_OF_EARTHQUAKE:
+                return TRUE;
             /* useful non-magical tools */
             case STETHOSCOPE:
             case OILSKIN_SACK:
