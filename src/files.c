@@ -5058,30 +5058,38 @@ struct obj *o;
     return TRUE;
 }
 
-#define TNNT_DONOR_FILE HACKDIR "/donors"
-void
-credit_swapobj_donor(otmp)
-struct obj *otmp;
+const char *
+swapobj_donor_name(o)
+struct obj *o;
 {
+    const char *donor, *oname;
+    if (!has_oname(o)) {
+        impossible("swapchest obj with no name?");
+        return (const char *) 0;
+    }
     /* Assumption: otmp has just come from a swap chest and the player hasn't
      * had a chance to rename it yet, so the donor name saved as part of the
      * object name is still valid.
-     * Assumption: object name is "words words ... plname", key part is a space
-     * before the donor name */
-    const char *donor;
-    const char *oname;
-    FILE *donorfile;
-    if (!has_oname(otmp)) {
-        impossible("swapchest obj with no name?");
-        return;
-    }
-    oname = ONAME(otmp);
+     * Assumption: object name is "words words ... plname", key part is a
+     * space before the donor name */
+    oname = ONAME(o);
     donor = eos((char *) oname);
     while (donor >= oname && *donor != ' ') {
         donor--;
     }
     donor++; /* don't include the leading space */
-    if (!strcmp(donor, plname)) {
+    return donor;
+}
+
+#define TNNT_DONOR_FILE HACKDIR "/donors"
+void
+credit_swapobj_donor(otmp)
+struct obj *otmp;
+{
+    const char *donor = swapobj_donor_name(otmp);
+    FILE *donorfile;
+
+    if (!donor || !strcmp(donor, plname)) {
         return; /* you don't get credit for removing your own items */
     }
     donorfile = fopen(TNNT_DONOR_FILE, "a");

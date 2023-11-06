@@ -2711,6 +2711,9 @@ register struct obj *obj;
     /* TNNT swap chest --> */
     /* Chest becomes "dormant" after successful removal of item */
     if (current_container->otyp == SWAP_CHEST) {
+        char *save_oname;
+        const char *donor;
+
         current_container->swapitems = SWAP_CHEST_USED_UP;
         /* items from chest come pre-identified */
         makeknown(otmp->otyp);
@@ -2720,6 +2723,21 @@ register struct obj *obj;
         delete_swap_chest_contents(current_container);
         credit_swapobj_donor(otmp);
         u.uconduct.rmswapchest++;
+        /* now livelog the item removal */
+        donor = swapobj_donor_name(otmp);
+        if (!donor)
+            donor = "someone"; /* paranoia */
+        /* suppress the item's name, since we're presenting the donor in a
+         * different way already (the tests aren't really necessary, since
+         * swapobjs should always be named non-artifacts, but out of an
+         * abundance of caution...) */
+        save_oname = has_oname(obj) ? ONAME(obj) : (char *) 0;
+        if (save_oname && !obj->oartifact)
+            ONAME(obj) = (char *) 0;
+        livelog_printf(LL_ACHIEVE, "removed %s %s from the swap chest",
+                       s_suffix(donor), xname(otmp));
+        if (save_oname && !obj->oartifact)
+            ONAME(obj) = save_oname;
     }
     /* <-- */
 
