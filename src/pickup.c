@@ -2711,12 +2711,14 @@ register struct obj *obj;
     /* TNNT swap chest --> */
     /* Chest becomes "dormant" after successful removal of item */
     if (current_container->otyp == SWAP_CHEST) {
-        char *save_oname;
-        const char *donor;
+        /* in case PL_NSIZ is very small, make sure it'll fit "someone's". */
+        char *save_oname, prefix[PL_NSIZ + sizeof "someone's"];
+        const char *donor, *itemname;
 
         current_container->swapitems = SWAP_CHEST_USED_UP;
         /* items from chest come pre-identified */
         makeknown(otmp->otyp);
+        update_inventory();
         makeknown(SWAP_CHEST);
         pline("%s snaps shut and backs away slightly.",
               The(xname(current_container)));
@@ -2725,8 +2727,15 @@ register struct obj *obj;
         u.uconduct.rmswapchest++;
         /* now livelog the item removal */
         donor = swapobj_donor_name(otmp);
-        if (!donor)
-            donor = "someone"; /* paranoia */
+        if (!donor) {
+            Strcpy(prefix, "someone's"); /* paranoia */
+        } else if (!strcmp(donor, plname)) {
+            /* removing your own items should only be possible in explore or
+             * wizard mode, but we should still handle it appropriately */
+            Sprintf(prefix, "%s own", uhis());
+        } else {
+            Strcpy(prefix, s_suffix(donor));
+        }
         /* suppress the item's name, since we're presenting the donor in a
          * different way already (the tests aren't really necessary, since
          * swapobjs should always be named non-artifacts, but out of an
@@ -2734,8 +2743,14 @@ register struct obj *obj;
         save_oname = has_oname(obj) ? ONAME(obj) : (char *) 0;
         if (save_oname && !obj->oartifact)
             ONAME(obj) = (char *) 0;
+        /* xname would be easier to use here since it doesn't include an
+         * article, but it's nice to see enchantment, quantity, etc */
+        itemname = doname(otmp);
+        if (!strncmp(itemname, "a ", 2) || !strncmp(itemname, "an ", 3)
+            || !strncmp(itemname, "the ", 4))
+            itemname = index(itemname, ' ') + 1; /* strip article */
         livelog_printf(LL_ACHIEVE, "removed %s %s from the swap chest",
-                       s_suffix(donor), xname(otmp));
+                       prefix, itemname);
         if (save_oname && !obj->oartifact)
             ONAME(obj) = save_oname;
     }
