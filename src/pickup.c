@@ -2314,7 +2314,9 @@ struct obj *obj;
                 return (obj->spe > 0);
             if (objects[obj->otyp].oc_magic)
                 return TRUE; /* magic things including empty BoH ok */
-            return FALSE;
+            if (!is_weptool(obj))
+                return FALSE;
+            /* FALLTHRU */
         case WEAPON_CLASS:
             if (obj->cursed)
                 return FALSE;
