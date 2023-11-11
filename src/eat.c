@@ -1949,11 +1949,6 @@ struct obj *otmp;
                will be abused more times before illness completes */
             make_vomiting((Vomiting & TIMEOUT) + (long) d(10, 4), TRUE);
         } else {
-            /* TNNT: achievements for eating certain foods */
-            if (otmp->otyp == C_RATION || otmp->otyp == K_RATION) {
-                tnnt_achieve(A_ATE_MILITARY_RATION);
-            }
-
  give_feedback:
             pline("This %s is %s", singular(otmp, xname),
                   otmp->cursed
@@ -2807,6 +2802,10 @@ doeat()
             You("%s %s.",
                 (context.victual.reqtime == 1) ? "eat" : "begin eating",
                 doname(otmp));
+        }
+        /* TNNT: achievements for eating certain foods */
+        if (otmp->otyp == K_RATION || otmp->otyp == C_RATION) {
+            tnnt_achieve(A_ATE_MILITARY_RATION);
         }
     }
 
