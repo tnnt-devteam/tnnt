@@ -982,8 +982,6 @@ struct monst *mtmp;
         otmp2 = otmp->nexthere;
         /* TNNT swap chest - these are not part of a gelcube's diet */
         if (otmp->otyp == SWAP_CHEST) {
-            /* TNNT TODO FOR 3.7: will need to integrate this into the new
-             * hugely complex system of bitfields for 'verbose' */
             if (!flags.verbose) {
                 /* simpler message: don't leave the monster's sudden
                  * disappearance from the map entirely unexplained */
