@@ -1095,10 +1095,19 @@ register struct trap *ttmp;
          * Leaving the arena level prior to or after finishing the deathmatch
          * does not destroy the portal. */
         if (!tnnt_globals.deathmatch_completed) {
+            struct monst *mtmp;
+            const char *mname = "a mysterious stranger";
+
+            for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+                if (is_deathmatch_opponent(mtmp)) {
+                    mname = livelog_mon_nam(mtmp);
+                }
+            }
             deltrap(ttmp);    /* destroy this portal - maybe unnecessary */
             portal_flag = -1; /* destroy corresponding portal */
             msg = "Loud booing follows you out of the arena...";
-            livelog_printf(LL_UMONST, "cowardly fled from the Arena");
+            livelog_printf(LL_UMONST, "cravenly fled from %s in a deathmatch",
+                           mname);
         }
     }
 

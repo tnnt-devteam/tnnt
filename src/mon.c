@@ -38,13 +38,6 @@ STATIC_DCL void FDECL(deal_with_overcrowding, (struct monst *));
     (Is_rogue_level(&u.uz)            \
      || (level.flags.graveyard && is_undead(mdat) && rn2(3)))
 
-/* A specific combination of x_monnam flags for livelogging. The livelog
- * shouldn't show that you killed a hallucinatory monster and not what it
- * actually is. */
-#define livelog_mon_nam(mtmp) \
-    x_monnam(mtmp, ARTICLE_THE, (char *) 0,                 \
-             (SUPPRESS_IT | SUPPRESS_HALLUCINATION), FALSE)
-
 #if 0
 /* part of the original warning code which was replaced in 3.3.1 */
 const char *warnings[] = {

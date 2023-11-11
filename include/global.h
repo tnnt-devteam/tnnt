@@ -390,4 +390,11 @@ struct savefile_info {
 #define LL_KILLEDPET  0x0100 /* Killed a tame monster */
 #define LL_DEBUG      0x8000 /* For debugging messages and other spam */
 
+/* A specific combination of x_monnam flags for livelogging. The livelog
+ * shouldn't show that you killed a hallucinatory monster and not what it
+ * actually is. */
+#define livelog_mon_nam(mtmp) \
+    x_monnam(mtmp, ARTICLE_THE, (char *) 0,                 \
+             (SUPPRESS_IT | SUPPRESS_HALLUCINATION), FALSE)
+
 #endif /* GLOBAL_H */
