@@ -2219,8 +2219,6 @@ register struct monst *mtmp;
         /* Monster is aggravated by being trapped by you.
            Recognizing who made the trap isn't completely
            unreasonable; everybody has their own style. */
-        if (trap->madeby_u)
-            tnnt_achieve(A_TRAPPED_MONSTER);
         if (trap->madeby_u && rnl(5))
             setmangry(mtmp, TRUE);
 
@@ -2320,6 +2318,8 @@ register struct monst *mtmp;
                     if (is_bear)
                         You_hear("the roaring of an angry bear!");
                 }
+                if (trap->madeby_u)
+                    tnnt_achieve(A_TRAPPED_MONSTER);
                 if (is_bear && trap->madeby_u)
                     tnnt_achieve(A_TRAPPED_BEAR_IN_BEAR_TRAP);
             } else if (force_mintrap) {
@@ -2497,6 +2497,8 @@ register struct monst *mtmp;
             if (DEADMONSTER(mtmp) || thitm(0, mtmp, (struct obj *) 0,
                                         rnd((tt == PIT) ? 6 : 10), FALSE))
                 trapkilled = TRUE;
+            if (trap->madeby_u)
+                tnnt_achieve(A_TRAPPED_MONSTER);
             break;
         case HOLE:
         case TRAPDOOR:
@@ -2532,6 +2534,8 @@ register struct monst *mtmp;
                 } else
                     break;
             }
+            if (trap->madeby_u)
+                tnnt_achieve(A_TRAPPED_MONSTER);
             /*FALLTHRU*/
         case LEVEL_TELEP:
         case MAGIC_PORTAL: {
@@ -2573,6 +2577,8 @@ register struct monst *mtmp;
                     seetrap(trap);
                 }
                 mtmp->mtrapped = tear_web ? 0 : 1;
+                if (trap->madeby_u && mtmp->mtrapped)
+                    tnnt_achieve(A_TRAPPED_MONSTER);
                 break;
             /* this list is fairly arbitrary; it deliberately
                excludes wumpus & giant/ettin zombies/mummies */
@@ -2699,6 +2705,8 @@ register struct monst *mtmp;
                 multi = -1;
                 nomovemsg = "The explosion awakens you!";
             }
+            if (trap->madeby_u)
+                tnnt_achieve(A_TRAPPED_MONSTER);
             break;
         case POLY_TRAP:
             if (resists_magm(mtmp)) {
