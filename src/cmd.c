@@ -5874,23 +5874,22 @@ boolean final;
     winid win = create_nhwindow(NHW_MENU);
     char response, buf[BUFSZ];
     int i, num_earned = 0;
+    boolean vanilla_achieved[NUM_VANILLA_ACHIEVEMENTS];
 
     /* Special handling for vanilla achievements which are not tracked in
-     * tnnt_achievements. This replicates the conditions in topten.c where they
-     * are added to the xlogfile. */
-    boolean vanilla_achieved[NUM_VANILLA_ACHIEVEMENTS] = {
-        (boolean) u.uachieve.bell,
-        (boolean) u.uachieve.enter_gehennom,
-        (boolean) u.uachieve.menorah,
-        (boolean) u.uachieve.book,
-        (boolean) u.uevent.invoked,
-        (boolean) u.uachieve.amulet,
-        In_endgame(&u.uz),
-        Is_astralevel(&u.uz),
-        (boolean) u.uachieve.mines_luckstone,
-        (boolean) u.uachieve.finish_sokoban,
-        (boolean) u.uachieve.killed_medusa
-    };
+     * tnnt_achievements. This replicates the conditions in topten.c where
+     * they are added to the xlogfile. */
+    vanilla_achieved[0] = (boolean) u.uachieve.bell;
+    vanilla_achieved[1] = (boolean) u.uachieve.enter_gehennom;
+    vanilla_achieved[2] = (boolean) u.uachieve.menorah;
+    vanilla_achieved[3] = (boolean) u.uachieve.book;
+    vanilla_achieved[4] = (boolean) u.uevent.invoked;
+    vanilla_achieved[5] = (boolean) u.uachieve.amulet;
+    vanilla_achieved[6] = In_endgame(&u.uz);
+    vanilla_achieved[7] = Is_astralevel(&u.uz);
+    vanilla_achieved[8] = (boolean) u.uachieve.mines_luckstone;
+    vanilla_achieved[9] = (boolean) u.uachieve.finish_sokoban;
+    vanilla_achieved[10] = (boolean) u.uachieve.killed_medusa;
 
     start_menu(win);
     if (!final) {
@@ -5929,7 +5928,8 @@ boolean final;
         putstr(win, ATR_HEADING, buf);
     }
     if (!final) {
-        putstr(win, ATR_BOLD, "(Use #tnntstats to check progress of certain ones.)");
+        putstr(win, ATR_BOLD,
+               "(Use #tnntstats to check progress of certain ones.)");
     }
     for (i = 0; i < NUM_VANILLA_ACHIEVEMENTS; ++i) {
         boolean earned = vanilla_achieved[i];
