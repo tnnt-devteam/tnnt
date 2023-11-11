@@ -215,7 +215,8 @@ struct monst *bugler; /* monster that played instrument */
             else if (distm < distance / 3
                      && !resist(mtmp, TOOL_CLASS, 0, NOTELL)) {
                 monflee(mtmp, 0, FALSE, TRUE);
-                tnnt_achieve(A_SCARED_WITH_MUSIC);
+                if (bugler == &youmonst)
+                    tnnt_achieve(A_SCARED_WITH_MUSIC);
             }
         }
     }
