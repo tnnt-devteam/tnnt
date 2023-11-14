@@ -2265,6 +2265,7 @@ STATIC_OVL void
 fpostfx(otmp)
 struct obj *otmp;
 {
+    int old_abase_str;
     /* this is highly unstable and relies on TRIPE_RATION being the
      * first defined food */
     tnnt_globals.foods_eaten |= 1L << (otmp->otyp - TRIPE_RATION);
@@ -2290,6 +2291,7 @@ struct obj *otmp;
         break;
     case LUMP_OF_ROYAL_JELLY:
         /* This stuff seems to be VERY healthy! */
+        old_abase_str = ABASE(A_STR);
         gainstr(otmp, 1, TRUE);
         if (Upolyd) {
             u.mh += otmp->cursed ? -rnd(20) : rnd(20);
@@ -2314,7 +2316,9 @@ struct obj *otmp;
         }
         if (!otmp->cursed)
             heal_legs(0);
-        tnnt_achieve(A_ATE_ROYAL_JELLY);
+        /* grant the achievement only if the hero actually gained STR */
+        if (ABASE(A_STR) > old_abase_str)
+            tnnt_achieve(A_ATE_ROYAL_JELLY);
         break;
     case EGG:
         if (flesh_petrifies(&mons[otmp->corpsenm])) {
