@@ -273,6 +273,8 @@ ACH("Buzzing With Energy", "Gain at least 5 max Pw by eating corpses or tins",
     5_MAXPW_FROM_NEWTS),
 ACH("Culinary Experience", "Gain a level by eating a tripe ration",
     LEVEL_FROM_TRIPE),
+ACH("Wafer-Thin Mint", "Eat a wraith corpse while already satiated",
+    SATIATED_ATE_WRAITH),
 ACH("The Omelet of Yendor",
     "While carrying 3 eggs, spinach, wolfsbane, garlic, eucalyptus, violet "
     "fungus, oil, and a dented pot, put on an apron and wield a knife",

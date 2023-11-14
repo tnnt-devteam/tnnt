@@ -2807,12 +2807,14 @@ doeat()
                 (context.victual.reqtime == 1) ? "eat" : "begin eating",
                 doname(otmp));
         }
-        /* TNNT: achievements for eating certain foods */
-        if (otmp->otyp == K_RATION || otmp->otyp == C_RATION) {
-            tnnt_achieve(A_ATE_MILITARY_RATION);
-        }
     }
-
+    /* TNNT: achievements for eating certain foods */
+    if (otmp->otyp == K_RATION || otmp->otyp == C_RATION) {
+        tnnt_achieve(A_ATE_MILITARY_RATION);
+    } else if (otmp->otyp == CORPSE && otmp->corpsenm == PM_WRAITH
+               && u.uhs == SATIATED) {
+        tnnt_achieve(A_SATIATED_ATE_WRAITH);
+    }
     /* re-calc the nutrition */
     basenutrit = (int) obj_nutrition(otmp);
 
