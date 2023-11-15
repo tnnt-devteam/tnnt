@@ -4671,14 +4671,14 @@ struct monst *mtmp;
         /* TNNT TODO FOR 3.7: We should probably stick a string in quest.lua
          * for these arena messages, so they can be printed as a single large
          * block of text. */
+        if (transient_invent) {
+            You_feel("%s vanish from your pack.",
+                     transient_invent == 1 ? "something" : "some items");
+        }
         if (otmp->nobj) { /* messages refer to a "pile" of multiple items */
             const char *const nearby =
                 (distu(mtmp->mx, mtmp->my) <= 7 * 7 ? "nearby"
                                                     : "in the distance");
-            if (transient_invent) {
-                You_feel("%s vanish from your pack.",
-                         transient_invent == 1 ? "something" : "some items");
-            }
             if (cansee(mtmp->mx, mtmp->my)) {
                 pline("%s possessions coalesce into a pile where %s fell.",
                       s_suffix(Monnam(mtmp)), mhe(mtmp));
@@ -4687,10 +4687,18 @@ struct monst *mtmp;
             } else {
                 You_feel("a jarring vibration %s.", nearby);
             }
+        } else if (cansee(mtmp->mx, mtmp->my)) {
+            char *objs = doname_vague_quan(otmp);
+            *objs = highc(*objs); /* capitalize */
+            pline("%s %s at the spot where %s fell.", objs,
+                  otense(otmp, "appear"), mon_nam(mtmp));
         }
         if (!Deaf) {
             pline("A voice echoes in the arena:");
-            verbalize("Choose thy trophy from the spoils!");
+            if (otmp->nobj)
+                verbalize("Choose thy trophy from the spoils!");
+            else
+                verbalize("Step forward and claim your trophy!");
         }
         while (otmp) {
             next = otmp->nobj;
