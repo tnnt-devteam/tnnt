@@ -748,8 +748,9 @@ boolean calc_costly;
     if (costly && !otmp->no_charge)
         return FALSE;
 
-    /* TNNT: no autopickup of NPC objects since the others will disappear */
-    if (otmp->transient)
+    /* TNNT: no autopickup of NPC objects after the fight is over, since the
+     * others will disappear */
+    if (otmp->transient && tnnt_globals.deathmatch_completed)
         return FALSE;
 
     /* check for pickup_types */
