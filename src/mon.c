@@ -32,6 +32,7 @@ STATIC_DCL void FDECL(lifesaved_monster, (struct monst *));
 STATIC_DCL void FDECL(migrate_mon, (struct monst *, XCHAR_P, XCHAR_P));
 STATIC_DCL boolean FDECL(ok_to_obliterate, (struct monst *));
 STATIC_DCL void FDECL(deal_with_overcrowding, (struct monst *));
+STATIC_DCL void FDECL(tnnt_arena_victory, (struct monst *));
 
 /* note: duplicated in dog.c */
 #define LEVEL_SPECIFIC_NOCORPSE(mdat) \
@@ -2184,40 +2185,8 @@ register struct monst *mtmp;
                 tnnt_achieve(A_AVENGED_ORCTOWN);
         }
     }
-    if (is_deathmatch_opponent(mtmp)) {
-        struct obj *list = collect_all_transient(NULL), *next;
-        tnnt_globals.deathmatch_completed = TRUE;
-        /* Gather all of the NPC's possessions in the spot of their death. */
-        if (list) {
-            /* TNNT TODO FOR 3.7: We should probably stick a string in quest.lua
-             * for these arena messages, so they can be printed as a single
-             * large block of text. */
-            /* first we tell the news to folks who can hear */
-            if (!Deaf) {
-                pline("A voice echoes in the arena:");
-                verbalize("Choose thy trophy from the spoils!");
-            }
-            if (list->nobj) { /* these messages don't make sense if there's only
-                                 1 item */
-                /* then we noisily pile the objects together */
-                if (cansee(mtmp->mx, mtmp->my))
-                    You("see %s possessions coalesce into a pile near you.",
-                        s_suffix(mon_nam(mtmp)));
-                /* then we describe that noisy pile if they couldn't see it */
-                else if (!Deaf)
-                    You("hear a pile of objects jumble together nearby.");
-                /* finally a vague sensation if traditional senses aren't
-                 * available */
-                else
-                    You_feel("a jarring vibration nearby.");
-            }
-        }
-        for (; list; list = next) {
-            next = list->nobj;
-            place_object(list, mtmp->mx, mtmp->my);
-        }
-    }
-
+    if (is_deathmatch_opponent(mtmp))
+        tnnt_arena_victory(mtmp);
     if (glyph_is_invisible(levl[mtmp->mx][mtmp->my].glyph))
         unmap_object(mtmp->mx, mtmp->my);
     m_detach(mtmp, mptr);
@@ -4675,6 +4644,61 @@ struct permonst *mdat;
             }
     }
     return msg_given ? TRUE : FALSE;
+}
+
+/* the arena opponent has been killed -- track the feat, notify the player,
+ * and pile up the transient items from the level for the prize */
+STATIC_OVL void
+tnnt_arena_victory(mtmp)
+struct monst *mtmp;
+{
+    struct obj *otmp, *next;
+    int transient_invent = 0;
+
+    tnnt_globals.deathmatch_completed = TRUE;
+    /* before we collect/extract all the transient items, check whether hero
+     * will be losing items she already picked up (e.g. missiles or ammo) */
+    /* since this is used to distinguish between "none", "one", and "multiple" 
+     * we can break once we reach transient_invent > 1 -- any more increments
+     * have no additional effect */
+    for (otmp = invent; otmp && transient_invent < 2; otmp = otmp->nobj) {
+        if (otmp->transient) {
+            transient_invent += otmp->quan;
+        }
+    }
+    /* Gather all of the NPC's possessions in the spot of their death. */
+    if ((otmp = collect_all_transient(NULL)) != (struct obj *) 0) {
+        /* TNNT TODO FOR 3.7: We should probably stick a string in quest.lua
+         * for these arena messages, so they can be printed as a single large
+         * block of text. */
+        if (otmp->nobj) { /* messages refer to a "pile" of multiple items */
+            const char *const nearby =
+                (distu(mtmp->mx, mtmp->my) <= 7 * 7 ? "nearby"
+                                                    : "in the distance");
+            if (transient_invent) {
+                You_feel("%s vanish from your pack.",
+                         transient_invent == 1 ? "something" : "some items");
+            }
+            if (cansee(mtmp->mx, mtmp->my)) {
+                pline("%s possessions coalesce into a pile where %s fell.",
+                      s_suffix(Monnam(mtmp)), mhe(mtmp));
+            } else if (!Deaf) {
+                You_hear("a pile of objects jumble together %s.", nearby);
+            } else {
+                You_feel("a jarring vibration %s.", nearby);
+            }
+        }
+        if (!Deaf) {
+            pline("A voice echoes in the arena:");
+            verbalize("Choose thy trophy from the spoils!");
+        }
+        while (otmp) {
+            next = otmp->nobj;
+            place_object(otmp, mtmp->mx, mtmp->my);
+            stackobj(otmp);
+            otmp = next;
+        }
+    }
 }
 
 /*mon.c*/
