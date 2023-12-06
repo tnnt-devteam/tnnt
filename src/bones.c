@@ -383,7 +383,7 @@ struct obj *corpse;
     struct fruit *f;
     struct cemetery *newbones;
     s_level *sptr;
-    schar lvariant;
+    uchar lvariant;
     char c, *bonesid;
     char whynot[BUFSZ];
 
@@ -557,7 +557,7 @@ struct obj *corpse;
 
     /* TNNT: include special level variant number in bones --> */
     sptr = Is_special(&u.uz);
-    lvariant = sptr ? sptr->which_level : -1;
+    lvariant = sptr ? sptr->which_level : 0;
     /* end TNNT */
 
 #ifdef MFLOPPY /* check whether there is room */
@@ -662,11 +662,11 @@ getbones()
         } else {
             register struct monst *mtmp;
             s_level *sptr;
-            schar lvariant;
+            uchar lvariant;
 
             /* TNNT --> */
             mread(fd, (genericptr_t) &lvariant, sizeof lvariant);
-            if ((sptr = Is_special(&u.uz)) && lvariant > -1) {
+            if ((sptr = Is_special(&u.uz)) && lvariant) {
                 sptr->which_level = lvariant;
             }
             /* end TNNT */
