@@ -382,6 +382,8 @@ struct obj *corpse;
     struct permonst *mptr;
     struct fruit *f;
     struct cemetery *newbones;
+    s_level *sptr;
+    schar lvariant;
     char c, *bonesid;
     char whynot[BUFSZ];
 
@@ -553,6 +555,11 @@ struct obj *corpse;
     }
     c = (char) (strlen(bonesid) + 1);
 
+    /* TNNT: include special level variant number in bones --> */
+    sptr = Is_special(&u.uz);
+    lvariant = sptr ? sptr->which_level : -1;
+    /* end TNNT */
+
 #ifdef MFLOPPY /* check whether there is room */
     if (iflags.checkspace) {
         savelev(fd, ledger_no(&u.uz), COUNT_SAVE);
@@ -570,6 +577,7 @@ struct obj *corpse;
         store_savefileinfo(fd);
         bwrite(fd, (genericptr_t) &c, sizeof c);
         bwrite(fd, (genericptr_t) bonesid, (unsigned) c); /* DD.nnn */
+        bwrite(fd, (genericptr_t) &lvariant, sizeof lvariant); /* TNNT */
         savefruitchn(fd, COUNT_SAVE);
         bflush(fd);
         if (bytes_counted > freediskspace(bones)) { /* not enough room */
@@ -587,6 +595,7 @@ struct obj *corpse;
     store_savefileinfo(fd);
     bwrite(fd, (genericptr_t) &c, sizeof c);
     bwrite(fd, (genericptr_t) bonesid, (unsigned) c); /* DD.nnn */
+    bwrite(fd, (genericptr_t) &lvariant, sizeof lvariant); /* TNNT */
     savefruitchn(fd, WRITE_SAVE | FREE_SAVE);
     update_mlstmv(); /* update monsters for eventual restoration */
     savelev(fd, ledger_no(&u.uz), WRITE_SAVE | FREE_SAVE);
@@ -652,6 +661,15 @@ getbones()
             trickery(errbuf);
         } else {
             register struct monst *mtmp;
+            s_level *sptr;
+            schar lvariant;
+
+            /* TNNT --> */
+            mread(fd, (genericptr_t) &lvariant, sizeof lvariant);
+            if ((sptr = Is_special(&u.uz)) && lvariant > -1) {
+                sptr->which_level = lvariant;
+            }
+            /* end TNNT */
 
             getlev(fd, 0, 0, TRUE);
 
