@@ -182,7 +182,8 @@ static char *FDECL(xcrypt, (const char *));
 static unsigned long FDECL(read_rumors_file,
                            (const char *, int *, long *, unsigned long));
 static boolean FDECL(get_gitinfo, (char *, char *));
-static void FDECL(do_rnd_access_file, (const char *, const char *));
+static void FDECL(do_rnd_access_file,
+                  (const char *, const char *, const char *));
 static boolean FDECL(d_filter, (char *));
 static boolean FDECL(h_filter, (char *));
 static void NDECL(build_savebones_compat_string);
@@ -366,16 +367,19 @@ char *options;
              * post-3.6.5:
              *  File must not be empty to avoid divide by 0
              *  in core's rn2(), so provide a default entry.
+             *  [Second argument is used to construct a temporary file name
+             *  without worrying about whether the file name macros from
+             *  global.h have been modified with port-specific punctuation.]
              */
-            do_rnd_access_file(EPITAPHFILE,
+            do_rnd_access_file(EPITAPHFILE, "epitaph",
                 /* default epitaph:  parody of the default engraving */
                                "No matter where I went, here I am.");
-            do_rnd_access_file(ENGRAVEFILE,
+            do_rnd_access_file(ENGRAVEFILE, "engrave",
                 /* default engraving:  popularized by "The Adventures of
                    Buckaroo Bonzai Across the 8th Dimenstion" but predates
                    that 1984 movie; some attribute it to Confucius */
                                "No matter where you go, there you are.");
-            do_rnd_access_file(BOGUSMONFILE,
+            do_rnd_access_file(BOGUSMONFILE, "bogusmon",
                 /* default bogusmon:  iconic monster that isn't in nethack */
                                "grue");
             /* TNNT: robotfindskitten */
@@ -968,12 +972,13 @@ unsigned long old_rumor_offset;
 }
 
 static void
-do_rnd_access_file(fname, deflt_content)
-const char *fname;
+do_rnd_access_file(fname, basefname, deflt_content)
+const char *fname, *basefname;
 const char *deflt_content;
 {
-    char *line;
+    char *line, greptmp[8 + 1 + 3 + 1];
 
+    Sprintf(greptmp, "grep-%.3s.tmp", basefname);
     Sprintf(filename, DATA_IN_TEMPLATE, fname);
     Strcat(filename, ".txt");
     if (!(ifp = fopen(filename, RDTMODE))) {
@@ -996,9 +1001,9 @@ const char *deflt_content;
        more likely to be picked than normal but it's nothing to worry about */
     (void) fputs(xcrypt(deflt_content), ofp);
 
-    tfp = getfp(DATA_TEMPLATE, "grep.tmp", WRTMODE);
+    tfp = getfp(DATA_TEMPLATE, greptmp, WRTMODE);
     grep0(ifp, tfp);
-    ifp = getfp(DATA_TEMPLATE, "grep.tmp", RDTMODE);
+    ifp = getfp(DATA_TEMPLATE, greptmp, RDTMODE);
 
     while ((line = fgetline(ifp)) != 0) {
         if (line[0] != '#' && line[0] != '\n')
@@ -1008,7 +1013,7 @@ const char *deflt_content;
     Fclose(ifp);
     Fclose(ofp);
 
-    delete_file(DATA_TEMPLATE, "grep.tmp");
+    delete_file(DATA_TEMPLATE, greptmp);
     return;
 }
 
@@ -2279,8 +2284,9 @@ do_oracles()
 void
 do_dungeon()
 {
-    char *line;
+    char *line, greptmp[8 + 1 + 3 + 1];
 
+    Sprintf(greptmp, "grep-%.3s.tmp", "dun");
     Sprintf(filename, DATA_IN_TEMPLATE, DGN_I_FILE);
     if (!(ifp = fopen(filename, RDTMODE))) {
         perror(filename);
@@ -2297,9 +2303,9 @@ do_dungeon()
     }
     Fprintf(ofp, "%s", Dont_Edit_Data);
 
-    tfp = getfp(DATA_TEMPLATE, "grep.tmp", WRTMODE);
+    tfp = getfp(DATA_TEMPLATE, greptmp, WRTMODE);
     grep0(ifp, tfp);
-    ifp = getfp(DATA_TEMPLATE, "grep.tmp", RDTMODE);
+    ifp = getfp(DATA_TEMPLATE, greptmp, RDTMODE);
 
     while ((line = fgetline(ifp)) != 0) {
         SpinCursor(3);
@@ -2314,7 +2320,7 @@ do_dungeon()
     Fclose(ifp);
     Fclose(ofp);
 
-    delete_file(DATA_TEMPLATE, "grep.tmp");
+    delete_file(DATA_TEMPLATE, greptmp);
     return;
 }
 
