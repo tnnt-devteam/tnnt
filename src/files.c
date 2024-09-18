@@ -5619,7 +5619,9 @@ short achvmt;
             * additional punctuation if that isn't the case */
         if (ln > 0 && !index(".!?", achnam[ln - 1]))
             endpunct = ".";
-        pline("TNNT achievement unlocked: \"%s\"%s", achnam, endpunct);
+        pline("%schievement unlocked: \"%s\"%s",
+              achvmt == NO_TNNT_ACHIEVEMENT ? "A" : "TNNT a",
+              achnam, endpunct);
     }
 
     /* don't write temp achievements file for explore-mode games */
