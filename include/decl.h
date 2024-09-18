@@ -519,6 +519,7 @@ struct tnnt_globals_t {
      * Since there are more than 64 achievements, we need multiple 64 bit ints.
      */
     uint64_t tnnt_achievements[NUM_TNNT_ACHIEVEMENTS / 64 + 1];
+    long v_achieve; /* cached vanilla ach bitfield for tnnt_achieve() */
 
     /* Various achievement counters */
     unsigned char graffiti_found;

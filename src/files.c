@@ -5584,22 +5584,42 @@ short achvmt;
     char* fname;
     FILE *achfile;
     int i;
+    const char *achnam = (const char *) 0;
 
-    if (achvmt != NO_TNNT_ACHIEVEMENT) {
+    if (achvmt == NO_TNNT_ACHIEVEMENT) { /* vanilla achievement */
+        /* find what bit is newly set in the encodeachieve() bitfield so
+         * that we can identify the achievement */
+        /* discard 8th bit (u.uachieve.ascended), and shift more significant
+         * bits up by one so indices will match vanilla_achivements[] */
+#define drop_uascended_bit(n) (((n & ~0x1ff) >> 1) | (n & 0xff))
+        long new_v_ach = drop_uascended_bit(encodeachieve()),
+             ach_bit = new_v_ach & ~tnnt_globals.v_achieve;
+
+        i = ffsl(ach_bit) - 1; /* get position of the achievement bit */
+
+        if (i < 0 || i >= NUM_VANILLA_ACHIEVEMENTS)
+            return; /* no change, or higher order ignored/non-ach bit */
+
+        tnnt_globals.v_achieve = new_v_ach; /* cache for next comparison */
+        achnam = vanilla_achievements[i].name;
+#undef drop_uascended_bit
+    } else { /* TNNT achievement */
         if (tnnt_is_achieved(achvmt))
             return; /* nothing to update */
 
         tnnt_globals.tnnt_achievements[(achvmt) / 64] |= 1L << ((achvmt) % 64);
-        if (flags.notify_achievements) {
-            const char *achnam = tnnt_achievements[achvmt].name,
-                       *endpunct = "";
-            int ln = (int) strlen(achnam);
-            /* some achievements have their own punctuation, so only append
-             * additional punctuation if that isn't the case */
-            if (ln > 0 && !index(".!?", achnam[ln - 1]))
-                endpunct = ".";
-            pline("TNNT achievement unlocked: \"%s\"%s", achnam, endpunct);
-        }
+        achnam = tnnt_achievements[achvmt].name;
+    }
+
+
+    if (flags.notify_achievements && achnam) {
+        const char *endpunct = "";
+        int ln = (int) strlen(achnam);
+        /* some achievements have their own punctuation, so only append
+            * additional punctuation if that isn't the case */
+        if (ln > 0 && !index(".!?", achnam[ln - 1]))
+            endpunct = ".";
+        pline("TNNT achievement unlocked: \"%s\"%s", achnam, endpunct);
     }
 
     /* don't write temp achievements file for explore-mode games */
