@@ -162,23 +162,19 @@ PANICTRACE_LIBC=2
 # default values.  Unlike the SYSCF values above, individual users can
 # still choose their own option settings via NETHACKOPTIONS in their
 # environment or via ~/.nethackrc run-time configuration file.
-#OPTIONS=!autopickup,fruit:tomato,symset:DECgraphics
-# The following are the NAO defaults for 3.6.0 according to paxed
-OPTIONS=bones
-OPTIONS=color
-OPTIONS=lit_corridor
-OPTIONS=dark_room
-OPTIONS=autodig
-OPTIONS=autoopen
-OPTIONS=disclose:yi ya yv yg yc yo yt
-OPTIONS=boulder:0
-OPTIONS=!autopickup
-OPTIONS=pickup_burden:unencumbered
-OPTIONS=hilite_pet
-OPTIONS=hilite_pile
-OPTIONS=msg_window:reversed
-OPTIONS=number_pad:0
-OPTIONS=sortloot:full
-OPTIONS=time
+
+# Basic options
+OPTIONS=disclose:yi ya yv yg yc yo
+OPTIONS=bones,color,lit_corridor,dark_room,autodig,autoopen
+OPTIONS=boulder:0,pickup_burden:unencumbered
+OPTIONS=!autopickup,hilite_pet,hilite_pile,time,use_darkgray
+OPTIONS=msg_window:reversed,number_pad:0,sortloot:full
+OPTIONS=menu_objsyms,perm_invent,hitpointbar
+# realtime options (wallclock time / play time / disabled)
+OPTIONS=realtime:wallclock time
+
+# Various MSGTYPE examples
+MSGTYPE=hide "Unknown command *"
+MSGTYPE=alert "The (couatl|.*eel|kraken) swings itself around you!"
 
 #eof
