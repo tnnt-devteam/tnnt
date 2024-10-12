@@ -4102,6 +4102,7 @@ boolean say; /* Announce out of sight hit/miss events if true */
     const char *fltxt;
     struct obj *otmp;
     int spell_type;
+    int total_bounces = 0; /* TNNT: for achievement */
 
     /* if its a Hero Spell then get its SPE_TYPE */
     spell_type = is_hero_spell(type) ? SPE_MAGIC_MISSILE + abstype : 0;
@@ -4172,6 +4173,11 @@ boolean say; /* Announce out of sight hit/miss events if true */
  buzzmonst:
             notonhead = (mon->mx != bhitpos.x || mon->my != bhitpos.y);
             if (zap_hit(find_mac(mon), spell_type)) {
+                if (total_bounces >= 3 && dx != 0 && dy != 0) {
+                    /* if it ever becomes possible for a non diagonal ray to
+                     * reflect at a diagonal angle, this will need updating */
+                    tnnt_achieve(A_HIT_WITH_3_BOUNCES);
+                }
                 if (mon_reflects(mon, (char *) 0)) {
                     if (cansee(mon->mx, mon->my)) {
                         hit(fltxt, mon, exclam(0));
@@ -4312,7 +4318,15 @@ boolean say; /* Announce out of sight hit/miss events if true */
             if (!dx || !dy || !rn2(bchance)) {
                 dx = -dx;
                 dy = -dy;
+                /* a wild bounce backwards doesn't count towards the intended
+                 * achievement of lining up a trick shot; reset it so that the
+                 * achievement won't be granted after this occurs (of course, if
+                 * it got to 3 bounces prior to a wild bounce, or somehow has
+                 * enough range to get 3 more bounces after a wild bounce, it
+                 * will still count) */
+                total_bounces = 0;
             } else {
+                total_bounces++;
                 if (isok(sx, lsy) && ZAP_POS(rmn = levl[sx][lsy].typ)
                     && !closed_door(sx, lsy)
                     && (IS_ROOM(rmn) || (isok(sx + dx, lsy)

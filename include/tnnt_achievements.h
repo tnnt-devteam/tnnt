@@ -459,7 +459,7 @@ ACH("Palantir", "Successfully apply a crystal ball", APPLIED_CRYSTAL_BALL),
 ACH("Peak Condition", "Raise all attributes to at least 18",
     MAXED_ATTRIBUTES),
 ACH("Replacement Goldfish", "Cast create familiar", CREATED_FAMILIAR),
-ACH("Pop the Question", "Give a ring of adornment to a succubus",
+ACH("Pop the Question", "Give a ring of adornment when seduced by a succubus",
     GAVE_ADORNMENT),
 ACH("No Soup For You!", "Get permanently expelled from the Quest",
     EXPELLED_FROM_QUEST),
@@ -564,7 +564,13 @@ ACH("The Full Elven",
 ACH("Drained and Regained",
     "Restore at least 3 lost levels with a single potion",
     RESTORED_3_LEVELS),
-/* 5 free bits in tnntachieve4 */
-/* 315 achievements defined */
+ACH("Vlad Was Here", "Find a Vlad trapdoor without triggering it",
+    FOUND_VLAD_TRAPDOOR),
+ACH("Three-Rail Shot",
+    "Hit a monster with a diagonal ray that bounced at least 3 times",
+    HIT_WITH_3_BOUNCES),
+
+/* 4 free bits in tnntachieve4 */
+/* 316 achievements defined */
 
 #undef ACH

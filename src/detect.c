@@ -1646,6 +1646,9 @@ struct trap *trap;
 
     You("find %s.", an(defsyms[trap_to_defsym(tt)].explanation));
 
+    if (trap->ttyp == TRAPDOOR && levl[trap->tx][trap->ty].typ == CORR)
+        tnnt_achieve(A_FOUND_VLAD_TRAPDOOR);
+
     if (cleared) {
         display_nhwindow(WIN_MAP, TRUE); /* wait */
         docrt();
