@@ -2262,10 +2262,9 @@ struct obj *obj;
                 return FALSE;
             return TRUE;
         case WAND_CLASS:
-            /* no wands of nothing or wishing. Maybe other stuff here too */
             switch (obj->otyp) {
-            case WAN_NOTHING:
-            case WAN_WISHING:
+            case WAN_NOTHING: /* useless */
+            case WAN_WISHING: /* too powerful */
                 return FALSE;
             default:
                 return obj->spe > 0;
@@ -2287,6 +2286,7 @@ struct obj *obj;
             if (Has_contents(obj))
                 return FALSE; /* bags with stuff in them not allowed */
             switch (obj->otyp) {
+            /* no gifting of (likely) wishes */
             case MAGIC_LAMP:
                 return FALSE;
             /* charged allowed tools: conveniently, these all work the same */
@@ -2387,7 +2387,21 @@ struct obj *obj;
             default:
                 return FALSE;
             }
-        default: /* gems, boulders, statues, iron chains, etc */
+        case GEM_CLASS:
+            /* opinions have been divided on whether to accept objects in this
+             * class; the current reasoning on why not is:
+             * 1. valuable gems: anyone who gets to a swap chest will have found
+             *    some of these already and one more is not useful.
+             * 2. luckstones: there's always one on the Mines End swapchest
+             *    level, and most players would have one by the Valley.
+             * 3. touchstones: not uncommon to find one in the Mines; even if
+             *    you didn't, allowing this would let you try other gray stones
+             *    that get rejected and thereby help you identify them. It'd
+             *    also probably be a common discard for Archeologists who have
+             *    by now used it to identify most glass, while not being useful
+             *    enough for other players to take. */
+            return FALSE;
+        default: /* boulders, statues, iron chains, etc */
             return FALSE;
     }
 }
