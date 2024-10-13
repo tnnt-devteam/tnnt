@@ -570,7 +570,7 @@ ACH("Three-Rail Shot",
     "Hit a monster with a diagonal ray that bounced at least 3 times",
     HIT_WITH_3_BOUNCES),
 
-/* 4 free bits in tnntachieve4 */
-/* 316 achievements defined */
+/* 3 free bits in tnntachieve4 */
+/* 317 achievements defined */
 
 #undef ACH
