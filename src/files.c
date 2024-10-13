@@ -5587,6 +5587,9 @@ short achvmt;
     const char *achnam = (const char *) 0;
 
     if (achvmt == NO_TNNT_ACHIEVEMENT) { /* vanilla achievement */
+        /* TNNT TODO FOR 3.7: This might need to be updated given that 3.7
+         * changed how achievements work. Probably not, since this is based on
+         * encodeachieve(), but needs to be checked. */
         /* find what bit is newly set in the encodeachieve() bitfield so
          * that we can identify the achievement */
         /* discard 8th bit (u.uachieve.ascended), and shift more significant

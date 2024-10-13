@@ -1,10 +1,37 @@
 #if defined(TNNT_ACH_ENUM)
+/* there is a slight possibility of name collision here since attributes and
+ * alignments both use A_*** as well. We use A_ to keep the constant names
+ * short and mitigate having to do ugly line wrappings in heavily indented
+ * blocks. */
 #define ACH(nam, desc, id) A_##id
 #elif defined (TNNT_ACH_NAMES)
 #define ACH(nam, desc, id) {nam, desc}
 #elif !defined(ACH)
 #error Bad inclusion of tnnt_achievements.h
 #endif
+
+/* an idea that has been tossed around for a while is to list (most of) the
+ * vanilla achievements in here, basically having a separate TNNT achievement
+ * for each vanilla one, so that they use the same system and we don't have to
+ * futz around with a separate list of vanilla achievements both here in the
+ * game and on the scoreboard side.
+ * For now, we haven't done that. Vanilla achievements are recorded at the point
+ * of accomplishment by tnnt_achieve(NO_TNNT_ACHVMT) for updating temporary
+ * achievements and notifying the player.
+ */
+
+/* TNNT TODO FOR 3.7: Vanilla achievements replace several of these or
+ * approximate them, so we should probably drop the TNNT ones and replace them
+ * with vanilla ones.
+ * Specifically these: (we can keep the achievement titles)
+ * vanilla "reached Minetown" supplants Back to Civilisation
+ * vanilla "entered a shop" might supplant "Dungeon Economics"
+ * vanilla "consulted the Oracle" supplants "Sage Advice"
+ * vanilla "read a Discworld novel" supplants "Escape to Discworld"
+ * Some of the other vanilla achievements should be tracked as new vanilla
+ * achievements, but possibly not all (depends on what we want to do with the
+ * rank title achievements).
+ */
 
 /* starting around 2021 achievements are organized into sort of groups based
  * around common themes */
@@ -574,3 +601,104 @@ ACH("Three-Rail Shot",
 /* 317 achievements defined */
 
 #undef ACH
+
+/*
+TNNT TODO FOR 3.7: Here are some good achievement ideas we want to do but they
+are best off waiting until 3.7 is released and TNNT rebases on it.
+
+"Hit the Ceiling": Reach XL 30 and your role's highest rank. This will be a
+vanilla achievement in 3.7.
+
+Also, two achievements for hitting XL 10, and one somewhere around 20 (you get a
+new rank at 10, but around 20 the options are 18 or 22 if we want to keep it
+tied to ranks. Or just don't tie it to ranks and award it at 20.) This would
+only be if we don't use the vanilla rank title achievements.
+
+Dry out a wet towel with fire. That behavior only exists in 3.7.
+
+Pacify your quest leader after angering them. Pre 3.7, if you anger them, you
+just get kicked out and your game is unwinnable.
+*/
+
+/*
+Preserving here for posterity: rejected achievement ideas, and the reasons for
+rejecting them.
+
+Category 1: achievements that amount to "end the game in a certain way" - even
+if the achievement allows you to survive with lifesaving, they just end up being
+not that interesting and there's a limit on how many you'd be able to get in one
+game. This applies to both dying and ascending in whatever contrived
+circumstance.
+    - Go from full HP to 0 in one turn.
+    - Escape in celestial disgrace.
+    - After getting the Mines luckstone and Sokoban prize and leaving both
+      branches, never return to either.
+    - Go to heaven prematurely.
+
+Category 2: achievements that are not easy to compute because they don't fit
+cleanly into something a player can accomplish in one NetHack game, which is how
+the achievement framework works.
+    - Have an item you donated to the swap chest taken by someone else.
+    - Play 60 turns in 60 games in less than 60 minutes.
+
+Category 3: achievements that are just too boring or tedious. This is
+subjective, to some extent. If it's likely that most players will see it as a
+chore, and it isn't really that impressive to talk about, it may not make the
+cut here.
+    - Destroy some large amount of doors.
+    - Dig out an entire level.
+
+Category 4: achievements that amount to "make a quirky wish". While players might wish
+for nonstandard things in order to accomplish achievements, such as the last
+missing piece of magic armor for Fashionista, having the esoteric wish be the
+only thing you need to get the achievement isn't interesting.
+    - Wish for a boulder.
+
+
+Other unsorted rejects:
+
+Minesweeper should not be entirely locked behind Ludios; it should just involve
+disarming some number of land mines over the game, which could be the ones in
+Ludios but don't have to be.
+    > That number would have to be pretty low in order to not still soft-lock
+    the achievement behind Ludios existing and getting into it to disarm mines.
+
+The +13 and -13 Luck achievements should require sustaining that level for some
+period of time.
+    > Players would already do this for +13 Luck, and would just boringly lock
+    themselves in a closet for the duration of the -13 Luck.
+
+Achievement for getting expelled from the Quest permanently.
+    "Make your game unwinnable" achievement falls under the same principle as
+    not having "die in a specific way" achievements. Plus, getting expelled from
+    the Quest permanently won't be possible in 3.7.
+
+Achievement for identifying a loadstone with a touchstone.
+    Loadstones identify themselves pretty easily; the main challenge would be
+    remembering to identify it with the touchstone before trying to drop it,
+    which isn't very compelling as an achievement. Plus, you have to identify a
+    loadstone anyway for Geologist.
+
+Achievement for finishing a game with INT_MAX points.
+    This was more achievable in 3.4.3 with automatable pudding farms; it's
+    unclear whether it's achievable now, and in any case, getting it would be a
+    huge slog.
+
+Achievement for formally identifying an item you already had type-named with the
+correct name.
+    Given how easy it is to informally identify an item, or even just guess
+    correctly when the pool is small (i.e. magic armor) this is not interesting
+    enough to make the cut.
+
+Achievement for restoring an attribute point with restore ability.
+    Too similar to Drained and Regained.
+
+Achievement for attempting to levelport deeper than Gehennom goes.
+    This is commonly done to get to the Vibrating Square level, and even if you
+    weren't planning to do that, the cost (1 scroll of teleportation) is
+    minimal.
+
+Achievement for performing genocide from all available sources
+    There are only 2 sources and there's already an achievement for performing
+    genocide 5 times, in which you're likely to have used both sources.
+*/
