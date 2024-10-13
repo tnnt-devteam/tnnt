@@ -1231,4 +1231,19 @@ tnnt_coord_hash(int x, int y, int z)
     return a;
 }
 
+/* TNNT: return the index of one of the tracked uniques in
+ * tnnt_globals.unique_info[] */
+int
+tnnt_uniqndx(int mndx)
+{
+    int i;
+    for (i = 0; i < NUM_UNIQUES_TRACKED; ++i) {
+        if (tnnt_globals.unique_info[i].mndx == mndx) {
+            return i;
+        }
+    }
+    impossible("tnnt_uniqndx: no unique found for mndx %d", mndx);
+    return 0;
+}
+
 /*hacklib.c*/

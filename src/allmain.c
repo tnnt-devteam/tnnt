@@ -725,6 +725,18 @@ newgame()
     }
     tnnt_globals.devteam_quest_status = DTQUEST_NOTSTARTED;
 
+    /* these have to be initialized here so we can keep the simple static
+     * initialization of tnnt_globals = DUMMY */
+    tnnt_globals.unique_info[0].mndx = urole.neminum;
+    tnnt_globals.unique_info[1].mndx = PM_VLAD_THE_IMPALER;
+    tnnt_globals.unique_info[2].mndx = PM_WIZARD_OF_YENDOR;
+    tnnt_globals.unique_info[3].mndx = PM_HIGH_PRIEST;
+    tnnt_globals.unique_info[4].mndx = PM_DEATH;
+    tnnt_globals.unique_info[5].mndx = PM_PESTILENCE;
+    tnnt_globals.unique_info[6].mndx = PM_FAMINE;
+
+    /* end TNNT init */
+
     if (MON_AT(u.ux, u.uy))
         mnexto(m_at(u.ux, u.uy));
     (void) makedog();

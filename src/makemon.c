@@ -1225,10 +1225,24 @@ int mmflags;
     set_mon_data(mtmp, ptr); /* mtmp->data = ptr; */
     if (ptr->msound == MS_LEADER && quest_info(MS_LEADER) == mndx)
         quest_status.leader_m_id = mtmp->m_id;
-    /* TNNT: track deathmatch opponent's monster id */
+
+    /* TNNT: track special monster ids for "never killed X" conduct */
+    for (ct = 0; ct < NUM_UNIQUES_TRACKED; ct++) {
+        if (mndx == tnnt_globals.unique_info[ct].mndx
+            /* don't bother tracking the Wizard since he doesn't have a single
+             * unique monster id (any death of his is recorded in wizdead()) */
+            && mndx != PM_WIZARD_OF_YENDOR
+            /* only register the unique m_id for PM_HIGH_PRIEST when it's
+             * Moloch's high priest */
+            && (mndx != PM_HIGH_PRIEST || Is_sanctum(&u.uz))) {
+            tnnt_globals.unique_info[ct].m_id = mtmp->m_id;
+        }
+    }
+    /* same principle but for the deathmatch system, not a conduct */
     if (Is_deathmatch_level(&u.uz) && in_mklev && is_mplayer(ptr)) {
         tnnt_globals.deathmatch_m_id = mtmp->m_id;
     }
+
     mtmp->mnum = mndx;
     mtmp->former_rank.mnum = NON_PM;
 

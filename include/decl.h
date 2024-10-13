@@ -582,7 +582,13 @@ struct tnnt_globals_t {
     /* TNNT TODO: probably move this above, or the other achievements below,
      * the devteam/npc side quests */
     unsigned feline_m_ids[MAX_TAMED_FELINES]; /* Cat Lady: ids of tamed cats */
+
+    /* wizards_killed increments only when the player kills the Wizard - not
+     * when the wizard or an iswiz monster dies by other means, so it is not
+     * suitable for "never killed the wizard" conduct tracking. */
     unsigned short wizards_killed;
+    unsigned char wizkills_this_action;
+
     /* Inedible object classes:
      * RANDOM_CLASS, ILLOBJ_CLASS, VENOM_CLASS are obvious.
      * GEM_CLASS and ROCK_CLASS have no edible items in them.
@@ -623,7 +629,6 @@ struct tnnt_globals_t {
 #define TNNT_UNTRAP_CONT     0x0080
 #define ALL_UNTRAPPABLE_TRAPTYPES 0x00FF
     uint16_t untrapped_types;
-    unsigned char wizkills_this_action;
     /* mthrowu.c tracks an 'archer' variable, but for some reason only for a
      * monster deliberately shooting at another monster. This does the same for
      * monster shooting at the player, for the "friendly fire" achievement. */
@@ -658,6 +663,20 @@ struct tnnt_globals_t {
     uint32_t polearms_found;
     boolean killed_izchak;
     coord kitten_loc;
+
+    /* Extra tracking for the "never killed X" conducts.
+     * The reason we need this is because the hero can slime or polymorph these
+     * foes, and kill the resulting monster; this will not treat the original
+     * monster as vanquished, so simply checking mvitals[...].died is
+     * insufficient.
+     */
+#define NUM_UNIQUES_TRACKED 7 /* nemesis, Vlad, Wizard, HPoM, 3 Riders */
+    struct {
+        int mndx; /* PM_ constant, initialized in newgame() */
+        unsigned m_id;
+        boolean died;
+    } unique_info[NUM_UNIQUES_TRACKED];
+
     /* tnnt devs: add more as needed */
 };
 E struct tnnt_globals_t tnnt_globals;

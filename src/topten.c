@@ -438,16 +438,17 @@ encodeconduct()
         e |= 1L << 13;
     if (u.uconduct.rmswapchest == 0)
         e |= 1L << 14;
-    if (mvitals[urole.neminum].died == 0)
+    if (!tnnt_globals.unique_info[tnnt_uniqndx(urole.neminum)].died)
         e |= 1L << 15;
-    if (mvitals[PM_VLAD_THE_IMPALER].died == 0)
+    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_VLAD_THE_IMPALER)].died)
         e |= 1L << 16;
-    if (mvitals[PM_WIZARD_OF_YENDOR].died == 0)
+    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_WIZARD_OF_YENDOR)].died)
         e |= 1L << 17;
-    if (mvitals[PM_HIGH_PRIEST].died == 0)
+    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_HIGH_PRIEST)].died)
         e |= 1L << 18;
-    if (mvitals[PM_DEATH].died == 0 && mvitals[PM_PESTILENCE].died == 0
-        && mvitals[PM_FAMINE].died == 0)
+    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_DEATH)].died
+        && !tnnt_globals.unique_info[tnnt_uniqndx(PM_PESTILENCE)].died
+        && !tnnt_globals.unique_info[tnnt_uniqndx(PM_FAMINE)].died)
         e |= 1L << 19;
     if (u.uconduct.artitouch == 0)
         e |= 1L << 20;

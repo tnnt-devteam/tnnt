@@ -717,6 +717,9 @@ wizdead()
         u.uevent.udemigod = TRUE;
         u.udg_cnt = rn1(250, 50);
     }
+    /* TNNT: increment his died counter to break the "never killed Wizard"
+     * conduct */
+    tnnt_globals.unique_info[tnnt_uniqndx(PM_WIZARD_OF_YENDOR)].died = TRUE;
 }
 
 const char *const random_insult[] = {

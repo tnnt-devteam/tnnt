@@ -1265,7 +1265,7 @@ struct obj *otmp;
 
     if (notake(mdat))
         return 0; /* can't carry anything */
-    
+
     if (otyp == SWAP_CHEST)
         return 0; /* TNNT: monsters can't pick up the swap chest */
 
@@ -1963,6 +1963,7 @@ register struct monst *mtmp;
 {
     struct permonst *mptr;
     int tmp;
+    int i;
     s_level* slev = Is_special(&u.uz);
     boolean bigrm, orctown;
 
@@ -2071,6 +2072,18 @@ register struct monst *mtmp;
     tmp = monsndx(mtmp->data);
     if (mvitals[tmp].died < 255)
         mvitals[tmp].died++;
+
+    /* TNNT - check to see if this was a polymorphed or slimed unique monster
+     * whose death should break one of the "never killed X" conducts.
+     * Wizard of Yendor is handled in wizdead(), but nemesis is handled here
+     * since nemdead() does not account for the nemesis being in a different
+     * form. */
+    for (i = 0; i < NUM_UNIQUES_TRACKED; ++i) {
+        if (tnnt_globals.unique_info[i].m_id == mtmp->m_id) {
+            tnnt_globals.unique_info[i].died = TRUE;
+            break;
+        }
+    }
 
     /* TNNT - killing the DevTeam is VERY BAD */
     if (tmp == PM_DEVTEAM_MEMBER) {
@@ -4658,7 +4671,7 @@ struct monst *mtmp;
     tnnt_globals.deathmatch_completed = TRUE;
     /* before we collect/extract all the transient items, check whether hero
      * will be losing items she already picked up (e.g. missiles or ammo) */
-    /* since this is used to distinguish between "none", "one", and "multiple" 
+    /* since this is used to distinguish between "none", "one", and "multiple"
      * we can break once we reach transient_invent > 1 -- any more increments
      * have no additional effect */
     for (otmp = invent; otmp && transient_invent < 2; otmp = otmp->nobj) {
