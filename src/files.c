@@ -4918,13 +4918,13 @@ short *rcode;
     while (fscanf(f,"%s",buf) == 1) {
         if (sscanf(buf, "otyp=%hd", &(o->otyp)) == 1)
             continue;
-        if (sscanf(buf, "owt=%d", &(o->owt)) == 1)
+        if (sscanf(buf, "owt=%u", &(o->owt)) == 1)
             continue;
         if (sscanf(buf, "quan=%ld", &(o->quan)) == 1)
             continue;
         if (sscanf(buf, "spe=%hhd", &(o->spe)) == 1)
             continue;
-        if (sscanf(buf, "oclass=%hhd", &(o->oclass)) == 1)
+        if (sscanf(buf, "oclass=%c", &(o->oclass)) == 1)
             continue;
         if (sscanf(buf, "cursed=%d", &tmp_bitfield) == 1) {
             o->cursed = tmp_bitfield;
