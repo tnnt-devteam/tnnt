@@ -4924,8 +4924,12 @@ short *rcode;
             continue;
         if (sscanf(buf, "spe=%hhd", &(o->spe)) == 1)
             continue;
-        if (sscanf(buf, "oclass=%c", &(o->oclass)) == 1)
+        if (sscanf(buf, "oclass=%d", &tmp_bitfield) == 1) {
+            /* oclass isn't a bitfield but read it as an int to silence a
+             * compiler warning for reading an int directly into a char */
+            o->oclass = (char) tmp_bitfield;
             continue;
+        }
         if (sscanf(buf, "cursed=%d", &tmp_bitfield) == 1) {
             o->cursed = tmp_bitfield;
             continue;
