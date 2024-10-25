@@ -5628,11 +5628,13 @@ boolean final;
             tnnt_globals.artis_eaten, plur(tnnt_globals.artis_eaten));
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You %s sent back %d level%s by the mysterious force.",
-            !final ? "have been" : "were",
-            tnnt_globals.mysterious_forced_back,
-            plur(tnnt_globals.mysterious_forced_back));
-    putstr(en_win, 0, buf);
+    if (final || u.uachieve.amulet) {
+        Sprintf(buf, "You %s sent back %d level%s by the mysterious force.",
+                !final ? "have been" : "were",
+                tnnt_globals.mysterious_forced_back,
+                plur(tnnt_globals.mysterious_forced_back));
+        putstr(en_win, 0, buf);
+    }
 
     Sprintf(buf, "You %shad a door resist %d consecutive time%s.",
             maybe_have(final), tnnt_globals.door_resist_max,
@@ -5663,9 +5665,15 @@ boolean final;
         Strcat(buf, " neutral"); \
     if ((altars) & AM_CHAOTIC)   \
         Strcat(buf, " chaotic");
-    Strcpy(buf, "High altar alignments visited:");
-    print_visited(tnnt_globals.high_altars);
-    putstr(en_win, 0, buf);
+    /* Initially I had this check for tnnt_globals.high_altars != 0, but it's
+     * probably better to show this a little earlier to avoid someone forgetting
+     * to step on Moloch's high altar and not realizing it until it's too late.
+     * Starting to show it around the start of the ascension run is fine. */
+    if (final || u.uevent.udemigod) {
+        Strcpy(buf, "High altar alignments visited:");
+        print_visited(tnnt_globals.high_altars);
+        putstr(en_win, 0, buf);
+    }
 
     Strcpy(buf, "Regular altar alignments visited:");
     print_visited(tnnt_globals.regular_altars);
@@ -5774,11 +5782,13 @@ boolean final;
     }
     putstr(en_win, 0, buf);
 
-    Sprintf(buf, "You %s%s%s up a land mine in Fort Ludios.",
-            maybe_have(final),
-            tnnt_globals.blew_up_ludios ? "" : (!final ? "not " : "never "),
-            !final ? "blown" : "blew");
-    putstr(en_win, 0, buf);
+    if (final || tnnt_is_achieved(A_ENTERED_LUDIOS)) {
+        Sprintf(buf, "You %s%s%s up a land mine in Fort Ludios.",
+                maybe_have(final),
+                tnnt_globals.blew_up_ludios ? "" : (!final ? "not " : "never "),
+                !final ? "blown" : "blew");
+        putstr(en_win, 0, buf);
+    }
 
     /* kill a certain number of foo */
     for (i = 0; i < 9; ++i) {
@@ -5791,19 +5801,31 @@ boolean final;
     Sprintf(buf, "You %skilled %d/3 erinyes.", maybe_have(final),
             mvitals[PM_ERINYS].ukilled);
     putstr(en_win, 0, buf);
-    Sprintf(buf, "You %skilled the Wizard of Yendor %d time%s.",
-            maybe_have(final), tnnt_globals.wizards_killed,
-            plur(tnnt_globals.wizards_killed));
-    putstr(en_win, 0, buf);
-    Sprintf(buf, "Home plane elementals killed: %d/4 %d/4 %d/4 %d/4",
-            tnnt_globals.elementals_killed_on_planes[0],
-            tnnt_globals.elementals_killed_on_planes[1],
-            tnnt_globals.elementals_killed_on_planes[2],
-            tnnt_globals.elementals_killed_on_planes[3]);
-    putstr(en_win, 0, buf);
-    Sprintf(buf, "Monsters on Astral eaten by purple worms: %d",
-            tnnt_globals.astral_worm_gulps);
-    putstr(en_win, 0, buf);
+    if (final || u.uevent.udemigod) {
+        Sprintf(buf, "You %skilled the Wizard of Yendor %d time%s.",
+                maybe_have(final), tnnt_globals.wizards_killed,
+                plur(tnnt_globals.wizards_killed));
+        putstr(en_win, 0, buf);
+        /* don't let this mislead someone into thinking they still have the
+         * "never kill the Wizard" conduct if they allowed him to die by some
+         * other means which doesn't tick wizards_killed */
+        if (tnnt_globals.wizards_killed == 0
+            && tnnt_globals.unique_info[tnnt_uniqndx(PM_WIZARD_OF_YENDOR)].died)
+            putstr(en_win, 0, "  ...but did not prevent him from dying.");
+    }
+    if (final || In_endgame(&u.uz)) {
+        Sprintf(buf, "Home plane elementals killed: %d/4 %d/4 %d/4 %d/4",
+                tnnt_globals.elementals_killed_on_planes[0],
+                tnnt_globals.elementals_killed_on_planes[1],
+                tnnt_globals.elementals_killed_on_planes[2],
+                tnnt_globals.elementals_killed_on_planes[3]);
+        putstr(en_win, 0, buf);
+    }
+    if (final || Is_astralevel(&u.uz)) {
+        Sprintf(buf, "Monsters on Astral eaten by purple worms: %d",
+                tnnt_globals.astral_worm_gulps);
+        putstr(en_win, 0, buf);
+    }
 
     for (i = 0; i < MAXOCLASSES; ++i) {
         char ochar[2];
@@ -5836,6 +5858,7 @@ boolean final;
     if (!final)
         Strcat(buf, "  For details, use #snacks.");
     putstr(en_win, 0, buf);
+
     /* ditto for #species */
     count = total = 0;
     for (i = LOW_PM; i < SPECIAL_PM; ++i) {
