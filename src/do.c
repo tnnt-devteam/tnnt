@@ -271,6 +271,8 @@ void
 doaltarobj(obj)
 register struct obj *obj;
 {
+    boolean wasknown = obj->bknown;
+
     if (Blind)
         return;
 
@@ -296,7 +298,9 @@ register struct obj *obj;
         if (obj->oclass != COIN_CLASS)
             obj->bknown = 1; /* ok to bypass set_bknown() */
     }
-    tnnt_achieve(A_BUC_FROM_ALTAR);
+    if (!wasknown && obj->bknown) {
+        tnnt_achieve(A_BUC_FROM_ALTAR);
+    }
 }
 
 STATIC_OVL void
