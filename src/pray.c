@@ -1095,7 +1095,7 @@ aligntyp g_align;
                     You_hear("a divine music...");
                     pline("It sounds like:  \"%s\".", tune);
                     u.uevent.uheard_tune++;
-                    tnnt_achieve(A_LEARNED_PASSTUNE);
+                    tnnt_achieve(A_LEARNED_PASSTUNE_FROM_GOD);
                     break;
                 }
             }

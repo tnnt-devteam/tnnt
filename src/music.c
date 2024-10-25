@@ -798,16 +798,15 @@ struct obj *instr;
                             if (find_drawbridge(&x, &y)) {
                                 /* tune now fully known */
                                 u.uevent.uheard_tune = 2;
-                                tnnt_achieve(A_LEARNED_PASSTUNE);
-                                if (levl[x][y].typ == DRAWBRIDGE_DOWN)
-                                    close_drawbridge(x, y);
-                                else
-                                    open_drawbridge(x, y);
                                 /* intentional that this achievement works even
                                  * if you are first using it to close the
                                  * drawbridge (maybe you opened it previously
                                  * with an opening beam) */
-                                tnnt_achieve(A_USED_PASSTUNE);
+                                tnnt_achieve(A_DEDUCED_PASSTUNE);
+                                if (levl[x][y].typ == DRAWBRIDGE_DOWN)
+                                    close_drawbridge(x, y);
+                                else
+                                    open_drawbridge(x, y);
                                 return 1;
                             }
             } else if (!Deaf) {
@@ -861,7 +860,9 @@ struct obj *instr;
                            tune would have matched above */
                         if (gears == 5) {
                             u.uevent.uheard_tune = 2;
-                            tnnt_achieve(A_LEARNED_PASSTUNE);
+                            /* No A_DEDUCED_PASSTUNE here, you have deduced the
+                             * passtune but you haven't moved the drawbridge
+                             * with it. */
                         }
                     }
                 }
