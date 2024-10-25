@@ -4173,7 +4173,8 @@ boolean say; /* Announce out of sight hit/miss events if true */
  buzzmonst:
             notonhead = (mon->mx != bhitpos.x || mon->my != bhitpos.y);
             if (zap_hit(find_mac(mon), spell_type)) {
-                if (total_bounces >= 3 && dx != 0 && dy != 0) {
+                if (!context.mon_moving
+                    && total_bounces >= 3 && dx != 0 && dy != 0 && type >= 0) {
                     /* if it ever becomes possible for a non diagonal ray to
                      * reflect at a diagonal angle, this will need updating */
                     tnnt_achieve(A_HIT_WITH_3_BOUNCES);
