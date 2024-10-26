@@ -660,6 +660,13 @@ int mntmp;
         flags.female = !flags.female;
         Strcat(buf, (is_male(&mons[mntmp]) || is_female(&mons[mntmp]))
                        ? "" : flags.female ? "female " : "male ");
+        /* small duplication of code in change_sex() because this code path
+         * flips your sex but doesn't want to do the other setup in change_sex()
+         * that assumes you're not polymorphed */
+        tnnt_globals.genderflips++;
+        if (tnnt_globals.genderflips > 1) {
+            tnnt_achieve(A_MULTI_GENDER_FLIP);
+        }
     }
     Strcat(buf, mons[mntmp].mname);
     You("%s %s!", (u.umonnum != mntmp) ? "turn into" : "feel like", an(buf));
