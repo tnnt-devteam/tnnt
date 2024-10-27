@@ -956,6 +956,8 @@ register struct obj *obj;
         tnnt_achieve(A_KILLED_TAMED_WOODCHUCK);
     if (mtmp->cham != NON_PM || is_shapeshifter(mtmp->data))
         tnnt_achieve(A_TAMED_SHAPECHANGER);
+    if (is_rider(mtmp->data))
+        tnnt_achieve(A_TAMED_RIDER);
     if (mtmp->data->mlet == S_FELINE
         && tnnt_globals.felines_tamed < MAX_TAMED_FELINES) {
         int i;

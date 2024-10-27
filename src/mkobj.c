@@ -2884,6 +2884,11 @@ struct obj **obj1, **obj2;
                       / (o1wt + o2wt));
             otmp1->age = moves - agetmp; /* conv. relative back to absolute */
             otmp1->owt += o2wt;
+            if (o1wt < 300 && o2wt < 300 && otmp1->owt > 300) {
+                /* 300 is the weight threshold in xname_flags() to be considered
+                 * "large". A glob that is "very large" will also qualify. */
+                tnnt_achieve(A_MADE_LARGE_GLOB);
+            }
             if (otmp1->oeaten || otmp2->oeaten)
                 otmp1->oeaten = o1wt + o2wt;
             otmp1->quan = 1L;

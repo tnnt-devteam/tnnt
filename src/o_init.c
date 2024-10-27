@@ -409,6 +409,10 @@ short otyp;
     switch (objects[otyp].oc_class) {
     case ARMOR_CLASS:
         /* Fashionista has a lot of ranges, unfortunately. */
+        /* TNNT TODO FOR 3.7: At least one of these ranges has changed (helm of
+         * brilliance is no longer shuffled, and comes before the shuffled ones;
+         * identifying brilliance should still be required for the achievement).
+         * Review and fix these ranges. */
         if ((otyp >= CORNUTHAUM && otyp <= DUNCE_CAP)
             || (otyp >= HELMET && otyp <= HELM_OF_TELEPATHY)
             || (otyp >= CLOAK_OF_PROTECTION && otyp <= CLOAK_OF_DISPLACEMENT)
@@ -445,6 +449,22 @@ short otyp;
         else if (otyp >= FIRST_GEM && otyp <= LAST_GEM)
             return A_IDENTIFIED_ALL_GEMS;
         break;
+    case TOOL_CLASS:
+        if (otyp >= SACK && otyp <= BAG_OF_TRICKS)
+            return A_IDENTIFIED_ALL_BAGS;
+        else if (otyp >= TOOLED_HORN && otyp <= HORN_OF_PLENTY)
+            return A_IDENTIFIED_ALL_HORNS;
+        else if (otyp >= TALLOW_CANDLE && otyp <= MAGIC_LAMP)
+            /* brass lantern is in the middle of this range and doesn't need to
+             * be identified, but that's not a problem */
+            return A_IDENTIFIED_ALL_LIGHTS;
+        /* magic instruments are a mess because there aren't any consecutive
+         * entries. Horns are their own achievement so this doesn't include fire
+         * or frost horns. */
+        else if (otyp == MAGIC_WHISTLE || otyp == MAGIC_FLUTE
+                 || otyp == MAGIC_HARP || otyp == DRUM_OF_EARTHQUAKE)
+            return A_IDENTIFIED_ALL_MAGIC_INSTRUMENTS;
+        break;
     }
     return NO_TNNT_ACHIEVEMENT;
 }
@@ -465,11 +485,15 @@ int otyp;
     int this_achvmt;
     if (otyp == SPE_DETECT_FOOD || otyp == SCR_FOOD_DETECTION) {
         /* special case: identify both of these for an achievement.
-         * Note that it is possible to start the game (e.g. as a Wizard) with
+         * Note that it is possible to start the game (as a Wizard) with
          * both of these; in this case, since tnnt_check_identifications is
          * called only during the game and on items that aren't yet known, it
          * will require amnesia to "forget" one or both of them and then
          * re-identify it. But this combination should be pretty rare.
+         * TNNT TODO FOR 3.7: amnesia won't exist anymore, so update this
+         * comment to reflect that a Wizard starting with both of these will
+         * just be out of luck. (That's preferred versus allowing an achievement
+         * to be earned just by starting the game.)
          */
         if (objects[SCR_FOOD_DETECTION].oc_name_known
             && objects[SPE_DETECT_FOOD].oc_name_known) {

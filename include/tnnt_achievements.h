@@ -184,6 +184,12 @@ ACH("King of Bling", "Identify all amulets", IDENTIFIED_ALL_AMULETS),
 ACH("Bookworm", "Identify all spellbooks", IDENTIFIED_ALL_BOOKS),
 ACH("Scholar", "Identify all scrolls", IDENTIFIED_ALL_SCROLLS),
 ACH("Alchemist", "Identify all potions", IDENTIFIED_ALL_POTIONS),
+ACH("I'm the Bagman", "Identify all bags", IDENTIFIED_ALL_BAGS),
+ACH("Four Horns Adventures", "Identify all horns", IDENTIFIED_ALL_HORNS),
+ACH("Izchak's Apprentice", "Identify all light sources", IDENTIFIED_ALL_LIGHTS),
+ACH("The One-Man Magic Band",
+    "Identify all 4 magical musical instruments (besides horns)",
+    IDENTIFIED_ALL_MAGIC_INSTRUMENTS), /* this DOES include magic whistles */
 ACH("Fashionista",
     "Identify all non-obvious cloaks, helms, boots, and gloves",
     IDENTIFIED_ACCESSORIES),
@@ -324,6 +330,7 @@ ACH("Distinction Without a Difference", "Polymorph a pet using a polytrap",
 ACH("Tenacious Companion",
     "Have a pet survive all the way to the Astral Plane that you brought into the Plane of Earth",
     PET_THROUGH_PLANES),
+ACH("Apocalyptic Horseplay", "Tame a Rider", TAMED_RIDER),
 /* involving bones */
 ACH("Those Who Came Before", "Sight another player's bones pile",
     FOUND_BONES_PILE),
@@ -422,6 +429,8 @@ ACH("Obligatory Pointy Hat", "Put on a cornuthaum as a wizard",
 ACH("Hobbit Skin", "Wear a mithril coat", WORE_MITHRIL_COAT),
 ACH("The Words of the Prophets", "Read 3 random graffiti", FOUND_3_GRAFFITI),
 ACH("Are You Still Pudding Farming", "Split a pudding", SPLIT_A_PUDDING),
+ACH("Yes I Am Still Pudding Farming",
+    "Split enough puddings to coalesce a large glob", MADE_LARGE_GLOB),
 ACH("Wearable Snack", "Wear a meat ring", WORE_MEAT_RING),
 ACH("Frozen Treats", "Loot an ice box", LOOTED_ICE_BOX),
 ACH("Six Pack", "Stock an ice box with 6 or more potions of booze",
@@ -506,6 +515,10 @@ ACH("Gullible", "Get out of trouble by successfully lying to a vault guard",
 ACH("Luck of the Grasshopper", "Reach +13 Luck", GOT_13_LUCK),
 ACH("Murphy's Law", "Reach -13 Luck", GOT_NEGATIVE_13_LUCK),
 ACH("Looking Slick", "Grease a piece of armor", GREASED_ARMOR),
+/* Deathly Hallows additionally requires all items to be identified (to prevent
+ * leaking the identity of a wand/cloak/amulet when you don't have some of the
+ * items identified and trying random combinations until you do have the
+ * achievement), but noting this in the description would make it too long. */
 ACH("The Deathly Hallows",
     "Wield a wand of death while wearing an invisibility cloak and amulet of life saving",
     DEATHLY_HALLOWS),
@@ -599,8 +612,8 @@ ACH("Three-Rail Shot",
     "Hit a monster with a diagonal ray that bounced at least 3 times",
     HIT_WITH_3_BOUNCES),
 
-/* 3 free bits in tnntachieve4 */
-/* 317 achievements defined */
+/* 61 free bits in tnntachieve5 */
+/* 323 achievements defined */
 
 #undef ACH
 
