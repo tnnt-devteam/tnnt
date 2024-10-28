@@ -1118,7 +1118,7 @@ register struct monst *mtmp;
             else if (!strcmpi(MNAME(mtmp), "patr")) {
                 chosenmsg = patrmsgs[rn2(SIZE(patrmsgs))];
             }
-            else if (!strcmpi(MNAME(mtmp), "ais")) {
+            else if (!strcmpi(MNAME(mtmp), "ais523")) {
                 chosenmsg = aismsgs[rn2(SIZE(aismsgs))];
             }
             else if (!strcmpi(MNAME(mtmp), "lorimer")) {
