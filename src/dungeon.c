@@ -2176,8 +2176,14 @@ int ledger_num;
             mptr->custom = (char *) 0;
         }
         (void) memset((genericptr_t) mptr->msrooms, 0, sizeof mptr->msrooms);
-        for (bp = mptr->final_resting_place; bp; bp = bp->next)
+        for (bp = mptr->final_resting_place; bp; bp = bp->next) {
             bp->bonesknown = FALSE;
+            /* TNNT TODO FOR 3.7: this function should no longer exist, so this
+             * decrement shouldn't be needed anymore. It will no longer be
+             * possible to forget a bones level and then find the same bones
+             * again. */
+            tnnt_globals.bones_piles_found--;
+        }
     }
 }
 
