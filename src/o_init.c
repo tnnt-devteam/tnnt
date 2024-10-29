@@ -454,9 +454,12 @@ short otyp;
             return A_IDENTIFIED_ALL_BAGS;
         else if (otyp >= TOOLED_HORN && otyp <= HORN_OF_PLENTY)
             return A_IDENTIFIED_ALL_HORNS;
-        else if (otyp >= TALLOW_CANDLE && otyp <= MAGIC_LAMP)
-            /* brass lantern is in the middle of this range and doesn't need to
-             * be identified, but that's not a problem */
+        else if (otyp == TALLOW_CANDLE || otyp == WAX_CANDLE
+                 || otyp == OIL_LAMP || otyp == MAGIC_LAMP)
+            /* can't simply use tallow...magic lamp range because brass lantern
+             * falls in the middle of it and does not need to be identified;
+             * this causes the discoveries list to show a phantom 1/5 identified
+             * instead of not showing anything */
             return A_IDENTIFIED_ALL_LIGHTS;
         /* magic instruments are a mess because there aren't any consecutive
          * entries. Horns are their own achievement so this doesn't include fire
