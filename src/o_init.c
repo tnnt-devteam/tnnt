@@ -596,11 +596,9 @@ int dis;
 int
 dodiscovered() /* free after Robert Viduya */
 {
-#define TNNT_MAX_MULTI_ACH 5
     register int i, dis;
     int ct = 0;
     char *s, oclass, prev_class, classes[MAXOCLASSES], buf[BUFSZ];
-    char multiprogress[TNNT_MAX_MULTI_ACH][BUFSZ];
     winid tmpwin;
 
     tmpwin = create_nhwindow(NHW_MENU);
@@ -628,15 +626,25 @@ dodiscovered() /* free after Robert Viduya */
     for (s = classes; *s; s++) {
         /* TNNT: count up number of items in this class that count towards
          * achievement */
-        int tnnt_disc = 0;
-        int tnnt_tot = 0;
-        int tnnt_ach = NO_TNNT_ACHIEVEMENT;
-        int j, tnnt_ach_multi = 0;
+#define MAX_ID_ACH_PER_OCLASS 5 /* actually currently 4 (tools) but leave room
+                                   for a 0 terminator at the end */
+        struct {
+            int ach_id;
+            unsigned char total; /* total items counting towards achievement */
+            unsigned char found; /* items that count and are actually identified */
+            /* slight assumption with the initialization that tnnt achievement
+             * #0 will not be an identification achievement. If this somehow
+             * became a problem, it could instead be initialized to
+             * NO_TNNT_ACHIEVEMENT. */
+        } tnnt_ctrs[MAX_ID_ACH_PER_OCLASS] = {0};
+        int j;
+        int tmp_tnnt_ach;
+
+        /* begin NON TNNT code - this is the regular discovery list */
         oclass = *s;
         prev_class = oclass + 1; /* forced different from oclass */
         for (i = bases[(int) oclass];
              i < NUM_OBJECTS && objects[i].oc_class == oclass; i++) {
-            int tmp_tnnt_ach;
             if ((dis = disco[i]) != 0 && interesting_to_discover(dis)) {
                 ct++;
                 if (oclass != prev_class) {
@@ -648,40 +656,42 @@ dodiscovered() /* free after Robert Viduya */
                 disco_append_typename(buf, dis);
                 putstr(tmpwin, 0, buf);
             }
+            /* end NON TNNT code, begin TNNT achievement counting code */
             tmp_tnnt_ach = tnnt_id_achvmt(i);
             if (tmp_tnnt_ach != NO_TNNT_ACHIEVEMENT) {
-                if (tnnt_ach != NO_TNNT_ACHIEVEMENT
-                    && tmp_tnnt_ach != tnnt_ach) {
-                    /* found multiple different achievements inside the same
-                     * object class; this is used for the 3 gem identification
-                     * achievements */
-                    if (tnnt_disc > 0 && tnnt_tot > 0
-                        && tnnt_ach_multi < TNNT_MAX_MULTI_ACH) {
-                        /* store the line so we can print it at the end of the
-                         * category */
-                        Sprintf(multiprogress[tnnt_ach_multi++],
-                                "  (%s: %d/%d)",
-                                tnnt_achievements[tnnt_ach].name,
-                                tnnt_disc, tnnt_tot);
+                for (j = 0; j < MAX_ID_ACH_PER_OCLASS; j++) {
+                    if (tnnt_ctrs[j].ach_id == 0) {
+                        /* new entry */
+                        tnnt_ctrs[j].ach_id = tmp_tnnt_ach;
+                        tnnt_ctrs[j].total = tnnt_ctrs[j].found = 0;
+                        break;
                     }
-                    tnnt_disc = tnnt_tot = 0;
+                    if (tnnt_ctrs[j].ach_id == tmp_tnnt_ach) {
+                        /* found the correct counter */
+                        break;
+                    }
                 }
-                tnnt_ach = tmp_tnnt_ach;
-                tnnt_tot++;
+                if (j == MAX_ID_ACH_PER_OCLASS) {
+                    impossible("too many achievements within 1 oclass");
+                    continue; /* on to next iteration of i loop */
+                }
+                tnnt_ctrs[j].total++;
                 if (objects[i].oc_name_known)
-                    tnnt_disc++;
+                    tnnt_ctrs[j].found++;
             }
         }
-        /* for classes with multiple achievements, print any lines that we may
-         * have prepared while traversing the category */
-        for (j = 0; j < tnnt_ach_multi; j++) {
-            putstr(tmpwin, 0, multiprogress[j]);
-        }
-        if (tnnt_disc > 0 && tnnt_tot > 0) {
-            /* similar printing code as a few lines above */
+        /* TNNT: Now at the end of the discoveries list for this class, print
+         * the lines showing progress towards them. */
+        for (j = 0; j < MAX_ID_ACH_PER_OCLASS; j++) {
+            if (tnnt_ctrs[j].ach_id == 0)
+                /* no more achievements for this object class */
+                break;
+            if (tnnt_ctrs[j].found == 0)
+                /* no progress towards this; don't display it */
+                continue;
             Sprintf(buf, "  (%s: %d/%d)",
-                    tnnt_achievements[tnnt_ach].name,
-                    tnnt_disc, tnnt_tot);
+                    tnnt_achievements[tnnt_ctrs[j].ach_id].name,
+                    tnnt_ctrs[j].found, tnnt_ctrs[j].total);
             putstr(tmpwin, 0, buf);
         }
     }
