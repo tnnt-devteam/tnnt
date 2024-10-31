@@ -29,7 +29,7 @@ nhsym ov_rogue_syms[SYM_MAX] = DUMMY;   /* overides via config ROGUESYMBOL */
 nhsym warnsyms[WARNCOUNT] = DUMMY; /* the current warning display symbols */
 const char invisexplain[] = "remembered, unseen, creature",
            altinvisexplain[] = "unseen creature"; /* for clairvoyance */
-           
+
 /* Default object class symbols.  See objclass.h.
  * {symbol, name, explain}
  *     name:    used in object_detect().
@@ -190,8 +190,8 @@ const struct symdef defsyms[MAXPCHARS] = {
        { '^', "bear trap", C(HI_METAL) },            /* trap */
        { '^', "land mine", C(CLR_RED) },             /* trap */
        { '^', "rolling boulder trap", C(CLR_GRAY) }, /* trap */
-       { '^', "sleeping gas trap", C(HI_ZAP) },      /* trap */
-/*50*/ { '^', "rust trap", C(CLR_BLUE) },            /* trap */
+/*50*/ { '^', "sleeping gas trap", C(HI_ZAP) },      /* trap */
+       { '^', "rust trap", C(CLR_BLUE) },            /* trap */
        { '^', "fire trap", C(CLR_ORANGE) },          /* trap */
        { '^', "pit", C(CLR_BLACK) },                 /* trap */
        { '^', "spiked pit", C(CLR_BLACK) },          /* trap */
@@ -200,8 +200,8 @@ const struct symdef defsyms[MAXPCHARS] = {
        { '^', "teleportation trap", C(CLR_MAGENTA) },  /* trap */
        { '^', "level teleporter", C(CLR_MAGENTA) },    /* trap */
        { '^', "magic portal", C(CLR_BRIGHT_MAGENTA) }, /* trap */
-       { '"', "web", C(CLR_GRAY) },                    /* web */
-/*60*/ { '^', "statue trap", C(CLR_GRAY) },            /* trap */
+/*60*/ { '"', "web", C(CLR_GRAY) },                    /* web */
+       { '^', "statue trap", C(CLR_GRAY) },            /* trap */
        { '^', "magic trap", C(HI_ZAP) },               /* trap */
        { '^', "anti-magic field", C(HI_ZAP) },         /* trap */
        { '^', "polymorph trap", C(CLR_BRIGHT_GREEN) }, /* trap */
@@ -211,10 +211,10 @@ const struct symdef defsyms[MAXPCHARS] = {
        { '-', "", C(CLR_GRAY) },                /* hbeam */
        { '\\', "", C(CLR_GRAY) },               /* lslant */
        { '/', "", C(CLR_GRAY) },                /* rslant */
-       { '*', "", C(CLR_WHITE) },               /* dig beam */
+/*70*/ { '*', "", C(CLR_WHITE) },               /* dig beam */
        { '!', "", C(CLR_WHITE) },               /* camera flash beam */
        { ')', "", C(HI_WOOD) },                 /* boomerang open left */
-/*70*/ { '(', "", C(HI_WOOD) },                 /* boomerang open right */
+       { '(', "", C(HI_WOOD) },                 /* boomerang open right */
        { '0', "", C(HI_ZAP) },                  /* 4 magic shield symbols */
        { '#', "", C(HI_ZAP) },
        { '@', "", C(HI_ZAP) },
@@ -222,10 +222,10 @@ const struct symdef defsyms[MAXPCHARS] = {
        { '#', "poison cloud", C(CLR_BRIGHT_GREEN) },   /* part of a cloud */
        { '?', "valid position", C(CLR_BRIGHT_GREEN) }, /*  target position */
        /* swallow colors are changed by mapglyph() to match engulfing monst */
-       { '/', "", C(CLR_GREEN) },         /* swallow top left      */
+/*80*/ { '/', "", C(CLR_GREEN) },         /* swallow top left      */
        { '-', "", C(CLR_GREEN) },         /* swallow top center    */
        { '\\', "", C(CLR_GREEN) },        /* swallow top right     */
-/*80*/ { '|', "", C(CLR_GREEN) },         /* swallow middle left   */
+       { '|', "", C(CLR_GREEN) },         /* swallow middle left   */
        { '|', "", C(CLR_GREEN) },         /* swallow middle right  */
        { '\\', "", C(CLR_GREEN) },        /* swallow bottom left   */
        { '-', "", C(CLR_GREEN) },         /* swallow bottom center */
@@ -233,10 +233,10 @@ const struct symdef defsyms[MAXPCHARS] = {
        /* explosion colors are changed by mapglyph() to match type of expl. */
        { '/', "", C(CLR_ORANGE) },        /* explosion top left     */
        { '-', "", C(CLR_ORANGE) },        /* explosion top center   */
-       { '\\', "", C(CLR_ORANGE) },       /* explosion top right    */
+/*90*/ { '\\', "", C(CLR_ORANGE) },       /* explosion top right    */
        { '|', "", C(CLR_ORANGE) },        /* explosion middle left  */
        { ' ', "", C(CLR_ORANGE) },        /* explosion middle center*/
-/*90*/ { '|', "", C(CLR_ORANGE) },        /* explosion middle right */
+       { '|', "", C(CLR_ORANGE) },        /* explosion middle right */
        { '\\', "", C(CLR_ORANGE) },       /* explosion bottom left  */
        { '-', "", C(CLR_ORANGE) },        /* explosion bottom center*/
        { '/', "", C(CLR_ORANGE) },        /* explosion bottom right */
