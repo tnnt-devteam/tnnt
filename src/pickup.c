@@ -2831,8 +2831,6 @@ boolean makecat, givemsg;
     xchar ox, oy;
     boolean itsalive = !rn2(2);
 
-    tnnt_achieve(A_OPENED_SCHROEDINGERS);
-
     box->spe = 0; /* box->owt will be updated below */
     if (get_obj_location(box, &ox, &oy, 0))
         box->ox = ox, box->oy = oy; /* in case it's being carried */
@@ -2881,6 +2879,9 @@ boolean makecat, givemsg;
             pline_The("%s inside the box is dead!",
                       Hallucination ? rndmonnam((char *) 0) : "housecat");
     }
+
+    tnnt_achieve(A_OPENED_SCHROEDINGERS);
+
     nhUse(deadcat);
     return;
 }
