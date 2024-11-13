@@ -1308,7 +1308,10 @@ int how;
 #endif
     /* END TNNT code */
 
-    /* Don't produce a dumplog for scummed games */
+    /* TNNT: Don't produce a dumplog for scummed games.  All the writes were
+     * contributing to serious server load when players were startscumming at
+     * an extremely rapid pace (whether violating the rules by using a script,
+     * or just quitting and restarting games very quickly by hand). */
     startscummed = ((how == QUIT || how == ESCAPED) && moves <= 100L);
 
     if (!startscummed)
@@ -1410,7 +1413,8 @@ int how;
         if (strcmp(flags.end_disclose, "none"))
             disclose(how, taken);
 
-        dump_everything(how, endtime);
+        if (!startscummed)
+            dump_everything(how, endtime);
     }
 
     /* if pets will contribute to score, populate mydogs list now
