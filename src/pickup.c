@@ -2669,6 +2669,16 @@ register struct obj *obj;
         obj->owt = weight(obj);
     }
 
+    if (current_container->otyp == SWAP_CHEST
+        && current_container->swapitems < SWAP_ITEMS_MIN) {
+        /* should not get to here if we haven't contributed to the chest */
+        You_feel(current_container->swapitems == SWAP_CHEST_USED_UP
+                    ? "%s is no longer interested in dealing with you."
+                    : "%s wants something from you first.",
+                    the(xname(current_container)));
+        return -1;
+    }
+
     if (obj->oartifact && !touch_artifact(obj, &youmonst))
         return 0;
 
@@ -2685,14 +2695,6 @@ register struct obj *obj;
 
     /* TNNT swap chest --> */
     if (current_container->otyp == SWAP_CHEST) {
-        if (current_container->swapitems < SWAP_ITEMS_MIN) {
-            /* should not get to here if we haven't contributed to the chest */
-            You_feel(current_container->swapitems == SWAP_CHEST_USED_UP
-                       ? "%s is no longer interested in dealing with you."
-                       : "%s wants something from you first.",
-                     the(xname(current_container)));
-            return -1;
-        }
         if (!delete_swapobj_file(obj)) {
             /* fails if file already doesn't exist */
             pline("You reach for %s, but %s!",
@@ -2778,6 +2780,7 @@ register struct obj *obj;
                        prefix, itemname);
         if (save_oname && !obj->oartifact)
             ONAME(obj) = save_oname;
+        return -1; /* don't try to remove any more items */
     }
     /* <-- */
 
