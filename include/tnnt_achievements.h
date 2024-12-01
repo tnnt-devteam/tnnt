@@ -633,87 +633,10 @@ Dry out a wet towel with fire. That behavior only exists in 3.7.
 
 Pacify your quest leader after angering them. Pre 3.7, if you anger them, you
 just get kicked out and your game is unwinnable.
-*/
 
-/*
-Preserving here for posterity: rejected achievement ideas, and the reasons for
-rejecting them.
-
-Category 1: achievements that amount to "end the game in a certain way" - even
-if the achievement allows you to survive with lifesaving, they just end up being
-not that interesting and there's a limit on how many you'd be able to get in one
-game. This applies to both dying and ascending in whatever contrived
-circumstance.
-    - Go from full HP to 0 in one turn.
-    - Escape in celestial disgrace.
-    - After getting the Mines luckstone and Sokoban prize and leaving both
-      branches, never return to either.
-    - Go to heaven prematurely.
-
-Category 2: achievements that are not easy to compute because they don't fit
-cleanly into something a player can accomplish in one NetHack game, which is how
-the achievement framework works.
-    - Have an item you donated to the swap chest taken by someone else.
-    - Play 60 turns in 60 games in less than 60 minutes.
-
-Category 3: achievements that are just too boring or tedious. This is
-subjective, to some extent. If it's likely that most players will see it as a
-chore, and it isn't really that impressive to talk about, it may not make the
-cut here.
-    - Destroy some large amount of doors.
-    - Dig out an entire level.
-
-Category 4: achievements that amount to "make a quirky wish". While players might wish
-for nonstandard things in order to accomplish achievements, such as the last
-missing piece of magic armor for Fashionista, having the esoteric wish be the
-only thing you need to get the achievement isn't interesting.
-    - Wish for a boulder.
-
-
-Other unsorted rejects:
-
-Minesweeper should not be entirely locked behind Ludios; it should just involve
-disarming some number of land mines over the game, which could be the ones in
-Ludios but don't have to be.
-    > That number would have to be pretty low in order to not still soft-lock
-    the achievement behind Ludios existing and getting into it to disarm mines.
-
-The +13 and -13 Luck achievements should require sustaining that level for some
-period of time.
-    > Players would already do this for +13 Luck, and would just boringly lock
-    themselves in a closet for the duration of the -13 Luck.
-
-Achievement for getting expelled from the Quest permanently.
-    "Make your game unwinnable" achievement falls under the same principle as
-    not having "die in a specific way" achievements. Plus, getting expelled from
-    the Quest permanently won't be possible in 3.7.
-
-Achievement for identifying a loadstone with a touchstone.
-    Loadstones identify themselves pretty easily; the main challenge would be
-    remembering to identify it with the touchstone before trying to drop it,
-    which isn't very compelling as an achievement. Plus, you have to identify a
-    loadstone anyway for Geologist.
-
-Achievement for finishing a game with INT_MAX points.
-    This was more achievable in 3.4.3 with automatable pudding farms; it's
-    unclear whether it's achievable now, and in any case, getting it would be a
-    huge slog.
-
-Achievement for formally identifying an item you already had type-named with the
-correct name.
-    Given how easy it is to informally identify an item, or even just guess
-    correctly when the pool is small (i.e. magic armor) this is not interesting
-    enough to make the cut.
-
-Achievement for restoring an attribute point with restore ability.
-    Too similar to Drained and Regained.
-
-Achievement for attempting to levelport deeper than Gehennom goes.
-    This is commonly done to get to the Vibrating Square level, and even if you
-    weren't planning to do that, the cost (1 scroll of teleportation) is
-    minimal.
-
-Achievement for performing genocide from all available sources
-    There are only 2 sources and there's already an achievement for performing
-    genocide 5 times, in which you're likely to have used both sources.
+"Chain Reaction" - Blow up a monster by triggering another monster to blow up.
+The only way to do this "organically" in pre 3.7 is to luck into two nearby gas
+spores. Otherwise, it requires artificial methods such as reverse genocide or
+create monster spam. 3.7 has more monsters that explode on death, so it's more
+feasible to happen organically.
 */
