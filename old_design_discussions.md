@@ -255,6 +255,50 @@ Miscellaneous suggestions:
 - Routinely cycle out custom stuff and replace it with new stuff to keep the
   tournament fresh. The main problem here may be finding the inspiration and
   developer will to make new custom stuff every year.
+- Horatius challenge; monsters are trying to cross a (wide?) bridge to get to
+  some objective behind you and you must prevent them from doing so. Note: would
+  have to rename "Horatius at the Bridge" achievement.
+- Monty Python branch that involves defeating the Black Knight and the Rabbit of
+  Caerbannog. The unique twist here would be that ghosts of players that died to
+  the Rabbit in other games would pile up in your game (and possibly be buffed
+  to do something relevant to the challenge).
+- The Council of Nine: inspired by the devnull Waldo challenge, it involves
+  exploring a secret society in the Mazes of Menace, which is possibly working
+  against the devteam.
+  - Chattable monsters may generate as "Councilor X", where X is either their
+    species or a famous NetHack player name - Deathonastick, Dudley, etc.
+  - Complete the challenge by finding or sidequesting for all nine councilors.
+  - Should involve secret messages passed by fortune cookie - either the
+    challenge should start and make Councilors spawn by finding (intercepting) a
+    message in a fortune cookie, or one councilor asks you to pass a message to
+    another via a fortune cookie.
+  - A council chamber either embedded in a Dungeons of Doom level and
+    inaccessible, or on a separate branch, reached very late in the challenge
+    after you have gained the council's trust.submitted 4 days ago by soulreaverdan
+- Challenge where there are 7 (or however many) magic gems / dilithium crystals
+  / ZAPM objects scattered around the dungeon that you must collect all of to
+  finish the challenge.
+- Land of the Lost challenge based on the TV series of that name, because of the
+  nature of this land its branch is inescapable until you complete it and get
+  whatever MacGuffin enables you to escape.
+- Challenge themed around Alice in Wonderland with a bunch of custom,
+  appropriately themed enemies.
+- Devnull-type restriction (lifted upon completing a challenge) that shopkeepers
+  won't let you in unless you're wearing a shirt and shoes. Unspecified whether
+  body armor or a cloak obviates the need for a shirt.
+- A popular suggestion from post tournament surveys: bring back some of the
+  devnull challenges such as Pac-Man, or at least lock certain NetHack things
+  behind devnull-style restrictions, where you must complete a TNNT challenge
+  in order to unlock it.
+- Don't just keep adding new content and challenges to TNNT. Rotate them out to
+  keep things fresh, even the swap chest. People have noted that new TNNT
+  challenges should stop helping water down the difficulty of the game by
+  providing players with extra resources, in comparison to devnull challenges
+  where the extra items you could obtain from them were useless outside them.
+- Restore the legacy Elf quest (minus its artifact reward). The drawback of this
+  is that it's kind of a boring quest, and it would provide yet more levels full
+  of loot and monsters with death drops for even more loot, when TNNT already
+  throws extra loot at the player.
 
 ## Other game enhancements
 
@@ -277,3 +321,14 @@ Miscellaneous suggestions:
     starttime of games, rather than the version, and would have to do this
     anyway since there are multiple past years in which TNNT used the same
     version.
+- Address the criticism that TNNT games are ineligible for NetHack world records
+  because they contain extra resources that a regular NetHack game doesn't have,
+  in one of a few ways:
+  - Birth option that disables TNNT branch stairs and portals from spawning or
+    being traversable, and prevents devteam scrolls and swap chests from
+    spawning. This would be communicated in the xlogfile.
+  - Conduct that is broken if you interact with a devteam scroll, swap chest,
+    etc, or enter a TNNT branch and do anything besides exit straight away.
+- On the week of (USA) Thanksgiving, make randomly generated fruits appear using
+  names of traditional Thanksgiving foods, such as roast turkeys and cranberry
+  sauce. This might confuse players outside the USA though.
