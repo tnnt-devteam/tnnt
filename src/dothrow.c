@@ -601,7 +601,7 @@ int x, y;
                               && (u.ux - x) && (u.uy - y));
 
         if (levl[x][y].typ == NKI) {
-            You("Stop moving.");
+            You("stop moving.");
             return FALSE;
         }
         if (IS_ROCK(levl[x][y].typ) || closed_door(x, y) || odoor_diag) {
