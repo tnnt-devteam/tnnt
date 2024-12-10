@@ -364,16 +364,15 @@ char *options;
             break;
         case 's':
         case 'S':
-            /* FIXME: does this bit here for TNNT need
-               to be redone? */
-            do_rnd_access_file(TNNT_NKIFILE, "nki", "A puppy");
             rafile('1');
             rafile('2');
             rafile('3');
+            rafile('4');
             break;
         case '1':
         case '2':
         case '3':
+        case '4':
             rafile(*options);
             break;
         case 'h':
@@ -446,6 +445,10 @@ int whichone;
             do_rnd_access_file(BOGUSMONFILE, "bogusmon",
                 /* default bogusmon:  iconic monster that isn't in nethack */
                                "grue");
+            break;
+    case '4':
+            /* TNNT: robotfindskitten */
+            do_rnd_access_file(TNNT_NKIFILE, "nki", "A puppy");
             break;
     }
 }
