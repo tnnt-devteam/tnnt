@@ -391,6 +391,7 @@ E int FDECL(glyph_at, (XCHAR_P, XCHAR_P));
 E void NDECL(set_wall_state);
 E void FDECL(unset_seenv, (struct rm *, int, int, int, int));
 E int FDECL(warning_of, (struct monst *));
+E boolean NDECL(tnnt_is_watch_present);
 
 /* ### do.c ### */
 
@@ -643,6 +644,7 @@ E boolean FDECL(has_ceiling, (d_level *));
 E boolean FDECL(In_quest, (d_level *));
 E boolean FDECL(In_mines, (d_level *));
 E boolean FDECL(In_dungeons_of_doom, (d_level *));
+E boolean FDECL(Is_minetown, (d_level *));
 E branch *FDECL(dungeon_branch, (const char *));
 E boolean FDECL(at_dgn_entrance, (const char *));
 E boolean FDECL(In_hell, (d_level *));

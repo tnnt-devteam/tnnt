@@ -1439,6 +1439,15 @@ d_level *lev;
     return (boolean) (lev->dnum == dungeons_dnum);
 }
 
+/* TNNT: are you in Minetown? */
+boolean
+Is_minetown(lev)
+d_level *lev;
+{
+    s_level *slev = Is_special(lev);
+    return (slev && !strcmp(slev->proto, "minetn"));
+}
+
 /*
  * Return the branch for the given dungeon.
  *
