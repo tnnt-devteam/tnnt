@@ -2451,6 +2451,7 @@ recalc_mapseen()
     unsigned i, ridx;
     int x, y, ltyp, count, atmp;
     uchar lvl_bones_found = 0; /* TNNT */
+    boolean old_sokosolved; /* TNNT */
 
     /* Should not happen in general, but possible if in the process
      * of being booted from the quest.  The mapseen object gets
@@ -2480,7 +2481,24 @@ recalc_mapseen()
         }
     }
     mptr->flags.knownbones = 0;
+    old_sokosolved = mptr->flags.sokosolved;
     mptr->flags.sokosolved = In_sokoban(&u.uz) && !Sokoban;
+    if (!old_sokosolved && mptr->flags.sokosolved
+        && tnnt_globals.soko_guilts == 0) {
+        pline("bing");
+        /* TNNT: check the mapseen chain for if there are now 4 sokosolved
+         * levels, if so award the achievement */
+        mapseen *mptrtmp = mapseenchn;
+        int solved = 0;
+        for (mptrtmp = mapseenchn; mptrtmp; mptrtmp = mptrtmp->next) {
+            if (mptrtmp->flags.sokosolved) {
+                solved++;
+            }
+        }
+        if (solved == 4) {
+            tnnt_achieve(A_DID_PURE_SOKOBAN);
+        }
+    }
     /* mptr->flags.bigroom retains previous value when hero can't see */
     if (!Blind)
         mptr->flags.bigroom = Is_bigroom(&u.uz);
