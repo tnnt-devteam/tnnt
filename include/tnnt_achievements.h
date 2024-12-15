@@ -137,7 +137,8 @@ ACH("Hulk Smash", "Kill a monster with a heavy iron ball",
     KILLED_WITH_IRONBALL),
 ACH("DIRGE", "Instakill a monster with poison", INSTAPOISONED),
 ACH("Poseidon", "Kill a sea monster with a trident", KILLED_WITH_TRIDENT),
-ACH("Touch It With A 10 Foot Pole", "Kill a floating eye with a polearm",
+ACH("Touch It With A 10 Foot Pole",
+    "Kill a floating eye at range with a lance or polearm",
     KILLED_EYE_POLEARM),
 ACH("Bar Brawler", "Kill a monster with HP damage by smashing a bottle on it",
     KILLED_WITH_BOTTLE),
@@ -196,7 +197,7 @@ ACH("Fashionista",
 ACH("Mineralogist", "Identify every type of valuable gemstone",
     IDENTIFIED_ALL_GEMS),
 ACH("Geologist", "Identify all gray stones", IDENTIFIED_ALL_STONES),
-ACH("Glass Menagerie", "Identify all worthless glass", IDENTIFIED_ALL_GLASS),
+ACH("Glass Collector", "Identify all worthless glass", IDENTIFIED_ALL_GLASS),
 /* involving maintaining a conduct up to Quest */
 ACH("Friends Not Food", "Receive the Quest with vegetarian conduct intact",
     PARTIAL_VEGETARIAN),
@@ -357,7 +358,7 @@ ACH("Necromancer", "Resurrect a fallen pet and have it return tame",
     RESURRECTED_PET_TAME),
 ACH("Asudem", "Revive Perseus", REVIVED_PERSEUS),
 ACH("So Thou Thought Thou Couldst Resurrect Me",
-    "Resurrect the Wizard of Yendor", RESURRECTED_WIZARD),
+    "Resurrect the Wizard of Yendor's corpse", RESURRECTED_WIZARD),
 ACH("Insert Quarter to Continue", "Get life-saved", GOT_LIFESAVED),
 /* involving shops */
 ACH("Always Talk to the Wise Old Man", "Chat with Izchak", CHATTED_IZCHAK),
@@ -639,4 +640,6 @@ The only way to do this "organically" in pre 3.7 is to luck into two nearby gas
 spores. Otherwise, it requires artificial methods such as reverse genocide or
 create monster spam. 3.7 has more monsters that explode on death, so it's more
 feasible to happen organically.
+
+Kill a certain number of monsters with a single casting of chain lightning.
 */
