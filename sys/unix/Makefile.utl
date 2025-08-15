@@ -375,7 +375,7 @@ stripbs.o: stripbs.c
 #       dependencies for generating yaml file of TNNT achievements
 #
 tnnt_ach_to_yaml: $(ACHOBJS)
-        $(CC) $(LFLAGS) -o tnnt_ach_to_yaml $(ACHOBJS) $(LIBS)
+	$(CC) $(LFLAGS) -o tnnt_ach_to_yaml $(ACHOBJS) $(LIBS)
 
 tnnt_ach_to_yaml.o: tnnt_ach_to_yaml.c ../include/tnnt_achievements.h
 
