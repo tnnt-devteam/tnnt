@@ -6,6 +6,7 @@
 #include "hack.h"
 #include "artifact.h"
 #include "artilist.h"
+#include "assert.h"
 
 /*
  * Note:  both artilist[] and artiexist[] have a dummy element #0,
@@ -30,6 +31,7 @@ STATIC_DCL uchar FDECL(abil_to_adtyp, (long *));
 STATIC_DCL int FDECL(glow_strength, (int));
 STATIC_DCL boolean FDECL(untouchable, (struct obj *, BOOLEAN_P));
 STATIC_DCL int FDECL(count_surround_traps, (int, int));
+STATIC_DCL void dispose_of_orig_obj(struct obj *);
 
 /* The amount added to the victim's total hit points to insure that the
    victim will be killed even after damage bonus/penalty adjustments.
@@ -192,20 +194,43 @@ aligntyp alignment; /* target alignment, or A_NONE */
         a = &artilist[m];
 
         /* make an appropriate object if necessary, then christen it */
-        if (by_align)
-            otmp = mksobj((int) a->otyp, TRUE, FALSE);
+        if (by_align) {
+            struct obj *artiobj = mksobj((int) a->otyp, TRUE, FALSE);
 
-        if (otmp) {
-            otmp = oname(otmp, a->name);
-            otmp->oartifact = m;
-            artiexist[m] = TRUE;
+            /* nonnull value of 'otmp' is unexpected. Cope. */
+            if (otmp)  /* just in case; avoid orphaning */
+                dispose_of_orig_obj(otmp);
+            otmp = artiobj;
         }
+        /*
+         * otmp should be nonnull at this point:
+         * either the passed argument (if !by_align == A_NONE), or
+         * the result of mksobj() just above if by_align is an alignment. */
+        assert(otmp != 0);
+        /* prevent erosion from generating */
+        otmp->oeroded = otmp->oeroded2 = 0;
+        otmp = oname(otmp, a->name);
+        otmp->oartifact = m;  /* probably already set by this point, but */
+        artiexist[m] = 1;
     } else {
         /* nothing appropriate could be found; return original object */
-        if (by_align)
-            otmp = 0; /* (there was no original object) */
+        if (by_align && otmp) {
+            /* (there shouldn't have been an original object) */
+            dispose_of_orig_obj(otmp);
+            otmp = 0;
+        }
     }
     return otmp;
+}
+
+STATIC_OVL void
+dispose_of_orig_obj(struct obj *obj)
+{
+    if (!obj)
+        return;
+
+    obj_extract_self(obj);
+    obfree(obj, (struct obj *) 0);
 }
 
 /*
