@@ -876,8 +876,6 @@ struct obj *obj;
         tnnt_achieve(NO_TNNT_ACHIEVEMENT);
         obj->record_achieve_special = NON_PM;
         obj->nomerge = 0;
-        if (tnnt_globals.soko_guilts == 0)
-            tnnt_achieve(A_DID_PURE_SOKOBAN);
     }
     /* TNNT: general checks for "acquired certain items" go here */
     if (obj->otyp == ATHAME && obj->lichathame)

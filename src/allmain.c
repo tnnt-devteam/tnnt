@@ -200,24 +200,13 @@ boolean resuming;
                      * Note that it's possible that the achievement doesn't
                      * trigger for a turn after the last watchman is gone due to
                      * them being able to fall down a hole or die to conflict on
-                     * their own, but putting it in movemon() might be a little
-                     * too intensive. */
-                    {
-                        s_level *slev = Is_special(&u.uz);
-                        if (slev && !strcmp(slev->proto, "minetn")
-                            && slev->which_level != 1 /* not orctown */
-                            && !tnnt_is_achieved(A_GOT_RID_OF_WATCH)) {
-                            boolean has_watch = FALSE;
-                            for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-                                if (mtmp->data == &mons[PM_WATCH_CAPTAIN]
-                                    || mtmp->data == &mons[PM_WATCHMAN]) {
-                                    has_watch = TRUE;
-                                    break;
-                                }
-                            }
-                            if (!has_watch)
-                                tnnt_achieve(A_GOT_RID_OF_WATCH);
-                        }
+                     * their own, but it's too cumbersome to check this in every
+                     * place a watchman could leave the level. */
+                    if (!tnnt_is_achieved(A_GOT_RID_OF_WATCH)
+                        && !tnnt_globals.minetown_bereft_of_watch
+                        && Is_minetown(&u.uz)
+                        && !tnnt_is_watch_present()) {
+                        tnnt_achieve(A_GOT_RID_OF_WATCH);
                     }
 #ifdef EXTRAINFO_FN
                     if ((prev_dgl_extrainfo == 0) || (prev_dgl_extrainfo < (moves + 250))) {

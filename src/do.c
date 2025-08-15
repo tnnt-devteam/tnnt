@@ -1754,6 +1754,18 @@ boolean at_stairs, falling, portal;
             }
         }
         tnnt_achieve(A_ENTERED_LUDIOS);
+    } else if (new && Is_minetown(&u.uz)) {
+        /* TNNT: check if there are watchmen upon first visit to Minetown, if
+         * there are 0 (Orcish Town or bones where someone got rid of the Watch)
+         * then the achievement for clearing out all the watchmen can't be
+         * obtained this game, which is unfortunate but better than awarding it
+         * for doing nothing beyond randomly getting a minetown with no watch.
+         * A possible extension would be to clear this flag if the player
+         * summons or resurrects a watchman in Minetown.
+         */
+        if (!tnnt_is_watch_present()) {
+            tnnt_globals.minetown_bereft_of_watch = TRUE;
+        }
     } else {
         if (new && Is_rogue_level(&u.uz))
             You("enter what seems to be an older, more primitive world.");
@@ -1785,6 +1797,21 @@ boolean at_stairs, falling, portal;
 #ifdef WHEREIS_FILE
 	touch_whereis();
 #endif
+}
+
+/* TNNT: return TRUE if there are any Minetown Watch monsters on the current
+ * level (which we presume to be Minetown but doesn't have to be), FALSE if
+ * there aren't */
+boolean
+tnnt_is_watch_present()
+{
+    struct monst *mtmp;
+    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+        if (is_watch(mtmp->data)) {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 STATIC_OVL void

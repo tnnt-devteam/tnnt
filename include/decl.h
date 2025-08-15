@@ -670,6 +670,7 @@ struct tnnt_globals_t {
     uint32_t polearms_found;
     boolean killed_izchak;
     coord kitten_loc;
+    boolean minetown_bereft_of_watch;
 
     /* Extra tracking for the "never killed X" conducts.
      * The reason we need this is because the hero can slime or polymorph these
