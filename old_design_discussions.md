@@ -147,6 +147,7 @@ achievement:
    - Dig out an entire level.
    - Kill 200 monsters with polearms.
    - Extinct a bunch of monster species.
+   - Fill an entire level with gremlins.
 4. Achievements shouldn't amount to "make a quirky wish". While players might
    wish for nonstandard things in order to accomplish achievements, such as the
    last missing piece of magic armor for Fashionista, having the esoteric wish
@@ -205,6 +206,13 @@ Other unsorted rejected ideas:
   a shopkeeper.
   - Not distinct enough to be an achievement, this is easy to do and comparable
     to simply buying an item from a shop.
+- Achievement for getting a wand of death off a monster other than Orcus.
+  - This would either be cheesable by obtaining a wand of death from some
+    non-monster source, dropping it in front of a goblin, and killing him; or it
+    would incentivize casting create monster a jillion times until some monster
+    spawns with a wand of death; or it would have to be narrowed to something
+    awkward and clunky like "defeat a monster that didn't generate with a wand
+    of death, but picked up a randomly generated one".
 
 ### Achievement categorization
 
@@ -246,6 +254,12 @@ Miscellaneous suggestions:
 - The devteam level could suppress normal monster spawning. The problem with
   this is that it enables you to do things like nurse dancing and polypiling
   and have no chance of interruptions.
+- Reading a scroll of missing code, possibly with sufficiently high Int, either
+  uses the pager to display the fragment of C code it contains, or gives a
+  random YAFM such as "This code appears to implement a Thriller-themed rhythm
+  minigame for fighting Z-class monsters." Not implemented mainly because no
+  role's background knows how to program and would understand it, and there's
+  already a YAFM for reading the scroll with high Int.
 
 ## Potential future custom challenges
 
