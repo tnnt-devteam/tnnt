@@ -45,6 +45,7 @@ ENGRAVING:(02,09),burn,"This is my program. There are many programs like it, but
 
 #The Devteam
 MONSTER:"DevTeam member",(29,06),peaceful,"bhaak"
+# TNNT TODO FOR 3.7: give paxed an axe
 MONSTER:"DevTeam member",(38,06),peaceful,"paxed"
 MONSTER:"DevTeam member",(29,12),peaceful,"lorimer"
 MONSTER:"DevTeam member",(38,12),peaceful,"ais523"
