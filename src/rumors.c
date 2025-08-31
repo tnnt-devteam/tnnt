@@ -400,7 +400,7 @@ int fd, mode;
     if (perform_bwrite(mode)) {
         bwrite(fd, (genericptr_t) &oracle_cnt, sizeof oracle_cnt);
         if (oracle_cnt)
-            bwrite(fd, (genericptr_t) oracle_loc, 
+            bwrite(fd, (genericptr_t) oracle_loc,
                     oracle_cnt * sizeof(long));
     }
     if (release_data(mode)) {
@@ -572,6 +572,26 @@ const char *filename;
     program_state.something_worth_saving = save_something;
 }
 
+/* TNNT: Generate a unique, deterministic number from the hero's unique xyz
+ * coordinates. z can be a constant like 0 if the caller doesn't care if the
+ * resulting numbers are the same on different levels, or ledger_no(&u.uz) if
+ * the caller does care.
+ * If this function ever gets used for anything besides robotfindskitten, it
+ * should move back into hacklib.c. */
+unsigned int
+tnnt_coord_hash(int x, int y, int z)
+{
+    const int magic_number = 0x45d9f3b;
+    /* use Cantor pairing to reduce (x,y) to a unique number */
+    unsigned int a = ((x+y) * (x+y+1) / 2) + x + z + ubirthday;
+    a = a * magic_number;
+    a = ((a >> 16) ^ a) * magic_number;
+    a = ((a >> 16) ^ a);
+    return a;
+}
+
+/* TNNT: Obtain a random (but deterministic, so it doesn't change on a recheck) name
+ * of this item the hero has found which is, unfortunately, not a kitten. */
 char *
 tnnt_get_nki_text(buf, x, y)
 char *buf;

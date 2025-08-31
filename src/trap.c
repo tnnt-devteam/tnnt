@@ -5544,16 +5544,4 @@ maybe_finish_sokoban()
     }
 }
 
-/* TNNT: player has just disarmed one of the types of traps. Add it and check to
- * see if they earned the achievement. */
-void
-tnnt_add_untrap(mask)
-unsigned int mask; /* one of the TNNT_UNTRAP_* */
-{
-    tnnt_globals.untrapped_types |= mask;
-    if ((tnnt_globals.untrapped_types & ALL_UNTRAPPABLE_TRAPTYPES)
-        == ALL_UNTRAPPABLE_TRAPTYPES)
-        tnnt_achieve(A_UNTRAPPED_ALL_TRAPS);
-}
-
 /*trap.c*/

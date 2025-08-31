@@ -1219,31 +1219,4 @@ strbuf_t *strbuf;
     }
 }
 
-unsigned int
-tnnt_coord_hash(int x, int y, int z)
-{
-    const int magic_number = 0x45d9f3b;
-    /* use Cantor pairing to reduce (x,y) to a unique number */
-    unsigned int a = ((x+y) * (x+y+1) / 2) + x + z + ubirthday;
-    a = a * magic_number;
-    a = ((a >> 16) ^ a) * magic_number;
-    a = ((a >> 16) ^ a);
-    return a;
-}
-
-/* TNNT: return the index of one of the tracked uniques in
- * tnnt_globals.unique_info[] */
-int
-tnnt_uniqndx(int mndx)
-{
-    int i;
-    for (i = 0; i < NUM_UNIQUES_TRACKED; ++i) {
-        if (tnnt_globals.unique_info[i].mndx == mndx) {
-            return i;
-        }
-    }
-    impossible("tnnt_uniqndx: no unique found for mndx %d", mndx);
-    return 0;
-}
-
 /*hacklib.c*/

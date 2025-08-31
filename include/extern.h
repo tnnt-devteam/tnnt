@@ -246,8 +246,6 @@ E int FDECL(getdir, (const char *));
 E void NDECL(confdir);
 E const char *FDECL(directionname, (int));
 E int FDECL(isok, (int, int));
-E int FDECL(show_tnnt_stats, (BOOLEAN_P));
-E int FDECL(show_tnnt_achievements, (BOOLEAN_P));
 E int FDECL(get_adjacent_loc,
             (const char *, const char *, XCHAR_P, XCHAR_P, coord *));
 E const char *FDECL(click_to_cmd, (int, int, int));
@@ -391,7 +389,6 @@ E int FDECL(glyph_at, (XCHAR_P, XCHAR_P));
 E void NDECL(set_wall_state);
 E void FDECL(unset_seenv, (struct rm *, int, int, int, int));
 E int FDECL(warning_of, (struct monst *));
-E boolean NDECL(tnnt_is_watch_present);
 
 /* ### do.c ### */
 
@@ -643,8 +640,6 @@ E boolean FDECL(Can_rise_up, (int, int, d_level *));
 E boolean FDECL(has_ceiling, (d_level *));
 E boolean FDECL(In_quest, (d_level *));
 E boolean FDECL(In_mines, (d_level *));
-E boolean FDECL(In_dungeons_of_doom, (d_level *));
-E boolean FDECL(Is_minetown, (d_level *));
 E branch *FDECL(dungeon_branch, (const char *));
 E boolean FDECL(at_dgn_entrance, (const char *));
 E boolean FDECL(In_hell, (d_level *));
@@ -874,24 +869,6 @@ E void VDECL(livelog_printf, (unsigned int, const char *, ...)) PRINTF_F(2, 3);
 E void NDECL(mk_dgl_extrainfo);
 #endif
 
-#ifdef TNNT_SWAPCHEST_DIR
-E boolean FDECL(write_swapobj_file, (struct obj *, XCHAR_P));
-E void FDECL(refresh_swap_chest_contents, (struct obj *));
-E boolean FDECL(delete_swapobj_file, (struct obj *));
-E const char *FDECL(swapobj_donor_name, (struct obj *));
-E void FDECL(credit_swapobj_donor, (struct obj *));
-#endif
-
-#ifdef TNNT_NPC_DIR
-E void NDECL(write_npc_data);
-E struct monst* FDECL(create_tnnt_npc, (XCHAR_P, XCHAR_P));
-#endif
-
-#ifdef TNNT_ACHIEVEMENTS_DIR
-E void NDECL(erase_temp_achievements_file);
-#endif
-E void FDECL(tnnt_achieve, (SHORT_P));
-
 /* ### fountain.c ### */
 
 E void FDECL(floating_above, (const char *));
@@ -949,7 +926,6 @@ E int NDECL(max_capacity);
 E boolean FDECL(check_capacity, (const char *));
 E int FDECL(inv_cnt, (BOOLEAN_P));
 E long FDECL(money_cnt, (struct obj *));
-E void NDECL(tnnt_maybe_grant_ahab);
 
 /* ### hacklib.c ### */
 
@@ -1017,8 +993,6 @@ E void FDECL(strbuf_append, (strbuf_t *, const char *));
 E void FDECL(strbuf_reserve, (strbuf_t *, int));
 E void FDECL(strbuf_empty, (strbuf_t *));
 E void FDECL(strbuf_nl_to_crlf, (strbuf_t *));
-E unsigned int FDECL(tnnt_coord_hash, (int, int, int));
-E int FDECL(tnnt_uniqndx, (int));
 
 /* ### invent.c ### */
 
@@ -1482,7 +1456,6 @@ E void FDECL(mongone, (struct monst *));
 E void FDECL(monstone, (struct monst *));
 E void FDECL(monkilled, (struct monst *, const char *, int));
 E void FDECL(unstuck, (struct monst *));
-E boolean FDECL(tnnt_common_monst, (int));
 E void FDECL(killed, (struct monst *));
 E void FDECL(xkilled, (struct monst *, int));
 E void FDECL(mon_to_stone, (struct monst *));
@@ -1956,7 +1929,6 @@ E int FDECL(loot_mon, (struct monst *, int *, boolean *));
 E int NDECL(dotip);
 E struct autopickup_exception *FDECL(check_autopickup_exceptions, (struct obj *));
 E boolean FDECL(autopick_testobj, (struct obj *, BOOLEAN_P));
-E struct obj *FDECL(collect_all_transient, (struct obj *));
 
 /* ### pline.c ### */
 
@@ -2253,6 +2225,7 @@ E void FDECL(save_oracles, (int, int));
 E void FDECL(restore_oracles, (int));
 E int FDECL(doconsult, (struct monst *));
 E void NDECL(rumor_check);
+E unsigned int FDECL(tnnt_coord_hash, (int, int, int));
 E char *FDECL(tnnt_get_nki_text, (char *, XCHAR_P, XCHAR_P));
 
 /* ### save.c ### */
@@ -2380,7 +2353,6 @@ E void NDECL(attrcurse);
 
 /* ### sounds.c ### */
 
-E void FDECL(devteam_quest, (struct monst *, struct obj *));
 E void NDECL(dosounds);
 E const char *FDECL(growl_sound, (struct monst *));
 E void FDECL(growl, (struct monst *));
@@ -2497,7 +2469,6 @@ E int FDECL(mlevel_tele_trap, (struct monst *, struct trap *,
 E boolean FDECL(rloco, (struct obj *));
 E int NDECL(random_teleport_level);
 E boolean FDECL(u_teleport_mon, (struct monst *, BOOLEAN_P));
-E boolean FDECL(is_illegal_deathmatch, (d_level *));
 
 /* ### tile.c ### */
 #ifdef USE_TILES
@@ -2537,6 +2508,47 @@ E void FDECL(relink_timers, (BOOLEAN_P));
 E int NDECL(wiz_timeout_queue);
 E void NDECL(timer_sanity_check);
 
+/* ### tnnt.c ### */
+
+E int NDECL(dotnntdebug);
+E int NDECL(dotnntstats);
+E int FDECL(show_tnnt_stats, (BOOLEAN_P));
+E int NDECL(dotnntachievements);
+E int FDECL(show_tnnt_achievements, (BOOLEAN_P));
+E int NDECL(doshowfoodseaten);
+E int NDECL(dotnntspecies);
+#ifdef TNNT_SWAPCHEST_DIR
+E boolean FDECL(write_swapobj_file, (struct obj *, XCHAR_P));
+E void FDECL(refresh_swap_chest_contents, (struct obj *));
+E boolean FDECL(delete_swapobj_file, (struct obj *));
+E const char *FDECL(swapobj_donor_name, (struct obj *));
+E void FDECL(credit_swapobj_donor, (struct obj *));
+E boolean FDECL(swap_chest_eligible, (struct obj *));
+#endif
+#ifdef TNNT_NPC_DIR
+E void NDECL(write_npc_data);
+E struct monst* FDECL(create_tnnt_npc, (XCHAR_P, XCHAR_P));
+#endif
+E void NDECL(npc_awakens);
+E boolean FDECL(is_illegal_deathmatch, (d_level *));
+E struct obj *FDECL(collect_all_transient, (struct obj *));
+E void FDECL(devteam_quest, (struct monst *, struct obj *));
+#ifdef TNNT_ACHIEVEMENTS_DIR
+E void NDECL(erase_temp_achievements_file);
+#endif
+E void FDECL(tnnt_achieve, (SHORT_P));
+E boolean NDECL(tnnt_is_watch_present);
+E boolean FDECL(In_dungeons_of_doom, (d_level *));
+E boolean FDECL(Is_minetown, (d_level *));
+E void FDECL(tnnt_add_untrap, (unsigned int));
+E void FDECL(tnnt_door_resists, (XCHAR_P, XCHAR_P));
+E void FDECL(tnnt_update_ukilled, (int));
+E int FDECL(tnnt_id_achvmt, (short));
+E void FDECL(tnnt_check_identifications, (int));
+E void FDECL(tnnt_roomlit_credit, (int, int));
+E int FDECL(tnnt_uniqndx, (int));
+E void NDECL(tnnt_maybe_grant_ahab);
+
 /* ### topten.c ### */
 
 #ifdef RECORD_CONDUCT
@@ -2548,9 +2560,9 @@ E int FDECL(observable_depth, (d_level *));
 E void FDECL(topten, (int, time_t));
 E void FDECL(prscore, (int, char **));
 E struct toptenentry *NDECL(get_rnd_toptenentry);
-E char *FDECL(tnnt_get_rnd_tt_name, (BOOLEAN_P));
 E struct obj *FDECL(tt_oname, (struct obj *));
-E long NDECL(encodeachieve); /* TNNT - externified */
+E long NDECL(encodeachieve); /* externified for TNNT */
+E char *FDECL(tnnt_get_rnd_tt_name, (BOOLEAN_P));
 
 /* ### track.c ### */
 
@@ -2613,7 +2625,6 @@ E boolean FDECL(uescaped_shaft, (struct trap *));
 E boolean NDECL(lava_effects);
 E void NDECL(sink_into_lava);
 E void NDECL(sokoban_guilt);
-E void FDECL(tnnt_add_untrap, (unsigned int));
 
 /* ### u_init.c ### */
 

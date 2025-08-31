@@ -1252,9 +1252,9 @@ pickentry:
     return tt;
 }
 
-/* does a monster on the level already has this name?  used to ensure player
- * monster names from the high score list aren't reused on Astral */
-STATIC_OVL boolean
+/* TNNT: does a monster on the level already have this name?  used to ensure
+ * player monster names from the high score list aren't reused on Astral */
+static boolean
 tnnt_name_unused_on_lvl(name)
 const char *name;
 {
@@ -1279,7 +1279,7 @@ const char *name;
     return TRUE;
 }
 
-/* get random player name from the high score list; used for naming player
+/* TNNT: get random player name from the high score list; used for naming player
  * monsters on the Astral plane */
 char *
 tnnt_get_rnd_tt_name(unique)

@@ -1640,26 +1640,4 @@ boolean give_feedback;
     return TRUE;
 }
 
-/* TNNT - is newlev hero is traveling to the deathmatch, and illegal at this
- * moment because it might let them render the game unwinnable by leaving items
- * needed to win the game in the sealed-off deathmatch? */
-boolean
-is_illegal_deathmatch(newlev)
-d_level *newlev;
-{
-    if (!on_level(newlev, &deathmatch_level))
-        return FALSE; /* these rules apply only to entering deathmatch */
-    if (tnnt_globals.deathmatch_completed)
-        return FALSE; /* the branch will never get sealed off */
-
-    if (u.uhave.amulet)
-        return TRUE;
-    if (u.uevent.invoked)
-        return FALSE; /* invocation items are fine to bring in if you have
-                         already used them for the invocation */
-    if (u.uhave.bell || u.uhave.menorah || u.uhave.book)
-        return TRUE;
-    return FALSE;
-}
-
 /*teleport.c*/

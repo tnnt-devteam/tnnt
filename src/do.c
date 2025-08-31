@@ -1799,21 +1799,6 @@ boolean at_stairs, falling, portal;
 #endif
 }
 
-/* TNNT: return TRUE if there are any Minetown Watch monsters on the current
- * level (which we presume to be Minetown but doesn't have to be), FALSE if
- * there aren't */
-boolean
-tnnt_is_watch_present()
-{
-    struct monst *mtmp;
-    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-        if (is_watch(mtmp->data)) {
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-
 STATIC_OVL void
 final_level()
 {

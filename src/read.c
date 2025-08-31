@@ -34,7 +34,6 @@ STATIC_DCL int FDECL(maybe_tame, (struct monst *, struct obj *));
 STATIC_DCL boolean FDECL(get_valid_stinking_cloud_pos, (int, int));
 STATIC_DCL boolean FDECL(is_valid_stinking_cloud_pos, (int, int, BOOLEAN_P));
 STATIC_PTR void FDECL(display_stinking_cloud_positions, (int));
-STATIC_PTR void FDECL(tnnt_roomlit_credit, (int, int));
 STATIC_PTR void FDECL(set_lit, (int, int, genericptr));
 STATIC_DCL void NDECL(do_class_genocide);
 
@@ -1968,38 +1967,6 @@ int chg; /* recharging */
     /* obscure side-effect */
     exercise(A_STR, FALSE);
 }
-
-/* TNNT: give credit for lighting a position in a previously-unlit room.  */
-STATIC_PTR void
-tnnt_roomlit_credit(x, y)
-int x, y;
-{
-    if (levl[x][y].lit == 0 && In_dungeons_of_doom(&u.uz)
-        && (levl[x][y].roomno >= ROOMOFFSET || Is_bigroom(&u.uz))
-        && !tnnt_is_achieved(A_LIT_20_ROOMS)) {
-        int i;
-        for (i = 0; i < TNNT_LITROOM_GOAL; ++i) {
-            if (tnnt_globals.dark_rooms_lit[i].ledgerno > 0) {
-                /* hope this doesn't interact weirdly with SHARED */
-                unsigned short lno = tnnt_globals.dark_rooms_lit[i].ledgerno,
-                               rno = tnnt_globals.dark_rooms_lit[i].roomno;
-                if (lno == ledger_no(&u.uz) && rno == levl[x][y].roomno)
-                    /* already credited for lighting this room */
-                    break;
-                /* else if index i already stores a room, but it's not the
-                 * current room, just move on and check the next one */
-                continue;
-            }
-            /* this is a new room we're lighting! */
-            tnnt_globals.dark_rooms_lit[i].ledgerno = ledger_no(&u.uz);
-            tnnt_globals.dark_rooms_lit[i].roomno = levl[x][y].roomno;
-            if (i == TNNT_LITROOM_GOAL - 1)
-                tnnt_achieve(A_LIT_20_ROOMS);
-            break;
-        }
-    }
-}
-
 
 /* used to collect gremlins being hit by light so that they can be processed
    after vision for the entire lit area has been brought up to date */

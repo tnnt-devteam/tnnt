@@ -783,7 +783,7 @@ int mode;
             if (mode == DO_MOVE)
                 pline("There is an obstacle there.");
             return FALSE;
-        } else if (tmpr->typ == NKI) {    
+        } else if (tmpr->typ == NKI) {
             if (mode == DO_MOVE)
                 tnnt_rfk_move(x, y);
             return FALSE;
@@ -2080,25 +2080,6 @@ invocation_message()
     }
 }
 
-/* TNNT: things that need to happen when the NPC wakes up and the Deathmatch
- * begins. Assumes the caller is making the NPC wake up. */
-void
-npc_awakens()
-{
-    if (tnnt_globals.deathmatch_started) {
-        return;
-    }
-
-    if (Deaf) {
-        pline("The ground shakes a bit.");
-    } else {
-        pline("A voice echoes in the arena:");
-        verbalize("Thou art brave indeed, mortal!  Now prove thy prowess!");
-    }
-    tnnt_globals.deathmatch_started = TRUE;
-    livelog_printf(LL_UMONST, "has entered the Arena");
-}
-
 /* moving onto different terrain;
    might be going into solid rock, inhibiting levitation or flight,
    or coming back out of such, reinstating levitation/flying */
@@ -3301,24 +3282,6 @@ struct obj *otmp;
         otmp = otmp->nobj;
     }
     return 0L;
-}
-
-/* Grant the "Captain Ahab" achievement (A_SURVIVED_DROWNING) if the hero is
- * being grabbed by a sea monster with a drowning attack.  This function is
- * called just before zeroing out u.ustuck. */
-void
-tnnt_maybe_grant_ahab()
-{
-    if (u.ustuck && !u.uswallow && !sticks(youmonst.data)
-        && u.ustuck->data->mlet == S_EEL
-#if 0
-        /* unnecessary I think because no other scenario but attempted
-         * drowning would lead to a sea monster becoming u.ustuck(?) */
-        && dmgtype(u.ustuck->data, AD_WRAP)
-#endif
-        ) {
-        tnnt_achieve(A_SURVIVED_DROWNING);
-    }
 }
 
 /*hack.c*/

@@ -21,7 +21,6 @@ STATIC_PTR int NDECL(forcelock);
 STATIC_DCL const char *NDECL(lock_action);
 STATIC_DCL boolean FDECL(obstructed, (int, int, BOOLEAN_P));
 STATIC_DCL void FDECL(chest_shatter_msg, (struct obj *));
-STATIC_DCL void FDECL(tnnt_door_resists, (XCHAR_P, XCHAR_P));
 
 boolean
 picking_lock(x, y)
@@ -1131,33 +1130,6 @@ struct obj *otmp;
         break;
     }
     pline("%s %s!", An(thing), disposition);
-}
-
-/* TNNT - a door at this point is resisting (either from opening or closing).
- * Update accordingly and maybe award achievement. */
-STATIC_OVL void
-tnnt_door_resists(x, y)
-xchar x, y;
-{
-    /* The resists don't necessarily have to happen all at once (e.g. player can
-     * be having the door resist, walk away to fight a monster, and come back to
-     * resume trying the door), but getting a resist from another door will
-     * break the streak on the previous door */
-    if (tnnt_globals.door_attempt_ledger == ledger_no(&u.uz)
-        && tnnt_globals.door_attempt_x == x
-        && tnnt_globals.door_attempt_y == y) {
-        tnnt_globals.consecutive_door_resists++;
-        if (tnnt_globals.consecutive_door_resists >= TNNT_DOOR_RESIST_GOAL)
-            tnnt_achieve(A_DOOR_RESIST_8X);
-    }
-    else { /* new door */
-        tnnt_globals.door_attempt_ledger = ledger_no(&u.uz);
-        tnnt_globals.door_attempt_x = x;
-        tnnt_globals.door_attempt_y = y;
-        tnnt_globals.consecutive_door_resists = 1;
-    }
-    if (tnnt_globals.consecutive_door_resists > tnnt_globals.door_resist_max)
-        tnnt_globals.door_resist_max = tnnt_globals.consecutive_door_resists;
 }
 
 /*lock.c*/
