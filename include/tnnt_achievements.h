@@ -35,6 +35,27 @@
 
 /* starting around 2021 achievements are organized into sort of groups based
  * around common themes */
+
+/* "Vanilla achievements" group - these are all tracked in uachieve, and for
+ * years TNNT just used that xlogfile field to pass the data to the scoreboard,
+ * but it gets rid of a lot of special casing to just treat them as TNNT
+ * achievements.
+ * Note that uachieve.ascended does not count as a TNNT achievement because it
+ * requires ending the game. */
+ACH("Are You Feeling Lucky", "Get the luckstone from Mines' End",
+    GOT_LUCKSTONE),
+ACH("Boulder-Pusher", "Finish Sokoban", COMPLETED_SOKOBAN),
+ACH("Ringing In My Ears", "Get the Bell of Opening", GOT_BELL),
+ACH("Anti-Stoner", "Kill Medusa", KILLED_MEDUSA),
+ACH("We Need To Go Deeper", "Enter Gehennom", ENTERED_GEHENNOM),
+ACH("Emerging Into The Light", "Get the Candelabrum of Invocation",
+    GOT_CANDELABRUM),
+ACH("Weighing Of The Heart", "Get the Book of the Dead", GOT_BOOK_OF_DEAD),
+ACH("Bell, Book And Candle", "Perform the invocation ritual", DID_INVOCATION),
+ACH("My Preciousss", "Get the Amulet of Yendor", GOT_AOY),
+ACH("From The Dungeon They Came", "Enter the Elemental Planes", ENTERED_PLANES),
+ACH("The Halls of the Gods", "Enter the Astral Plane", ENTERED_ASTRAL),
+
 /* "vanilla-ish milestones" group */
 ACH("Back to Civilisation", "Step onto the Minetown altar",
     FOUND_MINES_ALTAR),
@@ -49,7 +70,8 @@ ACH("Have Fun Storming the Castle", "Blow up the Castle drawbridge",
 ACH("The Chosen One", "Get crowned", CROWNED),
 ACH("Watch Your Footing", "Step onto the vibrating square",
     REACHED_VIBRATING_SQ),
-/* "TNNT custom content" group */
+
+/* "TNNT custom challenges" group */
 ACH("It's Dangerous To Go Alone! Take This", "Put an item into a swap chest",
     PUT_INTO_SWAPCHEST),
 ACH("Paw Patrol", "Find kitten", FOUND_KITTEN),
@@ -59,6 +81,7 @@ ACH("There Is No Spoon", "Finish the task the devteam requires of you",
     FINISHED_DEVTEAM_QUEST),
 ACH("Thunderdome", "Defeat the NPC from the NPC Deathmatch quest",
     NPC_DEATHMATCH),
+
 /* "kill specific things" group */
 ACH("Asmodead", "Kill Asmodeus", KILLED_ASMODEUS),
 ACH("Baalzebust", "Kill Baalzebub", KILLED_BAALZEBUB),
@@ -118,6 +141,7 @@ ACH("Learn the Alphabet", "Kill a monster of each class from a to z",
 ACH("LEARN THE ALPHABET",
     "Kill a monster of each class from A to Z (except I)",
     KILLED_A_Z_UPPERCASE),
+
 /* "kill things in specific circumstances" group */
 ACH("What It Was Made For", "Kill an appropriate monster with a Bane weapon",
     USED_CORRECT_BANE),
@@ -165,6 +189,7 @@ ACH("Some Nemesis You Are",
     ONE_SIDED_NEMESIS_KILL),
 ACH("Faster than Light", "Kill a \"y\" monster in melee without it exploding",
     KILLED_LIGHT_MELEE),
+
 /* "survive a hazard" group */
 ACH("Part-time Statue", "Cure stoning", CURED_STONING),
 ACH("The Blob", "Cure sliming", CURED_SLIMING),
@@ -172,6 +197,7 @@ ACH("Captain Ahab", "Survive being grabbed by a sea monster",
     SURVIVED_DROWNING),
 ACH("Furry Little Problem", "Cure lycanthropy", CURED_LYCANTHROPY),
 ACH("New Lease on Life", "Cure deathly illness", CURED_ILLNESS),
+
 /* involving identification */
 ACH("Diamond in the Rough", "Identify a gem with a touchstone",
     USED_TOUCHSTONE),
@@ -198,6 +224,7 @@ ACH("Mineralogist", "Identify every type of valuable gemstone",
     IDENTIFIED_ALL_GEMS),
 ACH("Geologist", "Identify all gray stones", IDENTIFIED_ALL_STONES),
 ACH("Glass Collector", "Identify all worthless glass", IDENTIFIED_ALL_GLASS),
+
 /* involving maintaining a conduct up to Quest */
 ACH("Friends Not Food", "Receive the Quest with vegetarian conduct intact",
     PARTIAL_VEGETARIAN),
@@ -252,6 +279,7 @@ ACH("Fur Allergy", "Receive the Quest with petless conduct intact",
     PARTIAL_PETLESS),
 ACH("Death Isn't So Cheap", "Receive the Quest with survivor conduct intact",
     PARTIAL_SURVIVOR),
+
 /* involving entering a certain room/area */
 ACH("Breaking and Entering", "Enter a vault", ENTERED_VAULT),
 ACH("Who Was That David Person Anyway?", "Enter a treasure zoo", ENTERED_ZOO),
@@ -265,6 +293,7 @@ ACH("Halt, Who Goes There?", "Enter a barracks", ENTERED_BARRACKS),
 ACH("Dungeon Ecology", "Enter a swamp", ENTERED_SWAMP),
 ACH("Statue Showcase", "Enter a cockatrice nest", ENTERED_COCKNEST),
 ACH("Ocean's Eleven", "Enter Fort Ludios", ENTERED_LUDIOS),
+
 /* involving doing all of a set of things */
 ACH("Pilgrim", "Visit every type of aligned altar", VISITED_ALL_ALTARS),
 ACH("The Grand Tour", "Visit each high altar on the Astral Plane",
@@ -286,12 +315,14 @@ ACH("Extreme Omnivore",
 ACH("Ultimate Polearm Geek",
     "Collect one of each of the 12 types of polearm",
     COLLECTED_ALL_POLEARMS),
+
 /* involving artifact gifts */
 ACH("Go Forth and Smite", "Receive an artifact gift from your deity",
     GRANTED_ARTI),
 ACH("Too Little Too Late", "Get a sacrifice gift on the Astral Plane",
     GIFT_ON_ASTRAL),
 ACH("Some Watery Tart", "Be gifted Excalibur", GOT_EXCALIBUR),
+
 /* involving eating */
 ACH("Superfood", "Gain strength by eating royal jelly", ATE_ROYAL_JELLY),
 ACH("You Are What You Eat",
@@ -315,6 +346,7 @@ ACH("The Omelet of Yendor",
     "While carrying 3 eggs, spinach, wolfsbane, garlic, eucalyptus, violet "
     "fungus, oil, and a dented pot, put on an apron and wield a knife",
     OMELET_OF_YENDOR),
+
 /* involving taming and pets */
 ACH("Pet Whisperer", "Tame a monster by feeding it", TAMED_BY_FOOD),
 ACH("Beast Master", "Tame a monster without using food", TAMED_NOT_BY_FOOD),
@@ -332,6 +364,7 @@ ACH("Tenacious Companion",
     "Have a pet survive all the way to the Astral Plane that you brought into the Plane of Earth",
     PET_THROUGH_PLANES),
 ACH("Apocalyptic Horseplay", "Tame a Rider", TAMED_RIDER),
+
 /* involving bones */
 ACH("Those Who Came Before", "Sight another player's bones pile",
     FOUND_BONES_PILE),
@@ -344,10 +377,12 @@ ACH("Double Bones", "Encounter two bones piles on a single level",
 ACH("Mr. Bones' Wild Ride",
     "Find the bones of four former heroes in one game",
     FOUND_FOUR_BONES),
+
 /* involving tins */
 ACH("Civilized Cooking", "Open a tin with a tin opener", OPENED_TIN_PROPERLY),
 ACH("Exotic Meat", "Tin a unique monster", TINNED_UNIQUE_MON),
 ACH("Tinned Out", "Use up a tinning kit", USED_UP_TINNING_KIT),
+
 /* involving resurrection */
 ACH("Reincarnation Cancelled",
     "Feel \"less hassled\" after blocking a troll's revival attempt",
@@ -360,6 +395,7 @@ ACH("Asudem", "Revive Perseus", REVIVED_PERSEUS),
 ACH("So Thou Thought Thou Couldst Resurrect Me",
     "Resurrect the Wizard of Yendor's corpse", RESURRECTED_WIZARD),
 ACH("Insert Quarter to Continue", "Get life-saved", GOT_LIFESAVED),
+
 /* involving shops */
 ACH("Always Talk to the Wise Old Man", "Chat with Izchak", CHATTED_IZCHAK),
 ACH("Dungeon Economics", "Buy or sell something at a shop", PURCHASED),
@@ -370,12 +406,14 @@ ACH("The Art of the Deal", "Bankrupt a shopkeeper by getting all their money",
 ACH("Stop, Thief!", "Be chased by the Keystone Kops", ROBBED_SHOP),
 ACH("The Last Chance Outpost", "Visit a shop at or below level 20",
     VISITED_DEEP_SHOP),
+
 /* involving bribing */
 ACH("Money Talks", "Bribe a demon lord with at least 25000 gold",
     BRIBED_DEMON_LORD),
 ACH("The Negotiator", "Successfully bribe a demon lord with 1 zorkmid",
     BRIBED_WITH_1),
 ACH("Look the Other Way", "Successfully bribe a mercenary", BRIBED_MERC),
+
 /* involving monsters doing things to you */
 ACH("A Little Light Larceny", "Get robbed by a nymph", ROBBED_BY_NYMPH),
 ACH("Pot of Greed", "Have your purse lightened by a leprechaun",
@@ -388,6 +426,7 @@ ACH("Who You Gonna Call?", "Get scared by a ghost", SCARED_BY_GHOST),
 ACH("Heisenberg", "Become uncertain about your position or velocity",
     HEISENBERG),
 ACH("Yoink!", "Have the Amulet of Yendor stolen from you", AMULET_WAS_STOLEN),
+
 /* involving gods and religion */
 ACH("Indulgences", "Buy protection from a priest", BOUGHT_PROTECTION),
 ACH("Orthodoxy", "Convert an altar", CONVERTED_ALTAR),
@@ -396,6 +435,7 @@ ACH("Potions of Booze Cost More Than That",
 ACH("Fumata Bianca", "Get a priest to grow up into a high priest",
     MON_GREW_TO_HIPRIEST),
 ACH("Get Flashed", "Learn an item's beatitude from an altar", BUC_FROM_ALTAR),
+
 /* unsorted */
 ACH("The Royal Treatment", "Sit on a throne", USED_THRONE),
 ACH("It'll Turn Up Later", "Drop a ring in a sink", DROPPED_RING_IN_SINK),

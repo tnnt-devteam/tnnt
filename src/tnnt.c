@@ -493,22 +493,6 @@ boolean final;
     winid win = create_nhwindow(NHW_MENU);
     char response, buf[BUFSZ];
     int i, num_earned = 0;
-    boolean vanilla_achieved[NUM_VANILLA_ACHIEVEMENTS];
-
-    /* Special handling for vanilla achievements which are not tracked in
-     * tnnt_achievements. This replicates the conditions in topten.c where
-     * they are added to the xlogfile. */
-    vanilla_achieved[0] = (boolean) u.uachieve.bell;
-    vanilla_achieved[1] = (boolean) u.uachieve.enter_gehennom;
-    vanilla_achieved[2] = (boolean) u.uachieve.menorah;
-    vanilla_achieved[3] = (boolean) u.uachieve.book;
-    vanilla_achieved[4] = (boolean) u.uevent.invoked;
-    vanilla_achieved[5] = (boolean) u.uachieve.amulet;
-    vanilla_achieved[6] = In_endgame(&u.uz);
-    vanilla_achieved[7] = Is_astralevel(&u.uz);
-    vanilla_achieved[8] = (boolean) u.uachieve.mines_luckstone;
-    vanilla_achieved[9] = (boolean) u.uachieve.finish_sokoban;
-    vanilla_achieved[10] = (boolean) u.uachieve.killed_medusa;
 
     start_menu(win);
     if (!final) {
@@ -550,17 +534,6 @@ boolean final;
         putstr(win, ATR_BOLD,
                "(Use #tnntstats to check progress of certain ones.)");
     }
-    for (i = 0; i < NUM_VANILLA_ACHIEVEMENTS; ++i) {
-        boolean earned = vanilla_achieved[i];
-        if (earned)
-            num_earned++;
-        if (response == 'a' || earned == (response == 'e')) {
-            struct tnnt_achvmt_data* dat = &vanilla_achievements[i];
-            Sprintf(buf, "[%c] #V%02d \"%s\" - %s", (earned ? 'X' : ' '),
-                    i + 1, dat->name, dat->descr);
-            putstr(win, 0, buf);
-        }
-    }
 
     for (i = 0; i < NUM_TNNT_ACHIEVEMENTS; ++i) {
         /* a response of "both" unconditionally prints any achievement;
@@ -577,7 +550,7 @@ boolean final;
         }
     }
     Sprintf(buf, "%d/%d achievements earned in this game.", num_earned,
-            NUM_TNNT_ACHIEVEMENTS + NUM_VANILLA_ACHIEVEMENTS);
+            NUM_TNNT_ACHIEVEMENTS);
     putstr(win, 0, buf);
     display_nhwindow(win, TRUE);
     /* select_menu(win, PICK_ONE, &choice); */
@@ -1922,9 +1895,7 @@ erase_temp_achievements_file(void)
 #endif
 
 /* This used to be a macro that just set the bit in tnnt_achievements, but now
- * we also write out to a file.
- * This may be called with NO_TNNT_ACHIEVEMENT when a vanilla achievement has
- * just been updated. */
+ * we also write out to a file. */
 void
 tnnt_achieve(achvmt)
 short achvmt;
@@ -1934,34 +1905,19 @@ short achvmt;
     int i;
     const char *achnam = (const char *) 0;
 
-    if (achvmt == NO_TNNT_ACHIEVEMENT) { /* vanilla achievement */
-        /* TNNT TODO FOR 3.7: This might need to be updated given that 3.7
-         * changed how achievements work. Probably not, since this is based on
-         * encodeachieve(), but needs to be checked. */
-        /* find what bit is newly set in the encodeachieve() bitfield so
-         * that we can identify the achievement */
-        /* discard 8th bit (u.uachieve.ascended), and shift more significant
-         * bits up by one so indices will match vanilla_achivements[] */
-#define drop_uascended_bit(n) (((n & ~0x1ff) >> 1) | (n & 0xff))
-        long new_v_ach = drop_uascended_bit(encodeachieve()),
-             ach_bit = new_v_ach & ~tnnt_globals.v_achieve;
-
-        i = ffsl(ach_bit) - 1; /* get position of the achievement bit */
-
-        if (i < 0 || i >= NUM_VANILLA_ACHIEVEMENTS)
-            return; /* no change, or higher order ignored/non-ach bit */
-
-        tnnt_globals.v_achieve = new_v_ach; /* cache for next comparison */
-        achnam = vanilla_achievements[i].name;
-#undef drop_uascended_bit
-    } else { /* TNNT achievement */
-        if (tnnt_is_achieved(achvmt))
-            return; /* nothing to update */
-
-        tnnt_globals.tnnt_achievements[(achvmt) / 64] |= 1L << ((achvmt) % 64);
-        achnam = tnnt_achievements[achvmt].name;
+    if (achvmt == NO_TNNT_ACHIEVEMENT) {
+        /* formerly this was used to prompt reading from encodeachieve() for
+         * achievements tracked by vanilla. Now we just track them as TNNT
+         * achievements, so this shouldn't happen anymore. */
+        impossible("tnnt_achieve called with null achievement");
+        return;
     }
 
+    if (tnnt_is_achieved(achvmt))
+        return; /* nothing to update */
+
+    tnnt_globals.tnnt_achievements[(achvmt) / 64] |= 1L << ((achvmt) % 64);
+    achnam = tnnt_achievements[achvmt].name;
 
     if (flags.notify_achievements && achnam) {
         const char *endpunct = "";

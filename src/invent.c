@@ -819,7 +819,7 @@ struct obj *obj;
         if(!u.uachieve.amulet)
             livelog_write_string(LL_ACHIEVE, "acquired the Amulet of Yendor");
         u.uachieve.amulet = 1;
-        tnnt_achieve(NO_TNNT_ACHIEVEMENT);
+        tnnt_achieve(A_GOT_AOY);
     } else if (obj->otyp == CANDELABRUM_OF_INVOCATION) {
         if (u.uhave.menorah)
             impossible("already have candelabrum?");
@@ -827,7 +827,7 @@ struct obj *obj;
         if(!u.uachieve.menorah)
             livelog_write_string(LL_ACHIEVE, "acquired the Candelabrum of Invocation");
         u.uachieve.menorah = 1;
-        tnnt_achieve(NO_TNNT_ACHIEVEMENT);
+        tnnt_achieve(A_GOT_CANDELABRUM);
     } else if (obj->otyp == BELL_OF_OPENING) {
         if (u.uhave.bell)
             impossible("already have silver bell?");
@@ -835,7 +835,7 @@ struct obj *obj;
         if(!u.uachieve.bell)
             livelog_write_string(LL_ACHIEVE, "acquired the Bell of Opening");
         u.uachieve.bell = 1;
-        tnnt_achieve(NO_TNNT_ACHIEVEMENT);
+        tnnt_achieve(A_GOT_BELL);
     } else if (obj->otyp == SPE_BOOK_OF_THE_DEAD) {
         if (u.uhave.book)
             impossible("already have the book?");
@@ -843,7 +843,7 @@ struct obj *obj;
         if(!u.uachieve.book)
             livelog_write_string(LL_ACHIEVE, "acquired the Book of the Dead");
         u.uachieve.book = 1;
-        tnnt_achieve(NO_TNNT_ACHIEVEMENT);
+        tnnt_achieve(A_GOT_BOOK_OF_DEAD);
     } else if (obj->oartifact) {
         if (is_quest_artifact(obj)) {
             if (u.uhave.questart)
@@ -866,14 +866,14 @@ struct obj *obj;
         if(!u.uachieve.mines_luckstone) /* This is spoily if player can see livelog */
             livelog_write_string(LL_ACHIEVE, "acquired the luckstone from Mines' End");
         u.uachieve.mines_luckstone = 1;
-        tnnt_achieve(NO_TNNT_ACHIEVEMENT);
+        tnnt_achieve(A_GOT_LUCKSTONE);
         obj->record_achieve_special = NON_PM;
         obj->nomerge = 0;
     } else if (is_soko_prize(obj)) {
         if(!u.uachieve.finish_sokoban)
             livelog_write_string(LL_ACHIEVE, "completed Sokoban");
         u.uachieve.finish_sokoban = 1;
-        tnnt_achieve(NO_TNNT_ACHIEVEMENT);
+        tnnt_achieve(A_COMPLETED_SOKOBAN);
         obj->record_achieve_special = NON_PM;
         obj->nomerge = 0;
     }

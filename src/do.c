@@ -1655,8 +1655,10 @@ boolean at_stairs, falling, portal;
 
     /* TNNT: trigger writing of transient achievement file for entering the
      * Planes or Astral Plane (vanilla achievements) */
-    if (Is_earthlevel(&u.uz) || Is_astralevel(&u.uz))
-        tnnt_achieve(NO_TNNT_ACHIEVEMENT);
+    if (Is_earthlevel(&u.uz))
+        tnnt_achieve(A_ENTERED_PLANES);
+    if (Is_astralevel(&u.uz))
+        tnnt_achieve(A_ENTERED_ASTRAL);
 
     if (level_info[new_ledger].flags & FORGOTTEN) {
         forget_map(ALL_MAP); /* forget the map */
@@ -1698,7 +1700,7 @@ boolean at_stairs, falling, portal;
         if(!u.uachieve.enter_gehennom)
             livelog_write_string(LL_ACHIEVE, "entered Gehennom");
         u.uachieve.enter_gehennom = 1;
-        tnnt_achieve(NO_TNNT_ACHIEVEMENT);
+        tnnt_achieve(A_ENTERED_GEHENNOM);
     }
     /* in case we've managed to bypass the Valley's stairway down */
     if (Inhell && !Is_valley(&u.uz))
