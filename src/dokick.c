@@ -1041,6 +1041,11 @@ dokick()
             register int i;
             if (Levitation)
                 goto dumb;
+            if (Is_devteam(&u.uz)) {
+                /* TNNT: no effects from devteam throne (not even destroying it
+                 * for free gold */
+                goto ouch;
+            }
             if ((Luck < 0 || maploc->doormask) && !rn2(3)) {
                 maploc->typ = ROOM;
                 maploc->doormask = 0; /* don't leave loose ends.. */

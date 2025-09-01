@@ -160,6 +160,14 @@ dosit()
         You(sit_message, "drawbridge");
     } else if (IS_THRONE(typ)) {
         You(sit_message, defsyms[S_throne].explanation);
+        if (Is_devteam(&u.uz)) {
+            /* TNNT - Mike Stephenson's throne is cosmetic. No wishes or
+             * genocides (or even the achievement for sitting on a throne), but
+             * it won't kill you either. */
+            You_feel("powerful... regal... a true master of NetHack!");
+            pline("... But that appears to be all.  Nothing else happens.");
+            return 1;
+        }
         tnnt_achieve(A_USED_THRONE);
         if (rnd(6) > 4) {
             switch (rnd(13)) {

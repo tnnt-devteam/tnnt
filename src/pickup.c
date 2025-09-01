@@ -1995,7 +1995,12 @@ reverse_loot()
     if (!goldob)
         return FALSE;
 
-    if (!IS_THRONE(levl[x][y].typ)) {
+    if (!IS_THRONE(levl[x][y].typ)
+        || Is_devteam(&u.uz)) { /* TNNT: normally the gold would just go into
+                                 * the chest elsewhere on the devteam level, but
+                                 * we want to prevent someone from removing that
+                                 * chest so they can generate monsters from the
+                                 * devteam throne */
         dropx(goldob);
         /* the dropped gold might have fallen to lower level */
         if (g_at(x, y))
