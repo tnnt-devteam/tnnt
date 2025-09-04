@@ -1919,7 +1919,11 @@ short achvmt;
     tnnt_globals.tnnt_achievements[(achvmt) / 64] |= 1L << ((achvmt) % 64);
     achnam = tnnt_achievements[achvmt].name;
 
-    if (flags.notify_achievements && achnam) {
+    if (flags.notify_achievements && achnam
+	/* since Mines' End tends to have other gray stones to mislead you from
+	 * the luckstone, don't identify it by printing this (there
+	 * are ways around it, but don't be blatantly obvious) */
+	&& achvmt != A_GOT_LUCKSTONE) {
         const char *endpunct = "";
         int ln = (int) strlen(achnam);
         /* some achievements have their own punctuation, so only append
