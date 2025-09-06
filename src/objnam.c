@@ -755,7 +755,7 @@ unsigned cxn_flags; /* bitmask of CXN_xxx values */
         Sprintf(eos(buf), " with text \"%s\"", tshirt_text(obj, tmpbuf));
     }
 
-    if (has_oname(obj) && dknown) {
+    if (has_oname(obj) && dknown && obj->where != OBJ_INSWAP) {
         Strcat(buf, " named ");
  nameit:
         (void) strncat(buf, ONAME(obj),
