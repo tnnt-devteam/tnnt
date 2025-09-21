@@ -942,6 +942,7 @@ int how;
     if (!context.mon_moving)
         endmultishot(FALSE);
     tnnt_achieve(A_GOT_LIFESAVED);
+    tnnt_globals.lifesaved_this_turn = TRUE;
     if (u.uswallow) {
         /* might drop hero onto a trap that kills her all over again */
         expels(u.ustuck, u.ustuck->data, TRUE);

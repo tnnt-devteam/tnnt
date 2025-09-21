@@ -3838,6 +3838,9 @@ drown()
                 else
                     You("touch bottom.");
             }
+            else {
+                tnnt_achieve(A_SWAM_ON_WATER_PLANE);
+            }
         }
         if (Punished) {
             unplacebc();

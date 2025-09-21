@@ -2322,6 +2322,7 @@ register struct obj *obj;
         else
             panic("in_container:  bag not found.");
 
+        tnnt_achieve(A_BLEW_UP_BOH);
         losehp(d(6, 6), "magical explosion", KILLED_BY_AN);
         current_container = 0; /* baggone = TRUE; */
     }

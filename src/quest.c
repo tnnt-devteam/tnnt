@@ -369,6 +369,8 @@ chat_with_leader()
             tnnt_quest_checks();
         }
     }
+    if (moves < 5000)
+        tnnt_achieve(A_QUICKLY_REACHED_QUEST);
 }
 
 void

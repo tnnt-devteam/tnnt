@@ -16,8 +16,8 @@
  *    exception would be if the name doesn't make sense without using lowercase.
  * 2. Achievement descriptions should be in the present tense imperative,
  *    describing what the player must do to earn them.
- * 3. Achievement names should be in the past tense, tersely describing what the
- *    player has done to earn it.
+ * 3. Achievement constants should be in the past tense, tersely describing what
+ *    the player has done to earn it.
  */
 
 /* starting around 2021 achievements are organized into sort of groups based
@@ -266,6 +266,9 @@ ACH("Fur Allergy", "Receive the Quest with petless conduct intact",
     PARTIAL_PETLESS),
 ACH("Death Isn't So Cheap", "Receive the Quest with survivor conduct intact",
     PARTIAL_SURVIVOR),
+/* not conduct related but still involves the quest leader */
+ACH("To The Quest Without A Rest",
+    "Talk to your Quest leader before turn 5000", QUICKLY_REACHED_QUEST),
 
 /* involving entering a certain room/area */
 ACH("Breaking And Entering", "Enter a vault", ENTERED_VAULT),
@@ -486,6 +489,7 @@ ACH("Ding-A-Ling", "Summon a nymph by ringing a cursed bell", SUMMONED_NYMPH),
 ACH("Diver Down",
     "Dive into a moat or pool and retrieve an item from the bottom",
     GOT_OBJECT_UNDERWATER),
+ACH("Infinity Pool", "Go swimming on the Plane of Water", SWAM_ON_WATER_PLANE),
 ACH("Ceiling Clinging Commute", "Ride a wumpus over water",
     RODE_WUMPUS_OVER_WATER),
 ACH("Collapse The Wavefunction", "Open the box containing Schroedinger's Cat",
@@ -597,6 +601,7 @@ ACH("Cosmic Bungee Cord",
     "Get sent back a total of 15 or more levels by the mysterious force",
     MFORCE_15_LEVELS),
 ACH("No Rulez", "Remove all watchmen from Minetown", GOT_RID_OF_WATCH),
+ACH("Bag End", "Blow up a bag of holding", BLEW_UP_BOH),
 ACH("Packing Light",
     "Successfully store a bag of holding inside another bag of holding",
     NESTED_BOH),
@@ -639,9 +644,14 @@ ACH("Vlad Was Here", "Find a Vlad trapdoor without triggering it",
 ACH("Three-Rail Shot",
     "Hit a monster with a diagonal ray that bounced at least 3 times",
     HIT_WITH_3_BOUNCES),
+ACH("Tis But A Scratch", "Lose 100 HP in one turn while not wearing life saving",
+    LOST_100_HP),
+ACH("Plane Sailing",
+    "Exit each Elemental Plane within 100 turns of entering it",
+    SPEEDRAN_PLANES),
 
-/* 61 free bits in tnntachieve5 */
-/* 323 achievements defined */
+/* 56 free bits in tnntachieve5 */
+/* 328 achievements defined */
 
 #undef ACH
 

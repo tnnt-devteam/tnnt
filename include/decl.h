@@ -680,6 +680,10 @@ struct tnnt_globals_t {
         boolean died;
     } unique_info[NUM_UNIQUES_TRACKED];
 
+    boolean lifesaved_this_turn;
+    long turns_entered_last_plane;
+    boolean too_long_on_planes;
+
     /* tnnt devs: add more as needed */
 };
 E struct tnnt_globals_t tnnt_globals;

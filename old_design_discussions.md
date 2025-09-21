@@ -213,6 +213,35 @@ Other unsorted rejected ideas:
     spawns with a wand of death; or it would have to be narrowed to something
     awkward and clunky like "defeat a monster that didn't generate with a wand
     of death, but picked up a randomly generated one".
+- Achievement for polymorphing a nonmagic item into a magic item.
+  - Sounds cool in theory, until you consider that this is actually very common
+    for object classes composed mostly of magic items, like scrolls, and will
+    tend to happen automatically if the player does a bare minimum of
+    polypiling.
+- Achievement for killing a certain number of monsters in one action.
+  - If the number is 8 or less, this is trivially achievable by creating some
+    acid blobs or other weak monsters and breaking a wand.
+  - If the number is 9 or more, this is effectively only possible by casting
+    skilled fireball or cone of cold, and that's not that interesting of an
+    achievement.
+- "I Believe It Not!" achievement for surviving a wide-angle disintegration
+  beam.
+  - The setup for this achievement involves ticking off your god and surviving
+    smites until they zap you with disintegration. Since getting disintegrated
+    and then life-saved wouldn't qualify, the achievement basically boils down
+    to "get disintegration resistance then do a bunch of self-harming actions"
+    all for, effectively, a unique YAFM from your god. Compare to the other
+    "survive X" achievements which involve legitimate threats faced in a typical
+    game.
+- "Freed Action" - Have the potion of paralysis effects (or any source of
+  paralysis) blocked by free action.
+  - Not that interesting, a typical ascension will accomplish this passively
+    with no extra effort on the player's part.
+- Achievement for enhancing a skill, not because it is particularly noteworthy
+  but so newer players who don't know you can enhance a skill will learn about
+  it.
+  - There are probably not many, if any, players who know how to check
+    #achievements but not #enhance.
 
 ### Achievement categorization
 

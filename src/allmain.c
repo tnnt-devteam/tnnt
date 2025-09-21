@@ -33,6 +33,8 @@ boolean resuming;
 #endif
     int moveamt = 0, wtcap = 0, change = 0;
     boolean monscanmove = FALSE;
+    /* TNNT: hp tracking */
+    int prevhp = 0;
 
     /* Note:  these initializers don't do anything except guarantee that
             we're linked properly.
@@ -208,6 +210,18 @@ boolean resuming;
                         && !tnnt_is_watch_present()) {
                         tnnt_achieve(A_GOT_RID_OF_WATCH);
                     }
+
+                    /* TNNT: check amount of HP lost this turn */
+                    if (u.uhp + 100 <= prevhp
+                        && !tnnt_globals.lifesaved_this_turn
+                        /* achievement specifies "without using life saving" in
+                         * order to force you to really have skin in the game -
+                         * so wearing life saving even if you didn't end up
+                         * needing it still negates the achievement. */
+                        && !Lifesaved)
+                        tnnt_achieve(A_LOST_100_HP);
+                    prevhp = u.uhp;
+                    tnnt_globals.lifesaved_this_turn = FALSE;
 #ifdef EXTRAINFO_FN
                     if ((prev_dgl_extrainfo == 0) || (prev_dgl_extrainfo < (moves + 250))) {
                         prev_dgl_extrainfo = moves;

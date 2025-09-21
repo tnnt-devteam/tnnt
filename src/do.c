@@ -1441,6 +1441,20 @@ boolean at_stairs, falling, portal;
          * incorrect to leave it as a nonzero value here. */
         tnnt_globals.num_planes_pets = 0;
     }
+    /* checks for Plane Sailing achievement */
+    if (In_endgame(newlevel)) {
+        if (Is_earthlevel(newlevel)) {
+            tnnt_globals.too_long_on_planes = FALSE;
+            tnnt_globals.turns_entered_last_plane = moves;
+        }
+        else if (moves - tnnt_globals.turns_entered_last_plane > 100) {
+            tnnt_globals.too_long_on_planes = TRUE;
+        }
+        if (Is_astralevel(newlevel)
+            && tnnt_globals.too_long_on_planes == FALSE) {
+            tnnt_achieve(A_SPEEDRAN_PLANES);
+        }
+    }
     /* end TNNT */
     if (u.uswallow) /* idem */
         u.uswldtim = u.uswallow = 0;
