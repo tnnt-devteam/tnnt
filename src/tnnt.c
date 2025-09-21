@@ -491,7 +491,7 @@ boolean final;
 {
     menu_item *choice = NULL;
     winid win = create_nhwindow(NHW_MENU);
-    char response, buf[BUFSZ];
+    char response, buf[BUFSZ], searchbuf[BUFSZ];
     int i, num_earned = 0;
 
     start_menu(win);
@@ -506,6 +506,9 @@ boolean final;
         any.a_char = 'a';
         add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
                 "show all achievements, marked as earned or not", MENU_UNSELECTED);
+        any.a_char = 's';
+        add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
+                "show all achievements matching a search string", MENU_UNSELECTED);
         end_menu(win, "Which achievements do you want a list of?");
         if (select_menu(win, PICK_ONE, &choice) > 0) {
             response = choice->item.a_char;
@@ -520,10 +523,22 @@ boolean final;
     else {
         response = 'e'; /* dumplog: show only achievements earned */
     }
+
+    searchbuf[0] = '\0';
+    if (response == 's') {
+        getlin("Enter your search string:", searchbuf);
+        if (strlen(searchbuf) < 1)
+            return 0;
+    }
+
     /* TNNT TODO: will need NHW_MENU if we can get paging to work in tty */
     win = create_nhwindow(NHW_TEXT);
     if (response == 'a') {
         putstr(win, ATR_HEADING, "All achievements:");
+    }
+    else if (response == 's') {
+        Sprintf(buf, "Achievements matching \"%s\":", searchbuf);
+        putstr(win, ATR_HEADING, buf);
     }
     else {
         Sprintf(buf, "Achievements %searned%s:",
@@ -536,14 +551,20 @@ boolean final;
     }
 
     for (i = 0; i < NUM_TNNT_ACHIEVEMENTS; ++i) {
+        struct tnnt_achvmt_data* dat = &tnnt_achievements[i];
+        char *p;
         /* a response of "both" unconditionally prints any achievement;
          * otherwise, only print the achievement if earned and response was
          * "earned", or if not earned and response was "not earned" */
         boolean earned = tnnt_is_achieved(i);
+        boolean searchmatch = ((p = strstri(dat->name, searchbuf)) != 0
+                               || (p = strstri(dat->descr, searchbuf)) != 0);
         if (earned)
             num_earned++;
-        if (response == 'a' || earned == (response == 'e')) {
-            struct tnnt_achvmt_data* dat = &tnnt_achievements[i];
+        if (response == 'a'
+            || (response == 'e' && earned)
+            || (response == 'u' && !earned)
+            || (response == 's' && searchmatch)) {
             Sprintf(buf, "[%c] #%03d \"%s\" - %s", (earned ? 'X' : ' '),
                     i + 1, dat->name, dat->descr);
             putstr(win, 0, buf);
