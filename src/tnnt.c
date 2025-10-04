@@ -2219,17 +2219,20 @@ short otyp;
 
     switch (objects[otyp].oc_class) {
     case ARMOR_CLASS:
-        /* Fashionista has a lot of ranges, unfortunately. */
+        /* Armor achievements have a lot of ranges, unfortunately. */
         /* TNNT TODO FOR 3.7: At least one of these ranges has changed (helm of
          * brilliance is no longer shuffled, and comes before the shuffled ones;
          * identifying brilliance should still be required for the achievement).
          * Review and fix these ranges. */
         if ((otyp >= CORNUTHAUM && otyp <= DUNCE_CAP)
-            || (otyp >= HELMET && otyp <= HELM_OF_TELEPATHY)
-            || (otyp >= CLOAK_OF_PROTECTION && otyp <= CLOAK_OF_DISPLACEMENT)
-            || (otyp >= LEATHER_GLOVES && otyp <= GAUNTLETS_OF_DEXTERITY)
-            || (otyp >= SPEED_BOOTS && otyp <= LEVITATION_BOOTS))
-            return A_IDENTIFIED_ACCESSORIES;
+            || (otyp >= HELMET && otyp <= HELM_OF_TELEPATHY))
+            return A_IDENTIFIED_ALL_HELMS;
+        if (otyp >= CLOAK_OF_PROTECTION && otyp <= CLOAK_OF_DISPLACEMENT)
+            return A_IDENTIFIED_ALL_CLOAKS;
+        if (otyp >= LEATHER_GLOVES && otyp <= GAUNTLETS_OF_DEXTERITY)
+            return A_IDENTIFIED_ALL_GLOVES;
+        if (otyp >= SPEED_BOOTS && otyp <= LEVITATION_BOOTS)
+            return A_IDENTIFIED_ALL_BOOTS;
         break;
     case RING_CLASS:
         return A_IDENTIFIED_ALL_RINGS; /* no exceptions */
