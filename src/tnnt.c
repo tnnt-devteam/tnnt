@@ -399,6 +399,11 @@ boolean final;
     Sprintf(buf, "You %skilled %d/3 erinyes.", maybe_have(final),
             mvitals[PM_ERINYS].ukilled);
     putstr(en_win, 0, buf);
+    if (tnnt_globals.non_wish_djinni > 0) {
+        Sprintf(buf, "You have summoned %d djinni who did not give you a wish.",
+                tnnt_globals.non_wish_djinni);
+        putstr(en_win, 0, buf);
+    }
     if (final || u.uevent.udemigod) {
         Sprintf(buf, "You %skilled the Wizard of Yendor %d time%s.",
                 maybe_have(final), tnnt_globals.wizards_killed,
@@ -2389,5 +2394,45 @@ tnnt_maybe_grant_ahab()
 #endif
         ) {
         tnnt_achieve(A_SURVIVED_DROWNING);
+    }
+}
+
+/* Grant "The Great Heist" achievement if player has entered every vault in the
+ * game, and there are no more levels that might generate another vault. */
+void
+tnnt_maybe_award_heist()
+{
+    d_level lvl = u.uz;
+    int i;
+    int not_entered = 0;
+    int entered = 0;
+    if (!In_dungeons_of_doom(&lvl)) {
+        impossible("checking vaults not in Dungeons?");
+        return;
+    }
+    for (i = 1; i <= dunlevs_in_dungeon(&u.uz); ++i) {
+        lvl.dlevel = i;
+        if (tnnt_globals.vault_status[i] == LEVEL_NOT_GENERATED) {
+            if (Is_special(&lvl)) {
+                /* Medusa, Castle etc; we already know this level will not have
+                 * a vault, so we can just fix it up */
+                tnnt_globals.vault_status[i] = LEVEL_HAS_NO_VAULT;
+            }
+            else {
+                /* not enough information to tell if we have plundered all
+                 * vaults */
+                return;
+            }
+        }
+        else if (tnnt_globals.vault_status[i] == VAULT_NOT_ENTERED)
+            not_entered++;
+        else if (tnnt_globals.vault_status[i] == VAULT_ENTERED)
+            entered++;
+    }
+    /* we do need to check that at least one vault has been entered; in the
+     * extremely rare case that a dungeon contains no vaults, the achievement
+     * cannot be earned */
+    if (not_entered == 0 && entered > 0) {
+        tnnt_achieve(A_ENTERED_ALL_VAULTS);
     }
 }

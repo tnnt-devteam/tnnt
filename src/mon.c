@@ -723,6 +723,9 @@ movemon()
 {
     register struct monst *mtmp, *nmtmp;
     register boolean somebody_can_move = FALSE;
+    /* TNNT - for Boss Rush achievement */
+    int dlords_on_level = 0;
+    const int FIRST_DLORD = PM_JUIBLEX;
 
     /*
      * Some of you may remember the former assertion here that
@@ -771,6 +774,24 @@ movemon()
         }
         if (DEADMONSTER(mtmp))
             continue;
+
+        /* TNNT: Boss Rush checks.
+         * Note the placement of this block: after DEADMONSTER so a recently
+         * killed demon lord will not work for the achievement, but before the
+         * movement check because it is not required that all of them actually
+         * get a turn.
+         * Checking it here in movemon() precludes awarding the achievement when
+         * the last one of them appears (if that happens on a fast hero action
+         * and the hero has more actions to do something before the demon lords
+         * do), but is a more performant way to do it than adding a separate
+         * loop over fmon somewhere else. */
+        if (!mtmp->mpeaceful
+            && (is_dlord(mtmp->data) || is_dprince(mtmp->data))) {
+            dlords_on_level |= (1 << (monsndx(mtmp->data) - FIRST_DLORD));
+            /* 8 demons, so checking for 8 bits lit up */
+            if (dlords_on_level == 0xFF)
+                tnnt_achieve(A_FACED_ALL_DEMON_LORDS_AT_ONCE);
+        }
 
         /* Find a monster that we have not treated yet. */
         if (mtmp->movement < NORMAL_SPEED)

@@ -2548,6 +2548,7 @@ E void FDECL(tnnt_check_identifications, (int));
 E void FDECL(tnnt_roomlit_credit, (int, int));
 E int FDECL(tnnt_uniqndx, (int));
 E void NDECL(tnnt_maybe_grant_ahab);
+E void NDECL(tnnt_maybe_award_heist);
 
 /* ### topten.c ### */
 

@@ -4188,6 +4188,7 @@ struct monst *mtmp;
             mtmp->mpeaceful = 1;
             set_malign(mtmp); /* reset alignment */
             pline("%s is grateful.", Monnam(mtmp));
+            tnnt_achieve(A_PACIFIED_BY_UNTRAPPING);
         }
         /* Helping someone out of a trap is a nice thing to do,
          * A lawful may be rewarded, but not too often.  */

@@ -1062,6 +1062,9 @@ int dieroll;
                             pline("%s %s over %s!", what,
                                   vtense(what, "splash"), whom);
                         }
+                        if (mon->mcansee && obj->otyp == CREAM_PIE) {
+                            tnnt_achieve(A_BLINDED_MONSTER_WITH_PIE);
+                        }
                         setmangry(mon, TRUE);
                         mon->mcansee = 0;
                         tmp = rn1(25, 21);

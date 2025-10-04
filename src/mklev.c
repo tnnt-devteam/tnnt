@@ -661,6 +661,10 @@ makelevel()
     oinit(); /* assign level dependent obj probabilities */
     clear_level_structures();
 
+    if (In_dungeons_of_doom(&u.uz)) {
+        tnnt_globals.vault_status[u.uz.dlevel] = LEVEL_HAS_NO_VAULT;
+    }
+
     {
         register s_level *slev = Is_special(&u.uz);
 
@@ -748,6 +752,7 @@ makelevel()
             mk_knox_portal(vault_x + w, vault_y + h);
             if (!level.flags.noteleport && !rn2(3))
                 makevtele();
+            tnnt_globals.vault_status[u.uz.dlevel] = VAULT_NOT_ENTERED;
         } else if (rnd_rect() && create_vault()) {
             vault_x = rooms[nroom].lx;
             vault_y = rooms[nroom].ly;
@@ -881,6 +886,14 @@ makelevel()
                 (void) mkobj_at(0, somex(croom), somey(croom), TRUE);
             }
         }
+    }
+    if (In_dungeons_of_doom(&u.uz)) {
+        /* Need to call this here since the hero might plunder all the vaults
+         * that generate while leaving some more levels un-generated, and when
+         * they generate they don't end up with a vault. We didn't have enough
+         * information to award it earlier, and we can't count on the hero
+         * stepping back inside a vault to award it later. */
+        tnnt_maybe_award_heist();
     }
 }
 
@@ -1204,7 +1217,7 @@ xchar x, y; /* location */
     while (br) {
         /* this logic is stolen from Is_branchlev in dungeon.c */
         if (on_level(&u.uz, &br->end1) || on_level(&u.uz, &br->end2)) {
-            /* x=0, y=0 causes the second branch to be randomly placed... this 
+            /* x=0, y=0 causes the second branch to be randomly placed... this
                is fine for TNNT but is not extensible. */
             place_branch(br, 0, 0);
         }

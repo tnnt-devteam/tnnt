@@ -683,6 +683,13 @@ struct tnnt_globals_t {
     boolean lifesaved_this_turn;
     long turns_entered_last_plane;
     boolean too_long_on_planes;
+#define LEVEL_NOT_GENERATED 0
+#define LEVEL_HAS_NO_VAULT 1
+#define VAULT_NOT_ENTERED 2
+#define VAULT_ENTERED 3
+    short vault_status[30]; /* indexes into this are u.uz.dlevel, only relevant
+                               in Dungeons of Doom; has a little extra space */
+    uchar non_wish_djinni;
 
     /* tnnt devs: add more as needed */
 };

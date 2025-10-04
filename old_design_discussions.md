@@ -242,6 +242,23 @@ Other unsorted rejected ideas:
   it.
   - There are probably not many, if any, players who know how to check
     #achievements but not #enhance.
+- Achievement for killing a troll that revives 3 (or whatever arbitrary number)
+  times.
+  - This has technical challenges: there can be lots of trolls that can be kept
+    indefinitely eligible to get killed or revive again (alive off level, or
+    dead in an ice box) and it'd be tricky to track them all. Not impossible but
+    probably not worth the effort.
+  - Another argument is that the more interesting accomplishment is to stop a
+    troll from reviving and we already have an achievement for that.
+- Achievement for eating the corpse of a former hero from a bones pile.
+  - This is too similar to, and less interesting than, the existing achievement
+    for resurrecting a former hero by drawing their ghost into the corpse.
+    (Probably slightly more difficult because the ghost must first be dealt with
+    instead of zapped at range, but not as interesting.)
+- Achievement for curing a stoned pet.
+  - It's difficult to get a stoned pet "naturally" as they will avoid eating
+    cockatrice meat, so this basically requires you to stone the pet yourself,
+    then cure it.
 
 ### Achievement categorization
 

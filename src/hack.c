@@ -2569,6 +2569,8 @@ register boolean newlev;
         switch (rt) {
         case VAULT:
             tnnt_achieve(A_ENTERED_VAULT);
+            tnnt_globals.vault_status[u.uz.dlevel] = VAULT_ENTERED;
+            tnnt_maybe_award_heist();
             rt = 0; /* don't unmake vault */
             break;
         case ZOO:

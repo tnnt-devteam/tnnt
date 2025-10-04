@@ -2366,6 +2366,7 @@ struct obj *obj;
 {
     struct monst *mtmp;
     int chance;
+    boolean gotwish = FALSE;
 
     if (!(mtmp = makemon(&mons[PM_DJINNI], u.ux, u.uy, NO_MM_FLAGS))) {
         pline("It turns out to be empty.");
@@ -2402,6 +2403,7 @@ struct obj *obj;
         }
         /* give a wish and discard the monster (mtmp set to null) */
         mongrantswish(&mtmp);
+        gotwish = TRUE;
         break;
     case 1:
         verbalize("Thank you for freeing me!");
@@ -2423,6 +2425,12 @@ struct obj *obj;
         mtmp->mpeaceful = FALSE;
         set_malign(mtmp);
         break;
+    }
+    if (!gotwish) {
+        tnnt_globals.non_wish_djinni++;
+        if (tnnt_globals.non_wish_djinni >= 3) {
+            tnnt_achieve(A_GOT_3_NON_WISH_DJINNI);
+        }
     }
 }
 
