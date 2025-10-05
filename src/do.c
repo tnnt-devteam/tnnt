@@ -1326,7 +1326,7 @@ boolean at_stairs, falling, portal;
             else {
                 tnnt_globals.mysterious_forced_back +=
                     (newlevel->dlevel - u.uz.dlevel);
-                if (tnnt_globals.mysterious_forced_back >= TNNT_MFORCE_GOAL)
+                if (tnnt_globals.mysterious_forced_back >= 15)
                     tnnt_achieve(A_MFORCE_15_LEVELS);
             }
 

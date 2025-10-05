@@ -503,28 +503,28 @@ E struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS];
 
 /* TNNT - generic globals that don't belong in you.h */
 #include <stdint.h> /* uint64_t */
-#define NUM_MISSING_CODE_SCROLLS 3
-#define MAX_TAMED_FELINES 7
-#define TNNT_OHKO_DMG 20
-enum dtquest_status {
-    DTQUEST_NOTSTARTED = 0,
-    DTQUEST_INPROGRESS,
-    DTQUEST_COMPLETED
-};
 struct tnnt_globals_t {
+    /* A note on #defines:
+     * Use one if it's a bitmask of some sort, or if it will be used in at least
+     * 2 places and so prevent magic-number repetition, but not if it's a simple
+     * "increment counter to at least N" achievement which will only need the
+     * number once.
+     * Defines supporting an achievement should come BEFORE any variables
+     * supporting that achievement, for style consistency.
+     */
     /* The actual achievement bitfields which get written out to xlogfile and
      * track whether or not you have achieved something.
      * Since there are more than 64 achievements, we need multiple 64 bit ints.
      */
     uint64_t tnnt_achievements[NUM_TNNT_ACHIEVEMENTS / 64 + 1];
-    long v_achieve; /* cached vanilla ach bitfield for tnnt_achieve() */
 
     /* Various achievement counters */
     unsigned char graffiti_found;
+#define MAX_TAMED_FELINES 7
     unsigned char felines_tamed; /* redundant; for #tnntstats */
     unsigned char high_altars; /* bitmask using regular AM_* masks */
     unsigned char regular_altars;
-    uint64_t foods_eaten; /* sadly there are 33 foods */
+
     /* More highly unstable code. This relies on the "produce" foods being the
      * 12th through 22nd foods, inclusive, defined in objects.c. Yay!
      * The expectation here is that 0x1 = first food type defined in objects.c,
@@ -535,16 +535,20 @@ struct tnnt_globals_t {
 #define FOODMASK_PRODUCE 0x0002FF800 /* all fruits & veggies */
 #define FOODMASK_TIN     0x100000000 /* only tin */
 #define FOODMASK_GLOBS   0x000000780 /* all types of glob (only need one) */
+    uint64_t foods_eaten; /* sadly there are 33 foods */
+
     unsigned short genderflips;
-    unsigned char wish_sources;
+
 #define WISHSRC_WAND         0x01
 #define WISHSRC_LAMP         0x02
 #define WISHSRC_SMOKY_POTION 0x04
 #define WISHSRC_THRONE       0x08
 #define WISHSRC_WATER_DEMON  0x10
 #define WISHSRC_ALL          0x1F
+    unsigned char wish_sources;
+
     boolean blew_up_ludios; /* blew up any of its land mines */
-    unsigned short readables;
+
 #define RDBL_SCROLL  0x0001
 #define RDBL_BOOK    0x0002
 #define RDBL_COIN    0x0004
@@ -557,20 +561,18 @@ struct tnnt_globals_t {
 #define ALL_READABLE 0x01FF
     /* Book of the Dead and Orb of Fate are also readable items, but are not
      * counted towards the "read all readable items" achievement. */
+    unsigned short readables;
+
     unsigned short soko_guilts;
 
-    /* Macro for adding a readable and auto-achieving the readables achievement
-     * if it has been obtained. */
-#define tnnt_read(rdbl)                                              \
-    do {                                                             \
-        tnnt_globals.readables |= (rdbl);                            \
-        if ((tnnt_globals.readables & ALL_READABLE) == ALL_READABLE) \
-            tnnt_achieve(A_READ_ALL_READABLE);                       \
-    } while(0)
-
     /* Devteam quest */
+#define NUM_MISSING_CODE_SCROLLS 3
     xchar missing_scroll_levels[NUM_MISSING_CODE_SCROLLS];
-    xchar devteam_quest_status;
+    enum dtquest_status {
+        DTQUEST_NOTSTARTED = 0,
+        DTQUEST_INPROGRESS,
+        DTQUEST_COMPLETED
+    } devteam_quest_status;
 
     /* NPC Deathmatch */
     boolean deathmatch_started;
@@ -597,22 +599,24 @@ struct tnnt_globals_t {
      * 0x2 = 1 << 1 = the 1th object class, and so on. */
 #define ALL_EDIBLE_OCLASSES 0x19EFC
     uint32_t objclasses_eaten;
+
     unsigned int astral_worm_gulps;
     unsigned short artis_eaten;
-    /* amount of each elemental needed to kill on home plane for achievement */
-#define TNNT_ELEMENTAL_KILL_THRESHOLD 4
     /* ordered by plane: earth, air, fire, water */
+#define TNNT_ELEMENTAL_KILL_THRESHOLD 4
     unsigned short elementals_killed_on_planes[4];
+
 #define TNNT_LITROOM_GOAL 20
     /* 20 entries of ledger_no and roomno */
     struct {
         unsigned short ledgerno;
         unsigned short roomno;
     } dark_rooms_lit[TNNT_LITROOM_GOAL];
-#define TNNT_MFORCE_GOAL 15
+
     unsigned short mysterious_forced_back;
     unsigned short num_planes_pets;
     unsigned int* planes_pet_m_ids; /* dynamically allocated entering Earth */
+
     /* #untrap-able trap types: arrow, dart, squeaky board, bear, landmine, web.
      * Also door and container traps.
      * There are ways to get rid of others but these are the only ones you can
@@ -629,11 +633,11 @@ struct tnnt_globals_t {
 #define TNNT_UNTRAP_CONT     0x0080
 #define ALL_UNTRAPPABLE_TRAPTYPES 0x00FF
     uint16_t untrapped_types;
+
     /* mthrowu.c tracks an 'archer' variable, but for some reason only for a
      * monster deliberately shooting at another monster. This does the same for
      * monster shooting at the player, for the "friendly fire" achievement. */
     struct monst *psuedo_archer;
-#define TNNT_DOOR_RESIST_GOAL 8
     unsigned char consecutive_door_resists;
     unsigned char door_resist_max;
     xchar door_attempt_x, door_attempt_y, door_attempt_ledger;
@@ -663,6 +667,7 @@ struct tnnt_globals_t {
      * block, hence why this does not have all lower bits set. */
 #define ALL_POLEARMS_FOUND 0x00003EEF
     uint32_t polearms_found;
+
     boolean killed_izchak;
     coord kitten_loc;
     boolean minetown_bereft_of_watch;
@@ -683,12 +688,14 @@ struct tnnt_globals_t {
     boolean lifesaved_this_turn;
     long turns_entered_last_plane;
     boolean too_long_on_planes;
+
 #define LEVEL_NOT_GENERATED 0
 #define LEVEL_HAS_NO_VAULT 1
 #define VAULT_NOT_ENTERED 2
 #define VAULT_ENTERED 3
     short vault_status[30]; /* indexes into this are u.uz.dlevel, only relevant
                                in Dungeons of Doom; has a little extra space */
+
     uchar non_wish_djinni;
 
     /* tnnt devs: add more as needed */
@@ -699,6 +706,10 @@ E struct tnnt_globals_t tnnt_globals;
  * tnnt_achieve() is now a proper function. */
 #define tnnt_is_achieved(achvmt) \
     ((tnnt_globals.tnnt_achievements[(achvmt) / 64] & (1L << ((achvmt) % 64))) != 0)
+
+/* TNNT - any misc defines that do get reused in multiple places, but aren't
+ * attached to a counter above */
+#define TNNT_OHKO_DMG 20
 
 #undef E
 

@@ -2040,7 +2040,7 @@ xchar x, y; // TNNT TODO FOR 3.7: use coordxy
         && tnnt_globals.door_attempt_x == x
         && tnnt_globals.door_attempt_y == y) {
         tnnt_globals.consecutive_door_resists++;
-        if (tnnt_globals.consecutive_door_resists >= TNNT_DOOR_RESIST_GOAL)
+        if (tnnt_globals.consecutive_door_resists >= 8)
             tnnt_achieve(A_DOOR_RESIST_8X);
     }
     else { /* new door */
@@ -2438,4 +2438,17 @@ tnnt_maybe_award_heist()
     if (not_entered == 0 && entered > 0) {
         tnnt_achieve(A_ENTERED_ALL_VAULTS);
     }
+}
+
+/* Add a type of readable object (a RDBL_* constant, not an otyp), which the hero
+ * has just read, to the tracker. Grant the achievement if all of them have been
+ * obtained. */
+void
+tnnt_read(int rdbl)
+{
+    tnnt_globals.readables |= rdbl;
+    if ((tnnt_globals.readables & ALL_READABLE) == ALL_READABLE) {
+        tnnt_achieve(A_READ_ALL_READABLE);
+    }
+
 }
