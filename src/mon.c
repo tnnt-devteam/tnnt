@@ -2507,7 +2507,10 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
             livelog_write_string (LL_CONDUCT,"killed for the first time");
 
     /* TNNT code for anything that triggers when the player kills a monster
-     * goes here. */
+     * goes here.
+     * Note: they all generally trigger even if the monster gets lifesaved. This
+     * is fine, because it still counts as a kill: it's consistent with how a
+     * lifesaved player will be told "You have been killed X times". */
     m_idx = (mtmp->cham != NON_PM) ? mtmp->cham : monsndx(mtmp->data);
     tnnt_update_ukilled(m_idx); /* killing groups of monsters achievements */
 
