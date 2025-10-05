@@ -662,8 +662,8 @@ ACH("In Your Face!", "Blind a monster by pieing it", BLINDED_MONSTER_WITH_PIE),
 ACH("Inverse Genie", "Summon three djinni who do not grant a wish",
     GOT_3_NON_WISH_DJINNI),
 
-/* 56 free bits in tnntachieve5 */
-/* 328 achievements defined */
+/* 34 free bits in tnntachieve5 */
+/* 350 achievements defined */
 
 #undef ACH
 
