@@ -2074,6 +2074,9 @@ invocation_message()
         You_feel("a strange vibration %s.", buf);
         u.uevent.uvibrated = 1;
         tnnt_achieve(A_REACHED_VIBRATING_SQ);
+        if (!tnnt_globals.non_downstairs_move_in_hell) {
+            tnnt_achieve(A_DESCENDED_GEHENNOM_WITHOUT_BACKTRACKING);
+        }
         if (otmp && otmp->spe == 7 && otmp->lamplit)
             pline("%s %s!", The(xname(otmp)),
                   Blind ? "throbs palpably" : "glows with a strange light");

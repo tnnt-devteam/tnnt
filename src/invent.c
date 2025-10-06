@@ -867,6 +867,9 @@ struct obj *obj;
             livelog_write_string(LL_ACHIEVE, "acquired the luckstone from Mines' End");
         u.uachieve.mines_luckstone = 1;
         tnnt_achieve(A_GOT_LUCKSTONE);
+        if (!tnnt_globals.u_backtracked) {
+            tnnt_achieve(A_GOT_LUCKSTONE_WITHOUT_BACKTRACKING);
+        }
         obj->record_achieve_special = NON_PM;
         obj->nomerge = 0;
     } else if (is_soko_prize(obj)) {
@@ -874,6 +877,9 @@ struct obj *obj;
             livelog_write_string(LL_ACHIEVE, "completed Sokoban");
         u.uachieve.finish_sokoban = 1;
         tnnt_achieve(A_COMPLETED_SOKOBAN);
+        if (!tnnt_globals.u_backtracked_after_soko) {
+            tnnt_achieve(A_COMPLETED_SOKOBAN_WITHOUT_BACKTRACKING);
+        }
         obj->record_achieve_special = NON_PM;
         obj->nomerge = 0;
     }

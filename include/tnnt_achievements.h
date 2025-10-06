@@ -661,6 +661,35 @@ ACH("The Great Heist", "Plunder every vault in the Dungeons of Doom",
 ACH("In Your Face!", "Blind a monster by pieing it", BLINDED_MONSTER_WITH_PIE),
 ACH("Inverse Genie", "Summon three djinni who do not grant a wish",
     GOT_3_NON_WISH_DJINNI),
+/* These "ironman-ish" achievements have slightly different conditions.
+ * Iron Miner only forbids backtracking, and permits levelporting, because it's
+ * relatively early game. (If it turns out it's too easy for an Archeologist to
+ * dig down through the mines we may have to further forbid digging.)
+ * Sokoban only permits traveling upwards since that effectively forbids
+ * backtracking. (Falling down a hole makes you ineligible; levelport and cursed
+ * gain level already don't work there.)
+ * Gehennom, however, requires that only downstairs be used to move from level
+ * to level, since by that time a player would very likely be able to simply dig
+ * through most of the floors - only the Wizard's Tower bars it. "Without
+ * backtracking" prevents dipping into Vlad's or using the portal to the
+ * Wizard's Tower. */
+/* TNNT TODO FOR 3.7: Iron Miner could be failed before it's really begun if the
+ * player takes the wrong downstairs from the level containing the Mines
+ * entrance. In current 3.6 TNNT, these stairs are distinguishable, but in 3.7
+ * branch stairways are not distinguishable until you've used them. So this
+ * means a 50% chance they make themselves ineligible, which we don't want, but
+ * we also don't want to allow a player to ignore the Mines, do as much of the
+ * rest of the dungeon as they want, and breeze through the Mines on their first
+ * visit when they come back. */
+ACH("Iron Miner",
+    "Obtain the luckstone from Mines' End without backtracking to previous levels",
+    GOT_LUCKSTONE_WITHOUT_BACKTRACKING),
+ACH("Soko In One Go",
+    "Complete Sokoban without backtracking after first entering it",
+    COMPLETED_SOKOBAN_WITHOUT_BACKTRACKING),
+ACH("The Long Road Through Hell",
+    "Go from the Valley to the Vibrating Square without backtracking, using only downstairs",
+    DESCENDED_GEHENNOM_WITHOUT_BACKTRACKING),
 
 /* 34 free bits in tnntachieve5 */
 /* 350 achievements defined */

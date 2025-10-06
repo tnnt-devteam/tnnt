@@ -698,6 +698,20 @@ struct tnnt_globals_t {
 
     uchar non_wish_djinni;
 
+    /* these are conduct-ish achievements but not actual conducts since they
+     * don't require being done for the whole game. So we track them here. */
+    boolean u_backtracked; /* revisited any level */
+    boolean u_entered_soko;
+    boolean u_backtracked_after_soko; /* can only be set after u_entered_soko is
+                                         true */
+    boolean non_downstairs_move_in_hell;
+    boolean unforeseen_fall; /* so if someone hits a trap door in Gehennom they
+                                legitimately didn't know about, it won't break the
+                                achievement - the alternative would be
+                                establishing a "safe" way to do this by
+                                methodically checking every level for traps
+                                which would be annoying */
+
     /* tnnt devs: add more as needed */
 };
 E struct tnnt_globals_t tnnt_globals;

@@ -936,6 +936,15 @@ level_tele()
 
     killer.name[0] = 0; /* still alive, so far... */
 
+    if (Inhell && !tnnt_globals.non_downstairs_move_in_hell
+        && newlev != depth(&u.uz) /* not sure why anyone attempting the
+                                  * Gehennom-march achievement would
+                                  * bother controlled levelporting to their own
+                                  * level, but if they do, it shouldn't break
+                                  * the achievement... */) {
+        tnnt_globals.non_downstairs_move_in_hell = TRUE;
+    }
+
     if (iflags.debug_fuzzer && newlev < 0)
         goto random_levtport;
     if (newlev < 0 && !force_dest) {

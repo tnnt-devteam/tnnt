@@ -473,8 +473,11 @@ unsigned ftflags;
         newlevel++;
     } while (!rn2(4) && newlevel < bottom);
 
+    tnnt_globals.unforeseen_fall = FALSE;
     if (td) {
         t = t_at(u.ux, u.uy);
+        if (!t->tseen)
+            tnnt_globals.unforeseen_fall = TRUE;
         feeltrap(t);
         if (!Sokoban && !(ftflags & TOOKPLUNGE)) {
             if (t->ttyp == TRAPDOOR)
@@ -507,6 +510,7 @@ unsigned ftflags;
             display_nhwindow(WIN_MESSAGE, FALSE);
             pline_The("opening under you closes up.");
         }
+        tnnt_globals.unforeseen_fall = FALSE;
         return;
     }
     if ((Flying || is_clinger(youmonst.data))

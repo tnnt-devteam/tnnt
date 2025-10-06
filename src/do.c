@@ -1455,7 +1455,26 @@ boolean at_stairs, falling, portal;
             tnnt_achieve(A_SPEEDRAN_PLANES);
         }
     }
+    /* track if we entered sokoban */
+    if (In_sokoban(newlevel)) {
+        tnnt_globals.u_entered_soko = TRUE;
+    }
+    /* track if we made an illegal move after entering hell
+     * if going up, or through a portal,
+     * or off the stairs, UNLESS falling and unforeseen
+     * downwards level teleport is not handled here because it passes no special
+     * flags, so it has its own handling for this */
+    if (Inhell) {
+        boolean expected_to_fall = falling && !tnnt_globals.unforeseen_fall;
+        /* if I'm off stairs AND I did not expect to fall, it is not illegal */
+        if (up || portal || expected_to_fall || (!at_stairs
+                                                 && expected_to_fall)) {
+            tnnt_globals.non_downstairs_move_in_hell = TRUE;
+        }
+    }
+    tnnt_globals.unforeseen_fall = FALSE;
     /* end TNNT */
+
     if (u.uswallow) /* idem */
         u.uswldtim = u.uswallow = 0;
     recalc_mapseen(); /* recalculate map overview before we leave the level */
@@ -1561,6 +1580,10 @@ boolean at_stairs, falling, portal;
             restore_waterlevel(-1);
         (void) nhclose(fd);
         oinit(); /* reassign level dependent obj probabilities */
+        tnnt_globals.u_backtracked = TRUE;
+        if (tnnt_globals.u_entered_soko) {
+            tnnt_globals.u_backtracked_after_soko = TRUE;
+        }
     }
     reglyph_darkroom();
     u.uinwater = 0;
