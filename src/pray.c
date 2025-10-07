@@ -1419,6 +1419,7 @@ dosacrifice()
                 angry_priest();
                 if (u.ualign.type == A_CHAOTIC)
                     tnnt_achieve(A_CONVERTED_ALTAR);
+                tnnt_record_altar(AM_CHAOTIC);
             } else {
                 struct monst *dmon;
                 const char *demonless_msg;
@@ -1700,6 +1701,7 @@ dosacrifice()
                         && !p_coaligned(pri))
                         angry_priest();
                     tnnt_achieve(A_CONVERTED_ALTAR);
+                    tnnt_record_altar(levl[u.ux][u.uy].altarmask);
                 } else {
                     pline("Unluckily, you feel the power of %s decrease.",
                           u_gname());

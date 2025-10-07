@@ -2262,9 +2262,7 @@ boolean pick;
         }
         /* this is the weaker form of grand tour and happens anywhere, even on
          * the astral plane */
-        tnnt_globals.regular_altars |= mask;
-        if (tnnt_globals.regular_altars == 0x7)
-            tnnt_achieve(A_VISITED_ALL_ALTARS);
+        tnnt_record_altar(mask);
     }
     if (spotterrain == GRAVE && Is_rogue_level(&u.uz)) {
         tnnt_achieve(A_FOUND_ROGUE_BONES_PILE);

@@ -2550,6 +2550,7 @@ E int FDECL(tnnt_uniqndx, (int));
 E void NDECL(tnnt_maybe_grant_ahab);
 E void NDECL(tnnt_maybe_award_heist);
 E void FDECL(tnnt_read, (int));
+E void FDECL(tnnt_record_altar, (xchar));
 
 /* ### topten.c ### */
 

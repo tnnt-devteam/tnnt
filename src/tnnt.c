@@ -2452,3 +2452,19 @@ tnnt_read(int rdbl)
     }
 
 }
+
+/* Player is standing on an altar (either moved onto it, or just converted it).
+ * Record its type towards the Pilgrim achievement. */
+void
+tnnt_record_altar(xchar amask)
+{
+    amask &= AM_MASK; /* erase shrine, etc just in case */
+    tnnt_globals.regular_altars |= amask;
+    if (amask == 0) {
+        /* Moloch altar; set a special bit that isn't actually set in
+         * tnnt_globals.regular_altars otherwise */
+        tnnt_globals.regular_altars |= 0x08;
+    }
+    if (tnnt_globals.regular_altars == 0x0F)
+        tnnt_achieve(A_VISITED_ALL_ALTARS);
+}

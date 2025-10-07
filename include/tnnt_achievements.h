@@ -287,7 +287,7 @@ ACH("Statue Showcase", "Enter a cockatrice nest", ENTERED_COCKNEST),
 ACH("Ocean's Eleven", "Enter Fort Ludios", ENTERED_LUDIOS),
 
 /* involving doing all of a set of things */
-ACH("Pilgrim", "Visit every type of aligned altar", VISITED_ALL_ALTARS),
+ACH("Pilgrim", "Visit all 4 types of altar", VISITED_ALL_ALTARS),
 ACH("The Grand Tour", "Visit each high altar on the Astral Plane",
     VISITED_HIGH_ALTARS),
 ACH("All You Ever Wanted", "Get a wish from every wish source",
