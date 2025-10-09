@@ -988,13 +988,34 @@ struct obj *otmp;
     fclose(donorfile);
 }
 
-/* Determine if obj may be placed in the swap chest. */
+/* Determine if obj may be placed in the swap chest.
+ * The general design criteria follow two rules:
+ *
+ * 1. An item should not be too powerful for the recipient to get in the early
+ *    to mid game. (Wishes, artifacts, etc.) This rule helps maintain the
+ *    overall balance of the recipient's game (albeit not preserving it entirely
+ *    since they are still making a trade for something more useful).
+ *
+ * 2. An item should not be of little immediate use to the donor, because the
+ *    idea is you are giving up something valuable in order to get something else
+ *    valuable. How common the item is plays a part in this; a +1 weapon might be
+ *    useful, but it's quite likely that a hero will find a +1 weapon that they
+ *    don't particularly want to wield themselves. This rule helps keep the pool
+ *    of items in the swap chest at a certain level of quality, rather than
+ *    filling up with junk; it also enforces a certain level of fairness in that
+ *    you can't dump in a piece of junk and get something really good in return.
+ */
 boolean
 swap_chest_eligible(obj)
 struct obj *obj;
 {
     if (obj->oartifact)
         return FALSE;
+
+    /* as with wishing, ammo has a higher allowed stack limit */
+    if (obj->quan > (is_ammo(obj) ? 10 : 3))
+        return FALSE;
+
     switch (obj->oclass) {
         case RING_CLASS:
             /* reject cursed rings and chargeable rings at +0 or worse */
@@ -1049,6 +1070,7 @@ struct obj *obj;
             case BUGLE:
             case TOOLED_HORN:
             case LEATHER_DRUM:
+            case SADDLE:
                 return TRUE;
             }
             /* other tools only require at least 1 charge */
@@ -1068,6 +1090,9 @@ struct obj *obj;
             case SILVER_SABER:
             case SILVER_DAGGER:
             case SILVER_SPEAR:
+            /* extra lances are useful for knights, and are rare and heavy
+             * enough that non-knights are unlikely to dump them in as junk */
+            case LANCE:
                 return TRUE;
             /* allow athame as long as it's not so dull it can't engrave */
             case ATHAME:
@@ -1078,21 +1103,19 @@ struct obj *obj;
         case ARMOR_CLASS:
             if (obj->cursed)
                 return FALSE;
+            /* dragon armor was previously eligible but there have been some
+             * incidents with players speedrunning not to win, but to flood the
+             * chests with dragon scale mail, which throws the intended game
+             * balance way out of whack.
+             * Dragon scales are likewise ineligible because it's relatively
+             * easy to create dragon scale mail from them. */
+            if (Is_dragon_armor(obj))
+                return FALSE;
             switch (obj->otyp) {
             case DUNCE_CAP:
             case FUMBLE_BOOTS:
             case GAUNTLETS_OF_FUMBLING:
                 return FALSE;
-            case GRAY_DRAGON_SCALES:
-            case SILVER_DRAGON_SCALES:
-            case RED_DRAGON_SCALES:
-            case ORANGE_DRAGON_SCALES:
-            case WHITE_DRAGON_SCALES:
-            case BLACK_DRAGON_SCALES:
-            case BLUE_DRAGON_SCALES:
-            case GREEN_DRAGON_SCALES:
-            case YELLOW_DRAGON_SCALES:
-                return TRUE;
             default:
                 return (objects[obj->otyp].oc_magic || obj->spe > 2);
             }
@@ -1107,6 +1130,7 @@ struct obj *obj;
         case SCROLL_CLASS:
             if (!objects[obj->otyp].oc_magic)
                 return FALSE;
+            /* some scrolls are almost useless for the recipient */
             switch (obj->otyp) {
             case SCR_AMNESIA:
             case SCR_PUNISHMENT:
