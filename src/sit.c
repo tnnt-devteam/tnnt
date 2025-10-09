@@ -77,7 +77,11 @@ dosit()
                                                                   : "");
         } else {
             You("sit on %s.", the(xname(obj)));
-            if (!(Is_box(obj) || objects[obj->otyp].oc_material == CLOTH))
+            if (obj->otyp == SWAP_CHEST) {
+                pline("It vibrates angrily, so you quickly get back to your %s.",
+                      makeplural(body_part(FOOT)));
+            }
+            else if (!(Is_box(obj) || objects[obj->otyp].oc_material == CLOTH))
                 pline("It's not very comfortable...");
         }
     } else if (trap != 0 || (u.utrap && (u.utraptype >= TT_LAVA))) {
