@@ -317,6 +317,8 @@ boolean incr; /* true iff via incremental experience growth */
         adjabil(u.ulevel - 1, u.ulevel); /* give new intrinsics */
         reset_rndmonst(NON_PM);          /* new monster selection */
     }
+    if (u.ulevel == MAXULEV)
+        tnnt_achieve(A_REACHED_LEVEL_30);
     context.botl = TRUE;
 }
 

@@ -614,6 +614,11 @@ peffects(otmp)
 register struct obj *otmp;
 {
     register int i, ii, lim;
+    /* TNNT - for Potion Roulette achievement;
+     * we bar Upolyd not because of being too lazy to check u.mh but because the
+     * spirit of the potion is your life must actually be on the line, and if
+     * you're polymorphed there's no actual danger */
+    boolean crithp = (!Upolyd && (u.uhp * 10 < u.uhpmax));
 
     switch (otmp->otyp) {
     case POT_RESTORE_ABILITY:
@@ -1026,6 +1031,8 @@ register struct obj *otmp;
         healup(d(6 + 2 * bcsign(otmp), 4), !otmp->cursed ? 1 : 0,
                !!otmp->blessed, !otmp->cursed);
         exercise(A_CON, TRUE);
+        if (crithp && !objects[POT_HEALING].oc_name_known)
+            tnnt_achieve(A_DRANK_UNID_HEALING_POTION);
         break;
     case POT_EXTRA_HEALING:
         You_feel("much better.");
@@ -1035,6 +1042,8 @@ register struct obj *otmp;
         (void) make_hallucinated(0L, TRUE, 0L);
         exercise(A_CON, TRUE);
         exercise(A_STR, TRUE);
+        if (crithp && !objects[POT_EXTRA_HEALING].oc_name_known)
+            tnnt_achieve(A_DRANK_UNID_HEALING_POTION);
         break;
     case POT_FULL_HEALING:
         You_feel("completely healed.");
@@ -1049,6 +1058,8 @@ register struct obj *otmp;
         (void) make_hallucinated(0L, TRUE, 0L);
         exercise(A_STR, TRUE);
         exercise(A_CON, TRUE);
+        if (crithp && !objects[POT_FULL_HEALING].oc_name_known)
+            tnnt_achieve(A_DRANK_UNID_HEALING_POTION);
         break;
     case POT_LEVITATION:
     case SPE_LEVITATION:

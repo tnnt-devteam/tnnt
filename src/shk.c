@@ -1204,6 +1204,7 @@ register boolean silentkops;
         pline("%s calms down.", Shknam(shkp));
 
     make_happy_shoppers(silentkops);
+    tnnt_achieve(A_PACIFIED_SHOPKEEPER);
 }
 
 /* called by make_happy_shk() and also by losedogs() for migrating shk */

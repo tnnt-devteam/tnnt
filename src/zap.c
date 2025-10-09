@@ -1486,6 +1486,9 @@ int id;
 #undef USES_CORPSENM
     }
 
+    if (obj->otyp == ROCK && objects[otmp->otyp].oc_material == GEMSTONE)
+        tnnt_achieve(A_POLYED_ROCK_INTO_GEM);
+
     /* preserve quantity */
     otmp->quan = obj->quan;
     /* preserve the shopkeepers (lack of) interest */
