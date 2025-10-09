@@ -563,6 +563,8 @@ struct tnnt_globals_t {
      * counted towards the "read all readable items" achievement. */
     unsigned short readables;
 
+    /* TNNT TODO FOR 3.7: this counter will no longer be needed; we will be able
+     * to use u.uconduct.sokocheats */
     unsigned short soko_guilts;
 
     /* Devteam quest */
