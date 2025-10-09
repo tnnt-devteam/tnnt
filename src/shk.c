@@ -545,8 +545,47 @@ char *enterstring;
     if (!*enterstring)
         return;
 
+    /* this assignment is the same as the one below but we need it here for TNNT
+     * shop achievements that trigger before empty-shop checks */
+    rt = rooms[*enterstring - ROOMOFFSET].rtype;
+
     if (In_dungeons_of_doom(&u.uz) && depth(&u.uz) >= 20)
         tnnt_achieve(A_VISITED_DEEP_SHOP);
+    switch (rt) {
+    case SHOPBASE:
+        tnnt_achieve(A_ENTERED_GENERAL_STORE);
+        break;
+    case ARMORSHOP:
+        tnnt_achieve(A_ENTERED_ARMOR_SHOP);
+        break;
+    case SCROLLSHOP:
+        tnnt_achieve(A_ENTERED_ARMOR_SHOP);
+        break;
+    case POTIONSHOP:
+        tnnt_achieve(A_ENTERED_POTION_SHOP);
+        break;
+    case WEAPONSHOP:
+        tnnt_achieve(A_ENTERED_WEAPON_SHOP);
+        break;
+    case FOODSHOP:
+        tnnt_achieve(A_ENTERED_DELICATESSEN);
+        break;
+    case RINGSHOP:
+        tnnt_achieve(A_ENTERED_JEWELRY_SHOP);
+        break;
+    case WANDSHOP:
+        tnnt_achieve(A_ENTERED_WAND_SHOP);
+        break;
+    case TOOLSHOP:
+        tnnt_achieve(A_ENTERED_TOOL_SHOP);
+        break;
+    case BOOKSHOP:
+        tnnt_achieve(A_ENTERED_BOOK_SHOP);
+        break;
+    case FODDERSHOP:
+        tnnt_achieve(A_ENTERED_HEALTH_FOOD_SHOP);
+        break;
+    }
 
     if (!(shkp = shop_keeper(*enterstring))) {
         if (!index(empty_shops, *enterstring)
