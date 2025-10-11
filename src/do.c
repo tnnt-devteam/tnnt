@@ -1384,16 +1384,28 @@ boolean at_stairs, falling, portal;
     u.ustuck = 0; /* idem */
     u.uinwater = 0;
     u.uundetected = 0; /* not hidden, even if means are available */
-    /* TNNT: pets/steeds/followers can't use the portal to the arena */
-    if (!(Is_deathmatch_level(&u.uz) || on_level(newlevel, &deathmatch_level))) {
-        keepdogs(FALSE);
-    } else {
+    /* TNNT: pets/steeds/followers can't use the portal inbound to the arena;
+     * however, they CAN use it outbound - if a monster happens to spawn in the
+     * arena and you tame/saddle it, you can take it out.
+     * The reason for this is because keepdogs() also tracks the status of the
+     * Wizard, and if he resurrected in the deathmatch arena, you could escape
+     * the arena and the lack of a keepdogs() call would mean he would never
+     * reappear in person again, even on the Plane of Earth.
+     * There is still a bug in that the Wizard left alone on the deathmatch
+     * portal level will not harass you personally in the deathmatch, but that's
+     * less severe of an issue. The proper way to fix this problem for good
+     * would be to refactor keepdogs to be callable with a "Wizard only" option,
+     * but I'm not sure it's wise to do that refactor for TNNT.
+     * TNNT TODO FOR 3.7: The 3.7 code now checks "iflags.nofollowers". */
+    if (on_level(newlevel, &deathmatch_level)) {
         unleash_all();
         if (u.usteed) {
             pline("Your steed refuses to follow you!");
             dismount_steed(DISMOUNT_GENERIC);
             u.ugallop = 0L;
         }
+    } else {
+        keepdogs(FALSE);
     }
     /* more TNNT: check mydogs list when entering Earth/Astral for pets that
      * entered Earth entering Astral */
