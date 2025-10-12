@@ -16,7 +16,7 @@ While this file covers a lot of reasons why various features were rejected,
 don't assume that every idea in here has been considered and rejected. Sometimes
 an idea just never got enough interest from anyone to get implemented.
 
-The discussions in this file date from prior to the 2024 tournament, and do not
+The discussions in this file date from prior to the 2025 tournament, and do not
 cover anything during or after that tournament.
 
 ## Swap Chest
