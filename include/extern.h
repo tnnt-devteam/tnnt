@@ -2529,6 +2529,7 @@ E boolean FDECL(swap_chest_eligible, (struct obj *));
 E void NDECL(write_npc_data);
 E struct monst* FDECL(create_tnnt_npc, (XCHAR_P, XCHAR_P));
 #endif
+E void FDECL(tnnt_check_arena_entry, (xchar, xchar));
 E void NDECL(npc_awakens);
 E boolean FDECL(is_illegal_deathmatch, (d_level *));
 E struct obj *FDECL(collect_all_transient, (struct obj *));
@@ -2551,6 +2552,7 @@ E void NDECL(tnnt_maybe_grant_ahab);
 E void NDECL(tnnt_maybe_award_heist);
 E void FDECL(tnnt_read, (int));
 E void FDECL(tnnt_record_altar, (xchar));
+E void NDECL(tnnt_check_castle_rush);
 
 /* ### topten.c ### */
 

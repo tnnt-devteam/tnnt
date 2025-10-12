@@ -1808,6 +1808,8 @@ domove_core()
     if (!in_out_region(x, y))
         return;
 
+    tnnt_check_arena_entry(x, y);
+
     /* now move the hero */
     mtmp = m_at(x, y);
     u.ux += u.dx;
@@ -1819,11 +1821,7 @@ domove_core()
         exercise_steed();
     }
 
-    /* TNNT TODO FOR 3.7: check if the Castle is still static or if level
-     * flipping allows it to move */
-    if (Is_stronghold(&u.uz) && u.ux == 15 && u.uy == 11
-        && moves <= tnnt_globals.entered_castle_time + TNNT_CASTLE_TURNS)
-        tnnt_achieve(A_ENTERED_CASTLE_QUICKLY);
+    tnnt_check_castle_rush();
 
     /*
      * If safepet at destination then move the pet to the hero's
@@ -2122,18 +2120,6 @@ switch_terrain()
     }
     if ((!Levitation ^ was_levitating) || (!Flying ^ was_flying))
         context.botl = TRUE; /* update Lev/Fly status condition */
-
-    /* TNNT: hacky test for entering the NPC Deathmatch Arena via moving over
-     * the door in the arena. In here rather than spoteffects() because you
-     * might jump over the door, or obliterate the door.
-     * Assumes that there is exactly one door in the arena. Also assumes that
-     * there's no way for a player to engineer the destruction of a door such
-     * that its typ doesn't remain set on DOOR. */
-    if (Is_deathmatch_level(&u.uz) && IS_DOOR(lev->typ)) {
-        if (!tnnt_globals.deathmatch_started) {
-            aggravate(); /* this will call npc_awakens() */
-        }
-    }
 }
 
 /* extracted from spoteffects; called by spoteffects to check for entering or
