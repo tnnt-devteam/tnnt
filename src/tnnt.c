@@ -1331,39 +1331,78 @@ xchar x, y;
     char *npcfilename = pick_npc_file();
     const long int mmflags = (NO_MINVENT | MM_NOCOUNTBIRTH | MM_ADJACENTOK
                               | MM_ANGRY | MM_ASLEEP);
-    struct obj *obj;
+    struct obj *obj, *invent_from_file;
     int strategy;
     struct monst *npc;
+
     Sprintf(path, "%s/%s", TNNT_NPC_DIR, npcfilename);
     if (!*npcfilename || !(npcfile = fopen(path, "r"))) {
-        int mndx;
-        /* NB: in the actual tournament the directory should be stocked with
-         * NPC file(s) in advance, so that users will not see this error even
-         * if they enter the arena before anyone has ascended. */
+        /* In the actual tournament the directory should be stocked with NPC
+         * file(s) in advance, so that users will not see this error even if
+         * they enter the arena before anyone has ascended. */
         if (!*npcfilename)
             impossible("No NPC files available - creating mplayer instead");
         else
-            impossible(
-                     "Error opening NPC file '%s' - creating mplayer instead",
+            impossible("Error opening NPC file '%s' - creating mplayer instead",
                        path);
-        mndx = rn1(PM_WIZARD - PM_ARCHEOLOGIST + 1, PM_ARCHEOLOGIST);
-        /* special = true better approximates an ascending character... */
-        npc = mk_mplayer(&mons[mndx], x, y, TRUE);
-        npc->mcloned = 1;
-        npc->msleeping = 1;
-        return npc;
-    }
-    /* Get base data from the file. */
-    fgets(npcname, BUFSZ, npcfile); /* eat up timestamp; game doesn't use it */
-    fgets(npcname, BUFSZ, npcfile); /* actually read in name this time */
-    npcname[strlen(npcname)-1] = '\0'; /* strip \n that was read in */
-    fscanf(npcfile, "%d %d\n", &pm_num, &gender);  /* get PM_* of correct player monster */
-    fscanf(npcfile, "%d\n", &npc_level);   /* get ascender's XL */
-    fscanf(npcfile, "%d\n", &hpmax);   /* get ascender's hp max */
-    fscanf(npcfile, "0x%hx\n", &mintrinsics); /* get ascender's monster-format intrinsics */
+        /* set default values as if we had read them from the file */
+        Strcpy(npcname, "Mr. Generic");
+        pm_num = rn1(PM_WIZARD - PM_ARCHEOLOGIST + 1, PM_ARCHEOLOGIST);
+        npc_level = 14 + rn2(17); /* 14..30 */
+        hpmax = 100; /* it will be reset later */
+        mintrinsics = 0;
+        invent_from_file = NULL;
 
-    /* Make the monster normally and take care of all the boilerplate. */
-    npc = makemon(&mons[pm_num], x, y, mmflags);
+        /* Now make the npc.
+         * special = true better approximates an ascending character. */
+        npc = mk_mplayer(&mons[pm_num], x, y, TRUE);
+    }
+    else {
+        /* eat up timestamp; game doesn't use it */
+        fgets(npcname, BUFSZ, npcfile);
+        /* actually read in name this time */
+        fgets(npcname, BUFSZ, npcfile);
+        /* strip \n that was read in */
+        npcname[strlen(npcname)-1] = '\0';
+        /* get PM_* of correct player monster */
+        fscanf(npcfile, "%d %d\n", &pm_num, &gender);
+        /* get ascender's XL */
+        fscanf(npcfile, "%d\n", &npc_level);
+        /* get ascender's hp max */
+        fscanf(npcfile, "%d\n", &hpmax);
+        /* get ascender's monster-format intrinsics */
+        fscanf(npcfile, "0x%hx\n", &mintrinsics);
+        /* get inventory */
+        while (fgets(line, BUFSZ, npcfile) != NULL) {
+            char objnam[BUFSZ];
+            int n, otyp, quan, spe, cursed, blessed, oerodeproof, recharged,
+                greased, corpsenm, usecount, oeaten;
+            n = sscanf(line, "%d %d %d %d %d %d %d %d %d %d %d %[^\n]",
+                       &otyp, &quan, &spe, &cursed, &blessed, &oerodeproof,
+                       &recharged, &greased, &corpsenm, &usecount, &oeaten,
+                       objnam);
+            if (n >= 11) {
+                obj = mksobj(otyp, FALSE, FALSE);
+                obj->quan = quan;
+                obj->spe = spe;
+                obj->cursed = cursed;
+                obj->blessed = blessed;
+                obj->oerodeproof = oerodeproof;
+                obj->recharged = recharged;
+                obj->greased = greased;
+                obj->corpsenm = corpsenm;
+                obj->usecount = usecount;
+                obj->oeaten = oeaten;
+                if (n == 12)
+                    obj = oname(obj, objnam);
+                /* add to temp invent chain */
+                obj->nobj = invent_from_file;
+                invent_from_file = obj;
+            }
+        }
+        /* Create the npc and take care of all the boilerplate. */
+        npc = makemon(&mons[pm_num], x, y, mmflags);
+    }
 
     /* Setup! */
     npc->m_lev = max(npc_level, 14);
@@ -1384,37 +1423,16 @@ xchar x, y;
      */
     npc->mextrinsics = mintrinsics;
     npc->mpeaceful = 0;
+    npc->msleeping = 1; /* npc from file has MM_ASLEEP but not Mr. Generic */
     set_malign(npc);
-    /* Regular player monsters never use the mcloned flag, so this is a good way
-     * to put a special marker on the NPC. Plus they ARE sort of a clone. */
-    npc->mcloned = 1;
 
     /* Inventory! */
     strategy = NEED_HTH_WEAPON;
-    while (fgets(line, BUFSZ, npcfile) != NULL) {
-        char objnam[BUFSZ];
-        int n, otyp, quan, spe, cursed, blessed, oerodeproof, recharged,
-            greased, corpsenm, usecount, oeaten;
-        n = sscanf(line, "%d %d %d %d %d %d %d %d %d %d %d %[^\n]",
-                   &otyp, &quan, &spe, &cursed, &blessed, &oerodeproof,
-                   &recharged, &greased, &corpsenm, &usecount, &oeaten,
-                   objnam);
-        if (n >= 11) {
-            obj = mksobj(otyp, FALSE, FALSE);
-            obj->quan = quan;
-            obj->spe = spe;
-            obj->cursed = cursed;
-            obj->blessed = blessed;
-            obj->oerodeproof = oerodeproof;
-            obj->recharged = recharged;
-            obj->greased = greased;
-            obj->corpsenm = corpsenm;
-            obj->usecount = usecount;
-            obj->oeaten = oeaten;
-            if (n == 12)
-                obj = oname(obj, objnam);
-            mpickobj(npc, obj);
-        }
+    while (invent_from_file) {
+        struct obj *nobj;
+        nobj = invent_from_file->nobj;
+        mpickobj(npc, invent_from_file);
+        invent_from_file = nobj;
     }
     m_dowear(npc, TRUE);
     npc->weapon_check = strategy;

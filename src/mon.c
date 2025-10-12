@@ -2683,7 +2683,9 @@ int xkill_flags; /* 1: suppress message, 2: suppress corpse, 4: pacifist */
             /* no extra item from kops--too easy to abuse */
             && mdat->mlet != S_KOP
             /* no items from cloned monsters */
-            && !mtmp->mcloned) {
+            && !mtmp->mcloned
+            /* TNNT: no item from deathmatch opponent */
+            && !is_deathmatch_opponent(mtmp)) {
             otmp = mkobj(RANDOM_CLASS, TRUE);
             /* don't create large objects from small monsters */
             otyp = otmp->otyp;
