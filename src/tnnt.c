@@ -1506,8 +1506,8 @@ xchar x, y;
         mpickobj(npc, obj);
     }
     if (!which_armor(npc, W_ARMF)) {
-        obj = rn2(2) ? mksobj(SPEED_BOOTS, FALSE, FALSE)
-                     : mksobj(WATER_WALKING_BOOTS, FALSE, FALSE);
+        obj = rn2(3) ? mksobj(SPEED_BOOTS, FALSE, FALSE)
+                     : mksobj(JUMPING_BOOTS, FALSE, FALSE);
         bless(obj);
         obj->spe = rnd(2) + 3;
         obj->oerodeproof = 1;
