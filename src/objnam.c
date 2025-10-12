@@ -477,7 +477,19 @@ unsigned cxn_flags; /* bitmask of CXN_xxx values */
                           * it would call xname() (via doname()) recursively
                           * and could end up clobbering all the obufs... */
 
-    if (iflags.override_ID || obj->where == OBJ_INSWAP) {
+    /* TNNT: if the item is in the swap chest, show it as fully identified
+     * because the idea of the swap chest is you know exactly what you're
+     * getting.
+     * If the item is in the pile of deathmatch loot, show it as fully
+     * identified in order to avoid the player getting to see its unidentified
+     * description in this game and be able to check the dumplog of the player
+     * that generated it to unambiguously know what that object type is.
+     * We have to check deathmatch_completed because otherwise items will be
+     * shown as fully known *during* the fight - leading to weirdness like "NPC
+     * hurls a potion of blindness! It suddenly gets dark. Call a pink potion:"
+     */
+    if (iflags.override_ID || obj->where == OBJ_INSWAP
+        || (obj->transient && tnnt_globals.deathmatch_completed)) {
         known = dknown = bknown = TRUE;
         nn = 1;
     } else {
