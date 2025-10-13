@@ -380,6 +380,11 @@
 #define TNNT_ACHIEVEMENTS_DIR HACKDIR "/temp_achievements"
 #endif
 
+/* File where the donors of _removed_ swap chest objects are tallied */
+#ifndef TNNT_DONOR_FILE
+#define TNNT_DONOR_FILE HACKDIR "/donors"
+#endif
+
 /* Whether to enable the #tnntdebug command (and possibly, in the future, other
  * debugging / public beta testing stuff) outside of wizard mode. */
 /* #define TNNT_BETA */

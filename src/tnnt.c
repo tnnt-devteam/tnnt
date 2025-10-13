@@ -972,7 +972,6 @@ struct obj *o;
     return donor;
 }
 
-#define TNNT_DONOR_FILE HACKDIR "/donors"
 void
 credit_swapobj_donor(otmp)
 struct obj *otmp;
