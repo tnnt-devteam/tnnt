@@ -923,8 +923,6 @@ OBJECT:'(',random
 OBJECT:random,random
 OBJECT:random,random
 OBJECT:random,random
-# TNNT Swap Chest
-OBJECT:('(',"swap chest"),(49,13)
 # Random traps
 TRAP:random,random
 TRAP:random,random
@@ -1009,7 +1007,6 @@ IF [50%] {
 
 # Dungeon Description
 FOUNTAIN:(14,13)
-OBJECT:('(',"swap chest"),(14,12)
 REGION:(23,03,48,06),lit,"ordinary"
 REGION:(21,06,22,06),lit,"ordinary"
 REGION:(14,04,14,04),unlit,"ordinary"
@@ -1150,7 +1147,6 @@ STAIR:(42,8),up
 WALLIFY
 
 # Objects
-OBJECT:('(',"swap chest"),(68,4)
 OBJECT:('*',"luckstone"),$place[0]
 OBJECT:('*',"flint"),$place[1]
 OBJECT:('*',"diamond"),random

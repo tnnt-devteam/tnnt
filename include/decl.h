@@ -713,6 +713,7 @@ struct tnnt_globals_t {
                                 establishing a "safe" way to do this by
                                 methodically checking every level for traps
                                 which would be annoying */
+    uchar swapchest1_dlevel;
 
     /* tnnt devs: add more as needed */
 };

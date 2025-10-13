@@ -727,6 +727,17 @@ newgame()
         add_to_migration(scroll);
     }
     tnnt_globals.devteam_quest_status = DTQUEST_NOTSTARTED;
+    {
+        /* select level for the first swap chest, but ensure it will land in an
+         * ordinary level. Branch levels such as the quest portal level are fine
+         * to place the swap chest in, and of course we don't know yet where the
+         * Ludios portal might generate anyway. */
+        d_level tlev = { dungeons_dnum, 0 };
+        do {
+            tlev.dlevel = 10 + rn2(6);
+        } while (Is_special(&tlev) || Is_rogue_level(&tlev));
+        tnnt_globals.swapchest1_dlevel = tlev.dlevel;
+    }
 
     /* these have to be initialized here so we can keep the simple static
      * initialization of tnnt_globals = DUMMY */

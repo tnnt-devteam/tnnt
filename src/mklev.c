@@ -655,13 +655,15 @@ makelevel()
     struct monst *tmonst; /* always put a web with a spider */
     branch *branchp;
     int room_threshold;
+    /* TNNT variables: */
+    boolean in_dod = In_dungeons_of_doom(&u.uz);
 
     if (wiz1_level.dlevel == 0)
         init_dungeons();
     oinit(); /* assign level dependent obj probabilities */
     clear_level_structures();
 
-    if (In_dungeons_of_doom(&u.uz)) {
+    if (in_dod) {
         tnnt_globals.vault_status[u.uz.dlevel] = LEVEL_HAS_NO_VAULT;
     }
 
@@ -753,6 +755,12 @@ makelevel()
             if (!level.flags.noteleport && !rn2(3))
                 makevtele();
             tnnt_globals.vault_status[u.uz.dlevel] = VAULT_NOT_ENTERED;
+            if (u.uz.dlevel == tnnt_globals.swapchest1_dlevel) {
+                /* Always place the swap chest in a vault if one exists. */
+                croom = &rooms[nroom - 1];
+                (void) mksobj_at(SWAP_CHEST, somex(croom), somey(croom), TRUE,
+                                 FALSE);
+            }
         } else if (rnd_rect() && create_vault()) {
             vault_x = rooms[nroom].lx;
             vault_y = rooms[nroom].ly;
@@ -887,7 +895,14 @@ makelevel()
             }
         }
     }
-    if (In_dungeons_of_doom(&u.uz)) {
+    if (in_dod) {
+        if (u.uz.dlevel == tnnt_globals.swapchest1_dlevel
+            && tnnt_globals.vault_status[u.uz.dlevel] == LEVEL_HAS_NO_VAULT) {
+            /* If there is no vault, we did not create the swap chest yet. */
+            croom = &rooms[rn2(nroom)];
+            (void) mksobj_at(SWAP_CHEST, somex(croom), somey(croom), TRUE,
+                             FALSE);
+        }
         /* Need to call this here since the hero might plunder all the vaults
          * that generate while leaving some more levels un-generated, and when
          * they generate they don't end up with a vault. We didn't have enough

@@ -123,6 +123,10 @@ dotnntdebug(VOID_ARGS)
                 putstr(en_win, 0, "Quest completed.");
                 break;
         }
+        putstr(en_win, 0, "");
+
+        Sprintf(buf, "Swap chest #1 level: %d", tnnt_globals.swapchest1_dlevel);
+        putstr(en_win, 0, buf);
 
         display_nhwindow(en_win, TRUE);
         destroy_nhwindow(en_win);
