@@ -1,5 +1,5 @@
 MAZE:"robotfindskitn",' '
-FLAGS:nommap,noteleport,hardfloor
+FLAGS:nommap,hardfloor
 MESSAGE: "You feel oddly robotic."
 GEOMETRY:center,center
 #         1         2         3         4         5         6         7
