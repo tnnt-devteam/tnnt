@@ -1296,18 +1296,9 @@ int how;
     iflags.at_night = night();
     iflags.at_midnight = midnight();
 
-    /* TNNT: Any achievements that can ONLY be scored at the end of the game go
-     * here. Previously we put various achievements here that were convenient to
-     * track at the end of the game, but now that the player can see
-     * earned/unearned achievements it's misleading to show the achievement as
-     * unearned because it wouldn't be processed until the end of the game. */
-
-#ifdef TNNT_NPC_DIR
-    /* store ascender as an NPC */
+    /* TNNT: store ascender as an NPC opponent for the next fellow */
     if (how == ASCENDED)
         write_npc_data();
-#endif
-    /* END TNNT code */
 
     /* TNNT: Don't produce a dumplog for scummed games.  All the writes were
      * contributing to serious server load when players were startscumming at
@@ -1315,8 +1306,11 @@ int how;
      * or just quitting and restarting games very quickly by hand). */
     startscummed = ((how == QUIT || how == ESCAPED) && moves <= 100L);
 
+    /* END TNNT code */
+
     if (!startscummed)
         dump_open_log(endtime);
+
     /* Sometimes you die on the first move.  Life's not fair.
      * On those rare occasions you get hosed immediately, go out
      * smiling... :-)  -3.
@@ -1699,14 +1693,14 @@ int how;
     if (have_windows && !iflags.toptenwin)
         exit_nhwindows((char *) 0), have_windows = FALSE;
     topten(how, endtime);
-#ifdef TNNT_ACHIEVEMENTS_DIR
+
     /* Do this here, after the xlogfile is written, rather than where the NPC
      * file is written above, because if the file is erased up there and then
      * they take a long time lingering on the end of game disclosure, we don't
      * want the temporary achievements reported on the site to look like they
      * vanished with no explanation. */
     erase_temp_achievements_file();
-#endif /* TNNT_ACHIEVEMENTS_DIR */
+
     if (have_windows)
         exit_nhwindows((char *) 0);
 

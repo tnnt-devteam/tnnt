@@ -2517,26 +2517,20 @@ E int NDECL(dotnntachievements);
 E int FDECL(show_tnnt_achievements, (BOOLEAN_P));
 E int NDECL(doshowfoodseaten);
 E int NDECL(dotnntspecies);
-#ifdef TNNT_SWAPCHEST_DIR
 E boolean FDECL(write_swapobj_file, (struct obj *, XCHAR_P));
 E void FDECL(refresh_swap_chest_contents, (struct obj *));
 E boolean FDECL(delete_swapobj_file, (struct obj *));
 E const char *FDECL(swapobj_donor_name, (struct obj *));
 E void FDECL(credit_swapobj_donor, (struct obj *));
 E boolean FDECL(swap_chest_eligible, (struct obj *));
-#endif
-#ifdef TNNT_NPC_DIR
 E void NDECL(write_npc_data);
 E struct monst* FDECL(create_tnnt_npc, (XCHAR_P, XCHAR_P));
-#endif
 E void FDECL(tnnt_check_arena_entry, (xchar, xchar));
 E void NDECL(npc_awakens);
 E boolean FDECL(is_illegal_deathmatch, (d_level *));
 E struct obj *FDECL(collect_all_transient, (struct obj *));
 E void FDECL(devteam_quest, (struct monst *, struct obj *));
-#ifdef TNNT_ACHIEVEMENTS_DIR
 E void NDECL(erase_temp_achievements_file);
-#endif
 E void FDECL(tnnt_achieve, (SHORT_P));
 E boolean NDECL(tnnt_is_watch_present);
 E boolean FDECL(In_dungeons_of_doom, (d_level *));

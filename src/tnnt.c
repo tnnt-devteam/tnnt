@@ -30,16 +30,12 @@
 
 /* static forward declarations */
 static boolean tnnt_common_monst(int mndx);
-#ifdef TNNT_SWAPCHEST_DIR
 static char *make_swapobj_filename(struct obj *o);
 static struct obj * mkswapobj(struct obj *swapchest,
                               char *filename, short *rcode);
-#endif
-#ifdef TNNT_NPC_DIR
 static char * pick_npc_file(void);
 static void collect_transient_within(struct obj *container,
                                      struct obj **olist);
-#endif
 
 /* ######################################################################
  * TNNT COMMANDS
@@ -132,7 +128,6 @@ dotnntdebug(VOID_ARGS)
         destroy_nhwindow(en_win);
         en_win = WIN_ERR;
     }
-#ifdef TNNT_NPC_DIR
     else if (response == 'w') {
         write_npc_data();
         pline("Finished writing your data as an NPC.");
@@ -141,11 +136,6 @@ dotnntdebug(VOID_ARGS)
         pline("Summoning the NPC deathmatch monster.");
         create_tnnt_npc(u.ux, u.uy);
     }
-#else
-    else {
-        pline("NPC arena monsters not supported in this build.");
-    }
-#endif
     return 0;
 }
 
@@ -696,7 +686,6 @@ dotnntspecies(VOID_ARGS)
  * SWAP CHEST FUNCTIONS
  * ###################################################################### */
 
-#ifdef TNNT_SWAPCHEST_DIR
 static char *
 make_swapobj_filename(o)
 struct obj *o;
@@ -704,6 +693,10 @@ struct obj *o;
     /* needs to be big enough for full path */
     static char buf[BUFSZ];
     const char *pfx = (const char *) 0;
+    /* post 2025 TODO: We should flip this define around. By default the swap
+     * chest files should have no prefix unless specified otherwise in CFLAGS,
+     * and the server build should define CFLAGS with the prefixes it wants
+     * (similar to how it defines SERVER_LOCATION). */
 #ifndef LOCAL_SWAPCHESTS
     static const char *const prefixes[] = { "eu.", "us.", "au." };
     const schar num_servers = SIZE(prefixes);
@@ -1174,13 +1167,9 @@ struct obj *obj;
     }
 }
 
-#endif /* TNNT_SWAPCHEST_DIR */
-
 /* ######################################################################
  * DEATHMATCH FUNCTIONS
  * ###################################################################### */
-
-#ifdef TNNT_NPC_DIR
 
 /* Take the (presumed to be ascending) player, and encode all of their
  * applicable stats and inventory into a data file which can be reloaded to
@@ -1636,8 +1625,6 @@ xchar x, y;
     return npc;
 }
 
-#endif /* TNNT_NPC_FILE */
-
 /* Player has just moved from (ux, uy) to (x, y); ux and uy haven't been updated
  * yet. Check if that move has entered the Arena.
  * This check is its own function because there is no one place in the code that
@@ -1988,7 +1975,6 @@ struct obj *thrownscroll;
  * TNNT ACHIEVEMENTS SYSTEM
  * ###################################################################### */
 
-#ifdef TNNT_ACHIEVEMENTS_DIR
 static char*
 get_temp_achfile_path(void)
 {
@@ -2013,7 +1999,6 @@ erase_temp_achievements_file(void)
     if (unlink(fname) == -1 && errno != ENOENT)
         impossible("can't unlink temp achievements file (%d)", errno);
 }
-#endif
 
 /* This used to be a macro that just set the bit in tnnt_achievements, but now
  * we also write out to a file. */
@@ -2058,7 +2043,6 @@ short achvmt;
     if (discover)
         return;
 
-#ifdef TNNT_ACHIEVEMENTS_DIR
     fname = get_temp_achfile_path();
     achfile = fopen(fname, "w");
     if (!achfile) {
@@ -2070,7 +2054,6 @@ short achvmt;
         fprintf(achfile, "0x%" PRIx64 "\n", tnnt_globals.tnnt_achievements[i]);
     }
     fclose(achfile);
-#endif /* TNNT_ACHIEVEMENTS_DIR */
 }
 
 /* ######################################################################
