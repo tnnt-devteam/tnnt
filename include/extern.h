@@ -2523,6 +2523,7 @@ E boolean FDECL(delete_swapobj_file, (struct obj *));
 E const char *FDECL(swapobj_donor_name, (struct obj *));
 E void FDECL(credit_swapobj_donor, (struct obj *));
 E boolean FDECL(swap_chest_eligible, (struct obj *));
+E void NDECL(maybe_place_dungeons_swapchest);
 E void NDECL(write_npc_data);
 E struct monst* FDECL(create_tnnt_npc, (XCHAR_P, XCHAR_P));
 E void FDECL(tnnt_check_arena_entry, (xchar, xchar));

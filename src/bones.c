@@ -213,7 +213,22 @@ boolean restore;
                 otmp->otyp = SPE_BLANK_PAPER;
                 curse(otmp);
             } else if (otmp->otyp == SWAP_CHEST) {
-                otmp->swapitems = 0;
+                if (Is_valley(&u.uz)) {
+                    /* This swapchest does not get replaced when the bones are
+                     * loaded. Leave it in place and refresh it for the next
+                     * person. */
+                    otmp->swapitems = 0;
+                }
+                else {
+                    /* this level may not be (probably isn't) the swap chest
+                     * destination level in the game this file gets loaded into,
+                     * and we have maybe_place_dungeons_swapchest to put a swap
+                     * chest into a bones level that lacks a swap chest anyway
+                     */
+                    obj_extract_self(otmp);
+                    dealloc_obj(otmp);
+                    continue;
+                }
             }
         }
     }
@@ -699,6 +714,9 @@ getbones()
     }
     (void) nhclose(fd);
     sanitize_engravings();
+    /* TNNT: bones files never contain a swap chest. If there needs to be a swap
+     * chest on this level, it needs to be added in now. */
+    maybe_place_dungeons_swapchest();
     u.uroleplay.numbones++;
 
     if (wizard) {

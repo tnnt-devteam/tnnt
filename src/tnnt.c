@@ -1167,6 +1167,30 @@ struct obj *obj;
     }
 }
 
+/* Place the first of the 2 swapchests in the game, if on the appropriate level
+ * for it.
+ * This is a function because it can be called either from makelevel() or from
+ * getbones().
+ */
+void
+maybe_place_dungeons_swapchest()
+{
+    struct mkroom *croom;
+    if (In_dungeons_of_doom(&u.uz)
+        && tnnt_globals.swapchest1_dlevel == u.uz.dlevel) {
+        croom = search_special(VAULT);
+        if (!croom) {
+            /* no vault on this level
+             * ensure swap chest doesn't land in a shop */
+            do {
+                croom = &rooms[rn2(nroom)];
+            } while (croom->orig_rtype >= SHOPBASE);
+        }
+        (void) mksobj_at(SWAP_CHEST, somex(croom), somey(croom), TRUE,
+                         FALSE);
+    }
+}
+
 /* ######################################################################
  * DEATHMATCH FUNCTIONS
  * ###################################################################### */
