@@ -2464,7 +2464,6 @@ recalc_mapseen()
     mptr->flags.sokosolved = In_sokoban(&u.uz) && !Sokoban;
     if (!old_sokosolved && mptr->flags.sokosolved
         && tnnt_globals.soko_guilts == 0) {
-        pline("bing");
         /* TNNT: check the mapseen chain for if there are now 4 sokosolved
          * levels, if so award the achievement */
         mapseen *mptrtmp = mapseenchn;
