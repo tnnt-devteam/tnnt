@@ -497,7 +497,11 @@ enum tnnt_achievements {
 struct tnnt_achvmt_data {
     const char* name;
     const char* descr;
-    /* Maybe track achievement earned/not status here with a boolean? */
+    enum tnnt_ach_status {
+        ACH_NOT_EARNED = 0,
+        ACH_EARNED_IN_PREVIOUS_GAME = 1,
+        ACH_EARNED_THIS_GAME = 2
+    } status;
 };
 E struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS];
 
@@ -512,11 +516,18 @@ struct tnnt_globals_t {
      * Defines supporting an achievement should come BEFORE any variables
      * supporting that achievement, for style consistency.
      */
+
     /* The actual achievement bitfields which get written out to xlogfile and
-     * track whether or not you have achieved something.
+     * track whether or not you have achieved something. Only achievements
+     * earned in this game, ignoring the ones from prior games.
+     *
      * Since there are more than 64 achievements, we need multiple 64 bit ints.
+     *
+     * As of 2025, this is now redundant with tnnt_achievements[i].status, but
+     * is still kept around because it wouldn't be performant for various bits
+     * of code that need to write or show it to loop over all the achievements.
      */
-    uint64_t tnnt_achievements[NUM_TNNT_ACHIEVEMENTS / 64 + 1];
+    uint64_t achievement_bitmap[(NUM_TNNT_ACHIEVEMENTS / 64) + 1];
 
     /* Various achievement counters */
     unsigned char graffiti_found;
@@ -718,11 +729,6 @@ struct tnnt_globals_t {
     /* tnnt devs: add more as needed */
 };
 E struct tnnt_globals_t tnnt_globals;
-
-/* This is the main "function" for checking whether you achieved something.
- * tnnt_achieve() is now a proper function. */
-#define tnnt_is_achieved(achvmt) \
-    ((tnnt_globals.tnnt_achievements[(achvmt) / 64] & (1L << ((achvmt) % 64))) != 0)
 
 /* TNNT - any misc defines that do get reused in multiple places, but aren't
  * attached to a counter above */

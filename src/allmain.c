@@ -749,6 +749,7 @@ newgame()
     tnnt_globals.unique_info[5].mndx = PM_PESTILENCE;
     tnnt_globals.unique_info[6].mndx = PM_FAMINE;
 
+    initialize_prev_game_achievements();
     /* end TNNT init */
 
     if (MON_AT(u.ux, u.uy))

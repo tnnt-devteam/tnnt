@@ -886,8 +886,8 @@ boolean taken;
     }
 
     /* TNNT - show achievements */
-    for (i = 0; i < SIZE(tnnt_globals.achievement_bitmap); i++) {
-        if (tnnt_globals.achievement_bitmap[i] != 0ULL) {
+    for (i = 0; i < NUM_TNNT_ACHIEVEMENTS; i++) {
+        if (tnnt_is_achieved(i)) {
             achieved = TRUE;
             break;
         }
@@ -1301,6 +1301,17 @@ int how;
      * an extremely rapid pace (whether violating the rules by using a script,
      * or just quitting and restarting games very quickly by hand). */
     startscummed = ((how == QUIT || how == ESCAPED) && moves <= 100L);
+
+    /* TNNT: write the achievements-in-previous-games file with all achievements
+     * earned in this or previous games
+     * Same thing with the startscumming. If you happened to earn an achievement
+     * in a game that ended up recorded as a startscum, it won't be tracked as a
+     * previously earned achievement in future games (though it will be recorded
+     * in the xlogfile). This possible slight degradation in quality for
+     * startscummers is an acceptable trade-off for avoiding excess load on the
+     * server. */
+    if (!startscummed)
+        write_prev_ach_file();
 
     /* END TNNT code */
 

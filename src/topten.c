@@ -379,9 +379,9 @@ int how;
             genders[flags.initgend].filecode, XLOG_SEP,
             aligns[1 - u.ualignbase[A_ORIGINAL]].filecode);
     Fprintf(rfile, "%cflags=0x%lx", XLOG_SEP, encodexlogflags());
-    for (i = 0; i < SIZE(tnnt_globals.tnnt_achievements); ++i) {
+    for (i = 0; i < SIZE(tnnt_globals.achievement_bitmap); ++i) {
         Fprintf(rfile, "%ctnntachieve%d=0x%" PRIx64, XLOG_SEP, i,
-                tnnt_globals.tnnt_achievements[i]);
+                tnnt_globals.achievement_bitmap[i]);
     }
     Fprintf(rfile, "\n");
 #undef XLOG_SEP

@@ -88,9 +88,9 @@ dotnntdebug(VOID_ARGS)
         en_win = create_nhwindow(NHW_MENU);
         /* tnnt achievements */
         putstr(en_win, ATR_BOLD, "TNNT achievements (in hexadecimal):");
-        for (i = 0; i < SIZE(tnnt_globals.tnnt_achievements); ++i) {
+        for (i = 0; i < SIZE(tnnt_globals.achievement_bitmap); ++i) {
             Sprintf(buf, "tnntachieve%d: 0x%" PRIx64, i,
-                    tnnt_globals.tnnt_achievements[i]);
+                    tnnt_globals.achievement_bitmap[i]);
             putstr(en_win, 0, buf);
         }
         putstr(en_win, 0, "");
@@ -491,20 +491,26 @@ boolean final;
     menu_item *choice = NULL;
     winid win = create_nhwindow(NHW_MENU);
     char response, buf[BUFSZ], searchbuf[BUFSZ];
-    int i, num_earned = 0;
+    int i, num_earned = 0, num_prevgame = 0;
 
     start_menu(win);
     if (!final) {
         anything any;
         any.a_char = 'e';
         add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-                "show only achievements earned this game", MENU_UNSELECTED);
+                "show achievements earned in this game", MENU_UNSELECTED);
         any.a_char = 'u';
         add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-                "show only achievements not yet earned this game", MENU_UNSELECTED);
+                "show achievements not yet earned in this game", MENU_UNSELECTED);
+        any.a_char = 'E';
+        add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
+                "show achievements earned in this tournament", MENU_UNSELECTED);
+        any.a_char = 'U';
+        add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
+                "show achievements not yet earned in this tournament", MENU_UNSELECTED);
         any.a_char = 'a';
         add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-                "show all achievements, marked as earned or not", MENU_UNSELECTED);
+                "show all achievements, whether earned or not", MENU_UNSELECTED);
         any.a_char = 's';
         add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
                 "show all achievements matching a search string", MENU_UNSELECTED);
@@ -520,7 +526,8 @@ boolean final;
         destroy_nhwindow(win);
     }
     else {
-        response = 'e'; /* dumplog: show only achievements earned */
+        /* dumplog: show only achievements earned this game */
+        response = 'e';
     }
 
     searchbuf[0] = '\0';
@@ -540,40 +547,63 @@ boolean final;
         putstr(win, ATR_HEADING, buf);
     }
     else {
-        Sprintf(buf, "Achievements %searned%s:",
-                response == 'e' ? "" : "not ", final ? "" : " so far");
+        Sprintf(buf, "Achievements %searned%s in this %s:",
+                (response == 'e' || response == 'E') ? "" : "not ",
+                final ? "" : " so far",
+                (response == 'e' || response == 'u') ? "game" : "tournament");
         putstr(win, ATR_HEADING, buf);
     }
     if (!final) {
         putstr(win, ATR_BOLD,
                "(Use #tnntstats to check progress of certain ones.)");
+        /* if this proves confusing to players, here is a legend that can be
+         * added; the [X] at the line start makes it look like one of the earned
+         * achievements though
+        putstr(win, 0,
+               "[X]: earned this game  [=]: earned this tournament  [ ]: not earned");
+        */
     }
 
     for (i = 0; i < NUM_TNNT_ACHIEVEMENTS; ++i) {
         struct tnnt_achvmt_data* dat = &tnnt_achievements[i];
         char *p;
-        /* a response of "both" unconditionally prints any achievement;
-         * otherwise, only print the achievement if earned and response was
-         * "earned", or if not earned and response was "not earned" */
-        boolean earned = tnnt_is_achieved(i);
+        /* a response of "show all achievements" unconditionally prints any
+         * achievement; otherwise, only print the achievement if earned and
+         * response was "earned", or if not earned and response was "not earned"
+         */
+        int ach_status = dat->status;
+        boolean earned_game = tnnt_is_achieved(i);
+        boolean earned_prev = (ach_status == ACH_EARNED_IN_PREVIOUS_GAME);
         boolean searchmatch = ((p = strstri(dat->name, searchbuf)) != 0
                                || (p = strstri(dat->descr, searchbuf)) != 0);
-        if (earned)
+        if (earned_game)
             num_earned++;
+        if (earned_prev)
+            num_prevgame++;
         if (response == 'a'
-            || (response == 'e' && earned)
-            || (response == 'u' && !earned)
+            || (response == 'e' && earned_game)
+            || (response == 'u' && !earned_game)
+            || (response == 'E' && (earned_game || earned_prev))
+            || (response == 'U' && !earned_game && !earned_prev)
             || (response == 's' && searchmatch)) {
-            Sprintf(buf, "[%c] #%03d \"%s\" - %s", (earned ? 'X' : ' '),
+            char indicator = earned_game ? 'X'
+                                         : earned_prev ? '=' : ' ';
+            Sprintf(buf, "[%c] #%03d \"%s\" - %s", indicator,
                     i + 1, dat->name, dat->descr);
             putstr(win, 0, buf);
         }
     }
-    Sprintf(buf, "%d/%d achievements earned in this game.", num_earned,
-            NUM_TNNT_ACHIEVEMENTS);
-    putstr(win, 0, buf);
+    if (response == 'e' || response == 'u' || response == 'a') {
+        Sprintf(buf, "%d/%d achievements earned in this game.",
+                num_earned, NUM_TNNT_ACHIEVEMENTS);
+        putstr(win, 0, buf);
+    }
+    if (response == 'E' || response == 'U' || response == 'a') {
+        Sprintf(buf, "%d/%d achievements earned in this tournament.",
+                num_earned + num_prevgame, NUM_TNNT_ACHIEVEMENTS);
+        putstr(win, 0, buf);
+    }
     display_nhwindow(win, TRUE);
-    /* select_menu(win, PICK_ONE, &choice); */
     destroy_nhwindow(win);
     return 0;
 }
@@ -1999,11 +2029,15 @@ struct obj *thrownscroll;
  * TNNT ACHIEVEMENTS SYSTEM
  * ###################################################################### */
 
+/* Produce the path for either the file of temporary achievements in this game
+ * ([plname].tach.txt) if temp is TRUE, or the file of achievements earned in
+ * previous games ([plname].prev_ach.txt) if temp is FALSE. */
 static char*
-get_temp_achfile_path(void)
+get_achfile_path(boolean temp)
 {
     static char buf[BUFSZ];
-    Sprintf(buf, "%s/%s.tach.", TNNT_ACHIEVEMENTS_DIR, plname);
+    Sprintf(buf, "%s/%s.%s.", TNNT_ACHIEVEMENTS_DIR,
+            temp ? "tach" : "prev_ach", plname);
 #ifdef SERVER_LOCATION
     /* hardfought specific assumption: SERVER_LOCATION is "us.hardfought.org"
      * or "eu" or "au"
@@ -2016,12 +2050,107 @@ get_temp_achfile_path(void)
     return buf;
 }
 
+/* We have just recorded a new achievement; write out anew the file of
+ * achievements earned in the current game.
+ * Note: after the introduction of the "achievements earned in prior games"
+ * system, the temp achievements file NO LONGER contains achievements earned in
+ * a prior game. This is because the only consumer of the file is the
+ * scoreboard, and if you earned any given achievement in a prior game, the
+ * scoreboard will just show it as earned and have no need of showing it as a
+ * temp achievement that hasn't been recorded yet.
+ */
+void
+write_temp_achievements_file(void)
+{
+    int i;
+    char *fname = get_achfile_path(TRUE);
+    FILE *achfile = fopen(fname, "w");
+    if (!achfile) {
+        impossible("Error writing player achievements data to '%s' file", fname);
+        return;
+    }
+    for (i = 0; i < SIZE(tnnt_globals.achievement_bitmap); ++i) {
+        fprintf(achfile, "0x%" PRIx64 "\n", tnnt_globals.achievement_bitmap[i]);
+    }
+    fclose(achfile);
+}
+
+/* The game is ending; discard the temp achievements file because soon the
+ * achievements will show as earned in the xlogfile and the scoreboard will
+ * update to show them as fully earned, not temporary. */
 void
 erase_temp_achievements_file(void)
 {
-    char *fname = get_temp_achfile_path();
+    char *fname = get_achfile_path(TRUE);
     if (unlink(fname) == -1 && errno != ENOENT)
         impossible("can't unlink temp achievements file (%d)", errno);
+}
+
+/* The game is starting; initialize tnnt_achievements[].status with achievements
+ * earned in previous games. */
+void
+initialize_prev_game_achievements(void)
+{
+    char *fname = get_achfile_path(FALSE);
+    FILE *achfile = fopen(fname, "r");
+    short achvmt = 0;
+    short bit_index;
+    char line[BUFSZ];
+    uint64_t bitmap;
+    if (!achfile) {
+        /* could be the first game and no previous achievements exist */
+        return;
+    }
+    while (fgets(line, BUFSZ, achfile) != NULL) {
+        bitmap = 0;
+        if (achvmt >= NUM_TNNT_ACHIEVEMENTS) {
+            impossible("too much data in prev achievements file");
+            return;
+        }
+        sscanf(line, "0x%" PRIx64 "\n", &bitmap);
+        for (bit_index = 0; bit_index < 64; bit_index++) {
+            if (bitmap & (1UL << bit_index))
+                tnnt_achievements[achvmt].status = ACH_EARNED_IN_PREVIOUS_GAME;
+            achvmt++;
+            if (achvmt >= NUM_TNNT_ACHIEVEMENTS)
+                break;
+        }
+    }
+    fclose(achfile);
+}
+
+/* The game is ending; write out the "all achievements earned in previous games"
+ * file. */
+void
+write_prev_ach_file(void)
+{
+    char *fname = get_achfile_path(FALSE);
+    FILE *achfile = fopen(fname, "w");
+    short achvmt;
+    uint64_t bitmap = 0;
+    for (achvmt = 0; achvmt < NUM_TNNT_ACHIEVEMENTS; achvmt++) {
+        /* unlike other countings, count any achievement other than NOT_EARNED
+         * ones. */
+        if (tnnt_achievements[achvmt].status != ACH_NOT_EARNED) {
+            bitmap |= 1UL << (achvmt % 64);
+        }
+        if ((achvmt + 1) % 64 == 0 || achvmt + 1 == NUM_TNNT_ACHIEVEMENTS) {
+            fprintf(achfile, "0x%" PRIx64 "\n", bitmap);
+            bitmap = 0;
+        }
+    }
+    fclose(achfile);
+}
+
+/* The main function for whether you got the given achievement (in the current
+ * game, previous ones don't count). Used extensively for performance purposes
+ * like avoiding an expensive check for an achievement if it already got earned.
+ */
+boolean
+tnnt_is_achieved(achvmt)
+short achvmt;
+{
+    return (tnnt_achievements[achvmt].status == ACH_EARNED_THIS_GAME);
 }
 
 /* This used to be a macro that just set the bit in tnnt_achievements, but now
@@ -2030,14 +2159,12 @@ void
 tnnt_achieve(achvmt)
 short achvmt;
 {
-    char* fname;
-    FILE *achfile;
-    int i;
     const char *achnam = (const char *) 0;
+    int old_status = tnnt_achievements[achvmt].status;
 
     if (achvmt == NO_TNNT_ACHIEVEMENT) {
         /* formerly this was used to prompt reading from encodeachieve() for
-         * achievements tracked by vanilla. Now we just track them as TNNT
+         * achievements tracked by vanilla. Now we just track those as TNNT
          * achievements, so this shouldn't happen anymore. */
         impossible("tnnt_achieve called with null achievement");
         return;
@@ -2046,9 +2173,14 @@ short achvmt;
     if (tnnt_is_achieved(achvmt))
         return; /* nothing to update */
 
-    tnnt_globals.tnnt_achievements[(achvmt) / 64] |= 1L << ((achvmt) % 64);
-    achnam = tnnt_achievements[achvmt].name;
+    tnnt_globals.achievement_bitmap[(achvmt) / 64] |= 1UL << ((achvmt) % 64);
+    if (tnnt_achievements[achvmt].status != ACH_EARNED_THIS_GAME) {
+        /* supersedes earned-in-previous-game status; we no longer care that it
+         * was earned in a previous game */
+        tnnt_achievements[achvmt].status = ACH_EARNED_THIS_GAME;
+    }
 
+    achnam = tnnt_achievements[achvmt].name;
     if (flags.notify_achievements && achnam
 	/* since Mines' End tends to have other gray stones to mislead you from
 	 * the luckstone, don't identify it by printing this (there
@@ -2067,16 +2199,10 @@ short achvmt;
     if (discover)
         return;
 
-    fname = get_temp_achfile_path();
-    achfile = fopen(fname, "w");
-    if (!achfile) {
-        impossible("Error writing player achievements data to '%s' file", fname);
-        return;
-    }
-    for (i = 0; i < SIZE(tnnt_globals.tnnt_achievements); ++i) {
-        fprintf(achfile, "0x%" PRIx64 "\n", tnnt_globals.tnnt_achievements[i]);
-    }
-    fclose(achfile);
+    if (old_status == ACH_NOT_EARNED)
+        /* as mentioned above, ACH_EARNED_IN_PREVIOUS_GAME achievements have no
+         * reason to be written out as temp achievements */
+        write_temp_achievements_file();
 }
 
 /* ######################################################################
