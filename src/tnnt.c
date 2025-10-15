@@ -2073,7 +2073,6 @@ short achvmt;
         impossible("Error writing player achievements data to '%s' file", fname);
         return;
     }
-    fprintf(achfile, "0x%lx\n", encodeachieve());
     for (i = 0; i < SIZE(tnnt_globals.tnnt_achievements); ++i) {
         fprintf(achfile, "0x%" PRIx64 "\n", tnnt_globals.tnnt_achievements[i]);
     }
