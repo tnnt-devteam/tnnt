@@ -574,8 +574,9 @@ boolean final;
         int ach_status = dat->status;
         boolean earned_game = tnnt_is_achieved(i);
         boolean earned_prev = (ach_status == ACH_EARNED_IN_PREVIOUS_GAME);
-        boolean searchmatch = ((p = strstri(dat->name, searchbuf)) != 0
-                               || (p = strstri(dat->descr, searchbuf)) != 0);
+        boolean searchmatch = (response == 's'
+                               && ((p = strstri(dat->name, searchbuf)) != 0
+                                   || (p = strstri(dat->descr, searchbuf)) != 0));
         if (earned_game)
             num_earned++;
         if (earned_prev)
