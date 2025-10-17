@@ -2167,7 +2167,6 @@ void
 tnnt_achieve(achvmt)
 short achvmt;
 {
-    const char *achnam = (const char *) 0;
     int old_status = tnnt_achievements[achvmt].status;
 
     if (achvmt == NO_TNNT_ACHIEVEMENT) {
@@ -2182,25 +2181,19 @@ short achvmt;
         return; /* nothing to update */
 
     tnnt_globals.achievement_bitmap[(achvmt) / 64] |= 1UL << ((achvmt) % 64);
-    if (tnnt_achievements[achvmt].status != ACH_EARNED_THIS_GAME) {
-        /* supersedes earned-in-previous-game status; we no longer care that it
-         * was earned in a previous game */
-        tnnt_achievements[achvmt].status = ACH_EARNED_THIS_GAME;
-    }
 
-    achnam = tnnt_achievements[achvmt].name;
-    if (flags.notify_achievements && achnam
-	/* since Mines' End tends to have other gray stones to mislead you from
-	 * the luckstone, don't identify it by printing this (there
-	 * are ways around it, but don't be blatantly obvious) */
-	&& achvmt != A_GOT_LUCKSTONE) {
-        const char *endpunct = "";
-        int ln = (int) strlen(achnam);
-        /* some achievements have their own punctuation, so only append
-            * additional punctuation if that isn't the case */
-        if (ln > 0 && !index(".!?", achnam[ln - 1]))
-            endpunct = ".";
-        pline("Achievement unlocked: \"%s\"%s", achnam, endpunct);
+    /* supersedes earned-in-previous-game status; we no longer care that it was
+     * earned in a previous game */
+    tnnt_achievements[achvmt].status = ACH_EARNED_THIS_GAME;
+
+    /* mark for deferred notification, though only if flags.notify_achievements
+     * is set. If it's off, this flag will never get set for this achievement
+     * and it will never be announced, which is what we want rather than
+     * setting needs_notification but then failing to print it until the player
+     * flips it back on and gets notifications of all their old achievements */
+    if (flags.notify_achievements) {
+        tnnt_achievements[achvmt].needs_notification = TRUE;
+        tnnt_globals.ach_needs_notification = TRUE;
     }
 
     /* don't write temp achievements file for explore-mode games */
@@ -2211,6 +2204,45 @@ short achvmt;
         /* as mentioned above, ACH_EARNED_IN_PREVIOUS_GAME achievements have no
          * reason to be written out as temp achievements */
         write_temp_achievements_file();
+}
+
+/* Announce new achievements (those that were just earned, and have
+ * needs_notification flipped on) to the player. */
+void
+tnnt_announce_achievements(void)
+{
+    int ach;
+    if (!tnnt_globals.ach_needs_notification)
+        /* no achievements earned since the last time this was called */
+        return;
+
+    for (ach = 0; ach < NUM_TNNT_ACHIEVEMENTS; ++ach) {
+        if (ach == A_GOT_LUCKSTONE) {
+            /* since Mines' End tends to have other gray stones to mislead you
+             * from the luckstone, don't identify it by printing this (there are
+             * ways around it, but don't be blatantly obvious) */
+            continue;
+        }
+        if (tnnt_achievements[ach].needs_notification) {
+            const char *achnam = (const char *) 0;
+            const char *endpunct = "";
+            int len;
+            if (!tnnt_achievements[ach].name) {
+                impossible("achievement %d without name?", ach);
+                continue;
+            }
+            achnam = tnnt_achievements[ach].name;
+            len = (int) strlen(achnam);
+            /* some achievements have their own punctuation, so only append
+             * additional punctuation if that isn't the case */
+            if (len > 0 && !index(".!?", achnam[len - 1]))
+                endpunct = ".";
+            pline("Achievement unlocked: \"%s\"%s", achnam, endpunct);
+        }
+        tnnt_achievements[ach].needs_notification = FALSE;
+    }
+    tnnt_globals.ach_needs_notification = FALSE;
+
 }
 
 /* ######################################################################

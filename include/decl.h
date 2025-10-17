@@ -502,6 +502,10 @@ struct tnnt_achvmt_data {
         ACH_EARNED_IN_PREVIOUS_GAME = 1,
         ACH_EARNED_THIS_GAME = 2
     } status;
+    /* when achievement was just earned, flag it with this to give a deferred
+     * "achievement unlocked" message at the end of the current player input
+     * round */
+    boolean needs_notification;
 };
 E struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS];
 
@@ -724,7 +728,11 @@ struct tnnt_globals_t {
                                 establishing a "safe" way to do this by
                                 methodically checking every level for traps
                                 which would be annoying */
+
     uchar swapchest1_dlevel;
+    boolean ach_needs_notification; /* this flag is so we don't have to loop
+                                       over all achievements every player action
+                                       to see if any are newly achieved */
 
     /* tnnt devs: add more as needed */
 };

@@ -471,6 +471,11 @@ boolean resuming;
         u.umoved = FALSE;
         /* TNNT: reset number of wizards killed (by player) this action */
         tnnt_globals.wizkills_this_action = 0;
+        /* This has to come right before player input, because putting it at the
+         * wrong point in the loop (such as before find_ac() or other functions
+         * that contain tnnt_achieve in them) might not announce the achievement
+         * until the next player input, when it was earned now */
+        tnnt_announce_achievements();
 
         if (multi > 0) {
             lookaround();

@@ -2537,6 +2537,7 @@ E void NDECL(initialize_prev_game_achievements);
 E void NDECL(write_prev_ach_file);
 E boolean FDECL(tnnt_is_achieved, (SHORT_P));
 E void FDECL(tnnt_achieve, (SHORT_P));
+E void NDECL(tnnt_announce_achievements);
 E boolean NDECL(tnnt_is_watch_present);
 E boolean FDECL(In_dungeons_of_doom, (d_level *));
 E boolean FDECL(Is_minetown, (d_level *));
