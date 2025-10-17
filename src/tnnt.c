@@ -2131,6 +2131,11 @@ write_prev_ach_file(void)
     FILE *achfile = fopen(fname, "w");
     short achvmt;
     uint64_t bitmap = 0;
+    if (!achfile) {
+        if (!program_state.done_hup)
+            raw_print("Cannot open prev achievement file!");
+        return;
+    }
     for (achvmt = 0; achvmt < NUM_TNNT_ACHIEVEMENTS; achvmt++) {
         /* unlike other countings, count any achievement other than NOT_EARNED
          * ones. */
