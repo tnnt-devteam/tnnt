@@ -723,6 +723,7 @@ movemon()
 {
     register struct monst *mtmp, *nmtmp;
     register boolean somebody_can_move = FALSE;
+
     /* TNNT - for Boss Rush achievement */
     int dlords_on_level = 0;
     const int FIRST_DLORD = PM_JUIBLEX;
@@ -786,6 +787,7 @@ movemon()
          * do), but is a more performant way to do it than adding a separate
          * loop over fmon somewhere else. */
         if (!mtmp->mpeaceful
+            && mtmp->cham == NON_PM /* no shapeshifters */
             && (is_dlord(mtmp->data) || is_dprince(mtmp->data))) {
             dlords_on_level |= (1 << (monsndx(mtmp->data) - FIRST_DLORD));
             /* 8 demons, so checking for 8 bits lit up */
