@@ -2037,8 +2037,10 @@ static char*
 get_achfile_path(boolean temp)
 {
     static char buf[BUFSZ];
-    Sprintf(buf, "%s/%s.%s.", TNNT_ACHIEVEMENTS_DIR,
-            temp ? "tach" : "prev_ach", plname);
+    if (temp)
+        Sprintf(buf, "%s/tach.%s.", TNNT_TEMP_ACHIEVEMENTS_DIR, plname);
+    else
+        Sprintf(buf, "%s/prev_ach.%s.", TNNT_PREV_ACHIEVEMENTS_DIR, plname);
 #ifdef SERVER_LOCATION
     /* hardfought specific assumption: SERVER_LOCATION is "us.hardfought.org"
      * or "eu" or "au"

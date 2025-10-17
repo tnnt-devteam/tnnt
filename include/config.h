@@ -376,8 +376,13 @@
 #endif
 
 /* Directory where temporary in-progress achievements get recorded */
-#ifndef TNNT_ACHIEVEMENTS_DIR
-#define TNNT_ACHIEVEMENTS_DIR HACKDIR "/temp_achievements"
+#ifndef TNNT_TEMP_ACHIEVEMENTS_DIR
+#define TNNT_TEMP_ACHIEVEMENTS_DIR HACKDIR "/temp_achievements"
+#endif
+
+/* Directory where achievements from previous games get recorded */
+#ifndef TNNT_PREV_ACHIEVEMENTS_DIR
+#define TNNT_PREV_ACHIEVEMENTS_DIR HACKDIR "/prev_achievements"
 #endif
 
 /* File where the donors of _removed_ swap chest objects are tallied */
