@@ -1115,6 +1115,9 @@ boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
     /* TNNT: throwing Mjollnir for a kill */
     int prethrow_census;
 
+    if (obj->oclass == POTION_CLASS)
+        u.uconduct.potionuse++;
+
     notonhead = FALSE; /* reset potentially stale value */
     if ((obj->cursed || obj->greased) && (u.dx || u.dy) && !rn2(7)) {
         boolean slipok = TRUE;

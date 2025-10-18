@@ -1541,6 +1541,8 @@ boolean telekinesis; /* not picking it up directly by hand */
 
     if (Underwater)
         tnnt_achieve(A_GOT_OBJECT_UNDERWATER);
+    if (Is_container(obj))
+        u.uconduct.container++;
 
     /* Whats left of the special case for gold :-) */
     if (obj->oclass == COIN_CLASS)

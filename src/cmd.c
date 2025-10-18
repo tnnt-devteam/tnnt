@@ -3456,6 +3456,15 @@ int final;
     if (u.uconduct.pets == 0)
         you_have_never("had a pet");
 
+    if (u.uconduct.container == 0)
+        you_have_never("picked up nor applied a container");
+
+    if (u.uconduct.zaps == 0)
+        you_have_never("attempted to zap a wand or cast a spell");
+
+    if (u.uconduct.potionuse == 0)
+        you_have_never("quaffed, dipped into, or thrown a potion");
+
     /* Pop up the window and wait for a key */
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);

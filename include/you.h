@@ -99,6 +99,9 @@ struct u_conduct {     /* number of times... */
     long rmswapchest;  /* got item out of swap chest */
     long artitouch;    /* touched an artifact in any way */
     long pets;         /* obtained a pet */
+    long container;    /* picked up or applied (but not looted) a container */
+    long zaps;         /* zapped a wand or attempted to cast a spell */
+    long potionuse;    /* quaffed (or ate), dipped item into, or threw potion */
 };
 
 struct u_roleplay {

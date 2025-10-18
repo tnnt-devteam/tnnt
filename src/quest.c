@@ -294,6 +294,12 @@ tnnt_quest_checks()
         tnnt_achieve(A_PARTIAL_PETLESS);
     if (u.umortality == 0)
         tnnt_achieve(A_PARTIAL_SURVIVOR);
+    if (u.uconduct.container == 0)
+        tnnt_achieve(A_PARTIAL_CONTAINERLESS);
+    if (u.uconduct.zaps == 0)
+        tnnt_achieve(A_PARTIAL_ZAPLESS);
+    if (u.uconduct.potionuse == 0)
+        tnnt_achieve(A_PARTIAL_POTIONLESS);
 }
 
 STATIC_OVL void

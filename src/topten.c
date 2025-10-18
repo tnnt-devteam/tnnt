@@ -460,6 +460,12 @@ encodeconduct()
         e |= 1L << 23;
     if (u.uroleplay.numbones == 0)
         e |= 1L << 24;
+    if (u.uconduct.container == 0)
+        e |= 1L << 25;
+    if (u.uconduct.zaps == 0)
+        e |= 1L << 26;
+    if (u.uconduct.potionuse == 0)
+        e |= 1L << 27;
 
     return e;
 }

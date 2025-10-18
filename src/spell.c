@@ -738,8 +738,10 @@ docast()
 {
     int spell_no;
 
-    if (getspell(&spell_no))
+    if (getspell(&spell_no)) {
+        u.uconduct.zaps++;
         return spelleffects(spell_no, FALSE);
+    }
     return 0;
 }
 

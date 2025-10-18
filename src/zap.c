@@ -2272,6 +2272,7 @@ dozap()
 
     check_unpaid(obj);
 
+    u.uconduct.zaps++;
     /* zappable addition done by GAN 11/03/86 */
     if (!zappable(obj))
         pline1(nothing_happens);
