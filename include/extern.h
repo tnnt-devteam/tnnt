@@ -2553,6 +2553,7 @@ E void NDECL(tnnt_maybe_award_heist);
 E void FDECL(tnnt_read, (int));
 E void FDECL(tnnt_record_altar, (xchar));
 E void NDECL(tnnt_check_castle_rush);
+E void NDECL(tnnt_do_quest_achievements);
 
 /* ### topten.c ### */
 
