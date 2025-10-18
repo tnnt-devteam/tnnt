@@ -3108,7 +3108,7 @@ boolean put_in;
                 otmp = pick_list[i].item.a_obj;
                 count = pick_list[i].count;
                 if (count > 0 && count < otmp->quan
-                    && current_container->otyp != SWAP_CHEST) {
+                    && (put_in || current_container->otyp != SWAP_CHEST)) {
                     otmp = splitobj(otmp, count);
                     /* special split case also handled by askchain() */
                 }
