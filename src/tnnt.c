@@ -1059,7 +1059,7 @@ struct obj *obj;
         return FALSE;
 
     /* as with wishing, ammo has a higher allowed stack limit */
-    if (obj->quan > (is_ammo(obj) ? 10 : 3))
+    if (obj->quan > (is_ammo(obj) || is_missile(obj) ? 10 : 3))
         return FALSE;
 
     switch (obj->oclass) {
