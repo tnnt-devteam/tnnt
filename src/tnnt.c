@@ -1034,6 +1034,19 @@ struct obj *otmp;
     fclose(donorfile);
 }
 
+/* Small eligibility case separated from swap_chest_eligible so we can inform
+ * the user the swap chest doesn't want their item because they're trying to put
+ * too much in.
+ * This is NOT called from swap_chest_eligible! Caller must make sure they are
+ * calling both functions. */
+boolean
+swap_chest_quan_too_high(obj)
+struct obj *obj;
+{
+    /* as with wishing, ammo/missiles have a higher allowed stack limit */
+    return (obj->quan > (is_ammo(obj) || is_missile(obj) ? 10 : 3));
+}
+
 /* Determine if obj may be placed in the swap chest.
  * The general design criteria follow two rules:
  *
@@ -1056,10 +1069,6 @@ swap_chest_eligible(obj)
 struct obj *obj;
 {
     if (obj->oartifact)
-        return FALSE;
-
-    /* as with wishing, ammo has a higher allowed stack limit */
-    if (obj->quan > (is_ammo(obj) || is_missile(obj) ? 10 : 3))
         return FALSE;
 
     switch (obj->oclass) {
