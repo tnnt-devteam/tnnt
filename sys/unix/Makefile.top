@@ -297,6 +297,7 @@ install: rootcheck $(GAME) recover $(VARDAT) dungeon spec_levs
 # order counts here:
 	chmod $(DIRPERM) $(INSTDIR) $(INSTDIR)/swapchest
 	chmod $(DIRPERM) $(INSTDIR) $(INSTDIR)/npcfiles
+	chmod $(DIRPERM) $(INSTDIR) $(INSTDIR)/temp_achievements
 	chmod $(DIRPERM) $(INSTDIR) $(INSTDIR)/prev_achievements
 	chmod $(VARDIRPERM) $(VARDIR) $(VARDIR)/save
 	chmod $(VARDIRPERM) $(VARDIR) $(VARDIR)/whereis

@@ -98,6 +98,8 @@ mkdir -p "$TNNT_CHROOT/$NHSUBDIR/npcfiles"
 chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/npcfiles"
 mkdir -p "$TNNT_CHROOT/$NHSUBDIR/temp_achievements"
 chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/temp_achievements"
+mkdir -p "$TNNT_CHROOT/$NHSUBDIR/prev_achievements"
+chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/prev_achievements"
 
 touch "$TNNT_CHROOT/$NHSUBDIR/var/logfile"
 chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var/logfile"
