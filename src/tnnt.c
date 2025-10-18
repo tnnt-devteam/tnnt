@@ -469,6 +469,25 @@ boolean final;
     if (!final)
         Strcat(buf, "  For details, use #species.");
     putstr(en_win, 0, buf);
+
+    /* show violated/not status for the ironman achievements */
+    if (!final) {
+        if (!tnnt_globals.u_backtracked) {
+            Strcpy(buf, "You have not yet backtracked to a previous level.");
+            putstr(en_win, 0, buf);
+        }
+        else if (In_sokoban(&u.uz)
+                 && !tnnt_globals.u_backtracked_after_soko) {
+            Strcpy(buf, "You have not yet backtracked after entering Sokoban.");
+            putstr(en_win, 0, buf);
+        }
+        else if (Inhell && !tnnt_globals.non_downstairs_move_in_hell) {
+            Strcpy(buf,
+                   "You have used only downstairs since entering Gehennom.");
+            putstr(en_win, 0, buf);
+        }
+    }
+
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
