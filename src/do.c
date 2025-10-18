@@ -1471,16 +1471,19 @@ boolean at_stairs, falling, portal;
     if (In_sokoban(newlevel)) {
         tnnt_globals.u_entered_soko = TRUE;
     }
-    /* track if we made an illegal move after entering hell
-     * if going up, or through a portal,
-     * or off the stairs, UNLESS falling and unforeseen
-     * downwards level teleport is not handled here because it passes no special
-     * flags, so it has its own handling for this */
+    /* Track if we made an illegal move after entering hell:
+     * going up, or through a portal, or falling down through a trap you already
+     * knew about.
+     * (Falling through a trap you DIDN'T know about is given an exception, even
+     * though it does technically break "used only downstairs to travel through
+     * Gehennom", because otherwise you'd either have to aggressively detect
+     * traps for thousands of squares of movement or gamble on hitting a trap
+     * door and breaking the challenge through no fault of your own.)
+     * Downwards level teleport is not handled here because it passes no special
+     * flags, so it has its own handling for this in level_tele(). */
     if (Inhell) {
         boolean expected_to_fall = falling && !tnnt_globals.unforeseen_fall;
-        /* if I'm off stairs AND I did not expect to fall, it is not illegal */
-        if (up || portal || expected_to_fall || (!at_stairs
-                                                 && expected_to_fall)) {
+        if (up || portal || expected_to_fall) {
             tnnt_globals.non_downstairs_move_in_hell = TRUE;
         }
     }
