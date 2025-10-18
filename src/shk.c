@@ -559,7 +559,7 @@ char *enterstring;
         tnnt_achieve(A_ENTERED_ARMOR_SHOP);
         break;
     case SCROLLSHOP:
-        tnnt_achieve(A_ENTERED_ARMOR_SHOP);
+        tnnt_achieve(A_ENTERED_SCROLL_SHOP);
         break;
     case POTIONSHOP:
         tnnt_achieve(A_ENTERED_POTION_SHOP);
