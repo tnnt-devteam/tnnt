@@ -469,6 +469,25 @@ boolean final;
     if (!final)
         Strcat(buf, "  For details, use #species.");
     putstr(en_win, 0, buf);
+
+    /* show violated/not status for the ironman achievements */
+    if (!final) {
+        if (!tnnt_globals.u_backtracked) {
+            Strcpy(buf, "You have not yet backtracked to a previous level.");
+            putstr(en_win, 0, buf);
+        }
+        else if (In_sokoban(&u.uz)
+                 && !tnnt_globals.u_backtracked_after_soko) {
+            Strcpy(buf, "You have not yet backtracked after entering Sokoban.");
+            putstr(en_win, 0, buf);
+        }
+        else if (Inhell && !tnnt_globals.non_downstairs_move_in_hell) {
+            Strcpy(buf,
+                   "You have used only downstairs since entering Gehennom.");
+            putstr(en_win, 0, buf);
+        }
+    }
+
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
@@ -1015,6 +1034,19 @@ struct obj *otmp;
     fclose(donorfile);
 }
 
+/* Small eligibility case separated from swap_chest_eligible so we can inform
+ * the user the swap chest doesn't want their item because they're trying to put
+ * too much in.
+ * This is NOT called from swap_chest_eligible! Caller must make sure they are
+ * calling both functions. */
+boolean
+swap_chest_quan_too_high(obj)
+struct obj *obj;
+{
+    /* as with wishing, ammo/missiles have a higher allowed stack limit */
+    return (obj->quan > (is_ammo(obj) || is_missile(obj) ? 10 : 3));
+}
+
 /* Determine if obj may be placed in the swap chest.
  * The general design criteria follow two rules:
  *
@@ -1037,10 +1069,6 @@ swap_chest_eligible(obj)
 struct obj *obj;
 {
     if (obj->oartifact)
-        return FALSE;
-
-    /* as with wishing, ammo has a higher allowed stack limit */
-    if (obj->quan > (is_ammo(obj) ? 10 : 3))
         return FALSE;
 
     switch (obj->oclass) {
@@ -2720,7 +2748,7 @@ tnnt_read(int rdbl)
 
 }
 
-/* Player is standing on an altar (either moved onto it, or just converted it).
+/* Hero is standing on an altar (either moved onto it, or just converted it).
  * Record its type towards the Pilgrim achievement. */
 void
 tnnt_record_altar(xchar amask)
@@ -2736,7 +2764,7 @@ tnnt_record_altar(xchar amask)
         tnnt_achieve(A_VISITED_ALL_ALTARS);
 }
 
-/* Player just moved (u.ux, u.uy represent the space they just moved to). Check
+/* Hero just moved (u.ux, u.uy represent the space they just moved to). Check
  * to see if they moved to the specific spot that earns the "get into the Castle
  * quick" achievement and if it is and they got there quickly enough, award it.
  * TNNT TODO FOR 3.7: check if this assumption holds or if the Castle can be
@@ -2748,4 +2776,62 @@ tnnt_check_castle_rush()
         && moves <= tnnt_globals.entered_castle_time + TNNT_CASTLE_TURNS) {
         tnnt_achieve(A_ENTERED_CASTLE_QUICKLY);
     }
+}
+
+/* Hero just got assigned the Quest. Award achievements that use this as a
+ * trigger condition.  */
+void
+tnnt_do_quest_achievements(void)
+{
+    tnnt_achieve(A_STARTED_QUEST);
+    if (!u.uconduct.unvegetarian)
+        tnnt_achieve(A_PARTIAL_VEGETARIAN);
+    if (!u.uconduct.unvegan)
+        tnnt_achieve(A_PARTIAL_VEGAN);
+    if (!u.uconduct.food)
+        tnnt_achieve(A_PARTIAL_FOODLESS);
+    if (!u.uconduct.gnostic)
+        tnnt_achieve(A_PARTIAL_ATHEIST);
+    if (!u.uconduct.weaphit)
+        tnnt_achieve(A_PARTIAL_WEAPONLESS);
+    if (!u.uconduct.killer)
+        tnnt_achieve(A_PARTIAL_PACIFIST);
+    if (!u.uconduct.literate)
+        tnnt_achieve(A_PARTIAL_ILLITERATE);
+    if (!u.uconduct.polypiles)
+        tnnt_achieve(A_PARTIAL_POLYPILELESS);
+    if (!u.uconduct.polyselfs)
+        tnnt_achieve(A_PARTIAL_POLYSELFLESS);
+    if (!u.uconduct.wishes)
+        tnnt_achieve(A_PARTIAL_WISHLESS);
+    if (!u.uconduct.wisharti)
+        tnnt_achieve(A_PARTIAL_ARTIWISHLESS);
+    if (u.uroleplay.blind)
+        tnnt_achieve(A_PARTIAL_ZEN);
+    if (u.uroleplay.nudist)
+        tnnt_achieve(A_PARTIAL_NUDIST);
+    if (num_genocides() == 0)
+        tnnt_achieve(A_PARTIAL_GENOCIDELESS);
+    if (!u.uconduct.elbereth)
+        tnnt_achieve(A_PARTIAL_ELBERETHLESS);
+    if (u.uroleplay.hallu)
+        tnnt_achieve(A_PARTIAL_PERMAHALLU);
+    if (u.uroleplay.deaf)
+        tnnt_achieve(A_PARTIAL_PERMADEAF);
+    if (u.uconduct.artitouch == 0)
+        tnnt_achieve(A_PARTIAL_ARTIFACTLESS);
+    if (u.uroleplay.numbones == 0)
+        tnnt_achieve(A_PARTIAL_BONESLESS);
+    if (u.uconduct.rmswapchest == 0)
+        tnnt_achieve(A_PARTIAL_SWAPCHESTLESS);
+    if (u.uconduct.pets == 0)
+        tnnt_achieve(A_PARTIAL_PETLESS);
+    if (u.umortality == 0)
+        tnnt_achieve(A_PARTIAL_SURVIVOR);
+    if (u.uconduct.container == 0)
+        tnnt_achieve(A_PARTIAL_CONTAINERLESS);
+    if (u.uconduct.zaps == 0)
+        tnnt_achieve(A_PARTIAL_ZAPLESS);
+    if (u.uconduct.potionuse == 0)
+        tnnt_achieve(A_PARTIAL_POTIONLESS);
 }

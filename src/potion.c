@@ -579,6 +579,12 @@ dodrink()
         tnnt_achieve(A_DRANK_HARMFUL_POTS);
     }
 
+    /* The reason this line is not inside dopotion is because a random potion
+     * effect from drinking a sink is not intended to break the conduct (it's
+     * rare and not repeatable). It does mean we need to put it near every other
+     * call of dopotion though...*/
+    u.uconduct.potionuse++;
+
     return dopotion(otmp);
 }
 
@@ -1995,6 +2001,7 @@ dodip()
         pline("That is a potion bottle, not a Klein bottle!");
         return 0;
     }
+    u.uconduct.potionuse++;
     potion->in_use = TRUE; /* assume it will be used up */
     if (potion->otyp == POT_WATER) {
         boolean useeit = !Blind || (obj == ublindf && Blindfolded_only);

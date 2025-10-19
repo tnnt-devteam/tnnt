@@ -18,7 +18,6 @@ STATIC_DCL void NDECL(on_goal);
 STATIC_DCL boolean NDECL(not_capable);
 STATIC_DCL int FDECL(is_pure, (BOOLEAN_P));
 STATIC_DCL void FDECL(expulsion, (BOOLEAN_P));
-STATIC_DCL void NDECL(tnnt_quest_checks);
 STATIC_DCL void NDECL(chat_with_leader);
 STATIC_DCL void NDECL(chat_with_nemesis);
 STATIC_DCL void NDECL(chat_with_guardian);
@@ -245,57 +244,6 @@ struct obj *obj; /* quest artifact; possibly null if carrying Amulet */
     }
 }
 
-/* Trigger checks for TNNT achievements that get achieved when you first get
- * assigned the quest. */
-STATIC_OVL void
-tnnt_quest_checks()
-{
-    if (!u.uconduct.unvegetarian)
-        tnnt_achieve(A_PARTIAL_VEGETARIAN);
-    if (!u.uconduct.unvegan)
-    	tnnt_achieve(A_PARTIAL_VEGAN);
-    if (!u.uconduct.food)
-    	tnnt_achieve(A_PARTIAL_FOODLESS);
-    if (!u.uconduct.gnostic)
-    	tnnt_achieve(A_PARTIAL_ATHEIST);
-    if (!u.uconduct.weaphit)
-    	tnnt_achieve(A_PARTIAL_WEAPONLESS);
-    if (!u.uconduct.killer)
-    	tnnt_achieve(A_PARTIAL_PACIFIST);
-    if (!u.uconduct.literate)
-    	tnnt_achieve(A_PARTIAL_ILLITERATE);
-    if (!u.uconduct.polypiles)
-    	tnnt_achieve(A_PARTIAL_POLYPILELESS);
-    if (!u.uconduct.polyselfs)
-    	tnnt_achieve(A_PARTIAL_POLYSELFLESS);
-    if (!u.uconduct.wishes)
-    	tnnt_achieve(A_PARTIAL_WISHLESS);
-    if (!u.uconduct.wisharti)
-    	tnnt_achieve(A_PARTIAL_ARTIWISHLESS);
-    if (u.uroleplay.blind)
-    	tnnt_achieve(A_PARTIAL_ZEN);
-    if (u.uroleplay.nudist)
-    	tnnt_achieve(A_PARTIAL_NUDIST);
-    if (num_genocides() == 0)
-        tnnt_achieve(A_PARTIAL_GENOCIDELESS);
-    if (!u.uconduct.elbereth)
-        tnnt_achieve(A_PARTIAL_ELBERETHLESS);
-    if (u.uroleplay.hallu)
-        tnnt_achieve(A_PARTIAL_PERMAHALLU);
-    if (u.uroleplay.deaf)
-        tnnt_achieve(A_PARTIAL_PERMADEAF);
-    if (u.uconduct.artitouch == 0)
-        tnnt_achieve(A_PARTIAL_ARTIFACTLESS);
-    if (u.uroleplay.numbones == 0)
-        tnnt_achieve(A_PARTIAL_BONESLESS);
-    if (u.uconduct.rmswapchest == 0)
-        tnnt_achieve(A_PARTIAL_SWAPCHESTLESS);
-    if (u.uconduct.pets == 0)
-        tnnt_achieve(A_PARTIAL_PETLESS);
-    if (u.umortality == 0)
-        tnnt_achieve(A_PARTIAL_SURVIVOR);
-}
-
 STATIC_OVL void
 chat_with_leader()
 {
@@ -364,9 +312,7 @@ chat_with_leader()
             qt_pager(QT_ASSIGNQUEST);
             exercise(A_WIS, TRUE);
             Qstat(got_quest) = TRUE;
-            tnnt_achieve(A_STARTED_QUEST);
-            /* TNNT: Check for conducts maintained so far. */
-            tnnt_quest_checks();
+            tnnt_do_quest_achievements();
         }
     }
     if (moves < 5000)

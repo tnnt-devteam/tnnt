@@ -2195,6 +2195,7 @@ eatspecial()
     }
     if (otmp->oclass == POTION_CLASS) {
         otmp->quan++; /* dopotion() does a useup() */
+        u.uconduct.potionuse++;
         (void) dopotion(otmp);
     } else if (otmp->oclass == RING_CLASS || otmp->oclass == AMULET_CLASS) {
         eataccessory(otmp);

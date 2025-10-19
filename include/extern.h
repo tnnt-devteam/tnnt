@@ -2522,6 +2522,7 @@ E void FDECL(refresh_swap_chest_contents, (struct obj *));
 E boolean FDECL(delete_swapobj_file, (struct obj *));
 E const char *FDECL(swapobj_donor_name, (struct obj *));
 E void FDECL(credit_swapobj_donor, (struct obj *));
+E boolean FDECL(swap_chest_quan_too_high, (struct obj *));
 E boolean FDECL(swap_chest_eligible, (struct obj *));
 E void NDECL(maybe_place_dungeons_swapchest);
 E void NDECL(write_npc_data);
@@ -2553,6 +2554,7 @@ E void NDECL(tnnt_maybe_award_heist);
 E void FDECL(tnnt_read, (int));
 E void FDECL(tnnt_record_altar, (xchar));
 E void NDECL(tnnt_check_castle_rush);
+E void NDECL(tnnt_do_quest_achievements);
 
 /* ### topten.c ### */
 

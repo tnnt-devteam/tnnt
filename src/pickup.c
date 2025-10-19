@@ -1541,6 +1541,8 @@ boolean telekinesis; /* not picking it up directly by hand */
 
     if (Underwater)
         tnnt_achieve(A_GOT_OBJECT_UNDERWATER);
+    if (Is_container(obj))
+        u.uconduct.container++;
 
     /* Whats left of the special case for gold :-) */
     if (obj->oclass == COIN_CLASS)
@@ -2214,6 +2216,19 @@ register struct obj *obj;
             Strcpy(buf, xname(obj));
             pline("%s spits out your %s disdainfully.",
                   The(xname(current_container)), buf);
+            return 0;
+        }
+        if (swap_chest_quan_too_high(obj)) {
+            /* special message to avoid players thinking it doesn't want the
+             * item because of its type, when the only thing wrong with it is
+             * there are too many in the stack.
+             * This is tested after swap_chest_eligible so that if someone tries
+             * to put in e.g. a bunch of rocks, they get the disdainful message
+             * rather than implying that the problem is they are putting in too
+             * many rocks. */
+            pline("%s refuses to take so many of those %s.",
+                  The(xname(current_container)),
+                  makeplural(simple_typename(obj->otyp)));
             return 0;
         }
         tnnt_achieve(A_PUT_INTO_SWAPCHEST);
@@ -3106,7 +3121,7 @@ boolean put_in;
                 otmp = pick_list[i].item.a_obj;
                 count = pick_list[i].count;
                 if (count > 0 && count < otmp->quan
-                    && current_container->otyp != SWAP_CHEST) {
+                    && (put_in || current_container->otyp != SWAP_CHEST)) {
                     otmp = splitobj(otmp, count);
                     /* special split case also handled by askchain() */
                 }

@@ -611,7 +611,9 @@ struct tnnt_globals_t {
     /* Inedible object classes:
      * RANDOM_CLASS, ILLOBJ_CLASS, VENOM_CLASS are obvious.
      * GEM_CLASS and ROCK_CLASS have no edible items in them.
-     * POTION_CLASS... you don't *eat* potions...
+     * POTION_CLASS... you don't *eat* potions... (or rather you can't. There is
+     * code to handle eating a potion, but no polyform is capable of reaching
+     * that code, so we don't require it.)
      * This variable is a bitmask: 0x1 = 1 << 0 = the 0th object class,
      * 0x2 = 1 << 1 = the 1th object class, and so on. */
 #define ALL_EDIBLE_OCLASSES 0x19EFC
