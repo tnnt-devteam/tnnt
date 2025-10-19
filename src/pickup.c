@@ -2229,6 +2229,7 @@ register struct obj *obj;
             pline("%s refuses to take so many of those %s.",
                   The(xname(current_container)),
                   makeplural(simple_typename(obj->otyp)));
+            (void) unsplitobj(obj);
             return 0;
         }
         tnnt_achieve(A_PUT_INTO_SWAPCHEST);
