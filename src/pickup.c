@@ -2398,22 +2398,6 @@ struct obj *obj;
     return (current_container && obj != current_container);
 }
 
-void
-delete_swap_chest_contents(swapchest)
-struct obj *swapchest;
-{
-    struct obj *otmp;
-    for (otmp = swapchest->cobj; otmp; otmp = otmp->nobj) {
-        /* newly placed objects dont have ptr to filename yet */
-        if (otmp->where == OBJ_INSWAP) {
-            free(otmp->swapobj_filename);
-            otmp->ocontainer = swapchest;
-            otmp->where = OBJ_CONTAINED;
-        }
-    }
-    delete_contents(swapchest);
-}
-
 /* Returns: -1 to stop, 1 item was removed, 0 item was not removed. */
 STATIC_PTR int
 out_container(obj)

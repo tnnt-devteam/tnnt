@@ -2520,6 +2520,7 @@ E int NDECL(dotnntspecies);
 E boolean FDECL(write_swapobj_file, (struct obj *, XCHAR_P));
 E void FDECL(refresh_swap_chest_contents, (struct obj *));
 E boolean FDECL(delete_swapobj_file, (struct obj *));
+E void FDECL(delete_swap_chest_contents, (struct obj *));
 E const char *FDECL(swapobj_donor_name, (struct obj *));
 E void FDECL(credit_swapobj_donor, (struct obj *));
 E boolean FDECL(swap_chest_quan_too_high, (struct obj *));

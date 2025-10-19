@@ -992,6 +992,24 @@ struct obj *o;
     return TRUE;
 }
 
+/* Hero has just withdrawn an item from the swap chest. Empty it of its
+ * contents, since now it cannot be used further. */
+void
+delete_swap_chest_contents(swapchest)
+struct obj *swapchest;
+{
+    struct obj *otmp;
+    for (otmp = swapchest->cobj; otmp; otmp = otmp->nobj) {
+        /* newly placed objects dont have ptr to filename yet */
+        if (otmp->where == OBJ_INSWAP) {
+            free(otmp->swapobj_filename);
+            otmp->ocontainer = swapchest;
+            otmp->where = OBJ_CONTAINED;
+        }
+    }
+    delete_contents(swapchest);
+}
+
 const char *
 swapobj_donor_name(o)
 struct obj *o;
