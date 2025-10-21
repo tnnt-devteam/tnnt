@@ -494,20 +494,11 @@ enum tnnt_achievements {
 #undef TNNT_ACH_ENUM
 
 /* TNNT - achievement names and descriptions */
-struct tnnt_achvmt_data {
+struct tnnt_achievement_strings {
     const char* name;
     const char* descr;
-    enum tnnt_ach_status {
-        ACH_NOT_EARNED = 0,
-        ACH_EARNED_IN_PREVIOUS_GAME = 1,
-        ACH_EARNED_THIS_GAME = 2
-    } status;
-    /* when achievement was just earned, flag it with this to give a deferred
-     * "achievement unlocked" message at the end of the current player input
-     * round */
-    boolean needs_notification;
 };
-E struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS];
+E struct tnnt_achievement_strings tnnt_ach_strings[NUM_TNNT_ACHIEVEMENTS];
 
 /* TNNT - generic globals that don't belong in you.h */
 #include <stdint.h> /* uint64_t */
@@ -521,13 +512,25 @@ struct tnnt_globals_t {
      * supporting that achievement, for style consistency.
      */
 
+    struct tnnt_ach_statusfields {
+        enum tnnt_ach_statuses {
+            ACH_NOT_EARNED = 0,
+            ACH_EARNED_IN_PREVIOUS_GAME = 1,
+            ACH_EARNED_THIS_GAME = 2
+        } status;
+        /* when achievement was just earned, flag it with this to give a
+         * deferred "achievement unlocked" message at the end of the current
+         * player input round */
+        boolean needs_notification;
+    } ach_status[NUM_TNNT_ACHIEVEMENTS];
+
     /* The actual achievement bitfields which get written out to xlogfile and
      * track whether or not you have achieved something. Only achievements
      * earned in this game, ignoring the ones from prior games.
      *
      * Since there are more than 64 achievements, we need multiple 64 bit ints.
      *
-     * As of 2025, this is now redundant with tnnt_achievements[i].status, but
+     * As of 2025, this is now redundant with ach_status[i].status, but
      * is still kept around because it wouldn't be performant for various bits
      * of code that need to write or show it to loop over all the achievements.
      */

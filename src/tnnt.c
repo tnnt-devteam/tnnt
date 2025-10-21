@@ -586,13 +586,13 @@ boolean final;
     }
 
     for (i = 0; i < NUM_TNNT_ACHIEVEMENTS; ++i) {
-        struct tnnt_achvmt_data* dat = &tnnt_achievements[i];
+        struct tnnt_achievement_strings* dat = &tnnt_ach_strings[i];
         char *p;
         /* a response of "show all achievements" unconditionally prints any
          * achievement; otherwise, only print the achievement if earned and
          * response was "earned", or if not earned and response was "not earned"
          */
-        int ach_status = dat->status;
+        int ach_status = tnnt_globals.ach_status[i].status;
         boolean earned_game = tnnt_is_achieved(i);
         boolean earned_prev = (ach_status == ACH_EARNED_IN_PREVIOUS_GAME);
         boolean searchmatch = (response == 's'
@@ -2116,8 +2116,8 @@ erase_temp_achievements_file(void)
         impossible("can't unlink temp achievements file (%d)", errno);
 }
 
-/* The game is starting; initialize tnnt_achievements[].status with achievements
- * earned in previous games. */
+/* The game is starting; initialize tnnt_globals.ach_status[].status with
+ * achievements earned in previous games. */
 void
 initialize_prev_game_achievements(void)
 {
@@ -2139,8 +2139,15 @@ initialize_prev_game_achievements(void)
         }
         sscanf(line, "0x%" PRIx64 "\n", &bitmap);
         for (bit_index = 0; bit_index < 64; bit_index++) {
-            if (bitmap & (1UL << bit_index))
-                tnnt_achievements[achvmt].status = ACH_EARNED_IN_PREVIOUS_GAME;
+            if (bitmap & (1UL << bit_index)) {
+                if (tnnt_globals.ach_status[achvmt].status != ACH_NOT_EARNED) {
+                    impossible("new game already has achievements?");
+                }
+                else {
+                    tnnt_globals.ach_status[achvmt].status
+                        = ACH_EARNED_IN_PREVIOUS_GAME;
+                }
+            }
             achvmt++;
             if (achvmt >= NUM_TNNT_ACHIEVEMENTS)
                 break;
@@ -2166,7 +2173,7 @@ write_prev_ach_file(void)
     for (achvmt = 0; achvmt < NUM_TNNT_ACHIEVEMENTS; achvmt++) {
         /* unlike other countings, count any achievement other than NOT_EARNED
          * ones. */
-        if (tnnt_achievements[achvmt].status != ACH_NOT_EARNED) {
+        if (tnnt_globals.ach_status[achvmt].status != ACH_NOT_EARNED) {
             bitmap |= 1UL << (achvmt % 64);
         }
         if ((achvmt + 1) % 64 == 0 || achvmt + 1 == NUM_TNNT_ACHIEVEMENTS) {
@@ -2185,16 +2192,16 @@ boolean
 tnnt_is_achieved(achvmt)
 short achvmt;
 {
-    return (tnnt_achievements[achvmt].status == ACH_EARNED_THIS_GAME);
+    return (tnnt_globals.ach_status[achvmt].status == ACH_EARNED_THIS_GAME);
 }
 
-/* This used to be a macro that just set the bit in tnnt_achievements, but now
+/* This used to be a macro that just set the bit in achievement_bitmap, but now
  * we also write out to a file. */
 void
 tnnt_achieve(achvmt)
 short achvmt;
 {
-    int old_status = tnnt_achievements[achvmt].status;
+    int old_status = tnnt_globals.ach_status[achvmt].status;
 
     if (achvmt == NO_TNNT_ACHIEVEMENT) {
         /* formerly this was used to prompt reading from encodeachieve() for
@@ -2211,7 +2218,7 @@ short achvmt;
 
     /* supersedes earned-in-previous-game status; we no longer care that it was
      * earned in a previous game */
-    tnnt_achievements[achvmt].status = ACH_EARNED_THIS_GAME;
+    tnnt_globals.ach_status[achvmt].status = ACH_EARNED_THIS_GAME;
 
     /* mark for deferred notification, though only if flags.notify_achievements
      * is set. If it's off, this flag will never get set for this achievement
@@ -2219,7 +2226,7 @@ short achvmt;
      * setting needs_notification but then failing to print it until the player
      * flips it back on and gets notifications of all their old achievements */
     if (flags.notify_achievements) {
-        tnnt_achievements[achvmt].needs_notification = TRUE;
+        tnnt_globals.ach_status[achvmt].needs_notification = TRUE;
         tnnt_globals.ach_needs_notification = TRUE;
     }
 
@@ -2250,15 +2257,15 @@ tnnt_announce_achievements(void)
              * ways around it, but don't be blatantly obvious) */
             continue;
         }
-        if (tnnt_achievements[ach].needs_notification) {
+        if (tnnt_globals.ach_status[ach].needs_notification) {
             const char *achnam = (const char *) 0;
             const char *endpunct = "";
             int len;
-            if (!tnnt_achievements[ach].name) {
+            if (!tnnt_ach_strings[ach].name) {
                 impossible("achievement %d without name?", ach);
                 continue;
             }
-            achnam = tnnt_achievements[ach].name;
+            achnam = tnnt_ach_strings[ach].name;
             len = (int) strlen(achnam);
             /* some achievements have their own punctuation, so only append
              * additional punctuation if that isn't the case */
@@ -2266,7 +2273,7 @@ tnnt_announce_achievements(void)
                 endpunct = ".";
             pline("Achievement unlocked: \"%s\"%s", achnam, endpunct);
         }
-        tnnt_achievements[ach].needs_notification = FALSE;
+        tnnt_globals.ach_status[ach].needs_notification = FALSE;
     }
     tnnt_globals.ach_needs_notification = FALSE;
 

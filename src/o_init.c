@@ -548,7 +548,7 @@ dodiscovered() /* free after Robert Viduya */
                 /* no progress towards this; don't display it */
                 continue;
             Sprintf(buf, "  (%s: %d/%d)",
-                    tnnt_achievements[tnnt_ctrs[j].ach_id].name,
+                    tnnt_ach_strings[tnnt_ctrs[j].ach_id].name,
                     tnnt_ctrs[j].found, tnnt_ctrs[j].total);
             putstr(tmpwin, 0, buf);
         }

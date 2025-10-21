@@ -360,7 +360,7 @@ struct tnnt_globals_t tnnt_globals = DUMMY;
 
 /* TNNT - custom tournament achievement names and descriptions */
 #define TNNT_ACH_NAMES
-struct tnnt_achvmt_data tnnt_achievements[NUM_TNNT_ACHIEVEMENTS] = {
+struct tnnt_achievement_strings tnnt_ach_strings[NUM_TNNT_ACHIEVEMENTS] = {
 #include "tnnt_achievements.h"
 };
 #undef TNNT_ACH_NAMES
