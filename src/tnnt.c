@@ -28,6 +28,10 @@
 /* this must be kept the same as in topten.c */
 #define NAMSZ PL_NSIZ
 
+/* for altar tracking since A_NONE is just 0 and not a flag */
+#define TNNT_AM_MOLOCH 0x08
+#define TNNT_AM_ALL 0x0F
+
 /* static forward declarations */
 static boolean tnnt_common_monst(int mndx);
 static char *make_swapobj_filename(struct obj *o);
@@ -248,26 +252,24 @@ boolean final;
             maybe_have(final), tnnt_globals.maxpw_from_corpses);
     putstr(en_win, 0, buf);
 
-#define print_visited(altars)    \
-    if ((altars) == 0)           \
-        Strcat(buf, " none");    \
-    if ((altars) & AM_LAWFUL)    \
-        Strcat(buf, " lawful");  \
-    if ((altars) & AM_NEUTRAL)   \
-        Strcat(buf, " neutral"); \
-    if ((altars) & AM_CHAOTIC)   \
-        Strcat(buf, " chaotic");
-    /* Initially I had this check for tnnt_globals.high_altars != 0, but it's
-     * probably better to show this a little earlier to avoid someone forgetting
-     * to step on Moloch's high altar and not realizing it until it's too late.
-     * Starting to show it around the start of the ascension run is fine. */
-    if (final || u.uevent.udemigod) {
+#define print_visited(altars)      \
+    if ((altars) == 0)             \
+        Strcat(buf, " none");      \
+    if ((altars) & AM_LAWFUL)      \
+        Strcat(buf, " lawful");    \
+    if ((altars) & AM_NEUTRAL)     \
+        Strcat(buf, " neutral");   \
+    if ((altars) & AM_CHAOTIC)     \
+        Strcat(buf, " chaotic");   \
+    if ((altars) & TNNT_AM_MOLOCH) \
+        Strcat(buf, " unaligned");
+    if (final || tnnt_globals.high_altars != 0) {
         Strcpy(buf, "High altar alignments visited:");
         print_visited(tnnt_globals.high_altars);
         putstr(en_win, 0, buf);
     }
 
-    Strcpy(buf, "Regular altar alignments visited:");
+    Strcpy(buf, "Altar alignments visited:");
     print_visited(tnnt_globals.regular_altars);
     putstr(en_win, 0, buf);
 #undef print_visited
@@ -2776,9 +2778,9 @@ tnnt_record_altar(xchar amask)
     if (amask == 0) {
         /* Moloch altar; set a special bit that isn't actually set in
          * tnnt_globals.regular_altars otherwise */
-        tnnt_globals.regular_altars |= 0x08;
+        tnnt_globals.regular_altars |= TNNT_AM_MOLOCH;
     }
-    if (tnnt_globals.regular_altars == 0x0F)
+    if (tnnt_globals.regular_altars == TNNT_AM_ALL)
         tnnt_achieve(A_VISITED_ALL_ALTARS);
 }
 
