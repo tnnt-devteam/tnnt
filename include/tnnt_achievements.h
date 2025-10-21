@@ -57,9 +57,9 @@ ACH("Have Fun Storming The Castle", "Blow up the Castle drawbridge",
 ACH("The Chosen One", "Get crowned", CROWNED),
 ACH("Watch Your Footing", "Step onto the vibrating square",
     REACHED_VIBRATING_SQ),
-/* TNNT TODO FOR 3.7: this will be an actual vanilla achievement, put it with
+/* TNNT TODO FOR 3.7: this will be an actual vanilla achievement, move it with
  * those ones */
-ACH("Maxed Out", "Reach experience level 30", REACHED_LEVEL_30),
+ACH("Hit The Ceiling", "Reach experience level 30", REACHED_LEVEL_30),
 
 /* "TNNT custom challenges" group */
 ACH("It's Dangerous To Go Alone! Take This", "Put an item into a swap chest",
@@ -723,8 +723,13 @@ ACH("Potion Roulette",
     "Drink an unidentified healing potion while below 10% HP",
     DRANK_UNID_HEALING_POTION),
 
-/* 19 free bits in tnntachieve5 */
-/* 365 achievements defined */
+/* 16 free bits in tnntachieve5
+ * 368 achievements defined
+ * (The achievement bitmap is auto-sized at compile time based on
+ * NUM_TNNT_ACHIEVEMENTS, but we still keep this comment around to remind the
+ * person who rolls it over into a new tnntachieve* xlogfile field that they
+ * need to update the xlogfile parsing on the scoreboard to check for it)
+ */
 
 #undef ACH
 
@@ -743,9 +748,6 @@ ACH("Potion Roulette",
 /*
 TNNT TODO FOR 3.7: Here are some good achievement ideas we want to do but they
 are best off waiting until 3.7 is released and TNNT rebases on it.
-
-"Hit the Ceiling": Reach XL 30 and your role's highest rank. This will be a
-vanilla achievement in 3.7.
 
 Also, two achievements for hitting XL 10, and one somewhere around 20 (you get a
 new rank at 10, but around 20 the options are 18 or 22 if we want to keep it
