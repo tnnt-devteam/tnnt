@@ -2142,6 +2142,7 @@ E void FDECL(region_stats, (const char *, char *, long *, long *));
 E NhRegion *FDECL(create_gas_cloud, (XCHAR_P, XCHAR_P, int, int));
 E boolean NDECL(region_danger);
 E void NDECL(region_safety);
+E void NDECL(add_deathmatch_arena_region);
 
 /* ### restore.c ### */
 
@@ -2528,7 +2529,7 @@ E boolean FDECL(swap_chest_eligible, (struct obj *));
 E void NDECL(maybe_place_dungeons_swapchest);
 E void NDECL(write_npc_data);
 E struct monst* FDECL(create_tnnt_npc, (XCHAR_P, XCHAR_P));
-E void FDECL(tnnt_check_arena_entry, (xchar, xchar));
+E void NDECL(shut_the_front_door);
 E void NDECL(npc_awakens);
 E boolean FDECL(is_illegal_deathmatch, (d_level *));
 E struct obj *FDECL(collect_all_transient, (struct obj *));

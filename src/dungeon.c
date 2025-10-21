@@ -1202,7 +1202,6 @@ int x, y;
                : impossible;
         (*func)("u_on_newpos: trying to place hero off map <%d,%d>", x, y);
     }
-    tnnt_check_arena_entry(x, y);
     u.ux = x;
     u.uy = y;
 #ifdef CLIPPING

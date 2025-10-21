@@ -1728,54 +1728,33 @@ xchar x, y;
     return npc;
 }
 
-/* Player has just moved from (ux, uy) to (x, y); ux and uy haven't been updated
- * yet. Check if that move has entered the Arena.
- * This check is its own function because there is no one place in the code that
- * covers all hero movement (i.e. stepping over the door, hurtling over the
- * door, jumping past the door) so it has to be called in multiple places.
- *
- * This function also contains the bit of code that closes the door behind you;
- * the NPC can awake in other ways, but only moving off the door will seal it.
- *
- * TNNT TODO FOR 3.7: regions seem like a better way of doing this, but I can't
- * be bothered to figure out how to get the specification of a region and its
- * callbacks perfect with the des-file format. */
+/* Player has just entered the region defining the Arena. Shut and lock the
+ * door. The NPC can awaken in other ways, but only entering the arena will seal
+ * it. */
 void
-tnnt_check_arena_entry(xchar newux, xchar newuy)
+shut_the_front_door(void)
 {
-    /* this will get called practically every move so be efficient about ruling
-     * out when we need to check anything */
+    xchar x, y;
+    /* this can get called if hero vacillates on the arena entry so be efficient
+     * about ruling out when we need to check anything */
     if (tnnt_globals.deathmatch_started)
         return;
-    if (!Is_deathmatch_level(&u.uz))
+    if (!Is_deathmatch_level(&u.uz)) /* just in case */
         return;
-    /* The hacky test is to check if you are moving off the door in the arena.
-     * Assumes that there is exactly one door in the arena. Also assumes that
-     * there's no way for a player to engineer the destruction of a door such
-     * that its typ doesn't remain set on DOOR. */
-    if (levl[newux][newuy].typ == ROOM && IS_DOOR(levl[u.ux][u.uy].typ)) {
-        /* it's possible we retreated off the door and the deathmatch should not
-         * start in that case; check this by seeing if you have moved towards
-         * the deathmatch opponent */
-        struct monst *mtmp;
-        int dist_old = -1, dist_new = 0;
-        for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-            if (is_deathmatch_opponent(mtmp)) {
-                dist_old = dist2(u.ux, u.uy, mtmp->mx, mtmp->my);
-                dist_new = dist2(newux, newuy, mtmp->mx, mtmp->my);
-                break;
+    for (x = 1; x < COLNO; x++) {
+        for (y = 0; y < ROWNO; y++) {
+            if (IS_DOOR(levl[x][y].typ)
+                /* this shouldn't happen but in case... */
+                && x != u.ux && y != u.uy) {
+                boolean wasopen = (levl[x][y].doormask != D_CLOSED
+                                   && levl[x][y].doormask != D_LOCKED);
+                levl[x][y].doormask = D_LOCKED;
+                if (wasopen)
+                    pline("The door behind you closes.");
+                newsym(x, y);
             }
         }
-        if (dist_old < 0) {
-            impossible("no deathmatch opponent?");
-        }
-        else if (dist_new < dist_old) {
-            levl[u.ux][u.uy].doormask = D_LOCKED;
-            pline("The door behind you closes.");
-            aggravate(); /* this will call npc_awakens() */
-        }
     }
-
 }
 
 /* Things that need to happen when the NPC wakes up and the Deathmatch begins.

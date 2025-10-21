@@ -1808,8 +1808,6 @@ domove_core()
     if (!in_out_region(x, y))
         return;
 
-    tnnt_check_arena_entry(x, y);
-
     /* now move the hero */
     mtmp = m_at(x, y);
     u.ux += u.dx;

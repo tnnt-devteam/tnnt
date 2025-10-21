@@ -6063,6 +6063,10 @@ const char *name;
     sp_level_free(lvl);
     Free(lvl);
 
+    if (Is_deathmatch_level(&u.uz)) {
+        add_deathmatch_arena_region();
+    }
+
 give_up:
     return result;
 }

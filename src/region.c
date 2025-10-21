@@ -26,6 +26,7 @@ void FDECL(add_rect_to_reg, (NhRegion *, NhRect *));
 void FDECL(add_mon_to_reg, (NhRegion *, struct monst *));
 void FDECL(remove_mon_from_reg, (NhRegion *, struct monst *));
 boolean FDECL(mon_in_region, (NhRegion *, struct monst *));
+boolean FDECL(inside_arena, (genericptr, genericptr)); /* TNNT */
 
 #if 0
 NhRegion *FDECL(clone_region, (NhRegion *));
@@ -49,7 +50,10 @@ static callback_proc callbacks[] = {
 #define INSIDE_GAS_CLOUD 0
     inside_gas_cloud,
 #define EXPIRE_GAS_CLOUD 1
-    expire_gas_cloud
+    expire_gas_cloud,
+    /* TNNT */
+#define INSIDE_ARENA 2
+    inside_arena,
 };
 
 /* Should be inlined. */
@@ -1125,6 +1129,44 @@ region_safety()
     /* maybe cure blindness too */
     if ((Blinded & TIMEOUT) == 1L)
         make_blinded(0L, TRUE);
+}
+
+/* TNNT FUNCTIONS FOR DEATHMATCH ARENA REGION */
+
+/* TNNT - callback for entering the deathmatch arena region. */
+boolean
+inside_arena(genericptr region UNUSED, genericptr monst)
+{
+    if (monst == (genericptr) 0) { /* player entered region */
+        shut_the_front_door();
+        aggravate(); /* this will call npc_awakens() */
+    }
+    /* else, some other monster entered the arena, do nothing */
+    return FALSE;
+}
+
+/* TNNT - hack for checking whether the Arena has been entered. This can't
+ * be done in the des file because the special level parser does not support
+ * adding a region. It is called just before the end of the special level
+ * loading code.
+ * TNNT TODO FOR 3.7: explore adding region support (with lua callbacks!) to
+ * the lua parser. I don't consider it worthwhile to do for des, but would
+ * consider it worthwhile to provide upstream. */
+void
+add_deathmatch_arena_region(void)
+{
+    NhRect tmprect;
+    NhRegion *arena;
+    /* MAJOR ASSUMPTION: The deathmatch arena has a single, fixed map that will
+     * always spawn such that the below coordinates are the furthest bounds of
+     * the arena area. */
+    tmprect.lx = 16;
+    tmprect.ly = 2;
+    tmprect.hx = 55;
+    tmprect.hy = 18;
+    arena = create_region(&tmprect, 1);
+    arena->enter_f = INSIDE_ARENA;
+    add_region(arena);
 }
 
 /*region.c*/
