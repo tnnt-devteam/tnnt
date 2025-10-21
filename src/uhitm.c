@@ -899,6 +899,7 @@ int dieroll;
             freeinv(obj);
             potionhit(mon, obj,
                       hand_to_hand ? POTHIT_HERO_BASH : POTHIT_HERO_THROW);
+            u.uconduct.potionuse++;
             if (DEADMONSTER(mon))
                 return FALSE; /* killed */
             hittxt = TRUE;
