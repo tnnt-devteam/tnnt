@@ -1387,7 +1387,8 @@ int dieroll;
                 tnnt_achieve(A_KILLED_WITH_AKLYS);
             if (obj && obj->otyp == TRIDENT && mdat->mlet == S_EEL)
                 tnnt_achieve(A_KILLED_WITH_TRIDENT);
-            if (obj && is_pole(obj) && mdat == &mons[PM_FLOATING_EYE])
+            if (obj && is_pole(obj) && mdat == &mons[PM_FLOATING_EYE]
+                && thrown == HMON_APPLIED)
                 tnnt_achieve(A_KILLED_EYE_POLEARM);
             if (obj && obj->otyp == TOWEL && obj->spe)
                 tnnt_achieve(A_KILLED_WITH_TOWEL);
