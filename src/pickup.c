@@ -2232,7 +2232,6 @@ register struct obj *obj;
             (void) unsplitobj(obj);
             return 0;
         }
-        tnnt_achieve(A_PUT_INTO_SWAPCHEST);
     }
     /* <-- */
     if (obj == uwep) {
@@ -2353,10 +2352,17 @@ register struct obj *obj;
             pline("Your offering is snatched from your hands!");
             You_feel("that %s is %s", buf,
                      chest_emotions[current_container->swapitems - 1]);
-            /* since hero's own swap items aren't actually visible to her,
+            /* since swap chest was moved to main Dungeons of Doom, it won't
+             * naturally spawn in a shop but it's possible to finagle it into
+             * one - make sure to charge hero properly for inserting the shop's
+             * inventory :) */
+            if (was_unpaid)
+                addtobill(obj, FALSE, FALSE, FALSE);
+            /* because hero's own swap items aren't actually visible to her,
                don't even bother putting them into swapchest->cobj since it'll
                do nothing but mess up the item count.  just free & return. */
             delobj(obj);
+            tnnt_achieve(A_PUT_INTO_SWAPCHEST);
             return 1;
         }
 
