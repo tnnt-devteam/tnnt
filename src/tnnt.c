@@ -1426,7 +1426,7 @@ xchar x, y;
     char *npcfilename = pick_npc_file();
     const long int mmflags = (NO_MINVENT | MM_NOCOUNTBIRTH | MM_ADJACENTOK
                               | MM_ANGRY | MM_ASLEEP);
-    struct obj *obj, *invent_from_file;
+    struct obj *obj, *invent_from_file = (struct obj *) 0;
     int strategy;
     struct monst *npc;
 
@@ -1470,9 +1470,10 @@ xchar x, y;
         /* get inventory */
         while (fgets(line, BUFSZ, npcfile) != NULL) {
             char objnam[BUFSZ];
-            int n, otyp, quan, spe, cursed, blessed, oerodeproof, recharged,
+            int n, otyp, spe, cursed, blessed, oerodeproof, recharged,
                 greased, corpsenm, usecount, oeaten;
-            n = sscanf(line, "%d %d %d %d %d %d %d %d %d %d %d %[^\n]",
+            long quan;
+            n = sscanf(line, "%d %ld %d %d %d %d %d %d %d %d %d %[^\n]",
                        &otyp, &quan, &spe, &cursed, &blessed, &oerodeproof,
                        &recharged, &greased, &corpsenm, &usecount, &oeaten,
                        objnam);
@@ -1526,6 +1527,7 @@ xchar x, y;
     while (invent_from_file) {
         struct obj *nobj;
         nobj = invent_from_file->nobj;
+        invent_from_file->nobj = (struct obj *) 0; /* clear nobj before calling mpickobj() */
         mpickobj(npc, invent_from_file);
         invent_from_file = nobj;
     }
