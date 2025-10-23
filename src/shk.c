@@ -549,6 +549,11 @@ char *enterstring;
      * shop achievements that trigger before empty-shop checks */
     rt = rooms[*enterstring - ROOMOFFSET].rtype;
 
+    /* Note that you get these achievements for "entering" the room as far as
+     * NetHack is concerned, which can mean you could be invisible and have just
+     * stepped into the doorway. That the shopkeeper is unwelcoming and barring
+     * you from entry doesn't matter; the point of the achievements is
+     * exploration and finding different sorts of shops. */
     if (In_dungeons_of_doom(&u.uz) && depth(&u.uz) >= 20)
         tnnt_achieve(A_VISITED_DEEP_SHOP);
     switch (rt) {
