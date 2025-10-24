@@ -1745,9 +1745,13 @@ shut_the_front_door(void)
         return;
     for (x = 1; x < COLNO; x++) {
         for (y = 0; y < ROWNO; y++) {
-            if (IS_DOOR(levl[x][y].typ)
-                /* this shouldn't happen but in case... */
-                && x != u.ux && y != u.uy) {
+            /* there used to be a check for (x, y) != (ux, uy), but since this
+             * is called from an in_out_region callback, the hero hasn't
+             * actually moved yet and will, in most cases, be occupying the door
+             * space. Assume the region is properly set up such that it does NOT
+             * contain the door, so if we're entering it the hero will not end
+             * up on the door. */
+            if (IS_DOOR(levl[x][y].typ)) {
                 boolean wasopen = (levl[x][y].doormask != D_CLOSED
                                    && levl[x][y].doormask != D_LOCKED);
                 levl[x][y].doormask = D_LOCKED;
