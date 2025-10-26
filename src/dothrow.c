@@ -1958,6 +1958,8 @@ boolean from_invent; /* thrown or dropped by player; maybe on shop bill */
 
     if (!breaktest(obj))
         return 0;
+    if (obj->oclass == POTION_CLASS)
+        u.uconduct.potionuse++;
     breakmsg(obj, in_view);
     breakobj(obj, x, y, TRUE, from_invent);
     return 1;

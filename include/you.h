@@ -101,7 +101,7 @@ struct u_conduct {     /* number of times... */
     long pets;         /* obtained a pet */
     long container;    /* picked up or applied (but not looted) a container */
     long zaps;         /* zapped a wand or attempted to cast a spell */
-    long potionuse;    /* quaffed (or ate), dipped item into, or threw potion */
+    long potionuse;    /* directly used a potion in any way, or shattered one */
 };
 
 struct u_roleplay {

@@ -3463,7 +3463,7 @@ int final;
         you_have_never("attempted to zap a wand or cast a spell");
 
     if (u.uconduct.potionuse == 0)
-        you_have_never("used a potion");
+        you_have_never("used or shattered a potion");
 
     /* Pop up the window and wait for a key */
     display_nhwindow(en_win, TRUE);
