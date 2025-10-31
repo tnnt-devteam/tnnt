@@ -4571,7 +4571,7 @@ struct monst *mtmp;
         }
     }
     /* Gather all of the NPC's possessions in the spot of their death. */
-    if ((otmp = collect_all_transient(NULL)) != (struct obj *) 0) {
+    if ((otmp = collect_all_transient(m_shot.obj)) != (struct obj *) 0) {
         /* TNNT TODO FOR 3.7: We should probably stick a string in quest.lua
          * for these arena messages, so they can be printed as a single large
          * block of text. */

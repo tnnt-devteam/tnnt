@@ -220,6 +220,7 @@ E NEARDATA struct multishot {
     int n, i;
     short o;
     boolean s;
+    struct obj *obj;
 } m_shot;
 
 E NEARDATA long moves, monstermoves;

@@ -215,6 +215,7 @@ int shotlimit;
     wep_mask = obj->owornmask;
     m_shot.o = obj->otyp;
     m_shot.n = multishot;
+    m_shot.obj = obj;
     killed_by_volley = 0;
     for (m_shot.i = 1; m_shot.i <= m_shot.n; m_shot.i++) {
         twoweap = u.twoweap;
@@ -234,6 +235,7 @@ int shotlimit;
     m_shot.n = m_shot.i = 0;
     m_shot.o = STRANGE_OBJECT;
     m_shot.s = FALSE;
+    m_shot.obj = (struct obj *) 0;
 
     return 1;
 }
