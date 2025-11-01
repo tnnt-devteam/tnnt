@@ -1094,6 +1094,7 @@ int pm;
         } else {
             HFast |= FROMOUTSIDE;
             You("seem faster.");
+            tnnt_achieve(A_GOT_CORPSE_INTRINSIC);
         }
         tnnt_achieve(A_HEISENBERG);
         break;
