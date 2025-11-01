@@ -1457,7 +1457,6 @@ boolean at_stairs, falling, portal;
     if (In_endgame(newlevel)) {
         if (Is_earthlevel(newlevel)) {
             tnnt_globals.too_long_on_planes = FALSE;
-            tnnt_globals.turns_entered_last_plane = moves;
         }
         else if (moves - tnnt_globals.turns_entered_last_plane > 100) {
             tnnt_globals.too_long_on_planes = TRUE;
@@ -1466,6 +1465,7 @@ boolean at_stairs, falling, portal;
             && tnnt_globals.too_long_on_planes == FALSE) {
             tnnt_achieve(A_SPEEDRAN_PLANES);
         }
+        tnnt_globals.turns_entered_last_plane = moves;
     }
     /* track if we entered sokoban */
     if (In_sokoban(newlevel)) {
