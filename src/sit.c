@@ -167,7 +167,14 @@ dosit()
         if (Is_devteam(&u.uz)) {
             /* TNNT - Mike Stephenson's throne is cosmetic. No wishes or
              * genocides (or even the achievement for sitting on a throne), but
-             * it won't kill you either. */
+             * it won't kill you either.
+             * Note: it's possible to get a sink on the devteam level, drop in a
+             * ring of polymorph, and transmute it into a throne. That throne
+             * will also be inert, partly because there's not really a good way
+             * to differentiate Mike's throne from some other one, partly
+             * because the sinks are "bonus" dungeon features anyway and the
+             * intent of this special case is to remove the chance of getting a
+             * "bonus" wish in the devteam level. */
             You_feel("powerful... regal... a true master of NetHack!");
             pline("... But that appears to be all.  Nothing else happens.");
             return 1;
