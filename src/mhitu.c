@@ -1,4 +1,4 @@
-/* NetHack 3.7	mhitu.c	$NHDT-Date: 1775259433 2026/04/03 15:37:13 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.341 $ */
+/* NetHack 5.0	mhitu.c	$NHDT-Date: 1775259433 2026/04/03 15:37:13 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.341 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2012. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -1312,7 +1312,7 @@ gulpmu(struct monst *mtmp, struct attack *mattk)
         place_monster(mtmp, u.ux, u.uy);
         set_ustuck(mtmp);
         newsym(mtmp->mx, mtmp->my);
-        /* 3.7: dismount for all engulfers, not just for purple worms */
+        /* 5.0: dismount for all engulfers, not just for purple worms */
         if (u.usteed) {
             char buf[BUFSZ];
 

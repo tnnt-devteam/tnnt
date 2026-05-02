@@ -56,11 +56,11 @@
 .ds h0 NetHack Guidebook
 .ds h1 \" empty
 .ds h2 %
-.ds vr NetHack 3.7.0
+.ds vr NetHack 5.0.0
 .ds f0 \*(vr
 .ds f1 \" empty
 .\"DO NOT REMOVE NH_DATESUB .ds f2 Date(%B %-d, %Y)
-.ds f2 May 1, 2026
+.ds f2 May 2, 2026
 .
 .\" A note on some special characters:
 .\" \(lq = left double quote
@@ -3940,7 +3940,7 @@ and also
 .op autopickup_exception
 for ways to refine the behavior.
 .lp ""
-Note: prior to version 3.7.0, the default for
+Note: prior to version 5.0.0, the default for
 .op autopickup
 was \fIon\fP.
 .lp autoquiver
@@ -5687,7 +5687,7 @@ An entry that maps a sound file to a user-specified message pattern.
 Each SOUND entry is broken down into the following parts:
 .PS "sound index"
 .PL MESG
-message window mapping (the only one supported in 3.7.0);
+message window mapping (the only one supported in 5.0.0);
 .PL msgtype
 optional; message type to use, see \(lqConfiguring Message Types\(rq
 .PL pattern
@@ -6149,7 +6149,7 @@ If your platform or terminal supports the display of UTF-8 character
 sequences, you can customize your game display by assigning Unicode
 codepoint values and \fIred-green-blue\fP colors to glyph
 representations. The customizations can be specified for use with a symset that
-has a UTF8 handler within the symbols file such as the enhanced1 set, or 
+has a UTF8 handler within the symbols file such as the enhanced1 set, or
 individually within your nethack.rc file.
 .pg
 The format for defining a glyph representation is:
@@ -6170,7 +6170,7 @@ U+224B and the color represented by R-G-B value 0-0-160:
 OPTIONS=glyph:G_pool/U+224B/0-0-160
 .ft
 .ED
-The list of acceptable glyphid's can be produced by 
+The list of acceptable glyphid's can be produced by
 \fBnethack \-\-dumpglyphids\fP.
 Individual NetHack glyphs can be specified using the G_ prefix,
 or you can use an S_ symbol for a glyphid and store the custom
@@ -6343,7 +6343,7 @@ Allows the following placeholders:
 .PL \f(CR%%\fP
 literal \(oq\f(CR%\fP\(cq
 .PL \f(CR%v\fP
-version (eg. \(lq\f(CR3.7.0\-0\fP\(rq)
+version (eg. \(lq\f(CR5.0.0\-0\fP\(rq)
 .PL \f(CR%u\fP
 game UID
 .PL \f(CR%t\fP
@@ -6793,6 +6793,73 @@ some bug fixes.
 .pg
 NetHack 3.6.7 was released on February 16, 2023 containing a security fix and
 some bug fixes.
+.pg
+Development work for the major release to follow NetHack 3.6 began in 2015
+around the same time as NetHack 3.6.0 was being released. That development
+work continued in parallel to each of the NetHack 3.6 releases from 2015
+through 2023, and continued until the end of April 2026.  For the first time,
+that development was shared publicly on GitHub and SourceForge as it occurred.
+It was done under the label NetHack-3.7 work-in-progress (WIP), although the
+version number for the next release had not yet been solidified.
+.pg
+Exposure of the development to the public brought many good things, and some
+challenges. People were able to observe and criticize changes and new features
+almost immediately, and they often did. The GitHub pull request system made
+it straightforward for people to contribute directly to development.
+Contributions resolved many, many bugs in the game and we thank all the
+contributors.
+.pg
+In early 2026, with the game development getting stable enough to consider
+initiating an official release, the devteam reviewed the nature and number of
+changes in the game. It was clear that there was sufficient depth and
+breadth to warrant a major release and version 5.0 was decided on.
+That's a new major release over 3.x, without opening up any ambiguity
+or confusion with existing variants that there might have been had it
+been released as version 4.0.
+.pg
+NetHack 5.0.0 was released on May 2, 2026.
+.pg
+The source code for NetHack 5.0.0 was modified and modernized to be
+compliant with the C99 standard. The 5.0.0 release contained over 3100 fixes,
+changes, and updated features.
+.pg
+NetHack 5.0 was the first version to replace the lex and yacc level
+and dungeon compilers of past versions, with a new Lua interpreter-based
+approach to provide those elements. Lua is also used for the quest texts
+in NetHack 5.0.0. The entire development team acknowledges the work
+done by \fBPasi Kallinen\fP to make that happen.
+.pg
+At the time of the NetHack 5.0 release, the core development team,
+active and erstwhile, included \fBWarwick Allison\fP, \fBMichael Allison\fP,
+\fBKen Arromdee\fP, \fBDavid Cohrs\fP, \fBJessie Collet\fP, \fBBart House\fP,
+\fBKevin Hugo\fP, \fBPasi Kallinen\fP, \fBKen Lorber\fP, \fBDean Luick\fP,
+\fBPat Rankin\fP, \fBDerek S. Ray\fP, \fBAlex Smith\fP, \fBPatric Mueller\fP,
+\fBMike Stephenson\fP, \fBJanet Walz\fP, \fBPaul Winner\fP.
+.pg
+\fBKen Lorber\fP, \fBPat Rankin\fP, \fBPatrick Mueller\fP and
+\fBMichael Allison\fP helped ensure that NetHack 5.0 would run
+on macOS.
+.pg
+\fBIngo Paschke\fP somehow managed to revive a NetHack 5.0 port for the Amiga,
+using a cross-compiler on a modern platform to do so. His work was shared so
+others can straightforwardly produce NetHack 5.0 for the Amiga thanks to his
+efforts.
+.pg
+\fBRay Chason\fP contributed the majority of maintenance work for the
+NetHack 5.0 MS-DOS port, including porting the curses interface to it.
+\fBMichael Allison\fP ensured that NetHack 5.0 core changes continued to
+work with the msdos port and keep it alive.  Cross-compiling the MS-DOS
+port has helped make that possible and mostly painless.
+.pg
+People that contributed to the Windows port of NetHack 5.0 since the
+development of NetHack 5.0 begain over eleven years ago, included
+\fBMichael Allison\fP, \fBDavid Cohrs\fP, \fBBart House\fP,
+\fBPasi Kallinen\fP, \fBAlex Kompel\fP, \fBDion Nicolaas\fP,
+\fBDerek S. Ray\fP and \fBYitzhak Sapir\fP.
+.pg
+With sadness, the devteam would like to acknowledge and remember the past
+contributions from the late \fBRon Van Iwaarden\fP, who was the sole maintainer
+of NetHack for OS/2 for several past NetHack releases. Ron will be missed.
 .pg
 The official NetHack web site is maintained by \fBKen Lorber\fP
 at

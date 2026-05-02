@@ -1,6 +1,6 @@
-Cross-compiling NetHack 3.7 Last edit: February 18, 2023
+Cross-compiling NetHack 5.0 Last edit: April 26, 2026
 
-The NetHack 3.7 build process differs from the build process of previous
+The NetHack 5.0 build process differs from the build process of previous
 versions in some important ways. Those differences make it possible to use
 a cross-compiler running on one platform (the "host" platform of the build)
 to produce a binary NetHack package that can execute on an entirely different
@@ -9,7 +9,7 @@ platform.
 Part A Contents:
     A1. Why cross-compile?
     A2. Building NetHack 3.6 (before)
-    A3. Building NetHack 3.7 (going forward)
+    A3. Building NetHack 5.0 (going forward)
     A4. How was the build procedure reduced to 5 steps?
     A5. How can I help with the cross-compiling initiative?
 
@@ -118,10 +118,10 @@ might, just might, be usable across platforms, but the chances are against it,
 and that certainly cannot be counted on.
 
   +------------------------------------------+
-  | A3. Building NetHack 3.7 (going forward) |
+  | A3. Building NetHack 5.0 (going forward) |
   +------------------------------------------+
 
-Again, very generally, the build of NetHack in 3.7 requires the following
+Again, very generally, the build of NetHack in 5.0 requires the following
 steps to be carried out:
 
     1. Compile and link util/makedefs.
@@ -152,7 +152,7 @@ executing the native compiler.
   | A4. How was the build procedure reduced to 5 steps? |
   +-----------------------------------------------------+
 
-The following are among several design changes planned in NetHack 3.7,
+The following are among several design changes planned in NetHack 5.0,
 and these specific changes are what altered the build process to make
 cross-compiling possible:
 
@@ -412,7 +412,7 @@ Using the cross-compiler, build the following targets:
        system support in *sys.c as well as others sources pertaining to your
        specific target platform(s).
 
-    b) Lua (mandatory in 3.7)
+    b) Lua (mandatory in 5.0)
 
           lib/lua-5.4.8/src
 
@@ -479,7 +479,7 @@ Cross-compiler pre-built binary downloads:
            bash sys/msdos/fetch-cross-compiler.sh
 
     That script won't install anything, it just does file fetches and stores
-    them in subfolders of lib. The linux.370 and macOS.370 hints files are
+    them in subfolders of lib. The linux.500 and macOS.500 hints files are
     configured to find the cross-compiler there if you add
         CROSS_TO_MSDOS=1
     on your make command line.
@@ -490,12 +490,12 @@ Cross-compiler pre-built binary downloads:
 
     On your linux host:
 
-        cd sys/unix ; sh setup.sh hints/linux.370 ; cd ../..
+        cd sys/unix ; sh setup.sh hints/linux.500 ; cd ../..
         make fetch-lua
 
     On your macOS host:
 
-        cd sys/unix ; sh setup.sh hints/macOS.370 ; cd ../..
+        cd sys/unix ; sh setup.sh hints/macOS.500 ; cd ../..
         make fetch-lua
 
     The MSDOS cross-compile can then be carried out by specifying
@@ -532,7 +532,7 @@ Disclaimer: This is a minimal recipe, just to help someone else get
 
 Cross-compiler used:     bebbo's amiga-gcc
 Cross-compiler url:      https://github.com/AmigaPorts/m68k-amigaos-gcc
-Author of 3.7 support:   Ingo Paschke
+Author of 5.0 support:   Ingo Paschke
   
     To our knowledge, a pre-built copy of the cross-compiler isn't available,
     so you will likely have to obtain the cross-compiler sources via git and
@@ -577,22 +577,22 @@ Author of 3.7 support:   Ingo Paschke
 
         On your linux host:
 
-        # Clone NetHack 3.7 source
+        # Clone NetHack 5.0 source
         cd NetHack
-        sys/unix/setup.sh sys/unix/hints/linux.370
+        sys/unix/setup.sh sys/unix/hints/linux.500
         make fetch-lua
         make CROSS_TO_AMIGA=1 fetch-regex
         make CROSS_TO_AMIGA=1 all
         make CROSS_TO_AMIGA=1 package
 
-        The distribution ZIP is created at targets/amiga/NH370AMI.ZIP.
+        The distribution ZIP is created at targets/amiga/NH500AMI.ZIP.
 
         On your macOS host, the Amiga cross-compile can be carried out by specifying
         CROSS_TO_AMIGA=1 on the make command line:
 
-        # Clone NetHack 3.7 source
+        # Clone NetHack 5.0 source
         cd NetHack
-        sys/unix/setup.sh sys/unix/hints/macOS.370
+        sys/unix/setup.sh sys/unix/hints/macOS.500
         make fetch-lua
         make CROSS_TO_AMIGA=1 fetch-regex
         make CROSS_TO_AMIGA=1 all
@@ -665,12 +665,12 @@ Cross-compiler url: https://emscripten.org/docs/getting_started/downloads.html
 
     On your linux host, prepare to cross-compile NetHack as follows:
 
-        cd sys/unix ; sh setup.sh hints/linux.370 ; cd ../..
+        cd sys/unix ; sh setup.sh hints/linux.500 ; cd ../..
         make fetch-lua
 
     On your macOS host, prepare to cross-compile NetHack as follows:
 
-        cd sys/unix ; sh setup.sh hints/macOS.370 ; cd ../..
+        cd sys/unix ; sh setup.sh hints/macOS.500 ; cd ../..
         make fetch-lua
 
     Then, cross-compile to targets/wasm as follows:
@@ -693,7 +693,7 @@ Cross-compiler url: https://emscripten.org/docs/getting_started/downloads.html
 
     The cross-compiler hints additions are enclosed inside ifdef sections
     and shouldn't interfere with the non-cross-compile builds using
-    hints/linux.370 or hints/macOS.370.
+    hints/linux.500 or hints/macOS.500.
 
 
   +--------------------------------+
@@ -712,7 +712,7 @@ Cross-compiler url:
         sudo apt install g++-mipsel-linux-gnu
 
     On your linux host, prepare to cross-compile NetHack as follows:
-        cd sys/unix ; sh setup.sh hints/linux.370 ; cd ../..
+        cd sys/unix ; sh setup.sh hints/linux.500 ; cd ../..
         make fetch-lua
 
     Then, cross-compile to targets/mips as follows:
@@ -725,7 +725,7 @@ Cross-compiler url:
 
     The cross-compiler hints additions are enclosed inside ifdef sections
     and shouldn't interfere with the non-cross-compile builds using
-    hints/linux.370 or hints/macOS.370.
+    hints/linux.500 or hints/macOS.500.
 
 
 ---

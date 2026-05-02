@@ -1,10 +1,10 @@
-# NetHack 3.7 Makefile.nmake
+# NetHack 5.0 Makefile.nmake
 #       Copyright (c) NetHack Development Team 1993-2026
 #
 #==============================================================================
 # Build Tools Environment
 #
-#       NetHack 3.7 Work-in-progress Makefile for
+#       NetHack 5.0 Work-in-progress Makefile for
 #       MS Visual Studio Visual C++ compiler
 #
 #       Visual Studio Compilers Tested:
@@ -158,7 +158,7 @@ GIT_AVAILABLE=Y
 #==============================================================================
 #
 #  The version of the game this Makefile was designed for
-NETHACK_VERSION="3.7.0"
+NETHACK_VERSION="5.0.0"
 
 # A brief version for use in macros
 NHV=$(NETHACK_VERSION:.=)
@@ -311,7 +311,7 @@ LUA_MAY_PROCEED=Y
 !MESSAGE or modify your Makefile to set the following:
 !MESSAGE     INTERNET_AVAILABLE=Y
 !MESSAGE     GIT_AVAILABLE=Y
-!ERROR Stopping because NetHack 3.7 requires Lua for its build.
+!ERROR Stopping because NetHack 5.0 requires Lua for its build.
 !ENDIF  # LUA_MAY_PROCEED
 
 # Now, pdcursesmod
@@ -385,7 +385,7 @@ ADD_CURSES = N
 !ENDIF  # WANT_CURSES
 
 !IF "$(ADD_CURSES)" != "Y"
-!MESSAGE NetHack 3.7 will be built without support for the curses window-port.
+!MESSAGE NetHack 5.0 will be built without support for the curses window-port.
 !ENDIF
 
 #These will be in the environment variables with one of the Visual Studio
@@ -548,8 +548,8 @@ GITPREFIX = -DNETHACK_GIT_PREFIX=\"$(GIT_PREFIX)\"
 #    This build assumes that the LUA sources are located
 #    at the specified location. If they are actually elsewhere
 #    you'll need to specify the correct spot below in order to
-#    successfully build NetHack-3.7.  You cannot build a functional
-#    version of NetHack-3.7 Work-in-progress without including Lua.
+#    successfully build NetHack-5.0.  You cannot build a functional
+#    version of NetHack-5.0 Work-in-progress without including Lua.
 #
 
 !IFNDEF LUAVER
@@ -778,7 +778,7 @@ RECOVOBJS      = $(OUTL)recover.o
 TILEFILES      = $(WSHR)monsters.txt $(WSHR)objects.txt $(WSHR)other.txt
 
 #
-# These are not invoked during a normal game build in 3.7
+# These are not invoked during a normal game build in 5.0
 #
 
 TEXT_IO   = $(OUTL)tiletext.o	$(OUTL)tiletxt.o	$(OUTL)drawing$(HOST).o \
@@ -1886,9 +1886,9 @@ $(OTTY)sfbase.o: sfbase.c $(HACK_H) $(INCL)sfmacros.h
 	$(Q)$(CC) $(CFLAGS) -Fo$@ $(@B).c
 
 #
-#  date.h is not used with NetHack 3.7
-#  onames.h is not used with NetHack 3.7
-#  pm.h is not used with NetHack 3.7
+#  date.h is not used with NetHack 5.0
+#  onames.h is not used with NetHack 5.0
+#  pm.h is not used with NetHack 5.0
 
 $(INCL)date.h $(OPTIONS_FILE) : $(U)makedefs.exe
 	$(U)makedefs -v

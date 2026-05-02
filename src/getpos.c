@@ -1,4 +1,4 @@
-/* NetHack 3.7	getpos.c	$NHDT-Date: 1763708572 2025/11/20 23:02:52 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.6 $ */
+/* NetHack 5.0	getpos.c	$NHDT-Date: 1763708572 2025/11/20 23:02:52 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.6 $ */
 /*-Copyright (c) Pasi Kallinen, 2023. */
 /* NetHack may be freely redistributed.  See license for details. */
 

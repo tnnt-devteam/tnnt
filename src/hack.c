@@ -1,4 +1,4 @@
-/* NetHack 3.7	hack.c	$NHDT-Date: 1763708572 2025/11/20 23:02:52 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.494 $ */
+/* NetHack 5.0	hack.c	$NHDT-Date: 1763708572 2025/11/20 23:02:52 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.494 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Derek S. Ray, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -2298,7 +2298,7 @@ domove_fight_empty(coordxy x, coordxy y)
         } else if (solid) {
             /* glyph might indicate unseen terrain if hero is blind;
                unlike searching, this won't reveal what that terrain is;
-               3.7: used to say "solid rock" for STONE, but that made it be
+               5.0: used to say "solid rock" for STONE, but that made it be
                different from unmapped walls outside of rooms (and was wrong
                on arboreal levels) */
             if (levl[x][y].seenv || IS_STWALL(levl[x][y].typ)
@@ -2310,7 +2310,7 @@ domove_fight_empty(coordxy x, coordxy y)
             }
             /* note: 'solid' is misleadingly named and catches pools
                of water and lava as well as rock and walls;
-               3.7: furniture too */
+               5.0: furniture too */
         } else {
             Strcpy(buf, "thin air");
         }

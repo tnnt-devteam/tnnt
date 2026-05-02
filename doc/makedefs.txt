@@ -144,9 +144,9 @@ AUTHOR
 
 COPYRIGHT
        This  file  is  Copyright  (C)  Kenneth  Lorber,   2024   for   version
-       NetHack-3.7:1.22.   NetHack  may  be freely redistributed.  See license
-       for details.
+       NetHack-5:1.22.   NetHack may be freely redistributed.  See license for
+       details.
 
 
 
-NETHACK                        25 December 2024                    MAKEDEFS(6)
+NETHACK                          26 April 2026                     MAKEDEFS(6)

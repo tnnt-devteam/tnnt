@@ -1,4 +1,4 @@
-NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.1649 $ $NHDT-Date: 1777000050 2026/04/23 19:07:30 $
+NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.1649 $ $NHDT-Date: 1777000050 2026/04/23 19:07:30 $
 
 General Fixes and Modified Features
 -----------------------------------
@@ -1451,7 +1451,7 @@ some theft messages by nymphs force "she", others use default monster naming
 if a nymph stole worn armor and got killed (perhaps by pet) before hero's next
 	turn, feedback would be "You finish taking off your suit." regardless
 	of the type of armor being taken off
-when setting an option interactively [via O or 3.7's mO], if the particular
+when setting an option interactively [via O or 5.0's mO], if the particular
 	option uses a prompt to get a line of input (for compounds: 'fruit',
 	'scores', most numeric ones), input was treated as a comma-separated
 	list of option[:value] rather than just the new value of that option
@@ -1606,7 +1606,7 @@ incorporate a fix to prevent segfault due to rolling boulder trap
 wands of digging generate less often lategame
 
 
-Fixes to 3.7.0-x General Problems Exposed Via git Repository
+Fixes to 5.0.0-x General Problems Exposed Via git Repository
 ------------------------------------------------------------
 incrementing EDITLEVEL to invalidate incompatible save files was not working
 	as intended because VERSION_COMPATIBILITY was defined as 3.7.0-0 and up
@@ -2237,7 +2237,7 @@ an attempt to pick up an object from a monster's stomach would trigger
 	set; set the coordinates to the monster's at the start of pick_obj()
 
 
-Fixes to 3.7.0-x Platform and/or Interface Problems Exposed Via git Repository
+Fixes to 5.0.0-x Platform and/or Interface Problems Exposed Via git Repository
 ------------------------------------------------------------------------------
 curses: 'msg_window' option wasn't functional for curses unless the binary
 	also included tty support

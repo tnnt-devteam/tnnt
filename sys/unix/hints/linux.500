@@ -1,4 +1,4 @@
-# NetHack 3.7  linux.370 $NHDT-Date: 1693519390 2023/08/31 22:03:10 $  $NHDT-Branch: keni-crashweb2 $:$NHDT-Revision: 1.61 $
+# NetHack 5.0  linux.500 $NHDT-Date: 1693519390 2023/08/31 22:03:10 $  $NHDT-Branch: keni-crashweb2 $:$NHDT-Revision: 1.61 $
 # Copyright (c) Kenneth Lorber, Kensington, Maryland, 2007.
 # NetHack may be freely redistributed.  See license for details.
 #
@@ -13,14 +13,14 @@
 #
 
 #-PRE
-# linux.370 hints file provides a single-user build for Linux (such
+# linux.500 hints file provides a single-user build for Linux (such
 # as Ubuntu focal).
 
 # note: '#-INCLUDE' is not just a comment
-#        multiw-1.370 contains sections 1 to 2
-#-INCLUDE multiw-1.370
+#        multiw-1.500 contains sections 1 to 2
+#-INCLUDE multiw-1.500
 
-HINTSVERSION := 370
+HINTSVERSION := 500
 
 ifdef MAKEFILE_TOP
 ifeq ($(MAKELEVEL),0)
@@ -52,7 +52,7 @@ USE_NOSTATICFN = 1
 #USE_NONOSTATICFN = 1
 
 #-----------------------------------------------------------------------------
-#-INCLUDE cross-pre1.370
+#-INCLUDE cross-pre1.500
 
 
 #-----------------------------------------------------------------------------
@@ -60,12 +60,12 @@ USE_NOSTATICFN = 1
 # you're reading this in Makefile augmented by hints, that may not be true).
 #
 
-#-INCLUDE multiw-2.370
+#-INCLUDE multiw-2.500
 
-# compiler.370 contains compiler detection and adjustments common
+# compiler.500 contains compiler detection and adjustments common
 # to both linux and macOS
 
-#-INCLUDE compiler.370
+#-INCLUDE compiler.500
 
 ifdef WANT_WIN_QT
 ifdef WANT_WIN_QT5
@@ -80,10 +80,10 @@ endif    # g++ greater than or equal to 14
 endif   # WANT_WIN_QT6
 endif  # WANT_WIN_QT
 
-# misc.370 must come after compiler.370
+# misc.500 must come after compiler.500
 # and after QTDIR is defined.
 #
-#-INCLUDE misc.370
+#-INCLUDE misc.500
 
 ifeq "$(USE_ASAN)" "1"
 CFLAGS+=-fsanitize=address
@@ -189,7 +189,7 @@ endif   #HAVE_NCURSESW
 endif   #WANT_WIN_CURSES
 
 #
-#-INCLUDE multisnd1-pre.370
+#-INCLUDE multisnd1-pre.500
 #
 
 ifeq "$(CCISCLANG)" "1"
@@ -201,15 +201,15 @@ LIBCFLAGS+=-DSIG_RET_TYPE=__sighandler_t
 # gcc-specific ends
 endif
 
-# WINCFLAGS set from multiw-2.370
-# SNDCFLAGS set from multisnd-pre.370
+# WINCFLAGS set from multiw-2.500
+# SNDCFLAGS set from multisnd-pre.500
 CFLAGS+= $(WINCFLAGS)
 CFLAGS+= $(SNDCFLAGS)
 CFLAGS+= $(NHCFLAGS)
 CFLAGS+= $(LIBCFLAGS)
 
-# WINCFLAGS set from multiw-2.370
-# SNDCFLAGS set from multisnd-pre.370
+# WINCFLAGS set from multiw-2.500
+# SNDCFLAGS set from multisnd-pre.500
 CCXXFLAGS+= $(WINCFLAGS)
 CCXXFLAGS+= $(SNDCFLAGS)
 CCXXFLAGS+= $(NHCFLAGS)
@@ -478,28 +478,28 @@ CHGRP=true
 # manpages directory
 MANDIR=/usr/share/man/man6
 #
-#-INCLUDE cross-pre2.370
+#-INCLUDE cross-pre2.500
 #
 
 #
-#-INCLUDE gbdates-pre.370
+#-INCLUDE gbdates-pre.500
 #
 
 #
-#-INCLUDE multisnd2-pre.370
+#-INCLUDE multisnd2-pre.500
 #
 
 #
-#-INCLUDE response.370
+#-INCLUDE response.500
 #
 
 #-POST
 
 #
-#-INCLUDE gbdates-post.370
+#-INCLUDE gbdates-post.500
 #
 #
-#-INCLUDE multisnd-post.370
+#-INCLUDE multisnd-post.500
 #
 
 ifdef MAKEFILE_TOP
@@ -523,6 +523,6 @@ $(TARGETPFX)libnhmain.o : ../sys/libnh/libnhmain.c $(HACK_H)
 endif  # WANT_LIBNH
 
 #
-#-INCLUDE cross-post.370
+#-INCLUDE cross-post.500
 #
 

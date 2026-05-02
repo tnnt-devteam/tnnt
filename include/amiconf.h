@@ -53,7 +53,7 @@ typedef long off_t;
 
 /* data librarian defs */
 #define DLBFILE "nhdat"   /* main library */
-/* nhsdat sound library not used in 3.7 */
+/* nhsdat sound library not used in 5.0 */
 #undef DLBFILE2
 
 #ifndef CROSS_TO_AMIGA

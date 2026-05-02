@@ -1,11 +1,11 @@
 #------------------------------------------------------------------------------
-# NetHack 3.7  misc.370 $NHDT-Date: 1668359836 2022/11/13 17:17:16 $  $NHDT-Branch: NetHack-3.7 $
+# NetHack 5.0  misc.500 $NHDT-Date: 1668359836 2022/11/13 17:17:16 $  $NHDT-Branch: NetHack-5.0 $
 #
-# Further set-up  for miscellaneous odds and ends (after compiler.370)
+# Further set-up  for miscellaneous odds and ends (after compiler.500)
 #
 # Included from:
-#           hints/linux.370
-#           hints/macOS.370
+#           hints/linux.500
+#           hints/macOS.500
 #
 
 # This ensures that .moc files are compatible with the version of Qt chosen.
@@ -21,7 +21,7 @@ ifdef WANT_WIN_QT6
 # Qt 6 builds and runs (with a couple of warnings) but needs more testing
 QTn_H = Qt6.h-t
 else
-# Qt 5 is currently the default version for nethack 3.7.x's Qt interface
+# Qt 5 is currently the default version for nethack NetHack 5.0.x's Qt interface
 QTn_H = Qt5.h-t
 endif
 $(QTn_H) ::
@@ -105,6 +105,6 @@ endif  # end groff less than 1.23
 endif  # end groff-specific
 endif  # not USE_MANDOC
 
-#end of hints/include/misc.370
+#end of hints/include/misc.500
 #------------------------------------------------------------------------------
 

@@ -1,4 +1,4 @@
-/* NetHack 3.7	wizard.c	$NHDT-Date: 1741407262 2025/03/07 20:14:22 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.116 $ */
+/* NetHack 5.0	wizard.c	$NHDT-Date: 1741407262 2025/03/07 20:14:22 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.116 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2016. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -620,7 +620,7 @@ nasty(struct monst *summoner)
         for (i = rnd(tmp); i > 0 && count < MAXNASTIES; --i) {
             /* Of the 44 nasties[], 10 are lawful, 14 are chaotic,
              * and 20 are neutral.  [These numbers are up date for
-             * 3.7.0; the ones in the next paragraph are not....]
+             * 5.0.0; the ones in the next paragraph are not....]
              *
              * Neutral caster, used for late-game harassment,
              * has 18/42 chance to stop the inner loop on each

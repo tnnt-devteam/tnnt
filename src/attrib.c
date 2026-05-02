@@ -1,4 +1,4 @@
-/* NetHack 3.7	attrib.c	$NHDT-Date: 1777000050 2026/04/23 19:07:30 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.137 $ */
+/* NetHack 5.0	attrib.c	$NHDT-Date: 1777000050 2026/04/23 19:07:30 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.137 $ */
 /*      Copyright 1988, 1989, 1990, 1992, M. Stephenson           */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -683,7 +683,7 @@ rnd_attr(void)
 {
     int i, x = rn2(100);
 
-    /* 3.7: the x -= ... calculation used to have an off by 1 error that
+    /* 5.0: the x -= ... calculation used to have an off by 1 error that
        resulted in the values being biased toward Str and away from Cha */
     for (i = 0; i < A_MAX; ++i)
         if ((x -= gu.urole.attrdist[i]) < 0)

@@ -1,4 +1,4 @@
-/* NetHack 3.7	uhitm.c	$NHDT-Date: 1752823766 2025/07/17 23:29:26 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.477 $ */
+/* NetHack 5.0	uhitm.c	$NHDT-Date: 1752823766 2025/07/17 23:29:26 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.477 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2012. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -2202,7 +2202,7 @@ steal_it(struct monst *mdef, struct attack *mattk)
     if (ustealo) { /* we will be taking everything */
         char heshe[20];
 
-        /* 3.7: this uses hero's base gender rather than nymph femininity
+        /* 5.0: this uses hero's base gender rather than nymph femininity
            but was using hardcoded pronouns She/her for target monster;
            switch to dynamic pronoun */
         if (gender(mdef) == (int) u.mfemale
@@ -4228,7 +4228,7 @@ mhitm_ad_ston(
                     pline("%s seems to grimace.", Monnam(magr));
                 }
                 /*
-                 * 3.7:  New moon is no longer overridden by carrying a
+                 * 5.0:  New moon is no longer overridden by carrying a
                  * lizard corpse.  Having the moon's impact on terrestrial
                  * activity be affected by carrying a dead critter felt
                  * silly.

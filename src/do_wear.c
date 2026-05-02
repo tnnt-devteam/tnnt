@@ -1,4 +1,4 @@
-/* NetHack 3.7	do_wear.c	$NHDT-Date: 1737343372 2025/01/19 19:22:52 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.201 $ */
+/* NetHack 5.0	do_wear.c	$NHDT-Date: 1737343372 2025/01/19 19:22:52 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.201 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2012. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -2501,7 +2501,7 @@ find_ac(void)
         uac -= u.ublessed;
     uac -= u.uspellprot;
 
-    /* put a cap on armor class [3.7: was +127,-128, now reduced to +/- 99 */
+    /* put a cap on armor class [5.0: was +127,-128, now reduced to +/- 99 */
     if (abs(uac) > AC_MAX)
         uac = sgn(uac) * AC_MAX;
 

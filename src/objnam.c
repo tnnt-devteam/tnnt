@@ -1,4 +1,4 @@
-/* NetHack 3.7	objnam.c	$NHDT-Date: 1745114235 2025/04/19 17:57:15 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.453 $ */
+/* NetHack 5.0	objnam.c	$NHDT-Date: 1745114235 2025/04/19 17:57:15 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.453 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2011. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -780,7 +780,7 @@ xname_flags(
                doname() so we've added an external flag to request it */
             Concat(buf, 0, "partly eaten ");
         }
-        if (obj->globby) { /* 3.7 added "medium" to replace no-prefix */
+        if (obj->globby) { /* 5.0 added "medium" to replace no-prefix */
             ConcatF2(buf, 0, "%s %s", (obj->owt <= 100) ? "small"
                                       : (obj->owt <= 300) ? "medium"
                                         : (obj->owt <= 500) ? "large"
@@ -4108,9 +4108,9 @@ readobjnam_preparse(struct _readobjnam_data *d)
                 break;
             d->gsize = 1;
         } else if (!strncmpi(d->bp, "medium ", l = 7)) {
-            /* 3.7: in 3.6, "medium" was only used during wishing and the
+            /* 5.0: in 3.6, "medium" was only used during wishing and the
                mid-size glob had no adjective when formatted, but as of
-               3.7, "medium" has become an explicit part of the name for
+               5.0, "medium" has become an explicit part of the name for
                combined globs of at least 5 individual ones (owt >= 100)
                and less than 15 (owt < 300) */
             d->gsize = 2;

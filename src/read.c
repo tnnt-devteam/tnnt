@@ -1,4 +1,4 @@
-/* NetHack 3.7	read.c	$NHDT-Date: 1762577372 2025/11/07 20:49:32 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.323 $ */
+/* NetHack 5.0	read.c	$NHDT-Date: 1762577372 2025/11/07 20:49:32 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.323 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2012. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -1505,7 +1505,7 @@ seffect_remove_curse(struct obj **sobjp)
     if (scursed) {
         pline_The("scroll disintegrates.");
     } else {
-        /* 3.7: this used to use a straight
+        /* 5.0: this used to use a straight
                for (obj = invent; obj; obj = obj->nobj) {}
            traversal, but for the confused case, secondary weapon might
            become cursed and be dropped, moving it from the invent chain
@@ -3212,7 +3212,7 @@ create_particular_parse(
     d->which = name_to_mon(bufp, &gender_name_var);
     /*
      * With the introduction of male and female monster names
-     * in 3.7, preserve that detail.
+     * in 5.0, preserve that detail.
      *
      * If d->fem is already set to MALE or FEMALE at this juncture, it means
      * one of those terms was explicitly specified.

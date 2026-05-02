@@ -1,4 +1,4 @@
-/* NetHack 3.7	trap.c	$NHDT-Date: 1741926700 2025/03/13 20:31:40 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.621 $ */
+/* NetHack 5.0	trap.c	$NHDT-Date: 1741926700 2025/03/13 20:31:40 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.621 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2013. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -5308,7 +5308,7 @@ untrap_prob(
                 chance = 1;
             /* else chance stays 3 */
         } else if (!webmaker(gy.youmonst.data)) {
-            chance = 7; /* 3.7: used to be 30 */
+            chance = 7; /* 5.0: used to be 30 */
         }
     }
     if (Confusion || Hallucination)
@@ -5993,7 +5993,7 @@ untrap(
         } /* end if */
 
         if (boxcnt) {
-            /* 3.7: this used to allow searching for traps on multiple
+            /* 5.0: this used to allow searching for traps on multiple
                containers on the same move and needed to keep track of
                whether any had been found but not attempted to untrap;
                now at most one per move may be checked and we only
@@ -6852,7 +6852,7 @@ lava_effects(void)
     /* Check whether we should burn away boots *first* so we know whether to
      * make the player sink into the lava. Assumption: water walking only
      * comes from boots.
-     * (3.7: that assumption is no longer true, but having boots be the first
+     * (5.0: that assumption is no longer true, but having boots be the first
      * thing to come into contact with lava makes sense.)
      */
     if (uarmf && (uarmf->in_use

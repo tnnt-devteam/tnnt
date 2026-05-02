@@ -1,4 +1,4 @@
-/* NetHack 3.7	sfctool.c */
+/* NetHack 5.0	sfctool.c */
 /* Copyright (c) Michael Allison, 2025.                           */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -195,7 +195,7 @@ main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     sz = strlen(folderbuf);
     (void) snprintf(eos(folderbuf), sizeof folderbuf - sz,
-                    "\\AppData\\Local\\NetHack\\3.7\\");
+                    "\\AppData\\Local\\NetHack\\5.0\\");
     // initoptions_init(); // This allows OPTIONS in syscf on Windows.
     set_default_prefix_locations(argv[0]);
 #endif

@@ -1,4 +1,4 @@
-/* NetHack 3.7	decl.c	$NHDT-Date: 1736530208 2025/01/10 09:30:08 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.341 $ */
+/* NetHack 5.0	decl.c	$NHDT-Date: 1736530208 2025/01/10 09:30:08 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.341 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Michael Allison, 2009. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -990,6 +990,11 @@ static const struct instance_globals_saved_x init_svx = {
     UNDEFINED_VALUE                      /* xmax */
 };
 
+static const struct instance_globals_saved_w init_svw = {
+    0,                                  /* wreserve */
+    100,                                /* wtreserved, not used currently */
+};
+
 static const struct instance_globals_saved_y init_svy = {
     /* mkmaze.c */
     UNDEFINED_VALUE,                     /* ymin */
@@ -1045,6 +1050,7 @@ struct instance_globals_saved_r svr;
 struct instance_globals_saved_s svs;
 struct instance_globals_saved_t svt;
 struct instance_globals_saved_u svu;
+struct instance_globals_saved_w svw;
 struct instance_globals_saved_x svx;
 struct instance_globals_saved_y svy;
 struct sinfo program_state;
@@ -1122,6 +1128,7 @@ decl_globals_init(void)
     svs = init_svs;
     svt = init_svt;
     svu = init_svu;
+    svw = init_svw;
     svx = init_svx;
     svy = init_svy;
 

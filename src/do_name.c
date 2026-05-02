@@ -1,4 +1,4 @@
-/* NetHack 3.7	do_name.c	$NHDT-Date: 1737013431 2025/01/15 23:43:51 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.326 $ */
+/* NetHack 5.0	do_name.c	$NHDT-Date: 1737013431 2025/01/15 23:43:51 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.326 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Pasi Kallinen, 2018. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -433,7 +433,7 @@ objtyp_is_callable(int i)
 
     switch(objects[i].oc_class) {
     case AMULET_CLASS:
-        /* 3.7: calling these used to be allowed but that enabled the
+        /* 5.0: calling these used to be allowed but that enabled the
            player to tell whether two unID'd amulets of yendor were both
            fake or one was real by calling them distinct names and then
            checking discoveries to see whether first name was replaced

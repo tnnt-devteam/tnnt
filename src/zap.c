@@ -1,4 +1,4 @@
-/* NetHack 3.7	zap.c	$NHDT-Date: 1770949988 2026/02/12 18:33:08 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.584 $ */
+/* NetHack 5.0	zap.c	$NHDT-Date: 1770949988 2026/02/12 18:33:08 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.584 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2013. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -198,7 +198,7 @@ bhitm(struct monst *mtmp, struct obj *otmp)
                 seemimic(mtmp);
             shieldeff(mtmp->mx, mtmp->my);
             pline("Boing!");
-            /* 3.7: used to 'break' to avoid setting learn_it here */
+            /* 5.0: used to 'break' to avoid setting learn_it here */
         } else if (u.uswallow || rnd(20) < 10 + find_mac(mtmp)) {
             if (disguised_mimic)
                 seemimic(mtmp);
@@ -1865,7 +1865,7 @@ poly_obj(struct obj *obj, int id)
         while (otmp->otyp == SPE_POLYMORPH)
             otmp->otyp = rnd_class(svb.bases[SPBOOK_CLASS], SPE_BLANK_PAPER);
         /* reduce spellbook abuse; non-blank books degrade;
-           3.7: novels don't use spestudied so shouldn't degrade to blank
+           5.0: novels don't use spestudied so shouldn't degrade to blank
            (but don't force spestudied to zero for them since a non-zero
            value could get passed along to a future polymorph) */
         if (otmp->otyp != SPE_BLANK_PAPER && otmp->otyp != SPE_NOVEL) {
@@ -4547,7 +4547,7 @@ zhitu(
     }
 
     /*
-     * 3.7: when fatal, this used to yield "Killed by <fltxt>." without any
+     * 5.0: when fatal, this used to yield "Killed by <fltxt>." without any
      * information about who was responsible.  Now 'buzzer' is used to try
      * to supply "zapped/cast/breathed by <mon> [imitating <other_mon>]."
      *

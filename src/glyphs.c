@@ -1,4 +1,4 @@
-/* NetHack 3.7	glyphs.c	TODO: add NHDT branch/date/revision tags */
+/* NetHack 5.0	glyphs.c	TODO: add NHDT branch/date/revision tags */
 /* Copyright (c) Michael Allison, 2021. */
 /* NetHack may be freely redistributed.  See license for details. */
 

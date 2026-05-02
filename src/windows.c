@@ -1,4 +1,4 @@
-/* NetHack 3.7	windows.c	$NHDT-Date: 1737345149 2025/01/19 19:52:29 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.138 $ */
+/* NetHack 5.0	windows.c	$NHDT-Date: 1737345149 2025/01/19 19:52:29 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.138 $ */
 /* Copyright (c) D. Cohrs, 1993. */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -1212,7 +1212,7 @@ dump_fmtstr(
                 else
                     Strcpy(tmpbuf, "{current date+time}");
                 break;
-            case 'v': /* version, eg. "3.7.0-0" */
+            case 'v': /* version, eg. "5.0.0,-0" */
                 Sprintf(tmpbuf, "%s", version_string(verbuf, sizeof verbuf));
                 break;
             case 'u': /* UID */

@@ -1,5 +1,5 @@
 #	NetHack Makefile.
-# NetHack 3.7  Makefile.src    $NHDT-Date: 1697316523 2023/10/14 20:48:43 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.164 $
+# NetHack 5.0  Makefile.src    $NHDT-Date: 1697316523 2023/10/14 20:48:43 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.164 $
 # Copyright (c) 2018 by Pasi Kallinen
 # NetHack may be freely redistributed.  See license for details.
 
@@ -68,7 +68,7 @@ SYSOBJ = $(TARGETPFX)ioctl.o $(TARGETPFX)unixmain.o $(TARGETPFX)unixtty.o \
 #SYSOBJ = $(TARGETPFX)bemain.o $(TARGETPFX)unixtty.o $(TARGETPFX)ioctl.o
 
 
-# NetHack 3.7 began introducing C99 code.
+# NetHack 5.0 began introducing C99 code.
 #
 # If your compiler needs an appropriate switch to accept C99 code.
 # CSTD = -std=c99

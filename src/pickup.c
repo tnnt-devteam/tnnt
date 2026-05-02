@@ -1,4 +1,4 @@
-/* NetHack 3.7	pickup.c	$NHDT-Date: 1773373633 2026/03/12 19:47:13 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.386 $ */
+/* NetHack 5.0	pickup.c	$NHDT-Date: 1773373633 2026/03/12 19:47:13 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.386 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2012. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -544,7 +544,7 @@ allow_category(struct obj *obj)
      *  1) object class (armor, potion, &c);
      *  2) unpaid shop item;
      *  3) bless/curse state (blessed, uncursed, cursed, BUC-unknown).
-     * Version 3.7 added a fourth:
+     * Version 5.0 added a fourth:
      *  4) 'novelty' ('P' for just picked up items).
      * When only one type is present, the situation is simple:
      * to be accepted, obj's status must match one of the entries.

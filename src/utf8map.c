@@ -1,4 +1,4 @@
-/* NetHack 3.7	utf8map.c	*/
+/* NetHack 5.0	utf8map.c	*/
 /* Copyright (c) Michael Allison, 2021. */
 /* NetHack may be freely redistributed.  See license for details. */
 

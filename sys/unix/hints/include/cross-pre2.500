@@ -1,5 +1,5 @@
 #===============-=================================================
-# NetHack 3.7  include/cross-pre2 $NHDT-Date: 1597332785 2020/08/13 15:33:05 $  $NHDT-Branch: NetHack-3.7 $
+# NetHack 5.0  include/cross-pre2 $NHDT-Date: 1597332785 2020/08/13 15:33:05 $  $NHDT-Branch: NetHack-5.0 $
 #
 # Cross-compiling -PRE section 2
 #
@@ -328,7 +328,7 @@ WASM_CFLAGS += -Wshadow
 # WASM_CFLAGS += -Wwrite-strings
 # WASM_CFLAGS += -Werror
 # Nethack C flags
-WASM_CFLAGS += $(WINCFLAGS)   #WINCFLAGS set from multiw-2.370
+WASM_CFLAGS += $(WINCFLAGS)   #WINCFLAGS set from multiw-2.500
 WASM_CFLAGS += -DSYSCF -DSYSCF_FILE=\"/sysconf\" -DSECURE
 #WASM_CFLAGS += -g -I../include -DNOTPARMDECL
 WASM_CFLAGS += -I../include -DNOTPARMDECL
@@ -470,7 +470,7 @@ ifdef CROSS_TO_AMIGA
 #
 # Cross-compiler: https://franke.ms/git/bebbo/amiga-gcc
 # Install to /opt/amiga, then:
-#     sys/unix/setup.sh sys/unix/hints/linux.370
+#     sys/unix/setup.sh sys/unix/hints/linux.500
 #     make fetch-lua
 #     make CROSS_TO_AMIGA=1 fetch-regex
 #     make CROSS_TO_AMIGA=1 all
@@ -499,7 +499,7 @@ override TARGET_CFLAGS = -c -O2 -noixemul $(TOOLARCH) \
 	$(LUAINCL) -DAMIGA -DNOTTYGRAPHICS -DNO_TERMS -DNO_SIGNAL \
 	-DTILES_IN_GLYPHMAP $(PDCURSESDEF) \
 	-DCROSSCOMPILE -DCROSSCOMPILE_TARGET -DCROSS_TO_AMIGA \
-	-DAMIGA_VERSION_STRING=\""VER: NetHack 3.7.0"\"
+	-DAMIGA_VERSION_STRING=\""VER: NetHack 5.0.0"\"
 override TARGET_CXXFLAGS = $(TARGET_CFLAGS)
 LUA_TARGET_CFLAGS = $(TARGET_CFLAGS)
 ifeq "$(REGEXOBJ)" "$(TARGETPFX)cppregex.o"

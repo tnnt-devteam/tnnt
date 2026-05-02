@@ -1,5 +1,5 @@
 The definition for each OPTIONS= option resides in include/optlist.h as of
-February 2020 in 3.7 WIP.
+February 2020 in the WIP branch.
 
 Boolean and compound options are combined into a single allopt[] array.
 

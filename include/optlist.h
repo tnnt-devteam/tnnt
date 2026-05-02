@@ -1,4 +1,4 @@
-/* NetHack 3.7	optlist.h */
+/* NetHack 5.0	optlist.h */
 /* NetHack may be freely redistributed.  See license for details. */
 
 #ifndef OPTLIST_H

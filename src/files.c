@@ -1,4 +1,4 @@
-/* NetHack 3.7	files.c	$NHDT-Date: 1740532826 2025/02/25 17:20:26 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.417 $ */
+/* NetHack 5.0	files.c	$NHDT-Date: 1740532826 2025/02/25 17:20:26 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.417 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Derek S. Ray, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -2254,7 +2254,7 @@ make_converted_name(const char *filename)
             size_t sz = strlen(folderbuf);
 
             Snprintf(eos(folderbuf), sizeof folderbuf - sz,
-                     "\\AppData\\Local\\NetHack\\3.7\\");
+                     "\\AppData\\Local\\NetHack\\5.0\\");
             dir = (const char *) folderbuf;
         }
 #endif /* UNIX || WIN32 */

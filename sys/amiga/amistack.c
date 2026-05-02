@@ -16,7 +16,7 @@
 
 /*
  * Increase stack size to allow deep recursions.
- * NetHack 3.7 with Lua needs significantly more stack than 3.6.
+ * NetHack 5.0 with Lua needs significantly more stack than 3.6.
  */
 
 #ifdef __SASC_60

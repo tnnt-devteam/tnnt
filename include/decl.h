@@ -1,4 +1,4 @@
-/* NetHack 3.7  decl.h  $NHDT-Date: 1725653004 2024/09/06 20:03:24 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.377 $ */
+/* NetHack 5.0  decl.h  $NHDT-Date: 1725653004 2024/09/06 20:03:24 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.377 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Michael Allison, 2007. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -1224,6 +1224,12 @@ struct instance_globals_saved_u {
     dest_area updest;
 };
 
+struct instance_globals_saved_w {
+    /* reserved */
+    long wreserve;
+    int32_t wtreserved;
+};
+
 struct instance_globals_saved_x {
     /* mkmaze.c */
     int xmin, xmax; /* level boundaries x */
@@ -1277,6 +1283,7 @@ extern struct instance_globals_saved_r svr;
 extern struct instance_globals_saved_s svs;
 extern struct instance_globals_saved_t svt;
 extern struct instance_globals_saved_u svu;
+extern struct instance_globals_saved_w svw;
 extern struct instance_globals_saved_x svx;
 extern struct instance_globals_saved_y svy;
 extern struct sinfo program_state; /* flags describing game's current state */

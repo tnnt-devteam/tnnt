@@ -1,4 +1,4 @@
-/* NetHack 3.7	global.h	$NHDT-Date: 1704225560 2024/01/02 19:59:20 $  $NHDT-Branch: keni-luabits2 $:$NHDT-Revision: 1.159 $ */
+/* NetHack 5.0	global.h	$NHDT-Date: 1704225560 2024/01/02 19:59:20 $  $NHDT-Branch: keni-luabits2 $:$NHDT-Revision: 1.159 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Michael Allison, 2006. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -422,7 +422,7 @@ extern struct nomakedefs_s nomakedefs;
 #include "color.h"
 
 /*
- * Version 3.7.x has aspirations of portable file formats. We
+ * Version 5.0.x has aspirations of portable file formats. We
  * make a distinction between MAIL functionality and MAIL_STRUCTURES
  * so that the underlying structures are consistent, whether MAIL is
  * defined or not.

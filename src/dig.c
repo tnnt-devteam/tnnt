@@ -1,4 +1,4 @@
-/* NetHack 3.7	dig.c	$NHDT-Date: 1740629713 2025/02/26 20:15:13 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.227 $ */
+/* NetHack 5.0	dig.c	$NHDT-Date: 1740629713 2025/02/26 20:15:13 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.227 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Michael Allison, 2012. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -455,7 +455,7 @@ dig(void)
         } else if (digtyp == DIGTYP_BOULDER
                    && (obj = sobj_at(BOULDER, dpx, dpy)) != 0) {
             fracture_rock(obj);
-            /*[3.7: this probably isn't necessary anymore]*/
+            /*[5.0: this probably isn't necessary anymore]*/
             if ((bobj = sobj_at(BOULDER, dpx, dpy)) != 0) {
                 /* another boulder here, restack it to the top */
                 obj_extract_self(bobj);

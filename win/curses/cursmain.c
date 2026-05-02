@@ -1,5 +1,5 @@
 /* vim:set cin ft=c sw=4 sts=4 ts=8 et ai cino=Ls\:0t0(0 : -*- mode:c;fill-column:80;tab-width:8;c-basic-offset:4;indent-tabs-mode:nil;c-file-style:"k&r" -*-*/
-/* NetHack 3.7 cursmain.c */
+/* NetHack 5.0 cursmain.c */
 /* Copyright (c) Karl Garrison, 2010. */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -924,7 +924,7 @@ print_glyph(window, x, y, glyphinfo, bkglyphinfo)
                     int ttychar;  the character mapping for the original tty
                                   interface. Most or all window ports wanted
                                   and used this for various things so it is
-                                  provided in 3.7+
+                                  provided in 5.0+
                     short int symidx;     offset into syms array
                     unsigned glyphflags;  more detail about the entity
 

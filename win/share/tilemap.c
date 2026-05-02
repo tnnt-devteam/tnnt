@@ -1,4 +1,4 @@
-/* NetHack 3.7	tilemap.c	$NHDT-Date: 1737720923 2025/01/24 04:15:23 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.87 $ */
+/* NetHack 5.0	tilemap.c	$NHDT-Date: 1737720923 2025/01/24 04:15:23 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.87 $ */
 /*      Copyright (c) 2016 by Michael Allison                     */
 /* NetHack may be freely redistributed.  See license for details. */
 

@@ -1,4 +1,4 @@
-/* NetHack 3.7	options.c	$NHDT-Date: 1737556914 2025/01/22 06:41:54 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.753 $ */
+/* NetHack 5.0	options.c	$NHDT-Date: 1737556914 2025/01/22 06:41:54 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.753 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Michael Allison, 2008. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -3679,7 +3679,7 @@ optfn_scores(
         if ((op = string_for_opt(opts, FALSE)) == empty_optstr)
             return optn_err;
 
-        /* 3.7: earlier versions left old values for unspecified arguments
+        /* 5.0: earlier versions left old values for unspecified arguments
            if player's scores:foo option only specified some of the three;
            in particular, attempting to use 'scores:own' rather than
            'scores:0 top/0 around/own' didn't work as intended */

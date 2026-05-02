@@ -1,5 +1,5 @@
 #	NetHack Makefile (VMS) - for building nethack itself.
-#	NetHack 3.7	Makefile.src	$NHDT-Date: 1683748060 2023/05/10 19:47:40 $	$NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.60 $
+#	NetHack 5.0	Makefile.src	$NHDT-Date: 1683748060 2023/05/10 19:47:40 $	$NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.60 $
 # Copyright (c) 2011 by Robert Patrick Rankin
 # NetHack may be freely redistributed.  See license for details.
 
@@ -136,7 +136,7 @@ RANDOBJ = isaac64.obj,random.obj
 # Other things that have to be reconfigured are in vmsconf.h,
 # and config.h
 
-VERSION  = 3.7.0
+VERSION  = 5.0.0
 
 MAKEDEFS = $(UTL)makedefs.exe;
 

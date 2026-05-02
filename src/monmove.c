@@ -1,4 +1,4 @@
-/* NetHack 3.7	monmove.c	$NHDT-Date: 1737392015 2025/01/20 08:53:35 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.266 $ */
+/* NetHack 5.0	monmove.c	$NHDT-Date: 1737392015 2025/01/20 08:53:35 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.266 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Michael Allison, 2006. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -1786,13 +1786,13 @@ m_move(struct monst *mtmp, int after)
          * attack it.
          */
         if (intruder && intruder != mtmp
-            /* 3.7: this used to use 'dist2() < 2' which meant that intended
+            /* 5.0: this used to use 'dist2() < 2' which meant that intended
                attack was disallowed if they were adjacent diagonally */
             && dist2(mtmp->mx, mtmp->my, tx, ty) <= 2) {
             gb.bhitpos.x = tx, gb.bhitpos.y = ty;
             gn.notonhead = (intruder->mx != tx || intruder->my != ty);
             covetousattack = mattackm(mtmp, intruder);
-            /* 3.7: this used to erroneously use '== 2' (M_ATTK_DEF_DIED) */
+            /* 5.0: this used to erroneously use '== 2' (M_ATTK_DEF_DIED) */
             if (covetousattack & M_ATTK_AGR_DIED)
                 return MMOVE_DIED;
             mmoved = MMOVE_MOVED;

@@ -1,4 +1,4 @@
-/* NetHack 3.7	restore.c	$NHDT-Date: 1736530208 2025/01/10 09:30:08 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.234 $ */
+/* NetHack 5.0	restore.c	$NHDT-Date: 1736530208 2025/01/10 09:30:08 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.234 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Michael Allison, 2009. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -598,6 +598,8 @@ restgamestate(NHFILE *nhfp)
     amii_setpens(amii_numcolors); /* use colors from save file */
 #endif
 #endif /* !SFCTOOL */
+    Sfi_long(nhfp, &svw.wreserve, "wreserve");
+    Sfi_int32(nhfp, &svw.wtreserved, "wtreserved");
     Sfi_you(nhfp, &u, "gamestate-you");
     gy.youmonst.cham = u.mcham;
 

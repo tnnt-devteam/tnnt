@@ -1,4 +1,4 @@
-This is a listing of all files in a full NetHack 3.7 distribution, organized
+This is a listing of all files in a full NetHack 5.0 distribution, organized
 in their standard manner on a UNIX system.  It indicates which files are
 necessary for which versions, so that you can tell which files may be deleted
 from or not transferred to your system if you wish.
@@ -76,7 +76,7 @@ fixes3-2-2.txt     fixes3-2-3.txt     fixes3-3-0.txt     fixes3-3-1.txt
 fixes3-4-0.txt     fixes3-4-1.txt     fixes3-4-2.txt     fixes3-4-3.txt
 fixes3-5-0.txt     fixes3-6-0.txt     fixes3-6-1.txt     fixes3-6-2.txt
 fixes3-6-3.txt     fixes3-6-4.txt     fixes3-6-5.txt     fixes3-6-6.txt
-fixes3-6-7.txt     fixes3-7-0.txt     fixesX-X-X.txt     lua.adoc
+fixes3-6-7.txt     fixes5-0-0.txt     fixesX-X-X.txt     lua.adoc
 makedefs.6         makedefs.txt       mn.7               mn.txt
 mnh.7              mnh.txt            nethack.6          nethack.txt
 options.txt        recover.6          recover.txt        sound.txt
@@ -132,17 +132,17 @@ mac-carbon.h  mac-qt.h      mac-term.h    macconf.h     macpopup.h
 mactty.h      macwin.h      mttypriv.h
 
 outdated/sys/amiga:
-(files for Amiga versions - untested for 3.7)
+(files for Amiga versions - untested for 5.0)
 Build.ami     Install.ami   Makefile.agc  Makefile.ami  NetHack.cnf
 ifchange      mkdmake       txt2iff.c     xpm2iff.c
 
 outdated/sys/atari:
-(files for Atari version - untested for 3.7)
+(files for Atari version - untested for 5.0)
 Install.tos   atarifnt.uue  nethack.mnu   setup.g       tos.c
 unx2atar.sed
 
 outdated/sys/be:
-(files for BeOS version - untested for 3.7)
+(files for BeOS version - untested for 5.0)
 README    bemain.c
 
 outdated/sys/mac:
@@ -159,7 +159,7 @@ Makefile.BC   Makefile.MSC  SCHEMA35.MSC  moveinit.pat  ovlinit.c
 schema1.BC    schema2.BC    schema3.MSC
 
 outdated/sys/os2:
-(files for OS/2 version - untested for 3.7)
+(files for OS/2 version - untested for 5.0)
 Install.os2   Makefile.os2  nhpmico.uu    os2.c
 
 outdated/sys/unix:
@@ -182,7 +182,7 @@ outdated/sys/vms:
 lev_lex.h
 
 outdated/sys/wince:
-(files for Windows CE and PocketPC - untested for 3.7)
+(files for Windows CE and PocketPC - untested for 5.0)
 Install.ce    bootstrp.mak  celib.c       cesetup.bat   cesound.c
 defaults.nh   keypad.uu     menubar.uu    mhaskyn.c     mhaskyn.h
 mhcmd.c       mhcmd.h       mhcolor.c     mhcolor.h     mhdlg.c
@@ -195,20 +195,12 @@ resource.h    winMS.h       winhack.c     winhack.rc    winhcksp.rc
 winmain.c
 
 outdated/sys/wince/ceinc:
-(header files for Windows CE and PocketPC - untested for 3.7)
+(header files for Windows CE and PocketPC - untested for 5.0)
 assert.h  errno.h   fcntl.h
 
 outdated/sys/wince/ceinc/sys:
 (sys/stat.h for Windows CE and PocketPC - untested for 3.6.2)
 stat.h
-
-outdated/sys/windows:
-(files that are no longer maintained for current game code)
-travis-gcc.sh
-
-outdated/sys/windows/vs:
-(files that are no longer maintained for current game code)
-travisci.sh
 
 outdated/win/Qt3:
 (files for the Qt 3 widget library - X11, Windows, Mac OS X, or Qtopia)
@@ -220,12 +212,12 @@ qt3tableview.cpp     qt3tableview.h       tileedit.cpp
 tileedit.h
 
 outdated/win/gem:
-(files for GEM versions - untested for 3.7)
+(files for GEM versions - untested for 5.0)
 Install.gem  bitmfile.c   gem_rsc.uu   gem_rso.uu   gr_rect.c    gr_rect.h
 load_img.c   tile2img.c   title.uu     wingem.c     wingem1.c    xpm2img.c
 
 outdated/win/gnome:
-(files for GNOME versions - untested for 3.7)
+(files for GNOME versions - untested for 5.0)
 README      gn_xpms.h   gnaskstr.c  gnaskstr.h  gnbind.c    gnbind.h
 gnglyph.c   gnglyph.h   gnmain.c    gnmain.h    gnmap.c     gnmap.h
 gnmenu.c    gnmenu.h    gnmesg.c    gnmesg.h    gnomeprv.h  gnopts.c
@@ -359,11 +351,8 @@ random.c
 (Berkeley uudecode file, which may be used in build process of any version)
 uudecode.c
 
-(file for MSDOS, OS/2, Amiga, and Atari versions - only MSDOS tested for 3.7)
-pcmain.c
-
-(file for MSDOS, OS/2, and Atari versions - only MSDOS tested for 3.7)
-NetHack.cnf  pctty.c
+(file for MSDOS, Amiga versions)
+NetHack.cnf  pcmain.c     pctty.c
 
 (file for MSDOS, OS/2, and VMS versions)
 termcap
@@ -371,10 +360,10 @@ termcap
 (file for VMS version)
 tclib.c
 
-(files for MSDOS, OS/2 and Atari versions - only MSDOS tested for 3.7)
+(files for MSDOS, Amiga versions)
 pcsys.c   pcunix.c
 
-(files for OS/2 version - untested for 3.7)
+(files for OS/2 version - untested for 5.0)
 Makefile.lib  termcap.uu
 
 (files for UNIX and Be versions)
@@ -416,16 +405,16 @@ NetHack.xcscheme   makedefs.xcscheme  recover.xcscheme
 
 sys/unix/hints:
 (files for configuring UNIX NetHack versions)
-linux-minimal       linux.370           macOS.370
+linux-minimal       linux.500           macOS.500
 macosx.sh           solaris             solaris-playground
 unix
 
 sys/unix/hints/include:
 (files for configuring UNIX NetHack versions)
-compiler.370       cross-post.370     cross-pre1.370     cross-pre2.370
-gbdates-post.370   gbdates-pre.370    misc.370           multisnd-post.370
-multisnd1-pre.370  multisnd2-pre.370  multiw-1.370       multiw-2.370
-response.370
+compiler.500       cross-post.500     cross-pre1.500     cross-pre2.500
+gbdates-post.500   gbdates-pre.500    misc.500           multisnd-post.500
+multisnd1-pre.500  multisnd2-pre.500  multiw-1.500       multiw-2.500
+response.500
 
 sys/vms:
 (files for VMS version)
@@ -702,7 +691,7 @@ GNUmakefile  Makefile
 qt_kde0.moc   qt_main.moc   qt_map.moc    qt_menu.moc   qt_msg.moc
 qt_plsel.moc  qt_set.moc    qt_stat.moc   qt_xcmd.moc   qt_yndlg.moc
 
-(file generated by makedefs -m but unused in 3.7)
+(file generated by makedefs -m but unused in 5.0)
 monstr.c
 
 (file optionally generated by tilemap at compile time)
