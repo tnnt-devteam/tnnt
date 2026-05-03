@@ -146,7 +146,7 @@ ifdef DOSBOX
 dosbox=$(DOSBOX)
 endif
 ifdef dosbox
-dosboxgameid=NH370
+dosboxgameid=NH$(NHV)
 dosboxtop=$(dosbox)
 dosboxnhfolder=$(dosboxtop)/$(dosboxgameid)
 dosboxnhsrc=$(dosboxnhfolder)/NHSRC
@@ -329,7 +329,7 @@ WASM_CFLAGS += -Wshadow
 # WASM_CFLAGS += -Werror
 # Nethack C flags
 WASM_CFLAGS += $(WINCFLAGS)   #WINCFLAGS set from multiw-2.500
-WASM_CFLAGS += -DSYSCF -DSYSCF_FILE=\"/sysconf\" -DSECURE
+WASM_CFLAGS += -DSYSCF -DSYSCF_FILE=\"/sysconf\" -DSECURE -DNHUUID
 #WASM_CFLAGS += -g -I../include -DNOTPARMDECL
 WASM_CFLAGS += -I../include -DNOTPARMDECL
 # NetHack sources control

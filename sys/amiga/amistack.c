@@ -22,6 +22,10 @@
 #ifdef __SASC_60
 long __stack = 256 * 1024;
 #else
-/* For GCC with -noixemul (libnix), __stack is also recognized */
+/* libnix needs __stkinit referenced to pull swapstack.o from libnix.a */
 unsigned long __stack = 256 * 1024;
+#ifdef CROSS_TO_AMIGA
+extern void __stkinit(void);
+void *__nh_force_stkinit = __stkinit;
+#endif
 #endif
