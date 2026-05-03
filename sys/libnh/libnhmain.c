@@ -800,18 +800,22 @@ after_opt_showpaths(const char *dir)
 void
 get_nhuuid(void)
 {
-    char *uuid = NULL;
     unsigned char stmp[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    char *uuid = (char *) &stmp[0];
 
     if (svn.nhuuid[0])
         return;
 
+#ifndef NONHUUID
+#ifdef NHUUID
     uuid = emscripten_run_script_string("crypto.randomUUID()");
     if (!uuid) {
         uuid = (char *) &stmp[0];
     }
+#endif  /* NHUUID */
+#endif  /* NONHUUID */
     Snprintf(svn.nhuuid, sizeof svn.nhuuid, "%s", uuid);
 }
 
