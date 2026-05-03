@@ -804,7 +804,11 @@ get_nhuuid(void)
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     char *uuid = (char *) &stmp[0];
+#ifndef NONHUUID
+#ifdef NHUUID
     int uuid_available = 0;
+#endif
+#endif
 
     if (svn.nhuuid[0])
         return;
