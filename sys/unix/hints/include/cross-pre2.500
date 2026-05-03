@@ -146,7 +146,7 @@ ifdef DOSBOX
 dosbox=$(DOSBOX)
 endif
 ifdef dosbox
-dosboxgameid=NH500
+dosboxgameid=NH$(NHV)
 dosboxtop=$(dosbox)
 dosboxnhfolder=$(dosboxtop)/$(dosboxgameid)
 dosboxnhsrc=$(dosboxnhfolder)/NHSRC

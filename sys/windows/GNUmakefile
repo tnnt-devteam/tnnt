@@ -1388,9 +1388,8 @@ TARGET_CPU = x86
 endif
 endif
 
-NHV=370
 PKGFILES = nethackrc.template Guidebook.txt license NetHack.exe NetHack.txt \
-	NetHackW.exe opthelp nhdat370 record symbols sysconf.template $(notdir $(LUADLL))
+	NetHackW.exe opthelp nhdat$(NHV) record symbols sysconf.template $(notdir $(LUADLL))
 
 FILESTOZIP = $(addprefix $(GAMEDIR)/, $(PKGFILES))
 MAINZIP = $(PkgDir)/nethack-$(NHV)-win-$(TARGET_CPU)-msys2.zip

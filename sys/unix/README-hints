@@ -5,7 +5,7 @@ The sys/unix/hints/include subfolder contains Makefile content that
 is included in the distributed Makefiles.
 
 
-[.370 hints]
+[.500 hints]
 
 
 There are two .500 series hints files provided with NetHack:
@@ -16,7 +16,7 @@ Those will also pull in content from sys/unix/hints/include/*.370,
 that is shared between the linux.500 and macOS.500 hints files.
 
 
-[.370 make build options]
+[.500 make build options]
 
 
 Here are some options that can be specified on the make command

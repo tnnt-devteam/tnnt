@@ -90,8 +90,8 @@ else
 	  fi; )
 endif
 	-touch $(TARGETPFX)pkg/RECORD
-	cd $(TARGETPFX)pkg ; zip -9 ../NH500DOS.ZIP * ; cd ../../..
-	@echo msdos package zip file $(TARGETPFX)NH500DOS.ZIP
+	cd $(TARGETPFX)pkg ; zip -9 ../NH$(NHV)DOS.ZIP * ; cd ../../..
+	@echo msdos package zip file $(TARGETPFX)NH$(NHV)DOS.ZIP
 
 $(LUABIN):
 	( cd .. && make luabin && cd src)
@@ -105,14 +105,14 @@ deploy-to-dosbox:
 endif
 .PHONY: deploytodosbox
 
-deploytodosbox: $(TARGETPFX)NH500DOS.ZIP $(dosboxnhfolder) $(dosboxnhsrc) \
+deploytodosbox: $(TARGETPFX)NH$(NHV)DOS.ZIP $(dosboxnhfolder) $(dosboxnhsrc) \
 			$(dosboxnhsrc)/src $(dosboxnhsrc)/include \
 			$(dosboxnhsrc)/sys/msdos $(dosboxnhsrc)/sys/share \
 			$(dosboxnhsrc)/win/share $(dosboxnhsrc)/win/curses \
 			$(dosboxnhsrc)/win/tty $(dosboxnhsrc)/util \
 			$(dosboxnhfolder)/NETHACK.EXE
 	@echo DOS NetHack deployed to dosbox at $(dosboxnhfolder)
-$(TARGETPFX)NH500DOS.ZIP: dospkg
+$(TARGETPFX)NH$(NHV)DOS.ZIP: dospkg
 $(dosboxnhfolder):
 	mkdir -p $@
 $(dosboxnhsrc): $(dosboxnhfolder)
@@ -144,8 +144,8 @@ $(dosboxnhsrc)/util: $(dosboxnhsrc)
 	mkdir -p $@
 	cp --preserve=timestamps $(FLDR)util/*.c $(dosboxnhsrc)/util
 	cp --preserve=timestamps $(FLDR)util/*.h $(dosboxnhsrc)/util
-$(dosboxnhfolder)/NETHACK.EXE: $(TARGETPFX)NH500DOS.ZIP
-	unzip -o $(TARGETPFX)NH500DOS.ZIP -d $(dosboxnhfolder)
+$(dosboxnhfolder)/NETHACK.EXE: $(TARGETPFX)NH$(NHV)DOS.ZIP
+	unzip -o $(TARGETPFX)NH$(NHV)DOS.ZIP -d $(dosboxnhfolder)
 	find $(dosboxnhfolder) -type f -name "$(dosboxconfigfile)" \
 		| xargs sed -i 's/#OPTIONS=video:autodetect/OPTIONS=video:autodetect/g'
 endif  # dosbox
@@ -225,8 +225,8 @@ mipspkg: dodata $(GAMEBIN) $(TARGETPFX)recover
 	cp ../sys/msdos/sysconf $(TARGETPFX)pkg/sysconf
 	cp ../doc/nethack.txt $(TARGETPFX)pkg/nethack.txt
 	-touch $(TARGETPFX)pkg/record
-	cd $(TARGETPFX)pkg ; zip -9 ../nh500mips.zip * ; cd ../../..
-	@echo MIPS package zip file $(TARGETPFX)nh500mips.zip
+	cd $(TARGETPFX)pkg ; zip -9 ../nh$(NHV)mips.zip * ; cd ../../..
+	@echo MIPS package zip file $(TARGETPFX)nh$(NHV)mips.zip
 endif  # CROSS_TO_MIPS
 
 
@@ -332,8 +332,8 @@ amigapkg: $(AMITILES) ../util/uudecode
 	-( cd $(TARGETPFX)pkg && test -f ../../../sys/amiga/HackWB.uu && \
 		../../../util/uudecode ../../../sys/amiga/HackWB.uu )
 	touch $(TARGETPFX)pkg/record
-	( cd $(TARGETPFX)pkg && zip -9r ../NH500AMI.ZIP * )
-	@echo amiga package zip file $(TARGETPFX)NH500AMI.ZIP
+	( cd $(TARGETPFX)pkg && zip -9r ../NH$(NHV)AMI.ZIP * )
+	@echo amiga package zip file $(TARGETPFX)NH$(NHV)AMI.ZIP
 endif  # CROSS_TO_AMIGA
 
 ifdef CROSS_SHARED

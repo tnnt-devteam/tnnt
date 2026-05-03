@@ -19,5 +19,9 @@
 #WANT_DEFAULT=Qt
 #WANT_DEFAULT=X11
 
+# Based on the NetHack version 5.0.0
+# Used to build some filenames subsequently in other include files
+NHV=500
+
 #end of multiw-1.500
 #------------------------------------------------------------------------------
