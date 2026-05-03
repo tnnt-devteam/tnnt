@@ -804,15 +804,21 @@ get_nhuuid(void)
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     char *uuid = (char *) &stmp[0];
+    int uuid_available = 0;
 
     if (svn.nhuuid[0])
         return;
 
 #ifndef NONHUUID
 #ifdef NHUUID
-    uuid = emscripten_run_script_string("crypto.randomUUID()");
-    if (!uuid) {
-        uuid = (char *) &stmp[0];
+    uuid_available = emscripten_run_script_int(
+		    "typeof crypto !== 'undefined'"
+		    " && typeof crypto.randomUUID === 'function'");
+    if (uuid_available) {
+        uuid = emscripten_run_script_string("crypto.randomUUID()");
+        if (!uuid) {
+            uuid = (char *) &stmp[0];
+        }
     }
 #endif  /* NHUUID */
 #endif  /* NONHUUID */
