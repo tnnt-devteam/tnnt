@@ -2050,7 +2050,7 @@ problematic_savefile(int sfstatus, const char *savefilenm)
 
 /* ----------  BEGIN EXTERNAL CONVERSION HANDLING ----------- */
 
-static boolean cvtinit = FALSE;
+/* static boolean cvtinit = FALSE; */
 
 #ifndef SFCTOOL
 static char *unconverted_filename = 0, *converted_filename = 0;
@@ -2171,7 +2171,7 @@ free_convert_filenames(void)
         free((genericptr_t) converted_filename), converted_filename = 0;
     if (unconverted_filename)
         free((genericptr_t) unconverted_filename), unconverted_filename = 0;
-    cvtinit = FALSE;
+/*    cvtinit = FALSE; */
 }
 
 /* return TRUE if s contains a directory, not just a filespec */
