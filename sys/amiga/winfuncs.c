@@ -886,6 +886,49 @@ int
     return 0;
 }
 
+/* Fall back from AMIV (tile) to AMII (text) if this machine can't
+ * run tile mode.  Probes in order of reliability. */
+static void
+amii_fall_back(const char *why1, const char *why2)
+{
+    extern struct window_procs amii_procs;
+
+    raw_print(why1);
+    raw_print(why2);
+    raw_print("Falling back to text mode.  Set windowtype:amiv in");
+    raw_print("nethack.cnf to override.");
+    windowprocs = amii_procs;
+    ami_wininit_data(WININIT);
+}
+
+static void
+amii_maybe_fall_back_to_text(void)
+{
+    if (!WINVERS_AMIV)
+        return;
+
+    if (IntuitionBase->LibNode.lib_Version >= 37) {
+        struct Screen *wbscr;
+        int wb_depth = -1;
+
+        if ((wbscr = LockPubScreen("Workbench")) != NULL) {
+            wb_depth = wbscr->BitMap.Depth;
+            UnlockPubScreen(NULL, wbscr);
+        }
+        if (wb_depth >= 0 && wb_depth < 4) {
+            amii_fall_back("Workbench screen is shallower than 16 colours",
+                           "(tile mode requires depth >= 4).");
+            return;
+        }
+    }
+
+    if (AvailMem(MEMF_CHIP) < 384L * 1024L) {
+        amii_fall_back("Not enough chip RAM available for tile mode",
+                       "(< 384 KB free).");
+        return;
+    }
+}
+
 /* Initialize the windowing environment */
 
 void
@@ -950,6 +993,8 @@ amii_init_nhwindows(int *argcp, char **argv)
     if ((AslBase = OpenLibrary("asl.library", amii_libvers)) == NULL) {
         Abort(AG_OpenLib);
     }
+
+    amii_maybe_fall_back_to_text();
 
     amiIDisplay =
         (struct amii_DisplayDesc *) alloc(sizeof(struct amii_DisplayDesc));

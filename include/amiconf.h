@@ -212,4 +212,7 @@ struct ami_sysflags {
 };
 extern struct ami_sysflags sysflags;
 
+#undef SYSCF
+#undef SYSCF_FILE
+
 #endif /* AMICONF_H */
