@@ -318,7 +318,6 @@ amigapkg: $(AMITILES) ../util/uudecode
 	cp $(TARGETPFX)tiles16.iff $(TARGETPFX)pkg/tiles/tiles16.iff
 	cp $(TARGETPFX)tiles32.iff $(TARGETPFX)pkg/tiles/tiles32.iff
 	cp $(TARGETPFX)tomb.iff $(TARGETPFX)pkg/tomb.iff
-	cp ../sys/msdos/sysconf $(TARGETPFX)pkg/sysconf
 	cp ../doc/nethack.txt $(TARGETPFX)pkg/nethack.txt
 	( cd $(TARGETPFX)pkg && ../../../util/uudecode ../../../sys/amiga/amifont8.uu && mv 8 hack/8 )
 	( cd $(TARGETPFX)pkg && ../../../util/uudecode ../../../sys/amiga/amifont.uu )
