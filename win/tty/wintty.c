@@ -766,6 +766,8 @@ getret(void)
 #if defined(MICRO) || defined(WIN32CON)
     getreturn("to continue");
 #else
+    if (!isatty(STDIN_FILENO))
+        return;
     HUPSKIP();
     xputs("\n");
     if (flags.standout)
