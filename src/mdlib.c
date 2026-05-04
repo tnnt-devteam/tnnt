@@ -355,14 +355,16 @@ bannerc_string(char *outbuf, size_t bufsz, const char *build_date)
     subbuf[0] = ' ';
     Strcpy(&subbuf[1], PORT_SUB_ID);
 #endif
+
 #if (NH_DEVEL_STATUS != NH_STATUS_RELEASED)
 #if (NH_DEVEL_STATUS == NH_STATUS_BETA)
-    Strcat(subbuf, " Beta");
-#else
-    Strcat(subbuf, " Work-in-progress");
+    Strcpy(subbuf, " Beta");
+#elif (NH_DEVEL_STATUS == NH_STATUS_WIP)
+    Strcpy(subbuf, " Work-in-progress");
+#elif (NH_DEVEL_STATUS == NH_STATUS_POSTRELEASE)
+    Strcpy(subbuf, " post-release");
 #endif
-#endif
-
+#endif  /* !NH_STATUS_RELEASED */
     Snprintf(outbuf, bufsz, "         Version %s %s%s, %s %s.",
             mdlib_version_string(versbuf, "."), PORT_ID, subbuf,
             date_via_env ? "revised" : "built", build_date);
