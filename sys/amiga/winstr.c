@@ -2,15 +2,9 @@
 /* Copyright (c) Gregg Wonderly, Naperville, Illinois,  1991,1992,1993. */
 /* NetHack may be freely redistributed.  See license for details. */
 
-#ifndef CROSS_TO_AMIGA
-#include "NH:sys/amiga/windefs.h"
-#include "NH:sys/amiga/winext.h"
-#include "NH:sys/amiga/winproto.h"
-#else
 #include "windefs.h"
 #include "winext.h"
 #include "winproto.h"
-#endif
 /* Put a string into the indicated window using the indicated attribute */
 
 void
@@ -144,12 +138,6 @@ amii_putstr(winid window, int attr, const char *str)
                     p++;
                 str = p;
 
-#if 0
-		if( str != ostr ) {
-		    outsubstr( cw, "+", 1, fudge );
-		    cw->curx+=2;
-		}
-#endif
                 if (*str)
                     amii_scrollmsg(w, cw);
                 amii_cl_end(cw, cw->curx);
