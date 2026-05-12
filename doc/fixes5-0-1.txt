@@ -19,6 +19,8 @@ when a vault guard was moved off the map, an impossible about trying to update
 doc: use full URL for nethack.org in Guidebook.mn
 doc: fix a paste error in Guidebook.tex
 doc: fix spelling correction in nethack.6
+spelling: "Flanian Pobble Bead" to "Flainian Pobble Bead"
+
 
 Platform- and/or Interface-Specific Fixes
 -----------------------------------------
@@ -61,6 +63,28 @@ Amiga: drop redundant 'either windowtype' guards
 Amiga: deduplicate amii_procs and amiv_procs
 Amiga: route non-menu messages from DoMenuScroll to ProcessMessage
 Amiga: delete outdated/sys/amiga/
+Amiga: graphical tombstone RTG-screen fallback
+Amiga: fix extended-command menu mouse-pick
+Amiga: clamp amii_numcolors and guard tile CMAP loop
+Amiga: fix --more-- infinite loop on overlong words
+Amiga: bound BufferQueueChar; move CloseWindow out of Forbid()
+Amiga: defensive NULL/bounds guards in menus and window creation
+Amiga: tighten input/dialog buffer bounds
+Amiga: header hygiene and palette-size constants
+Amiga: drop UNTESTED AROS path; tighten fopenp separator write
+Amiga: harden host-side bmp/xpm to iff converters
+Amiga: tighten two minor issues from review
+Amiga: fix bitmap/IFF resource handling in winchar.c
+Amiga: fix overview-window crashes
+Amiga: fix latent issue found in code review: fname[18]/sprintf risks
+	overflow for >=10 in any version field; switch to snprintf into
+	a wider static buffer
+Amiga: fix latent issue found in code review: (1L << i) for i==31 (or
+	shifting into the depth-loop terminator) is undefined for signed
+	long;use 1UL
+Amiga: fix latent issue found in code review: Drop unused cnt= from
+	amii_display_nhwindow's DoMenuScroll call; the menu return value
+	is consumed elsewhere, not here
 gcc-16: tiletext.c [-Wdiscarded-qualifiers] warning suppression
 libnh: update get_nhuuid() for libnhmain
 libnh: sys/libnh/libnhmain.c: drop `static` on `whoami()`
@@ -127,5 +151,6 @@ Amiga: remove miscellaneous unused code like TTY/BBS support, commented
 	out test code etc
 Amiga: make INTUI_NEW_LOOK unconditional
 Amiga: drop SHAREDLIB dead build flavor
+Amiga: make amigapkg depend on $(GAMEBIN)
 
 
