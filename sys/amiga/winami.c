@@ -499,7 +499,8 @@ amii_get_ext_cmd(void)
                 sel = com_index;
             } else {
                 colx = put_ext_cmd(obufp, colx, cw, bottom);
-                if (bufp - obufp < BUFSZ - 1 && bufp - obufp < COLNO)
+                if (bufp - obufp < (int) sizeof obufp - 1
+                    && bufp - obufp < COLNO)
                     bufp++;
             }
         } else if (c == ('X' - 64) || c == '\177') {

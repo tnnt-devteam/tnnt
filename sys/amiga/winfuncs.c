@@ -1732,7 +1732,7 @@ amii_set_text_font(char *name, int size)
 
     /* Look for windows to set, and change them */
 
-    if (DiskfontBase = OpenLibrary("diskfont.library", amii_libvers)) {
+    if ((DiskfontBase = OpenLibrary("diskfont.library", amii_libvers))) {
         TextsFont = OpenDiskFont(&TextsFont13);
         for (i = 0; TextsFont && i < MAXWIN; ++i) {
             if ((cw = amii_wins[i]) && cw->win != NULL) {
@@ -1751,9 +1751,9 @@ amii_set_text_font(char *name, int size)
                 }
             }
         }
+        CloseLibrary(DiskfontBase);
+        DiskfontBase = NULL;
     }
-    CloseLibrary(DiskfontBase);
-    DiskfontBase = NULL;
 }
 
 void
