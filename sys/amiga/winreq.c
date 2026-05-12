@@ -704,6 +704,9 @@ DispCol(struct Window *w, int idx, UWORD *colors)
     char buf[50];
     char *colname, *defval;
 
+    if (idx < 0 || idx >= amii_numcolors)
+        return;
+
     if (WINVERS_AMIV) {
         colname = amiv_colnames[idx].name;
         defval = amiv_colnames[idx].defval;

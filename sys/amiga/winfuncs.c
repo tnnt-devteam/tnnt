@@ -164,23 +164,23 @@ amii_destroy_nhwindow(winid win) /* just hide */
                 WIN_OVER = WIN_ERR;
             }
         } else if (cw->type == NHW_OVER) {
-            struct Window *w = amii_wins[WIN_OVER]->win;
-            amii_oldover.MinX = w->LeftEdge;
-            amii_oldover.MinY = w->TopEdge;
-            amii_oldover.MaxX = w->Width;
-            amii_oldover.MaxY = w->Height;
+            struct Window *w = cw->win;
+            if (w) {
+                amii_oldover.MinX = w->LeftEdge;
+                amii_oldover.MinY = w->TopEdge;
+                amii_oldover.MaxX = w->Width;
+                amii_oldover.MaxY = w->Height;
 
-            if (WIN_MESSAGE != WIN_ERR && amii_wins[WIN_MESSAGE]) {
-                w = amii_wins[WIN_MESSAGE]->win;
-                amii_oldmsg.MinX = w->LeftEdge;
-                amii_oldmsg.MinY = w->TopEdge;
-                amii_oldmsg.MaxX = w->Width;
-                amii_oldmsg.MaxY = w->Height;
-                SizeWindow(amii_wins[WIN_MESSAGE]->win,
-                           (amiIDisplay->xpix
-                            - amii_wins[WIN_MESSAGE]->win->LeftEdge)
-                               - amii_wins[WIN_MESSAGE]->win->Width,
-                           0);
+                if (WIN_MESSAGE != WIN_ERR && amii_wins[WIN_MESSAGE]
+                    && (w = amii_wins[WIN_MESSAGE]->win) != NULL) {
+                    amii_oldmsg.MinX = w->LeftEdge;
+                    amii_oldmsg.MinY = w->TopEdge;
+                    amii_oldmsg.MaxX = w->Width;
+                    amii_oldmsg.MaxY = w->Height;
+                    SizeWindow(w,
+                               (amiIDisplay->xpix - w->LeftEdge) - w->Width,
+                               0);
+                }
             }
         }
     }
@@ -358,6 +358,9 @@ amii_create_nhwindow(int type)
         if (!HackPort)
             panic("no memory for msg port");
     }
+
+    if (type < 0 || type > NHW_OVER)
+        panic("bad type %d in create_nhwindow", type);
 
     nw = &new_wins[type].newwin;
     nw->Width = amiIDisplay->xpix;
@@ -915,7 +918,7 @@ amii_init_nhwindows(int *argcp, char **argv)
 
         for (t = 1; t <= lclargc; t++) {
             if (!strcmp("-L", *argv_in) || !strcmp("-l", *argv_in)) {
-                bigscreen = (*argv_in[1] == 'l') ? -1 : 1;
+                bigscreen = ((*argv_in)[1] == 'l') ? -1 : 1;
                 /* and eat the flag */
                 (*argcp)--;
             } else {
@@ -1123,12 +1126,16 @@ amii_init_nhwindows(int *argcp, char **argv)
             SM_FilterHook.h_Data = 0;
             SM_FilterHook.h_SubEntry = 0;
             SMR = AllocAslRequest(ASL_ScreenModeRequest, NULL);
-            if (AslRequestTags(SMR, ASLSM_FilterFunc, (ULONG) &SM_FilterHook,
-                               TAG_END))
-                amii_scrnmode = SMR->sm_DisplayID;
-            else
+            if (SMR) {
+                if (AslRequestTags(SMR, ASLSM_FilterFunc,
+                                   (ULONG) &SM_FilterHook, TAG_END))
+                    amii_scrnmode = SMR->sm_DisplayID;
+                else
+                    amii_scrnmode = 0;
+                FreeAslRequest(SMR);
+            } else {
                 amii_scrnmode = 0;
-            FreeAslRequest(SMR);
+            }
         }
 
         if (forcenobig == 0) {
