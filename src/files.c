@@ -126,10 +126,6 @@ static void write_whereis(boolean);
 
 #ifdef AMIGA
 extern char PATH[]; /* see sys/amiga/amidos.c */
-extern char bbs_id[];
-#ifdef __SASC_60
-#include <proto/dos.h>
-#endif
 
 #include <libraries/dos.h>
 extern void amii_set_text_font(char *, int);
@@ -1195,11 +1191,6 @@ set_savefile_name(boolean regularize_it)
 #if defined(MICRO) && !defined(WIN32) && !defined(MSDOS)
     if (strlen(gs.SAVEP) < (SAVESIZE - 1))
         Strcpy(gs.SAVEF, gs.SAVEP);
-    else
-#ifdef AMIGA
-        if (strlen(gs.SAVEP) + strlen(bbs_id) < (SAVESIZE - 1))
-            strncat(gs.SAVEF, bbs_id, PATHLEN);
-#endif
     {
         int i = strlen(gs.SAVEP);
 #ifdef AMIGA

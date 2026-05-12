@@ -3,28 +3,18 @@
  */
 /* NetHack may be freely redistributed.  See license for details. */
 
-#ifndef CROSS_TO_AMIGA
-#include "NH:sys/amiga/windefs.h"
-#include "NH:sys/amiga/winext.h"
-#include "NH:sys/amiga/winproto.h"
-#else
 #include "windefs.h"
 #include "winext.h"
 #include "winproto.h"
-#endif
 
 #include "patchlevel.h"
 
 extern struct TagItem scrntags[];
-#ifndef CROSS_TO_AMIGA
-extern struct Library *ConsoleDevice;
-#else
 extern struct Device *
 # ifdef __CONSTLIBBASEDECL__
      __CONSTLIBBASEDECL__
 # endif /* __CONSTLIBBASEDECL__ */
        ConsoleDevice;
-#endif
 static BitMapHeader amii_bmhd;
 static void cursor_common(struct RastPort *, int, int);
 
@@ -136,14 +126,10 @@ ami_wininit_data(int dir)
 
         memcpy(amii_initmap, amiv_init_map, sizeof(amii_initmap));
     }
-#ifdef OPT_DISPMAP
-    dispmap_sanity();
-#endif
     memcpy(sysflags.amii_dripens, amii_defpens,
            sizeof(sysflags.amii_dripens));
 }
 
-#ifdef INTUI_NEW_LOOK
 struct Hook SM_FilterHook;
 struct Hook fillhook;
 struct TagItem wintags[] = {
@@ -151,7 +137,6 @@ struct TagItem wintags[] = {
     { WA_PubScreenName, (ULONG) "NetHack" },
     { TAG_END, 0 },
 };
-#endif
 
 void
 amii_destroy_nhwindow(winid win) /* just hide */
@@ -244,7 +229,6 @@ amii_destroy_nhwindow(winid win) /* just hide */
         WIN_INVEN = WIN_ERR;
 }
 
-#ifdef INTUI_NEW_LOOK
 struct FillParams {
     struct Layer *layer;
     struct Rectangle bounds;
@@ -252,7 +236,6 @@ struct FillParams {
     WORD offsety;
 };
 
-#ifdef __GNUC__
 #ifdef __PPC__
 void PPC_LayerFillHook(void);
 struct EmulLibEntry LayerFillHook = { TRAP_LIB, 0,
@@ -280,16 +263,6 @@ __asm(
 void
 LayerFillHook_impl(struct Hook *hk, struct RastPort *rp,
                     struct FillParams *fp)
-{
-#endif
-#else
-void
-#ifndef _DCC
-    __interrupt
-#endif
-        __saveds __asm LayerFillHook(__a0 struct Hook *hk,
-                                     __a2 struct RastPort *rp,
-                                     __a1 struct FillParams *fp)
 {
 #endif
 
@@ -334,7 +307,6 @@ void
     SetDrMd(&rptmp, JAM2);
     RectFill(&rptmp, x, y, xmax, ymax);
 }
-#endif
 
 winid
 amii_create_nhwindow(int type)
@@ -519,12 +491,10 @@ amii_create_nhwindow(int type)
         if (nw->Height + stath + maph < HackScreen->Height - nw->TopEdge)
             nw->Height = HackScreen->Height - nw->TopEdge - 1 - maph - stath;
 
-#ifdef INTUI_NEW_LOOK
         if (IntuitionBase->LibNode.lib_Version >= 37) {
             MsgPropScroll.Flags |= PROPNEWLOOK;
             PropScroll.Flags |= PROPNEWLOOK;
         }
-#endif
     }
 
     nw->IDCMPFlags |= MENUPICK;
@@ -568,29 +538,26 @@ amii_create_nhwindow(int type)
     wd = (struct amii_WinDesc *) alloc(sizeof(struct amii_WinDesc));
     memset(wd, 0, sizeof(struct amii_WinDesc));
 
-    /* Both, since user may have changed the pen settings so respect those */
-    if (WINVERS_AMII || WINVERS_AMIV) {
-        /* Special backfill for these types of layers */
-        switch (type) {
-        case NHW_MESSAGE:
-        case NHW_STATUS:
-        case NHW_TEXT:
-        case NHW_MENU:
-        case NHW_BASE:
-        case NHW_OVER:
-        case NHW_MAP:
-            if (wd) {
-                fillhook.h_Entry = (void *) &LayerFillHook;
-                fillhook.h_Data = (void *) type;
-                fillhook.h_SubEntry = 0;
-                wd->hook = alloc(sizeof(fillhook));
-                memcpy(wd->hook, &fillhook, sizeof(fillhook));
-                memcpy(wd->wintags, wintags, sizeof(wd->wintags));
-                wd->wintags[0].ti_Data = (long) wd->hook;
-                nw->Extension = (void *) wd->wintags;
-            }
-            break;
+    /* Special backfill for these types of layers */
+    switch (type) {
+    case NHW_MESSAGE:
+    case NHW_STATUS:
+    case NHW_TEXT:
+    case NHW_MENU:
+    case NHW_BASE:
+    case NHW_OVER:
+    case NHW_MAP:
+        if (wd) {
+            fillhook.h_Entry = (void *) &LayerFillHook;
+            fillhook.h_Data = (void *) type;
+            fillhook.h_SubEntry = 0;
+            wd->hook = alloc(sizeof(fillhook));
+            memcpy(wd->hook, &fillhook, sizeof(fillhook));
+            memcpy(wd->wintags, wintags, sizeof(wd->wintags));
+            wd->wintags[0].ti_Data = (long) wd->hook;
+            nw->Extension = (void *) wd->wintags;
         }
+        break;
     }
 
     /* Don't open MENU or TEXT windows yet */
@@ -828,7 +795,6 @@ amii_create_nhwindow(int type)
     return (newid);
 }
 
-#ifdef __GNUC__
 #ifdef __PPC__
 int PPC_SM_Filter(void);
 struct EmulLibEntry SM_Filter = { TRAP_LIB, 0,
@@ -856,16 +822,6 @@ __asm(
 int
 SM_Filter_impl(struct Hook *hk, ULONG modeID,
                struct ScreenModeRequester *smr)
-{
-#endif
-#else
-int
-#ifndef _DCC
-    __interrupt
-#endif
-        __saveds __asm SM_Filter(
-            __a0 struct Hook *hk, __a1 ULONG modeID,
-            __a2 struct ScreenModeRequester *smr)
 {
 #endif
     struct DimensionInfo dims;
@@ -1002,7 +958,6 @@ amii_init_nhwindows(int *argcp, char **argv)
     /* Use Intuition sizes for overscan screens... */
 
     amiIDisplay->xpix = 0;
-#ifdef INTUI_NEW_LOOK
     if (IntuitionBase->LibNode.lib_Version >= 37) {
         if (wbscr = LockPubScreen("Workbench")) {
             amiIDisplay->xpix = wbscr->Width;
@@ -1010,7 +965,6 @@ amii_init_nhwindows(int *argcp, char **argv)
             UnlockPubScreen(NULL, wbscr);
         }
     }
-#endif
     if (amiIDisplay->xpix == 0) {
         amiIDisplay->ypix = GfxBase->NormalDisplayRows;
         amiIDisplay->xpix = GfxBase->NormalDisplayColumns;
@@ -1055,9 +1009,11 @@ amii_init_nhwindows(int *argcp, char **argv)
      */
 
     if (DiskfontBase = OpenLibrary("diskfont.library", amii_libvers)) {
-        Hack80.ta_Name -= SIZEOF_DISKNAME;
+        extern UBYTE HackFontName[], HackFontPath[];
+
+        Hack80.ta_Name = HackFontPath;
         HackFont = OpenDiskFont(&Hack80);
-        Hack80.ta_Name += SIZEOF_DISKNAME;
+        Hack80.ta_Name = HackFontName;
 
         /* Textsfont13 is filled in with "FONT=" settings. The default is
          * courier/13.
@@ -1068,9 +1024,9 @@ amii_init_nhwindows(int *argcp, char **argv)
 
         /* Try hack/8 for texts if no user specified font */
         if (TextsFont == NULL) {
-            Hack80.ta_Name -= SIZEOF_DISKNAME;
+            Hack80.ta_Name = HackFontPath;
             TextsFont = OpenDiskFont(&Hack80);
-            Hack80.ta_Name += SIZEOF_DISKNAME;
+            Hack80.ta_Name = HackFontName;
         }
 
         /* If no fonts, make everything topaz 8 for non-view windows.
@@ -1136,11 +1092,6 @@ amii_init_nhwindows(int *argcp, char **argv)
                 PATCHLEVEL);
         NewHackScreen.DefaultTitle = fname;
     }
-#if 0
-    NewHackScreen.BlockPen = C_BLACK;
-    NewHackScreen.DetailPen = C_WHITE;
-#endif
-#ifdef INTUI_NEW_LOOK
     if (IntuitionBase->LibNode.lib_Version >= 37) {
         int i;
         struct DimensionInfo dims;
@@ -1159,11 +1110,7 @@ amii_init_nhwindows(int *argcp, char **argv)
 
         if (amii_scrnmode == 0xffffffff) {
             struct ScreenModeRequester *SMR;
-#ifdef __GNUC__
             SM_FilterHook.h_Entry = (void *) &SM_Filter;
-#else
-            SM_FilterHook.h_Entry = (ULONG (*) ()) SM_Filter;
-#endif
             SM_FilterHook.h_Data = 0;
             SM_FilterHook.h_SubEntry = 0;
             SMR = AllocAslRequest(ASL_ScreenModeRequest, NULL);
@@ -1253,15 +1200,14 @@ amii_init_nhwindows(int *argcp, char **argv)
             }
         }
     }
-#endif
 
     if (WINVERS_AMIV) {
         extern char *tilefile;
         if (amii_numcolors >= 32) {
-            tilefile = "NetHack:tiles/tiles32.iff";
+            tilefile = (char *) fqname("tiles/tiles32.iff", DATAPREFIX, 0);
             amii_numcolors = 32;
         } else {
-            tilefile = "NetHack:tiles/tiles16.iff";
+            tilefile = (char *) fqname("tiles/tiles16.iff", DATAPREFIX, 0);
         }
         amii_bmhd = ReadTileImageFiles();
     } else
@@ -1300,10 +1246,8 @@ amii_init_nhwindows(int *argcp, char **argv)
     else
         bigscreen = 0;
 
-#ifdef INTUI_NEW_LOOK
     if (IntuitionBase->LibNode.lib_Version >= 37)
         PubScreenStatus(HackScreen, 0);
-#endif
 
     amiIDisplay->ypix = HackScreen->Height;
     amiIDisplay->xpix = HackScreen->Width;
@@ -1354,6 +1298,7 @@ amii_sethipens(struct Window *w, int type, int attr)
     case NHW_TEXT:
         SetAPen(w->RPort, attr ? C_BLACK : amii_textAPen);
         SetBPen(w->RPort, amii_textBPen);
+        break;
     case -2:
         SetBPen(w->RPort, amii_otherBPen);
         SetAPen(w->RPort, attr ? C_RED : amii_otherAPen);
@@ -1445,7 +1390,7 @@ amii_clear_nhwindow(winid win)
 
     /* Clear the overview window too if it is displayed */
     if (WINVERS_AMIV
-        && (cw->type == WIN_MAP && WIN_OVER != WIN_ERR && reclip == 0)) {
+        && (cw->type == NHW_MAP && WIN_OVER != WIN_ERR && reclip == 0)) {
         amii_clear_nhwindow(WIN_OVER);
     }
 
@@ -1724,11 +1669,6 @@ amii_curs(winid window, int x, int y)
         if (WINVERS_AMIV) {
             if (cw->type == NHW_MAP) {
                 if (Is_rogue_level(&u.uz)) {
-#if 0
-int qqx= (x * w->RPort->TxWidth) + w->BorderLeft;
-int qqy= w->BorderTop + ( (y+1) * w->RPort->TxHeight ) + 1;
-printf("pos: (%d,%d)->(%d,%d)\n",x,y,qqx,qqy);
-#endif
                     SetAPen(w->RPort,
                             C_WHITE); /* XXX should be elsewhere (was 4)*/
                     Move(rp, (x * w->RPort->TxWidth) + w->BorderLeft,
@@ -1932,12 +1872,7 @@ cursor_on(winid window)
 
 /* Save the current information */
 
-#ifdef DISPMAP
-    if (WINVERS_AMIV && cw->type == NHW_MAP && !Is_rogue_level(&u.uz))
-        x = cw->cursx = (rp->cp_x & -8) + 8;
-    else
-#endif
-        x = cw->cursx = rp->cp_x;
+    x = cw->cursx = rp->cp_x;
     y = cw->cursy = rp->cp_y;
     apen = rp->FgPen;
     bpen = rp->BgPen;
@@ -2031,6 +1966,8 @@ removetopl(int cnt)
 void
 port_help(void)
 {
+    /* display_file -> dlb_fopen -> fopen_datafile already routes through
+       DATAPREFIX; pass the bare filename. */
     display_file(PORT_HELP, 1);
 }
 #endif
@@ -2075,15 +2012,6 @@ amii_print_glyph(winid win, coordxy x, coordxy y,
         panic(winpanicstr, win, "amii_print_glyph");
     }
 
-#if 0
-{
-static int x=-1;
-if(u.uz.dlevel != x){
- fprintf(stderr,"lvlchg: %d (%d)\n",u.uz.dlevel,Is_rogue_level(&u.uz));
- x = u.uz.dlevel;
-}
-}
-#endif
     if (WINVERS_AMIV && !Is_rogue_level(&u.uz)) {
         amii_curs(win, x, y);
         amiga_print_glyph(win, 0, glyph);

@@ -1193,6 +1193,11 @@ mswin_select_map_mode(int mode)
     data =
         (PNHMainWindow) GetWindowLongPtr(GetNHApp()->hMainWnd, GWLP_USERDATA);
 
+    if (!data) {
+        impossible("data is null in %s:%d", __func__, __LINE__);
+        return;
+    }
+
     /* override for Rogue level */
     if (Is_rogue_level(&u.uz) && !IS_MAP_ASCII(mode))
         return;

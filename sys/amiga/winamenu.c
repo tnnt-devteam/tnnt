@@ -3,15 +3,9 @@
  */
 /* NetHack may be freely redistributed.  See license for details. */
 
-#ifndef CROSS_TO_AMIGA
-#include "NH:sys/amiga/windefs.h"
-#include "NH:sys/amiga/winext.h"
-#include "NH:sys/amiga/winproto.h"
-#else
 #include "windefs.h"
 #include "winext.h"
 #include "winproto.h"
-#endif
 
 /* Start building the text for a menu */
 void
@@ -215,7 +209,7 @@ make_menu_items(struct amii_WinDesc *cw, menu_item **rmip)
     }
 
     if (idx) {
-        mmip = *rmip = (menu_item *) alloc(idx * sizeof(*mip));
+        mmip = *rmip = (menu_item *) alloc(idx * sizeof(menu_item));
         for (mip = cw->menu.items; mip; mip = mip->next) {
             if (mip->selected) {
                 mmip->item = mip->identifier;
@@ -271,11 +265,9 @@ DoMenuScroll(int win, int blocking, int how, menu_item **retmip)
     topidx = 0;
 
     if (w == NULL) {
-#ifdef INTUI_NEW_LOOK
         if (IntuitionBase->LibNode.lib_Version >= 37) {
             PropScroll.Flags |= PROPNEWLOOK;
         }
-#endif
         nw = (void *) DupNewWindow((void *) (&new_wins[cw->type].newwin));
         if (!alwaysinvent || win != WIN_INVEN) {
             xsize = scrn->WBorLeft + scrn->WBorRight + MenuScroll.Width + 1
@@ -368,10 +360,8 @@ DoMenuScroll(int win, int blocking, int how, menu_item **retmip)
         }
         nw->Height = min(ysize, amiIDisplay->ypix - nw->TopEdge);
 
-        if (WINVERS_AMIV || WINVERS_AMII) {
-            /* Make sure we are using the correct hook structure */
-            nw->Extension = cw->wintags;
-        }
+        /* Make sure we are using the correct hook structure */
+        nw->Extension = cw->wintags;
 
         /* Now, open the window */
         w = cw->win = OpenShWindow((void *) nw);
@@ -447,13 +437,6 @@ DoMenuScroll(int win, int blocking, int how, menu_item **retmip)
     morc = 0;
     oidx = -1;
 
-#if 0
-    /* Make sure there are no selections left over from last time. */
-/* XXX potential problem for preselection if this is really needed */
-  for( amip = cw->menu.items; amip; amip = amip->next )
-	amip->selected = 0;
-#endif
-
     DisplayData(win, topidx);
 
     /* Make the prop gadget the right size and place */
@@ -480,11 +463,13 @@ DoMenuScroll(int win, int blocking, int how, menu_item **retmip)
             mx = imsg->MouseX;
             my = imsg->MouseY;
 
-            /* Only do our window or VANILLAKEY from other windows */
-
+            /* Only do our window or VANILLAKEY from other windows.
+             * Background events (NEWSIZE on inventory, CLOSEWINDOW
+             * on overview, etc.) get routed to the main dispatcher
+             * so the game stays in sync.  ProcessMessage ReplyMsgs. */
             if (imsg->IDCMPWindow != w && class != VANILLAKEY
                 && class != RAWKEY) {
-                ReplyMsg((struct Message *) imsg);
+                ProcessMessage(imsg);
                 continue;
             }
 
@@ -550,21 +535,19 @@ DoMenuScroll(int win, int blocking, int how, menu_item **retmip)
                  * amii_cl_end if window shrinks and columns decrease.
                  */
 
-                if (WINVERS_AMII || WINVERS_AMIV) {
-                    amii_setfillpens(w, cw->type);
-                    SetDrMd(w->RPort, JAM2);
-                    x2 = w->Width - w->BorderRight;
-                    y2 = w->Height - w->BorderBottom;
-                    x1 = x2 - w->IFont->tf_XSize - w->IFont->tf_XSize;
-                    y1 = w->BorderTop;
-                    if (x1 < w->BorderLeft)
-                        x1 = w->BorderLeft;
-                    RectFill(w->RPort, x1, y1, x2, y2);
+                amii_setfillpens(w, cw->type);
+                SetDrMd(w->RPort, JAM2);
+                x2 = w->Width - w->BorderRight;
+                y2 = w->Height - w->BorderBottom;
+                x1 = x2 - w->IFont->tf_XSize - w->IFont->tf_XSize;
+                y1 = w->BorderTop;
+                if (x1 < w->BorderLeft)
                     x1 = w->BorderLeft;
-                    y1 = y1 - w->IFont->tf_YSize;
-                    RectFill(w->RPort, x1, y1, x2, y2);
-                    RefreshWindowFrame(w);
-                }
+                RectFill(w->RPort, x1, y1, x2, y2);
+                x1 = w->BorderLeft;
+                y1 = y1 - w->IFont->tf_YSize;
+                RectFill(w->RPort, x1, y1, x2, y2);
+                RefreshWindowFrame(w);
 
                 /* Make the prop gadget the right size and place */
 
@@ -982,8 +965,8 @@ DoMenuScroll(int win, int blocking, int how, menu_item **retmip)
                                     amip->str[SOFF + 2] = '-';
                             }
                         }
-                        if (counting && amip->selected && amip->canselect
-                            && amip->selector) {
+                        if (amip && counting && amip->selected
+                            && amip->canselect && amip->selector) {
                             amip->count = count;
                             reset_counting = TRUE;
                             amip->str[SOFF + 2] = '#';
@@ -1415,11 +1398,9 @@ SetPropInfo(struct Window *win, struct Gadget *gad, long vis, long total, long t
         pot = 0;
 
     mflags = AUTOKNOB | FREEVERT;
-#ifdef INTUI_NEW_LOOK
     if (IntuitionBase->LibNode.lib_Version >= 37) {
         mflags |= PROPNEWLOOK;
     }
-#endif
 
     NewModifyProp(gad, win, NULL, mflags, 0, pot, MAXBODY, body, 1);
 }

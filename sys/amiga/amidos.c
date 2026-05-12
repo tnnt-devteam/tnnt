@@ -20,10 +20,8 @@
 
 #undef COUNT
 
-#if defined(__SASC_60) || defined(__GNUC__)
 #include <proto/exec.h>
 #include <proto/dos.h>
-#endif
 
 /* POSIX stubs needed by libnix (-noixemul) */
 #ifdef __noixemul__
@@ -47,30 +45,19 @@ amiga_self_assign(void)
         UnLock(dup);
 }
 
-/* Generate an RFC 4122 v4 UUID for this game.  Entropy comes from
-   DateStamp + the running task's address mixed through a small LCG. */
+/* Generate an RFC 4122 v4 UUID for this game.  Draw bytes from the
+   core's ISAAC64 RNG, which init_random() seeded before we get here. */
 void
 get_nhuuid(void)
 {
     uchar bytes[16];
-    struct DateStamp ds;
-    unsigned long x;
     int i;
 
     if (svn.nhuuid[0])
         return;
 
-    DateStamp(&ds);
-    x = (unsigned long) ds.ds_Days
-      ^ ((unsigned long) ds.ds_Minute << 16)
-      ^ ((unsigned long) ds.ds_Tick << 8)
-      ^ (unsigned long) FindTask(NULL);
-    /* Classic glibc/POSIX rand() LCG (Knuth, C99 7.22.2.1).  Full period
-       2^32; we read bits 16-23 to skip the LCG's bad low bits. */
-    for (i = 0; i < 16; i++) {
-        x = x * 1103515245u + 12345u;
-        bytes[i] = (uchar) (x >> 16);
-    }
+    for (i = 0; i < 16; i++)
+        bytes[i] = (uchar) rn2(256);
     /* RFC 4122: version=4 (random), variant=10. */
     bytes[6] = (bytes[6] & 0x0F) | 0x40;
     bytes[8] = (bytes[8] & 0x3F) | 0x80;
@@ -96,21 +83,8 @@ free_nhuuid(void)
     }
 }
 
-#ifdef AZTEC_50
-#include <functions.h>
-#undef strcmpi
-#endif
-
-/* Prototypes */
-#ifndef CROSS_TO_AMIGA
-#include "NH:sys/amiga/amiwind.p"
-#include "NH:sys/amiga/winami.p"
-#include "NH:sys/amiga/amidos.p"
-#else
-#include "amiwind.p"
-#include "winami.p"
-#include "amidos.p"
-#endif
+#include "winext.h"
+#include "winproto.h"
 
 
 extern char Initialized;
@@ -118,9 +92,7 @@ extern struct window_procs amii_procs;
 struct ami_sysflags sysflags = {0};
 FILE *fopenp(const char *, const char *);
 
-#ifndef __SASC_60
 int Enable_Abort = 0; /* for stdio package */
-#endif
 
 /* Initial path, so we can find NetHack.cnf */
 char PATH[PATHLEN] = "NetHack:";
@@ -150,27 +122,6 @@ getlogin(void)
 #endif
 
 /* abs() provided by libnix/stdlib */
-
-#ifdef SHELL
-int
-dosh(void)
-{
-    int i = 0;
-    char buf[BUFSZ];
-    extern struct ExecBase *SysBase;
-
-    /* Only under 2.0 and later ROMs do we have System() */
-    if (SysBase->LibNode.lib_Version >= 37 && !amibbs) {
-        getlin("Enter CLI Command...", buf);
-        if (buf[0] != '\033')
-            i = System(buf, NULL);
-    } else {
-        i = 0;
-        pline("No mysterious force prevented you from using multitasking.");
-    }
-    return i;
-}
-#endif /* SHELL */
 
 #ifdef MFLOPPY
 #include <ctype.h>
@@ -276,74 +227,6 @@ filesize(char *file)
     return size;
 }
 
-#if 0
-void
-void
-eraseall(const char *path, const char *files)
-{
-    BPTR dirLock, dirLock2;
-    struct FileInfoBlock *fibp;
-    int chklen;
-#if (NH_DEVEL_STATUS != NH_STATUS_RELEASED)
-    if(files != g.alllevels)panic("eraseall");
-#endif
-    chklen=(int)index(files,'*')-(int)files;
-
-    if (dirLock = Lock( (char *)path ,SHARED_LOCK)) {
-	dirLock2=DupLock(dirLock);
-	dirLock2= CurrentDir(dirLock2);
-	fibp=AllocMem(sizeof(struct FileInfoBlock),0);
-	if(fibp){
-	    if(Examine(dirLock,fibp)){
-		while(ExNext(dirLock,fibp)){
-		    if(!strncmp(fibp->fib_FileName,files,chklen)){
-			DeleteFile(fibp->fib_FileName);
-		    }
-		}
-	    }
-	    FreeMem(fibp,sizeof(struct FileInfoBlock));
-	}
-	UnLock(dirLock);
-	UnLock(CurrentDir(dirLock2));
-    }
-}
-#endif
-
-/* This size makes that most files can be copied with two Read()/Write()s */
-
-#if 0 /* Unused */
-#define COPYSIZE 4096
-
-char *CopyFile(const char *from, const char *to)
-{
-    BPTR fromFile, toFile;
-    char *buffer;
-    long size;
-    char *error = NULL;
-
-    buffer = (char *) alloc(COPYSIZE);
-    if (fromFile = Open( (char *)from, MODE_OLDFILE)) {
-	if (toFile = Open( (char *)to, MODE_NEWFILE)) {
-	    while (size = Read(fromFile, buffer, (long)COPYSIZE)) {
-		if (size == -1){
-		    error = "Read error";
-		    break;
-		}
-		if (size != Write(toFile, buffer, size)) {
-		    error = "Write error";
-		    break;
-		}
-	    }
-	    Close(toFile);
-	} else
-	    error = "Cannot open destination";
-	Close(fromFile);
-    } else
-	error = "Cannot open source (this should not occur)";
-    free(buffer);
-    return error;
-}
-#endif
 
 #ifdef MFLOPPY
 /* this should be replaced */
@@ -481,7 +364,7 @@ fopenp(const char *name, const char *mode)
     while (pp && *pp) {
         bp = buf;
         while (*pp && *pp != PATHSEP) {
-            if (bp > buf + BUFSIZ - 1)
+            if (bp >= buf + BUFSIZ - 1)
                 return (NULL);
             lastch = *bp++ = *pp++;
         }
