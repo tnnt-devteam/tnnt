@@ -1087,9 +1087,9 @@ amii_init_nhwindows(int *argcp, char **argv)
     NewHackScreen.Width = max(WIDTH, amiIDisplay->xpix);
     NewHackScreen.Height = max(SCREENHEIGHT, amiIDisplay->ypix);
     {
-        static char fname[18];
-        sprintf(fname, "NetHack %d.%d.%d", VERSION_MAJOR, VERSION_MINOR,
-                PATCHLEVEL);
+        static char fname[32];
+        snprintf(fname, sizeof fname, "NetHack %d.%d.%d",
+                 VERSION_MAJOR, VERSION_MINOR, PATCHLEVEL);
         NewHackScreen.DefaultTitle = fname;
     }
     if (IntuitionBase->LibNode.lib_Version >= 37) {
@@ -1216,7 +1216,7 @@ amii_init_nhwindows(int *argcp, char **argv)
 
     /* Find out how deep the screen needs to be, 32 planes is enough! */
     for (i = 0; i < 32; ++i) {
-        if ((1L << i) >= amii_numcolors)
+        if ((1UL << i) >= (unsigned long) amii_numcolors)
             break;
     }
 
@@ -1240,7 +1240,7 @@ amii_init_nhwindows(int *argcp, char **argv)
         if (--NewHackScreen.Depth < 3)
             Abort(AN_OpenScreen & ~AT_DeadEnd);
     }
-    amii_numcolors = 1L << NewHackScreen.Depth;
+    amii_numcolors = 1UL << NewHackScreen.Depth;
     if (HackScreen->Height > 300 && forcenobig == 0)
         bigscreen = 1;
     else
@@ -1526,7 +1526,6 @@ void
 amii_display_nhwindow(winid win, boolean blocking)
 {
     menu_item *mip;
-    int cnt;
     static int lastwin = -1;
     struct amii_WinDesc *cw;
 
@@ -1549,7 +1548,7 @@ amii_display_nhwindow(winid win, boolean blocking)
     }
 
     if (cw->type == NHW_MENU || cw->type == NHW_TEXT) {
-        cnt = DoMenuScroll(win, blocking, PICK_ONE, &mip);
+        (void) DoMenuScroll(win, blocking, PICK_ONE, &mip);
     } else if (cw->type == NHW_MAP) {
         amii_end_glyphout(win);
         /* Do more if it is time... */
