@@ -189,6 +189,7 @@ MyAllocBitMap(int xsize, int ysize, int depth, long mflags)
     if (!bm)
         return (NULL);
 
+    bm->mflags = mflags;
     bm->xsize = xsize;
     bm->ysize = ysize;
     InitBitMap(&bm->bm, depth, xsize, ysize);

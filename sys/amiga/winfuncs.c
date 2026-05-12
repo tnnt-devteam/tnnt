@@ -227,6 +227,10 @@ amii_destroy_nhwindow(winid win) /* just hide */
         WIN_MESSAGE = WIN_ERR;
     else if (win == WIN_INVEN)
         WIN_INVEN = WIN_ERR;
+    else if (win == WIN_OVER)
+        WIN_OVER = WIN_ERR;
+    else if (win == WIN_BASE)
+        WIN_BASE = WIN_ERR;
 }
 
 struct FillParams {
@@ -416,8 +420,13 @@ amii_create_nhwindow(int type)
         if (nw->Width >= amiIDisplay->xpix - nw->LeftEdge)
             nw->Width = amiIDisplay->xpix - nw->LeftEdge;
     } else if (WINVERS_AMIV && type == NHW_OVER) {
-        nw->Flags |= WINDOWSIZING | WINDOWDRAG | WINDOWCLOSE;
-        nw->IDCMPFlags |= CLOSEWINDOW;
+        /* No window-system gadgets: BORDERLESS means there is no border
+         * to attach close/size/drag gadgets to.  On some Kickstarts the
+         * phantom gadgets hit-test against unrelated input (selecting
+         * the overview and pressing ESC has been observed to destroy
+         * the window and crash the game).  SHIFT-HELP toggles the
+         * overview cleanly via delayed_key_action; that is the
+         * supported close path. */
         /* Bring up window as half the width of the message window, and make
          * the message window change to one half the width...
          */
