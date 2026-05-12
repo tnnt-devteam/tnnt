@@ -375,7 +375,7 @@ amii_get_ext_cmd(void)
     int bottom = 0;
 
     struct Window *w;
-    char obufp[100];
+    char obufp[BUFSZ];
     char *bufp = obufp;
     int c;
     int com_index, oindex;
@@ -417,7 +417,7 @@ amii_get_ext_cmd(void)
             amii_start_menu(win, MENU_BEHAVE_STANDARD);
 
             for (i = 0; extcmdlist[i].ef_txt != NULL; ++i) {
-                id.a_char = extcmdlist[i].ef_txt[0];
+                id.a_int = i;
                 sprintf(buf, "%-10s - %s ", extcmdlist[i].ef_txt,
                         extcmdlist[i].ef_desc);
                 amii_add_menu(win, (const glyph_info *) 0, &id,
@@ -432,16 +432,14 @@ amii_get_ext_cmd(void)
             if (sel == 0) {
                 return (-1);
             } else {
-                sel = mip->item.a_char;
-                for (i = 0; extcmdlist[i].ef_txt != NULL; ++i) {
-                    if (sel == extcmdlist[i].ef_txt[0])
-                        break;
-                }
+                i = mip->item.a_int;
 
                 /* copy in the text */
                 if (extcmdlist[i].ef_txt != NULL) {
                     amii_clear_nhwindow(WIN_MESSAGE);
-                    strcpy(bufp = obufp, extcmdlist[i].ef_txt);
+                    strncpy(obufp, extcmdlist[i].ef_txt, sizeof(obufp) - 1);
+                    obufp[sizeof(obufp) - 1] = '\0';
+                    bufp = obufp;
                     (void) put_ext_cmd(obufp, colx, cw, bottom);
                     return (i);
                 } else
