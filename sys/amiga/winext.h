@@ -63,7 +63,7 @@ extern struct Menu HackMenu[];
 extern struct Menu *MenuStrip;
 extern struct NewMenu GTHackMenu[];
 extern APTR *VisualInfo;
-extern unsigned char KbdBuffered;
+extern int KbdBuffered;
 extern struct TextFont *TextsFont;
 extern struct TextFont *HackFont;
 extern struct IOStdReq ConsoleIO;
