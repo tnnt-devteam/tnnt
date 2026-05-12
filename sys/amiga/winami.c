@@ -339,7 +339,7 @@ struct NewScreen NewHackScreen = { 0, 0, WIDTH, SCREENHEIGHT, 3, 0,
 void
 amii_askname(void)
 {
-    char plnametmp[300]; /* From winreq.c: sizeof(StrStringSIBuff) */
+    char plnametmp[BUFSZ]; /* matches StrStringSIBuff in winreq.c */
     *plnametmp = 0;
     do {
         amii_getlin("Who are you?", plnametmp);
@@ -577,7 +577,7 @@ amii_yn_function(const char *query, const char *resp, char def)
     char q;
     char rtmp[40];
     boolean digit_ok, allow_num;
-    char prompt[BUFSZ];
+    char prompt[BUFSZ + QBUFSZ + 16];
     struct amii_WinDesc *cw;
 
     if (cw = amii_wins[WIN_MESSAGE])
@@ -592,10 +592,12 @@ amii_yn_function(const char *query, const char *resp, char def)
             *rb = '\0';
         (void) strncpy(prompt, query, QBUFSZ - 1);
         prompt[QBUFSZ - 1] = '\0';
-        Sprintf(eos(prompt), " [%s]", respbuf);
+        Snprintf(eos(prompt), sizeof prompt - strlen(prompt),
+                 " [%s]", respbuf);
         if (def)
-            Sprintf(eos(prompt), " (%c)", def);
-        Strcat(prompt, " ");
+            Snprintf(eos(prompt), sizeof prompt - strlen(prompt),
+                     " (%c)", def);
+        Snprintf(eos(prompt), sizeof prompt - strlen(prompt), " ");
         pline("%s", prompt);
     } else {
         amii_putstr(WIN_MESSAGE, 0, query);
@@ -705,7 +707,8 @@ amii_display_file(const char *fn, boolean complain)
 
     if ((fp = dlb_fopen(fn, RDTMODE)) == (dlb *) NULL) {
         if (complain) {
-            sprintf(buf, "Can't display %s: %s", fn, strerror(errno));
+            Snprintf(buf, sizeof buf,
+                     "Can't display %s: %s", fn, strerror(errno));
             amii_addtopl(buf);
         }
         return;
