@@ -130,6 +130,12 @@ ReadImageFile(const char *filename, struct BitMap **bmp)
     bmhd = (BitMapHeader *) prop->sp_Data;
     np = bmhd->nPlanes;
 
+    if (np > DEPTH) {
+        errfmt = "%s: too many bitplanes (code %ld)";
+        errcode = np;
+        goto cleanup;
+    }
+
     /* Load CMAP into palette arrays if present */
     prop = FindProp(iff, ID_BMAP, ID_CMAP);
     if (prop) {
@@ -819,7 +825,7 @@ amii_lprint_glyph(winid window, int color_index, int glyph)
         /*
          * Add it to the end of the buffer
          */
-        amii_glyph_buffer[glyph_buffer_index++] = glyph;
+        amii_glyph_buffer[glyph_buffer_index++] = (char) glyph;
         amii_g_nodes[glyph_node_index - 1].len++;
     } else {
         /* See if we're out of glyph nodes */

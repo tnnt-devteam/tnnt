@@ -1219,9 +1219,9 @@ amii_init_nhwindows(int *argcp, char **argv)
 
     if (WINVERS_AMIV) {
         extern char *tilefile;
-        if (amii_numcolors >= 32) {
+        if (amii_numcolors >= AMIV_PALETTE_SIZE) {
             tilefile = (char *) fqname("tiles/tiles32.iff", DATAPREFIX, 0);
-            amii_numcolors = 32;
+            amii_numcolors = AMIV_PALETTE_SIZE;
         } else {
             tilefile = (char *) fqname("tiles/tiles16.iff", DATAPREFIX, 0);
         }
@@ -1257,6 +1257,11 @@ amii_init_nhwindows(int *argcp, char **argv)
             Abort(AN_OpenScreen & ~AT_DeadEnd);
     }
     amii_numcolors = 1UL << NewHackScreen.Depth;
+    {
+        int palmax = WINVERS_AMIV ? AMIV_PALETTE_SIZE : AMII_PALETTE_SIZE;
+        if (amii_numcolors > palmax)
+            amii_numcolors = palmax;
+    }
     if (HackScreen->Height > 300 && forcenobig == 0)
         bigscreen = 1;
     else
