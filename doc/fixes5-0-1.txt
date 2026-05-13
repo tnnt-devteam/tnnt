@@ -20,6 +20,7 @@ doc: use full URL for nethack.org in Guidebook.mn
 doc: fix a paste error in Guidebook.tex
 doc: fix spelling correction in nethack.6
 spelling: "Flanian Pobble Bead" to "Flainian Pobble Bead"
+obey statue type gender (gnome king statue in minetn-5)
 
 
 Platform- and/or Interface-Specific Fixes

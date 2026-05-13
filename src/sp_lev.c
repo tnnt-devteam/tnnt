@@ -3671,6 +3671,7 @@ lspo_object(lua_State *L)
         boolean nonpmobj = FALSE;
         int i;
         char *montype = get_table_str_opt(L, "montype", NULL);
+        int lflags = 0;
 
         if (montype) {
             if ((tmpobj.id == TIN && (!strcmpi(montype, "spinach")
@@ -3688,11 +3689,16 @@ lspo_object(lua_State *L)
                              G_NOGEN | G_IGNORE);
             } else {
                 for (i = LOW_PM; i < NUMMONS; i++)
-                    if (!strcmpi(mons[i].pmnames[NEUTRAL], montype)
-                        || (mons[i].pmnames[MALE] != 0
-                            && !strcmpi(mons[i].pmnames[MALE], montype))
-                        || (mons[i].pmnames[FEMALE] != 0
-                            && !strcmpi(mons[i].pmnames[FEMALE], montype))) {
+                    if (!strcmpi(mons[i].pmnames[NEUTRAL], montype)) {
+                        pm = &mons[i];
+                        break;
+                    } else if (mons[i].pmnames[MALE] != 0
+                               && !strcmpi(mons[i].pmnames[MALE], montype)) {
+                        lflags |= CORPSTAT_MALE;
+                        pm = &mons[i];
+                    } else if  (mons[i].pmnames[FEMALE] != 0
+                                && !strcmpi(mons[i].pmnames[FEMALE], montype)) {
+                        lflags |= CORPSTAT_FEMALE;
                         pm = &mons[i];
                         break;
                     }
@@ -3704,7 +3710,6 @@ lspo_object(lua_State *L)
                 nhl_error(L, "Unknown montype");
         }
         if (tmpobj.id == STATUE || tmpobj.id == CORPSE) {
-            int lflags = 0;
 
             if (get_table_boolean_opt(L, "historic", 0))
                 lflags |= CORPSTAT_HISTORIC;
