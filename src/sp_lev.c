@@ -3698,8 +3698,8 @@ lspo_object(lua_State *L)
                         lflags |= CORPSTAT_MALE;
                         pm = &mons[i];
                         break;
-                    } else if  (mons[i].pmnames[FEMALE] != 0
-                                && !strcmpi(mons[i].pmnames[FEMALE], montype)) {
+                    } else if (mons[i].pmnames[FEMALE] != 0
+                               && !strcmpi(mons[i].pmnames[FEMALE], montype)) {
                         lflags |= CORPSTAT_FEMALE;
                         pm = &mons[i];
                         break;
@@ -3711,7 +3711,8 @@ lspo_object(lua_State *L)
             else if (!nonpmobj)
                 nhl_error(L, "Unknown montype");
         }
-        if (tmpobj.id == STATUE || tmpobj.id == CORPSE || tmpobj.id == FIGURINE) {
+        if (tmpobj.id == STATUE || tmpobj.id == FIGURINE
+            || tmpobj.id == CORPSE) {
 
             if (get_table_boolean_opt(L, "historic", 0))
                 lflags |= CORPSTAT_HISTORIC;
@@ -3719,7 +3720,7 @@ lspo_object(lua_State *L)
                 lflags |= CORPSTAT_MALE;
             if (get_table_boolean_opt(L, "female", 0))
                 lflags |= CORPSTAT_FEMALE;
-            if (lflags |= 0)
+            if (lflags != 0)
                 tmpobj.spe = lflags;
         } else if (tmpobj.id == EGG) {
             tmpobj.spe = get_table_boolean_opt(L, "laid_by_you", 0) ? 1 : 0;
