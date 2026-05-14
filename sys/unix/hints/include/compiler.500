@@ -110,6 +110,7 @@ CXX=clang++ -std=gnu++11
 CLANGGTEQ12 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 12)
 CLANGGTEQ14 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 14)
 CLANGGTEQ21 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 21)
+CLANGGTEQ22 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 22)
 ifeq "$(CLANGGTEQ12)" "1"
 CFLAGS+=-Wimplicit-fallthrough
 endif
@@ -123,6 +124,9 @@ CFLAGS+=-Wno-missing-field-initializers
 endif
 ifeq "$(CLANGGTEQ21)" "1"
 CFLAGS+=-Wno-deprecated-octal-literals
+endif
+ifeq "$(CLANGGTEQ22)" "1"
+NO_WARN_DISCARDED_QUALIFIERS=-Wno-incompatible-pointer-types-discards-qualifiers
 endif
 # none
 endif  # clang-specific ends here
