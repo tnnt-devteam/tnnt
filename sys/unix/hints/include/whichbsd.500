@@ -6,11 +6,13 @@
 .undef WHICHBSD
 .endif
 
-.if ${.MAKE.OS} == "FreeBSD"
+OS!=uname -s
+
+.if ${OS} == "FreeBSD"
 WHICHBSD=FREEBSD
-.elif ${.MAKE.OS} == "OpenBSD"
+.elif ${OS} == "OpenBSD"
 WHICHBSD=OPENBSD
-.elif ${.MAKE.OS} == "NetBSD"
+.elif ${OS} == "NetBSD"
 WHICHBSD=NETBSD
 .else
 WHICHBSD=OTHERBSD
