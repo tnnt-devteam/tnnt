@@ -1,4 +1,4 @@
-/* NetHack 5.0	unixunix.c	$NHDT-Date: 1711213894 2024/03/23 17:11:34 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.43 $ */
+/* NetHack 5.0	unixunix.c	$NHDT-Date: 1778886716 2026/05/15 15:11:56 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.48 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Kenneth Lorber, Kensington, Maryland, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -370,6 +370,9 @@ int
 child(int wt)
 {
     int f;
+#ifdef CHDIR
+    const char *home = getenv("HOME");
+#endif
 
     suspend_nhwindows((char *) 0); /* also calls end_screen() */
 #ifdef _M_UNIX
@@ -382,7 +385,8 @@ child(int wt)
         (void) setgid(getgid());
         (void) setuid(getuid());
 #ifdef CHDIR
-        (void) chdir(getenv("HOME"));
+        if (home)
+            (void) chdir(home);
 #endif
         return 1;
     }
