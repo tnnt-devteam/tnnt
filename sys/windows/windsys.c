@@ -1252,6 +1252,18 @@ error:
 }
 #undef win32err
 
+#ifdef MSWIN_GRAPHICS
+int
+get_approx_window_column_width(void)
+{
+    return GetSystemMetrics(SM_CXSCREEN) / 8;
+}
+int
+get_approx_window_rows(void)
+{
+    return GetSystemMetrics(SM_CYSCREEN) / 12;
+}
+#endif
 
 #include <shellapi.h>
 #define MAX_SYM_SIZE 100

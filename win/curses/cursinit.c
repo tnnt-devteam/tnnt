@@ -768,8 +768,18 @@ curses_init_options(void)
         if (console_width != 0)
             iflags.wc2_term_cols = console_width;
         else
-#endif
             iflags.wc2_term_cols = 110;
+#else
+        int width = get_approx_window_column_width();
+
+        if (width > 220)
+            width = 220;
+
+        if (width != 0)
+            iflags.wc2_term_cols = width;
+        else
+            iflags.wc2_term_cols = 110;
+#endif
     }
     if (iflags.wc2_term_rows == 0) {
 #ifndef MSWIN_GRAPHICS
@@ -778,8 +788,14 @@ curses_init_options(void)
         if (console_height != 0)
             iflags.wc2_term_rows = console_height;
         else
-#endif
             iflags.wc2_term_rows = 32;
+#else
+        int scrows = get_approx_window_rows();
+
+        if (scrows > 54)
+            scrows = 54;
+        iflags.wc2_term_rows = scrows ? scrows : 32;
+#endif
     }
     resize_term(iflags.wc2_term_rows, iflags.wc2_term_cols);
     getmaxyx(base_term, term_rows, term_cols);
