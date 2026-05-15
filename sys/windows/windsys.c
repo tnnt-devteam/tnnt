@@ -527,6 +527,13 @@ nethack_exit(int code)
 #ifdef MSWIN_GRAPHICS
     free_winmain_stuff();
 #endif
+#ifdef WIN32CON
+#ifdef CURSES_GRAPHICS
+    if (WINDOWPORT(curses)) {
+        console_exit();
+    }
+#endif
+#endif
     exit(code);
 }
 

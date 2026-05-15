@@ -2182,7 +2182,7 @@ extern void synch_cursor(void);
 extern void nethack_enter_consoletty(void);
 extern int get_console_width(void);
 extern int get_console_height(void);
-extern void consoletty_exit(void);
+extern void console_exit(void);
 extern int set_keyhandling_via_option(void);
 #ifdef ENHANCED_SYMBOLS
 extern void tty_utf8graphics_fixup(void);
