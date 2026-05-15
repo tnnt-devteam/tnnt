@@ -401,8 +401,8 @@ NetHack.xcscheme   makedefs.xcscheme  recover.xcscheme
 
 sys/unix/hints:
 (files for configuring UNIX NetHack versions)
-linux-minimal       linux.500           macOS.500
-macosx.sh           netbsd.500          solaris
+bsd.500             linux-minimal       linux.500
+macOS.500           macosx.sh           solaris
 solaris-playground  unix
 
 sys/unix/hints/include:
@@ -410,7 +410,7 @@ sys/unix/hints/include:
 compiler.500       cross-post.500     cross-pre1.500     cross-pre2.500
 gbdates-post.500   gbdates-pre.500    misc.500           multisnd-post.500
 multisnd1-pre.500  multisnd2-pre.500  multiw-1.500       multiw-2.500
-response.500
+response.500       whichbsd.500
 
 sys/vms:
 (files for VMS version)
