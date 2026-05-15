@@ -370,9 +370,6 @@ int
 child(int wt)
 {
     int f;
-#ifdef CHDIR
-    const char *home = getenv("HOME");
-#endif
 
     suspend_nhwindows((char *) 0); /* also calls end_screen() */
 #ifdef _M_UNIX
@@ -382,6 +379,9 @@ child(int wt)
     linux_mapon();
 #endif
     if ((f = fork()) == 0) { /* child */
+#ifdef CHDIR
+        const char *home = getenv("HOME");
+#endif
         (void) setgid(getgid());
         (void) setuid(getuid());
 #ifdef CHDIR
