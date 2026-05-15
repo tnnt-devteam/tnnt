@@ -12,6 +12,10 @@
 # This hints file provides the legacy configuration that NetHack has shipped
 # with historically - this means you will most likely need to hand edit .h
 # and Makefiles.
+#
+# note: '#-INCLUDE' is not just a comment. setup.sh inserts the contents of
+#       a file found in sys/unix/hints/include
+#-INCLUDE whichbsd.500
 
 PREFIX=/usr/local
 
@@ -52,11 +56,17 @@ VARDIRPERM = 0755
 .ifdef MAKEFILE_DOC
 MAKEDEFS = ../util/makedefs
 NEEDMAKEDEFS = $(MAKEDEFS)
+
+.if ${WHICHBSD} == "NETBSD"
 .if exists (/usr/pkg/bin/groff)
 NROFF = /usr/pkg/bin/groff
 .else
 NROFF = groff
-.endif
+.endif  # ? Is NROFF groff or /usr/pkg/bin/groff
+.else   # WHICHBSD is not NETBSD
+NROFF = groff
+.endif  # WHICHBSD
+
 # NROFF_FLAGS comes from a hints file
 GUIDEBOOK = Guidebook           # regular ASCII file
 COLCMD = col -bx
