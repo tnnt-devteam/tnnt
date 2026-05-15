@@ -22,6 +22,8 @@ doc: fix spelling correction in nethack.6
 spelling: "Flanian Pobble Bead" to "Flainian Pobble Bead"
 obey statue type gender (gnome king statue in minetn-5)
 fix statue and figurine genders in special levels in general
+fix buffer overflow in update_topl when handling multiple items in a
+	container
 
 
 Platform- and/or Interface-Specific Fixes
