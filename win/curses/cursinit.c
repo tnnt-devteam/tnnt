@@ -761,11 +761,26 @@ curses_init_options(void)
        terminal size programmatically.  If the user does not specify a
        size in the config file, we will set it to a nice big 32x110 to
        take advantage of some of the nice features of this windowport. */
-    if (iflags.wc2_term_cols == 0)
-        iflags.wc2_term_cols = 110;
-    if (iflags.wc2_term_rows == 0)
-        iflags.wc2_term_rows = 32;
+    if (iflags.wc2_term_cols == 0) {
+#ifndef MSWIN_GRAPHICS
+        int console_width = get_console_width();
 
+        if (console_width != 0)
+            iflags.wc2_term_cols = console_width;
+        else
+#endif
+            iflags.wc2_term_cols = 110;
+    }
+    if (iflags.wc2_term_rows == 0) {
+#ifndef MSWIN_GRAPHICS
+        int console_height = get_console_height();
+
+        if (console_height != 0)
+            iflags.wc2_term_rows = console_height;
+        else
+#endif
+            iflags.wc2_term_rows = 32;
+    }
     resize_term(iflags.wc2_term_rows, iflags.wc2_term_cols);
     getmaxyx(base_term, term_rows, term_cols);
 

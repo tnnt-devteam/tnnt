@@ -2638,6 +2638,18 @@ void nethack_enter_consoletty(void)
     nhUse(apisuccess);
 }
 
+int
+get_console_width(void)
+{
+    return console.width;
+}
+
+int
+get_console_height(void)
+{
+    return console.height;
+}
+
 RESTORE_WARNING_CONDEXPR_IS_CONSTANT
 
 #endif /* TTY_GRAPHICS */
