@@ -894,7 +894,8 @@ cl_eos(void) /* free after Robert Viduya */
 
 #include <curses.h>
 
-#if !defined(LINUX) && !defined(__FreeBSD__) && !defined(NOTPARMDECL)
+#if !defined(LINUX) && !defined(__FreeBSD__) && !defined(__OpenBSD__) \
+	&& !defined(NOTPARMDECL)
 extern char *tparm();
 #endif
 
