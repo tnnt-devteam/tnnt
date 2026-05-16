@@ -24,6 +24,7 @@ obey statue type gender (gnome king statue in minetn-5)
 fix statue and figurine genders in special levels in general
 fix buffer overflow in update_topl when handling multiple items in a
 	container
+fix random attended shrines in irregular rooms
 
 
 Platform- and/or Interface-Specific Fixes
