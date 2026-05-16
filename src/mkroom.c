@@ -595,7 +595,7 @@ shrine_pos(int roomno)
         buf.y++;
 
     /* irregular room or the location is blocked */
-    if (roomno != levl[buf.x][buf.y].roomno
+    if (roomno != (int) levl[buf.x][buf.y].roomno
         || (levl[buf.x][buf.y].typ != ROOM
             && levl[buf.x][buf.y].typ != ICE
             && levl[buf.x][buf.y].typ != CLOUD))
