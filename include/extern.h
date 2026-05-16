@@ -2033,8 +2033,8 @@ extern int win32_cr_gettrace(int, char *, int);
 extern int *win32_cr_shellexecute(const char *);
 # endif
 #ifdef MSWIN_GRAPHICS
-extern int get_approx_window_column_width(void);
-extern int get_approx_window_rows(void);
+extern int get_approx_display_width(void);
+extern int get_approx_display_rows(void);
 #endif
 #endif /* WIN32 */
 
@@ -2185,8 +2185,8 @@ void console_g_putch(int in_ch);
 extern void set_output_mode(int);
 extern void synch_cursor(void);
 extern void nethack_enter_consoletty(void);
-extern int get_console_width(void);
-extern int get_console_height(void);
+extern int get_approx_display_cols(void);
+extern int get_approx_display_rows(void);
 extern void console_exit(void);
 extern int set_keyhandling_via_option(void);
 #ifdef ENHANCED_SYMBOLS

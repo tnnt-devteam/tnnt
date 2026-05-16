@@ -1361,6 +1361,19 @@ nh_compose_ascii_screenshot(void)
     return retval;
 }
 
+int
+get_approx_display_cols(void)
+{
+    return GetSystemMetrics(SM_CXSCREEN) / 8;
+}
+
+int
+get_approx_display_rows(void)
+{
+    return GetSystemMetrics(SM_CYSCREEN) / 12;
+}
+
+
 #ifdef ENHANCED_SYMBOLS
 // returns malloc() created pointer - callee assumes the ownership
 static WCHAR *

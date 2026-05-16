@@ -2644,13 +2644,13 @@ void nethack_enter_consoletty(void)
 }
 
 int
-get_console_width(void)
+get_approx_display_cols(void)
 {
     return console.width;
 }
 
 int
-get_console_height(void)
+get_approx_display_rows(void)
 {
     return console.height;
 }

@@ -762,40 +762,26 @@ curses_init_options(void)
        size in the config file, we will set it to a nice big 32x110 to
        take advantage of some of the nice features of this windowport. */
     if (iflags.wc2_term_cols == 0) {
-#ifndef MSWIN_GRAPHICS
-        int console_width = get_console_width();
+        int display_width = get_approx_display_cols();
 
-        if (console_width != 0)
-            iflags.wc2_term_cols = console_width;
+        if (display_width > 220)
+            display_width = 220;
+
+        if (display_width != 0)
+            iflags.wc2_term_cols = display_width;
         else
             iflags.wc2_term_cols = 110;
-#else
-        int width = get_approx_window_column_width();
-
-        if (width > 220)
-            width = 220;
-
-        if (width != 0)
-            iflags.wc2_term_cols = width;
-        else
-            iflags.wc2_term_cols = 110;
-#endif
     }
     if (iflags.wc2_term_rows == 0) {
-#ifndef MSWIN_GRAPHICS
-        int console_height = get_console_height();
+        int display_height = get_approx_display_rows();
 
-        if (console_height != 0)
-            iflags.wc2_term_rows = console_height;
+        if (display_height > 64)
+            display_height = 64;
+
+        if (display_height != 0)
+            iflags.wc2_term_rows = display_height;
         else
             iflags.wc2_term_rows = 32;
-#else
-        int scrows = get_approx_window_rows();
-
-        if (scrows > 54)
-            scrows = 54;
-        iflags.wc2_term_rows = scrows ? scrows : 32;
-#endif
     }
     resize_term(iflags.wc2_term_rows, iflags.wc2_term_cols);
     getmaxyx(base_term, term_rows, term_cols);
