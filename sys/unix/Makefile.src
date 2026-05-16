@@ -230,6 +230,9 @@ REGEXOBJ ?= $(TARGETPFX)posixregex.o
 #REGEXOBJ = $(TARGETPFX)pmatchregex.o
 #REGEXOBJ = $(TARGETPFX)cppregex.o
 
+TILECFILE ?= tile.c
+TILEOFILE ?=
+
 # Set the WINSRC, WINOBJ, and WINLIB lines to correspond to your desired
 # combination of windowing systems.  Also set matching USE_x_GRAPHICS in
 # config.h.  Note that if you are building for any window system which
@@ -260,10 +263,10 @@ WINX11SRC = ../win/X11/Window.c ../win/X11/dialogs.c ../win/X11/winX.c \
 	../win/X11/winmap.c  ../win/X11/winmenu.c ../win/X11/winmesg.c \
 	../win/X11/winmisc.c ../win/X11/winstat.c ../win/X11/wintext.c \
 	../win/X11/winval.c tile.c
-WINX11OBJ = $(TARGETPFX)Window.o $(TARGETPFX)dialogs.o $(TARGETPFX)winX.o \
+WINX11OBJ ?= $(TARGETPFX)Window.o $(TARGETPFX)dialogs.o $(TARGETPFX)winX.o \
 	$(TARGETPFX)winmap.o $(TARGETPFX)winmenu.o $(TARGETPFX)winmesg.o \
 	$(TARGETPFX)winmisc.o $(TARGETPFX)winstat.o $(TARGETPFX)wintext.o \
-	$(TARGETPFX)winval.o #$(TARGETPFX)tile.o
+	$(TARGETPFX)winval.o $(TILEOFILE)
 #
 # Files for a Qt 3 interface (renamed since nethack 3.6.x)
 #
@@ -291,7 +294,7 @@ WINQTSRC = ../win/Qt/qt_bind.cpp ../win/Qt/qt_click.cpp \
 	../win/Qt/qt_stat.cpp ../win/Qt/qt_str.cpp ../win/Qt/qt_streq.cpp \
 	../win/Qt/qt_svsel.cpp ../win/Qt/qt_win.cpp ../win/Qt/qt_xcmd.cpp \
 	../win/Qt/qt_yndlg.cpp $(WINQTMOC) tile.c
-WINQTOBJ = $(TARGETPFX)qt_bind.o $(TARGETPFX)qt_click.o \
+WINQTOBJ ?= $(TARGETPFX)qt_bind.o $(TARGETPFX)qt_click.o \
 	$(TARGETPFX)qt_clust.o $(TARGETPFX)qt_delay.o \
 	$(TARGETPFX)qt_glyph.o $(TARGETPFX)qt_icon.o \
 	$(TARGETPFX)qt_inv.o $(TARGETPFX)qt_key.o $(TARGETPFX)qt_line.o \
@@ -366,7 +369,7 @@ WINBELIB = -lbe
 #
 # libraries for curses port
 # link with ncurses
-WINCURSESLIB = -lncurses
+WINCURSESLIB ?= -lncurses
 # link with pdcurses for SDL, installed in a separate directory
 #WINCURSESLIB = -L/usr/local/lib/pdcurses -lpdcurses -lSDL
 # same as above, for XCurses
@@ -426,7 +429,7 @@ RANDOBJ =
 
 # used by `make depend' to reconstruct this Makefile; you shouldn't need this
 # at all but can override with 'make AWK=nawk' or 'make AWK=gawk' if necessary
-AWK	= awk
+AWK	?= awk
 
 # when using 'makedefs -v', also force dat/gitinfo.txt to be up to date;
 # changing this to 0 will change the behavior to only make that file if

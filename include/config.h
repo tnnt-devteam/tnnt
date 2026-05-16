@@ -677,7 +677,9 @@ typedef unsigned char uchar;
 #ifdef NHL_SANDBOX
 #ifdef CHRONICLE
     /* LIVELOG (and therefore CHRONICLE)  is needed for --loglua */
+#ifndef LIVELOG
 #define LIVELOG
+#endif
 #endif
 #endif
 
