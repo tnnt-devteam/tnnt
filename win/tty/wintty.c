@@ -3897,18 +3897,17 @@ tty_print_glyph(
             if (ttyDisplay->color != NO_COLOR)
                 term_end_color();
         }
-        /* we don't link with termcap.o if NO_TERMS is defined */
-        if ((tty_procs.wincap2 & WC2_EXTRACOLORS)
-            && glyphinfo->gm.customcolor != 0
-            && iflags.colorcount >= 256
+        if (glyphinfo->gm.customcolor != 0
             && !calling_from_update_inventory) {
-            if ((glyphinfo->gm.customcolor & NH_BASIC_COLOR) == 0) {
+            if ((glyphinfo->gm.customcolor & NH_BASIC_COLOR) != 0) {
+                /* NH_BASIC_COLOR */
+                color = COLORVAL(glyphinfo->gm.customcolor);
+            } else if ((tty_procs.wincap2 & WC2_EXTRACOLORS)
+                       && iflags.colorcount >= 256) {
                 term_start_extracolor(glyphinfo->gm.customcolor,
                                       glyphinfo->gm.color256idx);
                 ttyDisplay->colorflags = 0;
                 colordone = TRUE;
-            } else {
-                color = COLORVAL(glyphinfo->gm.customcolor);
             }
         }
         if (!colordone) {

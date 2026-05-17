@@ -1,4 +1,4 @@
-NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.0 $ $NHDT-Date: 1778152494 2026/05/07 11:14:54 $
+NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.5 $ $NHDT-Date: 1778535648 2026/05/11 21:40:48 $
 
 General Fixes and Modified Features
 -----------------------------------
@@ -12,11 +12,21 @@ fix issue where the new game startup message was stating 'Work-in-progress'
 	even when NH_DEVEL_STATUS was set to NH_STATUS_POSTRELEASE
 if 'mention_decor' was set in config file or NETHACKOPTIONS,
 	starting the game told you that "you are standing on stairs which lead
-	out of the dungeon", even when the player entered the tutorial where that
-	wasn't true
+	out of the dungeon", even when the player entered the tutorial where
+	that wasn't true
+when a vault guard was moved off the map, an impossible about trying to update
+	map location <0,0> was issued
 doc: use full URL for nethack.org in Guidebook.mn
 doc: fix a paste error in Guidebook.tex
 doc: fix spelling correction in nethack.6
+spelling: "Flanian Pobble Bead" to "Flainian Pobble Bead"
+obey statue type gender (gnome king statue in minetn-5)
+fix statue and figurine genders in special levels in general
+fix buffer overflow in update_topl when handling multiple items in a
+	container
+fix random attended shrines in irregular rooms
+fix experience-level up/down hilighting
+
 
 Platform- and/or Interface-Specific Fixes
 -----------------------------------------
@@ -41,6 +51,47 @@ Amiga: wire altmeta option to sysflags.altmeta
 Amiga: restore glyph icons in menus
 Amiga: sys/amiga/README.amiga stated "Extract NH50AMI.ZIP" but it could
 	be named something else; added a note about the potential suffix
+Amiga: `amiv_lprint_glyph` used an uninitialized `base` in tile-offset math
+Amiga: `amii_clear_nhwindow` overview window never got cleared with the map
+Amiga: `amii_sethipens` fell through from `NHW_TEXT` into `case -2`, clobbering
+	text-window pens
+Amiga: `NHW_BASE`/`NHW_OVER` collided with `NHW_PERMINVENT=6`; renumbered
+	off `NHW_LAST_TYPE`, matching the `wintty.h` convention
+Amiga: `make_menu_items` sized its output array by
+	`sizeof(amii_menu_item)` instead of `sizeof(menu_item)`
+Amiga: `DoMenuScroll` could deref a NULL `amip` on the `SELECTUP` path
+Amiga: `GlyphToIcon`'s ASCII passthrough used `> 10000` instead of `>=`
+Amiga: `fopenp`'s buffer-bound check fired one byte too late
+Amiga: fix port_help double-prefix path
+Amiga: replace WINVERS_AMI* strcmp with WINDOWPORT() id compare
+Amiga: route port paths through fqname()
+Amiga: drop redundant 'either windowtype' guards
+Amiga: deduplicate amii_procs and amiv_procs
+Amiga: route non-menu messages from DoMenuScroll to ProcessMessage
+Amiga: delete outdated/sys/amiga/
+Amiga: graphical tombstone RTG-screen fallback
+Amiga: fix extended-command menu mouse-pick
+Amiga: clamp amii_numcolors and guard tile CMAP loop
+Amiga: fix --more-- infinite loop on overlong words
+Amiga: bound BufferQueueChar; move CloseWindow out of Forbid()
+Amiga: defensive NULL/bounds guards in menus and window creation
+Amiga: tighten input/dialog buffer bounds
+Amiga: header hygiene and palette-size constants
+Amiga: drop UNTESTED AROS path; tighten fopenp separator write
+Amiga: harden host-side bmp/xpm to iff converters
+Amiga: tighten two minor issues from review
+Amiga: fix bitmap/IFF resource handling in winchar.c
+Amiga: fix overview-window crashes
+Amiga: fix latent issue found in code review: fname[18]/sprintf risks
+	overflow for >=10 in any version field; switch to snprintf into
+	a wider static buffer
+Amiga: fix latent issue found in code review: (1L << i) for i==31 (or
+	shifting into the depth-loop terminator) is undefined for signed
+	long;use 1UL
+Amiga: fix latent issue found in code review: Drop unused cnt= from
+	amii_display_nhwindow's DoMenuScroll call; the menu return value
+	is consumed elsewhere, not here
+gcc-16: tiletext.c [-Wdiscarded-qualifiers] warning suppression
 libnh: update get_nhuuid() for libnhmain
 libnh: sys/libnh/libnhmain.c: drop `static` on `whoami()`
 libnh: rewrote sys/unix/hints/macOS.500: rewrote the libnh.a rule. The
@@ -67,6 +118,8 @@ Windows: correct a NetHack 5.0.0 packaging error if visual studio was
 	used; a remnant hard-coded 370 was in package.nmake
 Windows: setting any map_mode option in the config file could trigger
 	an app failure on launch by dereferencing a null pointer
+tty: allow custom glyph colors if they're basic 16 nethack colors
+	on terminals with less than 256 colors
 
 
 General New Features
@@ -87,4 +140,25 @@ Code Cleanup and Reorganization
 -------------------------------
 add Contributing.md with some guidelines for making a pull request that
 	is in an acceptable format
+Make all top-level .md files subject to nhsub substitutions
+Fix subst for luahelper
+Amiga: delete dead files and dead-macro code
+Amiga: delete the .p prototype headers
+Amiga: drop #if 0 dead-code blocks
+Amiga: drop TESTING dev toggle in winchar.c
+Amiga: collapse #ifndef CROSS_TO_AMIGA include forks
+Amiga: clean up amiconf.h
+Amiga: drop OPT_DISPMAP / display_map / fast_map machinery
+Amiga: correct command-line flag doc in amii.hlp
+Amiga: delete outdated/sys/amiga/ source folder tree
+Amiga: drop legacy non-gcc compiler guards
+Amiga: remove remnants of support for compiling on Amiga (the old
+	compilers couldn't cope with such a large codebase anymore)
+Amiga: remove old conditionals for running on OS 1.3
+Amiga: remove miscellaneous unused code like TTY/BBS support, commented
+	out test code etc
+Amiga: make INTUI_NEW_LOOK unconditional
+Amiga: drop SHAREDLIB dead build flavor
+Amiga: make amigapkg depend on $(GAMEBIN)
+
 
