@@ -17,9 +17,6 @@ staticfn const char *rank(void);
 staticfn void bot_via_windowport(void);
 staticfn void stat_update_time(void);
 
-/* limit of the player's name in the status window */
-#define BOTL_NSIZ 16
-
 char *
 get_strength_str(void)
 {
