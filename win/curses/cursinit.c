@@ -787,9 +787,9 @@ curses_init_options(void)
 #else
     /* FIXME: should these be higher; is there a way to detect max there? */
     if (iflags.wc2_term_cols == 0)
-        iflags.wc2_term_cols = 80;
+        iflags.wc2_term_cols = 110;
     if (iflags.wc2_term_rows == 0)
-        iflags.wc2_term_rows = 25;
+        iflags.wc2_term_rows = 32;
 #endif
     resize_term(iflags.wc2_term_rows, iflags.wc2_term_cols);
     getmaxyx(base_term, term_rows, term_cols);
