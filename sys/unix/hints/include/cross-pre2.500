@@ -177,7 +177,7 @@ MSDOS_GPP_CFLAGS = -Wall -Wextra -Wno-missing-field-initializers -Wreturn-type \
 	-Wmissing-declarations -Wformat-nonliteral -Wunreachable-code \
 	-Wno-maybe-uninitialized
 MSDOS_TARGET_CFLAGS = -c -O $(DBGFLAGS) -I../include -I../sys/msdos -I../win/share \
-	$(LUAINCL) -DDLB $(PDCURSESDEF) -DTILES_IN_GLYPHMAP -DUSE_TILES \
+	$(LUAINCL) -DDLB $(PDCURSESDEF) -DTILES_IN_GLYPHMAP \
 	-DCROSSCOMPILE -DCROSSCOMPILE_TARGET -DCROSS_TO_MSDOS \
 	-D_NAIVE_DOS_REGS \
 	$(MSDOS_GCC_CFLAGS) $(SNDCFLAGS)
