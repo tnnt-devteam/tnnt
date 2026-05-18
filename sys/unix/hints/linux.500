@@ -473,7 +473,7 @@ LFLAGS+=-rdynamic
 
 # if TTY_TILES_ESCCODES
 #WINSRC += tile.c
-#WINOBJ += tile.o
+#GENTILEOFILE = $(SRCDIR)/tile.o
 # endif
 
 CHOWN=true
