@@ -314,7 +314,6 @@ else	# !WANT_WIN_QT
 LINK=$(CC)
 endif	# !WANT_WIN_QT
 
-# prevent duplicate tile.o in WINOBJ
 WINOBJ = $(WINOBJ0)
 # prevent duplicates in VARDATND if both X11 and Qt are being supported
 VARDATND += $(sort $(VARDATND0))

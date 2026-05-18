@@ -225,7 +225,7 @@ override SYSOBJ= $(TARGETPFX)pcmain.o $(TARGETPFX)msdos.o \
 		$(TARGETPFX)vidvga.o $(TARGETPFX)vidvesa.o \
 		$(TARGETPFX)font.o \
 		$(TARGETPFX)bmptiles.o $(TARGETPFX)giftiles.o \
-		$(TARGETPFX)tileset.o $(TARGETPFX)tile.o
+		$(TARGETPFX)tileset.o $(GENTILEOFILE)
 override WINLIB=
 override LUALIB=
 override LUALIBS=

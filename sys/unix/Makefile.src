@@ -231,8 +231,8 @@ REGEXOBJ ?= $(TARGETPFX)posixregex.o
 #REGEXOBJ ?= $(TARGETPFX)pmatchregex.o
 #REGEXOBJ ?= $(TARGETPFX)cppregex.o
 
-GENTILECFILE = tile.c
-GENTILEOFILE = $(TARGETPFX)tile.o
+GENTILECFILE = $(SRCDIR)/tile.c
+GENTILEOFILE ?=
 
 # Set the WINSRC, WINOBJ, and WINLIB lines to correspond to your desired
 # combination of windowing systems.  Also set matching USE_x_GRAPHICS in
@@ -270,7 +270,7 @@ WINX11OBJ ?= $(TARGETPFX)Window.o $(TARGETPFX)dialogs.o $(TARGETPFX)winX.o \
 #WINQT3SRC = ../win/Qt3/qt3_win.cpp ../win/Qt3/qt3_clust.cpp \
 #	../win/Qt3/qt3tableview.cpp
 #WINQT3OBJ = $(TARGETPFX)qt3_win.o $(TARGETPFX)qt3_clust.o \
-#	$(TARGETPFX)qt3tableview.o $(GENTILEOFILE)
+#	$(TARGETPFX)qt3tableview.o
 # empty values for 'make depend'
 WINQT3SRC =
 WINQT3OBJ =
@@ -299,7 +299,7 @@ WINQTOBJ ?= $(TARGETPFX)qt_bind.o $(TARGETPFX)qt_click.o \
 	$(TARGETPFX)qt_msg.o $(TARGETPFX)qt_plsel.o $(TARGETPFX)qt_rip.o \
 	$(TARGETPFX)qt_set.o $(TARGETPFX)qt_stat.o $(TARGETPFX)qt_str.o \
 	$(TARGETPFX)qt_streq.o $(TARGETPFX)qt_svsel.o $(TARGETPFX)qt_win.o \
-	$(TARGETPFX)qt_xcmd.o $(TARGETPFX)qt_yndlg.o $(GENTILEOFILE)
+	$(TARGETPFX)qt_xcmd.o $(TARGETPFX)qt_yndlg.o
 
 # Files for Shim windowing interface for libnh -- doesn't do anything,
 # just passes along the API calls to the library
@@ -314,7 +314,7 @@ WINBEOBJ ?=
 #WINBESRC = ../win/BeOS/winbe.cpp ../win/BeOS/NHWindow.cpp \
 #	../win/BeOS/NHMenuWindow.cpp ../win/BeOS/NHMapWindow.cpp $(GENTILECFILE)
 #WINBEOBJ = $(TARGETPFX)winbe.o $(TARGETPFX)NHWindow.o \
-#	$(TARGETPFX)NHMenuWindow.o $(TARGETPFX)NHMapWindow.o $(GENTILEOFILE)
+#	$(TARGETPFX)NHMenuWindow.o $(TARGETPFX)NHMapWindow.o
 #
 #
 #WINSRC = $(WINTTYSRC)
@@ -541,9 +541,6 @@ SYSCSRC ?= ../sys/share/pcmain.c ../sys/share/pcsys.c \
 	../sys/unix/unixunix.c ../sys/unix/unixres.c
 SYSCXXSRC ?= ../sys/share/cppregex.cpp
 
-# generated source files (tile.c is handled separately via WINxxxSRC)
-GENCSRC ?= #tile.c
-
 # all windowing-system-dependent .c (for dependencies and such)
 WINCSRC ?= $(WINTTYSRC) $(WINCURSESSRC) $(WINX11SRC) $(WINSHIMSRC)
 # all windowing-system-dependent .cpp (for dependencies and such)
@@ -584,6 +581,9 @@ HSOURCES ?= $(HACKINCL) dgn_file.h
 # the following .o's _must_ be made before any others (for makedefs)
 FIRSTOBJ ?= monst.o objects.o
 HOSTOBJ ?= $(FIRSTOBJ) alloc.o drawing.o
+
+$(info WINOBJ=$(WINOBJ))
+$(info GENTILEOFILE=$(GENTILEOFILE))
 
 #
 # $(TARGETPFX)date.o is not included in this list
@@ -767,8 +767,8 @@ $(MAKEDEFS): $(FIRSTOBJ) \
 	@( cd ../util ; $(MAKE) ../include/pm.h )
 #	Created at build time for configurations which support tiles,
 #	but not by makedefs so not connected to the others.
-tile.c: ../win/share/tilemap.c $(HACK_H)
-	@( cd ../util ; $(MAKE) $(SRCDIR)/tile.c )
+../src/tile.c: ../win/share/tilemap.c $(HACK_H)
+	@( cd ../util ; $(MAKE) ../src/tile.c )
 
 #
 # hacklib (a library of utility routines)
@@ -1272,7 +1272,7 @@ $(TARGETPFX)strutil.o: strutil.c $(HACK_H)
 $(TARGETPFX)symbols.o: symbols.c $(HACK_H) ../include/tcap.h
 $(TARGETPFX)sys.o: sys.c $(HACK_H)
 $(TARGETPFX)teleport.o: teleport.c $(HACK_H)
-$(TARGETPFX)tile.o: tile.c $(HACK_H)
+$(TARGETPFX)tile.o: $(SRCDIR)/tile.c $(HACK_H)
 $(TARGETPFX)timeout.o: timeout.c $(HACK_H)
 $(TARGETPFX)topten.o: topten.c $(HACK_H) ../include/dlb.h
 $(TARGETPFX)track.o: track.c $(HACK_H)
