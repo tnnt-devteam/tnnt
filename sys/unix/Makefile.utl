@@ -10,6 +10,7 @@
 
 # Root of source tree:
 NHSROOT=..
+SRCDIR = $(NHSROOT)/src
 
 # newer makes predefine $(MAKE) to 'make' and do smarter processing of
 # recursive make calls if $(MAKE) is used
@@ -517,7 +518,7 @@ tilemap: tilemap.o $(OBJDIR)/objects.o $(OBJDIR)/monst.o $(OBJDIR)/drawing.o \
 	$(CLINK) $(LFLAGS) -o tilemap tilemap.o $(OBJDIR)/objects.o  \
 		$(OBJDIR)/monst.o  $(OBJDIR)/drawing.o $(HACKLIB) \
 		$(LIBS)
-../src/tile.c: tilemap
+$(SRCDIR)/tile.c: tilemap
 	./tilemap
 
 tiletext.o: ../win/share/tiletext.c $(CONFIG_H) ../win/share/tile.h
