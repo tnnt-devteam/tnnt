@@ -5,22 +5,34 @@
 #---------------------------------------------------------------------
 # MacOS hints file with support for multiple window ports (interfaces)
 # Tested on:
-#     - MacOS Catalina 10.15
-#     - MacOS Ventura 13 (Intel processor)
+#     - MacOS Catalina 10.15 (Intel processor)
+#     - MacOS Tahoe 26.5 (Intel processor)
+#     - MacOS Tahoe 26.5 (M ARM64 processor)
 #
 # If this doesn't work for some other version of macOS, consider
 # making a new hints file it, rather than changing this one.
 # And let us know about it.
 # Useful info: http://www.opensource.apple.com/darwinsource/index.html
 
+#
+#-EARLY
+
+TARGETPFX=
+HINTSVERSION := 500
+
+# note: '#-INCLUDE' is not just a comment, it inserts a
+#        file from sys/unix/hints/include.
+#        multiw-1.500 contains sections 1 to 2
+#-INCLUDE multiw-1.500
+
+# sys/unix/Makefile.header will get inserted right here,
+# ahead of the PRE section.
+
+#-PRE
+
 #-PRE xxxx
 # macOS hints file
 #
-
-# note: '#-INCLUDE' is not just a comment; multiw-1 contains sections 1 to 2
-#-INCLUDE multiw-1.500
-
-HINTSVERSION := 500
 
 ifdef MAKEFILE_TOP
 ifeq ($(MAKELEVEL),0)

@@ -5,22 +5,26 @@
 #---------------------------------------------------------------------
 # Linux hints file with support for multiple window ports (interfaces)
 # Tested on:
-#     - Ubuntu focal
+#     - Ubuntu resolute raccoon
 #
 # If this doesn't work for your distribution, consider making a new
 # hints file for it, rather than changing this one.
 # And let us know about it.
 #
+#-EARLY
 
-#-PRE
-# linux.500 hints file provides a single-user build for Linux (such
-# as Ubuntu focal).
+TARGETPFX=
+HINTSVERSION := 500
 
-# note: '#-INCLUDE' is not just a comment
+# note: '#-INCLUDE' is not just a comment, it inserts a
+#        file from sys/unix/hints/include.
 #        multiw-1.500 contains sections 1 to 2
 #-INCLUDE multiw-1.500
 
-HINTSVERSION := 500
+# sys/unix/Makefile.header will get inserted right here,
+# ahead of the PRE section.
+
+#-PRE
 
 ifdef MAKEFILE_TOP
 ifeq ($(MAKELEVEL),0)
