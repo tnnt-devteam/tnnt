@@ -18,7 +18,9 @@ $(TARGETPFX)vidvesa.o : ../sys/msdos/vidvesa.c ../sys/msdos/portio.h \
 		../win/share/tile.h ../include/tileset.h ../sys/msdos/font.h $(HACK_H)
 $(TARGETPFX)vidstub.o : ../sys/msdos/vidvesa.c ../sys/msdos/portio.h \
 		$(HACK_H)
-$(TARGETPFX)tile.o : tile.c
+$(TARGETPFX)tile.o : $(SRCDIR)/tile.c
+	$(TARGET_CC) $(TARGET_CFLAGS) -c -o $@ $(SRCDIR)/tile.c
+$(SRCDIR)tile.c : tiletext
 $(TARGETPFX)exceptn.o : ../lib/djgpp/djgpp-patch/src/libc/go32/exceptn.S
 	$(TARGET_CC) -c -o $@ ../lib/djgpp/djgpp-patch/src/libc/go32/exceptn.S
 	$(TARGET_AR) ru ../lib/djgpp/i586-pc-msdosdjgpp/lib/libc.a $(TARGETPFX)exceptn.o
@@ -475,7 +477,11 @@ $(TARGETPFX)slk.o : $(PDCTOP)/pdcurses/slk.c
 $(TARGETPFX)termattr.o : $(PDCTOP)/pdcurses/termattr.c
 $(TARGETPFX)touch.o : $(PDCTOP)/pdcurses/touch.c
 $(TARGETPFX)util.o : $(PDCTOP)/pdcurses/util.c
+# We need an explicit recipe for the creation of $(TARGETPFX)window.o
+# because it will try and use the X11 version of window.c otherwise
 $(TARGETPFX)window.o : $(PDCTOP)/pdcurses/window.c
+	$(TARGET_CC) $(PDCINCL) $(PDC_TARGET_CFLAGS) \
+		-Wno-sign-compare -o$@  $(PDCTOP)/pdcurses/window.c
 $(TARGETPFX)debug.o : $(PDCTOP)/pdcurses/debug.c
 $(TARGETPFX)pdcclip.o : $(PDCPORT)/pdcclip.c
 $(TARGETPFX)pdcdisp.o : $(PDCPORT)/pdcdisp.c

@@ -134,6 +134,7 @@ override TARGET_CC = $(TOOLTOP1)/i586-pc-msdosdjgpp-gcc
 override TARGET_CXX = $(TOOLTOP1)/i586-pc-msdosdjgpp-g++
 override TARGET_AR = $(TOOLTOP1)/i586-pc-msdosdjgpp-gcc-ar
 override TARGET_STUBEDIT = ../lib/djgpp/i586-pc-msdosdjgpp/bin/stubedit
+override GENTILEOFILE = $(TARGETPFX)tile.o
 ifdef MAKEFILE_SRC
 FLDR=../
 endif
@@ -176,7 +177,7 @@ MSDOS_GPP_CFLAGS = -Wall -Wextra -Wno-missing-field-initializers -Wreturn-type \
 	-Wmissing-declarations -Wformat-nonliteral -Wunreachable-code \
 	-Wno-maybe-uninitialized
 MSDOS_TARGET_CFLAGS = -c -O $(DBGFLAGS) -I../include -I../sys/msdos -I../win/share \
-	$(LUAINCL) -DDLB $(PDCURSESDEF) -DTILES_IN_GLYPHMAP \
+	$(LUAINCL) -DDLB $(PDCURSESDEF) -DTILES_IN_GLYPHMAP -DUSE_TILES \
 	-DCROSSCOMPILE -DCROSSCOMPILE_TARGET -DCROSS_TO_MSDOS \
 	-D_NAIVE_DOS_REGS \
 	$(MSDOS_GCC_CFLAGS) $(SNDCFLAGS)
@@ -225,11 +226,12 @@ override SYSOBJ= $(TARGETPFX)pcmain.o $(TARGETPFX)msdos.o \
 		$(TARGETPFX)vidvga.o $(TARGETPFX)vidvesa.o \
 		$(TARGETPFX)font.o \
 		$(TARGETPFX)bmptiles.o $(TARGETPFX)giftiles.o \
-		$(TARGETPFX)tileset.o $(GENTILEOFILE)
+		$(TARGETPFX)tileset.o
 override WINLIB=
 override LUALIB=
 override LUALIBS=
 override TOPLUALIB=
+override WINX11OBJ=
 override GAMEBIN = $(TARGETPFX)nethack.exe
 override RECOVERBIN = $(TARGETPFX)recover.exe
 override SFCTOOLBIN = $(TARGETPFX)sfctool.exe
@@ -258,6 +260,11 @@ endif  # WANT_WIN_CURSES
 # Rule for files in sys/msdos
 $(TARGETPFX)%.o : ../sys/msdos/%.c
 	$(TARGET_CC) $(TARGET_CFLAGS) -o$@ $<
+#
+# Rule for files in util
+$(TARGETPFX)%.o : ../util/%.c
+	$(TARGET_CC) $(TARGET_CFLAGS) -o$@ $<
+
 endif  # CROSS_TO_MSDOS
 #=================================================================
 

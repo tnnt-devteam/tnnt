@@ -263,7 +263,7 @@ WINX11SRC ?= ../win/X11/Window.c ../win/X11/dialogs.c ../win/X11/winX.c \
 WINX11OBJ ?= $(TARGETPFX)Window.o $(TARGETPFX)dialogs.o $(TARGETPFX)winX.o \
 	$(TARGETPFX)winmap.o $(TARGETPFX)winmenu.o $(TARGETPFX)winmesg.o \
 	$(TARGETPFX)winmisc.o $(TARGETPFX)winstat.o $(TARGETPFX)wintext.o \
-	$(TARGETPFX)winval.o $(TILEOFILE)
+	$(TARGETPFX)winval.o
 #
 # Files for a Qt 3 interface (renamed since nethack 3.6.x)
 #
@@ -553,10 +553,10 @@ CHAINOBJ ?= $(TARGETPFX)wc_chainin.o $(TARGETPFX)wc_chainout.o \
 	$(TARGETPFX)wc_trace.o
 
 # .c files for this version (for date.h)
-VERSOURCES ?= $(HACKCSRC) $(HACKLIBSRC) $(SYSSRC) $(WINSRC) $(CHAINSRC) $(GENCSRC)
+VERSOURCES ?= $(HACKCSRC) $(HACKLIBSRC) $(SYSSRC) $(WINSRC) $(CHAINSRC) $(GENTILECFILE)
 
 # .c files for all versions using this Makefile (for lint and tags)
-CSOURCES ?= $(HACKCSRC) $(HACKLIBSRC) $(SYSCSRC) $(WINCSRC) $(CHAINSRC) $(GENCSRC)
+CSOURCES ?= $(HACKCSRC) $(HACKLIBSRC) $(SYSCSRC) $(WINCSRC) $(CHAINSRC) $(GENTILECFILE)
 
 
 # all .h files except date.h, which would
