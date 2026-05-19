@@ -673,8 +673,8 @@ Sysatt:	$(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) $(GENTILEOFILE) \
 		$(DATE_O) $(BUILDMORE) Makefile
 	@echo "Loading $(GAME)."
 	$(AT)$(LD) $(TARGET_LFLAGS) /lib/crt0s.o /lib/shlib.ifile \
-		-o $(GAMEBIN) $(HOSTOBJ) $(HOBJ) $(DATE_O) $(TARGET_HACKLIB) \
-		$(LUALIBS)
+		-o $(GAMEBIN) $(HOSTOBJ) $(HOBJ) $(DATE_O) \
+		$(TARGET_HACKLIB) $(LUALIBS)
 	@touch Sysatt
 
 Systos:	$(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) $(GENTILEOFILE) \

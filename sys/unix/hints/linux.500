@@ -23,6 +23,7 @@
 HINTSVERSION := 500
 
 ifdef MAKEFILE_TOP
+LUA_VERSION=5.4.8
 ifeq ($(MAKELEVEL),0)
 PRECHECK+=checkmakefiles
 # all files included from this hints file get listed
@@ -67,6 +68,35 @@ USE_NOSTATICFN = 1
 
 #-INCLUDE compiler.500
 
+ifdef WANT_SYSTEM_LUA
+OS_ID := $(shell grep -E '^ID=' /etc/os-release 2>/dev/null | cut -d= -f2)
+ifeq ($(OS_ID),alpine)
+USE_SYSTEM_LUA=1
+CURSPKG = ncurses
+endif  # Alpine Linux
+
+ifeq "$(USE_SYSTEM_LUA)" "1"
+#5.4.8
+ifndef LUA_VERSION
+LUA_VERSION := 5.4.8
+endif
+LUASUBDELIM := $(subst ., ,$(LUA_VERSION))
+LUASHVER := $(word 1, $(LUASUBDELIM)).$(word 2, $(LUASUBDELIM))
+LUAHEADERS := /usr/include/lua$(LUASHVER)
+LUATESTTARGET := $(LUAHEADERS)/lua.h
+LUAHPREFIX :=
+LUAFLAGS := $(shell pkg-config --cflags lua-$(LUASHVER))
+LUALIBS := $(shell pkg-config --libs lua-$(LUASHVER))
+CFLAGS += $(LUAFLAGS)
+LUATOP=
+LUAMAKEFLAGS=
+LUA2NHTOP=
+LUABASELIB=
+TOPLUALIB=
+LUALIB=
+endif # USE_SYSTEM_LUA
+endif # WANT_SYSTEM_LUA
+
 ifdef WANT_WIN_QT
 ifdef WANT_WIN_QT5
 QTDIR=/usr
@@ -96,6 +126,7 @@ LFLAGS+=-fsanitize=undefined
 endif
 
 ifeq "$(USE_CURSESLIB)" "1"
+CURSPKG ?= ncursesw
 # default
 CURSESLIB = -lncurses -ltinfo
 # If CURSES_UNICODE is defined, we need ncursesw.
@@ -103,8 +134,8 @@ CURSESLIB = -lncurses -ltinfo
 # CURSESLIB = -lncurses -ltinfo
 ifdef MAKEFILE_SRC
 comma:=,
-NCURSES_LFLAGS = $(shell pkg-config ncursesw --libs)
-NCURSES_CFLAGS = $(shell pkg-config ncursesw --cflags)
+NCURSES_LFLAGS = $(shell pkg-config $(CURSPKG) --libs)
+NCURSES_CFLAGS = $(shell pkg-config $(CURSPKG) --cflags)
 ifeq (,$(findstring ncursesw, $(NCURSES_LFLAGS)))
 ifeq (,$(findstring ncurses, $(NCURSES_LFLAGS)))
 #this indicates that pkg-config itself was unavailable
