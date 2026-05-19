@@ -36,6 +36,9 @@ HINTSINCLFILES := $(addsuffix .$(HINTSVERSION), $(HINTSINCLNAMES))
 endif
 endif
 
+#-INCLUDE linuxdistro.500
+
+
 ifndef LIBXPM
 LIBXPM= -L/opt/X11/lib -lXpm
 endif
@@ -69,31 +72,107 @@ USE_NOSTATICFN = 1
 #-INCLUDE compiler.500
 
 ifdef WANT_SYSTEM_LUA
-OS_ID := $(shell grep -E '^ID=' /etc/os-release 2>/dev/null | cut -d= -f2)
-ifeq ($(OS_ID),alpine)
-USE_SYSTEM_LUA=1
-CURSPKG = ncurses
-endif  # Alpine Linux
-
-ifeq "$(USE_SYSTEM_LUA)" "1"
-#5.4.8
 ifndef LUA_VERSION
 LUA_VERSION := 5.4.8
 endif
 LUASUBDELIM := $(subst ., ,$(LUA_VERSION))
 LUASHVER := $(word 1, $(LUASUBDELIM)).$(word 2, $(LUASUBDELIM))
+
+ifeq ($(LINUX_DISTRO),alpine)
+# prereq: doas apk add lua5.4-dev
+#         doas apk add linux-headers
+#         doas apk add musl-dev
+USE_SYSTEM_LUA=1
+SHELLPKG :=pkg-config
+LUAPKGNAME = lua-$(LUASHVER)
+CURSPKG = ncurses
+#
+else ifeq ($(LINUX_DISTRO),debian)
+# prereq: sudo apt install lua5.4 liblua5.4-dev
+USE_SYSTEM_LUA=1
+SHELLPKG :=pkg-config
+LUAPKGNAME = lua-$(LUASHVER)
+#
+else ifeq ($(LINUX_DISTRO),ubuntu)
+# prereq: sudo apt install lua5.4 liblua5.4-dev
+USE_SYSTEM_LUA=1
+SHELLPKG :=dpkg
+LUAPKGNAME = lua$(LUASHVER)
+#
+else ifeq ($(LINUX_DISTRO),fedora)
+# prereq: sudo dnf install lua lua-devel
+USE_SYSTEM_LUA=1
+SHELLPKG :=rpm
+LUAPKGNAME = lua-devel
+#
+else
+USE_SYSTEM_LUA=0
+SHELLPKG :=
+endif  # LINUX_DISTRO
+
+ifeq ($(USE_SYSTEM_LUA),1)
+ifneq "$(SHELLPKG)" ""
+#
+# Two requirements must now pass:
+# 1. We need to be able to check if Lua package
+#    is installed. We do that here.
+# 2. The lua.h header file needs to be present
+#    where expected. We set LUATESTTARGET here,
+#    but the check is done later on in the top
+#    Makefile.
+#
+# Try to confirm package presence
+ifeq ($(SHELLPKG),pkg-config)
+PKG_EXISTS := $(shell pkg-config --exists $(LUAPKGNAME) \
+		&& echo yes || echo no)
+#
+else ifeq ($(SHELLPKG),dpkg)
+PKG_EXISTS := $(shell dpkg -s $(LUAPKGNAME) > /dev/null 2>&1 \
+		&& echo yes || echo no)
+#
+else ifeq ($(SHELLPKG),rpm)
+PKG_EXISTS := $(shell rpm -q $(LUAPKGNAME) > /dev/null 2>&1 \
+		&& echo yes || echo no)
+#
+else
+$(info Section for DEFAULT)
+PKG_EXISTS=no
+$(info Existance of package $(LUAPKGNAME) could not be verified)
+endif
+
+ifeq ($(PKG_EXISTS),yes)
+$(info Existance of package $(LUAPKGNAME) verified)
+#
+ifeq ($(LINUX_DISTRO),fedora)
+LUACFLAGS := $(shell pkg-config --cflags lua-$(LUASHVER))
+LUALIBS := $(shell pkg-config --libs lua-$(LUASHVER))
 LUAHEADERS := /usr/include/lua$(LUASHVER)
 LUATESTTARGET := $(LUAHEADERS)/lua.h
-LUAHPREFIX :=
-LUAFLAGS := $(shell pkg-config --cflags lua-$(LUASHVER))
+#
+else ifeq ($(LINUX_DISTRO),ubuntu)
+LUACFLAGS := -I/usr/include/lua$(LUASHVER)
+LUALIBS := -llua$(LUASHVER) -lm -ldl
+LUAHEADERS := /usr/include/lua$(LUASHVER)
+LUATESTTARGET := $(LUAHEADERS)/lua.h
+#
+else ifeq ($(SHELLPKG),pkg-config)
+LUACFLAGS := $(shell pkg-config --cflags lua-$(LUASHVER))
 LUALIBS := $(shell pkg-config --libs lua-$(LUASHVER))
-CFLAGS += $(LUAFLAGS)
+LUAHEADERS := /usr/include/lua$(LUASHVER)
+LUATESTTARGET := $(LUAHEADERS)/lua.h
+endif
+#
+LUAHPREFIX=
 LUATOP=
 LUAMAKEFLAGS=
 LUA2NHTOP=
 LUABASELIB=
-TOPLUALIB=
+LUATOPLIB=
+LUALIBBUILT=
 LUALIB=
+CFLAGS += $(LUACFLAGS)
+endif # PKG_EXISTS?
+endif # SHELLPKG has a value
 endif # USE_SYSTEM_LUA
 endif # WANT_SYSTEM_LUA
 

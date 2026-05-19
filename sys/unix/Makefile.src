@@ -582,8 +582,8 @@ HSOURCES ?= $(HACKINCL) dgn_file.h
 FIRSTOBJ ?= monst.o objects.o
 HOSTOBJ ?= $(FIRSTOBJ) alloc.o drawing.o
 
-$(info WINOBJ=$(WINOBJ))
-$(info GENTILEOFILE=$(GENTILEOFILE))
+#$(info WINOBJ=$(WINOBJ))
+#$(info GENTILEOFILE=$(GENTILEOFILE))
 
 #
 # $(TARGETPFX)date.o is not included in this list
