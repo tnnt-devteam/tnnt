@@ -239,7 +239,7 @@ $(TARGETPFX)amistack.o : ../sys/amiga/amistack.c $(HACK_H)
 $(TARGETPFX)amiwind.o : ../sys/amiga/amiwind.c \
 		../sys/amiga/amimenu.c $(HACK_H)
 $(TARGETPFX)winami.o : ../sys/amiga/winami.c $(HACK_H)
-$(TARGETPFX)winchar.o : ../sys/amiga/winchar.c tile.c $(HACK_H)
+$(TARGETPFX)winchar.o : ../sys/amiga/winchar.c $(SRCDIR)/tile.c $(HACK_H)
 $(TARGETPFX)winfuncs.o : ../sys/amiga/winfuncs.c $(HACK_H)
 $(TARGETPFX)winkey.o : ../sys/amiga/winkey.c $(HACK_H)
 $(TARGETPFX)winamenu.o : ../sys/amiga/winamenu.c $(HACK_H)
