@@ -135,7 +135,6 @@ PKG_EXISTS := $(shell rpm -q $(LUAPKGNAME) > /dev/null 2>&1 \
 		&& echo yes || echo no)
 #
 else
-$(info Section for DEFAULT)
 PKG_EXISTS=no
 $(info Existance of package $(LUAPKGNAME) could not be verified)
 endif
