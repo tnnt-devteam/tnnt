@@ -20,7 +20,7 @@ $(TARGETPFX)vidstub.o : ../sys/msdos/vidvesa.c ../sys/msdos/portio.h \
 		$(HACK_H)
 $(TARGETPFX)tile.o : $(SRCDIR)/tile.c
 	$(TARGET_CC) $(TARGET_CFLAGS) -c -o $@ $(SRCDIR)/tile.c
-$(SRCDIR)tile.c : tiletext
+$(SRCDIR)/tile.c : tiletext
 $(TARGETPFX)exceptn.o : ../lib/djgpp/djgpp-patch/src/libc/go32/exceptn.S
 	$(TARGET_CC) -c -o $@ ../lib/djgpp/djgpp-patch/src/libc/go32/exceptn.S
 	$(TARGET_AR) ru ../lib/djgpp/i586-pc-msdosdjgpp/lib/libc.a $(TARGETPFX)exceptn.o
