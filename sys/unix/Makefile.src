@@ -553,10 +553,10 @@ CHAINOBJ ?= $(TARGETPFX)wc_chainin.o $(TARGETPFX)wc_chainout.o \
 	$(TARGETPFX)wc_trace.o
 
 # .c files for this version (for date.h)
-VERSOURCES ?= $(HACKCSRC) $(HACKLIBSRC) $(SYSSRC) $(WINSRC) $(CHAINSRC) $(GENTILECFILE)
+VERSOURCES ?= $(HACKCSRC) $(HACKLIBSRC) $(SYSSRC) $(WINSRC) $(CHAINSRC)
 
 # .c files for all versions using this Makefile (for lint and tags)
-CSOURCES ?= $(HACKCSRC) $(HACKLIBSRC) $(SYSCSRC) $(WINCSRC) $(CHAINSRC) $(GENTILECFILE)
+CSOURCES ?= $(HACKCSRC) $(HACKLIBSRC) $(SYSCSRC) $(WINCSRC) $(CHAINSRC)
 
 
 # all .h files except date.h, which would
@@ -632,10 +632,10 @@ HOBJ ?= $(TARGETPFX)allmain.o $(TARGETPFX)alloc.o \
 	$(TARGETPFX)wizcmds.o $(TARGETPFX)worm.o $(TARGETPFX)worn.o \
 	$(TARGETPFX)write.o $(TARGETPFX)zap.o \
 	$(REGEXOBJ) $(RANDOBJ) $(SYSOBJ) $(WINOBJ) \
-	$(HINTOBJ) $(SNDLIBOBJ) $(UUIDOBJ) $(GENTILEOFILE) \
+	$(HINTOBJ) $(SNDLIBOBJ) $(UUIDOBJ) \
 	$(TARGETPFX)version.o 
 
-DATE_O ?= $(TARGETPFX)date.o
+DATE_O = $(TARGETPFX)date.o
 
 # the .o files from the HACKCSRC, SYSSRC, and WINSRC lists
 
@@ -653,51 +653,55 @@ pregame: $(RESPONSEFILES)
 $(GAME):	pregame $(MAKEDEFS) $(LUALIB) $(WAVS) $(SYSTEM)
 	@echo "$(GAME) is up to date."
 
-Sysunix: $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) $(GENTILEOFILE) \
+#$(info DATE_O=$(DATE_O))
+#$(info GENTILEOFILE=$(GENTILEOFILE))
+
+Sysunix: $(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
 		$(DATE_O) $(BUILDMORE) Makefile
 	@echo "Linking $(GAME)."
 	$(AT)$(TARGET_LINK) $(TARGET_LFLAGS) -o $(GAMEBIN) \
-		$(HOBJ) $(DATE_O) $(TARGET_HACKLIB) $(WINLIB) \
+		$(HOBJ) $(DATE_O) $(GENTILEOFILE) \
+		$(TARGET_HACKLIB) $(WINLIB) \
 		$(TARGET_LIBS) $(LUALIBS) $(AUTOLIBS)
 	@touch Sysunix
 
-Sys3B2:	$(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) $(GENTILEOFILE) \
+Sys3B2:	$(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
 		$(DATE_O) $(BUILDMORE) Makefile
 	@echo "Linking $(GAME)."
 	$(AT)$(TARGET_LINK) $(TARGET_LFLAGS) -o $(GAMEBIN) \
-		$(HOBJ) $(DATE_O) $(TARGET_HACKLIB) $(WINLIB) \
-		$(LUALIBS) -lmalloc
+		$(HOBJ) $(DATE_O) $(GENTILEOFILE) \
+		$(TARGET_HACKLIB) $(WINLIB) $(LUALIBS) -lmalloc
 	@touch Sys3B2
 
-Sysatt:	$(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) $(GENTILEOFILE) \
+Sysatt:	$(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
 		$(DATE_O) $(BUILDMORE) Makefile
 	@echo "Loading $(GAME)."
 	$(AT)$(LD) $(TARGET_LFLAGS) /lib/crt0s.o /lib/shlib.ifile \
-		-o $(GAMEBIN) $(HOSTOBJ) $(HOBJ) $(DATE_O) \
-		$(TARGET_HACKLIB) $(LUALIBS)
+		-o $(GAMEBIN) $(HOSTOBJ) $(HOBJ) \
+		$(DATE_O) $(GENTILEOFILE) $(TARGET_HACKLIB) $(LUALIBS)
 	@touch Sysatt
 
-Systos:	$(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) $(GENTILEOFILE) \
+Systos:	$(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
 		$(DATE_O) $(BUILDMORE) Makefile
 	@echo "Linking $(GAME)."
 	$(AT)$(TARGET_LINK) $(TARGET_LFLAGS) -o $(GAMEBIN) \
-		$(HOBJ) $(DATE_O) $(TARGET_HACKLIB) \
+		$(HOBJ) $(DATE_O) $(GENTILEOFILE) $(TARGET_HACKLIB) \
 		$(WINLIB) $(LUALIBS)
 	@touch Systos
 
-SysV-AT: DUMB.Setup $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) $(GENTILEOFILE) \
+SysV-AT: DUMB.Setup $(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
 		$(DATE_O) $(BUILDMORE) Makefile
 	@echo "Linking $(GAME)."
 	$(AT)$(TARGET_LINK) $(TARGET_LFLAGS) -o $(GAMEBIN) \
-		$(HOBJ) $(DATE_O) $(TARGET_HACKLIB) \
+		$(HOBJ) $(DATE_O) $(GENTILEOFILE) $(TARGET_HACKLIB) \
 		$(WINLIB) $(LUALIBS)
 	@touch SysV-AT
 
-SysBe: $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) $(GENTILEOFILE) \
+SysBe: $(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
 		$(DATE_O) $(BUILDMORE) Makefile
 	@echo "Linking $(GAME)."
 	$(AT)$(TARGET_LINK) $(TARGET_LFLAGS) -o $(GAME) \
-		$(HOBJ) $(DATE_O) $(TARGET_HACKLIB) \
+		$(HOBJ) $(DATE_O) $(GENTILEOFILE) $(TARGET_HACKLIB) \
 		$(WINLIB) $(TARGET_LIBS) $(LUALIBS)
 	@xres -o $(GAME) ../win/BeOS/nethack.rsrc
 	@mimeset -f $(GAME)
@@ -785,7 +789,7 @@ $(TARGETPFX)sfbase.o: sfbase.c $(HACK_H) ../include/sfprocs.h ../include/sfmacro
 #	date.c should be recompiled any time any of the source or include code
 #	is modified.
 DATECFLAGS = $(TARGET_CFLAGS) $(GITHASH) $(GITBRANCH) $(GITPREFIX)
-$(TARGETPFX)date.o: date.c $(HACK_H) $(HACKCSRC)  $(HOBJ) $(TARGET_HACKLIB)
+$(TARGETPFX)date.o: date.c $(GENTILECFILE) $(HACK_H) $(HACKCSRC)  $(HOBJ) $(TARGET_HACKLIB)
 	$(TARGET_CC) $(DATECFLAGS) -c -o $@ date.c
 
 #	date.h should be remade any time any of the source or include code
