@@ -123,6 +123,8 @@ ifdef CROSS_TO_MSDOS
 #=================================================================
 
 CFLAGS += -DCROSSCOMPILE
+#also set a make variable flagging this as a crosscompile
+CROSSCOMPILE=1
 
 #
 # Override the build tools and some obj files to
@@ -134,6 +136,7 @@ override TARGET_CC = $(TOOLTOP1)/i586-pc-msdosdjgpp-gcc
 override TARGET_CXX = $(TOOLTOP1)/i586-pc-msdosdjgpp-g++
 override TARGET_AR = $(TOOLTOP1)/i586-pc-msdosdjgpp-gcc-ar
 override TARGET_STUBEDIT = ../lib/djgpp/i586-pc-msdosdjgpp/bin/stubedit
+override GENTILEOFILE = $(TARGETPFX)tile.o
 ifdef MAKEFILE_SRC
 FLDR=../
 endif
@@ -225,11 +228,12 @@ override SYSOBJ= $(TARGETPFX)pcmain.o $(TARGETPFX)msdos.o \
 		$(TARGETPFX)vidvga.o $(TARGETPFX)vidvesa.o \
 		$(TARGETPFX)font.o \
 		$(TARGETPFX)bmptiles.o $(TARGETPFX)giftiles.o \
-		$(TARGETPFX)tileset.o $(TARGETPFX)tile.o
+		$(TARGETPFX)tileset.o
 override WINLIB=
 override LUALIB=
 override LUALIBS=
-override TOPLUALIB=
+override LUATOPLIB=
+override WINX11OBJ=
 override GAMEBIN = $(TARGETPFX)nethack.exe
 override RECOVERBIN = $(TARGETPFX)recover.exe
 override SFCTOOLBIN = $(TARGETPFX)sfctool.exe
@@ -258,6 +262,11 @@ endif  # WANT_WIN_CURSES
 # Rule for files in sys/msdos
 $(TARGETPFX)%.o : ../sys/msdos/%.c
 	$(TARGET_CC) $(TARGET_CFLAGS) -o$@ $<
+#
+# Rule for files in util
+$(TARGETPFX)%.o : ../util/%.c
+	$(TARGET_CC) $(TARGET_CFLAGS) -o$@ $<
+
 endif  # CROSS_TO_MSDOS
 #=================================================================
 
@@ -267,6 +276,8 @@ ifdef CROSS_TO_WASM
 # WASM
 # originally from https://github.com/NetHack/NetHack/pull/385
 #===============-=================================================
+#also set a make variable flagging this as a crosscompile
+CROSSCOMPILE=1
 #
 #WASM_DEBUG = 1
 WASM_DATA_DIR = $(TARGETPFX)wasm-data
@@ -360,7 +371,7 @@ override SYSOBJ= $(TARGETPFX)libnhmain.o \
 		$(TARGETPFX)winshim.o
 override WINLIB = emranlib
 override LUALIB=
-override TOPLUALIB=
+override LUATOPLIB=
 override REGEXOBJ = $(TARGETPFX)posixregex.o
 override WINOBJ=
 override UUIDOBJ=
@@ -403,6 +414,8 @@ ifdef CROSS_TO_MIPS
 #=================================================================
 
 CFLAGS += -DCROSSCOMPILE
+#also set a make variable flagging this as a crosscompile
+CROSSCOMPILE=1
 
 #
 # Override the build tools and some obj files to
@@ -443,7 +456,7 @@ override SYSOBJ = $(TARGETPFX)ioctl.o $(TARGETPFX)unixmain.o $(TARGETPFX)unixtty
 override WINLIB = $(NCURSESLIB)
 override LUALIB=
 override LUALIBS=
-override TOPLUALIB=
+override LUATOPLIB=
 override GAMEBIN=$(MIPS_TARGET)
 override RECOVERBIN = $(TARGETPFX)recover
 override PACKAGE = mipspkg
@@ -479,6 +492,8 @@ ifdef CROSS_TO_AMIGA
 #=================================================================
 
 CFLAGS += -DCROSSCOMPILE
+#also set a make variable flagging this as a crosscompile
+CROSSCOMPILE=1
 
 #
 # Override the build tools and some obj files to
@@ -502,6 +517,7 @@ override TARGET_CFLAGS = -c -O2 -noixemul $(TOOLARCH) \
 	-DCROSSCOMPILE -DCROSSCOMPILE_TARGET -DCROSS_TO_AMIGA \
 	-DAMIGA_VERSION_STRING=\""VER: NetHack 5.0.0"\"
 override TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+override GENTILEOFILE = $(TARGETPFX)tile.o
 LUA_TARGET_CFLAGS = $(TARGET_CFLAGS)
 ifeq "$(REGEXOBJ)" "$(TARGETPFX)cppregex.o"
 override TARGET_LINK = $(TARGET_CXX)
@@ -535,7 +551,7 @@ override SYSOBJ = $(TARGETPFX)amidos.o \
 override WINLIB=
 override LUALIB=
 override LUALIBS=
-override TOPLUALIB=
+override LUATOPLIB=
 override DLLIB=
 override WINOBJ=
 override GAMEBIN = $(TARGETPFX)nethack

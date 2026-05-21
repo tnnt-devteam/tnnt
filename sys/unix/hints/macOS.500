@@ -271,6 +271,7 @@ ifdef WANT_WIN_X11
 USE_XPM=1
 WINX11LIB = -lXaw -lXmu -lXext -lXt -lX11
 VARDATND0 += x11tiles NetHack.ad pet_mark.xbm pilemark.xbm
+GENTILEOFILE = $(SRCDIR)/tile.o
 # -x: if built without dodlb, some versions of mkfontdir think *.lev are fonts
 POSTINSTALL += bdftopcf win/X11/nh10.bdf > $(HACKDIR)/nh10.pcf; ( cd $(HACKDIR); mkfontdir -x .lev );
 # separate from CFLAGS so that we don't pass it to every file
@@ -313,8 +314,7 @@ else	# !WANT_WIN_QT
 LINK=$(CC)
 endif	# !WANT_WIN_QT
 
-# prevent duplicate tile.o in WINOBJ
-WINOBJ = $(WINOBJ0) $(sort $(XTRAOBJ))
+WINOBJ = $(WINOBJ0)
 # prevent duplicates in VARDATND if both X11 and Qt are being supported
 VARDATND += $(sort $(VARDATND0))
 

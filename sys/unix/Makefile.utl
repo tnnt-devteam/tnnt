@@ -10,6 +10,7 @@
 
 # Root of source tree:
 NHSROOT=..
+SRCDIR = $(NHSROOT)/src
 
 # newer makes predefine $(MAKE) to 'make' and do smarter processing of
 # recursive make calls if $(MAKE) is used

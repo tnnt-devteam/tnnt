@@ -31,8 +31,15 @@ x)      hints=/dev/null
         ;;
 esac
 
-/bin/sh ./mkmkfile.sh Makefile.top TOP ../../Makefile $hints $hfile
-/bin/sh ./mkmkfile.sh Makefile.dat DAT ../../dat/Makefile $hints $hfile
-/bin/sh ./mkmkfile.sh Makefile.doc DOC ../../doc/Makefile $hints $hfile
-/bin/sh ./mkmkfile.sh Makefile.src SRC ../../src/Makefile $hints $hfile
-/bin/sh ./mkmkfile.sh Makefile.utl UTL ../../util/Makefile $hints $hfile
+# is make gnu or bsd?
+if make --version 2>/dev/null | grep -q "GNU"; then
+    whichmake=gnu
+else
+    whichmake=bsd
+fi
+
+/bin/sh ./mkmkfile.sh Makefile.top TOP ../../Makefile $hints $hfile $whichmake
+/bin/sh ./mkmkfile.sh Makefile.dat DAT ../../dat/Makefile $hints $hfile $whichmake
+/bin/sh ./mkmkfile.sh Makefile.doc DOC ../../doc/Makefile $hints $hfile $whichmake
+/bin/sh ./mkmkfile.sh Makefile.src SRC ../../src/Makefile $hints $hfile $whichmake
+/bin/sh ./mkmkfile.sh Makefile.utl UTL ../../util/Makefile $hints $hfile $whichmake
