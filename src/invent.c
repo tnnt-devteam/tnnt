@@ -2579,7 +2579,7 @@ reroll_menu(void)
              ATR_NONE, NO_COLOR, "start the game with this character",
              MENU_ITEMFLAGS_NONE);
     any.a_char = 'y';
-    Strcat(buf, "reroll another character");
+    Strcpy(buf, "reroll another character");
 #ifdef SYSCF
     if (sysopt.maxrerolls > 0) {
         char *bp = eos(buf);
