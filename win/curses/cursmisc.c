@@ -41,7 +41,6 @@ curses_getch(void)
     } else if (iflags.idlecheckpoint) {
         boolean done_a_checkpoint = FALSE;
 
-        done_a_checkpoint = FALSE;
         timeout(IDLECHECKPOINT_WAIT_TIME * 1000);
         timeoutset = TRUE;
 
