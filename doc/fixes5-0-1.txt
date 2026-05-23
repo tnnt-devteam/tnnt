@@ -141,7 +141,7 @@ tty: allow custom glyph colors if they're basic 16 nethack colors
 
 General New Features
 --------------------
-sysconf option MAX_REROLLS to limit number of rerolls
+sysconf option MAX_REROLL_RATE to limit rate at which rerolls are performed
 
 
 Platform- and/or Interface-Specific New Features
