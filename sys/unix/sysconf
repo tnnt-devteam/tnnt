@@ -57,7 +57,7 @@ MAXPLAYERS=0
 
 # Limit the number of rerolls per second when using the reroll option.
 # 0 means that there is no limit on how quickly the user can reroll.
-MAX_REROLL_RATE=5
+MAX_REROLL_RATE=10
 
 # If not null, added to string "To get local support, " in the support
 # information help.
