@@ -35,6 +35,11 @@ fix a buffer overflow in reroll processing that was introduced in a
 	post-release 5.0.0 commit
 ensure a checkpoint, aka a save_currentstate() call, isn't done before
 	the game is ready
+add ANY_INT16 to any_types and use it for u.ux/uy/tx/ty and uz dlevel/dnum;
+	those are coordxy (int16_t) but the Lua bindings were treating them
+	as 1-byte fields, so on big-endian m68k Lua read the high byte (0)
+	instead of the actual value. Symptom: place_object off map <0,0>
+	in the tutorial.
 
 
 Platform- and/or Interface-Specific Fixes
