@@ -7151,8 +7151,9 @@ initoptions_init(void)
             gc.cmdline_windowsys = NULL;
     }
 
-    /* make any symbol parsing quicker */
-    if (!glyphid_cache_status())
+    /* make any symbol parsing quicker, but only if
+     * gd.disable_glyphid_cache_prefill is not set to TRUE */
+    if (!glyphid_cache_status() && !gd.disable_glyphid_cache_prefill)
         fill_glyphid_cache();
 
     /* set up the command parsing */
