@@ -145,8 +145,8 @@ Windows: correct a NetHack 5.0.0 packaging error if visual studio was
 Windows: setting any map_mode option in the config file could trigger
 	an app failure on launch by dereferencing a null pointer
 Windows: a Windows console debug line began showing up after the sources
-	switched from NH_DEVEL_STATUS from NH_STATUS_RELEASED to 
-	NH_STATUS_POSTRELEASE; make it only show if (wizard) is true
+	switched patchlevel.h NH_DEVEL_STATUS from NH_STATUS_RELEASED to 
+	NH_STATUS_POSTRELEASE; make it only ever show if (wizard) is true
 tty: allow custom glyph colors if they're basic 16 nethack colors
 	on terminals with less than 256 colors
 
