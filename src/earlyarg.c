@@ -40,7 +40,7 @@ static const struct early_opt earlyopts[] = {
 #ifndef NODUMPENUMS
     { ARG_DUMPENUMS, "dumpenums", 9, FALSE },
 #endif
-    { ARG_DUMPGLYPHIDS, "dumpglyphids", 12, FALSE },
+    { ARG_DUMPGLYPHIDS, "dumpglyphnames", 12, FALSE },
     { ARG_DUMPMONGEN, "dumpmongen", 10, FALSE },
     { ARG_DUMPWEIGHTS, "dumpweights", 11, FALSE },
 #ifdef WIN32
@@ -530,7 +530,7 @@ argcheck(int argc, char *argv[], enum earlyarg e_arg)
             return 2;
 #endif
         case ARG_DUMPGLYPHIDS:
-            dump_glyphids();
+            dump_glyphnames();
             return 2;
         case ARG_DUMPMONGEN:
             dump_mongen();
@@ -803,9 +803,9 @@ dump_enums(void)
 #endif /* NODUMPENUMS */
 
 void
-dump_glyphids(void)
+dump_glyphnames(void)
 {
-    dump_all_glyphids(stdout);
+    dump_all_glyphnames(stdout);
 }
 #endif /* !NODUMPENUMS */
 
