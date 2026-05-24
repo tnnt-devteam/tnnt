@@ -1,4 +1,4 @@
-NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.5 $ $NHDT-Date: 1778535648 2026/05/11 21:40:48 $
+NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.20 $ $NHDT-Date: 1779581008 2026/05/24 00:03:28 $
 	
 General Fixes and Modified Features
 -----------------------------------
@@ -145,7 +145,7 @@ Windows: correct a NetHack 5.0.0 packaging error if visual studio was
 Windows: setting any map_mode option in the config file could trigger
 	an app failure on launch by dereferencing a null pointer
 Windows: a Windows console debug line began showing up after the sources
-	switched NH_DEVEL_STATUS from NH_STATUS_RELEASED to 
+	switched from NH_DEVEL_STATUS from NH_STATUS_RELEASED to 
 	NH_STATUS_POSTRELEASE; make it only show if (wizard) is true
 tty: allow custom glyph colors if they're basic 16 nethack colors
 	on terminals with less than 256 colors
