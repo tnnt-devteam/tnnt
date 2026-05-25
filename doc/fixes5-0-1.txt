@@ -40,6 +40,7 @@ add ANY_INT16 to any_types and use it for u.ux/uy/tx/ty and uz dlevel/dnum;
 	as 1-byte fields, so on big-endian m68k Lua read the high byte (0)
 	instead of the actual value. Symptom: place_object off map <0,0>
 	in the tutorial.
+fix an off-by-one in glyph_is_normal_piletop_obj (pr #1547 by ingpaschke)
 
 
 Platform- and/or Interface-Specific Fixes
