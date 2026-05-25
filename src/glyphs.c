@@ -975,7 +975,8 @@ parse_id(
                                      ? obj_descr[i].oc_name
                                      : obj_descr[i].oc_descr;
                         Strcpy(buf[0], "G_");
-                        if (glyph_is_normal_piletop_obj(glyph))
+                        if (glyph_is_normal_piletop_obj(glyph)
+                            || glyph_is_piletop_generic_obj(glyph))
                             Strcat(buf[0], "piletop_");
                         Strcat(buf[0], buf2);
                         Strcat(buf[0], buf3);
