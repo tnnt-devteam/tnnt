@@ -73,8 +73,8 @@
  *     that should already exist for the struct name that hasn't
  *     got the '_rev0' suffix:
  *
- *       struct mystruct *      : sfi_rm,            \
- *       struct mystruct_rev0 * : sfi_rm_rev0,       \
+ *       struct mystruct *      : sfi_mystruct,         \
+ *       struct mystruct_rev0 * : sfi_mysruct_rev0,     \
  *
  *  7. Also in include/savefile.h, a little further down in the
  *     'Sfi_' macro defininitions, add one below the existing
@@ -130,11 +130,11 @@
  *     pointers in another struct. The 'sfo_' function will not be called
  *     from anywhere.
  *
- *         historical_sfo_rm,
- *         historical_sfo_rm_rev0,
+ *         historical_sfo_mystruct,
+ *         historical_sfo_mystruct_rev0,
  *     ...
- *         historical_sfi_rm,
- *         historical_sfi_rm_rev0,
+ *         historical_sfi_mystruct,
+ *         historical_sfi_mystruct_rev0,
  *
  * 14. In the C source file where the 'Sfi_' call is made for your struct,
  *     the current code likely has a line for reading the struct from
