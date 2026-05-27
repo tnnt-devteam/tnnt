@@ -13,7 +13,7 @@ boolean revision_increment(
         /*
          * Revision 1
          * We set a flag gu.uplift_needed_rev0_to_rev1 for use by restore routines.
-         * 
+         *
          */
         gu.uplift_needed_rev0_to_rev1 = 1;
         if (csc[file_critical_byte_count - 1] == 0)
@@ -26,7 +26,7 @@ boolean revision_increment(
 
 #ifdef DEMO_UPLIFTS
 
-/* original revision 0 is in include/revision.h */       
+/* original revision 0 is in include/revision.h */
 
 /* revision 1 */
 struct mystruct {
@@ -54,7 +54,7 @@ void
 read_mystruct(struct mystruct *ms)
 {
 #ifdef SAVEFILE_REVISION_LEVEL
-    
+
 #if (SAVEFILE_REVISION_LEVEL == 0)
     Sfi_mystruct(nhfp, ms, "mystruct-example");
 #elif (SAVEFILE_REVISION_LEVEL == 1)
