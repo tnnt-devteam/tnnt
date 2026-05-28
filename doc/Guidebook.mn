@@ -60,7 +60,7 @@
 .ds f0 \*(vr
 .ds f1 \" empty
 .\"DO NOT REMOVE NH_DATESUB .ds f2 Date(%B %-d, %Y)
-.ds f2 May 25, 2026
+.ds f2 May 28, 2026
 .
 .\" A note on some special characters:
 .\" \(lq = left double quote
@@ -3678,22 +3678,34 @@ OPTIONS=!legacy,autopickup,pickup_types:$\(dq=/!?+
 .ft
 .ed
 .lp HACKDIR
+[not availabe on Unix]
+.br
 Default location of files NetHack needs. On Windows HACKDIR
 defaults to the location of the NetHack.exe or NetHackw.exe file
 so setting HACKDIR to override that is not usually necessary or recommended.
 .lp LEVELDIR
+[not availabe on Unix]
+.br
 The location that in-progress level files are stored. Defaults to HACKDIR,
 must be writable.
 .lp SAVEDIR
+[not availabe on Unix]
+.br
 The location where saved games are kept. Defaults to HACKDIR, must be
 writable.
 .lp BONESDIR
+[not availabe on Unix]
+.br
 The location that bones files are kept. Defaults to HACKDIR, must be
 writable.
 .lp LOCKDIR
+[not availabe on Unix]
+.br
 The location that file synchronization locks are stored. Defaults to
 HACKDIR, must be writable.
 .lp TROUBLEDIR
+[not availabe on Unix]
+.br
 The location that a record of game aborts and self-diagnosed game problems
 is kept. Defaults to HACKDIR, must be writable.
 .\"
