@@ -140,5 +140,5 @@
 .ie \n(.g .hy 12
 .el       .hy 14
 .ds JW Jon W{tte\"
-.if \n(.g .if !'\*[.T]'ascii' .ds Jw Jon W\(:atte
+.if \n(.g .if !'\*[.T]'ascii' .ds JW Jon W\(:atte
 .\"tmac.nh/"

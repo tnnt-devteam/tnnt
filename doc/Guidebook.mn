@@ -3678,33 +3678,33 @@ OPTIONS=!legacy,autopickup,pickup_types:$\(dq=/!?+
 .ft
 .ed
 .lp HACKDIR
-[not availabe on Unix]
+[not available on Unix]
 .br
 Default location of files NetHack needs. On Windows HACKDIR
 defaults to the location of the NetHack.exe or NetHackw.exe file
 so setting HACKDIR to override that is not usually necessary or recommended.
 .lp LEVELDIR
-[not availabe on Unix]
+[not available on Unix]
 .br
 The location that in-progress level files are stored. Defaults to HACKDIR,
 must be writable.
 .lp SAVEDIR
-[not availabe on Unix]
+[not available on Unix]
 .br
 The location where saved games are kept. Defaults to HACKDIR, must be
 writable.
 .lp BONESDIR
-[not availabe on Unix]
+[not available on Unix]
 .br
 The location that bones files are kept. Defaults to HACKDIR, must be
 writable.
 .lp LOCKDIR
-[not availabe on Unix]
+[not available on Unix]
 .br
 The location that file synchronization locks are stored. Defaults to
 HACKDIR, must be writable.
 .lp TROUBLEDIR
-[not availabe on Unix]
+[not available on Unix]
 .br
 The location that a record of game aborts and self-diagnosed game problems
 is kept. Defaults to HACKDIR, must be writable.
