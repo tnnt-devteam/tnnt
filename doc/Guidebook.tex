@@ -25,7 +25,7 @@
 \author{Original version - Eric S. Raymond\\
 (Edited and expanded for 5.0.0 by Mike Stephenson and others)}
 %DO NOT REMOVE NH_DATESUB \date{Date(%B %-d, %Y)}
-\date{May 11, 2026}
+\date{May 29, 2026}
 
 \maketitle
 
@@ -3980,27 +3980,33 @@ Example:
 
 %.lp
 \item[HACKDIR]
+{[}Not available on Unix]\\
 Default location of files \textit{NetHack} needs. On Windows HACKDIR
 defaults to the location of the \textit{NetHack.exe} or \textit{NetHackw.exe} file
 so setting HACKDIR to override that is not usually necessary or recommended.
 %.lp
 \item[LEVELDIR]
+{[}Not available on Unix]\\
 The location that in-progress level files are stored. Defaults to HACKDIR,
 must be writable.
 %.lp
 \item[SAVEDIR]
+{[}Not available on Unix]\\
 The location where saved games are kept. Defaults to HACKDIR, must be
 writable.
 %.lp
 \item[BONESDIR]
+{[}Not available on Unix]\\
 The location that bones files are kept. Defaults to HACKDIR, must be
 writable.
 %.lp
 \item[LOCKDIR]
+{[}Not available on Unix]\\
 The location that file synchronization locks are stored. Defaults to
 HACKDIR, must be writable.
 %.lp
 \item[TROUBLEDIR]
+{[}Not available on Unix]\\
 The location that a record of game aborts and self-diagnosed game problems
 is kept. Defaults to HACKDIR, must be writable.
 %
@@ -6755,7 +6761,7 @@ individually within your own nethack.rc file.
 
 The format for defining a glyph representation is:\\
 \begin{verbatim}
-OPTIONS=glyph:glyphid/U+nnnn/R-G-B
+OPTIONS=glyph:glyphname/U+nnnn/R-G-B
 \end{verbatim}
 
 The window port that is active needs to provide support for displaying UTF-8
@@ -6763,18 +6769,18 @@ character sequences and explicit 24-bit red-green-blue colors in order for the g
 representation to be visible as specified.
 
 For example, the following line in your configuration file will cause
-the glyph representation for glyphid G\textunderscore pool to use Unicode codepoint
+the glyph representation for glyphname G\textunderscore pool to use Unicode codepoint
 U+224B and the color represented by R-G-B value 0-0-160:\\
 \begin{verbatim}
 OPTIONS=glyph:G_pool/U+224B/0-0-160
 \end{verbatim}
 
-The list of acceptable glyphid's can be produced by
+The list of acceptable glyphnames can be produced by
 \begin{verbatim}
-    nethack --glyphids
+    nethack --dumpglyphnames
 \end{verbatim}
 Individual NetHack glyphs can be specified using the G\textunderscore prefix,
-or you can use an S\textunderscore symbol for a glyphid and store the custom
+or you can use an S\textunderscore symbol for a glyphname and store the custom
 representation for all NetHack glyphs that would map to that
 particular symbol.
 

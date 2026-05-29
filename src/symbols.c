@@ -1069,12 +1069,12 @@ do_symset(boolean rogueflag)
     if (gs.symset[which_set].name) {
         /* non-default symbols */
         int ok;
-        if (!glyphid_cache_status()) {
-            fill_glyphid_cache();
+        if (!glyphname_hash_indices_loaded()) {
+            populate_glyphname_hash_indices();
         }
         ok = read_sym_file(which_set);
-        if (glyphid_cache_status()) {
-            free_glyphid_cache();
+        if (glyphname_hash_indices_loaded()) {
+            empty_glyphname_hash_indices();
         }
         if (ok) {
             ready_to_switch = TRUE;

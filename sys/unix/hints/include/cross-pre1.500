@@ -50,6 +50,7 @@ override TARGET_LIBS=
 endif
 
 ifdef CROSS
+CROSSCOMPILE=1
 override PREGAME=
 override BUILDMORE=
 override CLEANMORE=

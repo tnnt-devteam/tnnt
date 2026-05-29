@@ -347,6 +347,7 @@ struct instance_globals_d {
     /* new */
     boolean deferred_showpaths;
     char *deferred_showpaths_dir;
+    boolean disable_glyphname_hash_indices_prefill;
 
     boolean havestate;
 };
@@ -979,6 +980,9 @@ struct instance_globals_u {
 
     /* decl.c */
     boolean unweapon;
+
+        /* revision.c */
+    int uplift_needed_rev0_to_rev1;
 
     /* role.c */
     struct Role urole; /* player's role. May be munged in role_init() */
