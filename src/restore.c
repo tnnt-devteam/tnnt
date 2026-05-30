@@ -890,7 +890,7 @@ dorecover(NHFILE *nhfp)
     restoreinfo.mread_flags = 0;
 
     rewind_nhfile(nhfp);        /* return to beginning of file */
-    (void) validate(nhfp, (char *) 0, FALSE);
+    (void) validate(nhfp, (char *) 0, FALSE, 0);
     get_plname_from_file(nhfp, svp.plname, TRUE);
 
     /* not 0 nor REST_GSTATE nor REST_LEVELS */
