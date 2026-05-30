@@ -10,6 +10,7 @@ SOURCEINSTALL=1
 # -----------------------------------------
 ifeq "$(WHICH_OS)" "Linux"
 
+PREFIX ?=/opt/nethack/chroot
 HACKDIR ?=/nh500.0-hdf
 INSTDIR ?=$(PREFIX)$(HACKDIR)
 VARDIR ?=$(INSTDIR)/var
