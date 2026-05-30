@@ -1504,7 +1504,7 @@ get_saved_games(void)
 
                         Sprintf(filename, "save/%d%s", uid, name);
                         r = plname_from_file(filename,
-                                             ALLOW_WAITSYNCH_PERFILE);
+                                             ALLOW_WAITSYNCH_PERFILE, 0);
                         if (r)
                             result[j++] = r;
                     }
