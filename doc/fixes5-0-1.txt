@@ -44,7 +44,11 @@ fix an off-by-one in glyph_is_normal_piletop_obj (pr #1547 by ingpaschke)
 replace the hashtable used for parsing glyphnames with sorted indices and
 	reduce the string allocation load during that processing (cherry-pick
 	of pr #1548 by ingpaschke)
-
+for SELECTSAVE, don't display error messages to a regular player about
+	out-of-date save file encountered while building the saved-game list
+	to select from; the game doesn't offer any action to assist with them
+	presently, and they would have to be dealt with external to the game
+ 
 
 Platform- and/or Interface-Specific Fixes
 -----------------------------------------
