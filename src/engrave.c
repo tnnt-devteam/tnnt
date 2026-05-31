@@ -439,7 +439,7 @@ make_engr_at(
         Strcpy(ep->engr_txt[i], s);
     if (havepristine)
         Strcpy(ep->engr_txt[pristine_text], pristine_s);
-    if (!strcmp(s, "Elbereth")) {
+    if (!strcmpi(s, "Elbereth")) {
         /* engraving "Elbereth":  if done when making a level, it creates
            an old-style Elbereth that deters monsters when any objects are
            present; otherwise (done by the player), exercises wisdom */
