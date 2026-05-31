@@ -1594,10 +1594,25 @@ html_print_glyph(
     } else {
         dump_set_color_attr(color, attr, TRUE);
     }
-    if (htmlsym[glyphinfo->gm.sym.symidx])
-        fprintf(dumphtml_file, "&#%d;", htmlsym[glyphinfo->gm.sym.symidx]);
-    else
-        html_dump_char(dumphtml_file, (char)glyphinfo->ttychar);
+    {
+        /* prefer the player's own glyph: a UTF8 symset (e.g. Enhanced1)
+           stores its codepoint in gm.u, so the dump matches the screen;
+           otherwise fall back to the html line-drawing table, then the
+           default tty character */
+        long cp = 0;
+
+#ifdef ENHANCED_SYMBOLS
+        if (glyphinfo->gm.u && glyphinfo->gm.u->utf32ch)
+            cp = (long) glyphinfo->gm.u->utf32ch;
+        else
+#endif
+        if (htmlsym[glyphinfo->gm.sym.symidx])
+            cp = htmlsym[glyphinfo->gm.sym.symidx];
+        if (cp)
+            fprintf(dumphtml_file, "&#%ld;", cp);
+        else
+            html_dump_char(dumphtml_file, (char) glyphinfo->ttychar);
+    }
     if (rgb) {
         fprintf(dumphtml_file, SPAN_E);
         dump_set_color_attr(NO_COLOR, attr & ~HL_INVERSE, FALSE);
