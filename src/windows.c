@@ -902,7 +902,6 @@ hup_ctrl_nhwindow(
 
 #endif /* HANGUPHANDLING */
 
-
 /****************************************************************************/
 /* genl backward compat stuff                                               */
 /****************************************************************************/
@@ -1290,7 +1289,7 @@ dump_fmtstr(
 #define BLNK_S "<i>"
 #define BLNK_E "</i>"
 #define SPAN_E "</span>"
-#define LINEBREAK "<br />"
+#define LINEBREAK "<br>"
 
 /** HTML putstr() handling **/
 
@@ -1349,7 +1348,7 @@ html_write_tags(
     }
     /* after string is written */
     if (in_preform) {
-        fprintf(fp, LINEBREAK); /* preform still gets <br /> at end of line */
+        fprintf(fp, LINEBREAK); /* preform still gets <br> at end of line */
         return; /* don't write </pre> until we get the next thing */
     }
     if (in_list) {
@@ -1385,7 +1384,7 @@ html_dump_char(
         fprintf(fp, "&#39;");
         break;
     case '\n':
-        fprintf(fp, "<br />\n");
+        fprintf(fp, "<br>\n");
         break;
     default:
         fprintf(fp, "%c", c);
@@ -1548,8 +1547,10 @@ html_print_glyph(
     char buf[BUFSZ]; /* do_screen_description requires this :( */
     const char *firstmatch = "unknown"; /* and this */
     coord cc;
-    int desc_found = 0;
+    int desc_found = 0, color;
     unsigned attr;
+    uint32 custclr;
+    unsigned long rgb = 0UL; /* nonzero => emit inline 24-bit RGB span */
 
     if (!dumphtml_file)
         return;
@@ -1563,12 +1564,48 @@ html_print_glyph(
     if (desc_found)
         fprintf(dumphtml_file, "<div class=\"tooltip\">");
     attr = mg_hl_attr(glyphinfo->gm.glyphflags);
-    dump_set_color_attr(glyphinfo->gm.sym.color, attr, TRUE);
+    /* honor CUSTOMCOLOR: NH50 stores the resolved colour directly in the
+       glyph_map.  A non-zero customcolor with NH_BASIC_COLOR set is just a
+       0-15 override; without it, the low 24 bits are a raw RGB which HTML
+       can render exactly via an inline style. */
+    color = glyphinfo->gm.sym.color;
+    custclr = iflags.customcolors ? glyphinfo->gm.customcolor : 0;
+    if (custclr != 0) {
+        if ((custclr & NH_BASIC_COLOR) != 0)
+            color = (int) COLORVAL(custclr);
+        else
+            rgb = (unsigned long) COLORVAL(custclr);
+    }
+    /* highlight the hero's tile with a green background, mimicking the
+       terminal cursor's "you are here" cue on every other windowport */
+    if (x == u.ux && y == u.uy)
+        fprintf(dumphtml_file, "<span class=\"nh_player\">");
+    if (rgb) {
+        /* keep the bold/uline/blink wrappers from dump_set_color_attr but
+           supply the colour inline; render inverse video as a coloured
+           background here so no nh_inv_N class (0-15 only) is needed */
+        dump_set_color_attr(NO_COLOR, attr & ~HL_INVERSE, TRUE);
+        if (attr & HL_INVERSE)
+            fprintf(dumphtml_file,
+                    "<span style=\"color:#000;background-color:#%06lX;\">",
+                    rgb);
+        else
+            fprintf(dumphtml_file, "<span style=\"color:#%06lX;\">", rgb);
+    } else {
+        dump_set_color_attr(color, attr, TRUE);
+    }
     if (htmlsym[glyphinfo->gm.sym.symidx])
         fprintf(dumphtml_file, "&#%d;", htmlsym[glyphinfo->gm.sym.symidx]);
     else
         html_dump_char(dumphtml_file, (char)glyphinfo->ttychar);
-    dump_set_color_attr(glyphinfo->gm.sym.color, attr, FALSE);
+    if (rgb) {
+        fprintf(dumphtml_file, SPAN_E);
+        dump_set_color_attr(NO_COLOR, attr & ~HL_INVERSE, FALSE);
+    } else {
+        dump_set_color_attr(color, attr, FALSE);
+    }
+    if (x == u.ux && y == u.uy)
+        fprintf(dumphtml_file, SPAN_E);
     if (desc_found)
        fprintf(dumphtml_file,
                "<span class=\"tooltiptext\">%s</span></div>", firstmatch);
@@ -1934,14 +1971,22 @@ dump_headers(void)
         return;
 
     fprintf(dumphtml_file, "<!DOCTYPE html>\n");
-    fprintf(dumphtml_file, "<head>\n");
-    fprintf(dumphtml_file, "<title>NetHack %s (%s)</title>\n",  version_string(vers, sizeof vers), svp.plname);
-    fprintf(dumphtml_file, "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n");
-    fprintf(dumphtml_file, "<meta name=\"generator\" content=\"NetHack %s (%s)\" />\n", vers, svp.plname);
-    fprintf(dumphtml_file, "<meta name=\"date\" content=\"%s\" />\n", iso8601);
-    fprintf(dumphtml_file, "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n");
-    fprintf(dumphtml_file, "<link href=\"https://cdn.jsdelivr.net/gh/maxwell-k/dejavu-sans-mono-web-font@2.37/index.css\" title=\"Default\" rel=\"stylesheet\" type=\"text/css\" media=\"all\" />\n");
-    fprintf(dumphtml_file, "<style type=\"text/css\">\n");
+    fprintf(dumphtml_file, "<html lang=\"en\">\n<head>\n");
+    fprintf(dumphtml_file, "<meta charset=\"utf-8\">\n");
+    fprintf(dumphtml_file, "<title>NetHack %s (%s)</title>\n",
+            version_string(vers, sizeof vers), svp.plname);
+    fprintf(dumphtml_file,
+            "<meta name=\"generator\" content=\"NetHack %s (%s)\">\n",
+            vers, svp.plname);
+    fprintf(dumphtml_file, "<meta name=\"date\" content=\"%s\">\n", iso8601);
+    fprintf(dumphtml_file,
+            "<meta name=\"viewport\""
+            " content=\"width=device-width, initial-scale=1.0\">\n");
+    fprintf(dumphtml_file,
+            "<link href=\"https://cdn.jsdelivr.net/gh/maxwell-k/"
+            "dejavu-sans-mono-web-font@2.37/index.css\""
+            " title=\"Default\" rel=\"stylesheet\" media=\"all\">\n");
+    fprintf(dumphtml_file, "<style>\n");
     dump_css();
     fprintf(dumphtml_file, "</style>\n</head>\n<body>\n");
 
@@ -2402,7 +2447,6 @@ decode_mixed(char *buf, const char *str)
     *put = '\0';
     return buf;
 }
-
 
 /*
  * This differs from putstr() because the str parameter can
