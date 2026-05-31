@@ -46,6 +46,10 @@ replace the hashtable used for parsing glyphnames with sorted indices and
 	of pr #1548 by ingpaschke)
 for SELECTSAVE, allow utd flags for uptodate() to be passed down through
 	the small set of callers that eventually call uptodate()
+avoid calling costly_spot(), costly_adjacent(), find_byowner(), which
+	all rely on shop_keeper() under the hood, in the midst of the level
+	loading process before all the required data structures have
+	been finalized
  
 
 Platform- and/or Interface-Specific Fixes
