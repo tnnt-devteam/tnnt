@@ -1005,6 +1005,7 @@ static const struct instance_globals_saved_y init_svy = {
 };
 
 static const struct sinfo init_program_state = { 0 };
+static const struct levelstatus init_level_status = { 0 };
 
 #if 0
 struct instance_globals g;
@@ -1057,6 +1058,7 @@ struct instance_globals_saved_w svw;
 struct instance_globals_saved_x svx;
 struct instance_globals_saved_y svy;
 struct sinfo program_state;
+struct levelstatus level_status;
 
 const struct const_globals cg = {
     DUMMY, /* zeroobj */
@@ -1080,6 +1082,12 @@ void
 program_state_init(void)
 {
     program_state = init_program_state;
+}
+
+void
+level_status_init(void)
+{
+    level_status = init_level_status;
 }
 
 void
