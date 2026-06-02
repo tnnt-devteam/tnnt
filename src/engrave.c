@@ -1066,12 +1066,28 @@ doengrave(void)
         rloc_engr(de->oep);
         de->oep->eread = 0;
         de->oep->erevealed = 0;
+        /* The old engraving indicator is probably still showing
+         * if, for example, the hero is invisible. Get rid of it
+         * right now, if the player has already been told that
+         * it vanished.
+         */
+        if (de->hero_told_it_vanished)
+            newsym(u.ux, u.uy);
+
         de->disprefresh = TRUE;
         de->oep = (struct engr *) 0;
     }
     if (de->dengr) {
         del_engr(de->oep);
         de->oep = (struct engr *) 0;
+        /* The old engraving indicator is probably still showing
+         * if, for example, the hero is invisible. Get rid of it
+         * right now, if the player has already been told that
+         * it vanished.
+         */
+        if (de->hero_told_it_vanished)
+            newsym(u.ux, u.uy);
+
         de->disprefresh = TRUE;
     }
     /* Something has changed the engraving here */
@@ -1176,15 +1192,6 @@ doengrave(void)
     de->eloc = surface(u.ux, u.uy);
     de->adding = (de->oep && !de->eow);
     doengrave_ctx_verb(de);
-
-    /* The old engraving indictor is probably still showing
-     * if, for example, the hero is invisible. Get rid of it
-     * right now, if the player has already been told that
-     * it vanished, before proceeding with a new engraving.
-     */
-    if (de->hero_told_it_vanished)
-        newsym(u.ux, u.uy);
-
 
     /* Tell adventurer what is going on */
     if (de->otmp != &hands_obj)
