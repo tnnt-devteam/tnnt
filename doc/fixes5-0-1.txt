@@ -50,7 +50,10 @@ avoid calling costly_spot(), costly_adjacent(), find_byowner(), which
 	all rely on shop_keeper() under the hood, in the midst of the level
 	loading process before all the required data structures have
 	been finalized
- 
+if the hero has already been told that an engraving vanished, ensure that
+	the engraving marker isn't still showing when prompted for a
+	new engraving
+
 
 Platform- and/or Interface-Specific Fixes
 -----------------------------------------

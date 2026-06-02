@@ -18,6 +18,7 @@ struct _doengrave_ctx {
     boolean disprefresh; /* TRUE if the display needs a refresh */
     boolean frosted;  /* TRUE if engraving on ice */
     boolean adding;   /* TRUE if adding to existing engraving */
+    boolean hero_told_it_vanished;
 
     int ret;          /* doengrave return value */
     int type;         /* Type of engraving made */
@@ -553,6 +554,7 @@ doengrave_ctx_init(struct _doengrave_ctx *de)
     de->zapwand = FALSE;
     de->disprefresh = FALSE;
     de->adding = FALSE;
+    de->hero_told_it_vanished = FALSE;
 
     de->ret = ECMD_OK;
     de->type = DUST;
@@ -666,17 +668,21 @@ doengrave_sfx_item_WAN(struct _doengrave_ctx *de)
     case WAN_CANCELLATION:
     case WAN_MAKE_INVISIBLE:
         if (de->oep && de->oep->engr_type != HEADSTONE) {
-            if (!Blind)
+            if (!Blind) {
                 pline_The("engraving on the %s vanishes!",
                           surface(u.ux, u.uy));
+                de->hero_told_it_vanished = TRUE;
+            }
             de->dengr = TRUE;
         }
         break;
     case WAN_TELEPORTATION:
         if (de->oep && de->oep->engr_type != HEADSTONE) {
-            if (!Blind)
+            if (!Blind) {
                 pline_The("engraving on the %s vanishes!",
                           surface(u.ux, u.uy));
+                de->hero_told_it_vanished = TRUE;
+            }
             de->teleengr = TRUE;
         }
         break;
@@ -1170,6 +1176,15 @@ doengrave(void)
     de->eloc = surface(u.ux, u.uy);
     de->adding = (de->oep && !de->eow);
     doengrave_ctx_verb(de);
+
+    /* The old engraving indictor is probably still showing
+     * if, for example, the hero is invisible. Get rid of it
+     * right now, if the player has already been told that
+     * it vanished, before proceeding with a new engraving.
+     */
+    if (de->hero_told_it_vanished)
+        newsym(u.ux, u.uy);
+
 
     /* Tell adventurer what is going on */
     if (de->otmp != &hands_obj)
