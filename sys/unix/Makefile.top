@@ -125,7 +125,7 @@ RECOVERBIN = recover
 LUAHEADERS ?= lib/lua-$(LUA_VERSION)/src
 LUATESTTARGET ?= $(LUAHEADERS)/lua.h
 LUATOP = $(LUAHEADERS)
-LUAMAKEFLAGS = CC='$(CC)' SYSCFLAGS='$(SYSCFLAGS)'
+LUAMAKEFLAGS = CC='$(TARGET_CC)' SYSCFLAGS='$(SYSCFLAGS)'
 LUA2NHTOP ?= ../../..
 LUABASELIB ?= liblua-$(LUA_VERSION).a
 LUATOPLIB ?= lib/lua/$(LUABASELIB)
@@ -145,7 +145,7 @@ $(GAME): lua_support
 lua_support: include/nhlua.h
 	@true
 $(LUATOP)/liblua.a: $(LUAHEADERS)/lua.h
-	( cd $(LUATOP) && make $(LUAMAKEFLAGS) CC=$(TARGET_CC) a )
+	( cd $(LUATOP) && make $(LUAMAKEFLAGS) a )
 lib/lua/$(LUABASELIB): $(LUALIBBUILT)
 	@( if test -d lib/lua ; then true ; else mkdir -p lib/lua ; fi )
 	cp $(LUATOP)/liblua.a $@
@@ -165,7 +165,7 @@ lib/lua-$(LUA_VERSION)/src/lua.h:
 	@false
 luabin:
 	( cd $(LUATOP) \
-	  && make $(LUAMAKEFILES) CC=$(TARGET_CC) all && cd $(LUA2NHTOP) )
+	  && make $(LUAMAKEFILES) all && cd $(LUA2NHTOP) )
 
 # This is only needed for some internal tools.
 nhlua:
