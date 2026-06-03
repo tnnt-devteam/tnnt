@@ -172,6 +172,7 @@ Windows: with SELECTSAVE don't display error messages to a regular player
 	dealt with external to the game, so try not to annoy
 tty: allow custom glyph colors if they're basic 16 nethack colors
 	on terminals with less than 256 colors
+X11: obey timed_delay
 
 
 General New Features
