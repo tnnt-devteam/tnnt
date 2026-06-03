@@ -27,6 +27,7 @@ GAME     = nethack
 # GAME     = nethack.prg
 #GAMEUID  = games
 #GAMEGRP  = bin
+TARGET_CC ?= $(CC)
 
 #	Permissions - some places use setgid instead of setuid, for instance.
 #	See also the option "SECURE" in include/config.h.
@@ -144,7 +145,7 @@ $(GAME): lua_support
 lua_support: include/nhlua.h
 	@true
 $(LUATOP)/liblua.a: $(LUAHEADERS)/lua.h
-	( cd $(LUATOP) && make $(LUAMAKEFLAGS) a )
+	( cd $(LUATOP) && make $(LUAMAKEFLAGS) CC=$(TARGET_CC) a )
 lib/lua/$(LUABASELIB): $(LUALIBBUILT)
 	@( if test -d lib/lua ; then true ; else mkdir -p lib/lua ; fi )
 	cp $(LUATOP)/liblua.a $@
@@ -164,7 +165,7 @@ lib/lua-$(LUA_VERSION)/src/lua.h:
 	@false
 luabin:
 	( cd $(LUATOP) \
-	  && make $(LUAMAKEFILES) all && cd $(LUA2NHTOP) )
+	  && make $(LUAMAKEFILES) CC=$(TARGET_CC) all && cd $(LUA2NHTOP) )
 
 # This is only needed for some internal tools.
 nhlua:
