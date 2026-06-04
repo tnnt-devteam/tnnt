@@ -1327,10 +1327,10 @@ tmp_at(coordxy x, coordxy y)
                 tglyph->sidx = 1;
             }
 
-            if (!suppress_show) {
+            if (!suppress_show)
                 show_glyph(x, y, tglyph->glyph); /* show it */
-                flush_screen(0);                 /* make sure it shows up */
-            }
+
+            flush_screen(0);                 /* make sure it shows up */
             break;
         } /* end switch */
     }
