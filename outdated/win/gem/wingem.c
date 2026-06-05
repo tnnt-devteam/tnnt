@@ -63,7 +63,7 @@ struct window_procs Gem_procs = {
     Gem_getlin, Gem_get_ext_cmd, Gem_number_pad, Gem_delay_output,
 #ifdef CHANGE_COLOR /* the Mac uses a palette device */
     Gem_change_color,
-#ifdef MACOS9
+#ifdef MAC68K
     Gem_change_background, Gem_set_font_name,
 #endif
     Gem_get_color_string,
@@ -76,7 +76,7 @@ struct window_procs Gem_procs = {
     genl_can_suspend_no,
 };
 
-#ifdef MACOS9
+#ifdef MAC68K
 void *
 Gem_change_background(dummy)
 int dummy;
