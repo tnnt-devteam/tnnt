@@ -344,8 +344,7 @@ dofiles-nodlb:
 LUA_URL :=www.lua.org/ftp
 LUA_URL_MIRROR :=www.tecgraf.puc-rio.br/lua/mirror/ftp
 LUA_URL_NHD :=www.nethack.org/download/thirdparty
-LUA_CEASE_TRYING := __cease_trying__
-LUA_URL_list:=$(LUA_URL) $(LUA_URL_MIRROR) $(LUA_URL_NHD) $(LUA_CEASE_TRYING)
+LUA_URL_list:=$(LUA_URL) $(LUA_URL_MIRROR) $(LUA_URL_NHD)
 #
 #CURL := curl
 #ask curl to return a failure code if error 404 is encountered
@@ -376,14 +375,13 @@ fetch-Lua:
 	  mkdir -p lib && cd lib && \
 	  while [ $$# -gt 0 ]; do \
 	    shift; \
-	    if [ "$$1" != "$(LUA_CEASE_TRYING)" ]; then \
-	      if [ $$curlstatus -ne 0 ]; then \
-	        luaurl=https://$$1/$$luafile; \
-	        echo Trying $$luaurl; \
-	        $(CURL) -R -O $$luaurl; \
-	        curlstatus=$$?; \
-	        if [ $$curlstatus -eq 0 ]; then \
-	          if [ ! -z "$$shac" ]; then \
+	    if [ $$curlstatus -ne 0 ]; then \
+	      luaurl=https://$$1/$$luafile; \
+	      echo Trying $$luaurl; \
+	      $(CURL) -R -O $$luaurl; \
+	      curlstatus=$$?; \
+	      if [ $$curlstatus -eq 0 ]; then \
+	        if [ ! -z "$$shac" ]; then \
 		    CHKSUMS=../submodules/CHKSUMS; \
 		    CHKSUMSTMP=../submodules/CHKSUMS.tmp; \
 		    fgrep $$luafile < $$CHKSUMS > $$CHKSUMSTMP; \
@@ -393,13 +391,10 @@ fetch-Lua:
 		      echo Checking integrity of $$luafile with $$shac; \
 		      $$shac -w --ignore-missing -c $$CHKSUMSTMP < $$luafile; \
 		    fi; \
-	          fi; \
-	          tar zxf $$luafile && \
-	          rm -f $$luafile; \
 	        fi; \
+	        tar zxf $$luafile && \
+	        rm -f $$luafile; \
 	      fi; \
-	    else \
-              exit 1; \
 	    fi; \
 	  done; \
 	  true )
