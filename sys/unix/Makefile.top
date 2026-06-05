@@ -392,6 +392,7 @@ fetch-Lua:
 		    else \
 		      echo Checking integrity of $$luafile with $$shac; \
 		      $$shac -w --ignore-missing -c $$CHKSUMSTMP < $$luafile; \
+		      break; \
 		    fi; \
 	          fi; \
 	          tar zxf $$luafile && \
