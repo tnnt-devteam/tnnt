@@ -399,8 +399,7 @@ fetch-Lua:
 	        fi; \
 	      fi; \
 	    else \
-	      echo All three sites failed!; \
-	      break; \
+              exit 1; \
 	    fi; \
 	  done; \
 	  true )
