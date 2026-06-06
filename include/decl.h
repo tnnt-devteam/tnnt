@@ -558,6 +558,10 @@ struct tnnt_globals_t {
 
     unsigned short genderflips;
 
+/* TNNT TODO FOR 3.7: The Amulet of Yendor will grant a wish when picked up. Do
+ * we add it to this list?
+ * Also, should Vlad's throne count separately from a normal throne because its
+ * wish is guaranteed? */
 #define WISHSRC_WAND         0x01
 #define WISHSRC_LAMP         0x02
 #define WISHSRC_SMOKY_POTION 0x04
@@ -571,6 +575,10 @@ struct tnnt_globals_t {
 #define RDBL_SCROLL  0x0001
 #define RDBL_BOOK    0x0002
 #define RDBL_COIN    0x0004
+/* TNNT TODO FOR 3.7: Hawaiian shirt can be read, but doesn't actually contain
+ * text. We should decide if we want to count them (and change the achievement
+ * description to "shirt") or explicitly keep it as only T-shirt (and make this
+ * constant RDBL_T_SHIRT). */
 #define RDBL_SHIRT   0x0008
 #define RDBL_MARKER  0x0010
 #define RDBL_CANDY   0x0020
