@@ -3432,6 +3432,9 @@ set_ustuck(struct monst *mtmp)
         u.uswallow = 0;
         u.uswldtim = 0;
     }
+#ifdef INSURANCE
+    save_currentstate();
+#endif
 }
 
 void
