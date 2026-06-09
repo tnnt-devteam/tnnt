@@ -1,4 +1,4 @@
-NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.20 $ $NHDT-Date: 1779581008 2026/05/24 00:03:28 $
+NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.36 $ $NHDT-Date: 1781062909 2026/06/09 19:41:49 $
 	
 General Fixes and Modified Features
 -----------------------------------
@@ -59,6 +59,7 @@ don't overflow svp.plname on restore (pr #1570 by chasonr)
 monsters (including pets) aren't scared of the Sokoban rolling boulder traps
 fix a bug in which steeds would continuously gain movement points while
         being ridden
+when hero's behavior makes erinyes stronger, cap level at 49 rather than 50
 
 
 Platform- and/or Interface-Specific Fixes
