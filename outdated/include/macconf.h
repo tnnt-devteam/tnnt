@@ -3,7 +3,7 @@
 /*-Copyright (c) Kevin Hugo, 2004. */
 /* NetHack may be freely redistributed.  See license for details. */
 
-#ifdef MACOS9
+#ifdef MAC68K
 #ifndef MACCONF_H
 #define MACCONF_H
 
@@ -16,7 +16,7 @@
  *	__MWERKS__		Metrowerks' Codewarrior compiler
  *
  * We use these early in config.h to define some needed symbols,
- * including MACOS9.
+ * including MAC68K.
  #
  # The Metrowerks compiler defines __STDC__ (which sets NHSTC) and uses
  # WIDENED_PROTOTYPES (defined if UNWIDENED_PROTOTYPES is undefined and
@@ -123,4 +123,4 @@ extern void error(const char *, ...);
 #define MAC_GRAPHICS_ENV
 
 #endif /* ! MACCONF_H */
-#endif /* MACOS9 */
+#endif /* MAC68K */

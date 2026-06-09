@@ -27,6 +27,7 @@ GAME     = nethack
 # GAME     = nethack.prg
 #GAMEUID  = games
 #GAMEGRP  = bin
+TARGET_CC ?= $(CC)
 
 #	Permissions - some places use setgid instead of setuid, for instance.
 #	See also the option "SECURE" in include/config.h.
@@ -127,7 +128,7 @@ RECOVERBIN = recover
 LUAHEADERS ?= lib/lua-$(LUA_VERSION)/src
 LUATESTTARGET ?= $(LUAHEADERS)/lua.h
 LUATOP = $(LUAHEADERS)
-LUAMAKEFLAGS = CC='$(CC)' SYSCFLAGS='$(SYSCFLAGS)'
+LUAMAKEFLAGS ?= CC='$(TARGET_CC)' SYSCFLAGS='$(SYSCFLAGS)'
 LUA2NHTOP ?= ../../..
 LUABASELIB ?= liblua-$(LUA_VERSION).a
 LUATOPLIB ?= lib/lua/$(LUABASELIB)
@@ -347,6 +348,10 @@ LUA_URL :=www.lua.org/ftp
 LUA_URL_MIRROR :=www.tecgraf.puc-rio.br/lua/mirror/ftp
 LUA_URL_NHD :=www.nethack.org/download/thirdparty
 LUA_URL_list:=$(LUA_URL) $(LUA_URL_MIRROR) $(LUA_URL_NHD)
+#
+#CURL := curl
+#ask curl to return a failure code if error 404 is encountered
+CURL := curl --fail
 
 fetch-lua-mirror: LUA_URL_list:=$(LUA_URL_MIRROR)
 fetch-lua-mirror: fetch-Lua
@@ -376,7 +381,7 @@ fetch-Lua:
 	    if [ $$curlstatus -ne 0 ]; then \
 	      luaurl=https://$$1/$$luafile; \
 	      echo Trying $$luaurl; \
-	      curl -R -O $$luaurl; \
+	      $(CURL) -R -O $$luaurl; \
 	      curlstatus=$$?; \
 	      if [ $$curlstatus -eq 0 ]; then \
 	        if [ ! -z "$$shac" ]; then \
@@ -403,7 +408,7 @@ fetch-Lua:
 
 fetch-lua-http:
 	( mkdir -p lib && cd lib && \
-	  curl -R -O http://$(LUA_URL)/lua-$(LUA_VERSION).tar.gz && \
+	  $(CURL) -R -O http://$(LUA_URL)/lua-$(LUA_VERSION).tar.gz && \
 	  tar zxf lua-$(LUA_VERSION).tar.gz && \
 	  rm -f lua-$(LUA_VERSION).tar.gz )
 
