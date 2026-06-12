@@ -11,9 +11,6 @@
  *    only in rumors.c
  */
 
-/* TNNT TODO FOR 3.7: Ensure function signature style is consistent with the new
- * style used in 3.7, rather than old K&R style. */
-
 #include <sys/types.h>
 #include <dirent.h>
 #include <stdio.h>
@@ -49,7 +46,7 @@ static winid en_win = WIN_ERR;
 
 /* #tnntdebug command */
 int
-dotnntdebug(VOID_ARGS)
+dotnntdebug(void)
 {
     char buf[BUFSZ];
     char buf2[BUFSZ];
@@ -61,7 +58,7 @@ dotnntdebug(VOID_ARGS)
         && (!sysopt.tnnt_devs || !sysopt.tnnt_devs[0]
             || !check_user_string(sysopt.tnnt_devs))) {
         Norep("'#tnntdebug' command not available.");
-        return 0;
+        return ECMD_OK;
     }
 #endif
     any.a_char = 's';
@@ -82,7 +79,7 @@ dotnntdebug(VOID_ARGS)
     }
     else {
         destroy_nhwindow(en_win);
-        return 0;
+        return ECMD_OK;
     }
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
@@ -140,7 +137,7 @@ dotnntdebug(VOID_ARGS)
         pline("Summoning the NPC deathmatch monster.");
         create_tnnt_npc(u.ux, u.uy);
     }
-    return 0;
+    return ECMD_OK;
 }
 
 /* #tnntstats command.
@@ -150,14 +147,13 @@ dotnntdebug(VOID_ARGS)
  * achievements are and what they require. It doesn't alert an unaware user that
  * there's a devteam quest. */
 int
-dotnntstats(VOID_ARGS)
+dotnntstats(void)
 {
     return show_tnnt_stats(FALSE);
 }
 
 int
-show_tnnt_stats(final)
-boolean final;
+show_tnnt_stats(boolean final)
 {
 #define maybe_have(final) (!final ? "have " : "")
     char buf[BUFSZ];
@@ -500,21 +496,20 @@ boolean final;
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
-    return 0;
+    return ECMD_OK;
 #undef maybe_have
 }
 
 /* #achievements command. Ask whether they want to see achievements earned
  * or unearned, then display whichever list is appropriate. */
 int
-dotnntachievements(VOID_ARGS)
+dotnntachievements(void)
 {
     return show_tnnt_achievements(FALSE);
 }
 
 int
-show_tnnt_achievements(final)
-boolean final;
+show_tnnt_achievements(boolean final)
 {
     menu_item *choice = NULL;
     winid win = create_nhwindow(NHW_MENU);
@@ -549,7 +544,7 @@ boolean final;
         }
         else {
             destroy_nhwindow(win);
-            return 0;
+            return ECMD_OK;
         }
         destroy_nhwindow(win);
     }
@@ -562,7 +557,7 @@ boolean final;
     if (response == 's') {
         getlin("Enter your search string:", searchbuf);
         if (strlen(searchbuf) < 1)
-            return 0;
+            return ECMD_OK;
     }
 
     /* TNNT TODO: will need NHW_MENU if we can get paging to work in tty */
@@ -634,12 +629,12 @@ boolean final;
     }
     display_nhwindow(win, TRUE);
     destroy_nhwindow(win);
-    return 0;
+    return ECMD_OK;
 }
 
 /* #snacks command */
 int
-doshowfoodseaten(VOID_ARGS)
+doshowfoodseaten(void)
 {
     /* More highly unstable food-based code. Assumes that TRIPE_RATION is the
      * first food and TIN is the last food defined in objects.c.
@@ -692,12 +687,12 @@ doshowfoodseaten(VOID_ARGS)
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
-    return 0;
+    return ECMD_OK;
 }
 
 /* #species command */
 int
-dotnntspecies(VOID_ARGS)
+dotnntspecies(void)
 {
     int i, total = 0, numeligible = 0;
     char buf[BUFSZ];
@@ -738,7 +733,7 @@ dotnntspecies(VOID_ARGS)
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
     en_win = WIN_ERR;
-    return 0;
+    return ECMD_OK;
 }
 
 /* ######################################################################
@@ -746,8 +741,7 @@ dotnntspecies(VOID_ARGS)
  * ###################################################################### */
 
 static char *
-make_swapobj_filename(o)
-struct obj *o;
+make_swapobj_filename(struct obj *o)
 {
     /* needs to be big enough for full path */
     static char buf[BUFSZ];
@@ -784,9 +778,7 @@ struct obj *o;
 }
 
 boolean
-write_swapobj_file(o, swapnum)
-struct obj *o;
-xchar swapnum;
+write_swapobj_file(struct obj *o, xint8 swapnum)
 {
     char *filename = make_swapobj_filename(o);
     FILE *f;
@@ -820,16 +812,13 @@ xchar swapnum;
 
 /* Create object from file and add to swapchest */
 static struct obj *
-mkswapobj(swapchest, filename, rcode)
-struct obj *swapchest;
-char *filename;
-short *rcode;
+mkswapobj(struct obj *swapchest, char *filename, short *rcode)
 {
 #define _N2STR(n) #n
 #define N2STR(n) _N2STR(n)
     char buf[BUFSZ]; /* multi-use */
     char donorname[PL_NSIZ + 1];
-    int swapnum = -1;
+    xint8 swapnum = -1;
     char o_playmode = '-', playmode;
     FILE *f;
     struct obj *o;
@@ -959,8 +948,7 @@ short *rcode;
 }
 
 void
-refresh_swap_chest_contents(swapchest)
-struct obj *swapchest;
+refresh_swap_chest_contents(struct obj *swapchest)
 {
     DIR *d;
     struct dirent *de;
@@ -988,8 +976,7 @@ struct obj *swapchest;
 }
 
 boolean
-delete_swapobj_file(o)
-struct obj *o;
+delete_swapobj_file(struct obj *o)
 {
     char path[BUFSZ];
     Sprintf(path, "%s/%s", TNNT_SWAPCHEST_DIR, o->swapobj_filename);
@@ -1004,8 +991,7 @@ struct obj *o;
 /* Hero has just withdrawn an item from the swap chest. Empty it of its
  * contents, since now it cannot be used further. */
 void
-delete_swap_chest_contents(swapchest)
-struct obj *swapchest;
+delete_swap_chest_contents(struct obj *swapchest)
 {
     struct obj *otmp;
     for (otmp = swapchest->cobj; otmp; otmp = otmp->nobj) {
@@ -1020,8 +1006,7 @@ struct obj *swapchest;
 }
 
 const char *
-swapobj_donor_name(o)
-struct obj *o;
+swapobj_donor_name(struct obj *o)
 {
     const char *donor, *oname;
     if (!has_oname(o)) {
@@ -1043,8 +1028,7 @@ struct obj *o;
 }
 
 void
-credit_swapobj_donor(otmp)
-struct obj *otmp;
+credit_swapobj_donor(struct obj *otmp)
 {
     const char *donor = swapobj_donor_name(otmp);
     FILE *donorfile;
@@ -1067,8 +1051,7 @@ struct obj *otmp;
  * This is NOT called from swap_chest_eligible! Caller must make sure they are
  * calling both functions. */
 boolean
-swap_chest_quan_too_high(obj)
-struct obj *obj;
+swap_chest_quan_too_high(struct obj *obj)
 {
     /* as with wishing, ammo/missiles have a higher allowed stack limit */
     return (obj->quan > (is_ammo(obj) || is_missile(obj) ? 10 : 3));
@@ -1092,8 +1075,7 @@ struct obj *obj;
  *    you can't dump in a piece of junk and get something really good in return.
  */
 boolean
-swap_chest_eligible(obj)
-struct obj *obj;
+swap_chest_eligible(struct obj *obj)
 {
     if (obj->oartifact)
         return FALSE;
@@ -1259,7 +1241,7 @@ struct obj *obj;
  * getbones().
  */
 void
-maybe_place_dungeons_swapchest()
+maybe_place_dungeons_swapchest(void)
 {
     struct mkroom *croom;
     if (In_dungeons_of_doom(&u.uz)
@@ -1293,7 +1275,7 @@ maybe_place_dungeons_swapchest()
  * set.
  */
 void
-write_npc_data(VOID_ARGS)
+write_npc_data(void)
 {
     FILE *npcfile;
     char buf[BUFSZ];
@@ -1423,8 +1405,7 @@ pick_npc_file(void)
  * destroyed is by being replaced with another NPC.
  */
 struct monst*
-create_tnnt_npc(x, y)
-xchar x, y;
+create_tnnt_npc(coordxy x, coordxy y)
 {
     FILE* npcfile;
     int pm_num, gender, npc_level, hpmax;
@@ -1743,7 +1724,7 @@ xchar x, y;
 void
 shut_the_front_door(void)
 {
-    xchar x, y;
+    coordxy x, y;
     /* this can get called if hero vacillates on the arena entry so be efficient
      * about ruling out when we need to check anything */
     if (tnnt_globals.deathmatch_started)
@@ -1773,7 +1754,7 @@ shut_the_front_door(void)
 /* Things that need to happen when the NPC wakes up and the Deathmatch begins.
  * Assumes the caller is making the NPC wake up. */
 void
-npc_awakens()
+npc_awakens(void)
 {
     if (tnnt_globals.deathmatch_started) {
         return;
@@ -1793,8 +1774,7 @@ npc_awakens()
  * moment because it might let them render the game unwinnable by leaving items
  * needed to win the game in the sealed-off deathmatch? */
 boolean
-is_illegal_deathmatch(newlev)
-d_level *newlev;
+is_illegal_deathmatch(d_level *newlev)
 {
     if (!on_level(newlev, &deathmatch_level))
         return FALSE; /* these rules apply only to entering deathmatch */
@@ -1816,9 +1796,7 @@ d_level *newlev;
  * Doesn't assume that this has been checked for actually containing objects.
  * Doesn't try to collect container itself if that is transient. */
 static void
-collect_transient_within(container, olist)
-struct obj* container;
-struct obj** olist;
+collect_transient_within(struct obj* container, struct obj** olist)
 {
     struct obj *otmp, *next;
     for (otmp = container->cobj; otmp; otmp = next) {
@@ -1839,8 +1817,7 @@ struct obj** olist;
  * everything in *your* inventory except the one object "exception".
  * Return a list of objects that have been extracted and now exist only here. */
 struct obj*
-collect_all_transient(exception)
-struct obj* exception;
+collect_all_transient(struct obj* exception)
 {
     int x, y;
     struct obj *otmp, *next, *collected;
@@ -1863,7 +1840,7 @@ struct obj* exception;
     for (y = 0; y < ROWNO; ++y) {
         for (x = 0; x < COLNO; ++x) {
             for (otmp = level.objects[x][y]; otmp; otmp = next) {
-                xchar oldox = otmp->ox, oldoy = otmp->oy;
+                coordxy oldox = otmp->ox, oldoy = otmp->oy;
                 next = otmp->nobj;
                 t_collect(otmp);
                 if (otmp->transient)
@@ -1914,15 +1891,13 @@ struct obj* exception;
  * chatting to the special "leader" devteam member. If non-null, it might be any
  * devteam member. */
 void
-devteam_quest(devteam, thrownscroll)
-struct monst *devteam;
-struct obj *thrownscroll;
+devteam_quest(struct monst *devteam, struct obj *thrownscroll)
 {
-    xchar qstatus = tnnt_globals.devteam_quest_status;
+    xint8 qstatus = tnnt_globals.devteam_quest_status;
     boolean is_leader = !strcmp(MNAME(devteam), "Mike Stephenson");
 
     if (u.uhave.amulet && !thrownscroll && qstatus == DTQUEST_COMPLETED) {
-        com_pager(QT_DEVTEAM_AOY_REACTION);
+        com_pager("devteam_aoy_reaction");
         return;
     }
 
@@ -1947,7 +1922,7 @@ struct obj *thrownscroll;
          * second #chat to complete it. */
         if (Deaf)
             pline("%s signs:", Monnam(devteam));
-        com_pager(QT_DEVTEAM_GIVENQUEST);
+        com_pager("devteam_givenquest");
         qstatus = tnnt_globals.devteam_quest_status = DTQUEST_INPROGRESS;
     }
     /* not else if; starting the quest by throwing the scroll when Deaf could
@@ -1964,8 +1939,8 @@ struct obj *thrownscroll;
          */
         int i;
         int nscrolls_given = 0;
-        xchar scrolls_remaining = 0,
-              nextlevel; /* they tell you where to look next */
+        xint16 scrolls_remaining = 0,
+               nextlevel; /* they tell you where to look next */
         struct obj* scroll = (thrownscroll ? thrownscroll : carrying(SCR_MISSING_CODE));
         while (scroll) {
             int dt_level = scroll->corpsenm;
@@ -2036,12 +2011,12 @@ struct obj *thrownscroll;
                 tnnt_achieve(A_FINISHED_DEVTEAM_QUEST);
                 if (tnnt_globals.killed_izchak) {
                     /* credit for finishing the quest, but no reward */
-                    com_pager(QT_DEVTEAM_BADFINISH);
+                    com_pager("devteam_badfinish");
                 }
                 else {
                     if (Deaf)
                         pline("%s signs:", Monnam(devteam));
-                    com_pager(QT_DEVTEAM_FINISHQUEST);
+                    com_pager("devteam_finishquest");
                     reward = mksobj(T_SHIRT, FALSE, FALSE);
                     reward = oname(reward, artiname(ART_REALLY_COOL_SHIRT));
                     /* player should have just given up at least one scroll, so
@@ -2202,8 +2177,7 @@ write_prev_ach_file(void)
  * like avoiding an expensive check for an achievement if it already got earned.
  */
 boolean
-tnnt_is_achieved(achvmt)
-short achvmt;
+tnnt_is_achieved(short achvmt)
 {
     return (tnnt_globals.ach_status[achvmt].status == ACH_EARNED_THIS_GAME);
 }
@@ -2211,8 +2185,7 @@ short achvmt;
 /* This used to be a macro that just set the bit in achievement_bitmap, but now
  * we also write out to a file. */
 void
-tnnt_achieve(achvmt)
-short achvmt;
+tnnt_achieve(short achvmt)
 {
     int old_status = tnnt_globals.ach_status[achvmt].status;
 
@@ -2300,7 +2273,7 @@ tnnt_announce_achievements(void)
  * (which we presume to be Minetown but doesn't have to be), FALSE if there
  * aren't */
 boolean
-tnnt_is_watch_present()
+tnnt_is_watch_present(void)
 {
     struct monst *mtmp;
     for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
@@ -2313,26 +2286,24 @@ tnnt_is_watch_present()
 
 /* are you in the main non-Gehennom dungeon? */
 boolean
-In_dungeons_of_doom(lev)
-d_level *lev;
+In_dungeons_of_doom(d_level *lev)
 {
     return (boolean) (lev->dnum == dungeons_dnum);
 }
 
 /* are you in Minetown? */
 boolean
-Is_minetown(lev)
-d_level *lev;
+Is_minetown(d_level *lev)
 {
     s_level *slev = Is_special(lev);
     return (slev && !strcmp(slev->proto, "minetn"));
 }
 
 /* player has just disarmed one of the types of traps. Add it and check to see
- * if they earned the achievement. */
+ * if they earned the achievement.
+ * mask parameter is one of the TNNT_UNTRAP_* constants */
 void
-tnnt_add_untrap(mask)
-unsigned int mask; /* one of the TNNT_UNTRAP_* */
+tnnt_add_untrap(unsigned int mask)
 {
     tnnt_globals.untrapped_types |= mask;
     if ((tnnt_globals.untrapped_types & ALL_UNTRAPPABLE_TRAPTYPES)
@@ -2343,8 +2314,7 @@ unsigned int mask; /* one of the TNNT_UNTRAP_* */
 /* A door at this point is resisting (either from opening or closing).
  * Update accordingly and maybe award achievement. */
 void
-tnnt_door_resists(x, y)
-xchar x, y; // TNNT TODO FOR 3.7: use coordxy
+tnnt_door_resists(coordxy x, coordxy y)
 {
     /* The resists don't necessarily have to happen all at once (e.g. player can
      * be having the door resist, walk away to fight a monster, and come back to
@@ -2370,8 +2340,7 @@ xchar x, y; // TNNT TODO FOR 3.7: use coordxy
 /* Return true if a given monster counts towards certain achievements (the ones
  * for killing a certain amount of species). */
 static boolean
-tnnt_common_monst(mndx)
-int mndx;
+tnnt_common_monst(int mndx)
 {
     /* Rule 0: We don't want anything after SPECIAL_PM (long worm tail, player
      * monsters, quest guardians/nemeses/leaders). This also excludes the
@@ -2424,8 +2393,7 @@ int mndx;
  * any filtration or translation as necessary, then process achievements that
  * trigger based on the player personally killing stuff. */
 void
-tnnt_update_ukilled(mndx)
-int mndx;
+tnnt_update_ukilled(int mndx)
 {
     int i, ct = 0;
     int32_t lowercase_killed = 0x0, uppercase_killed = 0x0;
@@ -2462,14 +2430,14 @@ int mndx;
 
             /* a to z achievement */
             if (mons[i].mlet >= S_ANT && mons[i].mlet <= S_ZRUTY) {
-                xchar offset = (mons[i].mlet - S_ANT);
+                xint8 offset = (mons[i].mlet - S_ANT);
                 lowercase_killed |= (1 << offset);
                 if (lowercase_killed == 0x03FFFFFF) /* low 26 bits */
                     tnnt_achieve(A_KILLED_A_Z_LOWERCASE);
             }
             /* A to Z achievement */
             if (mons[i].mlet >= S_ANGEL && mons[i].mlet <= S_ZOMBIE) {
-                xchar offset = (mons[i].mlet - S_ANGEL);
+                xint8 offset = (mons[i].mlet - S_ANGEL);
                 uppercase_killed |= (1 << offset);
                 /* low 26 bits, EXCEPT the one for 'I' since that is not a
                  * monster class. (Bit for 'I' is 1 << ('I'-'A') = 0x100) */
@@ -2478,7 +2446,7 @@ int mndx;
             }
             /* Kill all baby dragons achievement */
             if (i >= PM_BABY_GRAY_DRAGON && i <= PM_BABY_YELLOW_DRAGON) {
-                xchar offset = i - PM_BABY_GRAY_DRAGON;
+                xint8 offset = i - PM_BABY_GRAY_DRAGON;
                 baby_dragons_killed |= (1 << offset);
                 /* TNNT TODO FOR 3.7: with the introduction of gold dragons,
                  * 0x1ff will change to 0x3ff, both for this one and for
@@ -2488,7 +2456,7 @@ int mndx;
             }
             /* Kill all dragons achievement */
             if (i >= PM_GRAY_DRAGON && i <= PM_YELLOW_DRAGON) {
-                xchar offset = i - PM_GRAY_DRAGON;
+                xint8 offset = i - PM_GRAY_DRAGON;
                 dragons_killed |= (1 << offset);
                 if (dragons_killed == 0x1ff)
                     tnnt_achieve(A_KILLED_ALL_DRAGONS);
@@ -2511,8 +2479,7 @@ int mndx;
  * "all scrolls" and "all spellbooks". This only returns the latter. */
 #define FIRST_GEM DILITHIUM_CRYSTAL /* same as in end.c */
 int
-tnnt_id_achvmt(otyp)
-short otyp;
+tnnt_id_achvmt(short otyp)
 {
     /* for performance, catch all the specific items that do NOT count towards
      * anything first */
@@ -2609,8 +2576,7 @@ short otyp;
  * achievement isn't otherwise trackable until the xlogfile is written.
  */
 void
-tnnt_check_identifications(otyp)
-int otyp;
+tnnt_check_identifications(int otyp)
 {
     const char oclass = objects[otyp].oc_class;
     int tmp_otyp;
@@ -2652,8 +2618,7 @@ int otyp;
 /* Give credit for permanently lighting a position in a previously-unlit
  * room. */
 void
-tnnt_roomlit_credit(x, y)
-int x, y; /* TNNT TODO FOR 3.7: these should be coordxy */
+tnnt_roomlit_credit(coordxy x, y)
 {
     if (levl[x][y].lit == 0 && In_dungeons_of_doom(&u.uz)
         && (levl[x][y].roomno >= ROOMOFFSET || Is_bigroom(&u.uz))
@@ -2700,7 +2665,7 @@ tnnt_uniqndx(int mndx)
  * being grabbed by a sea monster with a drowning attack.  This function is
  * called just before zeroing out u.ustuck. */
 void
-tnnt_maybe_grant_ahab()
+tnnt_maybe_grant_ahab(void)
 {
     if (u.ustuck && !u.uswallow && !sticks(youmonst.data)
         && u.ustuck->data->mlet == S_EEL
@@ -2717,7 +2682,7 @@ tnnt_maybe_grant_ahab()
 /* Grant "The Great Heist" achievement if player has entered every vault in the
  * game, and there are no more levels that might generate another vault. */
 void
-tnnt_maybe_award_heist()
+tnnt_maybe_award_heist(void)
 {
     d_level lvl = u.uz;
     int i;
@@ -2770,7 +2735,7 @@ tnnt_read(int rdbl)
 /* Hero is standing on an altar (either moved onto it, or just converted it).
  * Record its type towards the Pilgrim achievement. */
 void
-tnnt_record_altar(xchar amask)
+tnnt_record_altar(unsigned int amask)
 {
     amask &= AM_MASK; /* erase shrine, etc just in case */
     tnnt_globals.regular_altars |= amask;
@@ -2789,7 +2754,7 @@ tnnt_record_altar(xchar amask)
  * TNNT TODO FOR 3.7: check if this assumption holds or if the Castle can be
  * level flipped and appear in a slightly different position */
 void
-tnnt_check_castle_rush()
+tnnt_check_castle_rush(void)
 {
     if (Is_stronghold(&u.uz) && u.ux == 15 && u.uy == 11
         && moves <= tnnt_globals.entered_castle_time + TNNT_CASTLE_TURNS) {
