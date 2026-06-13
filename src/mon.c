@@ -1,4 +1,4 @@
-/* NetHack 5.0	mon.c	$NHDT-Date: 1770949988 2026/02/12 18:33:08 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.621 $ */
+/* NetHack 5.0	mon.c	$NHDT-Date: 1781062909 2026/06/09 19:41:49 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.634 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Derek S. Ray, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -1237,14 +1237,19 @@ movemon_singlemon(struct monst *mtmp)
             (void) gd_move(mtmp);
             mtmp->mlstmv = svm.moves;
         }
+        mtmp->movement = 0;
         return FALSE;
     }
-    if (DEADMONSTER(mtmp))
+    if (DEADMONSTER(mtmp)) {
+        mtmp->movement = 0;
         return FALSE;
+    }
 
     /* monster isn't on this map anymore */
-    if (mon_offmap(mtmp))
+    if (mon_offmap(mtmp)) {
+        mtmp->movement = 0;
         return FALSE;
+    }
 
     /* TNNT: Boss Rush checks.
      * Note the placement of this block: after DEADMONSTER and mon_offmap so a
@@ -3943,7 +3948,6 @@ xkilled(
         }
         if (!unique_corpstat(mdat)) {
             boolean mname = has_mgivenname(mtmp);
-
             livelog_printf(LL_KILLEDPET, "murdered %s%s%s faithful %s",
                            mname ? MGIVENNAME(mtmp) : "",
                            mname ? ", " : "",
@@ -6205,8 +6209,9 @@ adj_erinys(unsigned abuse)
         pm->mattk[2].damd = 4;
     }
 
-    /* also adjust level and difficulty */
-    pm->mlevel = min(7 + u.ualign.abuse, 50);
+    /* also adjust level and difficulty;
+       mlevel >= 50 has a special meaning, so don't exceed 49 */
+    pm->mlevel = min(7 + u.ualign.abuse, 49);
     pm->difficulty = min(10 + (u.ualign.abuse / 3), 25);
 }
 

@@ -2224,7 +2224,7 @@ fprefx(struct obj *otmp)
         } else if (otmp->otyp == APPLE && otmp->cursed && !Sleep_resistance) {
             ; /* skip core joke; feedback deferred til fpostfx() */
 
-#if defined(MACOS9) || defined(MACOS)
+#if defined(MAC68K) || defined(MACOS)
         /* KMH -- Why should Unix have all the fun?
            We check MACOS before UNIX to get the Apple-specific apple
            message; the '#if UNIX' code will still kick in for pear. */
@@ -3086,7 +3086,6 @@ doeat(void)
                     livelog_printf(LL_CONDUCT,
                                "tasted meat for the first time, by eating %s",
                                    an(food_xname(otmp, FALSE)));
-
                 violated_vegetarian();
             }
             break;

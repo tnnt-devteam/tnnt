@@ -19,6 +19,7 @@ struct sysopt_s {
     char *msghandler;
 #ifdef DUMPLOG
     char *dumplogfile; /* where the dump file is saved */
+    char *dumplogurl;  /* url path for the above */
 #endif
 #ifdef DUMPHTML
     char *dumphtmlfile; /* where the html dump is saved */
@@ -30,6 +31,7 @@ struct sysopt_s {
                        * -1: getenv() didn't find a value for DEBUGFILES.
                        */
     int maxplayers;
+    int maxrerollrate;
     int seduce;
     unsigned int livelog;  /* event types to livelog */
     int ll_conduct_turns;  /* do not livelog conducts before this turncount */

@@ -26,8 +26,10 @@ staticfn boolean fuzzer_savelife(int);
 ATTRNORETURN staticfn void really_done(int) NORETURN;
 staticfn void savelife(int);
 staticfn boolean should_query_disclose_option(int, char *);
-#ifdef DUMPLOG
+#if defined(DUMPLOG) || defined(DUMPHTML)
 staticfn void dump_plines(void);
+extern void dump_start_screendump(void); /* defined in windows.c */
+extern void dump_end_screendump(void);
 #endif
 staticfn void dump_everything(int, time_t);
 staticfn void fixup_death(int);
@@ -110,9 +112,12 @@ done2(void)
             u.usleep = 0;
         }
 
-        if (abandon_tutorial)
+        if (abandon_tutorial) {
+            /* mention_decor can be processed now */
+            rcfile_only_this_option(opt_mention_decor);
             schedule_goto(&u.ucamefrom, UTOTYPE_ATSTAIRS,
                           "Resuming regular play.", (char *) 0);
+        }
         return ECMD_OK;
     }
 
@@ -501,7 +506,7 @@ should_query_disclose_option(int category, char *defquery)
     return TRUE;
 }
 
-#ifdef DUMPLOG
+#if defined(DUMPLOG) || defined(DUMPHTML)
 staticfn void
 dump_plines(void)
 {
@@ -576,7 +581,6 @@ dump_everything(
                                              : gu.urole.name.m);
     putstr(0, ATR_SUBHEAD, pbuf);
     putstr(NHW_DUMPTXT, 0, "");
-
     dump_start_screendump();
 
     /* info about current game state */
@@ -592,7 +596,7 @@ dump_everything(
     putstr(NHW_DUMPTXT, 0, "");
 
     dump_plines();
-    putstr(NHW_DUMPTXT, 0, "");
+    putstr(0, 0, "");
     putstr(0, ATR_HEADING, "Inventory:");
     (void) display_inventory((char *) 0, TRUE);
     container_contents(gi.invent, TRUE, TRUE, FALSE);
@@ -1217,7 +1221,7 @@ really_done(int how)
      * contributing to serious server load when players were startscumming at
      * an extremely rapid pace (whether violating the rules by using a script,
      * or just quitting and restarting games very quickly by hand). */
-    startscummed = ((how == QUIT || how == ESCAPED) && moves <= 100L);
+    startscummed = ((how == QUIT || how == ESCAPED) && svm.moves <= 100L);
 
     /* TNNT: write the achievements-in-previous-games file with all achievements
      * earned in this or previous games
@@ -1547,7 +1551,7 @@ really_done(int how)
 
         if (!done_stopprint)
             artifact_score(gi.invent, FALSE, endwin); /* list artifacts */
-#ifdef DUMPLOG
+#if defined(DUMPLOG) || defined(DUMPHTML)
         dump_redirect(TRUE);
         if (iflags.in_dumplog)
             artifact_score(gi.invent, FALSE, 0);
@@ -1662,6 +1666,8 @@ really_done(int how)
         raw_print("");
         raw_print("");
     }
+    if (!startscummed)
+        livelog_dump_url(LL_DUMP_ALL | (how == ASCENDED ? LL_DUMP_ASC : 0));
     nh_terminate(EXIT_SUCCESS);
 }
 
@@ -1753,9 +1759,6 @@ nh_terminate(int status)
     program_state.in_moveloop = 0; /* won't be returning to normal play */
 
     l_nhcore_call(NHCORE_GAME_EXIT);
-#ifdef MACOS9
-    getreturn("to exit");
-#endif
     /* don't bother to try to release memory if we're in panic mode, to
        avoid trouble in case that happens to be due to memory problems */
     if (!program_state.panicking) {
@@ -1970,7 +1973,7 @@ build_english_list(char *in)
 # endif
 
 void
-NH_abort(char *why USED_FOR_CRASHREPORT)
+NH_abort(const char *why USED_FOR_CRASHREPORT)
 {
 #ifdef PANICTRACE
     int gdb_prio = SYSOPT_PANICTRACE_GDB;
@@ -1986,7 +1989,7 @@ NH_abort(char *why USED_FOR_CRASHREPORT)
 
 #ifdef PANICTRACE
 #ifdef CRASHREPORT
-    if(!submit_web_report(1, "Panic", why))
+    if (!submit_web_report(1, "Panic", why))
 #endif
     {
 #ifndef VMS

@@ -132,7 +132,6 @@ main(int argc, char *argv[])
     program_state.early_options = 1;
     /* handle -dalthackdir, -s <score stuff>, --version, --showpaths */
     early_options(&argc, &argv, &dir);
-    program_state.early_options = 0;
 #ifdef CHDIR
     /*
      * Change directories before we initialize the window system so
@@ -146,6 +145,7 @@ main(int argc, char *argv[])
 #ifdef __linux__
     check_linux_console();
 #endif
+    program_state.early_options = 0;
 
     initoptions();
 #ifdef PANICTRACE
@@ -607,6 +607,9 @@ sethanguphandler(void (*handler)(int))
     (void) signal(SIGHUP, (SIG_RET_TYPE) handler);
 #ifdef SIGXCPU
     (void) signal(SIGXCPU, (SIG_RET_TYPE) handler);
+#endif
+#ifdef WHEREIS_FILE
+    (void) signal(SIGUSR1, (SIG_RET_TYPE) signal_whereis);
 #endif
 #endif /* ?SA_RESTART */
 }

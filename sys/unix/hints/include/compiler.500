@@ -5,7 +5,7 @@
 #	various -I, -D, and -W settings appended below;
 #	these are the settings of most interest for an end-user build
 #	(clang doesn't support '-Og', gcc needs 4.x or later)
-CCFLAGS = -g
+CCFLAGS = -g3 -O0
 #CCFLAGS = -g -Og
 #CCFLAGS = -O2
 #	Note: this is not the usual 'CFLAGS' which is used in default
@@ -49,7 +49,7 @@ endif
 #CC= clang
 #CXX=clang++ -std=gnu++11
 
-CFLAGS=$(CCFLAGS) -I../include -DNOTPARMDECL
+CFLAGS=$(CCFLAGS) -I../include
 CFLAGS+=-Wall -Wextra  \
 	-Wreturn-type -Wunused -Wformat -Wswitch -Wshadow -Wwrite-strings
 CFLAGS+=-pedantic
@@ -89,7 +89,7 @@ CXX=g++ -std=gnu++11
 GCCGTEQ9 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 9)
 GCCGTEQ11 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 11)
 GCCGTEQ12 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 12)
-GCCGTEQ14 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 14)
+GCCGTEQ16 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 16)
 ifeq "$(GCCGTEQ9)" "1"
 # flags present in gcc version greater than or equal to 9 can go here
 CFLAGS+=-Wformat-overflow
@@ -100,7 +100,8 @@ CFLAGS+=-Wimplicit-fallthrough
 #endif
 #ifeq "$(GCCGTEQ12)" "1"
 #endif
-#ifeq "$(GCCGTEQ14)" "1"
+#ifeq "$(GCCGTEQ16)" "1"
+NO_WARN_DISCARDED_QUALIFIERS=-Wno-discarded-qualifiers
 #endif
 # end of gcc-specific
 else   # gcc or clang?
@@ -109,6 +110,7 @@ CXX=clang++ -std=gnu++11
 CLANGGTEQ12 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 12)
 CLANGGTEQ14 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 14)
 CLANGGTEQ21 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 21)
+CLANGGTEQ22 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 22)
 ifeq "$(CLANGGTEQ12)" "1"
 CFLAGS+=-Wimplicit-fallthrough
 endif
@@ -123,12 +125,15 @@ endif
 ifeq "$(CLANGGTEQ21)" "1"
 CFLAGS+=-Wno-deprecated-octal-literals
 endif
+ifeq "$(CLANGGTEQ22)" "1"
+NO_WARN_DISCARDED_QUALIFIERS=-Wno-incompatible-pointer-types-discards-qualifiers
+endif
 # none
 endif  # clang-specific ends here
 
 ifdef MAKEFILE_SRC
 ifdef CPLUSPLUS_NEEDED
-CCXXFLAGS = -g -I../include -DNOTPARMDECL
+CCXXFLAGS = -g -I../include
 CCXXFLAGS+=-Wall -Wextra -Wno-missing-field-initializers \
         -Wreturn-type -Wunused -Wformat -Wswitch -Wshadow -Wwrite-strings
 CCXXFLAGS+=-pedantic

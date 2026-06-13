@@ -640,6 +640,7 @@ encode_extended_conducts(char *buf)
     add_achieveX(buf, "wishless",     !u.uconduct.wishes);
     add_achieveX(buf, "artiwishless", !u.uconduct.wisharti);
     add_achieveX(buf, "genocideless", !num_genocides());
+    add_achieveX(buf, "elberethless", !u.uconduct.elbereth);
     if (sokoban_in_play())
         add_achieveX(buf, "sokoban",  !u.uconduct.sokocheat);
     add_achieveX(buf, "blind",        u.uroleplay.blind);

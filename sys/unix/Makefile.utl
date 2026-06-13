@@ -10,6 +10,7 @@
 
 # Root of source tree:
 NHSROOT=..
+SRCDIR = $(NHSROOT)/src
 
 # newer makes predefine $(MAKE) to 'make' and do smarter processing of
 # recursive make calls if $(MAKE) is used
@@ -226,13 +227,13 @@ ACHOBJS = tnnt_ach_to_yaml.o
 # files or on the command line.
 
 TARGETPFX=
-TARGET_CC = $(CC)
-TARGET_CFLAGS = $(CFLAGS) $(CSTD)
-TARGET_CLINK = $(CLINK)
-TARGET_LFLAGS = $(LFLAGS)
-TARGET_CXX = $(CXX)
-TARGET_CXXFLAGS = $(CXXFLAGS)
-TARGET_AR = $(AR)
+TARGET_CC ?= $(CC)
+TARGET_CFLAGS ?= $(CFLAGS) $(CSTD)
+TARGET_CLINK ?= $(CLINK)
+TARGET_LFLAGS ?= $(LFLAGS)
+TARGET_CXX ?= $(CXX)
+TARGET_CXXFLAGS ?= $(CXXFLAGS)
+TARGET_AR ?= $(AR)
 
 #
 #	dependencies for makedefs
@@ -535,7 +536,7 @@ tilemap: tilemap.o $(OBJDIR)/objects.o $(OBJDIR)/monst.o $(OBJDIR)/drawing.o \
 	./tilemap
 
 tiletext.o: ../win/share/tiletext.c $(CONFIG_H) ../win/share/tile.h
-	$(CC) $(CFLAGS) $(CSTD)  -I../win/share -c ../win/share/tiletext.c -o $@
+	$(CC) $(CFLAGS) $(NO_WARN_DISCARDED_QUALIFIERS) $(CSTD)  -I../win/share -c ../win/share/tiletext.c -o $@
 tiletxt.o: ../win/share/tiletxt.c ../win/share/tilemap.c $(HACK_H)
 	$(CC) $(CFLAGS) $(CSTD) -I../win/share -c ../win/share/tiletxt.c -o $@
 tilemap.o: ../win/share/tilemap.c $(HACK_H)

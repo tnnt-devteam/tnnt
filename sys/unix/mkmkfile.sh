@@ -10,6 +10,7 @@
 #  $3 install path
 #  $4 hints file (path)
 #  $5 hints file (as given by user)
+#  $6 gnu or bsd
 
 echo "#" > $3
 echo "# This file is generated automatically.  Do not edit." >> $3
@@ -18,6 +19,37 @@ echo "# Identify this file:" >> $3
 echo "MAKEFILE_$2=1" >> $3
 echo "" >> $3
 echo "HINTSFILE=$5" >> $3
+echo "" >> $3
+
+echo "###" >> $3
+echo "### add check for builder include file $6-style" >> $3
+echo "###" >> $3
+echo "" >> $3
+BUILDERINCL=make.prefs
+echo "" >> $3
+case "$6" in
+	"gnu")
+		echo "ifdef MAKEFILE_TOP" >> $3
+		echo "NHSROOT=." >> $3
+		echo "else" >> $3
+		echo "NHSROOT=.." >> $3
+		echo "endif" >> $3
+		echo "ifneq (\"\$(wildcard \$(NHSROOT)/$BUILDERINCL))\",\"\")" >> $3
+		echo "-include \$(NHSROOT)/$BUILDERINCL" >> $3
+		echo "endif" >> $3
+		;;
+	"bsd")
+		echo ".ifdef MAKEFILE_TOP" >> $3
+		echo "NHSROOT=." >> $3
+		echo ".else" >> $3
+		echo "NHSROOT=.." >> $3
+		echo ".endif" >> $3
+		echo ".if exists(\$(NHSROOT)/$BUILDERINCL)" >> $3
+		echo ".include \"\$(NHSROOT)/$BUILDERINCL\"" >> $3
+		echo ".endif" >> $3
+		;;
+	*)
+esac
 echo "" >> $3
 
 echo "###" >> $3

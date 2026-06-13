@@ -20,31 +20,33 @@
 
 #undef COUNT
 
-#if defined(__SASC_60) || defined(__GNUC__)
 #include <proto/exec.h>
 #include <proto/dos.h>
-#endif
 
 /* POSIX stubs needed by libnix (-noixemul) */
 #ifdef __noixemul__
 int getpid(void) { return (int)FindTask(NULL); }
 #endif
 
-#ifdef AZTEC_50
-#include <functions.h>
-#undef strcmpi
-#endif
+/* Point NetHack: at the directory we were launched from.  Works for both
+   CLI ("nethack") and Workbench (icon double-click) launches, since
+   GetProgramDir() (V37+) resolves both.  Any existing assign is replaced;
+   it would just be stale state from a previous install or session. */
+void
+amiga_self_assign(void)
+{
+    BPTR dup;
 
-/* Prototypes */
-#ifndef CROSS_TO_AMIGA
-#include "NH:sys/amiga/amiwind.p"
-#include "NH:sys/amiga/winami.p"
-#include "NH:sys/amiga/amidos.p"
-#else
-#include "amiwind.p"
-#include "winami.p"
-#include "amidos.p"
-#endif
+    if (GetProgramDir() == 0)
+        return;
+    if ((dup = DupLock(GetProgramDir())) == 0)
+        return;
+    if (!AssignLock("NetHack", dup))
+        UnLock(dup);
+}
+
+#include "winext.h"
+#include "winproto.h"
 
 
 extern char Initialized;
@@ -52,9 +54,7 @@ extern struct window_procs amii_procs;
 struct ami_sysflags sysflags = {0};
 FILE *fopenp(const char *, const char *);
 
-#ifndef __SASC_60
 int Enable_Abort = 0; /* for stdio package */
-#endif
 
 /* Initial path, so we can find NetHack.cnf */
 char PATH[PATHLEN] = "NetHack:";
@@ -85,27 +85,6 @@ getlogin(void)
 
 /* abs() provided by libnix/stdlib */
 
-#ifdef SHELL
-int
-dosh(void)
-{
-    int i = 0;
-    char buf[BUFSZ];
-    extern struct ExecBase *SysBase;
-
-    /* Only under 2.0 and later ROMs do we have System() */
-    if (SysBase->LibNode.lib_Version >= 37 && !amibbs) {
-        getlin("Enter CLI Command...", buf);
-        if (buf[0] != '\033')
-            i = System(buf, NULL);
-    } else {
-        i = 0;
-        pline("No mysterious force prevented you from using multitasking.");
-    }
-    return i;
-}
-#endif /* SHELL */
-
 #ifdef MFLOPPY
 #include <ctype.h>
 
@@ -125,15 +104,7 @@ dosh(void)
 long
 freediskspace(char *path)
 {
-#ifdef UNTESTED
-    /* these changes from Patric Mueller <bhaak@gmx.net> for AROS to
-     * handle larger disks.  Also needs limits.h and aros/oldprograms.h
-     * for AROS.  (keni)
-     */
-    unsigned long long freeBytes = 0;
-#else
     long freeBytes = 0;
-#endif
     struct InfoData *infoData; /* Remember... longword aligned */
     char fileName[32];
 
@@ -175,11 +146,6 @@ freediskspace(char *path)
                         infoData->id_NumBlocks - infoData->id_NumBlocksUsed;
                     freeBytes -= (freeBytes + EXTENSION) / (EXTENSION + 1);
                     freeBytes *= infoData->id_BytesPerBlock;
-#ifdef UNTESTED
-                    if (freeBytes > LONG_MAX) {
-                        freeBytes = LONG_MAX;
-                    }
-#endif
                 }
                 if (freeBytes < 0)
                     freeBytes = 0;
@@ -210,74 +176,6 @@ filesize(char *file)
     return size;
 }
 
-#if 0
-void
-void
-eraseall(const char *path, const char *files)
-{
-    BPTR dirLock, dirLock2;
-    struct FileInfoBlock *fibp;
-    int chklen;
-#if (NH_DEVEL_STATUS != NH_STATUS_RELEASED)
-    if(files != g.alllevels)panic("eraseall");
-#endif
-    chklen=(int)index(files,'*')-(int)files;
-
-    if (dirLock = Lock( (char *)path ,SHARED_LOCK)) {
-	dirLock2=DupLock(dirLock);
-	dirLock2= CurrentDir(dirLock2);
-	fibp=AllocMem(sizeof(struct FileInfoBlock),0);
-	if(fibp){
-	    if(Examine(dirLock,fibp)){
-		while(ExNext(dirLock,fibp)){
-		    if(!strncmp(fibp->fib_FileName,files,chklen)){
-			DeleteFile(fibp->fib_FileName);
-		    }
-		}
-	    }
-	    FreeMem(fibp,sizeof(struct FileInfoBlock));
-	}
-	UnLock(dirLock);
-	UnLock(CurrentDir(dirLock2));
-    }
-}
-#endif
-
-/* This size makes that most files can be copied with two Read()/Write()s */
-
-#if 0 /* Unused */
-#define COPYSIZE 4096
-
-char *CopyFile(const char *from, const char *to)
-{
-    BPTR fromFile, toFile;
-    char *buffer;
-    long size;
-    char *error = NULL;
-
-    buffer = (char *) alloc(COPYSIZE);
-    if (fromFile = Open( (char *)from, MODE_OLDFILE)) {
-	if (toFile = Open( (char *)to, MODE_NEWFILE)) {
-	    while (size = Read(fromFile, buffer, (long)COPYSIZE)) {
-		if (size == -1){
-		    error = "Read error";
-		    break;
-		}
-		if (size != Write(toFile, buffer, size)) {
-		    error = "Write error";
-		    break;
-		}
-	    }
-	    Close(toFile);
-	} else
-	    error = "Cannot open destination";
-	Close(fromFile);
-    } else
-	error = "Cannot open source (this should not occur)";
-    free(buffer);
-    return error;
-}
-#endif
 
 #ifdef MFLOPPY
 /* this should be replaced */
@@ -415,12 +313,15 @@ fopenp(const char *name, const char *mode)
     while (pp && *pp) {
         bp = buf;
         while (*pp && *pp != PATHSEP) {
-            if (bp > buf + BUFSIZ - 1)
+            if (bp >= buf + BUFSIZ - 1)
                 return (NULL);
             lastch = *bp++ = *pp++;
         }
-        if (lastch != ':' && lastch != '/' && bp != buf)
+        if (lastch != ':' && lastch != '/' && bp != buf) {
+            if (bp >= buf + BUFSIZ - 2)
+                return (NULL);
             *bp++ = '/';
+        }
         if (bp + strlen(name) > buf + BUFSIZ - 1)
             return (NULL);
         strcpy(bp, name);

@@ -5,6 +5,10 @@
 
 ifdef CROSS_TO_MSDOS
 #
+.PHONY: tilemap
+tilemap:  ../util/tilemap.o $(SRCDIR)/objects.o $(SRCDIR)/monst.o $(SRCDIR)/drawing.o $(HACKLIB)
+../util/tilemap.o : ../win/share/tilemap.c
+	(cd ../util ; make tilemap.o ; cd ../src )
 $(TARGETPFX)msdos.o : ../sys/msdos/msdos.c $(HACK_H)
 $(TARGETPFX)font.o : ../sys/msdos/font.c ../sys/msdos/font.h $(HACK_H)
 $(TARGETPFX)pckeys.o : ../sys/msdos/pckeys.c $(HACK_H)
@@ -18,13 +22,15 @@ $(TARGETPFX)vidvesa.o : ../sys/msdos/vidvesa.c ../sys/msdos/portio.h \
 		../win/share/tile.h ../include/tileset.h ../sys/msdos/font.h $(HACK_H)
 $(TARGETPFX)vidstub.o : ../sys/msdos/vidvesa.c ../sys/msdos/portio.h \
 		$(HACK_H)
-$(TARGETPFX)tile.o : tile.c
+$(TARGETPFX)tile.o : $(SRCDIR)/tile.c
+	$(TARGET_CC) $(TARGET_CFLAGS) -c -o $@ $(SRCDIR)/tile.c
+$(SRCDIR)/tile.c : tilemap
 $(TARGETPFX)exceptn.o : ../lib/djgpp/djgpp-patch/src/libc/go32/exceptn.S
 	$(TARGET_CC) -c -o $@ ../lib/djgpp/djgpp-patch/src/libc/go32/exceptn.S
 	$(TARGET_AR) ru ../lib/djgpp/i586-pc-msdosdjgpp/lib/libc.a $(TARGETPFX)exceptn.o
 $(GAMEBIN) : $(HOBJ) $(TARGETPFX)date.o $(TARGET_HACKLIB) $(LUACROSSLIB)
 	$(TARGET_LINK) $(TARGET_LFLAGS) -o $@ \
-	$(HOBJ) $(TARGET_HACKLIB) $(WINLIB) $(TARGET_LIBS)
+	$(HOBJ) $(DATE_O) $(GENTILEOFILE) $(TARGET_HACKLIB) $(WINLIB) $(TARGET_LIBS)
 $(DOSFONT)/ter-u16b.psf: $(FONTTOP)/ter-u16b.bdf $(DOSFONT)/nh-u16b.bdf $(DOSFONT)/makefont.lua $(LUABIN)
 	$(LUABIN) $(DOSFONT)/makefont.lua $(FONTTOP)/ter-u16b.bdf $(DOSFONT)/nh-u16b.bdf $@
 $(DOSFONT)/ter-u16v.psf: $(FONTTOP)/ter-u16v.bdf $(DOSFONT)/nh-u16v.bdf $(DOSFONT)/makefont.lua $(LUABIN)
@@ -90,8 +96,8 @@ else
 	  fi; )
 endif
 	-touch $(TARGETPFX)pkg/RECORD
-	cd $(TARGETPFX)pkg ; zip -9 ../NH370DOS.ZIP * ; cd ../../..
-	@echo msdos package zip file $(TARGETPFX)NH370DOS.ZIP
+	cd $(TARGETPFX)pkg ; zip -9 ../NH$(NHV)DOS.ZIP * ; cd ../../..
+	@echo msdos package zip file $(TARGETPFX)NH$(NHV)DOS.ZIP
 
 $(LUABIN):
 	( cd .. && make luabin && cd src)
@@ -105,14 +111,14 @@ deploy-to-dosbox:
 endif
 .PHONY: deploytodosbox
 
-deploytodosbox: $(TARGETPFX)NH370DOS.ZIP $(dosboxnhfolder) $(dosboxnhsrc) \
+deploytodosbox: $(TARGETPFX)NH$(NHV)DOS.ZIP $(dosboxnhfolder) $(dosboxnhsrc) \
 			$(dosboxnhsrc)/src $(dosboxnhsrc)/include \
 			$(dosboxnhsrc)/sys/msdos $(dosboxnhsrc)/sys/share \
 			$(dosboxnhsrc)/win/share $(dosboxnhsrc)/win/curses \
 			$(dosboxnhsrc)/win/tty $(dosboxnhsrc)/util \
 			$(dosboxnhfolder)/NETHACK.EXE
 	@echo DOS NetHack deployed to dosbox at $(dosboxnhfolder)
-$(TARGETPFX)NH370DOS.ZIP: dospkg
+$(TARGETPFX)NH$(NHV)DOS.ZIP: dospkg
 $(dosboxnhfolder):
 	mkdir -p $@
 $(dosboxnhsrc): $(dosboxnhfolder)
@@ -144,8 +150,8 @@ $(dosboxnhsrc)/util: $(dosboxnhsrc)
 	mkdir -p $@
 	cp --preserve=timestamps $(FLDR)util/*.c $(dosboxnhsrc)/util
 	cp --preserve=timestamps $(FLDR)util/*.h $(dosboxnhsrc)/util
-$(dosboxnhfolder)/NETHACK.EXE: $(TARGETPFX)NH370DOS.ZIP
-	unzip -o $(TARGETPFX)NH370DOS.ZIP -d $(dosboxnhfolder)
+$(dosboxnhfolder)/NETHACK.EXE: $(TARGETPFX)NH$(NHV)DOS.ZIP
+	unzip -o $(TARGETPFX)NH$(NHV)DOS.ZIP -d $(dosboxnhfolder)
 	find $(dosboxnhfolder) -type f -name "$(dosboxconfigfile)" \
 		| xargs sed -i 's/#OPTIONS=video:autodetect/OPTIONS=video:autodetect/g'
 endif  # dosbox
@@ -225,21 +231,19 @@ mipspkg: dodata $(GAMEBIN) $(TARGETPFX)recover
 	cp ../sys/msdos/sysconf $(TARGETPFX)pkg/sysconf
 	cp ../doc/nethack.txt $(TARGETPFX)pkg/nethack.txt
 	-touch $(TARGETPFX)pkg/record
-	cd $(TARGETPFX)pkg ; zip -9 ../nh370mips.zip * ; cd ../../..
-	@echo MIPS package zip file $(TARGETPFX)nh370mips.zip
+	cd $(TARGETPFX)pkg ; zip -9 ../nh$(NHV)mips.zip * ; cd ../../..
+	@echo MIPS package zip file $(TARGETPFX)nh$(NHV)mips.zip
 endif  # CROSS_TO_MIPS
 
 
 ifdef CROSS_TO_AMIGA
 $(TARGETPFX)amidos.o : ../sys/amiga/amidos.c $(HACK_H)
-$(TARGETPFX)amigst.o : ../sys/amiga/amigst.c $(HACK_H)
 $(TARGETPFX)amirip.o : ../sys/amiga/amirip.c $(HACK_H)
 $(TARGETPFX)amistack.o : ../sys/amiga/amistack.c $(HACK_H)
-$(TARGETPFX)amitty.o : ../sys/amiga/amitty.c $(HACK_H)
 $(TARGETPFX)amiwind.o : ../sys/amiga/amiwind.c \
 		../sys/amiga/amimenu.c $(HACK_H)
 $(TARGETPFX)winami.o : ../sys/amiga/winami.c $(HACK_H)
-$(TARGETPFX)winchar.o : ../sys/amiga/winchar.c tile.c $(HACK_H)
+$(TARGETPFX)winchar.o : ../sys/amiga/winchar.c $(SRCDIR)/tile.c $(HACK_H)
 $(TARGETPFX)winfuncs.o : ../sys/amiga/winfuncs.c $(HACK_H)
 $(TARGETPFX)winkey.o : ../sys/amiga/winkey.c $(HACK_H)
 $(TARGETPFX)winamenu.o : ../sys/amiga/winamenu.c $(HACK_H)
@@ -309,31 +313,30 @@ UUDECODE = ../util/uudecode
 ../util/uudecode: ../sys/share/uudecode.c
 	$(CC) $(CFLAGS) -o $@ $<
 
-amigapkg: $(AMITILES) ../util/uudecode
-	mkdir -p $(TARGETPFX)pkg/tiles $(TARGETPFX)pkg/hack
-	cp $(GAMEBIN) $(TARGETPFX)pkg/nethack
-	cp ../dat/nhdat $(TARGETPFX)pkg/nhdat
-	cp ../dat/license $(TARGETPFX)pkg/license
-	cp ../dat/symbols $(TARGETPFX)pkg/symbols
-	cp $(TARGETPFX)tiles16.iff $(TARGETPFX)pkg/tiles/tiles16.iff
-	cp $(TARGETPFX)tiles32.iff $(TARGETPFX)pkg/tiles/tiles32.iff
-	cp $(TARGETPFX)tomb.iff $(TARGETPFX)pkg/tomb.iff
-	cp ../sys/msdos/sysconf $(TARGETPFX)pkg/sysconf
-	cp ../doc/nethack.txt $(TARGETPFX)pkg/nethack.txt
-	( cd $(TARGETPFX)pkg && ../../../util/uudecode ../../../sys/amiga/amifont8.uu && mv 8 hack/8 )
-	( cd $(TARGETPFX)pkg && ../../../util/uudecode ../../../sys/amiga/amifont.uu )
-	cp $(AMISRC)/nethack.cnf $(TARGETPFX)pkg/nethack.cnf
-	-( cd $(TARGETPFX)pkg && test -f ../../../sys/amiga/dflticon.uu && \
-		../../../util/uudecode ../../../sys/amiga/dflticon.uu )
-	-( cd $(TARGETPFX)pkg && test -f ../../../sys/amiga/NHinfo.uu && \
-		../../../util/uudecode ../../../sys/amiga/NHinfo.uu )
-	-( cd $(TARGETPFX)pkg && test -f ../../../sys/amiga/NewGame.uu && \
-		../../../util/uudecode ../../../sys/amiga/NewGame.uu )
-	-( cd $(TARGETPFX)pkg && test -f ../../../sys/amiga/HackWB.uu && \
-		../../../util/uudecode ../../../sys/amiga/HackWB.uu )
-	touch $(TARGETPFX)pkg/record
-	( cd $(TARGETPFX)pkg && zip -9r ../NH370AMI.ZIP * )
-	@echo amiga package zip file $(TARGETPFX)NH370AMI.ZIP
+amigapkg: $(GAMEBIN) $(AMITILES) ../util/uudecode
+	mkdir -p $(TARGETPFX)pkg/NetHack/tiles $(TARGETPFX)pkg/NetHack/hack
+	cp $(GAMEBIN) $(TARGETPFX)pkg/NetHack/nethack
+	cp ../dat/nhdat $(TARGETPFX)pkg/NetHack/nhdat
+	cp ../dat/license $(TARGETPFX)pkg/NetHack/license
+	cp ../dat/symbols $(TARGETPFX)pkg/NetHack/symbols
+	cp $(TARGETPFX)tiles16.iff $(TARGETPFX)pkg/NetHack/tiles/tiles16.iff
+	cp $(TARGETPFX)tiles32.iff $(TARGETPFX)pkg/NetHack/tiles/tiles32.iff
+	cp $(TARGETPFX)tomb.iff $(TARGETPFX)pkg/NetHack/tomb.iff
+	cp ../doc/nethack.txt $(TARGETPFX)pkg/NetHack/nethack.txt
+	( cd $(TARGETPFX)pkg/NetHack && ../../../../util/uudecode ../../../../sys/amiga/amifont8.uu && mv 8 hack/8 )
+	( cd $(TARGETPFX)pkg/NetHack && ../../../../util/uudecode ../../../../sys/amiga/amifont.uu )
+	cp $(AMISRC)/nethack.cnf $(TARGETPFX)pkg/NetHack/nethack.cnf
+	cp $(AMISRC)/README.amiga $(TARGETPFX)pkg/NetHack/README.amiga
+	cp $(AMISRC)/amii.hlp $(TARGETPFX)pkg/NetHack/amii.hlp
+	( cd $(TARGETPFX)pkg/NetHack && ../../../../util/uudecode ../../../../sys/amiga/NHinfo.uu )
+	( cd $(TARGETPFX)pkg/NetHack && ../../../../util/uudecode ../../../../sys/amiga/cnf-info.uu )
+	( cd $(TARGETPFX)pkg/NetHack && ../../../../util/uudecode ../../../../sys/amiga/license-info.uu )
+	( cd $(TARGETPFX)pkg/NetHack && ../../../../util/uudecode ../../../../sys/amiga/txt-info.uu )
+	( cd $(TARGETPFX)pkg/NetHack && ../../../../util/uudecode ../../../../sys/amiga/readme-info.uu )
+	( cd $(TARGETPFX)pkg && ../../../util/uudecode ../../../sys/amiga/drawer-info.uu )
+	touch $(TARGETPFX)pkg/NetHack/record
+	( cd $(TARGETPFX)pkg && zip -9r ../NH$(NHV)AMI$(AMIPKGSEQ).ZIP NetHack NetHack.info )
+	@echo amiga package zip file $(TARGETPFX)NH$(NHV)AMI$(AMIPKGSEQ).ZIP
 endif  # CROSS_TO_AMIGA
 
 ifdef CROSS_SHARED
@@ -348,11 +351,15 @@ $(TARGETPFX)giftiles.o : ../win/share/giftiles.c
 endif  # CROSS_SHARED
 #
 ifdef CROSS
+ifdef MAKEFILE_TOP
+# top-level liblua.a is a host-side build; keep TARGET_CC out of it
+LUAMAKEFLAGS = CC='$(CC)' SYSCFLAGS='$(SYSCFLAGS)'
+endif  # MAKEFILE_TOP
 $(TARGETPFX)hacklib.a: $(TARGETPFX)hacklib.o
 	$(TARGET_AR) $(TARGET_ARFLAGS) $@ $(TARGETPFX)hacklib.o
 ifdef MAKEFILE_UTL
 $(TARGETPFX)recover.o: recover.c $(CONFIG_H)
-	$(TARGET_CC) $(TARGET_CFLAGS) $(CSTD) -c recover.c -o $@
+	$(TARGET_CC) $(TARGET_CFLAGS) -c recover.c -o $@
 ifdef CROSS_TO_MSDOS
 $(TARGETPFX)recover.exe : $(TARGETPFX)recover.o $(TARGETPFX)rversion.o $(TARGETPFX)hacklib.a
 	$(TARGET_LINK) $(TARGET_LFLAGS) \
@@ -363,7 +370,7 @@ $(TARGETPFX)recover : $(TARGETPFX)recover.o $(TARGETPFX)rversion.o $(TARGETPFX)h
 	$(TARGETPFX)recover.o $(TARGETPFX)rversion.o $(TARGETPFX)hacklib.a -o $@
 endif
 $(TARGETPFX)rversion.o: ../src/version.c $(HACK_H)
-	$(TARGET_CC) $(TARGET_CFLAGS) -DMINIMAL_FOR_RECOVER  $(CSTD) -c ../src/version.c -o $@
+	$(TARGET_CC) $(TARGET_CFLAGS) -DMINIMAL_FOR_RECOVER  -c ../src/version.c -o $@
 endif  # MAKEFILE_UTL
 endif  # CROSS
 
@@ -478,7 +485,11 @@ $(TARGETPFX)slk.o : $(PDCTOP)/pdcurses/slk.c
 $(TARGETPFX)termattr.o : $(PDCTOP)/pdcurses/termattr.c
 $(TARGETPFX)touch.o : $(PDCTOP)/pdcurses/touch.c
 $(TARGETPFX)util.o : $(PDCTOP)/pdcurses/util.c
+# We need an explicit recipe for the creation of $(TARGETPFX)window.o
+# because it will try and use the X11 version of window.c otherwise
 $(TARGETPFX)window.o : $(PDCTOP)/pdcurses/window.c
+	$(TARGET_CC) $(PDCINCL) $(PDC_TARGET_CFLAGS) \
+		-Wno-sign-compare -o$@  $(PDCTOP)/pdcurses/window.c
 $(TARGETPFX)debug.o : $(PDCTOP)/pdcurses/debug.c
 $(TARGETPFX)pdcclip.o : $(PDCPORT)/pdcclip.c
 $(TARGETPFX)pdcdisp.o : $(PDCPORT)/pdcdisp.c

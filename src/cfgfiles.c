@@ -9,7 +9,7 @@
 #include "dlb.h"
 #include <errno.h>
 
-#if (!defined(MACOS9) && !defined(O_WRONLY) && !defined(AZTEC_C)) \
+#if (!defined(MAC68K) && !defined(O_WRONLY) && !defined(AZTEC_C)) \
     || defined(USE_FCNTL)
 #include <fcntl.h>
 #endif
@@ -35,6 +35,9 @@ staticfn char *is_config_section(char *);
 staticfn boolean handle_config_section(char *);
 boolean parse_config_line(char *);
 staticfn char *find_optparam(char *);
+#ifdef WIN32
+staticfn boolean portable_sysconf_only_this_statement(int);
+#endif
 #ifndef SFCTOOL
 staticfn boolean cnf_line_OPTIONS(char *);
 staticfn boolean cnf_line_AUTOPICKUP_EXCEPTION(char *);
@@ -62,6 +65,8 @@ staticfn boolean cnf_line_MSGHANDLER(char *);
 staticfn boolean cnf_line_EXPLORERS(char *);
 staticfn boolean cnf_line_DEBUGFILES(char *);
 staticfn boolean cnf_line_DUMPLOGFILE(char *);
+staticfn boolean cnf_line_DUMPLOGURL(char *);
+staticfn boolean cnf_line_DUMPHTMLFILE(char *);
 staticfn boolean cnf_line_GENERICUSERS(char *);
 staticfn boolean cnf_line_BONES_POOLS(char *);
 staticfn boolean cnf_line_SUPPORT(char *);
@@ -71,6 +76,7 @@ staticfn boolean cnf_line_CHECK_PLNAME(char *);
 staticfn boolean cnf_line_SEDUCE(char *);
 staticfn boolean cnf_line_HIDEUSAGE(char *);
 staticfn boolean cnf_line_MAXPLAYERS(char *);
+staticfn boolean cnf_line_MAX_REROLL_RATE(char *);
 staticfn boolean cnf_line_PERSMAX(char *);
 staticfn boolean cnf_line_PERS_IS_UID(char *);
 staticfn boolean cnf_line_ENTRYMAX(char *);
@@ -108,7 +114,7 @@ staticfn void cnf_parser_init(struct _cnf_parser_state *parser);
 staticfn void cnf_parser_done(struct _cnf_parser_state *parser);
 staticfn void parse_conf_buf(struct _cnf_parser_state *parser,
                            boolean (*proc)(char *arg));
-/* next one is in extern.h; why here too? */
+    /* next one is in extern.h; why here too? */
 boolean parse_conf_str(const char *str, boolean (*proc)(char *arg));
 static boolean ignore_errors_on_unmatched = FALSE,
                ignore_statement_errors = FALSE;
@@ -131,7 +137,7 @@ static const char *default_configfile =
 #ifdef UNIX
     ".nethackrc";
 #else
-#if defined(MACOS9) || defined(__BEOS__)
+#if defined(MAC68K) || defined(__BEOS__)
     "NetHack Defaults";
 #else
 #if defined(MSDOS) || defined(WIN32)
@@ -280,7 +286,7 @@ fopen_config_file(const char *filename, int src)
     }
     /* fall through to standard names */
 
-#if defined(MICRO) || defined(MACOS9) || defined(__BEOS__) || defined(WIN32)
+#if defined(MICRO) || defined(MAC68K) || defined(__BEOS__) || defined(WIN32)
     set_configfile_name(fqname(default_configfile, CONFIGPREFIX, 0));
     if ((fp = fopen(configfile, "r")) != (FILE *) 0) {
         return fp;
@@ -371,7 +377,7 @@ fopen_config_file(const char *filename, int src)
         wait_synch();
     }
 #endif /* !VMS => Unix */
-#endif /* !(MICRO || MACOS9 || __BEOS__ || WIN32) */
+#endif /* !(MICRO || MAC68K || __BEOS__ || WIN32) */
     return (FILE *) 0;
 }
 
@@ -866,6 +872,28 @@ cnf_line_DUMPLOGFILE(char *bufp)
 }
 
 staticfn boolean
+cnf_line_DUMPLOGURL(char *bufp)
+{
+#ifdef DUMPLOG
+    if (sysopt.dumplogurl)
+        free((genericptr_t) sysopt.dumplogurl);
+    sysopt.dumplogurl = dupstr(bufp);
+#endif /*DUMPLOG*/
+    return TRUE;
+}
+
+staticfn boolean
+cnf_line_DUMPHTMLFILE(char *bufp)
+{
+#ifdef DUMPHTML
+    if (sysopt.dumphtmlfile)
+        free((genericptr_t) sysopt.dumphtmlfile);
+    sysopt.dumphtmlfile = dupstr(bufp);
+#endif /*DUMPHTML*/
+    return TRUE;
+}
+
+staticfn boolean
 cnf_line_GENERICUSERS(char *bufp)
 {
     if (sysopt.genericusers)
@@ -966,6 +994,19 @@ cnf_line_MAXPLAYERS(char *bufp)
         n = 5;
     }
     sysopt.maxplayers = n;
+    return TRUE;
+}
+
+staticfn boolean
+cnf_line_MAX_REROLL_RATE(char *bufp)
+{
+    int n = atoi(bufp);
+
+    if (n < 0 || n > 255) {
+        config_error_add("Illegal value in MAX_REROLL_RATE (maximum is 255)");
+        n = 10;
+    }
+    sysopt.maxrerollrate = n;
     return TRUE;
 }
 
@@ -1367,6 +1408,8 @@ static const struct match_config_line_stmt {
     CNFL_S(EXPLORERS, 7),
     CNFL_S(DEBUGFILES, 5),
     CNFL_S(DUMPLOGFILE, 7),
+    CNFL_S(DUMPLOGURL, 10),
+    CNFL_S(DUMPHTMLFILE, 12),
     CNFL_S(GENERICUSERS, 12),
     CNFL_S(BONES_POOLS, 10),
     CNFL_S(SUPPORT, 7),
@@ -1376,6 +1419,7 @@ static const struct match_config_line_stmt {
     CNFL_S(SEDUCE, 6),
     CNFL_S(HIDEUSAGE, 9),
     CNFL_S(MAXPLAYERS, 10),
+    CNFL_S(MAX_REROLL_RATE, 10),
     CNFL_S(PERSMAX, 7),
     CNFL_S(PERS_IS_UID, 11),
     CNFL_S(ENTRYMAX, 8),
@@ -1989,24 +2033,6 @@ rcfile(void)
     /*[end of nethackrc handling]*/
 }
 
-void
-rcfile_interface_options(void)
-{
-    allopt_array_init();
-    disregard_all_options();
-    disregard_all_config_statements();
-    heed_this_option(opt_windowtype);
-    heed_this_option(opt_soundlib);
-    set_ignore_errors_on_unmatched();
-    ignore_statement_errors = TRUE;
-    rcfile();
-    heed_all_config_statements();
-    heed_all_options();
-    disregard_this_option(opt_windowtype);
-    disregard_this_option(opt_soundlib);
-    clear_ignore_errors_on_unmatched();
-    ignore_statement_errors = FALSE;
-}
 
 void
 heed_all_config_statements(void)
@@ -2056,6 +2082,162 @@ config_unmatched_ignored(void)
         return TRUE;
     return FALSE;
 }
+void
+rcfile_interface_options(void)
+{
+    allopt_array_init();
+    disregard_all_options();
+    disregard_all_config_statements();
+    heed_this_option(opt_windowtype);
+    heed_this_option(opt_soundlib);
+    set_ignore_errors_on_unmatched();
+    ignore_statement_errors = TRUE;
+    rcfile();
+    heed_all_config_statements();
+    heed_all_options();
+    disregard_this_option(opt_windowtype);
+    disregard_this_option(opt_soundlib);
+    clear_ignore_errors_on_unmatched();
+    ignore_statement_errors = FALSE;
+}
+
+void
+rcfile_only_this_option(enum opt heeded_option)
+{
+    allopt_array_init();
+    disregard_all_options();
+    disregard_all_config_statements();
+    heed_this_option(heeded_option);
+    set_ignore_errors_on_unmatched();
+    ignore_statement_errors = TRUE;
+    rcfile();
+    heed_all_config_statements();
+    heed_all_options();
+    clear_ignore_errors_on_unmatched();
+    ignore_statement_errors = FALSE;
+}
+
+void
+rcfile_only_this_statement(int statementid)
+{
+    allopt_array_init();
+    disregard_all_options();
+    disregard_all_config_statements();
+    heed_this_config_statement(statementid);
+    set_ignore_errors_on_unmatched();
+    ignore_statement_errors = TRUE;
+    rcfile();
+    heed_all_config_statements();
+    heed_all_options();
+    clear_ignore_errors_on_unmatched();
+    ignore_statement_errors = FALSE;
+}
+
+#ifdef WIN32
+extern char portable_device_path[_MAX_PATH]; /* windsys.c */
+extern boolean portable;
+
+staticfn boolean
+portable_sysconf_only_this_statement(int statementid)
+{
+    const char *exepath;
+    char portable_sysconf[_MAX_PATH];
+
+    exepath = windows_exepath();
+    if (exepath) {
+        Snprintf(portable_sysconf, sizeof portable_sysconf, "%s/sysconf",
+                 exepath);
+        if (portable_sysconf[0] && file_exists(portable_sysconf)) {
+#ifdef SYSCF
+#ifdef SYSCF_FILE
+            allopt_array_init();
+            disregard_all_options();
+            disregard_all_config_statements();
+            heed_this_config_statement(statementid);
+            set_ignore_errors_on_unmatched();
+            ignore_statement_errors = TRUE;
+
+            config_error_init(TRUE, portable_sysconf, FALSE);
+            go.opt_phase = syscf_opt;
+            (void) read_config_file(portable_sysconf, set_in_sysconf);
+            config_error_done();
+            heed_all_config_statements();
+            heed_all_options();
+            clear_ignore_errors_on_unmatched();
+            ignore_statement_errors = FALSE;
+            if (sysopt.portable_device_paths) {
+                Snprintf(portable_device_path, sizeof portable_device_path,
+                         "%s\\", exepath);
+                return TRUE;
+            }
+#endif
+#endif /* SYSCF */
+        }
+    }
+    return FALSE;
+}
+
+boolean
+check_for_portable_config(void)
+{
+    int i, target_index = -1;
+
+    for (i = 0; i < SIZE(config_line_stmt); i++) {
+        if (!strcmp(config_line_stmt[i].name, "PORTABLE_DEVICE_PATHS")) {
+            target_index = i;
+            break;
+        }
+    }
+    if (target_index >= 0) {
+        return portable_sysconf_only_this_statement(target_index);
+    }
+    return FALSE;
+}
+#endif
+
+#ifdef MSWIN_GRAPHICS
+void
+disregard_some_mswin_options(void)
+{
+    /* later for these */
+    disregard_this_option(opt_map_mode);
+    disregard_this_option(opt_font_map);
+    disregard_this_option(opt_font_menu);
+    disregard_this_option(opt_font_message);
+    disregard_this_option(opt_font_status);
+
+    disregard_this_option(opt_font_size_map);
+    disregard_this_option(opt_font_size_menu);
+    disregard_this_option(opt_font_size_message);
+    disregard_this_option(opt_font_size_status);
+}
+
+void
+rcfile_only_some_mswin_options(void)
+{
+    allopt_array_init();
+    disregard_all_options();
+    disregard_all_config_statements();
+    heed_this_option(opt_map_mode);
+    heed_this_option(opt_font_map);
+    heed_this_option(opt_font_menu);
+    heed_this_option(opt_font_message);
+    heed_this_option(opt_font_status);
+
+    heed_this_option(opt_font_size_map);
+    heed_this_option(opt_font_size_menu);
+    heed_this_option(opt_font_size_message);
+    heed_this_option(opt_font_size_status);
+    set_ignore_errors_on_unmatched();
+    ignore_statement_errors = TRUE;
+    rcfile();
+    heed_all_config_statements();
+    heed_all_options();
+    clear_ignore_errors_on_unmatched();
+    ignore_statement_errors = FALSE;
+}
+#endif /* MSWIN_GRAPHICS */
+
 #endif /* SFCTOOL */
 
 #ifdef SYSCF

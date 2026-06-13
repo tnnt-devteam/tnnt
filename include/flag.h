@@ -418,6 +418,8 @@ struct instance_flags {
     boolean wizmgender;      /* test gender info from core in window port */
     boolean customcolors;    /* support customcolors defined in glyphmap */
     boolean customsymbols;   /* support customsymbols defined in glyphmap */
+    boolean msg_is_alert;    /* suggest windowport should grab player's attention
+                              * and request <TAB> acknowlegement */
     /*
      * Window capability support.
      */
@@ -517,7 +519,7 @@ struct instance_flags {
 #ifdef MAC_GRAPHICS_ENV
 #define large_font obsolete
 #endif
-#ifdef MACOS9
+#ifdef MAC68K
 #define popup_dialog wc_popup_dialog
 #endif
 #define preload_tiles wc_preload_tiles

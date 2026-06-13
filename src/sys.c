@@ -58,6 +58,10 @@ sys_early_init(void)
 
 #ifdef DUMPLOG
     sysopt.dumplogfile = (char *) 0;
+    sysopt.dumplogurl = (char *) 0;
+#endif
+#ifdef DUMPHTML
+    sysopt.dumphtmlfile = (char *) 0;
 #endif
 #ifdef DUMPHTML
     sysopt.dumphtmlfile = (char *) 0;
@@ -68,6 +72,7 @@ sys_early_init(void)
     sysopt.genericusers = (char *) 0;
     sysopt.msghandler = (char *) 0;
     sysopt.maxplayers = 0; /* XXX eventually replace MAX_NR_OF_PLAYERS */
+    sysopt.maxrerollrate = 0;
     sysopt.bones_pools = 0;
     sysopt.livelog = LL_NONE;
 

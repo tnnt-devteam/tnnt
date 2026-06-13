@@ -15,7 +15,7 @@ staticfn void execplinehandler(const char *);
 #ifdef USER_SOUNDS
 extern void maybe_play_sound(const char *);
 #endif
-#ifdef DUMPLOG_CORE
+#if defined(DUMPLOG) || defined(DUMPHTML) || defined(DUMPLOG_CORE)
 
 /* keep the most recent DUMPLOG_MSG_COUNT messages */
 void
@@ -225,7 +225,7 @@ vpline(const char *line, va_list the_args)
     }
     msgtyp = MSGTYP_NORMAL;
 
-#ifdef DUMPLOG_CORE
+#if defined(DUMPLOG) || defined(DUMPHTML) || defined(DUMPLOG_CORE)
     /* We hook here early to have options-agnostic output.
      * Unfortunately, that means Norep() isn't honored (general issue) and
      * that short lines aren't combined into one longer one (tty behavior).
@@ -280,13 +280,17 @@ vpline(const char *line, va_list the_args)
     /* this gets cleared after every pline message */
     iflags.last_msg = PLNMSG_UNKNOWN;
     (void) strncpy(gp.prevmsg, line, BUFSZ), gp.prevmsg[BUFSZ - 1] = '\0';
-    if (msgtyp == MSGTYP_STOP)
-        display_nhwindow(WIN_MESSAGE, TRUE); /* --more-- */
-    else if (msgtyp == MSGTYP_ALERT) {
+    switch (msgtyp) {
+    case MSGTYP_ALERT:
         iflags.msg_is_alert = TRUE; /* <TAB> */
+        FALLTHROUGH;
+        /* FALLTHRU */
+    case MSGTYP_STOP:
         display_nhwindow(WIN_MESSAGE, TRUE); /* --more-- */
-        iflags.msg_is_alert = FALSE;
+        break;
     }
+    iflags.msg_is_alert = FALSE;
+
  pline_done:
 #ifdef SND_SPEECH
     /* clear the SPEECH flag so caller never has to */

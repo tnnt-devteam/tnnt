@@ -3,6 +3,9 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#if defined (EXTRAINFO_FN) && defined(UNIX)
+#include <sys/stat.h>
+#endif
 #include "dlb.h"
 #ifdef TTY_GRAPHICS
 #include "wintty.h"
@@ -22,7 +25,7 @@ extern struct window_procs Qt_procs;
 #ifdef GEM_GRAPHICS
 /*#include "wingem.h"*/
 #endif
-#ifdef MACOS9
+#ifdef MAC68K
 extern struct window_procs mac_procs;
 #endif
 #ifdef BEOS_GRAPHICS
@@ -67,6 +70,7 @@ staticfn void def_raw_print(const char *s) NONNULLARG1;
 staticfn void def_wait_synch(void);
 staticfn boolean get_menu_coloring(const char *, int *, int *) NONNULLPTRS;
 
+#if defined(DUMPLOG) || defined(DUMPHTML)
 staticfn winid dump_create_nhwindow(int);
 staticfn void dump_clear_nhwindow(winid);
 staticfn void dump_display_nhwindow(winid, boolean);
@@ -77,15 +81,25 @@ staticfn void dump_add_menu(winid, const glyph_info *, const ANY_P *, char,
 staticfn void dump_end_menu(winid, const char *);
 staticfn int dump_select_menu(winid, int, MENU_ITEM_P **);
 staticfn void dump_putstr(winid, int, const char *);
-/* HTML dumplog functions: */
+#ifdef DUMPHTML
+staticfn void html_write_tags(FILE *, int, boolean);
+staticfn void html_dump_char(FILE *, char);
+staticfn void html_dump_str(FILE *, const char *);
+staticfn void html_dump_line(FILE *, int, const char *);
+staticfn void dump_set_color_attr(int, int, boolean);
+staticfn void html_init_sym(void);
+staticfn unsigned mg_hl_attr(unsigned);
+staticfn int condcolor(long, unsigned long *);
+staticfn int condattr(long, unsigned long *);
+staticfn void dump_render_status(void);
+staticfn void dump_status_update(int, genericptr_t, int, int,
+                               int, unsigned long *);
 staticfn void dump_headers(void);
 staticfn void dump_footers(void);
-staticfn void dump_set_color_attr(int, int, boolean);
-#ifdef DUMPHTML
-staticfn void html_init_sym(void);
 staticfn void dump_css(void);
 staticfn void dump_outrip(winid, int, time_t);
-#endif
+#endif /* DUMPHTML */
+#endif /* DUMPLOG */
 
 #ifdef HANGUPHANDLING
 volatile
@@ -120,7 +134,7 @@ static struct win_choices {
 #ifdef GEM_GRAPHICS
     { &Gem_procs, win_Gem_init CHAINR(0) },
 #endif
-#ifdef MACOS9
+#ifdef MAC68K
     { &mac_procs, 0 CHAINR(0) },
 #endif
 #ifdef BEOS_GRAPHICS
@@ -552,7 +566,7 @@ staticfn void hup_cliparound(int, int);
 #endif
 #ifdef CHANGE_COLOR
 staticfn void hup_change_color(int, long, int);
-#ifdef MACOS9
+#ifdef MAC68K
 staticfn short hup_set_font_name(winid, char *);
 #endif
 staticfn char *hup_get_color_string(void);
@@ -601,7 +615,7 @@ static struct window_procs hup_procs = {
     hup_void_ndecl,                                   /* nh_delay_output  */
 #ifdef CHANGE_COLOR
     hup_change_color,
-#ifdef MACOS9
+#ifdef MAC68K
     hup_void_fdecl_int,                               /* change_background */
     hup_set_font_name,
 #endif
@@ -804,14 +818,14 @@ hup_change_color(int color UNUSED, long rgb UNUSED, int reverse UNUSED)
     return;
 }
 
-#ifdef MACOS9
+#ifdef MAC68K
 /*ARGSUSED*/
 staticfn short
 hup_set_font_name(winid window UNUSED, char *fontname UNUSED)
 {
     return 0;
 }
-#endif /* MACOS9 */
+#endif /* MAC68K */
 
 staticfn char *
 hup_get_color_string(void)
@@ -887,7 +901,6 @@ hup_ctrl_nhwindow(
 }
 
 #endif /* HANGUPHANDLING */
-
 
 /****************************************************************************/
 /* genl backward compat stuff                                               */
@@ -1126,11 +1139,12 @@ genl_status_update(
 RESTORE_WARNING_FORMAT_NONLITERAL
 
 static struct window_procs dumplog_windowprocs_backup;
-static int menu_headings_backup; /* for HTML dumplogs */
+static int menu_headings_backup;
+
 static FILE *dumplog_file;
 static FILE *dumphtml_file;
 
-#ifdef DUMPLOG
+#if defined(DUMPLOG) || defined(DUMPHTML)
 static time_t dumplog_now;
 
 char *
@@ -1275,7 +1289,7 @@ dump_fmtstr(
 #define BLNK_S "<i>"
 #define BLNK_E "</i>"
 #define SPAN_E "</span>"
-#define LINEBREAK "<br />"
+#define LINEBREAK "<br>"
 
 /** HTML putstr() handling **/
 
@@ -1291,17 +1305,16 @@ dump_fmtstr(
    then delimit the item with <li></li>
    for preformatted text, we don't mess with any existing bullet list, but try to
    keep consecutive preformatted strings in a single block.  */
-STATIC_OVL
 void
-html_write_tags(fp, win, attr, before)
-FILE *fp;
-winid win;
-int attr;
-boolean before; /* Tags before/after string */
+html_write_tags(
+    FILE *fp,
+    int attr,
+    boolean before) /* Tags before/after string */
 {
     static boolean in_list = FALSE;
     static boolean in_preform = FALSE;
-    if (!fp) return;
+    if (!fp)
+        return;
     if (before) { /* before next string is written,
                      close any finished blocks
                      and open a new block if necessary */
@@ -1316,7 +1329,7 @@ boolean before; /* Tags before/after string */
             fprintf(fp, PREF_E);
             in_preform = FALSE;
         }
-        if (!(attr & (ATR_HEADING | ATR_SUBHEAD)) && win == NHW_MENU) {
+        if (!(attr & (ATR_HEADING | ATR_SUBHEAD)) && gd.dumping_list) {
             /* This is a bullet point */
             if (!in_list) {
                 fprintf(fp, "%s\n", LIST_S);
@@ -1335,7 +1348,7 @@ boolean before; /* Tags before/after string */
     }
     /* after string is written */
     if (in_preform) {
-        fprintf(fp, LINEBREAK); /* preform still gets <br /> at end of line */
+        fprintf(fp, LINEBREAK); /* preform still gets <br> at end of line */
         return; /* don't write </pre> until we get the next thing */
     }
     if (in_list) {
@@ -1347,96 +1360,96 @@ boolean before; /* Tags before/after string */
 }
 
 /* Write HTML-escaped char to a file */
-STATIC_OVL void
-html_dump_char(fp, c)
-FILE *fp;
-char c;
+void
+html_dump_char(
+    FILE *fp,
+    char c)
 {
-    if (!fp) return;
+    if (!fp)
+        return;
     switch (c) {
-        case '<':
-            fprintf(fp, "&lt;");
-            break;
-        case '>':
-            fprintf(fp, "&gt;");
-            break;
-        case '&':
-            fprintf(fp, "&amp;");
-            break;
-        case '\"':
-            fprintf(fp, "&quot;");
-            break;
-        case '\'':
-            fprintf(fp, "&#39;");
-            break;
-        case '\n':
-            fprintf(fp, "<br />\n");
-            break;
-        default:
-            fprintf(fp, "%c", c);
+    case '<':
+        fprintf(fp, "&lt;");
+        break;
+    case '>':
+        fprintf(fp, "&gt;");
+        break;
+    case '&':
+        fprintf(fp, "&amp;");
+        break;
+    case '\"':
+        fprintf(fp, "&quot;");
+        break;
+    case '\'':
+        fprintf(fp, "&#39;");
+        break;
+    case '\n':
+        fprintf(fp, "<br>\n");
+        break;
+    default:
+        fprintf(fp, "%c", c);
     }
 }
 
 /* Write HTML-escaped string to a file */
-STATIC_OVL void
-html_dump_str(fp, str)
-FILE *fp;
-const char *str;
+void
+html_dump_str(
+    FILE *fp,
+    const char *str)
 {
     const char *p;
-    if (!fp) return;
+    if (!fp)
+        return;
     for (p = str; *p; p++)
         html_dump_char(fp, *p);
 }
 
-STATIC_OVL void
-html_dump_line(fp, win, attr, str)
-FILE *fp;
-winid win;
-int attr;
-const char *str;
+void
+html_dump_line(
+    FILE *fp,
+    int attr,
+    const char *str)
 {
     if (strlen(str) == 0) {
        /* if it's a blank line, just print a blank line */
        fprintf(fp, "%s\n", LINEBREAK);
        return;
     }
-    html_write_tags(fp, win, attr, TRUE);
+    html_write_tags(fp, attr, TRUE);
     html_dump_str(fp, str);
-    html_write_tags(fp, win, attr, FALSE);
+    html_write_tags(fp, attr, FALSE);
 }
-
-#endif
 
 /** HTML Map and status bar (collectively, the 'screendump') **/
 
 void
-dump_start_screendump()
+dump_start_screendump(void)
 {
-#ifdef DUMPHTML
-    if (!dumphtml_file) return;
+    if (!dumphtml_file)
+        return;
     html_init_sym();
     fprintf(dumphtml_file, "<pre class=\"nh_screen\">\n");
-#endif
 }
 
 void
-dump_end_screendump()
+dump_end_screendump(void)
 {
-#ifdef DUMPHTML
     if (dumphtml_file)
         fprintf(dumphtml_file, "%s\n", PREF_E);
-#endif
 }
 
+#endif /* DUMPHTML */
+
 /* Status and map highlighting */
-STATIC_OVL void
-dump_set_color_attr(coloridx, attrmask, onoff)
-int coloridx, attrmask;
-boolean onoff;
+void
+dump_set_color_attr(
+    int coloridx,
+    int  attrmask,
+    boolean onoff)
 {
 #ifdef DUMPHTML
-    if (!dumphtml_file) return;
+    if (!dumphtml_file)
+        return;
     if (onoff) {
         if (attrmask & HL_BOLD)
             fprintf(dumphtml_file, BOLD_S);
@@ -1464,7 +1477,7 @@ boolean onoff;
     nhUse(coloridx);
     nhUse(attrmask);
     nhUse(onoff);
-#endif
+#endif /* DUMPHTML */
 }
 
 #ifdef DUMPHTML
@@ -1476,8 +1489,8 @@ boolean onoff;
 
 static int htmlsym[SYM_MAX] = DUMMY;
 
-STATIC_OVL void
-html_init_sym()
+void
+html_init_sym(void)
 {
     /* see https://html-css-js.com/html/character-codes/drawing/ */
 
@@ -1498,18 +1511,18 @@ html_init_sym()
     htmlsym[S_hbeam] = 9472;
     htmlsym[S_sw_ml] = 9474;
     htmlsym[S_sw_mr] = 9474;
-    htmlsym[S_explode4] = 9474;
-    htmlsym[S_explode6] = 9474;
+    htmlsym[S_expl_ml] = 9474;
+    htmlsym[S_expl_mr] = 9474;
     /* and some extras */
     htmlsym[S_corr] = 9617;
     htmlsym[S_litcorr] = 9618;
+    htmlsym[S_fountain] = 8992;
 }
 
 /* convert 'special' flags returned from mapglyph to
   highlight attrs (currently just inverse) */
-STATIC_OVL unsigned
-mg_hl_attr(special)
-unsigned special;
+unsigned
+mg_hl_attr(unsigned special)
 {
     unsigned hl = 0;
     if ((special & MG_PET) && iflags.hilite_pet)
@@ -1524,36 +1537,95 @@ unsigned special;
 }
 
 void
-html_dump_glyph(x, y, sym, ch, color, special)
-int x, y, sym, ch, color;
-unsigned special;
+html_print_glyph(
+    winid win UNUSED,
+    coordxy x,
+    coordxy y,
+    const glyph_info *glyphinfo,
+    const glyph_info *bkglyphinfo UNUSED)
 {
     char buf[BUFSZ]; /* do_screen_description requires this :( */
     const char *firstmatch = "unknown"; /* and this */
     coord cc;
-    int desc_found = 0;
+    int desc_found = 0, color;
     unsigned attr;
+    uint32 custclr;
+    unsigned long rgb = 0UL; /* nonzero => emit inline 24-bit RGB span */
 
-    if (!dumphtml_file) return;
+    if (!dumphtml_file)
+        return;
 
-    if (x == 1) /* start row */
-        fprintf(dumphtml_file, "<span class=\"nh_screen\">  "); /* 2 space left margin */
+    if (x == 1) /* start row - 2 space left margin: */
+        fprintf(dumphtml_file, "<span class=\"nh_screen\">  ");
     cc.x = x;
     cc.y = y;
-    desc_found = do_screen_description(cc, TRUE, ch, buf, &firstmatch, (struct permonst **) 0);
+    desc_found = do_screen_description(cc, TRUE, glyphinfo->gm.sym.symidx, buf,
+                                       &firstmatch, (struct permonst **) 0);
     if (desc_found)
         fprintf(dumphtml_file, "<div class=\"tooltip\">");
-    attr = mg_hl_attr(special);
-    dump_set_color_attr(color, attr, TRUE);
-    if (htmlsym[sym])
-        fprintf(dumphtml_file, "&#%d;", htmlsym[sym]);
-    else
-        html_dump_char(dumphtml_file, (char)ch);
-    dump_set_color_attr(color, attr, FALSE);
+    attr = mg_hl_attr(glyphinfo->gm.glyphflags);
+    /* honor CUSTOMCOLOR: NH50 stores the resolved colour directly in the
+       glyph_map.  A non-zero customcolor with NH_BASIC_COLOR set is just a
+       0-15 override; without it, the low 24 bits are a raw RGB which HTML
+       can render exactly via an inline style. */
+    color = glyphinfo->gm.sym.color;
+    custclr = iflags.customcolors ? glyphinfo->gm.customcolor : 0;
+    if (custclr != 0) {
+        if ((custclr & NH_BASIC_COLOR) != 0)
+            color = (int) COLORVAL(custclr);
+        else
+            rgb = (unsigned long) COLORVAL(custclr);
+    }
+    /* highlight the hero's tile with a green background, mimicking the
+       terminal cursor's "you are here" cue on every other windowport */
+    if (x == u.ux && y == u.uy)
+        fprintf(dumphtml_file, "<span class=\"nh_player\">");
+    if (rgb) {
+        /* keep the bold/uline/blink wrappers from dump_set_color_attr but
+           supply the colour inline; render inverse video as a coloured
+           background here so no nh_inv_N class (0-15 only) is needed */
+        dump_set_color_attr(NO_COLOR, attr & ~HL_INVERSE, TRUE);
+        if (attr & HL_INVERSE)
+            fprintf(dumphtml_file,
+                    "<span style=\"color:#000;background-color:#%06lX;\">",
+                    rgb);
+        else
+            fprintf(dumphtml_file, "<span style=\"color:#%06lX;\">", rgb);
+    } else {
+        dump_set_color_attr(color, attr, TRUE);
+    }
+    {
+        /* prefer the player's own glyph: a UTF8 symset (e.g. Enhanced1)
+           stores its codepoint in gm.u, so the dump matches the screen;
+           otherwise fall back to the html line-drawing table, then the
+           default tty character */
+        long cp = 0;
+
+#ifdef ENHANCED_SYMBOLS
+        if (glyphinfo->gm.u && glyphinfo->gm.u->utf32ch)
+            cp = (long) glyphinfo->gm.u->utf32ch;
+        else
+#endif
+        if (htmlsym[glyphinfo->gm.sym.symidx])
+            cp = htmlsym[glyphinfo->gm.sym.symidx];
+        if (cp)
+            fprintf(dumphtml_file, "&#%ld;", cp);
+        else
+            html_dump_char(dumphtml_file, (char) glyphinfo->ttychar);
+    }
+    if (rgb) {
+        fprintf(dumphtml_file, SPAN_E);
+        dump_set_color_attr(NO_COLOR, attr & ~HL_INVERSE, FALSE);
+    } else {
+        dump_set_color_attr(color, attr, FALSE);
+    }
+    if (x == u.ux && y == u.uy)
+        fprintf(dumphtml_file, SPAN_E);
     if (desc_found)
-       fprintf(dumphtml_file, "<span class=\"tooltiptext\">%s</span></div>", firstmatch);
-    if (x == COLNO-1)
-        fprintf(dumphtml_file, "  </span>\n"); /* 2 trailing spaces and newline */
+       fprintf(dumphtml_file,
+               "<span class=\"tooltiptext\">%s</span></div>", firstmatch);
+    if (x == COLNO-1) /* end row - 2 trailing spaces and newline: */
+        fprintf(dumphtml_file, "  </span>\n");
 }
 
 #endif /* DUMPHTML */
@@ -1595,6 +1667,7 @@ static long dump_condition_bits;
 static struct dump_status_fields dump_status[MAXBLSTATS];
 static int hpbar_percent, hpbar_color;
 
+#ifdef DUMPHTML
 /* condcolor and condattr are needed to render the HTML status bar.
    These static routines exist verbatim in at least two other window
    ports. They should be promoted to the core (maybe botl.c).
@@ -1602,12 +1675,12 @@ static int hpbar_percent, hpbar_color;
    or ignored.
  */
 
-static int
-condcolor(bm, bmarray)
-long bm;
-unsigned long *bmarray;
+int
+condcolor(
+    long bm,
+    unsigned long *bmarray)
 {
-#if defined(STATUS_HILITES) && defined(TEXTCOLOR)
+#if defined(STATUS_HILITES)
     int i;
 
     if (bm && bmarray)
@@ -1619,10 +1692,10 @@ unsigned long *bmarray;
     return NO_COLOR;
 }
 
-STATIC_OVL int
-condattr(bm, bmarray)
-long bm;
-unsigned long *bmarray;
+int
+condattr(
+    long bm,
+    unsigned long *bmarray)
 {
     int attr = 0;
 #ifdef STATUS_HILITES
@@ -1661,8 +1734,8 @@ unsigned long *bmarray;
    No truncation is done as we'd prefer to see all info in the dumplog
    and allow the lines to be a little longer if necessary */
 
-STATIC_OVL void
-dump_render_status()
+void
+dump_render_status(void)
 {
     long mask, bits;
     int i, idx, c, row, num_rows, coloridx = 0, attrmask = 0;
@@ -1670,7 +1743,7 @@ dump_render_status()
     struct condition_t { /* auto, since this only gets called once */
         long mask;
         const char *text;
-    } conditions[] = {
+    } cond[] = {
         /* The sequence order of these matters */
         { BL_MASK_STONE,     "Stone"    },
         { BL_MASK_SLIME,     "Slime"    },
@@ -1703,8 +1776,8 @@ dump_render_status()
             if (idx == BL_CONDITION) {
                 /* | Condition Codes | */
                 bits = dump_condition_bits;
-                for (c = 0; c < SIZE(conditions) && bits != 0L; ++c) {
-                    mask = conditions[c].mask;
+                for (c = 0; c < SIZE(cond) && bits != 0L; ++c) {
+                    mask = cond[c].mask;
                     if (bits & mask) {
                         putstr(NHW_STATUS, 0, " ");
                         pad--;
@@ -1715,8 +1788,8 @@ dump_render_status()
                             dump_set_color_attr(coloridx, attrmask, TRUE);
                         }
 #endif
-                        putstr(NHW_STATUS, 0, conditions[c].text);
-                        pad -= strlen(conditions[c].text);
+                        putstr(NHW_STATUS, 0, cond[c].text);
+                        pad -= strlen(cond[c].text);
 #ifdef STATUS_HILITES
                         if (iflags.hilite_delta) {
                             dump_set_color_attr(coloridx, attrmask, FALSE);
@@ -1800,11 +1873,16 @@ dump_render_status()
     return;
 }
 
+DISABLE_WARNING_FORMAT_NONLITERAL
+
 void
-dump_status_update(fldidx, ptr, chg, percent, color, colormasks)
-int fldidx, chg UNUSED, percent, color;
-genericptr_t ptr;
-unsigned long *colormasks;
+dump_status_update(
+    int fldidx,
+    genericptr_t ptr,
+    int chg UNUSED,
+    int percent,
+    int color,
+    unsigned long *colormasks)
 {
     int attrmask;
     long *condptr = (long *) ptr;
@@ -1846,12 +1924,10 @@ unsigned long *colormasks;
         break;
     case BL_GOLD:
         text = decode_mixed(goldbuf, text);
+        FALLTHROUGH;
         /*FALLTHRU*/
     default:
         attrmask = (color >> 8) & 0x00FF;
-#ifndef TEXTCOLOR
-        color = NO_COLOR;
-#endif
         fmt = status_fieldfmt[fldidx];
         if (!fmt)
             fmt = "%s";
@@ -1891,12 +1967,13 @@ unsigned long *colormasks;
     return;
 }
 
+RESTORE_WARNING_FORMAT_NONLITERAL
+
 /** HTML Headers and footers **/
 
-STATIC_OVL void
-dump_headers()
+void
+dump_headers(void)
 {
-#ifdef DUMPHTML
     char vers[16]; /* buffer for short version string */
 
     /* TODO: make portable routine for getting iso8601 datetime */
@@ -1909,34 +1986,38 @@ dump_headers()
         return;
 
     fprintf(dumphtml_file, "<!DOCTYPE html>\n");
-    fprintf(dumphtml_file, "<head>\n");
-    fprintf(dumphtml_file, "<title>NetHack (TNNT) %s (%s)</title>\n",  version_string(vers), plname);
-    fprintf(dumphtml_file, "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n");
-    fprintf(dumphtml_file, "<meta name=\"generator\" content=\"NetHack (TNNT) %s (%s)\" />\n", vers, plname);
-    fprintf(dumphtml_file, "<meta name=\"date\" content=\"%s\" />\n", iso8601);
-    fprintf(dumphtml_file, "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n");
-    fprintf(dumphtml_file, "<link href=\"https://cdn.jsdelivr.net/gh/maxwell-k/dejavu-sans-mono-web-font@2.37/index.css\" title=\"Default\" rel=\"stylesheet\" type=\"text/css\" media=\"all\" />\n");
-    fprintf(dumphtml_file, "<style type=\"text/css\">\n");
+    fprintf(dumphtml_file, "<html lang=\"en\">\n<head>\n");
+    fprintf(dumphtml_file, "<meta charset=\"utf-8\">\n");
+    fprintf(dumphtml_file, "<title>NetHack %s (%s)</title>\n",
+            version_string(vers, sizeof vers), svp.plname);
+    fprintf(dumphtml_file,
+            "<meta name=\"generator\" content=\"NetHack %s (%s)\">\n",
+            vers, svp.plname);
+    fprintf(dumphtml_file, "<meta name=\"date\" content=\"%s\">\n", iso8601);
+    fprintf(dumphtml_file,
+            "<meta name=\"viewport\""
+            " content=\"width=device-width, initial-scale=1.0\">\n");
+    fprintf(dumphtml_file,
+            "<link href=\"https://cdn.jsdelivr.net/gh/maxwell-k/"
+            "dejavu-sans-mono-web-font@2.37/index.css\""
+            " title=\"Default\" rel=\"stylesheet\" media=\"all\">\n");
+    fprintf(dumphtml_file, "<style>\n");
     dump_css();
     fprintf(dumphtml_file, "</style>\n</head>\n<body>\n");
 
-#endif
 }
 
-STATIC_OVL void
-dump_footers()
+void
+dump_footers(void)
 {
-#ifdef DUMPHTML
     if (dumphtml_file) {
-        html_write_tags(dumphtml_file, 0, 0, TRUE); /* close </ul> and </pre> if open */
+        html_write_tags(dumphtml_file, 0, TRUE); /* close </ul> and </pre> if open */
         fprintf(dumphtml_file, "</body>\n</html>\n");
     }
-#endif
 }
 
-#ifdef DUMPHTML
-STATIC_OVL void
-dump_css()
+void
+dump_css(void)
 {
     int c = 0;
     FILE *css;
@@ -1954,14 +2035,14 @@ dump_css()
     fclose(css);
 }
 
-STATIC_OVL void
-dump_outrip(win, how, when)
-winid win;
-int how;
-time_t when;
+void
+dump_outrip(
+    winid win,
+    int how,
+    time_t when)
 {
    if (dumphtml_file) {
-       html_write_tags(dumphtml_file, 0, 0, TRUE); /* </ul>, </pre> if needed */
+       html_write_tags(dumphtml_file, 0, TRUE); /* </ul>, </pre> if needed */
        fprintf(dumphtml_file, "%s\n", PREF_S);
    }
    genl_outrip(win, how, when);
@@ -1970,7 +2051,7 @@ time_t when;
 
 }
 
-#endif
+#endif /* DUMPHTML */
 
 /** Dump file handling **/
 
@@ -1988,11 +2069,6 @@ dump_open_log(time_t now)
     char *fname = (char *)0;
 
     dumplog_now = now;
-/* #ifdef SYSCF
-    if (!sysopt.dumplogfile)
-        return;
-    fname = dump_fmtstr(sysopt.dumplogfile, buf, TRUE);
-#else */
 #ifdef DUMPLOG
     fname = dump_fmtstr(DUMPLOG_FILE, buf, TRUE);
     if (fname)
@@ -2005,7 +2081,7 @@ dump_open_log(time_t now)
 #endif
     if (dumplog_file || dumphtml_file) {
         dumplog_windowprocs_backup = windowprocs;
-        menu_headings_backup = iflags.menu_headings;
+        menu_headings_backup = iflags.menu_headings.attr;
     }
     dump_headers();
 #else /*!DUMPLOG/HTML*/
@@ -2037,10 +2113,10 @@ dump_forward_putstr(winid win, int attr, const char *str, int no_forward)
         putstr(win, attr, str);
 }
 
-#ifdef DUMPLOG
+#if defined(DUMPLOG) || defined (DUMPHTML)
 /*ARGSUSED*/
 staticfn void
-dump_putstr(winid win, int attr UNUSED, const char *str)
+dump_putstr(winid win, int attr, const char *str)
 {
     /* Suppress newline for NHW_STATUS
        Send NHW_STATUS to HTML only */
@@ -2051,14 +2127,17 @@ dump_putstr(winid win, int attr UNUSED, const char *str)
         if (win == NHW_STATUS)
             html_dump_str(dumphtml_file, str);
         else
-            html_dump_line(dumphtml_file, win, attr, str);
+            html_dump_line(dumphtml_file, attr, str);
     }
 #endif
 }
 
 staticfn winid
-dump_create_nhwindow(int type UNUSED)
+dump_create_nhwindow(int type)
 {
+#ifdef DUMPHTML
+    gd.dumping_list = (boolean) (type == NHW_MENU);
+#endif
     return WIN_ERR;
 }
 
@@ -2080,6 +2159,9 @@ dump_display_nhwindow(winid win UNUSED, boolean p UNUSED)
 staticfn void
 dump_destroy_nhwindow(winid win UNUSED)
 {
+#ifdef DUMPHTML
+    gd.dumping_list = FALSE;
+#endif
     return;
 }
 
@@ -2113,19 +2195,19 @@ dump_add_menu(winid win UNUSED,
         int color;
         boolean iscolor = FALSE;
         /* Don't use NHW_MENU for inv items as this makes bullet points */
-        if (!attr && glyph != NO_GLYPH)
+        if (!attr && glyphinfo->glyph != NO_GLYPH)
             win = (winid)0;
-        html_write_tags(dumphtml_file, win, attr, TRUE);
+        html_write_tags(dumphtml_file, attr, TRUE);
         if (iflags.use_menu_color && get_menu_coloring(str, &color, &attr)) {
             iscolor = TRUE;
             fprintf(dumphtml_file, "<span class=\"nh_color_%d\">", color);
         }
-        if (glyph != NO_GLYPH) {
+        if (glyphinfo->glyph != NO_GLYPH) {
             fprintf(dumphtml_file, "<span class=\"nh_item_letter\">%c</span> - ", ch);
         }
         html_dump_str(dumphtml_file, str);
         fprintf(dumphtml_file, "%s", iscolor ? "</span>" : "");
-        html_write_tags(dumphtml_file, win, attr, FALSE);
+        html_write_tags(dumphtml_file, attr, FALSE);
     }
 #endif
 }
@@ -2142,7 +2224,7 @@ dump_end_menu(winid win UNUSED, const char *str)
     }
 #ifdef DUMPHTML
     if (dumphtml_file)
-        html_dump_line(dumphtml_file, 0, 0, str ? str : "");
+        html_dump_line(dumphtml_file, 0, str ? str : "");
 #endif
 }
 
@@ -2173,10 +2255,10 @@ dump_redirect(boolean onoff_flag)
             windowprocs.win_status_update = dump_status_update;
         } else {
             windowprocs = dumplog_windowprocs_backup;
-            iflags.menu_headings = menu_headings_backup;
+            iflags.menu_headings.attr = menu_headings_backup;
         }
         iflags.in_dumplog = onoff_flag;
-        iflags.menu_headings |= ATR_SUBHEAD; /* ATR_SUBHEAD changes with in_dumplog */
+        iflags.menu_headings.attr |= ATR_SUBHEAD; /* ATR_SUBHEAD changes with in_dumplog */
     } else {
         iflags.in_dumplog = FALSE;
     }
@@ -2202,6 +2284,78 @@ has_color(int color)
 #endif
 #endif
     );
+}
+
+#ifdef EXTRAINFO_FN
+/* This probably belongs in files.c, but it
+ * uses dump_fmtstr() which is static here.
+ */
+void
+mk_dgl_extrainfo(void)
+{
+    FILE *extrai = (FILE *) 0;
+#ifdef UNIX
+    mode_t eimode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+#endif
+    char new_fn[512];
+
+    dump_fmtstr(EXTRAINFO_FN, new_fn, TRUE);
+
+    extrai = fopen(new_fn, "w");
+    if (!extrai) {
+        ;
+    } else {
+        int sortval = 0;
+        char tmpdng[16];
+        sortval += (u.uhave.amulet ? 1024 : 0);
+        if (Is_knox(&u.uz)) {
+            Sprintf(tmpdng, "%s", "Knx");
+            sortval += 245;
+        } else if (In_quest(&u.uz)) {
+            Sprintf(tmpdng, "%s%i", "Q", dunlev(&u.uz));
+            sortval += 250 + (dunlev(&u.uz));
+        } else if (In_endgame(&u.uz)) {
+            Sprintf(tmpdng, "%s", "End");
+            sortval += 256;
+        } else if (In_tower(&u.uz)) {
+            Sprintf(tmpdng, "T%i", dunlev(&u.uz));
+            sortval += 235 + (depth(&u.uz));
+        } else if (In_sokoban(&u.uz)) {
+            Sprintf(tmpdng, "S%i", dunlev(&u.uz));
+            sortval += 225 + (depth(&u.uz));
+        } else if (In_mines(&u.uz)) {
+            Sprintf(tmpdng, "M%i", dunlev(&u.uz));
+            sortval += 215 + (dunlev(&u.uz));
+        } else {
+            Sprintf(tmpdng, "D%i", depth(&u.uz));
+            sortval += (depth(&u.uz));
+        }
+#ifdef UNIX
+        chmod(new_fn, eimode);
+#endif
+        fprintf(extrai, "%i|%c %s", sortval, (u.uhave.amulet ? 'A' : ' '), tmpdng);
+        fclose(extrai);
+    }
+}
+#endif /* EXTRAINFO_FN */
+void
+livelog_dump_url(unsigned int llflags)
+{
+#ifdef DUMPLOG
+    char buf[BUFSZ];
+    char *dumpurl;
+
+#ifdef SYSCF
+    if (!sysopt.dumplogurl)
+        return;
+    dumpurl = dump_fmtstr(sysopt.dumplogurl, buf, TRUE);
+#else
+    dumpurl = dump_fmtstr(DUMPLOG_URL, buf, TRUE);
+#endif
+    livelog_printf(llflags, "%s", dumpurl);
+#else
+    nhUse(llflags);
+#endif /*?DUMPLOG*/
 }
 
 int
@@ -2308,7 +2462,6 @@ decode_mixed(char *buf, const char *str)
     *put = '\0';
     return buf;
 }
-
 
 /*
  * This differs from putstr() because the str parameter can

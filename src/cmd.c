@@ -5493,7 +5493,7 @@ yn_function(
 {
     char res = '\033', qbuf[QBUFSZ];
     struct _cmd_queue cq, *cmdq;
-#ifdef DUMPLOG_CORE
+#if defined(DUMPLOG) || defined(DUMPHTML) || defined(DUMPLOG_CORE)
     unsigned idx = gs.saved_pline_index;
     /* buffer to hold query+space+formatted_single_char_response */
     char dumplog_buf[QBUFSZ + 1 + 15]; /* [QBUFSZ+1+7] should suffice */
@@ -5559,10 +5559,10 @@ yn_function(
     if (addcmdq)
         cmdq_add_key(CQ_REPEAT, res);
 
-#ifdef DUMPLOG_CORE
+#if defined(DUMPLOG) || defined(DUMPHTML) || defined(DUMPLOG_CORE)
     if (idx == gs.saved_pline_index) {
-        /* when idx is still the same as gs.saved_pline_index, the interface
-           didn't put the prompt into gs.saved_plines[]; we put a simplified
+        /* when idx is still the same as saved_pline_index, the interface
+           didn't put the prompt into saved_plines[]; we put a simplified
            version in there now (without response choices or default) */
         Sprintf(dumplog_buf, "%s ", query);
         (void) key2txt((uchar) res, eos(dumplog_buf));

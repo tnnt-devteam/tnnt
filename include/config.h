@@ -36,7 +36,7 @@ try this define, used in pager.c and termcap.c */
 /* Hint: if you're not developing code, don't define
 ULTRIX_PROTO. */
 
-#include "config1.h" /* should auto-detect MSDOS, MACOS9, AMIGA, and WIN32 */
+#include "config1.h" /* should auto-detect MSDOS, MAC68K, AMIGA, and WIN32 */
 
 /*
 * Consolidated version, patchlevel, development status.
@@ -67,8 +67,8 @@ ULTRIX_PROTO. */
 *      tty, X11, mac, amii, BeOS, Qt, Gem, Gnome, shim
 */
 
-/* MACOS9 also means MAC windows */
-#ifdef MACOS9
+/* MAC68K also means MAC windows */
+#ifdef MAC68K
 #ifndef AUX
 #define DEFAULT_WINDOW_SYS "mac"
 #endif
@@ -342,7 +342,7 @@ ULTRIX_PROTO. */
 #define ENTRYMAX 100 /* must be >= 10 */
 #endif
 #ifndef PERS_IS_UID
-#if !defined(MICRO) && !defined(MACOS9) && !defined(WIN32)
+#if !defined(MICRO) && !defined(MAC68K) && !defined(WIN32)
 #define PERS_IS_UID 1 /* delete for PERSMAX per name; now per uid */
 #else
 #define PERS_IS_UID 0
@@ -437,7 +437,7 @@ ULTRIX_PROTO. */
  */
 #define INSURANCE /* allow crashed game recovery */
 
-#if !defined(MACOS9) && !defined(SHIM_GRAPHICS)
+#if !defined(MAC68K) && !defined(SHIM_GRAPHICS)
 #define CHDIR /* delete if no chdir() available */
 #endif
 
@@ -570,7 +570,7 @@ typedef unsigned char uchar;
 #define MACRO_CPATH /* use clear_path macros instead of functions */
 #endif
 
-#if !defined(MACOS9)
+#if !defined(MAC68K)
 #if !defined(NOCLIPPING)
 #define CLIPPING /* allow smaller screens -- ERS */
 #endif
@@ -693,6 +693,14 @@ typedef unsigned char uchar;
    whole thing, then type a new end for the text. */
 /* #define EDIT_GETLIN */
 
+/* Extra server enhancements for
+   dgamelaunch-based server play */
+/* #define DGAMELAUNCH */
+#ifdef DGAMELAUNCH
+#define EXTRAINFO_FN    "/dgldir/extrainfo-nh500/%n.extrainfo"
+#define MAILCKFREQ 5    /* SIMPLE_MAIL is in unixconf.h */
+#define WHEREIS_FILE    "whereis/%n.whereis" /* Write out player's current location to player.whereis */
+
 #ifndef NO_CHRONICLE
 /* CHRONICLE - enable #chronicle command, a log of major game events.
    The logged messages will also appear in DUMPLOG. */
@@ -704,6 +712,7 @@ typedef unsigned char uchar;
 #else
 #undef LIVELOG
 #endif /* NO_CHRONICLE */
+#endif /* DGAMELAUNCH */
 
 /* Extra enhancements borrowed from nao343 and elsewhere
    for dgamelaunch-based server play */
@@ -715,6 +724,7 @@ typedef unsigned char uchar;
 #endif /* DGAMELAUNCH */
 
 /* #define DUMPLOG */  /* End-of-game dump logs */
+/* #define DUMPHTML */ /* End-of-game HTML dumps */
 
 #define USE_ISAAC64 /* Use cross-platform, bundled RNG */
 
@@ -725,7 +735,9 @@ typedef unsigned char uchar;
 #ifdef NHL_SANDBOX
 #ifdef CHRONICLE
     /* LIVELOG (and therefore CHRONICLE)  is needed for --loglua */
+#ifndef LIVELOG
 #define LIVELOG
+#endif
 #endif
 #endif
 
@@ -736,6 +748,7 @@ typedef unsigned char uchar;
  * Currently has support in:
  *     WIN32CON
  *     Qt
+ *     curses
  */
 
 /* #define IDLECHECKPOINT */
@@ -761,6 +774,8 @@ typedef unsigned char uchar;
 #define LIVELOGFILE "livelog" /* in-game events recorded, live */
 #endif /* LIVELOGFILE */
 #endif /* LIVELOG */
+
+#if defined(DUMPLOG) || defined(DUMPHTML)
 
 #ifdef DUMPLOG
 #define DUMPLOG_CORE
@@ -795,5 +810,17 @@ typedef unsigned char uchar;
 #endif /* DUMPHTML */
 
 #endif /* DUMPLOG */
+
+#ifdef DUMPHTML
+#ifndef DUMPHTML_FILE
+#define DUMPHTML_FILE        "/tmp/nethack.%n.%d.html"
+/* Placeholders as above
+ * DUMPHTML_FILE is not used if SYSCF is defiined
+ */
+
+#endif
+
+#endif /* DUMPHTML */
+#endif /* DUMPLOG || DUMPHTML */
 
 #endif /* CONFIG_H */

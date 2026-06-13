@@ -2079,11 +2079,11 @@ void
 show_spells(void)
 {
     int unused = SPELLMENU_DUMP;
+    putstr(0, ATR_HEADING, "Spells:");
     if (spellid(0) == NO_SPELL) {
         pline("You didn't know any spells.");
         pline("%s", "");
     } else {
-        pline("Spells:");
         nhUse(dospellmenu("", SPELLMENU_DUMP, &unused));
     }
 }
@@ -2134,7 +2134,12 @@ dospellmenu(
     if (wizard)
         Sprintf(eos(buf), "%c%6s", sep, "turns");
 
-    add_menu_heading(tmpwin, buf);
+    if (splaction == SPELLMENU_DUMP)
+        /* html dumplogs: add_menu_heading does not let us use ATR_PREFORM */
+        putstr(tmpwin, ATR_PREFORM, buf);
+    else
+        add_menu_heading(tmpwin, buf);
+
     for (i = 0; i < MAXSPELL && spellid(i) != NO_SPELL; i++) {
         splnum = !gs.spl_orderindx ? i : gs.spl_orderindx[i];
         Sprintf(buf, fmt, spellname(splnum), spellev(splnum),
@@ -2146,7 +2151,8 @@ dospellmenu(
 
         any.a_int = splnum + 1; /* must be non-zero */
         add_menu(tmpwin, &nul_glyphinfo, &any, spellet(splnum), 0,
-                 ATR_NONE, clr, buf,
+                 (splaction == SPELLMENU_DUMP ? ATR_PREFORM : ATR_NONE),
+                 clr, buf,
                  (splnum == splaction)
                     ? MENU_ITEMFLAGS_SELECTED : MENU_ITEMFLAGS_NONE);
     }

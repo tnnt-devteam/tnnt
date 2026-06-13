@@ -14,6 +14,7 @@
 
 #include "hack.h"
 
+staticfn void enlght_out_attr(int, const char *);
 staticfn void enlght_out(const char *);
 staticfn void enlght_line(const char *, const char *, const char *,
                           const char *);
@@ -431,7 +432,7 @@ enlightenment(
     }
 
     enlght_out(""); /* separator */
-    enlght_out(ATR_SUBHEAD, "Miscellaneous:");
+    enlght_out_attr(ATR_SUBHEAD, "Miscellaneous:");
     /* reminder to player and/or information for dumplog */
     if ((mode & BASICENLIGHTENMENT) != 0 && (wizard || discover || final)) {
         if (wizard || discover) {
@@ -2156,7 +2157,7 @@ show_conduct(int final)
 
     if (!u.uconduct.literate) {
         you_have_been("illiterate");
-    } else if (wizard) {
+    } else {
         Sprintf(buf, "read items or engraved %ld time%s", u.uconduct.literate,
                 plur(u.uconduct.literate));
         you_have_X(buf);
@@ -2322,7 +2323,7 @@ show_achievements(
         awin = create_nhwindow(NHW_MENU);
     }
     Sprintf(title, "Achievement%s:", plur(acnt));
-    putstr(awin, 0, title);
+    putstr(awin, ATR_HEADING, title);
 
     /* display achievements in the order in which they were recorded;
        lone exception is to defer the Amulet if we just ascended;
@@ -2622,16 +2623,16 @@ show_gamelog(int final)
     char buf[BUFSZ];
     int eventcnt = 0;
 
-    win = create_nhwindow(NHW_TEXT);
+    win = create_nhwindow(NHW_MENU);
     Sprintf(buf, "%s events:", final ? "Major" : "Logged");
-    putstr(win, 0, buf);
+    putstr(win, ATR_HEADING, buf);
     for (llmsg = gg.gamelog; llmsg; llmsg = llmsg->next) {
         if (final && !majorevent(llmsg))
             continue;
         if (!final && !wizard && spoilerevent(llmsg))
             continue;
         if (!eventcnt++)
-            putstr(win, 0, " Turn");
+            putstr(win, ATR_SUBHEAD, " Turn");
         Snprintf(buf, sizeof buf, "%5ld: %s", llmsg->turn, llmsg->text);
         putstr(win, 0, buf);
     }
@@ -2997,7 +2998,7 @@ list_vanquished(char defquery, boolean ask)
     } else if (!program_state.gameover) {
         /* #vanquished rather than final disclosure, so pline() is ok */
         pline("No creatures have been vanquished.");
-#ifdef DUMPLOG
+#if defined(DUMPLOG) || defined(DUMPHTML)
     } else if (dumping) {
         putstr(0, 0, "No creatures were vanquished."); /* not pline() */
 #endif
@@ -3179,7 +3180,7 @@ list_genocided(char defquery, boolean ask)
         /* #genocided rather than final disclosure, so pline() is ok and
            extinction has been ignored */
         pline("No creatures have been genocided%s.", genoing ? " yet" : "");
-#ifdef DUMPLOG
+#if defined (DUMPLOG) || defined (DUMPHTML)
     } else if (dumping) { /* 'gameover' is True if we make it here */
         putstr(0, 0, "No species were genocided or became extinct.");
 #endif

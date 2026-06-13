@@ -7,35 +7,14 @@
 #include <exec/types.h>
 #include <libraries/iffparse.h>
 #include <graphics/scale.h>
-#ifndef _DCC
 #include <proto/iffparse.h>
-#endif
 
-#ifdef TESTING
-#include "hack.h"
-#else
-#ifndef CROSS_TO_AMIGA
-#include "NH:src/tile.c"
-#else
 #include "../src/tile.c"
-#endif
-#endif
 
-#ifndef CROSS_TO_AMIGA
-#include "NH:win/share/tile.h"
-#include "NH:sys/amiga/windefs.h"
-#include "NH:sys/amiga/winext.h"
-#include "NH:sys/amiga/winproto.h"
-#else
 #include "tile.h"
 #include "windefs.h"
 #include "winext.h"
 #include "winproto.h"
-#endif
-
-#ifdef OPT_DISPMAP
-#define DISPMAP /* use display_map() from dispmap.s */
-#endif
 
 /* NH:sys/amiga/winvchar.c */
 int main(int, char **);
@@ -59,10 +38,6 @@ extern int reclip;
 
 struct BitMap *MyAllocBitMap(int xsize, int ysize, int depth, long mflags);
 void MyFreeBitMap(struct BitMap *bmp);
-
-#ifdef DISPMAP
-extern void display_map(struct Window *);
-#endif
 
 #ifdef TILES_IN_GLYPHMAP
 extern int maxmontile, maxobjtile, maxothtile; /* from tile.c */
@@ -96,85 +71,6 @@ struct PDAT pictdata;
 char *tilefile;
 struct BitMap *tileimg, *tile;
 
-#ifdef TESTING
-short pens[NUMDRIPENS] = { 8, 3, 15, 0, 15, 7, 7, 8, 0 };
-main(int argc, char **argv)
-{
-    BitMapHeader bmhd;
-    struct IntuiMessage *imsg;
-    long code, class;
-    char buf[100];
-    int i, x, y, tbl, done = 0, num;
-    struct Window *w;
-    struct Screen *scr;
-
-    bmhd = ReadTileImageFiles();
-
-    scr = OpenScreenTags(
-        NULL, SA_Depth, pictdata.nplanes + amii_extraplanes, SA_DisplayID,
-        DBLNTSC_MONITOR_ID | HIRESLACE_KEY, SA_Overscan, OSCAN_TEXT, SA_Top,
-        0, SA_Left, 0, SA_Width, STDSCREENWIDTH, SA_Height, STDSCREENHEIGHT,
-        SA_Type, CUSTOMSCREEN, SA_DetailPen, 0, SA_BlockPen, 1, SA_Title,
-        "NetHack Chars", SA_Pens, pens, TAG_DONE);
-    if (scr == NULL) {
-        printf("no screen\n");
-#undef exit
-        exit(1);
-    }
-
-    w = OpenWindowTags(
-        0, WA_CustomScreen, scr, WA_Flags,
-        WFLG_DRAGBAR | WFLG_SIZEGADGET | WFLG_DEPTHGADGET | WFLG_CLOSEGADGET,
-        WA_IDCMP, IDCMP_CLOSEWINDOW | IDCMP_NEWSIZE | IDCMP_MOUSEBUTTONS,
-        WA_Left, 0, WA_Top, scr->WBorTop + 1 + 13, WA_MinWidth, 100,
-        WA_MinHeight, 100, WA_MaxWidth, 700, WA_MaxHeight, 1000, WA_Width,
-        640, WA_Height, 340, WA_SmartRefresh, TRUE, TAG_DONE);
-    if (w) {
-        while (!done) {
-            for (i = 0; i < NUMTILEIMAGES * IMGPAGESIZE; ++i) {
-                int dx, dy;
-                tbl = i / IMGPAGESIZE;
-                x = i % IMGPAGESIZE;
-                y = x / IMGCOLUMNS;
-                x = x % IMGCOLUMNS;
-                dx = i % (IMGCOLUMNS * 2);
-                dy = i / (IMGCOLUMNS * 2);
-                BltBitMapRastPort(tileimg, x * pictdata.xsize,
-                                  y * pictdata.ysize, w->RPort,
-                                  w->BorderLeft + 1 + dx * pictdata.xsize,
-                                  w->BorderTop + 1 + dy * pictdata.ysize,
-                                  pictdata.xsize, pictdata.ysize, 0xc0);
-            }
-            WaitPort(w->UserPort);
-            while (imsg = (struct IntuiMessage *) GetMsg(w->UserPort)) {
-                class = imsg->Class;
-                code = imsg->Code;
-                ReplyMsg((struct Message *) imsg);
-                switch (class) {
-                case IDCMP_MOUSEBUTTONS: {
-                    x = imsg->MouseX - w->BorderLeft;
-                    y = imsg->MouseY - w->BorderTop;
-                    num = ((y / pictdata.ysize) * IMGCOLUMNS * 2)
-                          + (x / pictdata.xsize);
-                    sprintf(buf, "Char #%d", num);
-                    SetWindowTitles(w, buf, buf);
-                } break;
-                case IDCMP_CLOSEWINDOW:
-                    done = 1;
-                    break;
-                }
-            }
-        }
-        CloseWindow(w);
-        CloseScreen(scr);
-    }
-
-    FreeTileImageFiles();
-
-    return (0);
-}
-#endif
-
 /*
  * Read a single BMAP IFF file into a BitMap.
  * Returns the BitMapHeader; *bmp receives the bitmap.
@@ -183,44 +79,68 @@ main(int argc, char **argv)
 BitMapHeader
 ReadImageFile(const char *filename, struct BitMap **bmp)
 {
-    BitMapHeader *bmhd, bmhds;
+    BitMapHeader *bmhd, bmhds = { 0 };
     int j, np;
-    struct IFFHandle *iff;
+    long err;
+    struct IFFHandle *iff = NULL;
     struct StoredProperty *prop;
+    int iff_opened = 0;
+    const char *errfmt = NULL;
+    long errcode = 0;
 
     IFFParseBase = OpenLibrary("iffparse.library", 0L);
     if (!IFFParseBase)
         panic("No iffparse.library");
 
     iff = AllocIFF();
-    if (!iff)
-        panic("can't start IFF processing");
+    if (!iff) {
+        errfmt = "can't start IFF processing";
+        goto cleanup;
+    }
 
     iff->iff_Stream = Open(filename, MODE_OLDFILE);
-    if (iff->iff_Stream == 0)
-        panic("Can't open %s", filename);
+    if (iff->iff_Stream == 0) {
+        errfmt = "Can't open %s";
+        goto cleanup;
+    }
 
     InitIFFasDOS(iff);
-    OpenIFF(iff, IFFF_READ);
+    if ((err = OpenIFF(iff, IFFF_READ)) != 0) {
+        errfmt = "OpenIFF failed on %s, code %ld";
+        errcode = err;
+        goto cleanup;
+    }
+    iff_opened = 1;
+
     PropChunk(iff, ID_BMAP, ID_BMHD);
     PropChunk(iff, ID_BMAP, ID_CMAP);
     PropChunk(iff, ID_BMAP, ID_PDAT);
     StopChunk(iff, ID_BMAP, ID_PLNE);
-    if ((j = ParseIFF(iff, IFFPARSE_SCAN)) != 0)
-        panic("ParseIFF failed on %s, code %d",
-              filename, j);
+    if ((err = ParseIFF(iff, IFFPARSE_SCAN)) != 0) {
+        errfmt = "ParseIFF failed on %s, code %ld";
+        errcode = err;
+        goto cleanup;
+    }
 
     prop = FindProp(iff, ID_BMAP, ID_BMHD);
-    if (!prop)
-        panic("No BMHD chunk in %s", filename);
+    if (!prop) {
+        errfmt = "No BMHD chunk in %s";
+        goto cleanup;
+    }
     bmhd = (BitMapHeader *) prop->sp_Data;
     np = bmhd->nPlanes;
+
+    if (np > DEPTH) {
+        errfmt = "%s: too many bitplanes (code %ld)";
+        errcode = np;
+        goto cleanup;
+    }
 
     /* Load CMAP into palette arrays if present */
     prop = FindProp(iff, ID_BMAP, ID_CMAP);
     if (prop) {
         unsigned char *cmap = prop->sp_Data;
-        for (j = 0; j < (1L << np) * 3; j += 3) {
+        for (j = 0; j < (1UL << np) * 3; j += 3) {
             amii_initmap[j / 3] =
                 amiv_init_map[j / 3] =
                     ((cmap[j+0] >> 4) << 8)
@@ -236,18 +156,29 @@ ReadImageFile(const char *filename, struct BitMap **bmp)
 
     *bmp = MyAllocBitMap(bmhd->w, bmhd->h,
                 np, MEMF_CHIP | MEMF_CLEAR);
-    if (!*bmp)
-        panic("Can't allocate bitmap for %s", filename);
+    if (!*bmp) {
+        errfmt = "Can't allocate bitmap for %s";
+        goto cleanup;
+    }
 
     for (j = 0; j < np; j++)
         ReadChunkBytes(iff, (*bmp)->Planes[j],
                        RASSIZE(bmhd->w, bmhd->h));
 
     bmhds = *bmhd;
-    CloseIFF(iff);
-    Close(iff->iff_Stream);
-    FreeIFF(iff);
+
+cleanup:
+    if (iff_opened)
+        CloseIFF(iff);
+    if (iff && iff->iff_Stream)
+        Close(iff->iff_Stream);
+    if (iff)
+        FreeIFF(iff);
     CloseLibrary(IFFParseBase);
+    IFFParseBase = NULL;
+
+    if (errfmt)
+        panic(errfmt, filename, errcode);
 
     return bmhds;
 }
@@ -293,9 +224,15 @@ MyAllocBitMap(int xsize, int ysize, int depth, long mflags)
     if (!bm)
         return (NULL);
 
+    bm->mflags = mflags;
     bm->xsize = xsize;
     bm->ysize = ysize;
     InitBitMap(&bm->bm, depth, xsize, ysize);
+    /* InitBitMap does not zero Planes[]; if a later AllocRaster fails
+     * and MyFreeBitMap unwinds, the uninitialized entries above the
+     * failure would be passed to FreeRaster as garbage pointers. */
+    for (j = 0; j < (int) (sizeof bm->bm.Planes / sizeof bm->bm.Planes[0]); ++j)
+        bm->bm.Planes[j] = NULL;
     for (j = 0; j < depth; ++j) {
         if (mflags & MEMF_CHIP)
             bm->bm.Planes[j] = AllocRaster(xsize, ysize);
@@ -329,25 +266,6 @@ MyFreeBitMap(struct BitMap *bmp)
     free(bm);
 }
 
-#ifdef TESTING
-void
-panic(char *s, long a1, long a2, long a3, long a4)
-{
-    printf(s, a1, a2, a3, a4);
-    putchar('\n');
-}
-long *
-alloc(unsigned int x)
-{
-    long *p = (long *) malloc(x);
-    if (!p) {
-        panic("malloc failed");
-        exit(1);
-    }
-    return p;
-}
-#endif
-
 void
 FreeTileImageFiles(void)
 {
@@ -355,7 +273,6 @@ FreeTileImageFiles(void)
     FreeImageFile(&tile);
 }
 
-#ifndef TESTING
 /*
  * Define some stuff for our special glyph drawing routines
  */
@@ -385,7 +302,6 @@ flush_glyph_buffer(struct Window *vw)
 void
 amiv_flush_glyph_buffer(struct Window *vw)
 {
-#if !defined(DISPMAP) || defined(OPT_DISPMAP)
     int xsize, ysize, x, y;
     struct BitScaleArgs bsa;
     struct BitScaleArgs bsm;
@@ -395,7 +311,6 @@ amiv_flush_glyph_buffer(struct Window *vw)
     int i, k;
     int scaling_needed;
     struct RastPort *rp = vw->RPort;
-#endif
 
     /* If nothing is buffered, return before we do anything */
     if (glyph_node_index == 0)
@@ -404,20 +319,8 @@ amiv_flush_glyph_buffer(struct Window *vw)
     cursor_off(WIN_MAP);
     amiv_start_glyphout(WIN_MAP);
 
-#ifdef OPT_DISPMAP
-    if (sysflags.fast_map) {
-#endif
-#ifdef DISPMAP
-        display_map(vw);
-#endif
-#ifdef OPT_DISPMAP
-    } else {
-#endif
-#if !defined(DISPMAP) || defined(OPT_DISPMAP)
-        /* XXX fix indent */
-        /* This is a dynamic value based on this relationship. */
-        scaling_needed =
-            (pictdata.xsize != mxsize || pictdata.ysize != mysize);
+    /* This is a dynamic value based on this relationship. */
+    scaling_needed = (pictdata.xsize != mxsize || pictdata.ysize != mysize);
 
         /* If overview window is up, set up to render the correct scale there
          */
@@ -546,10 +449,6 @@ amiv_flush_glyph_buffer(struct Window *vw)
             MyFreeBitMap(imgbm);
         if (bm)
             MyFreeBitMap(bm);
-#endif /* DISPMAP */
-#ifdef OPT_DISPMAP
-    }
-#endif
 
     amii_end_glyphout(WIN_MAP);
 
@@ -563,7 +462,7 @@ amiv_flush_glyph_buffer(struct Window *vw)
 void
 amiv_lprint_glyph(winid window, int color_index, int glyph)
 {
-    int base;
+    int base = 0;
     struct amii_WinDesc *cw;
     struct Window *w;
     int curx;
@@ -625,27 +524,8 @@ amiv_lprint_glyph(winid window, int color_index, int glyph)
         amiv_g_nodes[glyph_node_index].dsty =
             min(w->BorderTop + (cury * mysize), w->Height - 1);
 
-#ifdef OPT_DISPMAP
-        if (sysflags.fast_map) {
-#endif /* keni */
-#ifdef DISPMAP
-            /* display_map() needs byte-aligned destinations, and we don't
-             * want to
-             * overwrite the window border.
-             */
-            amiv_g_nodes[glyph_node_index].dstx =
-                (w->BorderLeft + 8 + (curx * mxsize)) & -8;
-#endif
-#ifdef OPT_DISPMAP
-        } else {
-#endif
-#if !defined(DISPMAP) || defined(OPT_DISPMAP)
-            amiv_g_nodes[glyph_node_index].dstx =
-                min(w->BorderLeft + (curx * mxsize), w->Width - 1);
-#endif
-#ifdef OPT_DISPMAP
-        }
-#endif
+        amiv_g_nodes[glyph_node_index].dstx =
+            min(w->BorderLeft + (curx * mxsize), w->Width - 1);
         amiv_g_nodes[glyph_node_index].odsty = cw->cury;
         amiv_g_nodes[glyph_node_index].odstx = cw->curx;
         amiv_g_nodes[glyph_node_index].srcx = xoff;
@@ -657,17 +537,6 @@ amiv_lprint_glyph(winid window, int color_index, int glyph)
         int j, k, x, y, apen;
         struct RastPort *rp = w->RPort;
         x = rp->cp_x - pictdata.xsize - 3;
-#ifdef OPT_DISPMAP
-        if (sysflags.fast_map) {
-#endif
-#ifdef DISPMAP
-            x &= -8;
-            if (x == 0)
-                x = 8;
-#endif
-#ifdef OPT_DISPMAP
-        }
-#endif
 
         y = rp->cp_y - pictdata.ysize + 1;
 
@@ -805,21 +674,12 @@ GlyphToIcon(int glyph)
     glyph_info gi;
 
     map_glyphinfo(0, 0, glyph, 0, &gi);
-    if (glyph > 10000)
+    if (glyph >= 10000)
         return glyph;
     return (gi.gm.tileidx);
 }
-#endif
 
 #ifdef AMII_GRAPHICS
-#ifdef TESTING
-/*
- * Define some stuff for our special glyph drawing routines
- */
-static unsigned short glyph_node_index, glyph_buffer_index;
-#define NUMBER_GLYPH_NODES 80
-#define GLYPH_BUFFER_SIZE 512
-#endif /* TESTING */
 
 struct amii_glyph_node {
     short x;
@@ -837,33 +697,15 @@ static char amii_glyph_buffer[GLYPH_BUFFER_SIZE];
  * See winami.c for the amiga specific colormap.
  */
 
+/* CLR_BLACK (slot 0) renders as the dim blue pen on black background,
+   CLR_WHITE (slot 15) uses white on black.  Slots 9-14 use the inverse-
+   video trick (fg=black, bg=color) to fit 16 logical colors into 8 pens. */
 int foreg[AMII_MAXCOLORS] = {
-    0, 7, 4, 2, 6, 5, 3, 1, 1, 0, 0, 0, 0, 0, 0, 0
+    6, 7, 4, 2, 6, 5, 3, 1, 1, 0, 0, 0, 0, 0, 0, 1
 };
 int backg[AMII_MAXCOLORS] = {
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 7, 4, 1, 6, 5, 3, 1
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 4, 1, 6, 5, 3, 0
 };
-#if 0
-#define CLR_BLACK 0
-#define CLR_RED 1
-#define CLR_GREEN 2
-#define CLR_BROWN 3 /* on IBM, low-intensity yellow is brown */
-#define CLR_BLUE 4
-#define CLR_MAGENTA 5
-#define CLR_CYAN 6
-#define CLR_GRAY 7 /* low-intensity white */
-#define NO_COLOR 8
-#define CLR_ORANGE 9
-#define CLR_BRIGHT_GREEN 10
-#define CLR_YELLOW 11
-#define CLR_BRIGHT_BLUE 12
-#define CLR_BRIGHT_MAGENTA 13
-#define CLR_BRIGHT_CYAN 14
-#define CLR_WHITE 15
-#define CLR_MAX 16
-#endif
-
-#ifndef TESTING
 /*
  * Begin Revamped Text display routines
  *
@@ -983,7 +825,7 @@ amii_lprint_glyph(winid window, int color_index, int glyph)
         /*
          * Add it to the end of the buffer
          */
-        amii_glyph_buffer[glyph_buffer_index++] = glyph;
+        amii_glyph_buffer[glyph_buffer_index++] = (char) glyph;
         amii_g_nodes[glyph_node_index - 1].len++;
     } else {
         /* See if we're out of glyph nodes */
@@ -1001,18 +843,14 @@ amii_lprint_glyph(winid window, int color_index, int glyph)
         ++glyph_node_index;
     }
 }
-#endif /* !TESTING */
 
-#ifdef TESTING
 /*
- * Define some variables which will be used to save context when toggling
- * back and forth between low level text and console I/O.
+ * Variables used to save context when toggling between low level text
+ * and console I/O.
  */
 static long xsave, ysave, modesave, apensave, bpensave;
 static int usecolor;
-#endif /* TESTING */
 
-#ifndef TESTING
 /*
  * The function is called before any glyphs are driven to the screen.  It
  * removes the cursor, saves internal state of the window, then returns.
@@ -1049,62 +887,5 @@ amii_start_glyphout(winid window)
     iflags.use_color = FALSE;
     cw->wflags |= FLMAP_INGLYPH;
 }
-#endif /* !TESTING */
 
-#if 0
-/*
- * General cleanup routine -- flushes and restores cursor
- */
-void
-amii_end_glyphout(window)
-    winid window;
-{
-    struct amii_WinDesc *cw;
-    struct Window *w;
-
-    if( ( cw = amii_wins[ window ] ) == (struct amii_WinDesc *)NULL )
-	panic("bad window id %d in amii_end_glyphout()", window );
-
-    if( ( cw->wflags & FLMAP_INGLYPH ) == 0 )
-	return;
-    cw->wflags &= ~(FLMAP_INGLYPH);
-
-    if( !(w = cw->win ) )
-	panic( "bad winid %d, no window ptr set", window );
-
-    /*
-     * Clean up whatever is left in the buffer
-     */
-    iflags.use_color = usecolor;
-
-    /*
-     * Reset internal data structs
-     */
-    SetAPen(w->RPort, apensave);
-    SetBPen(w->RPort, bpensave);
-    SetDrMd(w->RPort, modesave);
-
-    Move(w->RPort, xsave, ysave);
-}
 #endif
-#endif
-
-#ifndef TESTING
-#ifdef OPT_DISPMAP
-/* don't use dispmap unless x & y are 8,16,24,32,48 and equal */
-void
-dispmap_sanity(void)
-{
-    if (mxsize != mysize || dispmap_sanity1(mxsize)
-        || dispmap_sanity1(mysize)) {
-        sysflags.fast_map = 0;
-    }
-}
-int
-dispmap_sanity1(int x)
-{
-    static unsigned char valid[] = { 8, 16, 24, 32, 48, 0 };
-    return !strchr((char *)valid, x);
-}
-#endif /* OPT_DISPMAP */
-#endif /* TESTING */

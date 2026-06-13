@@ -53,14 +53,13 @@ void SetPropInfo(struct Window *win, struct Gadget *gad, long vis, long total,
 struct Window *OpenShWindow(struct NewWindow *nw);
 void CloseShWindow(struct Window *win);
 int ConvertKey(struct IntuiMessage *message);
+void ProcessMessage(struct IntuiMessage *message);
 int kbhit(void);
 int amikbhit(void);
 int WindowGetchar(void);
 WETYPE WindowGetevent(void);
 void amii_cleanup(void);
-#ifndef SHAREDLIB
-void Abort(long rc);
-#endif
+void Abort(long rc) NORETURN;
 void CleanUp(void);
 void flush_glyph_buffer(struct Window *w);
 void amiga_print_glyph(winid window, int color_index, int glyph);
@@ -71,10 +70,8 @@ void FreeNewWindow(struct NewWindow *win);
 void bell(void);
 void amii_delay_output(void);
 void amii_number_pad(int state);
-#ifndef SHAREDLIB
 void amiv_loadlib(void);
 void amii_loadlib(void);
-#endif
 void preserve_icon(void);
 void clear_icon(void);
 
@@ -114,10 +111,6 @@ BitMapHeader ReadTileImageFiles(void);
 void FreeTileImageFiles(void);
 
 /* winami.c */
-#ifdef SHAREDLIB
-int __UserLibInit(void);
-void __UserLibCleanup(void);
-#endif
 void amii_askname(void);
 void amii_player_selection(void);
 void RandomWindow(char *name);
@@ -127,16 +120,6 @@ void amii_display_file(const char *fn, boolean complain);
 void SetBorder(struct Gadget *gd);
 /* malloc/free provided by stdlib.h */
 
-#ifdef SHAREDLIB
-/* amilib.c */
-void amii_loadlib(void);
-void amiv_loadlib(void);
-void CleanUp(void);
-void setup_librefs(WinamiBASE *base);
-#else
-void Abort(long rc);
-#endif
-
 win_request_info *amii_ctrl_nhwindow(winid, int, win_request_info *);
 
 /* amirip.c */
@@ -145,7 +128,3 @@ void amii_outrip(winid tmpwin, int how, time_t when);
 /* winchar.c */
 void SetMazeType(MazeType);
 int GlyphToIcon(int glyph);
-#ifdef OPT_DISPMAP
-void dispmap_sanity(void);
-int dispmap_sanity1(int);
-#endif

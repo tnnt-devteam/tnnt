@@ -1,7 +1,7 @@
 /* CSS - only required for HTML DumpLogs */
 body {
-  color:#CCCCCC;
-  background-color:#222222;
+  color: #CCCCCC;
+  background-color: #222222;
   font-family: monospace;
   font-size: 0.9vw;
 }
@@ -11,6 +11,8 @@ pre.nh_screen {
   font-size: 1.05vw;
   background-color: black;
   width: fit-content;
+  padding: 0.5em;
+  border-radius: 4px;
 }
 
 .nh_item_letter {
@@ -27,22 +29,28 @@ pre.nh_screen {
 /* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden;
-  background-color: #222222;
+  background-color: #333;
   color: #fff;
   text-align: center;
   font-size: 0.9vw;
   padding: 5px 5px;
   border-radius: 6px;
+  border: 1px solid #555;
+  white-space: nowrap;
 
   position: absolute;
   z-index: 1;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 2px;
 }
 
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
+/* Show the tooltip text on hover or keyboard/touch focus */
+.tooltip:hover .tooltiptext,
+.tooltip:focus-within .tooltiptext {
   visibility: visible;
 }
-
 
 h2 {
   color: white;
@@ -63,6 +71,11 @@ blockquote {
 
 span.nh_screen {
   background-color: black;
+}
+
+/* Player position highlight (mimics terminal cursor on @) */
+.nh_player {
+  background-color: #00AA00;
 }
 
 .nh_color_0 { color: #555555; }  /* CLR_BLACK          */

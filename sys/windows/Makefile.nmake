@@ -8,8 +8,8 @@
 #       MS Visual Studio Visual C++ compiler
 #
 #       Visual Studio Compilers Tested:
-#            - Microsoft Visual Studio Community 2022 v 17.14.31
-#            - Microsoft Visual Studio Community 2026 v 18.5.2
+#            - Microsoft Visual Studio Community 2022 v 17.14.33
+#            - Microsoft Visual Studio Community 2026 v 18.6.2
 #
 #==============================================================================
 #   This is used for building two distinct executables of NetHack:
@@ -54,27 +54,30 @@ SOUND_LIBRARIES = windsound
 #------------------------------------------------------------------------------
 # Curses options.
 #
+
+WANT_CURSES=Y
+
 # Do you want console curses included?
 
-CURSES_CONSOLE = Y
+CURSES_CONSOLE=Y
 
 # Do you want graphical curses included?
 
-CURSES_GRAPHICAL = Y
+CURSES_GRAPHICAL=Y
 
 #
 #------------------------------------------------------------------------------
 # Do you want debug information available to the executable?
 #
 
-DEBUGINFO = Y
+DEBUGINFO=Y
 
 #
 #------------------------------------------------------------------------------
 # Do you want to include the address sanitizer?
 #
 
-#WANT_ASAN = Y
+#WANT_ASAN=Y
 
 #------------------------------------------------------------------------------
 # Do you have a connection to the internet available that you want
@@ -82,13 +85,13 @@ DEBUGINFO = Y
 # pdcursesmod source code?
 # Default is now Y. Set it to N if that won't work for you.
 
-INTERNET_AVAILABLE = Y
+INTERNET_AVAILABLE=1
 
 #------------------------------------------------------------------------------
 #
 # Do you have git commands available and NetHack in a git repository?
 
-GIT_AVAILABLE = N
+GIT_AVAILABLE=1
 
 # If not, because you obtained the NetHack sources in a zip file download,
 # set GIT_AVAILABLE = N
@@ -147,12 +150,24 @@ LUAVER=$(LUA_VERSION)
 
 # if GIT=1 is passed on the make command, allow use of git and internet
 !IF "$(GIT)" == "1"
-INTERNET_AVAILABLE=Y
-GIT_AVAILABLE=Y
+INTERNET_AVAILABLE=1
+GIT_AVAILABLE=1
 !ENDIF
 !IF "$(git)" == "1"
-INTERNET_AVAILABLE=Y
-GIT_AVAILABLE=Y
+INTERNET_AVAILABLE=1
+GIT_AVAILABLE=1
+!ENDIF
+!IF "$(GIT)" == "Y"
+INTERNET_AVAILABLE=1
+GIT_AVAILABLE=1
+!ENDIF
+!IF "$(git)" == "y"
+INTERNET_AVAILABLE=1
+GIT_AVAILABLE=1
+!ENDIF
+!IF "$(git)" == "Y"
+INTERNET_AVAILABLE=1
+GIT_AVAILABLE=1
 !ENDIF
 
 #==============================================================================
@@ -252,8 +267,8 @@ LUA_MAY_PROCEED=N
 ADD_CURSES=N
 
 # First, Lua
-!IF "$(INTERNET_AVAILABLE)" == "Y"
-!IF "$(GIT_AVAILABLE)" == "Y"
+!IF "$(INTERNET_AVAILABLE)" == "1"
+!IF "$(GIT_AVAILABLE)" == "1"
 R_LUATOP=$(SUBM)lua
 LUATOP=$(SUBM)lua$(BACKSLASH)
 R_LUASRC=$(R_LUATOP)
@@ -302,15 +317,15 @@ LUA_MAY_PROCEED=Y
 #!MESSAGE LUASRC=$(LUASRC)
 
 !IF "$(LUA_MAY_PROCEED)" != "Y"
-!IF "$(INTERNET_AVAILABLE)" != "Y"
+!IF "$(INTERNET_AVAILABLE)" != "1"
 !MESSAGE Your Makefile settings do not allow use of the internet to obtain Lua
 !ENDIF  # INTERNET_AVAILABLE
 !MESSAGE and no copy of Lua was found in either $(SUBM)lua or $(LIBDIR)lua-$(LUAVER).
 !MESSAGE Change your nmake command line to include:
 !MESSAGE     GIT=1
 !MESSAGE or modify your Makefile to set the following:
-!MESSAGE     INTERNET_AVAILABLE=Y
-!MESSAGE     GIT_AVAILABLE=Y
+!MESSAGE     INTERNET_AVAILABLE=1
+!MESSAGE     GIT_AVAILABLE=1
 !ERROR Stopping because NetHack 5.0 requires Lua for its build.
 !ENDIF  # LUA_MAY_PROCEED
 
@@ -334,8 +349,8 @@ ADD_CURSES=N
 R_PDCDIST=pdcursesmod
 PDCDIST=$(R_PDCDIST)$(BACKSLASH)
 #U_PDCDIST=$(PDCDIST:\=/)
-! IF "$(INTERNET_AVAILABLE)" == "Y"
-!  IF "$(GIT_AVAILABLE)" == "Y"
+! IF "$(INTERNET_AVAILABLE)" == "1"
+!  IF "$(GIT_AVAILABLE)" == "1"
 #!MESSAGE debug spot1
 R_PDCURSES_TOP=$(SUBM)$(R_PDCDIST)
 PDCURSES_TOP=$(R_PDCURSES_TOP)$(BACKSLASH)
@@ -349,7 +364,7 @@ PDCURSES_TOP=$(R_PDCURSES_TOP)$(BACKSLASH)
 ADD_CURSES=Y
 !  ENDIF # GIT_AVAILABLE
 ! ELSE  # NO internet available
-# Your Makefile settings do not allow $(PDCDIST) to be obtained by
+# Your Makefile settings do not allow $(R_PDCDIST) to be obtained by
 # git or by download. Check to see if it is available at one of
 # the expected locations already, with precedence given to ../submodules,
 # then ../lib.
@@ -671,17 +686,17 @@ HACKCSRC = \
 	$(SRC)objnam.c   $(SRC)options.c  $(SRC)pager.c    $(SRC)pickup.c \
 	$(SRC)pline.c    $(SRC)polyself.c $(SRC)potion.c   $(SRC)pray.c \
 	$(SRC)priest.c   $(SRC)quest.c    $(SRC)questpgr.c $(SRC)read.c \
-	$(SRC)rect.c     $(SRC)region.c   $(SRC)restore.c  $(SRC)rip.c \
-	$(SRC)rnd.c      $(SRC)role.c     $(SRC)rumors.c   $(SRC)save.c \
-	$(SRC)selvar.c   $(SRC)sfbase.c   $(SRC)sfstruct.c $(SRC)shk.c \
-	$(SRC)shknam.c   $(SRC)sit.c      $(SRC)sounds.c   $(SRC)sp_lev.c \
-	$(SRC)spell.c    $(SRC)stairs.c   $(SRC)steal.c    $(SRC)steed.c \
-	$(SRC)symbols.c  $(SRC)sys.c      $(SRC)teleport.c $(SRC)timeout.c \
-	$(SRC)topten.c   $(SRC)track.c    $(SRC)trap.c     $(SRC)u_init.c \
-	$(SRC)uhitm.c    $(SRC)utf8map.c  $(SRC)vault.c    $(SRC)version.c \
-	$(SRC)vision.c   $(SRC)weapon.c   $(SRC)were.c     $(SRC)wield.c \
-	$(SRC)windows.c  $(SRC)wizard.c   $(SRC)worm.c     $(SRC)worn.c \
-	$(SRC)write.c    $(SRC)zap.c
+	$(SRC)rect.c     $(SRC)region.c   $(SRC)restore.c  $(SRC)revision.c \
+	$(SRC)rip.c      $(SRC)rnd.c      $(SRC)role.c     $(SRC)rumors.c \
+	$(SRC)save.c     $(SRC)selvar.c   $(SRC)sfbase.c   $(SRC)sfstruct.c \
+	$(SRC)shk.c      $(SRC)shknam.c   $(SRC)sit.c      $(SRC)sounds.c \
+	$(SRC)sp_lev.c   $(SRC)spell.c    $(SRC)stairs.c   $(SRC)steal.c \
+	$(SRC)steed.c    $(SRC)symbols.c  $(SRC)sys.c      $(SRC)teleport.c \
+	$(SRC)timeout.c  $(SRC)topten.c   $(SRC)track.c    $(SRC)trap.c \
+	$(SRC)u_init.c   $(SRC)uhitm.c    $(SRC)utf8map.c  $(SRC)vault.c \
+	$(SRC)version.c  $(SRC)vision.c   $(SRC)weapon.c   $(SRC)were.c \
+	$(SRC)wield.c    $(SRC)windows.c  $(SRC)wizard.c   $(SRC)worm.c \
+	$(SRC)worn.c     $(SRC)write.c    $(SRC)zap.c
 
 # all .h files except date.h
 HACKINCL = \
@@ -700,15 +715,16 @@ HACKINCL = \
 	$(INCL)obj.h      $(INCL)objects.h    $(INCL)objclass.h \
 	$(INCL)optlist.h  $(INCL)patchlevel.h $(INCL)pcconf.h \
 	$(INCL)permonst.h $(INCL)prop.h       $(INCL)rect.h \
-	$(INCL)region.h   $(INCL)savefile.h   $(INCL)selvar.h \
-	$(INCL)sfprocs.h  $(INCL)sym.h        $(INCL)rm.h \
-	$(INCL)sp_lev.h   $(INCL)spell.h      $(INCL)sndprocs.h \
-	$(INCL)seffects.h $(INCL)stairs.h     $(INCL)sys.h \
-	$(INCL)tcap.h     $(INCL)timeout.h    $(INCL)tradstdc.h \
-	$(INCL)trap.h     $(INCL)unixconf.h   $(INCL)vision.h \
-	$(INCL)vmsconf.h  $(INCL)wintty.h     $(INCL)wincurs.h \
-	$(INCL)winX.h     $(INCL)winprocs.h   $(INCL)wintype.h \
-	$(INCL)you.h      $(INCL)youprop.h  $(INCL)weight.h
+	$(INCL)region.h   $(INCL)revision.h   $(INCL)savefile.h \
+	$(INCL)selvar.h   $(INCL)sfprocs.h    $(INCL)sym.h \
+	$(INCL)rm.h       $(INCL)sp_lev.h     $(INCL)spell.h \
+	$(INCL)sndprocs.h $(INCL)seffects.h   $(INCL)stairs.h \
+	$(INCL)sys.h      $(INCL)tcap.h       $(INCL)timeout.h \
+	$(INCL)tradstdc.h $(INCL)trap.h       $(INCL)unixconf.h \
+	$(INCL)vision.h   $(INCL)vmsconf.h    $(INCL)wintty.h \
+	$(INCL)wincurs.h  $(INCL)winX.h       $(INCL)winprocs.h \
+	$(INCL)wintype.h  $(INCL)you.h        $(INCL)youprop.h \
+	$(INCL)weight.h
 
 LUA_FILES = $(DAT)asmodeus.lua $(DAT)baalz.lua $(DAT)bigrm-1.lua \
 	$(DAT)bigrm-10.lua $(DAT)bigrm-11.lua $(DAT)bigrm-12.lua \
@@ -873,17 +889,17 @@ COREOBJTTY = \
 	$(OTTY)pickup.o   $(OTTY)pline.o    $(OTTY)polyself.o $(OTTY)potion.o \
 	$(OTTY)pray.o     $(OTTY)priest.o   $(OTTY)quest.o    $(OTTY)questpgr.o \
 	$(OTTY)read.o     $(OTTY)rect.o     $(OTTY)region.o   $(OTTY)report.o \
-	$(OTTY)restore.o  $(OTTY)rip.o      $(OTTY)rnd.o      $(OTTY)role.o \
-	$(OTTY)rumors.o   $(OTTY)save.o     $(OTTY)selvar.o   $(OTTY)sfbase.o \
-	$(OTTY)sfstruct.o $(OTTY)shk.o      $(OTTY)shknam.o   $(OTTY)sit.o \
-	$(OTTY)sounds.o   $(OTTY)sp_lev.o   $(OTTY)spell.o    $(OTTY)stairs.o \
-	$(OTTY)steal.o    $(OTTY)steed.o    $(OTTY)strutil.o  $(OTTY)symbols.o \
-	$(OTTY)sys.o      $(OTTY)teleport.o $(OTTY)timeout.o  $(OTTY)topten.o \
-	$(OTTY)track.o    $(OTTY)trap.o     $(OTTY)u_init.o   $(OTTY)uhitm.o \
-	$(OTTY)utf8map.o  $(OTTY)vault.o    $(OTTY)vision.o   $(OTTY)weapon.o \
-	$(OTTY)were.o     $(OTTY)wield.o    $(OTTY)windows.o  $(OTTY)wizard.o \
-	$(OTTY)wizcmds.o  $(OTTY)worm.o     $(OTTY)worn.o     $(OTTY)write.o \
-	$(OTTY)zap.o
+	$(OTTY)restore.o  $(OTTY)revision.o $(OTTY)rip.o      $(OTTY)rnd.o \
+	$(OTTY)role.o     $(OTTY)rumors.o   $(OTTY)save.o     $(OTTY)selvar.o \
+	$(OTTY)sfbase.o   $(OTTY)sfstruct.o $(OTTY)shk.o      $(OTTY)shknam.o \
+	$(OTTY)sit.o      $(OTTY)sounds.o   $(OTTY)sp_lev.o   $(OTTY)spell.o \
+	$(OTTY)stairs.o   $(OTTY)steal.o    $(OTTY)steed.o    $(OTTY)strutil.o \
+	$(OTTY)symbols.o  $(OTTY)sys.o      $(OTTY)teleport.o $(OTTY)timeout.o \
+	$(OTTY)topten.o   $(OTTY)track.o    $(OTTY)trap.o     $(OTTY)u_init.o \
+	$(OTTY)uhitm.o    $(OTTY)utf8map.o  $(OTTY)vault.o    $(OTTY)vision.o \
+	$(OTTY)weapon.o   $(OTTY)were.o     $(OTTY)wield.o    $(OTTY)windows.o \
+	$(OTTY)wizard.o   $(OTTY)wizcmds.o  $(OTTY)worm.o     $(OTTY)worn.o \
+	$(OTTY)write.o    $(OTTY)zap.o
 
 OBJSTTY = $(MDLIBTTY) $(COREOBJTTY) $(REGEXTTY) $(RANDOMTTY)
 
@@ -936,17 +952,17 @@ COREOBJGUI = \
 	$(OGUI)pickup.o   $(OGUI)pline.o    $(OGUI)polyself.o $(OGUI)potion.o \
 	$(OGUI)pray.o     $(OGUI)priest.o   $(OGUI)quest.o    $(OGUI)questpgr.o \
 	$(OGUI)read.o     $(OGUI)rect.o     $(OGUI)region.o   $(OGUI)report.o \
-	$(OGUI)restore.o  $(OGUI)rip.o      $(OGUI)rnd.o      $(OGUI)role.o \
-	$(OGUI)rumors.o   $(OGUI)save.o     $(OGUI)selvar.o   $(OGUI)sfbase.o \
-	$(OGUI)sfstruct.o $(OGUI)shk.o      $(OGUI)shknam.o   $(OGUI)sit.o \
-	$(OGUI)sounds.o   $(OGUI)sp_lev.o   $(OGUI)spell.o    $(OGUI)stairs.o \
-	$(OGUI)steal.o    $(OGUI)steed.o    $(OGUI)strutil.o  $(OGUI)symbols.o \
-	$(OGUI)sys.o      $(OGUI)teleport.o $(OGUI)timeout.o  $(OGUI)topten.o \
-	$(OGUI)track.o    $(OGUI)trap.o     $(OGUI)u_init.o   $(OGUI)uhitm.o \
-	$(OGUI)utf8map.o  $(OGUI)vault.o    $(OGUI)vision.o   $(OGUI)weapon.o \
-	$(OGUI)were.o     $(OGUI)wield.o    $(OGUI)windows.o  $(OGUI)wizard.o \
-	$(OGUI)wizcmds.o  $(OGUI)worm.o     $(OGUI)worn.o     $(OGUI)write.o \
-	$(OGUI)zap.o
+	$(OGUI)restore.o  $(OGUI)revision.o $(OGUI)rip.o      $(OGUI)rnd.o \
+	$(OGUI)role.o     $(OGUI)rumors.o   $(OGUI)save.o     $(OGUI)selvar.o \
+	$(OGUI)sfbase.o   $(OGUI)sfstruct.o $(OGUI)shk.o      $(OGUI)shknam.o \
+	$(OGUI)sit.o      $(OGUI)sounds.o   $(OGUI)sp_lev.o   $(OGUI)spell.o \
+	$(OGUI)stairs.o   $(OGUI)steal.o    $(OGUI)steed.o    $(OGUI)strutil.o \
+	$(OGUI)symbols.o  $(OGUI)sys.o      $(OGUI)teleport.o $(OGUI)timeout.o \
+	$(OGUI)topten.o   $(OGUI)track.o    $(OGUI)trap.o     $(OGUI)u_init.o \
+	$(OGUI)uhitm.o    $(OGUI)utf8map.o  $(OGUI)vault.o    $(OGUI)vision.o \
+	$(OGUI)weapon.o   $(OGUI)were.o     $(OGUI)wield.o    $(OGUI)windows.o \
+	$(OGUI)wizard.o   $(OGUI)wizcmds.o  $(OGUI)worm.o     $(OGUI)worn.o \
+	$(OGUI)write.o    $(OGUI)zap.o
 
 OBJSGUI   = $(MDLIBGUI) $(COREOBJGUI) $(REGEXGUI) $(RANDOMGUI)
 
@@ -1188,7 +1204,8 @@ rc=Rc.exe
 #
 # Recently tested versions:
 TESTEDVS2022 = 14.44.35225.0
-TESTEDVS2026 = 14.50.35730.0
+TESTEDVS2026 = 14.51.36244.0
+TESTEDVS2026 = 14.51.36246.0
 
 VS20261ST = 1450000000
 VS2026CUR = $(TESTEDVS2026:.=)
@@ -1591,8 +1608,8 @@ DLB =
 
 all :	package
 
-!IF "$(INTERNET_AVAILABLE)" == "Y"
-!IF "$(GIT_AVAILABLE)" == "Y"
+!IF "$(INTERNET_AVAILABLE)" == "1"
+!IF "$(GIT_AVAILABLE)" == "1"
 $(LUASRC)lua.h:
 	git submodule init $(SUBM)lua
 	git submodule update $(SUBM)lua
@@ -1827,7 +1844,7 @@ $(OUTL)makedefs.o: $(U)makedefs.c $(SRC)mdlib.c $(CONFIG_H) $(INCL)permonst.h \
 
 #
 # This is awful, but it allows the GITHASH, GITBRANCH and GITPREFIX macros to be
-# defined and utilized, using only build-in Windows and nmake commands,
+# defined and utilized, using only built-in Windows and nmake commands,
 # as well as the necessary git commands.
 #
 # We build a temporary Makefile on-the-fly for compiling date.c and
@@ -1837,44 +1854,42 @@ $(OTTY)date.o: $(HACKINCL) $(HACKSRC) $(HACKOBJ) $(ALLOBJTTY) $(CURSESOBJ)
 !IF "$(GIT_AVAILABLE)" == "1"
 	@git rev-parse --verify HEAD 2>&1 >$(OTTY)date1.tmp
 	@git rev-parse --abbrev-ref HEAD 2>&1 >$(OTTY)date2.tmp
-	@git config nethack.substprefix 2>&1 >$(OTTY)date3.tmp
-	@echo.>date.nmk
-	@echo OBJ = $(OBJTTY)>>date.nmk
-	@echo O = ^$(OBJTTY)^^^\>>date.nmk
-	@echo cc = $(cc)>>date.nmk
-	@echo CFLAGS = $(CFLAGS) ^\>>date.nmk
-	@for /F "usebackq" %%A IN ("$(OTTY)date1.tmp") DO @echo.	-DNETHACK_GIT_SHA=\"%%A\" ^\>>date.nmk
-	@for /F "usebackq" %%A IN ("$(OTTY)date2.tmp") DO @echo.	-DNETHACK_GIT_BRANCH=\"%%A\">>date.nmk
-	@for /F "usebackq" %%A IN ("$(OTTY)date3.tmp") DO @echo.	-DNETHACK_GIT_PREFIX=\"%%A\">>date.nmk
-	@echo.>>date.nmk
-	@echo default: ^$(OTTY)date.o>>date.nmk
-	@echo.>>date.nmk
-	@echo ^$(OTTY)date.o: >>date.nmk
-	@echo. 	^$(cc) ^$(CFLAGS) -Fo^$@ date.c>>date.nmk
-	@echo.>>date.nmk
-	@$(MAKE) /NOLOGO /A -f date.nmk
+#	@git config nethack.substprefix 2>&1 >$(OTTY)date3.tmp
+	@echo.>date-tty.nmk
+	@echo cc = $(cc)>>date-tty.nmk
+	@echo CFLAGS = $(CFLAGS) ^\>>date-tty.nmk
+	@for /F "usebackq" %%A IN ("$(OTTY)date1.tmp") DO @echo.	-DNETHACK_GIT_SHA=\"%%A\" ^\>>date-tty.nmk
+	@for /F "usebackq" %%A IN ("$(OTTY)date2.tmp") DO @echo.	-DNETHACK_GIT_BRANCH=\"%%A\">>date-tty.nmk
+#	@for /F "usebackq" %%A IN ("$(OTTY)date2.tmp") DO @echo.	-DNETHACK_GIT_BRANCH=\"%%A\" ^\>>date-tty.nmk
+#	@for /F "usebackq" %%A IN ("$(OTTY)date3.tmp") DO @echo.	-DNETHACK_GIT_PREFIX=\"%%A\">>date-tty.nmk
+	@echo.>>date-tty.nmk
+	@echo default: ^$(OTTY)date.o>>date-tty.nmk
+	@echo.>>date-tty.nmk
+	@echo ^$(OTTY)date.o: >>date-tty.nmk
+	@echo. 	^$(cc) ^$(CFLAGS) -Fo^$@ date.c>>date-tty.nmk
+	@echo.>>date-tty.nmk
+        @$(MAKE) /NOLOGO /A OTTY=$(OTTY) -f date-tty.nmk
 !ENDIF
 
 $(OGUI)date.o: $(HACKINCL) $(HACKSRC) $(HACKOBJ) $(ALLOBJGUI)
 !IF "$(GIT_AVAILABLE)" == "1"
 	@git rev-parse --verify HEAD 2>&1 >$(OGUI)date1.tmp
 	@git rev-parse --abbrev-ref HEAD 2>&1 >$(OGUI)date2.tmp
-	@git config nethack.substprefix 2>&1 >$(OTTY)date3.tmp
-	@echo.>date.nmk
-	@echo OBJ = $(OBJGUI)>>date.nmk
-	@echo O = ^$(OBJGUI)^^^\>>date.nmk
-	@echo cc = $(cc)>>date.nmk
-	@echo CFLAGS = $(CFLAGS) ^\>>date.nmk
-	@for /F "usebackq" %%A IN ("$(OGUI)date1.tmp") DO @echo.	-DNETHACK_GIT_SHA=\"%%A\" ^\>>date.nmk
-	@for /F "usebackq" %%A IN ("$(OGUI)date2.tmp") DO @echo.	-DNETHACK_GIT_BRANCH=\"%%A\">>date.nmk
-	@for /F "usebackq" %%A IN ("$(OTTY)date3.tmp") DO @echo.	-DNETHACK_GIT_PREFIX=\"%%A\">>date.nmk
-	@echo.>>date.nmk
-	@echo default: ^$(OGUI)date.o>>date.nmk
-	@echo.>>date.nmk
-	@echo ^$(OGUI)date.o: >>date.nmk
-	@echo. 	^$(cc) ^$(CFLAGS) -Fo^$@ date.c>>date.nmk
-	@echo.>>date.nmk
-	@$(MAKE) /NOLOGO /A -f date.nmk
+#	@git config nethack.substprefix 2>&1 >$(OGUI)date3.tmp
+	@echo.>date-gui.nmk
+	@echo cc = $(cc)>>date-gui.nmk
+	@echo CFLAGS = $(CFLAGS) ^\>>date-gui.nmk
+	@for /F "usebackq" %%A IN ("$(OGUI)date1.tmp") DO @echo.	-DNETHACK_GIT_SHA=\"%%A\" ^\>>date-gui.nmk
+	@for /F "usebackq" %%A IN ("$(OGUI)date2.tmp") DO @echo.	-DNETHACK_GIT_BRANCH=\"%%A\">>date-gui.nmk
+#	@for /F "usebackq" %%A IN ("$(OGUI)date2.tmp") DO @echo.	-DNETHACK_GIT_BRANCH=\"%%A\" ^\>>date-gui.nmk
+#	@for /F "usebackq" %%A IN ("$(OGUI)date3.tmp") DO @echo.	-DNETHACK_GIT_PREFIX=\"%%A\">>date-gui.nmk
+	@echo.>>date-gui.nmk
+	@echo default: ^$(OGUI)date.o>>date-gui.nmk
+	@echo.>>date-gui.nmk
+	@echo ^$(OGUI)date.o: >>date-gui.nmk
+	@echo. 	^$(cc) ^$(CFLAGS) -Fo^$@ date.c>>date-gui.nmk
+	@echo.>>date-gui.nmk
+        @$(MAKE) /NOLOGO /A OGUI=$(OGUI) -f date-gui.nmk
 !ENDIF
 
 $(OGUI)sfbase.o: sfbase.c $(HACK_H) $(INCL)sfmacros.h
@@ -2785,11 +2800,11 @@ $(SndWavDir)sa2_xplevelup.wav: $(SndWavDir)sa2_xplevelup.uu $(U)uudecode.exe
 #===============================================================================
 
 PKGFILES = nethackrc.template Guidebook.txt license NetHack.exe NetHack.txt \
-	 NetHackW.exe opthelp nhdat370 record symbols \
+	 NetHackW.exe opthelp nhdat$(NHV) record symbols \
 	 sysconf.template $(SFCTOOLBASENAM)
 FILESTOZIP = $(BinDir)nethackrc.template $(BinDir)Guidebook.txt $(BinDir)license \
 	$(BinDir)NetHack.exe $(BinDir)NetHack.txt $(BinDir)NetHackW.exe \
-	$(BinDir)opthelp $(BinDir)nhdat370 $(BinDir)record \
+	$(BinDir)opthelp $(BinDir)nhdat$(NHV) $(BinDir)record \
 	$(BinDir)symbols $(BinDir)sysconf.template $(SFCTOOLPKG)
 
 DBGSYMS = NetHack.PDB NetHackW.PDB $(SFCTOOLPDBNAM)
@@ -3328,6 +3343,7 @@ $(OTTY)rect.o: rect.c $(HACK_H)
 $(OTTY)region.o: region.c $(HACK_H)
 $(OTTY)report.o: report.c $(HACK_H) $(INCL)dlb.h $(INCL)nhmd4.h
 $(OTTY)restore.o: restore.c $(HACK_H) $(INCL)tcap.h
+$(OTTY)revision.o: revision.c $(HACK_H)
 $(OTTY)rip.o: rip.c $(HACK_H)
 $(OTTY)rnd.o: rnd.c $(HACK_H) $(INCL)isaac64.h
 $(OTTY)role.o: role.c $(HACK_H)
@@ -3708,6 +3724,7 @@ $(OGUI)rect.o: rect.c $(HACK_H)
 $(OGUI)region.o: region.c $(HACK_H)
 $(OGUI)report.o: report.c $(HACK_H) $(INCL)dlb.h $(INCL)nhmd4.h
 $(OGUI)restore.o: restore.c $(HACK_H) $(INCL)tcap.h
+$(OGUI)revision.o: revision.c $(HACK_H)
 $(OGUI)rip.o: rip.c $(HACK_H)
 $(OGUI)rnd.o: rnd.c $(HACK_H) $(INCL)isaac64.h
 $(OGUI)role.o: role.c $(HACK_H)

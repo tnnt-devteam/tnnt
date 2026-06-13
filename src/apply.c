@@ -852,8 +852,8 @@ use_leash_core(struct obj *obj, struct monst *mtmp, coord *cc, int spotmon)
             pline("The leash won't fit onto %s%s.", spotmon ? "your " : "",
                   lmonnam);
         } else {
-            You("slip the leash around %s%s.", spotmon ? "your " : "",
-                l_monnam(mtmp));
+            You("slip the leash around %s.",
+                spotmon ? y_monnam(mtmp) : l_monnam(mtmp));
             mtmp->mleashed = 1;
             obj->leashmon = (int) mtmp->m_id;
             mtmp->msleeping = 0;
@@ -870,8 +870,8 @@ use_leash_core(struct obj *obj, struct monst *mtmp, coord *cc, int spotmon)
             mtmp->mleashed = 0;
             obj->leashmon = 0;
             update_inventory();
-            You("remove the leash from %s%s.",
-                spotmon ? "your " : "", l_monnam(mtmp));
+            You("remove the leash from %s.",
+                spotmon ? y_monnam(mtmp) : l_monnam(mtmp));
         }
     }
 }

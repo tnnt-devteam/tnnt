@@ -1927,7 +1927,7 @@ do_look(int mode, coord *click_cc)
         if (found) {
             /* use putmixed() because there may be an encoded glyph present */
             putmixed(WIN_MESSAGE, 0, out_str);
-#ifdef DUMPLOG_CORE
+#if defined(DUMPLOG) || defined (DUMPHTML) || defined(DUMPLOG_CORE)
             {
                 char dmpbuf[BUFSZ];
 

@@ -197,7 +197,6 @@ struct sf_structlevel_procs historical_sfo_procs = {
         historical_sfo_version_info,
         historical_sfo_you,
         historical_sfo_any,
-
         historical_sfo_aligntyp,
         historical_sfo_boolean,
         historical_sfo_coordxy,
@@ -222,6 +221,10 @@ struct sf_structlevel_procs historical_sfo_procs = {
         historical_sfo_xint8,
         historical_sfo_char,
         historical_sfo_bitfield,
+#ifdef DEMO_UPLIFTS
+        historical_sfo_mystruct,
+        historical_sfo_mystruct_rev0,
+#endif
     }
 };
 
@@ -301,6 +304,10 @@ struct sf_structlevel_procs historical_sfi_procs = {
         historical_sfi_xint8,
         historical_sfi_char,
         historical_sfi_bitfield,
+#ifdef DEMO_UPLIFTS
+        historical_sfi_mystruct,
+        historical_sfi_mystruct_rev0,
+#endif
     }
 };
 

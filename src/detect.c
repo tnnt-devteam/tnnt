@@ -2309,7 +2309,7 @@ reveal_terrain_getglyph(
 
 #undef glyph_is_gascloud
 
-#ifdef DUMPLOG
+#if defined(DUMPLOG) || defined(DUMPHTML)
 void
 dump_map(void)
 {
@@ -2371,7 +2371,7 @@ dump_map(void)
     if (skippedrows)
         putstr(NHW_DUMPTXT, 0, "");
 }
-#endif /* DUMPLOG */
+#endif /* DUMPLOG || DUMPHTML */
 
 /* idea from crawl; show known portion of map without any monsters,
    objects, or traps occluding the view of the underlying terrain;

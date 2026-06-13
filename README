@@ -88,8 +88,8 @@ Please read items (1), (2) and (3) BEFORE doing anything with your new code.
         Intel Pentium or better running Windows 10 or 11
             [compiles, runs]
         Intel-based, or Apple M1, M2, M3, M4, M5 Macs running
+            macOS 10.11 (El Capitan) to macOS 26 (Tahoe)
             [compiles, runs]
-            macOS 10.11 (El Capitan) to macOS 26 (Tahoe) [compile, run]
             (follow the instructions in sys/unix/NewInstall.unx)
         Intel 80386 or greater running MS-DOS with DPMI
             [cross-compiles on Linux, runs on MS-DOS, emulator/dosbox]
@@ -142,13 +142,13 @@ If a feature is not accepted you are free, of course, to post the patches
 to the net yourself and let the marketplace decide their worth.
 
 All of this amounts to the following:  If you decide to apply a free-lanced
-patch to your 3.6 code, you are welcome to do so, of course, but we won't
-be able to provide support or receive bug reports for it.
+patch to your NetHack 5.0 code, you are welcome to do so, of course, but we
+won't be able to provide support or receive bug reports for it.
 
 In our own patches, we will assume that your code is synchronized with ours.
 
                   -- Good luck, and happy Hacking --
 
-# $NHDT-Date: 1652133501 2022/05/09 21:58:21 $ $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.97 $
+# $NHDT-Date: 1779926755 2026/05/28 00:05:55 $ $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.113 $
 # Copyright (c) 2012 by Michael Allison
 # NetHack may be freely redistributed.  See license for details.

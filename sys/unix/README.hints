@@ -5,7 +5,7 @@ The sys/unix/hints/include subfolder contains Makefile content that
 is included in the distributed Makefiles.
 
 
-[.370 hints]
+[.500 hints]
 
 
 There are two .500 series hints files provided with NetHack:
@@ -16,7 +16,7 @@ Those will also pull in content from sys/unix/hints/include/*.370,
 that is shared between the linux.500 and macOS.500 hints files.
 
 
-[.370 make build options]
+[.500 make build options]
 
 
 Here are some options that can be specified on the make command
@@ -49,6 +49,8 @@ make musl=1                   Build with settings appropriate for linking with
                               musl libc, instead of glibc. This causes
                               NOCRASHREPORT to be defined, and avoids the use
                               of 'col' during the build.
+make WANT_SYSTEM_LUA=1        Attempt to use an existing Lua package already
+                              on the system (initially for Alpine Linux).
 make resp=1                   Place the majority of the compiler switches into
                               a response file to de-clutter the build compiler
                               command lines and eliminate some of the
@@ -71,13 +73,15 @@ make WANT_ASAN=1              Include support for the address sanitizer in the
 make WANT_UBSAN=1             Include support for the undefined behaviour
                               sanitizer in the build.
 
-make WANT_SHARE_INSTALL=1     Place the results of the install/update portion
+make WANT_SHARED_INSTALL=1    Place the results of the install/update portion
                               of the build into a shared area on a multiuser
                               system.
 
 make WANT_SOURCE_INSTALL=1    Place the results of the install/update portion
                               of the build into a subfolder of the source
                               tree, rather than in a system-wide shared area.
+                              (This is now the default if WANT_SHARED_INSTALL=1
+                              wasn't specified)  
 
 make WANT_NHUUID=1            Include support for a unique game identifier.
                               On Linux, libuuid and its headers must be installed

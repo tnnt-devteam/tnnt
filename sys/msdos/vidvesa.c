@@ -691,9 +691,16 @@ vesa_xputg(const glyph_info *glyphinfo, const glyph_info *bkglyphinfo UNUSED)
     }
 #endif
     if (vesa_pixel_size > 8 && glyphinfo->gm.customcolor != 0) {
-        /* FIXME: won't display black (0,0,0) correctly, but the background
-           is usually black anyway */
-        attr = glyphinfo->gm.customcolor | 0x80000000;
+        attr = glyphinfo->gm.customcolor;
+        if (attr & NH_BASIC_COLOR) {
+            attr &= 0x0F;
+        } else {
+            struct Pixel p;
+            p.r = (unsigned char)(attr >> 16);
+            p.g = (unsigned char)(attr >>  8);
+            p.b = (unsigned char)(attr >>  0);
+            attr = vesa_MakeColor(p) | 0x80000000;
+        }
     }
 
     row = currow;
@@ -1121,17 +1128,6 @@ vesa_Init(void)
     clipy = 0;
     clipymax = clipy + (viewport_rows - 1);
 
-    /* Set the size of the tiles for the overview mode */
-    vesa_oview_width = vesa_x_res / COLNO;
-    if (vesa_oview_width > (unsigned) iflags.wc_tile_width) {
-        vesa_oview_width = (unsigned) iflags.wc_tile_width;
-    }
-    vesa_oview_height = (vesa_y_res - (TOP_MAP_ROW + 4) * vesa_char_height)
-                      / ROWNO;
-    if (vesa_oview_height > (unsigned) iflags.wc_tile_height) {
-        vesa_oview_height = (unsigned) iflags.wc_tile_height;
-    }
-
     /* Load a font of size appropriate to the screen size */
     if (vesa_x_res >= 1280 && vesa_y_res >= 960)
         font_name = "ter-u32b.psf";
@@ -1173,6 +1169,19 @@ vesa_Init(void)
             vesa_char_height = 64;
         }
         vesa_char_width = vesa_char_height / 2;
+    }
+
+    vesa_SetViewPort();
+
+    /* Set the size of the tiles for the overview mode */
+    vesa_oview_width = vesa_x_res / COLNO;
+    if (vesa_oview_width > (unsigned) iflags.wc_tile_width) {
+        vesa_oview_width = (unsigned) iflags.wc_tile_width;
+    }
+    vesa_oview_height = (vesa_y_res - (TOP_MAP_ROW + 5) * vesa_char_height)
+                      / ROWNO;
+    if (vesa_oview_height > (unsigned) iflags.wc_tile_height) {
+        vesa_oview_height = (unsigned) iflags.wc_tile_height;
     }
 
     /* Process tiles for the current video mode */

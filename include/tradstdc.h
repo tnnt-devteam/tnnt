@@ -509,7 +509,6 @@ typedef genericptr genericptr_t; /* (void *) or (char *) */
 #if !defined(UNUSED) && defined(ATTRUNUSED)
 #define UNUSED ATTRUNUSED
 #endif
-#endif
 
 /* Fallback implementations */
 #ifndef PRINTF_F

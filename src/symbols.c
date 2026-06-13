@@ -340,12 +340,21 @@ clear_symsetentry(int which_set, boolean name_too)
     }
 #ifdef ENHANCED_SYMBOLS
     /* if 'which_set' was using UTF8, it isn't anymore; if the other set
-       isn't using UTF8, discard the data for that */
-    if (old_handling == H_UTF8 && gs.symset[other_set].handling != H_UTF8)
+       isn't using UTF8, discard the data for that.  But keep the player's
+       UTF8 map glyphs when writing a dumplog, so the HTML map can show the
+       symbols the player saw (see the dumplog note below and
+       dump_everything() in end.c) */
+    if (old_handling == H_UTF8 && gs.symset[other_set].handling != H_UTF8
+        && !iflags.in_dumplog)
         free_all_glyphmap_u();
 #endif
     purge_custom_entries(which_set);
-    clear_all_glyphmap_colors();
+    /* keep the player's custom map colors when writing a dumplog: the
+       end-of-game dump reverts to the default symbol set via
+       init_symbols(), but the HTML map should still show the colors
+       the player saw (see dump_everything() in end.c) */
+    if (!iflags.in_dumplog)
+        clear_all_glyphmap_colors();
 }
 
 /* called from windmain.c */
@@ -1069,12 +1078,12 @@ do_symset(boolean rogueflag)
     if (gs.symset[which_set].name) {
         /* non-default symbols */
         int ok;
-        if (!glyphid_cache_status()) {
-            fill_glyphid_cache();
+        if (!glyphname_hash_indices_loaded()) {
+            populate_glyphname_hash_indices();
         }
         ok = read_sym_file(which_set);
-        if (glyphid_cache_status()) {
-            free_glyphid_cache();
+        if (glyphname_hash_indices_loaded()) {
+            empty_glyphname_hash_indices();
         }
         if (ok) {
             ready_to_switch = TRUE;

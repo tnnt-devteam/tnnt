@@ -1591,7 +1591,7 @@ static const char *const currencies[] = {
     "cirbozoid",             /* Starslip */
     "credit chit",           /* Deus Ex */
     "cubit",                 /* Battlestar Galactica */
-    "Flanian Pobble Bead",   /* The Hitchhiker's Guide to the Galaxy */
+    "Flainian Pobble Bead",  /* The Hitchhiker's Guide to the Galaxy */
     "fretzer",               /* Jules Verne */
     "imperial credit",       /* Star Wars */
     "Hong Kong Luna Dollar", /* The Moon is a Harsh Mistress */
@@ -2605,7 +2605,6 @@ askchain(
     return cnt;
 }
 
-
 /* The menu for rerolling attributes and inventory.
 
    This is similar to the other inventory menus, but simpler to help it fit on
@@ -2622,7 +2621,7 @@ reroll_menu(void)
     struct obj *otmp;
     int tmpglyph;
     glyph_info tmpglyphinfo;
-    char option;
+    char option = 'n';
     char buf[BUFSZ];
 
     win = create_nhwindow(NHW_MENU);
@@ -2634,9 +2633,9 @@ reroll_menu(void)
              ATR_NONE, NO_COLOR, "start the game with this character",
              MENU_ITEMFLAGS_NONE);
     any.a_char = 'y';
+    Strcpy(buf, "reroll another character");
     add_menu(win, &nul_glyphinfo, &any, flags.lootabc ? 0 : 'r', 0,
-             ATR_NONE, NO_COLOR, "reroll another character",
-             MENU_ITEMFLAGS_NONE);
+             ATR_NONE, NO_COLOR, buf, MENU_ITEMFLAGS_NONE);
     any.a_char = 0;
     add_menu(win, &nul_glyphinfo, &any, 0, 0, ATR_NONE, NO_COLOR, "",
              MENU_ITEMFLAGS_NONE);
@@ -2673,11 +2672,7 @@ reroll_menu(void)
     }
     destroy_nhwindow(win);
 
-    if (option == 'y') {
-        ++u.uroleplay.numrerolls;
-        return TRUE;
-    }
-    return FALSE;
+    return option == 'y';
 }
 
 /*
@@ -3151,7 +3146,7 @@ display_pickinv(
     if (lets && !*lets)
         lets = 0; /* simplify tests: (lets) instead of (lets && *lets) */
 
-#ifdef DUMPLOG
+#if defined(DUMPLOG) || defined(DUMPHTML)
     if (iflags.in_dumplog) {
         win = 0; /* passed to dump_putstr() which ignores it... */
     } else

@@ -198,7 +198,6 @@ struct monst {
     struct obj *mw;        /* mon's weapon */
     long misc_worn_check;  /* mon's wornmask */
     xint16 weapon_check;   /* flag for whether to try switching weapons */
-
     int meating;           /* monster is eating timeout */
     struct mextra *mextra; /* point to mextra struct */
 };

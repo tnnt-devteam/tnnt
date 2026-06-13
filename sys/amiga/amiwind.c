@@ -3,15 +3,9 @@
 /*    Copyright (c) Kenneth Lorber, Bethesda, Maryland 1993,1996  */
 /* NetHack may be freely redistributed.  See license for details. */
 
-#ifndef CROSS_TO_AMIGA
-#include "NH:sys/amiga/windefs.h"
-#include "NH:sys/amiga/winext.h"
-#include "NH:sys/amiga/winproto.h"
-#else
 #include "windefs.h"
 #include "winext.h"
 #include "winproto.h"
-#endif
 
 /* Have to undef CLOSE as display.h and intuition.h both use it */
 #undef CLOSE
@@ -23,9 +17,10 @@ static struct Message *GetFMsg(struct MsgPort *);
 #endif
 
 static int BufferGetchar(void);
-static void ProcessMessage(struct IntuiMessage *message);
+void ProcessMessage(struct IntuiMessage *message);
 
-#define BufferQueueChar(ch) (KbdBuffer[KbdBuffered++] = (ch))
+#define BufferQueueChar(ch) \
+    do { if (KbdBuffered < KBDBUFFER) KbdBuffer[KbdBuffered++] = (ch); } while (0)
 
 struct Device *ConsoleDevice = NULL;
 
@@ -38,11 +33,7 @@ struct Library *GadToolsBase = NULL;
 struct Library *LayersBase = NULL;
 struct Library *AslBase = NULL;
 
-#ifndef CROSS_TO_AMIGA
-#include "NH:sys/amiga/amimenu.c"
-#else
 #include "amimenu.c"
-#endif
 
 /* Now our own variables */
 
@@ -61,7 +52,7 @@ struct Library *DiskfontBase;
 
 #define KBDBUFFER 10
 static unsigned char KbdBuffer[KBDBUFFER];
-unsigned char KbdBuffered;
+int KbdBuffered;
 
 #ifdef HACKFONT
 
@@ -69,15 +60,17 @@ struct TextFont *TextsFont = NULL;
 struct TextFont *HackFont = NULL;
 struct TextFont *RogueFont = NULL;
 
-UBYTE FontName[] = "NetHack:hack.font";
-/* # chars in "NetHack:": */
-#define SIZEOF_DISKNAME 8
+/* hack.font is registered via NetHack:hack.font (which references
+ * NetHack:hack/8).  OpenFont()/SetFont() take the bare name; only
+ * OpenDiskFont() needs the full path. */
+UBYTE HackFontName[] = "hack.font";
+UBYTE HackFontPath[] = "NetHack:hack.font";
 
 #endif
 
 struct TextAttr Hack80 = {
 #ifdef HACKFONT
-    &FontName[SIZEOF_DISKNAME],
+    HackFontName,
 #else
     (UBYTE *) "topaz.font",
 #endif
@@ -328,9 +321,6 @@ ConvertKey(struct IntuiMessage *message)
                 got = 0;
                 break;
             }
-#ifdef OPT_DISPMAP
-            dispmap_sanity();
-#endif
 
             if (got) {
                 CO = (w->Width - w->BorderLeft - w->BorderRight) / mxsize;
@@ -365,7 +355,7 @@ ConvertKey(struct IntuiMessage *message)
  *  ahead of input demands, when the user types ahead.
  */
 
-static void
+void
 ProcessMessage(struct IntuiMessage *message)
 {
     int c;
@@ -620,17 +610,16 @@ amii_cleanup(void)
         Forbid();
         while (msg = (struct IntuiMessage *) GetMsg(HackPort))
             ReplyMsg((struct Message *) msg);
+        Permit();
         kill_nhwindows(1);
         DeleteMsgPort(HackPort);
         HackPort = NULL;
-        Permit();
     }
 
     /* Close the screen, under v37 or greater it is a pub screen and there may
      * be visitors, so check close status and wait till everyone is gone.
      */
     if (HackScreen) {
-#ifdef INTUI_NEW_LOOK
         if (IntuitionBase->LibNode.lib_Version >= 37) {
             if (MenuStrip)
                 FreeMenus(MenuStrip);
@@ -643,9 +632,7 @@ amii_cleanup(void)
                 };
                 EasyRequest(NULL, &easy, NULL, NULL);
             }
-        } else
-#endif
-        {
+        } else {
             CloseScreen(HackScreen);
         }
         HackScreen = NULL;
@@ -693,13 +680,6 @@ amii_cleanup(void)
         IntuitionBase = NULL;
     }
 
-#ifdef SHAREDLIB
-    if (DOSBase) {
-        CloseLibrary((struct Library *) DOSBase);
-        DOSBase = NULL;
-    }
-#endif
-
     ((struct Process *) FindTask(NULL))->pr_WindowPtr = (APTR) pr_WindowPtr;
 
     Initialized = 0;
@@ -707,11 +687,9 @@ amii_cleanup(void)
 
 #endif /* AMII_GRAPHICS */
 
-#ifndef SHAREDLIB
 void
 Abort(long rc)
 {
-    int fault = 1;
 #ifdef CHDIR
     extern char orgdir[];
     chdir(orgdir);
@@ -724,38 +702,11 @@ Abort(long rc)
     } else
 #endif
         printf("\n\nAbort with alert code %08lx...\n", rc);
-/* Alert(rc);              this is too severe */
-#ifdef __SASC
-#ifdef INTUI_NEW_LOOK
-    if (IntuitionBase->LibNode.lib_Version >= 37) {
-        struct EasyStruct es = {
-            sizeof(struct EasyStruct), 0, "NetHack Panic Request",
-            "NetHack is Aborting with code == 0x%08lx",
-            "Continue Abort|Return to Program|Clean up and exit",
-        };
-        fault = EasyRequest(NULL, &es, NULL, (long) rc);
-        if (fault == 2)
-            return;
-    }
-#endif
-    if (fault == 1) {
-        /*  __emit(0x4afc); */ /* illegal instruction */
-        __emit(0x40fc);        /* divide by */
-        __emit(0x0000);        /*  #0  */
-        /* NOTE: don't move amii_cleanup() above here - */
-        /* it is too likely to kill the system     */
-        /* before it can get the SnapShot out, if  */
-        /* there is something really wrong.    */
-    }
-#endif
 #ifdef AMII_GRAPHICS
     if (windowprocs.win_init_nhwindows == amii_procs.win_init_nhwindows)
         amii_cleanup();
 #endif
 #undef exit
-#ifdef AZTEC_C
-    _abort();
-#endif
     exit((int) rc);
 }
 
@@ -764,7 +715,6 @@ CleanUp(void)
 {
     amii_cleanup();
 }
-#endif
 
 #ifdef AMII_GRAPHICS
 
@@ -880,7 +830,6 @@ amii_number_pad(int state)
 }
 #endif /* AMII_GRAPHICS */
 
-#ifndef SHAREDLIB
 void
 amiv_loadlib(void)
 {
@@ -910,4 +859,3 @@ VA_DECL(const char *, s)
     VA_END();
     Abort(0L);
 }
-#endif

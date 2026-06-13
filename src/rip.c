@@ -9,8 +9,8 @@
    necessarily have to be used by a binary with multiple window-ports */
 
 #if defined(TTY_GRAPHICS) || defined(X11_GRAPHICS) || defined(GEM_GRAPHICS) \
-    || defined(DUMPLOG) || defined(CURSES_GRAPHICS) || defined(SHIM_GRAPHICS) \
-    || defined(AMII_GRAPHICS)
+    || defined(DUMPLOG) || defined(DUMPHTML) || defined(CURSES_GRAPHICS) \
+    || defined(SHIM_GRAPHICS) || defined(AMII_GRAPHICS)
 #define TEXT_TOMBSTONE
 #endif
 #if defined(mac) || defined(__BEOS__)

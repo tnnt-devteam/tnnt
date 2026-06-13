@@ -1193,6 +1193,13 @@ mswin_select_map_mode(int mode)
     data =
         (PNHMainWindow) GetWindowLongPtr(GetNHApp()->hMainWnd, GWLP_USERDATA);
 
+    if (!data) {
+#if (NH_DEVEL_STATUS != NH_STATUS_RELEASED && NH_DEVEL_STATUS != NH_STATUS_POSTRELEASE)
+        impossible("data is null in %s:%d", __func__, __LINE__);
+#endif
+        return;
+    }
+
     /* override for Rogue level */
     if (Is_rogue_level(&u.uz) && !IS_MAP_ASCII(mode))
         return;
@@ -1353,6 +1360,19 @@ nh_compose_ascii_screenshot(void)
     }
     return retval;
 }
+
+int
+get_approx_display_cols(void)
+{
+    return GetSystemMetrics(SM_CXSCREEN) / 8;
+}
+
+int
+get_approx_display_rows(void)
+{
+    return GetSystemMetrics(SM_CYSCREEN) / 12;
+}
+
 
 #ifdef ENHANCED_SYMBOLS
 // returns malloc() created pointer - callee assumes the ownership

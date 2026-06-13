@@ -137,7 +137,7 @@ static int optfn_##a(int, int, boolean, char *, char *);
                 "your starting alignment (lawful, neutral, or chaotic)")
     /* end of special ordering; remainder of entries are in alphabetical order
      */
-    NHOPTB(accessiblemsg, Advanced, 0, opt_out, set_in_game,
+    NHOPTB(accessiblemsg, Advanced, 0, opt_in, set_in_game,
            Off, Yes, No, No, NoAlias, &a11y.accessiblemsg, Term_False,
            "add location information to messages")
     NHOPTB(acoustics, Advanced, 0, opt_out, set_in_game,
@@ -159,6 +159,10 @@ static int optfn_##a(int, int, boolean, char *, char *);
     NHOPTB(altmeta, Advanced, 0, opt_out, set_in_game,
            Off, Yes, No, No, NoAlias, &iflags.altmeta, Term_False,
            "treat \"ESC c\" as M-c (Meta+c, 8th bit set)")
+#elif defined(AMIGA_INTUITION)
+    NHOPTB(altmeta, Advanced, 0, opt_out, set_in_game,
+           On, Yes, No, No, NoAlias, &sysflags.altmeta, Term_False,
+           "treat ALT+c as M-c (Meta+c, 8th bit set)")
 #else
     NHOPTB(altmeta, Advanced, 0, opt_out, set_in_config,
            Off, Yes, No, No, NoAlias, (boolean *) 0, Term_False,
@@ -167,7 +171,9 @@ static int optfn_##a(int, int, boolean, char *, char *);
     NHOPTB(armorstatus, Advanced, 0, opt_in, set_in_game,
                 Off, Yes, No, No, NoAlias, &flags.armorstatus, Term_False,
                 "summarize currently worn armor in a status field")
-    NHOPTB(ascii_map, Advanced, 0, opt_in, set_in_game,
+    /* this one needs unique handling because different window ports
+       expect different defaults */
+    NHOPTB(ascii_map, Advanced, 0, ascii_map_Def, set_in_game,
                 ascii_map_Def, Yes, No, No, NoAlias, &iflags.wc_ascii_map,
                 Term_False, "show map as text")
     NHOPTO("autocompletions", Advanced, o_autocomplete, BUFSZ, opt_in,
@@ -181,7 +187,7 @@ static int optfn_##a(int, int, boolean, char *, char *);
     NHOPTB(autoopen, Behavior, 0, opt_out, set_in_game,
            On, Yes, No, No, NoAlias, &flags.autoopen, Term_False,
            "walking into a door attempts to open it")
-    NHOPTB(autopickup, Behavior, 0, opt_out, set_in_game,
+    NHOPTB(autopickup, Behavior, 0, opt_in, set_in_game,
            Off, Yes, No, No, NoAlias, &flags.pickup, Term_False,
            "automatically pick up objects")
     NHOPTO("autopickup exceptions", Behavior, o_autopickup_exceptions, BUFSZ,
@@ -222,18 +228,18 @@ static int optfn_##a(int, int, boolean, char *, char *);
                 No, Yes, No, No, NoAlias,
                 "name of your starting pet if it is a kitten")
 #ifdef INSURANCE
-    NHOPTB(checkpoint, Advanced, 0, opt_out, set_in_game,
+    NHOPTB(checkpoint, Advanced, 0, opt_out, set_in_sysconf,
            On, Yes, No, No, NoAlias, &flags.ins_chkpt, Term_False,
            "save game state after each level change")
 #else
-    NHOPTB(checkpoint, Advanced, 0, opt_out, set_in_config,
+    NHOPTB(checkpoint, Advanced, 0, opt_out, set_in_sysconf,
            Off, No, No, No, NoAlias, (boolean *) 0, Term_False,
            (char *)0)
 #endif
     NHOPTB(cmdassist, Behavior, 0, opt_out, set_in_game,
            On, Yes, No, No, NoAlias, &iflags.cmdassist, Term_False,
            "give help for errors on direction input")
-    NHOPTB(color, Map, 0, opt_in, set_in_game,
+    NHOPTB(color, Map, 0, opt_out, set_in_game,
            On, Yes, No, No, "colour", &iflags.wc_color, Term_False,
            "use color in map")
     NHOPTB(confirm, Advanced, 0, opt_out, set_in_game,
@@ -360,7 +366,7 @@ static int optfn_##a(int, int, boolean, char *, char *);
     NHOPTB(herecmd_menu, Advanced, 0, opt_in, set_in_game,
            Off, Yes, No, No, NoAlias, &iflags.herecmd_menu, Term_False,
            "show commands available in this location")
-#if defined(MACOS9)
+#if defined(MAC68K)
     NHOPTC(hicolor, Advanced, 15, opt_in, set_in_config,
                 No, Yes, No, No, NoAlias,
                 "same as palette, only order is reversed")
@@ -393,7 +399,7 @@ static int optfn_##a(int, int, boolean, char *, char *);
     NHOPTB(idlecheckpoint, Advanced, 0, opt_in, set_in_game,
            Off, Yes, No, No, NoAlias, &iflags.idlecheckpoint, Term_Off,
            "update checkpoint file if input is idle for 10 seconds")
-#ifndef MACOS9
+#ifndef MAC68K
     NHOPTB(ignintr, Advanced, 0, opt_in, set_in_game,
            Off, Yes, No, No, NoAlias, &flags.ignintr, Term_False,
            "ignore interrupt signals")
@@ -455,7 +461,7 @@ static int optfn_##a(int, int, boolean, char *, char *);
            Yes, Yes, No, Yes, "use_menu_glyphs",
            "show object symbols in menus")
 #ifdef TTY_GRAPHICS
-    NHOPTB(menu_overlay, Advanced, 0, opt_in, set_in_game,
+    NHOPTB(menu_overlay, Advanced, 0, opt_out, set_in_game,
            On, Yes, No, No, NoAlias, &iflags.menu_overlay, Term_False,
            "menus overlay and align to right")
 #else
@@ -545,7 +551,7 @@ static int optfn_##a(int, int, boolean, char *, char *);
                 No, Yes, No, No, NoAlias,
                 "the inventory order of the items in your pack")
 #ifdef CHANGE_COLOR
-#ifndef MACOS9     /* not old Mac OS9 */
+#ifndef MAC68K     /* not old Mac OS9 */
     NHOPTC(palette, Advanced, 15, opt_in, set_gameview,
                 No, Yes, Yes, No, "hicolor",
                 "palette (adjust an RGB color in palette (color/R-G-B)")
@@ -775,7 +781,7 @@ static int optfn_##a(int, int, boolean, char *, char *);
            "display game turns in status line")
 #ifdef TIMED_DELAY
     NHOPTB(timed_delay, Map, 0, opt_out, set_in_game,
-           Off, Yes, No, No, NoAlias, &flags.nap, Term_False,
+           On, Yes, No, No, NoAlias, &flags.nap, Term_False,
            "use delay when pausing for display effects")
 #else
     NHOPTB(timed_delay, Map, 0, opt_in, set_in_config,
@@ -801,11 +807,11 @@ static int optfn_##a(int, int, boolean, char *, char *);
            On, Yes, No, No, NoAlias, &flags.travelcmd, Term_False,
            "enable traveling via mouse click")
 #ifdef DEBUG
-    NHOPTB(travel_debug, Advanced, 0, opt_out, set_wizonly,
+    NHOPTB(travel_debug, Advanced, 0, opt_in, set_wizonly,
            Off, Yes, No, No, NoAlias, &iflags.trav_debug, Term_False,
            (char *)0)
 #else
-    NHOPTB(travel_debug, Advanced, 0, opt_out, set_wizonly,
+    NHOPTB(travel_debug, Advanced, 0, opt_in, set_wizonly,
            Off, No, No, No, NoAlias, (boolean *) 0, Term_False,
            (char *)0)
 #endif

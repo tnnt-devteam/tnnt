@@ -58,6 +58,7 @@ enum any_types {
     ANY_STR,         /* pointer to null-terminated char string */
     ANY_NFUNC,       /* pointer to function taking no args, returning int */
     ANY_MASK32,      /* 32-bit mask (stored as unsigned long) */
+    ANY_INT16,      /* xint16 / coordxy (16-bit signed) */
 
     ANY_INVALID      /* leave this last */
 };
@@ -121,13 +122,12 @@ typedef struct glyphinfo {
 #define NHW_MAP 3
 #define NHW_MENU 4
 #define NHW_TEXT 5
-#define NHW_PERMINVENT 6
 #if defined(DUMPLOG) || defined(DUMPHTML)
 /* There's no windump.h, so these go here for now */
-#define NHW_DUMPTXT 7
-#define NHW_DUMPHTML 8
-#define NHW_LAST_TYPE NHW_DUMPHTML
-#else
+#define NHW_DUMPTXT 6
+#define NHW_DUMPHTML 7
+#endif
+#define NHW_PERMINVENT 8
 #define NHW_LAST_TYPE NHW_PERMINVENT
 #endif /* DUMPLOG || DUMPHTML */
 

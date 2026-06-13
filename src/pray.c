@@ -2454,6 +2454,7 @@ doturn(void)
            move if this is the first time agnostic conduct has been broken */
         return (u.uconduct.gnostic == 1) ? ECMD_TIME : ECMD_OK;
     }
+
     if ((u.ualign.type != A_CHAOTIC
          && (is_demon(gy.youmonst.data)
              || is_undead(gy.youmonst.data) || is_vampshifter(&gy.youmonst)))
