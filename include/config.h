@@ -670,12 +670,6 @@ typedef unsigned char uchar;
    but it isn't necessary for successful operation of the program */
 #define FREE_ALL_MEMORY             /* free all memory at exit */
 
-/* EXTRA_SANITY_CHECKS adds extra impossible calls,
- * probably not useful for normal play */
-#if (NH_DEVEL_STATUS != NH_STATUS_RELEASED)
-#define EXTRA_SANITY_CHECKS
-#endif
-
 /* BREADCRUMBS employs the use of predefined compiler macros
  * __FUNCTION__ and __LINE__ to store some caller breadcrumbs
  * for use during heavy debugging sessions. Only define if your
