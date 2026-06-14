@@ -42,6 +42,8 @@
 #include "vision.h"
 #include "you.h"
 
+#include "tnnt.h" /* TNNT - tnnt_globals_t, constants, achievement list */
+
 #define TELL 1
 #define NOTELL 0
 #define ON 1
