@@ -64,10 +64,6 @@ struct found_things {
    input but it's no longer used for that function */
 #define ALL_CLASSES (MAXOCLASSES + 1)
 
-#ifdef DUMPHTML
-extern void FDECL(html_dump_glyph, (int, int, int, int, int, unsigned));
-#endif
-
 /* bring hero out from underwater or underground or being engulfed;
    return True iff any change occurred */
 staticfn boolean

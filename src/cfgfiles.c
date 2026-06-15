@@ -127,7 +127,6 @@ static boolean ignore_errors_on_unmatched = FALSE,
 #endif /* SFCTOOL */
 
 /* TNNT config/sysconf functions: */
-staticfn boolean cnf_line_DUMPHTMLFILE(char *);
 staticfn boolean cnf_line_TNNTDEVS(char *);
 
 /* ----------  BEGIN CONFIG FILE HANDLING ----------- */
@@ -889,6 +888,8 @@ cnf_line_DUMPHTMLFILE(char *bufp)
     if (sysopt.dumphtmlfile)
         free((genericptr_t) sysopt.dumphtmlfile);
     sysopt.dumphtmlfile = dupstr(bufp);
+#else
+    nhUse(bufp);
 #endif /*DUMPHTML*/
     return TRUE;
 }
@@ -1344,19 +1345,6 @@ cnf_line_TNNTDEVS(char *bufp)
     if (sysopt.tnnt_devs)
         free((genericptr_t) sysopt.tnnt_devs);
     sysopt.tnnt_devs = dupstr(bufp);
-    return TRUE;
-}
-
-staticfn boolean
-cnf_line_DUMPHTMLFILE(char *bufp)
-{
-#ifdef DUMPHTML
-    if (sysopt.dumphtmlfile)
-        free((genericptr_t) sysopt.dumphtmlfile);
-    sysopt.dumphtmlfile = dupstr(bufp);
-#else
-    nhUse(bufp);
-#endif /*DUMPLOG*/
     return TRUE;
 }
 

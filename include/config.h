@@ -32,7 +32,7 @@ try this define, used in pager.c and termcap.c */
 /* define only if using cc v2.0 on a DECstation */
 /* #define ULTRIX_PROTO */
 /* define for Ultrix 4.0 (or higher) on a DECstation;
-* if you get compiler errors, don't define this. */
+ * if you get compiler errors, don't define this. */
 /* Hint: if you're not developing code, don't define
 ULTRIX_PROTO. */
 
@@ -694,6 +694,7 @@ typedef unsigned char uchar;
 #define EXTRAINFO_FN    "/dgldir/extrainfo-nh500/%n.extrainfo"
 #define MAILCKFREQ 5    /* SIMPLE_MAIL is in unixconf.h */
 #define WHEREIS_FILE    "whereis/%n.whereis" /* Write out player's current location to player.whereis */
+#endif /* DGAMELAUNCH */
 
 #ifndef NO_CHRONICLE
 /* CHRONICLE - enable #chronicle command, a log of major game events.
@@ -706,16 +707,6 @@ typedef unsigned char uchar;
 #else
 #undef LIVELOG
 #endif /* NO_CHRONICLE */
-#endif /* DGAMELAUNCH */
-
-/* Extra enhancements borrowed from nao343 and elsewhere
-   for dgamelaunch-based server play */
-/* #define DGAMELAUNCH */
-#ifdef DGAMELAUNCH
-#define EXTRAINFO_FN    "/dgldir/extrainfo-tnnt/%n.extrainfo"
-#define MAILCKFREQ 5    /* SIMPLE_MAIL is in unixconf.h */
-#define WHEREIS_FILE    "whereis/%n.whereis" /* Write out player's current location to player.whereis */
-#endif /* DGAMELAUNCH */
 
 /* #define DUMPLOG */  /* End-of-game dump logs */
 /* #define DUMPHTML */ /* End-of-game HTML dumps */

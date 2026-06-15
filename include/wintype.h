@@ -126,7 +126,6 @@ typedef struct glyphinfo {
 /* There's no windump.h, so these go here for now */
 #define NHW_DUMPTXT 6
 #define NHW_DUMPHTML 7
-#endif
 #define NHW_PERMINVENT 8
 #define NHW_LAST_TYPE NHW_PERMINVENT
 #endif /* DUMPLOG || DUMPHTML */
