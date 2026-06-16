@@ -887,6 +887,7 @@ make_corpse(struct monst *mtmp, unsigned int corpseflags)
     case PM_PAGE: case PM_ABBOT: case PM_ACOLYTE: case PM_HUNTER:
     case PM_THUG: case PM_NINJA: case PM_ROSHI: case PM_GUIDE:
     case PM_WARRIOR: case PM_APPRENTICE:
+    case PM_DEVTEAM_MEMBER: /* TNNT */
 #else
     default:
 #endif
@@ -1267,7 +1268,7 @@ movemon_singlemon(struct monst *mtmp)
         tnnt_globals.dlords_on_level |= (1 << (monsndx(mtmp->data)
                                                - FIRST_DLORD));
         /* 8 demons, so checking for 8 bits lit up */
-        if (dlords_on_level == 0xFF)
+        if (tnnt_globals.dlords_on_level == 0xFF)
             tnnt_achieve(A_FACED_ALL_DEMON_LORDS_AT_ONCE);
     }
 
@@ -3151,7 +3152,7 @@ logdeadmon(struct monst *mtmp, int mndx)
         struct monst * mtmp2;
         boolean didit = TRUE;
         for (mtmp2 = fmon; mtmp2; mtmp2 = mtmp2->nmon) {
-            if (DEADMONSTER(mtmp2) || mtmp2 == &youmonst)
+            if (DEADMONSTER(mtmp2) || mtmp2 == &gy.youmonst)
                 continue;
             if ((bigrm && !mtmp2->mpeaceful)
                 || (orctown && mtmp2->data->mlet == S_ORC)) {
@@ -3250,7 +3251,7 @@ mondead(struct monst *mtmp)
     }
 
     /* TNNT - killing the DevTeam is VERY BAD */
-    if (tmp == PM_DEVTEAM_MEMBER) {
+    if (mndx == PM_DEVTEAM_MEMBER) {
         struct monst *mon;
         com_pager("devteam_endofgame");
         for (mon = fmon; mon; mon = mon->nmon) {
@@ -3261,13 +3262,13 @@ mondead(struct monst *mtmp)
         }
         pline("Fissures open up, and the realm collapses in on itself.");
         You("die...");
-        Strcpy(killer.name, "collapsing dungeon");
-        killer.format = KILLED_BY_AN;
+        Strcpy(svk.killer.name, "collapsing dungeon");
+        svk.killer.format = KILLED_BY_AN;
         done(CRUSHING);
         /* life saving? */
         pline("Unfortunately, you are still buried under tons of rock...");
-        Strcpy(killer.name, "dungeon debris");
-        killer.format = KILLED_BY;
+        Strcpy(svk.killer.name, "dungeon debris");
+        svk.killer.format = KILLED_BY;
         done(CRUSHING);
         /* wizards can refuse to die twice, I guess. */
     }
@@ -3633,6 +3634,7 @@ xkilled(
             nomsg = (xkill_flags & XKILL_NOMSG) != 0,
             nocorpse = (xkill_flags & XKILL_NOCORPSE) != 0,
             noconduct = (xkill_flags & XKILL_NOCONDUCT) != 0;
+    xint16 m_idx;
 
     /* potential pet message; always clear global flag */
     be_sad = iflags.sad_feeling;
@@ -3670,8 +3672,8 @@ xkilled(
     case PM_GHOST:
         tnnt_achieve(A_KILLED_GHOST);
         break;
-    case PM_ALIGNED_PRIEST:
-    case PM_HIGH_PRIEST:
+    case PM_ALIGNED_CLERIC:
+    case PM_HIGH_CLERIC:
         if (mon_aligntyp(mtmp) == A_NONE)
             tnnt_achieve(A_KILLED_MOLOCH_PRIEST);
         break;
@@ -3685,7 +3687,7 @@ xkilled(
         tnnt_achieve(A_KILLED_SOLDIER_ANT);
         break;
     case PM_ERINYS:
-        if (mvitals[PM_ERINYS].ukilled == 3)
+        if (svm.mvitals[PM_ERINYS].ukilled == 3)
             tnnt_achieve(A_KILLED_3_ERINYES);
         break;
     case PM_EARTH_ELEMENTAL:
@@ -6330,9 +6332,8 @@ flash_mon(struct monst *mtmp)
 
 /* the arena opponent has been killed -- track the feat, notify the player,
  * and pile up the transient items from the level for the prize */
-STATIC_OVL void
-tnnt_arena_victory(mtmp)
-struct monst *mtmp;
+staticfn void
+tnnt_arena_victory(struct monst *mtmp)
 {
     struct obj *otmp, *next;
     int transient_invent = 0;
@@ -6343,13 +6344,13 @@ struct monst *mtmp;
     /* since this is used to distinguish between "none", "one", and "multiple"
      * we can break once we reach transient_invent > 1 -- any more increments
      * have no additional effect */
-    for (otmp = invent; otmp && transient_invent < 2; otmp = otmp->nobj) {
+    for (otmp = gi.invent; otmp && transient_invent < 2; otmp = otmp->nobj) {
         if (otmp->transient) {
             transient_invent += otmp->quan;
         }
     }
     /* Gather all of the NPC's possessions in the spot of their death. */
-    if ((otmp = collect_all_transient(m_shot.obj)) != (struct obj *) 0) {
+    if ((otmp = collect_all_transient(gm.m_shot.obj)) != (struct obj *) 0) {
         /* TNNT TODO FOR 3.7: We should probably stick a string in quest.lua
          * for these arena messages, so they can be printed as a single large
          * block of text. */

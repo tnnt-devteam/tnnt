@@ -1183,7 +1183,7 @@ domonnoise(struct monst *mtmp)
                 { "LOUD NOISES!!", 1}
             };
             struct devteam_msg chosenmsg;
-            boolean is_leader = !strcmpi(MNAME(mtmp), "Mike Stephenson");
+            boolean is_leader = !strcmpi(MGIVENNAME(mtmp), "Mike Stephenson");
 
             tnnt_achieve(A_TALKED_TO_DEVTEAM);
             if (u.uhave.amulet && !Deaf
@@ -1214,19 +1214,19 @@ domonnoise(struct monst *mtmp)
                 verbalize("Oh, neat! Show this scroll to Mike Stephenson!");
                 break;
             }
-            if (!strcmpi(MNAME(mtmp), "bhaak")) {
+            if (!strcmpi(MGIVENNAME(mtmp), "bhaak")) {
                 chosenmsg = bhaakmsgs[rn2(SIZE(bhaakmsgs))];
             }
-            else if (!strcmpi(MNAME(mtmp), "paxed")) {
+            else if (!strcmpi(MGIVENNAME(mtmp), "paxed")) {
                 chosenmsg = paxedmsgs[rn2(SIZE(paxedmsgs))];
             }
-            else if (!strcmpi(MNAME(mtmp), "patr")) {
+            else if (!strcmpi(MGIVENNAME(mtmp), "patr")) {
                 chosenmsg = patrmsgs[rn2(SIZE(patrmsgs))];
             }
-            else if (!strcmpi(MNAME(mtmp), "ais523")) {
+            else if (!strcmpi(MGIVENNAME(mtmp), "ais523")) {
                 chosenmsg = aismsgs[rn2(SIZE(aismsgs))];
             }
-            else if (!strcmpi(MNAME(mtmp), "lorimer")) {
+            else if (!strcmpi(MGIVENNAME(mtmp), "lorimer")) {
                 chosenmsg = lorimermsgs[rn2(SIZE(lorimermsgs))];
             }
             else { /* silence "maybe uninitialized" warning */

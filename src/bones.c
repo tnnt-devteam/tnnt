@@ -659,7 +659,7 @@ savebones(int how, time_t when, struct obj *corpse)
        string and isn't recorded in the file */
     Sfo_char(nhfp, &c, "bones_count", 1);
     Sfo_char(nhfp, bonesid, "bonesid", (int) c);       /* DD.nnn */
-    Sfo_uchar(nhfp, &lvariant, "level_variant", 1);
+    Sfo_uchar(nhfp, &lvariant, "level_variant");
     savefruitchn(nhfp);
     update_mlstmv(); /* update monsters for eventual restoration */
     savelev(nhfp, ledger_no(&u.uz));
@@ -750,7 +750,7 @@ getbones(void)
             /* TNNT --> */
             s_level *sptr;
             uchar lvariant;
-            Sfi_uchar(nhfp, &lvariant, "level_variant", 1);
+            Sfi_uchar(nhfp, &lvariant, "level_variant");
 
             if ((sptr = Is_special(&u.uz)) && lvariant) {
                 sptr->which_level = lvariant;

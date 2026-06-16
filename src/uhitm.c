@@ -649,9 +649,6 @@ known_hitum(
             if (mon->data->mlet == S_LIGHT)
                 tnnt_achieve(A_KILLED_LIGHT_MELEE);
         }
-        if (u.uconduct.weaphit && !oldweaphit)
-            livelog_write_string(LL_CONDUCT,
-                    "hit with a wielded weapon for the first time");
     }
     return malive;
 }
@@ -1958,16 +1955,16 @@ hmon_hitmon(
             gm.mkcorpstat_norevive = FALSE;
         }
 
-        if (hmd->artibane)
+        if (hmd.artibane)
             tnnt_achieve(A_USED_CORRECT_BANE);
-        if (mdat == &mons[PM_MEDUSA])
+        if (hmd.mdat == &mons[PM_MEDUSA])
             tnnt_achieve(A_KILLED_MEDUSA_PHYSICALLY);
         /* Weird bug: the vanilla code does not set obj to null after hitting
          * with a potion (which has already been freed). We use potion_hit to
          * track whether that happens (in fear that setting obj to null could
          * result in segfaults because the rest of the hmon_hitmon code may not
          * be prepared for that). */
-        if (hmd->potion_hit)
+        if (hmd.potion_hit)
             tnnt_achieve(A_KILLED_WITH_BOTTLE);
         else {
             if (obj && obj->otyp == RUBBER_HOSE)
@@ -1976,9 +1973,9 @@ hmon_hitmon(
                 tnnt_achieve(A_KILLED_WITH_IRONBALL);
             if (obj && obj->otyp == AKLYS && thrown == HMON_THROWN)
                 tnnt_achieve(A_KILLED_WITH_AKLYS);
-            if (obj && obj->otyp == TRIDENT && mdat->mlet == S_EEL)
+            if (obj && obj->otyp == TRIDENT && hmd.mdat->mlet == S_EEL)
                 tnnt_achieve(A_KILLED_WITH_TRIDENT);
-            if (obj && is_pole(obj) && mdat == &mons[PM_FLOATING_EYE]
+            if (obj && is_pole(obj) && hmd.mdat == &mons[PM_FLOATING_EYE]
                 && thrown == HMON_APPLIED)
                 tnnt_achieve(A_KILLED_EYE_POLEARM);
             if (obj && obj->otyp == TOWEL && obj->spe)

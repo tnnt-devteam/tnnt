@@ -1183,11 +1183,11 @@ level_tele(void)
         schedule_goto(&newlevel, UTOTYPE_NONE, (char *) 0, (char *) 0);
         return;
     }
-    if ((u.uhave.amulet || In_endgame(&u.uz) || In_sokoban(&u.uz))
+    if ((u.uhave.amulet || In_endgame(&u.uz) || In_sokoban(&u.uz)
          /* TNNT: player must exit ongoing deathmatch via portal, since it's
           * infeasible to seal the level otherwise */
          || (Is_deathmatch_level(&u.uz) && tnnt_globals.deathmatch_started
-             && !tnnt_globals.deathmatch_completed)
+             && !tnnt_globals.deathmatch_completed))
         && !wizard) {
         You_feel("very disoriented for a moment.");
         return;
@@ -1545,7 +1545,7 @@ domagicportal(struct trap *ttmp)
             }
             deltrap(ttmp);    /* destroy this portal - maybe unnecessary */
             totype |= UTOTYPE_RMPORTAL; /* destroy corresponding portal */
-            msg = "Loud booing follows you out of the arena...";
+            pline("Loud booing follows you out of the arena...");
             livelog_printf(LL_UMONST, "cravenly fled from %s in a deathmatch",
                            mname);
         }

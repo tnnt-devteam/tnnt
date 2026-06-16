@@ -1019,7 +1019,7 @@ revive(struct obj *corpse, boolean by_hero)
     }
     if (!mtmp)
         return (struct monst *) 0;
-    if (mtmp->data == &mons[PM_WIZARD_OF_YENDOR] && !context.mon_moving)
+    if (mtmp->data == &mons[PM_WIZARD_OF_YENDOR] && !svc.context.mon_moving)
         tnnt_achieve(A_RESURRECTED_WIZARD);
 
     /* hiders shouldn't already be re-hidden when they revive */
@@ -1102,8 +1102,8 @@ revive(struct obj *corpse, boolean by_hero)
             /* was ghost, now alive, it's all very confusing */
             mtmp->mconf = 1;
             /* TNNT - copy over bones monster info to newly revived "hero" */
-            if (has_mname(ghost)) { /* should always be true but for safety */
-                mtmp = christen_monst(mtmp, MNAME(ghost));
+            if (has_mgivenname(ghost)) { /* should always be true but for safety */
+                mtmp = christen_monst(mtmp, MGIVENNAME(ghost));
                 /* don't let player-provided name of corpse override actual
                  * name of ex-hero */
                 use_corpse_name = FALSE;
@@ -4935,7 +4935,7 @@ dobuzz(
             gn.notonhead = (mon->mx != gb.bhitpos.x
                             || mon->my != gb.bhitpos.y);
             if (!forcemiss && zap_hit(find_mac(mon), spell_type)) {
-                if (!context.mon_moving
+                if (!svc.context.mon_moving
                     && tnnt_globals.total_bounces >= 3
                     && dx != 0 && dy != 0 && type >= 0) {
                     /* if it ever becomes possible for a non diagonal ray to
@@ -5146,8 +5146,8 @@ melt_ice(coordxy x, coordxy y, const char *msg)
     }
     if (u_at(x, y))
         spoteffects(TRUE); /* possibly drown, notice objects */
-    } else if (is_pool(x, y) && (mtmp = m_at(x, y)) != 0) {
-        if (minliquid(mtmp) && !context.mon_moving)
+    else if (is_pool(x, y) && (mtmp = m_at(x, y)) != 0) {
+        if (minliquid(mtmp) && !svc.context.mon_moving)
             tnnt_achieve(A_MELTED_ICE_KILL);
     }
 }

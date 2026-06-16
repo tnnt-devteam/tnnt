@@ -3591,7 +3591,7 @@ optfn_realtime(
     if (req == get_val || req == get_cnf_val) {
         for (i = 0; i < SIZE(realtime_type_strings); ++i) {
             if (iflags.show_realtime == realtime_type_strings[i][0]) {
-                Strcpy(buf, realtime_type_strings[i]);
+                Strcpy(opts, realtime_type_strings[i]);
                 return optn_ok;
             }
         }
@@ -3635,7 +3635,7 @@ optfn_realtime_format(
     if (req == get_val || req == get_cnf_val) {
         for (i = 0; i < SIZE(realtime_format_strings); ++i) {
             if (iflags.show_realtime == realtime_format_strings[i][0]) {
-                Strcpy(buf, realtime_format_strings[i]);
+                Strcpy(opts, realtime_format_strings[i]);
                 return optn_ok;
             }
         }
@@ -6249,7 +6249,7 @@ handler_realtime(void)
     }
     end_menu(tmpwin, "Type of time to show on status bar:");
     if (select_menu(tmpwin, PICK_ONE, &mode_pick) > 0) {
-        iflags.realtime = mode_pick->item.a_char;
+        iflags.show_realtime = mode_pick->item.a_char;
         free((genericptr_t) mode_pick);
     }
     destroy_nhwindow(tmpwin);

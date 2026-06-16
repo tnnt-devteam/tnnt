@@ -20,7 +20,6 @@
 #include "hack.h"
 #include "dlb.h"
 #include "integer.h"
-#include "qtext.h"
 
 /* this must be kept the same as in topten.c */
 #define NAMSZ PL_NSIZ
@@ -53,6 +52,7 @@ dotnntdebug(void)
     menu_item *choice = NULL;
     char response;
     anything any;
+    int clr = NO_COLOR;
 #ifdef SYSCF
     if (!wizard
         && (!sysopt.tnnt_devs || !sysopt.tnnt_devs[0]
@@ -63,15 +63,21 @@ dotnntdebug(void)
 #endif
     any.a_char = 's';
     en_win = create_nhwindow(NHW_MENU);
-    start_menu(en_win);
-    add_menu(en_win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-             "show debug stats", MENU_UNSELECTED);
+    start_menu(en_win, MENU_BEHAVE_STANDARD);
+    add_menu(en_win, &nul_glyphinfo, &any, flags.lootabc ? 0 : any.a_char,
+             '\0', ATR_NONE, clr,
+             "show debug stats",
+             MENU_ITEMFLAGS_NONE);
     any.a_char = 'w';
-    add_menu(en_win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-             "write out a test npcdeath file", MENU_UNSELECTED);
+    add_menu(en_win, &nul_glyphinfo, &any, flags.lootabc ? 0 : any.a_char,
+             '\0', ATR_NONE, clr,
+             "write out a test npcdeath file",
+             MENU_ITEMFLAGS_NONE);
     any.a_char = 'c';
-    add_menu(en_win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-             "create an NPC deathmatch monster", MENU_UNSELECTED);
+    add_menu(en_win, &nul_glyphinfo, &any, flags.lootabc ? 0 : any.a_char,
+             '\0', ATR_NONE, clr,
+             "create an NPC deathmatch monster",
+             MENU_ITEMFLAGS_NONE);
     end_menu(en_win, "What would you like to do?");
     if (select_menu(en_win, PICK_ONE, &choice) > 0) {
         response = choice->item.a_char;
@@ -220,7 +226,7 @@ show_tnnt_stats(boolean final)
             tnnt_globals.artis_eaten, plur(tnnt_globals.artis_eaten));
     putstr(en_win, 0, buf);
 
-    if (final || u.uachieve.amulet) {
+    if (final || u.uachieved[ACH_AMUL]) {
         Sprintf(buf, "You %s sent back %d level%s by the mysterious force.",
                 !final ? "have been" : "were",
                 tnnt_globals.mysterious_forced_back,
@@ -338,11 +344,11 @@ show_tnnt_stats(boolean final)
          * right away (some bits set may be from unIDed pots that shouldn't be
          * revealed) so need to count them individually with 'known' */
         int known = 0;
-        for (i = bases[POTION_CLASS]; objects[i].oc_class == POTION_CLASS;
+        for (i = svb.bases[POTION_CLASS]; objects[i].oc_class == POTION_CLASS;
              i++) {
             if (!tnnt_pot_is_harmful(i))
                 continue;
-            if ((tnnt_globals.pots_drunk & (1UL << (i - bases[POTION_CLASS])))
+            if ((tnnt_globals.pots_drunk & (1UL << (i - svb.bases[POTION_CLASS])))
                 && (final || objects[i].oc_name_known)) {
                 Strcat(buf, " ");
                 /* chop the potion name at 5 characters to avoid overly long
@@ -389,7 +395,7 @@ show_tnnt_stats(boolean final)
             i);
     putstr(en_win, 0, buf);
     Sprintf(buf, "You %skilled %d/3 erinyes.", maybe_have(final),
-            mvitals[PM_ERINYS].ukilled);
+            svm.mvitals[PM_ERINYS].ukilled);
     putstr(en_win, 0, buf);
     if (tnnt_globals.non_wish_djinni > 0) {
         Sprintf(buf, "You have summoned %d djinni who did not give you a wish.",
@@ -458,7 +464,7 @@ show_tnnt_stats(boolean final)
     count = total = 0;
     for (i = LOW_PM; i < SPECIAL_PM; ++i) {
         if (tnnt_common_monst(i)) {
-            count += (mvitals[i].ukilled > 0);
+            count += (svm.mvitals[i].ukilled > 0);
             total++;
         }
     }
@@ -513,30 +519,46 @@ show_tnnt_achievements(boolean final)
 {
     menu_item *choice = NULL;
     winid win = create_nhwindow(NHW_MENU);
-    char response, buf[BUFSZ], searchbuf[BUFSZ];
+    /* searchbuf must be smaller than buf because at one point buf is
+     * constructed by printing searchbuf and other text into it; 100 should be
+     * plenty for anyone's search. */
+    char response, buf[BUFSZ], searchbuf[100];
     int i, num_earned = 0, num_prevgame = 0;
+    int clr = NO_COLOR;
 
-    start_menu(win);
+    start_menu(en_win, MENU_BEHAVE_STANDARD);
     if (!final) {
         anything any;
         any.a_char = 'e';
-        add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-                "show achievements earned in this game", MENU_UNSELECTED);
+        add_menu(win, &nul_glyphinfo, &any, flags.lootabc ? 0 : any.a_char,
+                 '\0', ATR_NONE, clr,
+                 "show achievements earned in this game",
+                 MENU_ITEMFLAGS_NONE);
         any.a_char = 'u';
-        add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-                "show achievements not yet earned in this game", MENU_UNSELECTED);
+        add_menu(win, &nul_glyphinfo, &any, flags.lootabc ? 0 : any.a_char,
+                 '\0', ATR_NONE, clr,
+                 "show achievements not yet earned in this game",
+                 MENU_ITEMFLAGS_NONE);
         any.a_char = 'E';
-        add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-                "show achievements earned in this tournament", MENU_UNSELECTED);
+        add_menu(win, &nul_glyphinfo, &any, flags.lootabc ? 0 : any.a_char,
+                 '\0', ATR_NONE, clr,
+                 "show achievements earned in this tournament",
+                 MENU_ITEMFLAGS_NONE);
         any.a_char = 'U';
-        add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-                "show achievements not yet earned in this tournament", MENU_UNSELECTED);
+        add_menu(win, &nul_glyphinfo, &any, flags.lootabc ? 0 : any.a_char,
+                 '\0', ATR_NONE, clr,
+                 "show achievements not yet earned in this tournament",
+                 MENU_ITEMFLAGS_NONE);
         any.a_char = 'a';
-        add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-                "show all achievements, whether earned or not", MENU_UNSELECTED);
+        add_menu(win, &nul_glyphinfo, &any, flags.lootabc ? 0 : any.a_char,
+                 '\0', ATR_NONE, clr,
+                 "show all achievements, whether earned or not",
+                 MENU_ITEMFLAGS_NONE);
         any.a_char = 's';
-        add_menu(win, NO_GLYPH, &any, flags.lootabc ? 0 : any.a_char, '\0', ATR_NONE,
-                "show all achievements matching a search string", MENU_UNSELECTED);
+        add_menu(win, &nul_glyphinfo, &any, flags.lootabc ? 0 : any.a_char,
+                 '\0', ATR_NONE, clr,
+                 "show all achievements matching a search string",
+                 MENU_ITEMFLAGS_NONE);
         end_menu(win, "Which achievements do you want a list of?");
         if (select_menu(win, PICK_ONE, &choice) > 0) {
             response = choice->item.a_char;
@@ -703,8 +725,9 @@ dotnntspecies(void)
 
     for (i = LOW_PM; i < SPECIAL_PM; ++i) {
         if (tnnt_common_monst(i)) {
-            boolean killed = (mvitals[i].ukilled > 0);
-            Sprintf(buf, "[%c] %s", (killed ? 'X' : ' '), mons[i].mname);
+            boolean killed = (svm.mvitals[i].ukilled > 0);
+            Sprintf(buf, "[%c] %s", (killed ? 'X' : ' '),
+                    mons[i].pmnames[NEUTRAL]);
             putstr(en_win, 0, buf);
             numeligible++;
             if (killed) {
@@ -772,7 +795,7 @@ make_swapobj_filename(struct obj *o)
     }
 #endif
     Sprintf(buf, "%s/%sSW-%ld-%s-%x-%x", TNNT_SWAPCHEST_DIR,
-            pfx ? pfx : "", time(NULL), plname, (unsigned) ubirthday,
+            pfx ? pfx : "", time(NULL), svp.plname, (unsigned) ubirthday,
             o->o_id);
     return strdup(buf);
 }
@@ -796,7 +819,7 @@ write_swapobj_file(struct obj *o, xint8 swapnum)
                o->o_id, o->otyp, o->owt, o->quan, o->spe, o->oclass,
                o->cursed, o->blessed, o->oeroded, o->oeroded2, o->oerodeproof,
                o->recharged, o->greased, o->opoisoned, o->usecount,
-               o->corpsenm, swapnum, playmode, plname);
+               o->corpsenm, swapnum, playmode, svp.plname);
     /* the second line is just for humans to read what the object is, for debugging */
     iflags.override_ID = 1;
     fprintf(f, "%s\n", doname(o));
@@ -818,7 +841,7 @@ mkswapobj(struct obj *swapchest, char *filename, short *rcode)
 #define N2STR(n) _N2STR(n)
     char buf[BUFSZ]; /* multi-use */
     char donorname[PL_NSIZ + 1];
-    xint8 swapnum = -1;
+    int swapnum = -1;
     char o_playmode = '-', playmode;
     FILE *f;
     struct obj *o;
@@ -831,11 +854,9 @@ mkswapobj(struct obj *swapchest, char *filename, short *rcode)
 
     /* there is no nice way to do this... */
     o = newobj();
-    *o = zeroobj;
-    o->age = monstermoves;
-    o->o_id = context.ident++;
-    if (!o->o_id)
-        o->o_id = context.ident++; /* overflow */
+    *o = cg.zeroobj;
+    o->age = svm.moves;
+    o->o_id = next_ident();
     o->corpsenm = NON_PM;
     o->known = 1;
     o->dknown = 1;
@@ -912,14 +933,14 @@ mkswapobj(struct obj *swapchest, char *filename, short *rcode)
             const char *pfx = (swapnum >= 0 && swapnum < SWAP_ITEMS_MAX)
                                 ? swprefixes[swapnum] : "a gift from";
 
-            if (!strcmp(donorname, plname) && !wizard && !discover) {
+            if (!strcmp(donorname, svp.plname) && !wizard && !discover) {
                 /* The player doesn't get to see their own items, unless in
                  * wizard or explore mode. */
                 *rcode = MKSWAPOBJ_IGNOREOBJ;
                 goto free_swapobj;
             }
             Sprintf(new_name, "%s %s", pfx, donorname);
-            o = oname(o, new_name);
+            o = oname(o, new_name, ONAME_NO_FLAGS);
         }
     }
     fclose(f);
@@ -1033,7 +1054,7 @@ credit_swapobj_donor(struct obj *otmp)
     const char *donor = swapobj_donor_name(otmp);
     FILE *donorfile;
 
-    if (!donor || !strcmp(donor, plname)) {
+    if (!donor || !strcmp(donor, svp.plname)) {
         return; /* you don't get credit for removing your own items */
     }
     donorfile = fopen(TNNT_DONOR_FILE, "a");
@@ -1251,7 +1272,7 @@ maybe_place_dungeons_swapchest(void)
             /* no vault on this level
              * ensure swap chest doesn't land in a shop */
             do {
-                croom = &rooms[rn2(nroom)];
+                croom = &svr.rooms[rn2(svn.nroom)];
             } while (croom->orig_rtype >= SHOPBASE);
         }
         (void) mksobj_at(SWAP_CHEST, somex(croom), somey(croom), TRUE,
@@ -1281,7 +1302,7 @@ write_npc_data(void)
     char buf[BUFSZ];
     unsigned short mintrinsics;
     struct obj *obj;
-    Sprintf(buf, "%s/NPC-%s", TNNT_NPC_DIR, plname);
+    Sprintf(buf, "%s/NPC-%s", TNNT_NPC_DIR, svp.plname);
     npcfile = fopen(buf, "w");
     if (!npcfile) {
         impossible("Error writing player data to '%s' file", buf);
@@ -1291,11 +1312,9 @@ write_npc_data(void)
     fprintf(npcfile, "%ld\n", program_state.gameover ? urealtime.finish_time
                                                      : time(NULL));
     /* line 2: player name */
-    fprintf(npcfile, "%s\n", plname);
+    fprintf(npcfile, "%s\n", svp.plname);
     /* line 3: player role index and gender */
-    fprintf(npcfile, "%d %d\n", (flags.female && urole.femalenum != NON_PM) ?
-                                    urole.femalenum : urole.malenum,
-                                flags.female);
+    fprintf(npcfile, "%d %d\n", gu.urole.mnum, flags.female);
     /* line 4: player experience level */
     fprintf(npcfile, "%d\n", u.ulevel);
     /* line 5: player hit point maximum */
@@ -1320,7 +1339,7 @@ write_npc_data(void)
     fprintf(npcfile, "0x%x\n", mintrinsics);
     /* lines 7-end: carried objects, we preserve only certain fields because
      * others would be pointless... */
-    for (obj = invent; obj; obj = obj->nobj) {
+    for (obj = gi.invent; obj; obj = obj->nobj) {
         boolean clear_usecount = FALSE;
         /* Items that should be excluded go here.
          * We don't go into cobj, so a container with stuff in it turns into an
@@ -1478,7 +1497,7 @@ create_tnnt_npc(coordxy x, coordxy y)
                 obj->usecount = usecount;
                 obj->oeaten = oeaten;
                 if (n == 12)
-                    obj = oname(obj, objnam);
+                    obj = oname(obj, objnam, ONAME_NO_FLAGS);
                 /* add to temp invent chain */
                 obj->nobj = invent_from_file;
                 invent_from_file = obj;
@@ -1568,8 +1587,8 @@ create_tnnt_npc(coordxy x, coordxy y)
         mpickobj(npc, obj);
     }
     if (!which_armor(npc, W_ARMG)) {
-        if (npc->data != &mons[PM_WIZARD] && npc->data != &mons[PM_PRIEST]
-            && npc->data != &mons[PM_PRIESTESS] && npc->data != &mons[PM_HEALER])
+        if (npc->data != &mons[PM_WIZARD] && npc->data != &mons[PM_CLERIC]
+            && npc->data != &mons[PM_HEALER])
             obj = rn2(4) ? mksobj(GAUNTLETS_OF_POWER, FALSE, FALSE)
                          : mksobj(LEATHER_GLOVES, FALSE, FALSE);
         else
@@ -1582,8 +1601,7 @@ create_tnnt_npc(coordxy x, coordxy y)
     }
     if (!which_armor(npc, W_ARMS) && npc->data != &mons[PM_MONK]
         && npc->data != &mons[PM_WIZARD] && npc->data != &mons[PM_HEALER]
-        && npc->data != &mons[PM_PRIEST] && npc->data != &mons[PM_PRIESTESS]
-        && npc->data != &mons[PM_BARBARIAN]) {
+        && npc->data != &mons[PM_CLERIC] && npc->data != &mons[PM_BARBARIAN]) {
         obj = rn2(2) ? mksobj(SMALL_SHIELD, FALSE, FALSE)
                      : mksobj(SHIELD_OF_REFLECTION, FALSE, FALSE);
         bless(obj);
@@ -1605,10 +1623,8 @@ create_tnnt_npc(coordxy x, coordxy y)
             obj = mksobj(SILVER_SABER, FALSE, FALSE);
         else if (npc->data == &mons[PM_BARBARIAN])
             obj = mksobj(BATTLE_AXE, FALSE, FALSE);
-        else if (npc->data == &mons[PM_CAVEMAN]
-                 || npc->data == &mons[PM_CAVEWOMAN]
-                 || npc->data == &mons[PM_PRIEST]
-                 || npc->data == &mons[PM_PRIESTESS])
+        else if (npc->data == &mons[PM_CAVE_DWELLER]
+                 || npc->data == &mons[PM_CLERIC])
             obj = mksobj(MACE, FALSE, FALSE);
         else if (npc->data == &mons[PM_HEALER]
                  || npc->data == &mons[PM_WIZARD])
@@ -1630,8 +1646,7 @@ create_tnnt_npc(coordxy x, coordxy y)
      * regardless of whether the last ascending player
      * had ranged weapons or not */
     if (npc->data == &mons[PM_ARCHEOLOGIST]
-        || npc->data == &mons[PM_CAVEMAN]
-        || npc->data == &mons[PM_CAVEWOMAN]) {
+        || npc->data == &mons[PM_CAVE_DWELLER]) {
         (void) mongets(npc, SLING);
         obj = mksobj(FLINT, FALSE, FALSE);
         bless(obj);
@@ -1643,8 +1658,7 @@ create_tnnt_npc(coordxy x, coordxy y)
         strategy = NEED_RANGED_WEAPON;
     }
     if (npc->data == &mons[PM_HEALER]
-        || npc->data == &mons[PM_PRIEST]
-        || npc->data == &mons[PM_PRIESTESS]
+        || npc->data == &mons[PM_CLERIC]
         || npc->data == &mons[PM_TOURIST]
         || npc->data == &mons[PM_WIZARD]) {
         obj = mksobj(DART, FALSE, FALSE);
@@ -1839,7 +1853,7 @@ collect_all_transient(struct obj* exception)
     /* floor objects */
     for (y = 0; y < ROWNO; ++y) {
         for (x = 0; x < COLNO; ++x) {
-            for (otmp = level.objects[x][y]; otmp; otmp = next) {
+            for (otmp = svl.level.objects[x][y]; otmp; otmp = next) {
                 coordxy oldox = otmp->ox, oldoy = otmp->oy;
                 next = otmp->nobj;
                 t_collect(otmp);
@@ -1855,7 +1869,7 @@ collect_all_transient(struct obj* exception)
             if (otmp->transient && otmp->oclass == ARMOR_CLASS) {
                 mtmp->misc_worn_check &= ~otmp->owornmask;
                 if (otmp->owornmask)
-                    update_mon_intrinsics(mtmp, otmp, FALSE, FALSE);
+                    update_mon_extrinsics(mtmp, otmp, FALSE, FALSE);
             } else if ((otmp->owornmask & W_WEP) != 0L) {
                 mtmp->mw = (struct obj *) 0;
             }
@@ -1863,12 +1877,12 @@ collect_all_transient(struct obj* exception)
         }
     }
     /* buried objects */
-    for (otmp = level.buriedobjlist; otmp; otmp = next) {
+    for (otmp = svl.level.buriedobjlist; otmp; otmp = next) {
         next = otmp->nobj;
         t_collect(otmp);
     }
     /* your inventory */
-    for (otmp = invent; otmp; otmp = next) {
+    for (otmp = gi.invent; otmp; otmp = next) {
         next = otmp->nobj;
         if (otmp != exception) {
             if (otmp->transient && otmp->owornmask)
@@ -1894,7 +1908,7 @@ void
 devteam_quest(struct monst *devteam, struct obj *thrownscroll)
 {
     xint8 qstatus = tnnt_globals.devteam_quest_status;
-    boolean is_leader = !strcmp(MNAME(devteam), "Mike Stephenson");
+    boolean is_leader = !strcmp(MGIVENNAME(devteam), "Mike Stephenson");
 
     if (u.uhave.amulet && !thrownscroll && qstatus == DTQUEST_COMPLETED) {
         com_pager("devteam_aoy_reaction");
@@ -2018,7 +2032,11 @@ devteam_quest(struct monst *devteam, struct obj *thrownscroll)
                         pline("%s signs:", Monnam(devteam));
                     com_pager("devteam_finishquest");
                     reward = mksobj(T_SHIRT, FALSE, FALSE);
-                    reward = oname(reward, artiname(ART_REALLY_COOL_SHIRT));
+                    reward = oname(reward, artiname(ART_REALLY_COOL_SHIRT),
+                                   /* "random" is not really correct but is the
+                                    * most correct option; ONAME_GIFT would be
+                                    * treated as a divine gift */
+                                   ONAME_RANDOM);
                     /* player should have just given up at least one scroll, so
                        should have room for this in inventory, but might get
                        encumbered and want to decline :d */
@@ -2053,9 +2071,9 @@ get_achfile_path(boolean temp)
 {
     static char buf[BUFSZ];
     if (temp)
-        Sprintf(buf, "%s/%s.tach.", TNNT_TEMP_ACHIEVEMENTS_DIR, plname);
+        Sprintf(buf, "%s/%s.tach.", TNNT_TEMP_ACHIEVEMENTS_DIR, svp.plname);
     else
-        Sprintf(buf, "%s/%s.prev_ach.", TNNT_PREV_ACHIEVEMENTS_DIR, plname);
+        Sprintf(buf, "%s/%s.prev_ach.", TNNT_PREV_ACHIEVEMENTS_DIR, svp.plname);
 #ifdef SERVER_LOCATION
     /* hardfought specific assumption: SERVER_LOCATION is "us.hardfought.org"
      * or "eu" or "au"
@@ -2255,7 +2273,7 @@ tnnt_announce_achievements(void)
             len = (int) strlen(achnam);
             /* some achievements have their own punctuation, so only append
              * additional punctuation if that isn't the case */
-            if (len > 0 && !index(".!?", achnam[len - 1]))
+            if (len > 0 && !strchr(".!?", achnam[len - 1]))
                 endpunct = ".";
             pline("Achievement unlocked: \"%s\"%s", achnam, endpunct);
         }
@@ -2344,14 +2362,14 @@ tnnt_common_monst(int mndx)
 {
     /* Rule 0: We don't want anything after SPECIAL_PM (long worm tail, player
      * monsters, quest guardians/nemeses/leaders). This also excludes the
-     * off-by-ones of PM_NINJA and PM_CAVEWOMAN. */
+     * off-by-one of PM_NINJA. */
     if (mndx >= SPECIAL_PM)
         return FALSE;
 
     /* Rule 1: Uniques tend to have their own achievements already, and aren't
      * really "species". High priests are the exception, because they aren't
      * really unique. */
-    if ((mons[mndx].geno & G_UNIQ) && mndx != PM_HIGH_PRIEST)
+    if ((mons[mndx].geno & G_UNIQ) && mndx != PM_HIGH_CLERIC)
         return FALSE;
 
     switch (mndx) {
@@ -2407,8 +2425,8 @@ tnnt_update_ukilled(int mndx)
     else if (mndx == PM_WEREWOLF)
         mndx = PM_HUMAN_WEREWOLF;
 
-    if (mvitals[mndx].ukilled < 255)
-        mvitals[mndx].ukilled++;
+    if (svm.mvitals[mndx].ukilled < 255)
+        svm.mvitals[mndx].ukilled++;
 
     /* Count the number of monster species that have had at least 1 monster
      * killed. */
@@ -2417,7 +2435,7 @@ tnnt_update_ukilled(int mndx)
         if (!tnnt_common_monst(i))
             continue;
 
-        if (mvitals[i].ukilled) {
+        if (svm.mvitals[i].ukilled) {
             ct++;
             if (ct >= 25)
                 tnnt_achieve(A_KILLED_25_SPECIES);
@@ -2478,6 +2496,7 @@ tnnt_update_ukilled(int mndx)
  * The only collisions currently are from the "both detect food sources" with
  * "all scrolls" and "all spellbooks". This only returns the latter. */
 #define FIRST_GEM DILITHIUM_CRYSTAL /* same as in end.c */
+#define LAST_GEM JADE /* idk what makedefs does with this */
 int
 tnnt_id_achvmt(short otyp)
 {
@@ -2604,7 +2623,7 @@ tnnt_check_identifications(int otyp)
     if (this_achvmt == NO_TNNT_ACHIEVEMENT)
         return;
 
-    for (tmp_otyp = bases[(int) oclass]; tmp_otyp < bases[oclass + 1];
+    for (tmp_otyp = svb.bases[(int) oclass]; tmp_otyp < svb.bases[oclass + 1];
          ++tmp_otyp) {
         if (tnnt_id_achvmt(tmp_otyp) == this_achvmt
             && !objects[tmp_otyp].oc_name_known)
@@ -2618,7 +2637,7 @@ tnnt_check_identifications(int otyp)
 /* Give credit for permanently lighting a position in a previously-unlit
  * room. */
 void
-tnnt_roomlit_credit(coordxy x, y)
+tnnt_roomlit_credit(coordxy x, coordxy y)
 {
     if (levl[x][y].lit == 0 && In_dungeons_of_doom(&u.uz)
         && (levl[x][y].roomno >= ROOMOFFSET || Is_bigroom(&u.uz))
@@ -2667,7 +2686,7 @@ tnnt_uniqndx(int mndx)
 void
 tnnt_maybe_grant_ahab(void)
 {
-    if (u.ustuck && !u.uswallow && !sticks(youmonst.data)
+    if (u.ustuck && !u.uswallow && !sticks(gy.youmonst.data)
         && u.ustuck->data->mlet == S_EEL
 #if 0
         /* unnecessary I think because no other scenario but attempted
@@ -2757,7 +2776,7 @@ void
 tnnt_check_castle_rush(void)
 {
     if (Is_stronghold(&u.uz) && u.ux == 15 && u.uy == 11
-        && moves <= tnnt_globals.entered_castle_time + TNNT_CASTLE_TURNS) {
+        && svm.moves <= tnnt_globals.entered_castle_time + TNNT_CASTLE_TURNS) {
         tnnt_achieve(A_ENTERED_CASTLE_QUICKLY);
     }
 }

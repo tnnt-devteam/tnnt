@@ -64,6 +64,7 @@ SF_PROTO_C(struct, rm);
 SF_PROTO_C(struct, spell);
 SF_PROTO_C(struct, stairway);
 SF_PROTO_C(struct, s_level);
+SF_PROTO_C(struct, tnnt_globals_t);
 SF_PROTO_C(struct, trap);
 SF_PROTO_C(struct, version_info);
 SF_PROTO_C(struct, you);
@@ -149,6 +150,7 @@ struct sf_procs {
     SF_ENTRY_C(struct, spell);
     SF_ENTRY_C(struct, stairway);
     SF_ENTRY_C(struct, s_level);
+    SF_ENTRY_C(struct, tnnt_globals_t);
     SF_ENTRY_C(struct, trap);
     SF_ENTRY_C(struct, version_info);
     SF_ENTRY_C(struct, you);

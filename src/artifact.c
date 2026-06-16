@@ -294,16 +294,6 @@ mk_artifact(
             if (new_spe >= -10 && new_spe < 10)
                 otmp->spe = new_spe;
         }
-        /*
-         * otmp should be nonnull at this point:
-         * either the passed argument (if !by_align == A_NONE), or
-         * the result of mksobj() just above if by_align is an alignment. */
-        assert(otmp != 0);
-        /* prevent erosion from generating */
-        otmp->oeroded = otmp->oeroded2 = 0;
-        otmp = oname(otmp, a->name);
-        otmp->oartifact = m;  /* probably already set by this point, but */
-        artiexist[m] = 1;
     } else {
         /* nothing appropriate could be found; return original object */
         if (by_align && otmp) {
@@ -1897,7 +1887,7 @@ invoke_create_portal(struct obj *obj)
         && !tnnt_globals.deathmatch_completed) {
         pline("Somehow, %s seems unable to make a portal.",
               the(xname(obj)));
-        break;
+        return ECMD_TIME;
     }
 
     tmpwin = create_nhwindow(NHW_MENU);
@@ -1913,7 +1903,7 @@ invoke_create_portal(struct obj *obj)
         /* TNNT: player can't branchport back into the npcdeath arena if they
          * fled the deathmatch (wizard mode #wizlevelport ought to work though
          * since it doesn't go through here.) */
-        if (!strcmp(dungeons[i].dname, "Deathmatch Arena")
+        if (!strcmp(svd.dungeons[i].dname, "Deathmatch Arena")
             && tnnt_globals.deathmatch_started
             && !tnnt_globals.deathmatch_completed)
             continue;

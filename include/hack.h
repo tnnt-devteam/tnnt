@@ -392,7 +392,7 @@ struct dgn_topology { /* special dungeon levels for speed */
     d_level d_devteam_level;
     d_level d_deathmatch_level;
     d_level d_rfk_level;
-    xchar d_dungeons_dnum; /* for "in main dungeon" achievements */
+    xint16 d_dungeons_dnum; /* for "in main dungeon" achievements */
 };
 
 /* macros for accessing the dungeon levels by their old names */
@@ -429,10 +429,10 @@ struct dgn_topology { /* special dungeon levels for speed */
 #define mineend_level           (svd.dungeon_topology.d_mineend_level)
 #define sokoend_level           (svd.dungeon_topology.d_sokoend_level)
 /* TNNT additions: */
-#define devteam_level           (dungeon_topology.d_devteam_level)
-#define deathmatch_level        (dungeon_topology.d_deathmatch_level)
-#define rfk_level               (dungeon_topology.d_rfk_level)
-#define dungeons_dnum           (dungeon_topology.d_dungeons_dnum)
+#define devteam_level           (svd.dungeon_topology.d_devteam_level)
+#define deathmatch_level        (svd.dungeon_topology.d_deathmatch_level)
+#define rfk_level               (svd.dungeon_topology.d_rfk_level)
+#define dungeons_dnum           (svd.dungeon_topology.d_dungeons_dnum)
 /* clang-format on */
 
 #define dunlev_reached(x) (svd.dungeons[(x)->dnum].dunlev_ureached)

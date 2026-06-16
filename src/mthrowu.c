@@ -462,7 +462,7 @@ ohitmon(
                     xkilled(mtmp, XKILL_NOMSG);
                 else
                     mondied(mtmp);
-                if (((archer && !archer->mpeaceful)
+                if (((gm.marcher && !gm.marcher->mpeaceful)
                      || (tnnt_globals.psuedo_archer
                          && !tnnt_globals.psuedo_archer->mpeaceful))
                     && !mtmp->mpeaceful)
@@ -562,7 +562,7 @@ u_catch_thrown_obj(struct obj *otmp)
      /* missile hit closed door */                                     \
      || closed_door(gb.bhitpos.x + dx, gb.bhitpos.y + dy)              \
      /* TNNT: objects are stopped by NKI/kitten */                     \
-     || levl[bhitpos.x + dx][bhitpos.y + dy].typ == NKI                \
+     || levl[gb.bhitpos.x + dx][gb.bhitpos.y + dy].typ == NKI          \
      /* missile might hit iron bars */                                 \
      /* the random chance for small objects hitting bars is */         \
      /* skipped when reaching them at point blank range */             \
@@ -1449,7 +1449,7 @@ hit_bars(
                 You_hear(Hallucination ? "angry snakes!"
                                        : "a hissing noise.");
             }
-            if (!nodissolve)
+            if (!nodissolve) {
                 dissolve_bars(barsx, barsy);
                 if (your_fault)
                     tnnt_achieve(A_DISSOLVED_IRONBARS);

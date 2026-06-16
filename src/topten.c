@@ -461,13 +461,13 @@ encodeconduct(void)
         e |= 1L << 15;
     if (u.uconduct.rmswapchest == 0)
         e |= 1L << 16;
-    if (!tnnt_globals.unique_info[tnnt_uniqndx(urole.neminum)].died)
+    if (!tnnt_globals.unique_info[tnnt_uniqndx(gu.urole.neminum)].died)
         e |= 1L << 17;
     if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_VLAD_THE_IMPALER)].died)
         e |= 1L << 18;
     if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_WIZARD_OF_YENDOR)].died)
         e |= 1L << 19;
-    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_HIGH_PRIEST)].died)
+    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_HIGH_CLERIC)].died)
         e |= 1L << 20;
     if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_DEATH)].died
         && !tnnt_globals.unique_info[tnnt_uniqndx(PM_PESTILENCE)].died
@@ -1461,8 +1461,7 @@ get_rnd_toptenentry(void)
 /* TNNT: does a monster on the level already have this name?  used to ensure
  * player monster names from the high score list aren't reused on Astral */
 static boolean
-tnnt_name_unused_on_lvl(name)
-const char *name;
+tnnt_name_unused_on_lvl(const char *name)
 {
     int namlen = strlen(name);
     char plus_space[NAMSZ + 2];
@@ -1473,9 +1472,9 @@ const char *name;
 
     for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
         const char *mnam;
-        if (!has_mname(mtmp))
+        if (!has_mgivenname(mtmp))
             continue;
-        mnam = MNAME(mtmp);
+        mnam = MGIVENNAME(mtmp);
         /* normal mplayer will typically be named like "<name> the <title>",
          * so check for starting with "<name> " in addition to a full match */
         if (!strncmpi(plus_space, mnam, namlen + 1) || !strcmpi(name, mnam)) {
@@ -1486,10 +1485,11 @@ const char *name;
 }
 
 /* TNNT: get random player name from the high score list; used for naming player
- * monsters on the Astral plane */
+ * monsters on the Astral plane.
+ * If `unique` is true, don't accept a name that's already in use on the level.
+ */
 char *
-tnnt_get_rnd_tt_name(unique)
-boolean unique; /* don't accept a name that's already in use on the level */
+tnnt_get_rnd_tt_name(boolean unique)
 {
     int rank, i, tries;
     FILE *rfile;

@@ -515,7 +515,7 @@ static const struct instance_globals_m g_init_m = {
     /* multi_reason usually points to a string literal (when not Null)
        but multireasonbuf[] is available for when it needs to be dynamic */
     DUMMY, /* multireasonbuf[] */
-    { 0, 0, STRANGE_OBJECT, FALSE }, /* m_shot */
+    { 0, 0, STRANGE_OBJECT, FALSE, 0 }, /* m_shot */
     FALSE, /* mrg_to_wielded */
     UNDEFINED_PTR, /* menu_colorings */
     UNDEFINED_PTR, /* migrating_objs */
@@ -892,7 +892,8 @@ static const struct instance_globals_saved_d init_svd = {
     {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0},
     0, 0, 0, 0, 0,
     {0}, {0}, {0},
-    {0}, {0}, {0} },                     /* dungeon_topology */
+    {0}, {0}, {0},
+    {0}, {0}, {0}, 0 },                  /* dungeon_topology */
     /* decl.c */
     { 0, 0, 0, 0, 0, 0, 0, 0 },          /* dndest */
     NULL,                                /* doors */

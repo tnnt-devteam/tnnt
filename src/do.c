@@ -1674,13 +1674,13 @@ goto_level(
         int i = 0;
         tnnt_globals.num_planes_pets = 0;
         /* count number of pets being brought */
-        for (mtmp = mydogs; mtmp; mtmp = mtmp->nmon) {
+        for (mtmp = gm.mydogs; mtmp; mtmp = mtmp->nmon) {
             tnnt_globals.num_planes_pets++;
         }
         if (tnnt_globals.num_planes_pets) {
             tnnt_globals.planes_pet_m_ids = (unsigned int *)
                 alloc(tnnt_globals.num_planes_pets * sizeof(unsigned int));
-            for (mtmp = mydogs; mtmp; mtmp = mtmp->nmon) {
+            for (mtmp = gm.mydogs; mtmp; mtmp = mtmp->nmon) {
                 tnnt_globals.planes_pet_m_ids[i] = mtmp->m_id;
                 i++;
             }
@@ -1719,14 +1719,14 @@ goto_level(
         if (Is_earthlevel(newlevel)) {
             tnnt_globals.too_long_on_planes = FALSE;
         }
-        else if (moves - tnnt_globals.turns_entered_last_plane > 100) {
+        else if (svm.moves - tnnt_globals.turns_entered_last_plane > 100) {
             tnnt_globals.too_long_on_planes = TRUE;
         }
         if (Is_astralevel(newlevel)
             && tnnt_globals.too_long_on_planes == FALSE) {
             tnnt_achieve(A_SPEEDRAN_PLANES);
         }
-        tnnt_globals.turns_entered_last_plane = moves;
+        tnnt_globals.turns_entered_last_plane = svm.moves;
     }
     /* track if we entered sokoban */
     if (In_sokoban(newlevel)) {
@@ -1822,7 +1822,7 @@ goto_level(
     if (!(svl.level_info[new_ledger].flags & LFILE_EXISTS)) {
         /* TNNT - track when the hero first entered the castle level */
         if (Is_stronghold(newlevel)) {
-            tnnt_globals.entered_castle_time = moves;
+            tnnt_globals.entered_castle_time = svm.moves;
         }
         /* entering this level for first time; make it now */
         if (svl.level_info[new_ledger].flags & (VISITED)) {

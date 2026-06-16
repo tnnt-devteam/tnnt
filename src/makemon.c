@@ -995,7 +995,7 @@ propagate(int mndx, boolean tally, boolean ghostly)
     /* TNNT - extinct armies
      * Unlike nazgul and erinyes, NOT necessary to kill all of them, only
      * necessary to have officially extincted them. */
-    if (mndx == PM_SOLDIER && (mvitals[mndx].mvflags & G_EXTINCT))
+    if (mndx == PM_SOLDIER && (svm.mvitals[mndx].mvflags & G_EXTINCT))
         tnnt_achieve(A_EXTINCTED_ARMY);
     return result;
 }
@@ -1278,14 +1278,14 @@ makemon(
             /* don't bother tracking the Wizard since he doesn't have a single
              * unique monster id (any death of his is recorded in wizdead()) */
             && mndx != PM_WIZARD_OF_YENDOR
-            /* only register the unique m_id for PM_HIGH_PRIEST when it's
+            /* only register the unique m_id for PM_HIGH_CLERIC when it's
              * Moloch's high priest */
-            && (mndx != PM_HIGH_PRIEST || Is_sanctum(&u.uz))) {
+            && (mndx != PM_HIGH_CLERIC || Is_sanctum(&u.uz))) {
             tnnt_globals.unique_info[ct].m_id = mtmp->m_id;
         }
     }
     /* same principle but for the deathmatch system, not a conduct */
-    if (Is_deathmatch_level(&u.uz) && in_mklev && is_mplayer(ptr)) {
+    if (Is_deathmatch_level(&u.uz) && gi.in_mklev && is_mplayer(ptr)) {
         tnnt_globals.deathmatch_m_id = mtmp->m_id;
     }
 
@@ -2170,7 +2170,7 @@ grow_up(struct monst *mtmp, struct monst *victim)
         } else if (canspotmon(mtmp)) {
             char buf[BUFSZ];
 
-            if (newtype == PM_HIGH_PRIEST)
+            if (newtype == PM_HIGH_CLERIC)
                 tnnt_achieve(A_MON_GREW_TO_HIPRIEST);
             /* 3.6.1:
              * Temporary (?) hack to fix growing into opposite gender.

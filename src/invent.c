@@ -1090,7 +1090,7 @@ addinv_core2(struct obj *obj)
     /* TNNT: achievements for carrying a certain amount of gold; check when
      * adding more gold to inventory */
     if (obj->oclass == COIN_CLASS) {
-        long umoney = money_cnt(invent);
+        long umoney = money_cnt(gi.invent);
         /* TNNT TODO FOR 3.7(?): with the new param for hidden_gold, can
          * include it without leaking info on !cknown bags. if this is done,
          * `if (oclass == COIN_CLASS)` needs `|| Has_contents(obj)` added. */
@@ -1498,8 +1498,7 @@ delobj_core(
     struct obj *obj,
     boolean force) /* 'force==TRUE' used when reviving Rider corpses */
 {
-    boolean update_map, was_pile, is_pile;
-    int x = 0, y = 0;
+    boolean update_map;
 
     /* obj_resists(obj,0,0) protects the Amulet, the invocation tools,
        and Rider corpses */
@@ -1513,11 +1512,6 @@ delobj_core(
         return;
     }
     update_map = (obj->where == OBJ_FLOOR);
-    if (update_map) {
-        x = obj->ox;
-        y = obj->oy;
-        was_pile = (level.objects[x][y] && level.objects[x][y]->nexthere);
-    }
     obj_extract_self(obj);
     if (update_map) { /* floor object's coordinates are always up to date */
         maybe_unhide_at(obj->ox, obj->oy);

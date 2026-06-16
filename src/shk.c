@@ -760,7 +760,7 @@ u_entered_shop(char *enterstring)
 
     /* this assignment is the same as the one below but we need it here for TNNT
      * shop achievements that trigger before empty-shop checks */
-    rt = rooms[*enterstring - ROOMOFFSET].rtype;
+    rt = svr.rooms[*enterstring - ROOMOFFSET].rtype;
 
     /* Note that you get these achievements for "entering" the room as far as
      * NetHack is concerned, which can mean you could be invisible and have just

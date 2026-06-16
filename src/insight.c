@@ -2254,20 +2254,21 @@ show_conduct(int final)
     if (u.uconduct.rmswapchest == 0)
         you_have_never("removed an item from a swap chest");
 
-    if (mvitals[urole.neminum].died == 0)
+    if (svm.mvitals[gu.urole.neminum].died == 0)
         you_have_never("allowed your nemesis to die");
 
-    if (mvitals[PM_VLAD_THE_IMPALER].died == 0)
+    if (svm.mvitals[PM_VLAD_THE_IMPALER].died == 0)
         you_have_never("allowed Vlad to die");
 
-    if (mvitals[PM_WIZARD_OF_YENDOR].died == 0)
+    if (svm.mvitals[PM_WIZARD_OF_YENDOR].died == 0)
         you_have_never("allowed the Wizard to die");
 
-    if (mvitals[PM_HIGH_PRIEST].died == 0)
+    if (svm.mvitals[PM_HIGH_CLERIC].died == 0)
         you_have_never("allowed a high priest to die");
 
-    if (mvitals[PM_DEATH].died == 0 && mvitals[PM_PESTILENCE].died == 0
-        && mvitals[PM_FAMINE].died == 0)
+    if (svm.mvitals[PM_DEATH].died == 0
+        && svm.mvitals[PM_PESTILENCE].died == 0
+        && svm.mvitals[PM_FAMINE].died == 0)
         you_have_never("allowed a Rider to die");
 
     if (u.uconduct.artitouch == 0)

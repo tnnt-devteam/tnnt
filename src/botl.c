@@ -16,6 +16,7 @@ const char *const enc_stat[] = {
 staticfn const char *rank(void);
 staticfn void bot_via_windowport(void);
 staticfn void stat_update_time(void);
+staticfn char *format_duration_with_units(long); /* TNNT */
 
 char *
 get_strength_str(void)
@@ -439,8 +440,7 @@ botl_score(void)
 #ifdef REALTIME_ON_BOTL
 /* Returns a human readable formatted duration (e.g. 2h:03m:ss). */
 char *
-format_duration_with_units(seconds)
-long seconds;
+format_duration_with_units(long seconds)
 {
     static char buf_fmt_duration[BUFSZ];
     long minutes = seconds / 60;
@@ -1168,7 +1168,7 @@ bot_via_windowport(void)
     gb.blstats[idx][BL_TIME].a.a_long = svm.moves;
 
     /* Realtime */
-    Strcpy(blstats[idx][BL_REALTIME].val, botl_realtime());
+    Strcpy(gb.blstats[idx][BL_REALTIME].val, botl_realtime());
 
     /* Hunger */
     /* note: u.uhs is unsigned, and 3.6.1's STATUS_HILITE defined

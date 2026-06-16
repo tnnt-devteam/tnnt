@@ -2299,7 +2299,7 @@ thitmonst(
                 if (mon->wormno)
                     cutworm(mon, gb.bhitpos.x, gb.bhitpos.y, chopper);
             }
-            } else {
+            else
                 killed_by_volley++;
             exercise(A_DEX, TRUE);
             /* if hero was swallowed and projectile killed the engulfer,

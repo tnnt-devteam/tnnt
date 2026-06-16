@@ -896,8 +896,8 @@ newgame(void)
      * in the Dungeons of Doom. */
     for (i = 0; i < NUM_MISSING_CODE_SCROLLS; ++i) {
         struct obj *scroll = mksobj(SCR_MISSING_CODE, FALSE, FALSE);
-        xchar castle_depth = stronghold_level.dlevel;
-        xchar dest;
+        xint16 castle_depth = stronghold_level.dlevel;
+        xint16 dest;
         boolean samelevel;
 
         /* TNNT TODO: More fine-grained control over where these end up.
@@ -946,10 +946,10 @@ newgame(void)
 
     /* these have to be initialized here so we can keep the simple static
      * initialization of tnnt_globals = DUMMY */
-    tnnt_globals.unique_info[0].mndx = urole.neminum;
+    tnnt_globals.unique_info[0].mndx = gu.urole.neminum;
     tnnt_globals.unique_info[1].mndx = PM_VLAD_THE_IMPALER;
     tnnt_globals.unique_info[2].mndx = PM_WIZARD_OF_YENDOR;
-    tnnt_globals.unique_info[3].mndx = PM_HIGH_PRIEST;
+    tnnt_globals.unique_info[3].mndx = PM_HIGH_CLERIC;
     tnnt_globals.unique_info[4].mndx = PM_DEATH;
     tnnt_globals.unique_info[5].mndx = PM_PESTILENCE;
     tnnt_globals.unique_info[6].mndx = PM_FAMINE;

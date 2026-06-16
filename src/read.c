@@ -44,6 +44,7 @@ staticfn void seffect_gold_detection(struct obj **);
 staticfn void seffect_food_detection(struct obj **);
 staticfn void seffect_identify(struct obj **);
 staticfn void seffect_magic_mapping(struct obj **);
+staticfn void seffect_missing_code(struct obj **sobjp); /* TNNT */
 #ifdef MAIL_STRUCTURES
 staticfn void seffect_mail(struct obj **);
 #endif /* MAIL_STRUCTURES */
@@ -618,13 +619,14 @@ doread(void)
     /* Actions required to win the game aren't counted towards conduct */
     /* Novel conduct is handled in read_tribute so exclude it too */
     if (otyp != SPE_BOOK_OF_THE_DEAD && otyp != SPE_NOVEL
-        && otyp != SPE_BLANK_PAPER && otyp != SCR_BLANK_PAPER)
+        && otyp != SPE_BLANK_PAPER && otyp != SCR_BLANK_PAPER) {
         if (!u.uconduct.literate++)
             livelog_printf(LL_CONDUCT, "became literate by reading %s",
                            (scroll->oclass == SPBOOK_CLASS) ? "a book"
                            : (scroll->oclass == SCROLL_CLASS) ? "a scroll"
                              : something);
         tnnt_read(scroll->oclass == SPBOOK_CLASS ? RDBL_BOOK : RDBL_SCROLL);
+    }
 
     if (scroll->oclass == SPBOOK_CLASS) {
         return study_book(scroll) ? ECMD_TIME : ECMD_OK;

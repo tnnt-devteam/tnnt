@@ -18,6 +18,7 @@ staticfn void moverock_done(coordxy, coordxy);
 staticfn int moverock(void);
 staticfn int moverock_core(coordxy, coordxy);
 staticfn void dosinkfall(void);
+staticfn void tnnt_rfk_move(coordxy, coordxy);
 staticfn boolean findtravelpath(int);
 staticfn boolean trapmove(coordxy, coordxy, struct trap *);
 staticfn int QSORTCALLBACK notice_mons_cmp(const genericptr,
@@ -990,9 +991,8 @@ invocation_pos(coordxy x, coordxy y)
                       && x == svi.inv_pos.x && y == svi.inv_pos.y);
 }
 
-void
-tnnt_rfk_move(x, y)
-int x, y;
+staticfn void
+tnnt_rfk_move(coordxy x, coordxy y)
 {
     if (!Is_rfk_level(&u.uz))
         return;
@@ -1004,12 +1004,12 @@ int x, y;
             impossible("found more than one kitten?");
 
         You("found kitten!  Way to go!");
-        livelog_write_string(LL_ACHIEVE, "found kitten");
+        livelog_printf(LL_ACHIEVE, "found kitten");
         tnnt_globals.kitten_loc.x = tnnt_globals.kitten_loc.y = 0;
         levl[x][y].typ = ROOM;
         kitten = makemon(&mons[PM_KITTEN], x, y, MM_NOGRP);
         if (u.uconduct.pets) {
-            tamedog(kitten, (struct obj *) 0);
+            tamedog(kitten, (struct obj *) 0, FALSE);
         } else {
             kitten->mpeaceful = 1;
             set_malign(kitten);
@@ -3392,7 +3392,7 @@ spoteffects(boolean pick)
 
     /* TNNT: a few achievements trigger by moving onto a certain terrain type */
     if (spotterrain == ALTAR) {
-        xchar mask = (levl[u.ux][u.uy].altarmask & ~AM_SHRINE);
+        xint8 mask = (levl[u.ux][u.uy].altarmask & ~AM_SHRINE);
         if (In_mines(&u.uz)) {
             tnnt_achieve(A_FOUND_MINES_ALTAR);
         }

@@ -438,6 +438,12 @@ rafile(int whichone)
                 /* default bogusmon:  iconic monster that isn't in nethack */
                                "grue", MD_PAD_BOGONS);
             break;
+    case '4':
+            do_rnd_access_file(TNNT_NKIFILE, "nki",
+                /* TNNT: robotfindskitten */
+                               "A puppy",
+                               MD_PAD_RUMORS); /* '_RUMORS' used here too */
+            break;
     }
 }
 
@@ -463,44 +469,6 @@ delete_file(const char *template, const char *tag)
     Unlink(name);
 }
 #endif
-
-void
-rafile(whichone)
-int whichone;
-{
-    switch(whichone) {
-            /*
-             * post-3.6.5:
-             *  File must not be empty to avoid divide by 0
-             *  in core's rn2(), so provide a default entry.
-             *  [Second argument is used to construct a temporary file name
-             *  without worrying about whether the file name macros from
-             *  global.h have been modified with port-specific punctuation.]
-             */
-    case '1':
-            do_rnd_access_file(EPITAPHFILE, "epitaph",
-                /* default epitaph:  parody of the default engraving */
-                               "No matter where I went, here I am.");
-            break;
-    case '2':
-            do_rnd_access_file(ENGRAVEFILE, "engrave",
-                /* default engraving:  popularized by "The Adventures of
-                   Buckaroo Bonzai Across the 8th Dimenstion" but predates
-                   that 1984 movie; some attribute it to Confucius */
-                               "No matter where you go, there you are.");
-            break;
-    case '3':
-            do_rnd_access_file(BOGUSMONFILE, "bogusmon",
-                /* default bogusmon:  iconic monster that isn't in nethack */
-                               "grue");
-            break;
-    case '4':
-            do_rnd_access_file(TNNT_NKIFILE, "nki",
-                /* TNNT: robotfindskitten */
-                               "A puppy");
-            break;
-    }
-}
 
 static FILE *
 getfp(const char *template, const char *tag, const char *mode, int flg)

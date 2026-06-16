@@ -731,6 +731,7 @@ void norm_ptrs_prop(struct prop *d_prop);
 void norm_ptrs_q_score(struct q_score *d_q_score);
 void norm_ptrs_rm(struct rm *d_rm);
 void norm_ptrs_s_level(struct s_level *d_s_level);
+void norm_ptrs_tnnt_globals_t(struct tnnt_globals_t *d_tnnt_globals_t);
 void norm_ptrs_skills(struct skills *d_skills);
 void norm_ptrs_spell(struct spell *d_spell);
 void norm_ptrs_stairway(struct stairway *d_stairway);
@@ -1056,6 +1057,11 @@ norm_ptrs_mystruct_rev0(struct mystruct_rev0 *d_mystruct_rev0 UNUSED)
 
 void
 norm_ptrs_s_level(struct s_level *d_s_level UNUSED)
+{
+}
+
+void
+norm_ptrs_tnnt_globals_t(struct tnnt_globals_t *d_tnnt_globals_t UNUSED)
 {
 }
 

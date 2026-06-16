@@ -257,7 +257,7 @@ ready_weapon(struct obj *wep)
                     mushroom = FALSE,
                     oil = FALSE,
                     fryingpan = FALSE;
-            for (otmp = invent; otmp; otmp = otmp->nobj) {
+            for (otmp = gi.invent; otmp; otmp = otmp->nobj) {
                 if (otmp->otyp == EGG)
                     n_eggs += otmp->quan;
                 /* require tins to be known so someone can't leak whether their

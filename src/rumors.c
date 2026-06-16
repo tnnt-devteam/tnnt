@@ -976,9 +976,7 @@ tnnt_coord_hash(int x, int y, int z)
 /* TNNT: Obtain a random (but deterministic, so it doesn't change on a recheck) name
  * of this item the hero has found which is, unfortunately, not a kitten. */
 char *
-tnnt_get_nki_text(buf, x, y)
-char *buf;
-xchar x, y;
+tnnt_get_nki_text(char *buf, coordxy x, coordxy y)
 {
     dlb *fh;
 
@@ -1010,7 +1008,7 @@ xchar x, y;
             (void) dlb_fseek(fh, starttxt, SEEK_SET);
             (void) dlb_fgets(line, sizeof line, fh);
         }
-        if ((endp = index(line, '\n')) != 0)
+        if ((endp = strchr(line, '\n')) != 0)
             *endp = 0;
         Strcat(buf, xcrypt(line, xbuf));
         (void) dlb_fclose(fh);

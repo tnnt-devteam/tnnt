@@ -211,7 +211,7 @@ struct tnnt_globals_t {
 #define HARMFUL_DRUNK  0x0b2009c
     uint32_t pots_drunk;
 #define tnnt_pot_is_harmful(otyp) \
-    ((HARMFUL_DRUNK & (1UL << ((otyp) - bases[POTION_CLASS]))) != 0UL)
+    ((HARMFUL_DRUNK & (1UL << ((otyp) - svb.bases[POTION_CLASS]))) != 0UL)
 
 #define FIRST_POLEARM PARTISAN
 #define LAST_POLEARM BEC_DE_CORBIN
@@ -272,7 +272,7 @@ struct tnnt_globals_t {
                             manipulated former local total_bounces variable was
                             split out into a different function */
 #define FIRST_DLORD PM_JUIBLEX
-    xint8 dlords_on_level; /* extracted after movemon/movemon_singlemon split,
+    uchar dlords_on_level; /* extracted after movemon/movemon_singlemon split,
                               to avoid having to loop over fmon twice */
 
 

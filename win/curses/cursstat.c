@@ -296,7 +296,7 @@ draw_horizontal(boolean border)
           /*xspecial*/ BL_CONDITION,
           /*xspecial*/ BL_VERS,
           BL_FLUSH, blPAD, blPAD, blPAD, blPAD, blPAD, blPAD, blPAD,
-          blPAD, blPAD, blPAD, blPAD, blPAD, blPAD, blPAD, blPAD }
+          blPAD, blPAD, blPAD, blPAD, blPAD, blPAD, blPAD }
     };
     const enum statusfields (*fieldorder)[20];
     coordxy spacing[MAXBLSTATS], valline[MAXBLSTATS];

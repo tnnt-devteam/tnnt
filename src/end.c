@@ -723,7 +723,7 @@ disclose(int how, boolean taken)
     if (achieved && !done_stopprint) {
         ask = should_query_disclose_option('t', &defquery);
         c = ask ? yn_function("Do you want to see your TNNT achievements?",
-                              ynqchars, defquery)
+                              ynqchars, defquery, TRUE)
                 : defquery;
         if (c == 'y')
             show_tnnt_achievements(TRUE);

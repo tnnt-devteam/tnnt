@@ -2431,9 +2431,6 @@ back_to_glyph(coordxy x, coordxy y)
     case WATER:
         idx = S_water;
         break;
-    case NKI:
-        idx = S_nki;
-        break;
     case DBWALL:
         idx = (ptr->horizontal) ? S_hcdbridge : S_vcdbridge;
         break;

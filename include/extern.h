@@ -2862,7 +2862,7 @@ extern boolean CapitalMon(const char *) NO_NNARGS;
 extern void free_CapMons(void);
 /* TNNT additions: */
 extern unsigned int tnnt_coord_hash(int, int, int);
-extern char *tnnt_get_nki_text(char *, xint8, xint8);
+extern char *tnnt_get_nki_text(char *, coordxy, coordxy);
 
 /* ### save.c ### */
 
@@ -3346,7 +3346,7 @@ extern void tnnt_door_resists(coordxy, coordxy);
 extern void tnnt_update_ukilled(int);
 extern int tnnt_id_achvmt(short);
 extern void tnnt_check_identifications(int);
-extern void tnnt_roomlit_credit(int, int);
+extern void tnnt_roomlit_credit(coordxy, coordxy);
 extern int tnnt_uniqndx(int);
 extern void tnnt_maybe_grant_ahab(void);
 extern void tnnt_maybe_award_heist(void);
@@ -3368,7 +3368,7 @@ extern struct toptenentry *get_rnd_toptenentry(void);
 extern struct obj *tt_oname(struct obj *) NO_NNARGS;
 extern int tt_doppel(struct monst *) NONNULLARG1;
 /* TNNT changes: */
-extern long encodeachieve(void); /* not new in TNNT, but externified */
+extern long encodeachieve(boolean); /* not new in TNNT, but externified */
 extern char *tnnt_get_rnd_tt_name(boolean);
 #ifdef RECORD_CONDUCT
 extern long encodeconduct(void);

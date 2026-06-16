@@ -3145,9 +3145,9 @@ recalc_mapseen(void)
         && tnnt_globals.soko_guilts == 0) {
         /* TNNT: check the mapseen chain for if there are now 4 sokosolved
          * levels, if so award the achievement */
-        mapseen *mptrtmp = mapseenchn;
+        mapseen *mptrtmp = svm.mapseenchn;
         int solved = 0;
-        for (mptrtmp = mapseenchn; mptrtmp; mptrtmp = mptrtmp->next) {
+        for (mptrtmp = svm.mapseenchn; mptrtmp; mptrtmp = mptrtmp->next) {
             if (mptrtmp->flags.sokosolved) {
                 solved++;
             }
@@ -3304,7 +3304,7 @@ recalc_mapseen(void)
             bp->bonesknown = TRUE;
             mptr->flags.knownbones = 1;
             lvl_bones_found++;
-            if (strncmp(plname, bp->who, strlen(plname)))
+            if (strncmp(svp.plname, bp->who, strlen(svp.plname)))
                 /* this one is only for someone else's bones, though the other
                  * ones below don't care */
                 tnnt_achieve(A_FOUND_BONES_PILE);

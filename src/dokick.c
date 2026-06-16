@@ -547,7 +547,7 @@ really_kick_object(coordxy x, coordxy y)
         return 1;
     }
 
-    if (kickedobj->oartifact)
+    if (gk.kickedobj->oartifact)
         u.uconduct.artitouch++;
 
     if (!uarmf && gk.kickedobj->otyp == CORPSE
@@ -658,16 +658,17 @@ really_kick_object(coordxy x, coordxy y)
         return 1;
     }
 
-    if (kickedobj->otyp == SWAP_CHEST) {
-        if (kickedobj->swapitems != SWAP_CHEST_USED_UP) {
+    if (gk.kickedobj->otyp == SWAP_CHEST) {
+        if (gk.kickedobj->swapitems != SWAP_CHEST_USED_UP) {
             pline("%s reveals hundreds of little legs and stomps on you!",
-                  The(xname(kickedobj)));
+                  The(xname(gk.kickedobj)));
             losehp(Maybe_Half_Phys(rn1(10, 5)),
                    "trampled to death by an angry box",
                    NO_KILLER_PREFIX);
             return 1;
         } else {
-            pline("%s is unresponsive, but seems quietly amused by your frustration.", The(xname(kickedobj)));
+            pline("%s is unresponsive, but seems quietly amused by your frustration.",
+                  The(xname(gk.kickedobj)));
         }
     }
     /* a box gets a chance of breaking open here */
@@ -849,7 +850,7 @@ kickstr(char *buf, const char *kickobjnam)
         what = "a ladder";
     else if (gm.maploc->typ == IRONBARS)
         what = "an iron bar";
-    else if (maploc->typ == NKI)
+    else if (gm.maploc->typ == NKI)
         what = "a mysterious thing";
     else
         what = "something weird";
@@ -1048,7 +1049,7 @@ kick_nondoor(coordxy x, coordxy y, int avrg_attrib)
         if (Is_devteam(&u.uz)) {
             /* TNNT: no effects from devteam throne (not even destroying it for
              * free gold) */
-            kick_ouch(x, y);
+            kick_ouch(x, y, "");
             return ECMD_TIME;
         }
         if ((Luck < 0 || gm.maploc->looted) && !rn2(3)) {
@@ -1160,7 +1161,7 @@ kick_nondoor(coordxy x, coordxy y, int avrg_attrib)
         }
         return ECMD_TIME;
     }
-    if (gm.maploc->typ == IRONBARS || maploc->typ == NKI) {
+    if (gm.maploc->typ == IRONBARS || gm.maploc->typ == NKI) {
         kick_ouch(x, y, "");
         return ECMD_TIME;
     }

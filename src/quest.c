@@ -368,7 +368,7 @@ chat_with_leader(struct monst *mtmp)
             tnnt_do_quest_achievements();
         }
     }
-    if (moves < 5000)
+    if (svm.moves < 5000)
         tnnt_achieve(A_QUICKLY_REACHED_QUEST);
 }
 

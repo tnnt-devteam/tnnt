@@ -2632,19 +2632,19 @@ in_container(struct obj *obj)
         pline("%s attached to your pet.", Tobjnam(obj, "are"));
         return 0;
     /* TNNT swap chest --> */
-    } else if (current_container->otyp == SWAP_CHEST) {
-        if (current_container->swapitems >= SWAP_ITEMS_MAX
+    } else if (gc.current_container->otyp == SWAP_CHEST) {
+        if (gc.current_container->swapitems >= SWAP_ITEMS_MAX
             /* shouldn't happen but just to be safe */
-            || current_container->swapitems == SWAP_CHEST_USED_UP) {
+            || gc.current_container->swapitems == SWAP_CHEST_USED_UP) {
             pline("%s refuses to impose further on your generosity.",
-                  The(xname(current_container)));
+                  The(xname(gc.current_container)));
             pline("It encourages you to take something and be on your way.");
             return -1;
         }
         if (!swap_chest_eligible(obj)) {
             Strcpy(buf, xname(obj));
             pline("%s spits out your %s disdainfully.",
-                  The(xname(current_container)), buf);
+                  The(xname(gc.current_container)), buf);
             return 0;
         }
         if (swap_chest_quan_too_high(obj)) {
@@ -2656,7 +2656,7 @@ in_container(struct obj *obj)
              * rather than implying that the problem is they are putting in too
              * many rocks. */
             pline("%s refuses to take so many of those %s.",
-                  The(xname(current_container)),
+                  The(xname(gc.current_container)),
                   makeplural(simple_typename(obj->otyp)));
             (void) unsplitobj(obj);
             return 0;
@@ -2694,12 +2694,12 @@ in_container(struct obj *obj)
     }
 
     /* TNNT make sure file is written before freeinv() */
-    if (current_container->otyp == SWAP_CHEST) {
-        if (!write_swapobj_file(obj, current_container->swapitems)) {
+    if (gc.current_container->otyp == SWAP_CHEST) {
+        if (!write_swapobj_file(obj, gc.current_container->swapitems)) {
             impossible("Could not write swapchest file");
             return -1;
         }
-        current_container->swapitems++;
+        gc.current_container->swapitems++;
     }
 
     freeinv(obj);
@@ -2779,13 +2779,13 @@ in_container(struct obj *obj)
     if (gc.current_container) {
         Strcpy(buf, the(xname(gc.current_container)));
         You("put %s into %s.", doname(obj), buf);
-        if (current_container->otyp == SWAP_CHEST) {
+        if (gc.current_container->otyp == SWAP_CHEST) {
             static const char *chest_emotions[SWAP_ITEMS_MAX] = {
                 "satisfied.", "grateful.", "very pleased!"
             };
             pline("Your offering is snatched from your hands!");
             You_feel("that %s is %s", buf,
-                     chest_emotions[current_container->swapitems - 1]);
+                     chest_emotions[gc.current_container->swapitems - 1]);
             /* since swap chest was moved to main Dungeons of Doom, it won't
              * naturally spawn in a shop but it's possible to finagle it into
              * one - make sure to charge hero properly for inserting the shop's
@@ -2811,7 +2811,7 @@ in_container(struct obj *obj)
              * they might not stack. */
             struct obj *otmp;
             int nbooze = 0;
-            for (otmp = current_container->cobj; otmp; otmp = otmp->nobj) {
+            for (otmp = gc.current_container->cobj; otmp; otmp = otmp->nobj) {
                 if (otmp->otyp == POT_BOOZE)
                     nbooze += otmp->quan;
             }
@@ -2884,11 +2884,11 @@ out_container(struct obj *obj)
         return res;
 
     if (obj->quan != count && obj->otyp != LOADSTONE
-        && current_container->otyp != SWAP_CHEST)
+        && gc.current_container->otyp != SWAP_CHEST)
         obj = splitobj(obj, count);
 
     /* TNNT swap chest --> */
-    if (current_container->otyp == SWAP_CHEST) {
+    if (gc.current_container->otyp == SWAP_CHEST) {
         if (!delete_swapobj_file(obj)) {
             /* fails if file already doesn't exist */
             pline("You reach for %s, but %s!",
@@ -2898,7 +2898,7 @@ out_container(struct obj *obj)
         }
         free(obj->swapobj_filename);
         obj->where = OBJ_CONTAINED;
-        obj->ocontainer = current_container;
+        obj->ocontainer = gc.current_container;
     }
     /* <-- */
 
@@ -2926,26 +2926,26 @@ out_container(struct obj *obj)
     }
     /* TNNT swap chest --> */
     /* Chest becomes "dormant" after successful removal of item */
-    if (current_container->otyp == SWAP_CHEST) {
+    if (gc.current_container->otyp == SWAP_CHEST) {
         /* in case PL_NSIZ is very small, make sure it'll fit "someone's". */
         char *save_oname, prefix[PL_NSIZ + sizeof "someone's"];
         const char *donor, *itemname;
 
-        current_container->swapitems = SWAP_CHEST_USED_UP;
+        gc.current_container->swapitems = SWAP_CHEST_USED_UP;
         /* items from chest come pre-identified */
         makeknown(otmp->otyp);
         update_inventory();
         makeknown(SWAP_CHEST);
         pline("%s snaps shut and backs away slightly.",
-              The(xname(current_container)));
-        delete_swap_chest_contents(current_container);
+              The(xname(gc.current_container)));
+        delete_swap_chest_contents(gc.current_container);
         credit_swapobj_donor(otmp);
         u.uconduct.rmswapchest++;
         /* now livelog the item removal */
         donor = swapobj_donor_name(otmp);
         if (!donor) {
             Strcpy(prefix, "someone's"); /* paranoia */
-        } else if (!strcmp(donor, plname)) {
+        } else if (!strcmp(donor, svp.plname)) {
             /* removing your own items should only be possible in explore or
              * wizard mode, but we should still handle it appropriately */
             Sprintf(prefix, "%s own", uhis());
@@ -2964,7 +2964,7 @@ out_container(struct obj *obj)
         itemname = doname(otmp);
         if (!strncmp(itemname, "a ", 2) || !strncmp(itemname, "an ", 3)
             || !strncmp(itemname, "the ", 4))
-            itemname = index(itemname, ' ') + 1; /* strip article */
+            itemname = strchr(itemname, ' ') + 1; /* strip article */
         livelog_printf(LL_ACHIEVE, "removed %s %s from the swap chest",
                        prefix, itemname);
         if (save_oname && !obj->oartifact)
@@ -3388,8 +3388,8 @@ use_container(
 
     /* make sure we don't go to loot_in with SWAP_CHEST_USED_UP -- that could
      * happen with 'b' ("take out, then put in") */
-    if (current_container->otyp == SWAP_CHEST
-        && current_container->swapitems == SWAP_CHEST_USED_UP) {
+    if (gc.current_container->otyp == SWAP_CHEST
+        && gc.current_container->swapitems == SWAP_CHEST_USED_UP) {
         /* no special message: the "snaps shut and backs away" message must
          * have just been printed and will suffice */
         goto containerdone;
@@ -3445,7 +3445,7 @@ use_container(
             pline1(emptymsg); /* <whatever> is empty. */
             if (!gc.current_container->cknown)
                 used = 1;
-            if (current_container->otyp != SWAP_CHEST)
+            if (gc.current_container->otyp != SWAP_CHEST)
                 gc.current_container->cknown = 1;
         } else {
             add_valid_menu_class(0); /* reset */
@@ -3624,7 +3624,7 @@ menu_loot(int retry, boolean put_in)
                 assert(otmp != 0);
                 count = pick_list[i].count;
                 if (count > 0 && count < otmp->quan
-                    && (put_in || current_container->otyp != SWAP_CHEST)) {
+                    && (put_in || gc.current_container->otyp != SWAP_CHEST)) {
                     otmp = splitobj(otmp, count);
                     /* special split case also handled by askchain() */
                 }

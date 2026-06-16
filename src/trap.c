@@ -804,7 +804,7 @@ animate_statue(
         return (struct monst *) 0;
     }
 
-    if ((statue->spe & STATUE_HISTORIC) && mptr == &mons[PM_KNIGHT]
+    if ((statue->spe & CORPSTAT_HISTORIC) && mptr == &mons[PM_KNIGHT]
         && has_oname(statue) && !strcmp(ONAME(statue), "Perseus"))
         tnnt_achieve(A_REVIVED_PERSEUS);
 
@@ -5662,7 +5662,7 @@ disarm_landmine(struct trap *ttmp) /* Helge Hafting */
     /* TNNT: check for "Minesweeper" completion.  Only check this when the
      * hero is disarming a naturally-generated land mine. */
     if (Is_knox(&u.uz) && !yours && !tnnt_globals.blew_up_ludios) {
-        for (ttmp = ftrap; ttmp; ttmp = ttmp->ntrap) {
+        for (ttmp = gf.ftrap; ttmp; ttmp = ttmp->ntrap) {
             /* Also don't check for player-created land mines here. */
             if (ttmp->ttyp == LANDMINE && !ttmp->madeby_u)
                 break;

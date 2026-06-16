@@ -1880,8 +1880,9 @@ unsetup_waterlevel(void)
 staticfn void
 tnnt_setup_rfk_level(void)
 {
+    /* TNNT TODO FOR 3.7: do this in lua rather than C */
 #define NUM_NKI 70
-    xchar x, y;
+    coordxy x, y;
     int i, tryct;
     /* place kitten */
     if (!tnnt_is_achieved(A_FOUND_KITTEN)) { /* in case of #wizmakemap */
