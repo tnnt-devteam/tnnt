@@ -1431,7 +1431,9 @@ inside_arena(genericptr region UNUSED, genericptr monst)
  * loading code.
  * TNNT TODO FOR 3.7: explore adding region support (with lua callbacks!) to
  * the lua parser. I don't consider it worthwhile to do for des, but would
- * consider it worthwhile to provide upstream. */
+ * consider it worthwhile to provide upstream.
+ * TNNT TODO FOR 3.7: The fixedness of this region means if the level is flipped
+ * horizontally, the player "enters the arena" just by entering the level. */
 void
 add_deathmatch_arena_region(void)
 {
