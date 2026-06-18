@@ -1007,7 +1007,7 @@ tnnt_rfk_move(coordxy x, coordxy y)
         livelog_printf(LL_ACHIEVE, "found kitten");
         tnnt_globals.kitten_loc.x = tnnt_globals.kitten_loc.y = 0;
         levl[x][y].typ = ROOM;
-        kitten = makemon(&mons[PM_KITTEN], x, y, MM_NOGRP);
+        kitten = makemon(&mons[PM_KITTEN], x, y, MM_NOGRP | MM_NOMSG);
         if (u.uconduct.pets) {
             tamedog(kitten, (struct obj *) 0, FALSE);
         } else {
