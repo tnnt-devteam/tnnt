@@ -3330,6 +3330,7 @@ extern void shut_the_front_door(void);
 extern void npc_awakens(void);
 extern boolean is_illegal_deathmatch(d_level *) NONNULLARG1;
 extern struct obj *collect_all_transient(struct obj *);
+extern void tnnt_arena_victory(struct monst *);
 extern void devteam_quest(struct monst *, struct obj *) NONNULLARG1;
 extern void write_temp_achievements_file(void);
 extern void erase_temp_achievements_file(void);
