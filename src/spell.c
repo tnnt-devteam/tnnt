@@ -537,11 +537,11 @@ study_book(struct obj *spellbook)
                 makeknown(booktype);
                 if (!u.uevent.read_tribute) {
                     record_achievement(ACH_NOVL);
+                    tnnt_achieve(A_READ_NOVEL);
                     /* give bonus of 20 xp and 4*20+0 pts */
                     more_experienced(20, 0);
                     newexplevel();
                     u.uevent.read_tribute = 1; /* only once */
-                    tnnt_achieve(A_READ_NOVEL);
                 }
             }
             return 1;

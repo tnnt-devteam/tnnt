@@ -740,8 +740,10 @@ doconsult(struct monst *oracl)
     }
     money2mon(oracl, (long) u_pay);
     disp.botl = TRUE;
-    if (!u.uevent.major_oracle && !u.uevent.minor_oracle)
+    if (!u.uevent.major_oracle && !u.uevent.minor_oracle) {
         record_achievement(ACH_ORCL);
+        tnnt_achieve(A_CONSULTED_ORACLE);
+    }
     add_xpts = 0; /* first oracle of each type gives experience points */
     if (u_pay == minor_cost) {
         outrumor(1, BY_ORACLE);
@@ -749,7 +751,6 @@ doconsult(struct monst *oracl)
             add_xpts = u_pay / (u.uevent.major_oracle ? 25 : 10);
         /* 5 pts if very 1st, or 2 pts if major already done */
         u.uevent.minor_oracle = TRUE;
-        tnnt_achieve(A_CONSULTED_ORACLE);
     } else {
         boolean cheapskate = u_pay < major_cost;
 
@@ -758,7 +759,6 @@ doconsult(struct monst *oracl)
             add_xpts = u_pay / (u.uevent.minor_oracle ? 25 : 10);
         /* ~100 pts if very 1st, ~40 pts if minor already done */
         u.uevent.major_oracle = TRUE;
-        tnnt_achieve(A_CONSULTED_ORACLE);
         exercise(A_WIS, !cheapskate);
     }
     if (add_xpts) {

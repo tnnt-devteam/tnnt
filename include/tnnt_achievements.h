@@ -23,17 +23,44 @@
 /* starting around 2021 achievements are organized into sort of groups based
  * around common themes */
 
-/* "Vanilla achievements" group - these are all tracked in uachieve, and for
+/* "Vanilla achievements" group - these are all tracked in uachieved, and for
  * years TNNT just used that xlogfile field to pass the data to the scoreboard,
- * but it gets rid of a lot of special casing to just treat them as TNNT
- * achievements.
- * Note that uachieve.ascended does not count as a TNNT achievement because it
- * requires ending the game. */
+ * but it gets rid of a lot of special casing on both the TNNT game side and the
+ * scoreboard side to just treat them as TNNT achievements.
+ *
+ * We do not include the following achievements:
+ *  ACH_UWIN - requires ending the game, which TNNT achievements don't do as a
+ *             rule
+ *  ACH_BLND - for some reason this remains tracked as an achievement rather
+ *             than a conduct upstream; we treat it as a conduct
+ *  ACH_NUDE - ditto
+ *  ACH_SHOP - TNNT has a more complex version of this, separate achievements
+ *             for each type of shop
+ *
+ * These do not match the order of enum achievements; they are arranged in the
+ * way that makes the most "narrative" sense when displayed in the in-game list
+ * or on the scoreboard, with the exception of rank title achievements which
+ * come after all the "story" ones.
+ */
+ACH("Delving Deep", "Enter the Gnomish Mines", ENTERED_MINES),
+ACH("Back To Civilisation", "Enter Minetown", ENTERED_MINETOWN),
 ACH("Are You Feeling Lucky", "Get the luckstone from Mines' End",
     GOT_LUCKSTONE),
-ACH("Boulder-Pusher", "Finish Sokoban", COMPLETED_SOKOBAN),
+ACH("Sage Advice", "Consult the Oracle", CONSULTED_ORACLE),
+ACH("Boulder-Pusher", "Enter Sokoban", ENTERED_SOKOBAN),
+ACH("Boulder Master", "Finish Sokoban", COMPLETED_SOKOBAN),
+ACH("Escape To Discworld", "Read a Terry Pratchett novel", READ_NOVEL),
+ACH("Wow, That's A Big Room", "Enter the Big Room", ENTERED_BIGROOM),
+ACH("Holy Sanctuary", "Enter a temple with a priest in attendance",
+    ENTERED_TEMPLE),
 ACH("Ringing In My Ears", "Get the Bell of Opening", GOT_BELL),
 ACH("Anti-Stoner", "Kill Medusa", KILLED_MEDUSA),
+    /* note: vanilla has only one ACH_TUNE achievement, but we award separate
+     * achievements for each of the two ways you can learn the tune */
+ACH("Heavenly Music", "Learn the passtune from your god",
+    LEARNED_PASSTUNE_FROM_GOD),
+ACH("Musical Mastermind", "Open the Castle drawbridge by deducing the passtune",
+    DEDUCED_PASSTUNE),
 ACH("We Need To Go Deeper", "Enter Gehennom", ENTERED_GEHENNOM),
 ACH("Emerging Into The Light", "Get the Candelabrum of Invocation",
     GOT_CANDELABRUM),
@@ -42,22 +69,22 @@ ACH("Bell, Book And Candle", "Perform the invocation ritual", DID_INVOCATION),
 ACH("My Preciousss", "Get the Amulet of Yendor", GOT_AOY),
 ACH("From The Dungeon They Came", "Enter the Elemental Planes", ENTERED_PLANES),
 ACH("The Halls Of The Gods", "Enter the Astral Plane", ENTERED_ASTRAL),
+ACH("Joining The Ranks", "Earn your second rank", GOT_RANK2),
+ACH("Rank and File", "Earn your third rank", GOT_RANK3),
+ACH("Rising Through The Ranks", "Earn your fourth rank", GOT_RANK4),
+ACH("Quest Rank", "Earn your fifth rank", GOT_RANK5),
+ACH("A Rank Above", "Earn your sixth rank", GOT_RANK6),
+ACH("High Ranking", "Earn your seventh rank", GOT_RANK7),
+ACH("Banking the Ranks", "Earn your eighth rank", GOT_RANK8),
+ACH("Top Ranked", "Earn your ninth and final rank", GOT_RANK9),
 
 /* "vanilla-ish milestones" group */
-ACH("Back To Civilisation", "Step onto the Minetown altar",
-    FOUND_MINES_ALTAR),
-ACH("Sage Advice", "Consult the Oracle", CONSULTED_ORACLE),
 ACH("The Archetypal Hero", "Get admitted to the Quest", STARTED_QUEST),
-ACH("Heavenly Music", "Learn the passtune from your god",
-    LEARNED_PASSTUNE_FROM_GOD),
-ACH("Musical Mastermind", "Open the Castle drawbridge by deducing the passtune",
-    DEDUCED_PASSTUNE),
 ACH("Have Fun Storming The Castle", "Blow up the Castle drawbridge",
     BLEW_UP_DRAWBRIDGE),
 ACH("The Chosen One", "Get crowned", CROWNED),
 ACH("Watch Your Footing", "Step onto the vibrating square",
     REACHED_VIBRATING_SQ),
-ACH("Hit The Ceiling", "Reach experience level 30", REACHED_LEVEL_30),
 
 /* "TNNT custom challenges" group */
 ACH("It's Dangerous To Go Alone! Take This", "Put an item into a swap chest",
@@ -504,7 +531,6 @@ ACH("Fill 'Er Up", "Fill an oil lamp with a potion of oil",
     REFILLED_OIL_LAMP),
 ACH("Chemistry 101", "Alchemize two potions in an established recipe",
     ALCHEMIZED),
-ACH("Escape To Discworld", "Read a Terry Pratchett novel", READ_NOVEL),
 ACH("Near Death Experience",
     "Chat with Death while carrying a Terry Pratchett novel", TALKED_TO_DEATH),
 ACH("Prize Inside!",
@@ -532,8 +558,6 @@ ACH("Who's That Pretty Girl In The Mirror, There?",
     "Deflect a nymph with a mirror", DEFLECTED_NYMPH),
 ACH("Under New Management", "Change your alignment by any means",
     CHANGED_ALIGNMENT),
-/* TNNT TODO FOR 3.7: Groundhog Day is impossible in 3.7 */
-ACH("Groundhog Day", "Return to a forgotten level", REVISITED_LOST_LEVEL),
 ACH("Tainted", "Dip an item in unholy water", DIPPED_IN_UNHOLY),
 ACH("Hydrochloric", "Dissolve iron bars with acid", DISSOLVED_IRONBARS),
 ACH("Predictably, Nothing Happens", "Break an identified wand of nothing",
@@ -721,8 +745,8 @@ ACH("Potion Roulette",
     "Drink an unidentified healing potion while below 10% HP",
     DRANK_UNID_HEALING_POTION),
 
-/* 16 free bits in tnntachieve5
- * 368 achievements defined
+/* 6 free bits in tnntachieve5
+ * 378 achievements defined
  * (The achievement bitmap is auto-sized at compile time based on
  * NUM_TNNT_ACHIEVEMENTS, but we still keep this comment around to remind the
  * person who rolls it over into a new tnntachieve* xlogfile field that they
@@ -731,26 +755,9 @@ ACH("Potion Roulette",
 
 #undef ACH
 
-/* TNNT TODO FOR 3.7: Achievements added to vanilla in 3.7 replace several of
- * these or approximate them, so we should probably change the TNNT condition to
- * trigger when the vanilla achievement is satisfied, if it's different.
- * Specifically these: (we can keep the achievement titles)
- * vanilla "reached Minetown" supplants Back to Civilisation; the altar may be a
- * little harder to reach than the town itself, but it isn't sufficiently
- * different to keep them as separate achievements
- * vanilla "entered a shop" might supplant "Dungeon Economics"
- * We may or may not want to track all the rank title achievements (which are
- * added in 3.7) in TNNT.
- */
-
 /*
 TNNT TODO FOR 3.7: Here are some good achievement ideas we want to do but they
 are best off waiting until 3.7 is released and TNNT rebases on it.
-
-Also, two achievements for hitting XL 10, and one somewhere around 20 (you get a
-new rank at 10, but around 20 the options are 18 or 22 if we want to keep it
-tied to ranks. Or just don't tie it to ranks and award it at 20.) This would
-only be if we don't use the vanilla rank title achievements.
 
 Dry out a wet towel with fire. That behavior only exists in 3.7.
 

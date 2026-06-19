@@ -423,6 +423,7 @@ intemple(int roomno)
     if ((priest = findpriest((char) roomno)) != 0) {
         /* tended */
         record_achievement(ACH_TMPL);
+        tnnt_achieve(A_ENTERED_TEMPLE);
 
         epri_p = EPRI(priest);
         shrined = has_shrine(priest);

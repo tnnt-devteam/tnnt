@@ -3393,10 +3393,7 @@ spoteffects(boolean pick)
     /* TNNT: a few achievements trigger by moving onto a certain terrain type */
     if (spotterrain == ALTAR) {
         xint8 mask = (levl[u.ux][u.uy].altarmask & ~AM_SHRINE);
-        if (In_mines(&u.uz)) {
-            tnnt_achieve(A_FOUND_MINES_ALTAR);
-        }
-        else if (Is_astralevel(&u.uz)) {
+        if (Is_astralevel(&u.uz)) {
             /* Assumes that the AM_* flags are 1, 2, and 4. */
             tnnt_globals.high_altars |= mask;
             if (tnnt_globals.high_altars == 0x7)
@@ -3720,6 +3717,7 @@ check_special_room(boolean newlev)
         && In_mines(&u.uz) && in_town(u.ux, u.uy)) {
         record_achievement(ACH_TOWN);
         svc.context.achieveo.minetn_reached = TRUE;
+        tnnt_achieve(A_ENTERED_MINETOWN);
     }
 
     if (!*u.uentered && !*u.ushops_entered) /* implied by newlev */

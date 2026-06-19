@@ -2049,8 +2049,10 @@ goto_level(
         }
         tnnt_achieve(A_ENTERED_LUDIOS);
     } else if (In_mines(&u.uz)) {
-        if (newdungeon)
+        if (newdungeon) {
             record_achievement(ACH_MINE);
+            tnnt_achieve(A_ENTERED_MINES);
+        }
         if (new && Is_minetown(&u.uz)) {
             /* TNNT: check if there are watchmen upon first visit to Minetown,
              * if there are 0 (Orcish Town or bones where someone got rid of the
@@ -2066,13 +2068,16 @@ goto_level(
             }
         }
     } else if (In_sokoban(&u.uz)) {
-        if (newdungeon)
+        if (newdungeon) {
             record_achievement(ACH_SOKO);
+            tnnt_achieve(A_ENTERED_SOKOBAN);
+        }
     } else {
         if (new && Is_rogue_level(&u.uz)) {
             You("enter what seems to be an older, more primitive world.");
         } else if (new && Is_bigroom(&u.uz)) {
             record_achievement(ACH_BGRM);
+            tnnt_achieve(A_ENTERED_BIGROOM);
         }
         /* main dungeon message from your quest leader */
         if (!In_quest(&u.uz0) && at_dgn_entrance("The Quest")

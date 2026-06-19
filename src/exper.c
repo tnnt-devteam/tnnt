@@ -356,8 +356,14 @@ pluslvl(
         SoundAchievement(0, sa2_xplevelup, 0);
         old_ach_cnt = count_achievements();
         newrank = xlev_to_rank(u.ulevel);
-        if (newrank > oldrank)
+        if (newrank > oldrank) {
             record_achievement(achieve_rank(newrank));
+            /* TNNT's first awarded rank achievement (for the second rank) is
+             * A_GOT_RANK2, but vanilla achievement system for the same rank is
+             * ACH_RNK1, which corresponds to xlev_to_rank() => 1.
+             */
+            tnnt_achieve(A_GOT_RANK2 + (newrank - 1));
+        }
         /* a new rank achievement will log its own message; log a simpler
            message here if we didn't just get an achievement (so when rank
            hasn't changed or hero just regained a lost level and the rank
@@ -368,8 +374,6 @@ pluslvl(
         if (u.ulevel > u.ulevelpeak)
             u.ulevelpeak = u.ulevel;
     }
-    if (u.ulevel == MAXULEV)
-        tnnt_achieve(A_REACHED_LEVEL_30);
     disp.botl = TRUE;
 }
 
