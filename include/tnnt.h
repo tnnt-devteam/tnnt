@@ -33,6 +33,47 @@ struct tnnt_globals_t {
      * supporting that achievement, for style consistency.
      */
 
+    /* DEVTEAM QUEST */
+#define NUM_MISSING_CODE_SCROLLS 3
+    xint16 missing_scroll_levels[NUM_MISSING_CODE_SCROLLS];
+    enum dtquest_status {
+        DTQUEST_NOTSTARTED = 0,
+        DTQUEST_INPROGRESS,
+        DTQUEST_COMPLETED
+    } devteam_quest_status;
+
+    /* NPC DEATHMATCH */
+    boolean deathmatch_started;
+    boolean deathmatch_completed;
+    int deathmatch_prize_oid;
+    unsigned int deathmatch_m_id;
+#define is_deathmatch_opponent(mtmp) (mtmp->m_id == tnnt_globals.deathmatch_m_id)
+
+    /* ROBOTFINDSKITTEN */
+    coord kitten_loc;
+
+    /* SWAP CHEST */
+    uchar swapchest1_dlevel;
+
+    /* ADDITIONAL TNNT CONDUCT TRACKING -
+     * Extra tracking for the "never killed X" conducts.
+     * The reason we need this is because the hero can slime or polymorph these
+     * foes, and kill the resulting monster; this will not treat the original
+     * monster as vanquished, so simply checking mvitals[...].died is
+     * insufficient.
+     * TNNT-added conduct counters that do not need any special extra tracking
+     * are in the uconduct struct.
+     */
+#define NUM_UNIQUES_TRACKED 7 /* nemesis, Vlad, Wizard, HPoM, 3 Riders */
+    struct {
+        int mndx; /* PM_ constant, initialized in newgame() */
+        unsigned m_id;
+        boolean died;
+    } unique_info[NUM_UNIQUES_TRACKED];
+
+    /* ACHIEVEMENTS -
+     * everything in tnnt_globals below this is for achievements */
+
     struct tnnt_ach_statusfields {
         enum tnnt_ach_statuses {
             ACH_NOT_EARNED = 0,
@@ -108,24 +149,6 @@ struct tnnt_globals_t {
      * counted towards the "read all readable items" achievement. */
     unsigned short readables;
 
-    /* Devteam quest */
-#define NUM_MISSING_CODE_SCROLLS 3
-    xint16 missing_scroll_levels[NUM_MISSING_CODE_SCROLLS];
-    enum dtquest_status {
-        DTQUEST_NOTSTARTED = 0,
-        DTQUEST_INPROGRESS,
-        DTQUEST_COMPLETED
-    } devteam_quest_status;
-
-    /* NPC Deathmatch */
-    boolean deathmatch_started;
-    boolean deathmatch_completed;
-    int deathmatch_prize_oid;
-    unsigned int deathmatch_m_id;
-#define is_deathmatch_opponent(mtmp) (mtmp->m_id == tnnt_globals.deathmatch_m_id)
-
-    /* TNNT TODO: probably move this above, or the other achievements below,
-     * the devteam/npc side quests */
     unsigned feline_m_ids[MAX_TAMED_FELINES]; /* Cat Lady: ids of tamed cats */
 
     /* wizards_killed increments only when the player kills the Wizard - not
@@ -213,21 +236,7 @@ struct tnnt_globals_t {
     uint32_t polearms_found;
 
     boolean killed_izchak;
-    coord kitten_loc;
     boolean minetown_bereft_of_watch;
-
-    /* Extra tracking for the "never killed X" conducts.
-     * The reason we need this is because the hero can slime or polymorph these
-     * foes, and kill the resulting monster; this will not treat the original
-     * monster as vanquished, so simply checking mvitals[...].died is
-     * insufficient.
-     */
-#define NUM_UNIQUES_TRACKED 7 /* nemesis, Vlad, Wizard, HPoM, 3 Riders */
-    struct {
-        int mndx; /* PM_ constant, initialized in newgame() */
-        unsigned m_id;
-        boolean died;
-    } unique_info[NUM_UNIQUES_TRACKED];
 
     boolean lifesaved_this_turn;
     long turns_entered_last_plane;
@@ -256,13 +265,14 @@ struct tnnt_globals_t {
                                 methodically checking every level for traps
                                 which would be annoying */
 
-    uchar swapchest1_dlevel;
     boolean ach_needs_notification; /* this flag is so we don't have to loop
                                        over all achievements every player action
                                        to see if any are newly achieved */
+
     xint8 total_bounces; /* extracted from dobuzz() after part of it that
                             manipulated former local total_bounces variable was
                             split out into a different function */
+
 #define FIRST_DLORD PM_JUIBLEX
     uchar dlords_on_level; /* extracted after movemon/movemon_singlemon split,
                               to avoid having to loop over fmon twice */
