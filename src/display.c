@@ -2459,7 +2459,7 @@ back_to_glyph(coordxy x, coordxy y)
         idx = (ptr->horizontal) ? S_hodbridge : S_vodbridge;
         break;
     case NKI:
-        /* TNNT TODO: is there a way to put back the code that took a coord
+        /* TNNT TODO FOR 3.7: is there a way to put back the code that took a coord
          * hash, combined a random objclass symbol with a random color, and put
          * them together?
          * This would mainly benefit people playing in ASCII. */
