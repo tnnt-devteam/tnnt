@@ -3142,7 +3142,7 @@ recalc_mapseen(void)
     old_sokosolved = mptr->flags.sokosolved;
     mptr->flags.sokosolved = In_sokoban(&u.uz) && !Sokoban;
     if (!old_sokosolved && mptr->flags.sokosolved
-        && tnnt_globals.soko_guilts == 0) {
+        && u.uconduct.sokocheat == 0) {
         /* TNNT: check the mapseen chain for if there are now 4 sokosolved
          * levels, if so award the achievement */
         mapseen *mptrtmp = svm.mapseenchn;

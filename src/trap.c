@@ -7123,7 +7123,6 @@ sokoban_guilt(void)
     if (Sokoban) {
         u.uconduct.sokocheat++;
         change_luck(-1);
-        tnnt_globals.soko_guilts++;
         /*
          * TODO:
          *  Issue some feedback so that player can learn that whatever

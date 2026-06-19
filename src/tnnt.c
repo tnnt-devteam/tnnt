@@ -491,13 +491,6 @@ show_tnnt_stats(boolean final)
             putstr(en_win, 0, buf);
         }
     }
-    if (!final && In_sokoban(&u.uz)) {
-        /* TNNT TODO FOR 3.7: Remove this block because in 3.7, this feedback is
-         * now provided by default in #conduct. */
-        Sprintf(buf, "You have %sbroken the Sokoban rules.",
-                (tnnt_globals.soko_guilts == 0) ? "never " : "");
-        putstr(en_win, 0, buf);
-    }
 
     display_nhwindow(en_win, TRUE);
     destroy_nhwindow(en_win);
