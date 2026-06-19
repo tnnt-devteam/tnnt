@@ -57,8 +57,6 @@ ACH("Have Fun Storming The Castle", "Blow up the Castle drawbridge",
 ACH("The Chosen One", "Get crowned", CROWNED),
 ACH("Watch Your Footing", "Step onto the vibrating square",
     REACHED_VIBRATING_SQ),
-/* TNNT TODO FOR 3.7: this will be an actual vanilla achievement, move it with
- * those ones */
 ACH("Hit The Ceiling", "Reach experience level 30", REACHED_LEVEL_30),
 
 /* "TNNT custom challenges" group */
@@ -69,7 +67,7 @@ ACH("The True Dungeon Masters", "Chat with an active devteam member",
     TALKED_TO_DEVTEAM),
 ACH("There Is No Spoon", "Finish the task the devteam requires of you",
     FINISHED_DEVTEAM_QUEST),
-ACH("Thunderdome", "Defeat the NPC from the NPC Deathmatch quest",
+ACH("Thunderdome", "Defeat the adversary in the Deathmatch Arena",
     NPC_DEATHMATCH),
 
 /* "kill specific things" group */
@@ -418,7 +416,7 @@ ACH("But He Also Attac", "Visit a weapon shop", ENTERED_WEAPON_SHOP),
 ACH("The Right Tool For The Job", "Visit a tool shop", ENTERED_TOOL_SHOP),
 ACH("Vegan Outfitters", "Visit a health food shop", ENTERED_HEALTH_FOOD_SHOP),
 ACH("Zap Happy", "Visit a wand shop", ENTERED_WAND_SHOP),
-ACH("A Real Gem Of A Shop", "Visit a jewelers", ENTERED_JEWELRY_SHOP),
+ACH("A Real Gem Of A Shop", "Visit a jewelry shop", ENTERED_JEWELRY_SHOP),
 
 /* involving bribing */
 ACH("Money Talks", "Bribe a demon lord with at least 25000 gold",
