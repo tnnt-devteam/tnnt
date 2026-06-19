@@ -204,8 +204,6 @@ struct tnnt_globals_t {
 #define ALL_POTS_DRUNK 0x1ffffff /* not currently used */
     /* considered harmful: confusion, blindness, paralysis, hallucination,
      * sleep, booze, sickness, acid */
-    /* TNNT TODO FOR 3.7: confirm that the potions list in objects.h hasn't
-     * changed or been reordered, or if it has, update this accordingly. */
 #define HARMFUL_DRUNK  0x0b2009c
     uint32_t pots_drunk;
 #define tnnt_pot_is_harmful(otyp) \
