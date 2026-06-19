@@ -2453,9 +2453,7 @@ revive_mon(anything *arg, long timeout UNUSED)
         } else { /* rot this corpse away */
             if (is_rider(mptr))
                 tnnt_achieve(A_PERMAKILLED_RIDER);
-            else
-                /* must be troll, TNNT TODO FOR 3.7: this will NOT be the case
-                 * since zombies can revive */
+            else if (mptr->mlet == S_TROLL)
                 tnnt_achieve(A_BLOCKED_TROLL_REVIVAL);
             if (!obj_has_timer(body, ROT_CORPSE))
                 You_feel("%sless hassled.", is_rider(mptr) ? "much " : "");
