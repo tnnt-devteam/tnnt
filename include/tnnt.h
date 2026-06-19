@@ -68,10 +68,8 @@ struct tnnt_globals_t {
      * 12th through 22nd foods, inclusive, defined in objects.c. Yay!
      * The expectation here is that 0x1 = first food type defined in objects.c,
      * 0x2 = second defined, etc. */
-    /* TNNT TODO FOR 3.7: confirm that the comestibles list in objects.h hasn't
-     * changed or been reordered, or if it has, update this accordingly. */
 #define FOODMASK_ALL     0x1FFFFFFFF /* all foods, period */
-#define FOODMASK_PRODUCE 0x0002FF800 /* all fruits & veggies */
+#define FOODMASK_PRODUCE 0x0003FF800 /* all fruits & veggies */
 #define FOODMASK_TIN     0x100000000 /* only tin */
 #define FOODMASK_GLOBS   0x000000780 /* all types of glob (only need one) */
     uint64_t foods_eaten; /* sadly there are 33 foods */
