@@ -9,6 +9,8 @@
  *    defined only in topten.c
  * 2) robotfindskitten related functions that rely on static helpers defined
  *    only in rumors.c
+ * 3) deathmatch region functions that need to use a table defined only in
+ *    region.c
  */
 
 #include <sys/types.h>
