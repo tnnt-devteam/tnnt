@@ -1426,14 +1426,17 @@ inside_arena(genericptr region UNUSED, genericptr monst)
 }
 
 /* TNNT - hack for checking whether the Arena has been entered. This can't
- * be done in the des file because the special level parser does not support
- * adding a region. It is called just before the end of the special level
+ * be done in the lua file because the lua loading code does not support
+ * adding a region. This gets called just before the end of the special level
  * loading code.
- * TNNT TODO FOR 3.7: explore adding region support (with lua callbacks!) to
- * the lua parser. I don't consider it worthwhile to do for des, but would
- * consider it worthwhile to provide upstream.
- * TNNT TODO FOR 3.7: The fixedness of this region means if the level is flipped
- * horizontally, the player "enters the arena" just by entering the level. */
+ * I previously considered making an upstream contribution to make the special
+ * level loader capable of adding a region (this type of region which has
+ * entry/exit/within triggers, not the existing des.region), but since there is
+ * no clear use case for it upstream, and no other clear use case for it in
+ * TNNT, there's little motivation for it. We might want to implement it if we
+ * ever want to provide multiple different deathmatch maps, because the arena
+ * size and coordinates could then vary.
+ */
 void
 add_deathmatch_arena_region(void)
 {

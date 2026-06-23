@@ -12,7 +12,13 @@ des.level_init({ style = "solidfill", fg = " " });
 
 des.level_flags("mazelevel");
 
-des.level_flags("nommap", "noteleport", "hardfloor")
+-- The noflipx is VERY IMPORTANT. The invisible region which covers the whole
+-- arena and triggers the start of the deathmatch upon entry has hardcoded,
+-- fixed coordinates that are defined in C - not here, because there isn't a way
+-- to add such a region in the special level code (des.region refers to a
+-- different type of region). If this level were to be flipped, the hero would
+-- spawn inside the arena region and the deathmatch would start immediately.
+des.level_flags("nommap", "noteleport", "hardfloor", "noflipx")
 des.message("Upon exiting the portal, you immediately feel on edge.")
 des.message("You feel as if you've stumbled across something very dangerous.")
 des.message("You resist the urge to flee.")
