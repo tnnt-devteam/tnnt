@@ -341,7 +341,7 @@ dosounds(void)
         static const char *const devteambranch_msg[] = {
             "a nearby typing noise.",
             "people arguing about game balance.",
-            "a voice say \"3.7.0\".",
+            "a voice say \"NetHack 5.0.1\".",
             "an infinite number of monkeys arguing about the script for Hamlet"
         };
         You_hear1(devteambranch_msg[rn2(3 + hallu)]);
@@ -1160,7 +1160,7 @@ domonnoise(struct monst *mtmp)
             };
             const struct devteam_msg patrmsgs[] = {
                 { "Thanks for that recent bug report.", 1},
-                { "indicates that 3.7 might be released soon.", 0},
+                { "reminds you that \"NetHack 3.7\" is actually NetHack 5.0.", 0},
                 { "To be honest, I'm surprised RGRN is still going.", 1},
             };
             const struct devteam_msg lorimermsgs[] = {
@@ -1206,7 +1206,6 @@ domonnoise(struct monst *mtmp)
                 devteam_quest(mtmp, NULL);
                 break;
             }
-            /* TNNT TODO: stuff here that gives you valid in-game info */
             if (!mtmp->mcan) {
                 /* break; */
             }
