@@ -1089,12 +1089,10 @@ addinv_core2(struct obj *obj)
 
     /* TNNT: achievements for carrying a certain amount of gold; check when
      * adding more gold to inventory */
-    if (obj->oclass == COIN_CLASS) {
-        long umoney = money_cnt(gi.invent);
-        /* TNNT TODO FOR 3.7(?): with the new param for hidden_gold, can
-         * include it without leaking info on !cknown bags. if this is done,
-         * `if (oclass == COIN_CLASS)` needs `|| Has_contents(obj)` added. */
-        /* umoney += hidden_gold(); */
+    if (!tnnt_is_achieved(A_CARRIED_100000_GOLD)
+        && (obj->oclass == COIN_CLASS
+            || (Has_contents(obj) && contained_gold(obj, FALSE) > 0))) {
+        long umoney = money_cnt(gi.invent) + hidden_gold(FALSE);
         if (umoney >= 100000L) {
             tnnt_achieve(A_CARRIED_100000_GOLD);
         }
