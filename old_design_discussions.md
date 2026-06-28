@@ -114,6 +114,14 @@ Miscellaneous suggestions:
 - Add a variety of deathmatch maps so it's not always the same one.
 - Pets you ascend with get recorded in the NPC data file and get spawned in as
   part of the deathmatch.
+- Delete the deathmatch level when exiting it after starting the deathmatch
+  even if the hero is victorious. Current behavior is to allow the hero back in
+  there when they won the deathmatch, and sealing or deleting the level raises
+  the possibility of players getting irritated when they left some non-unique
+  item in there and now it's gone forever. However, if we were to find players
+  are exploiting the arena for something, we might still decide to seal (but
+  not delete) the level after exiting for any reason after starting the
+  deathmatch.
 
 ## Achievements
 
