@@ -809,8 +809,6 @@ drag_ball(coordxy x, coordxy y, int *bc_control,
 
             } /* now check again in case mon died */
             if (!m_at(uchain->ox, uchain->oy)
-                /* TNNT TODO FOR 3.7: this is a fix to a vanilla bug. Check if
-                 * vanilla has fixed it in some different way. */
                 && in_out_region(uchain->ox, uchain->oy)) {
                 u.ux = uchain->ox;
                 u.uy = uchain->oy;
@@ -936,10 +934,6 @@ drop_ball(coordxy x, coordxy y)
                 || ((t = t_at(x, y))
                     && (is_pit(t->ttyp)
                         || is_hole(t->ttyp))))
-            /* TNNT TODO FOR 3.7: Both these in_out_regions are fixes to a
-             * vanilla bug that are necessary so the hero cannot drag themselves
-             * into the NPC deathmatch arena behind a thrown ball and avoid
-             * triggering the deathmatch. Check if vanilla has fixed this bug */
             && in_out_region(x, y)) {
             u.ux = x;
             u.uy = y;
