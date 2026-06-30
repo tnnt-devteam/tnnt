@@ -41,8 +41,10 @@ des.engraving({02,09}, "burn",
 
 --The Devteam
 des.monster({ id = "DevTeam member", x=29, y=06, peaceful = 1, name = "bhaak" })
--- TNNT TODO FOR 3.7: give paxed an axe
-des.monster({ id = "DevTeam member", x=38, y=06, peaceful = 1, name = "paxed" })
+des.monster({ id = "DevTeam member", x=38, y=06, peaceful = 1, name = "paxed",
+              inventory = function()
+   des.object("axe")
+end, keep_default_invent = true })
 des.monster({ id = "DevTeam member", x=29, y=12, peaceful = 1, name = "lorimer" })
 des.monster({ id = "DevTeam member", x=38, y=12, peaceful = 1, name = "ais523" })
 des.monster({ id = "DevTeam member", x=43, y=07, peaceful = 1, name = "PatR" })
