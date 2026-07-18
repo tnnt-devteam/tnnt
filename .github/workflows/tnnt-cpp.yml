@@ -14,7 +14,7 @@ jobs:
     env:
       HINTS_FILE: linux-debug
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: install dependencies
       run: |
         sudo apt-get -qq -y update
