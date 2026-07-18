@@ -12,15 +12,16 @@ jobs:
   linux-build:
     runs-on: ubuntu-latest
     env:
-      HINTS_FILE: linux-debug.gha
+      HINTS_FILE: linux-debug
     steps:
     - uses: actions/checkout@v4
+    - name: install dependencies
+      run: |
+        sudo apt-get -qq -y update
+        sudo apt-get -qq -y install libncurses-dev pkg-config
     - name: setup
       run: ./sys/unix/setup.sh sys/unix/hints/$HINTS_FILE
+    - name: fetch lua
+      run: make fetch-lua
     - name: make all
       run: make all
-    - name: make install
-      run: make install
-
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
