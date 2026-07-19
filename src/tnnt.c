@@ -2529,17 +2529,14 @@ tnnt_update_ukilled(int mndx)
             if (i >= PM_BABY_GRAY_DRAGON && i <= PM_BABY_YELLOW_DRAGON) {
                 xint8 offset = i - PM_BABY_GRAY_DRAGON;
                 baby_dragons_killed |= (1 << offset);
-                /* TNNT TODO FOR 3.7: with the introduction of gold dragons,
-                 * 0x1ff will change to 0x3ff, both for this one and for
-                 * A_KILLED_ALL_DRAGONS a couple lines down */
-                if (baby_dragons_killed == 0x1ff)
+                if (baby_dragons_killed == 0x3ff)
                     tnnt_achieve(A_KILLED_ALL_BABY_DRAGONS);
             }
             /* Kill all dragons achievement */
             if (i >= PM_GRAY_DRAGON && i <= PM_YELLOW_DRAGON) {
                 xint8 offset = i - PM_GRAY_DRAGON;
                 dragons_killed |= (1 << offset);
-                if (dragons_killed == 0x1ff)
+                if (dragons_killed == 0x3ff)
                     tnnt_achieve(A_KILLED_ALL_DRAGONS);
             }
         }
