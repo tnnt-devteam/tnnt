@@ -2580,17 +2580,18 @@ tnnt_id_achvmt(short otyp)
     switch (objects[otyp].oc_class) {
     case ARMOR_CLASS:
         /* Armor achievements have a lot of ranges, unfortunately. */
-        /* TNNT TODO FOR 3.7: At least one of these ranges has changed (helm of
-         * brilliance is no longer shuffled, and comes before the shuffled ones;
-         * identifying brilliance should still be required for the achievement).
-         * Review and fix these ranges. */
         if ((otyp >= CORNUTHAUM && otyp <= DUNCE_CAP)
             || (otyp >= HELMET && otyp <= HELM_OF_TELEPATHY))
+            /* note that this does not include the non-randomized
+             * crystal helmet / helm of brilliance, which therefore is not
+             * required for this achievement */
             return A_IDENTIFIED_ALL_HELMS;
         if (otyp >= CLOAK_OF_PROTECTION && otyp <= CLOAK_OF_DISPLACEMENT)
             return A_IDENTIFIED_ALL_CLOAKS;
         if (otyp >= LEATHER_GLOVES && otyp <= GAUNTLETS_OF_DEXTERITY)
             return A_IDENTIFIED_ALL_GLOVES;
+        if (otyp >= SMALL_SHIELD && otyp <= SHIELD_OF_SHOCK_RESISTANCE)
+            return A_IDENTIFIED_ALL_SHIELDS;
         if (otyp >= SPEED_BOOTS && otyp <= LEVITATION_BOOTS)
             return A_IDENTIFIED_ALL_BOOTS;
         break;
