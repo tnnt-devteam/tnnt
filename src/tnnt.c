@@ -132,7 +132,14 @@ dotnntdebug(void)
         }
         putstr(en_win, 0, "");
 
+        putstr(en_win, ATR_BOLD, "Swap Chest:");
         Sprintf(buf, "Swap chest #1 level: %d", tnnt_globals.swapchest1_dlevel);
+        putstr(en_win, 0, buf);
+        putstr(en_win, 0, "");
+
+        putstr(en_win, ATR_BOLD, "Robotfindskitten:");
+        Sprintf(buf, "Kitten x,y = %d,%d",
+                tnnt_globals.kitten_loc.x, tnnt_globals.kitten_loc.y);
         putstr(en_win, 0, buf);
 
         display_nhwindow(en_win, TRUE);
