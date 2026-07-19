@@ -11,6 +11,8 @@
  *    only in rumors.c
  * 3) deathmatch region functions that need to use a table defined only in
  *    region.c
+ * 4) robotfindskitten custom special level function that needs to go in a table
+ *    in sp_lev.c
  */
 
 #include <sys/types.h>

@@ -162,6 +162,7 @@ int lspo_terrain(lua_State *);
 int lspo_trap(lua_State *);
 int lspo_wall_property(lua_State *);
 int lspo_wallify(lua_State *);
+int lspo_set_kitten_loc(lua_State *);
 
 #define SPLEV_LEFT 1
 #define SPLEV_H_LEFT 2
@@ -6012,6 +6013,33 @@ lspo_wallify(lua_State *L)
     return 0;
 }
 
+/* TNNT: set real location of the kitten on the robotfindskitten level
+ * set_kitten_loc(x, y)
+ * */
+int
+lspo_set_kitten_loc(lua_State *L)
+{
+    coordxy x, y;
+    int argc = lua_gettop(L);
+
+    create_des_coder();
+
+    if (argc == 2 && lua_type(L, 1) == LUA_TNUMBER
+        && lua_type(L, 2) == LUA_TNUMBER) {
+        x = luaL_checkinteger(L, 1);
+        y = luaL_checkinteger(L, 2);
+    } else {
+        nhl_error(L, "wrong parameters");
+    }
+
+    get_location_coord(&x, &y, ANY_LOC, gc.coder->croom,
+                       SP_COORD_PACK(x, y));
+    tnnt_globals.kitten_loc.x = x;
+    tnnt_globals.kitten_loc.y = y;
+
+    return 0;
+}
+
 /* reset_level is only needed for testing purposes */
 int
 lspo_reset_level(lua_State *L)
@@ -6435,6 +6463,7 @@ static const struct luaL_Reg nhl_functions[] = {
     { "reset_level", lspo_reset_level },
     { "finalize_level", lspo_finalize_level },
     { "gas_cloud", lspo_gas_cloud },
+    { "set_kitten_loc", lspo_set_kitten_loc }, /* TNNT */
     /* TODO: { "branch", lspo_branch }, */
     /* TODO: { "portal", lspo_portal }, */
     { NULL, NULL }

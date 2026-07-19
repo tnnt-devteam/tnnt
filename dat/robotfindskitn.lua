@@ -1,9 +1,11 @@
 --
 des.level_init({ style = "solidfill", fg = " " });
 
-des.level_flags("mazelevel");
-
-des.level_flags("nommap", "hardfloor")
+-- note that level flipping code does NOT bother flipping
+-- tnnt_globals.kitten_loc; instead, we just use the noflip flag since
+-- kitten_loc is only used on this one level where no one would notice
+-- flipping anyway.
+des.level_flags("mazelevel", "nommap", "hardfloor", "noflip")
 des.message("You feel oddly robotic.")
 --         1         2         3         4         5         6         7
 --123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -28,7 +30,23 @@ des.map([[
 ............................................................................
 ............................................................................
 ............................................................................
-............................................................................
 ]]);
-des.region(selection.area(00,00,74,19), "lit")
+local all = selection.area(00,00,75,19)
+des.region(all, "lit")
+
+local NUM_NKI = 70
+
+-- place kitten
+local kcoord = all:rndcoord(1)
+nh.pline(kcoord.x..', '..kcoord.y)
+des.set_kitten_loc(kcoord.x, kcoord.y)
+des.terrain(kcoord, "N")
+
+-- place non-kitten items; a special case in sel_set_ter makes the first one set
+-- the real kitten
+for i = 1, NUM_NKI do
+   local coord = all:rndcoord(1)
+   des.terrain(coord, "N")
+end
+
 des.levregion({ region = {00,00,74,19}, exclude = {0,0,0,0}, type="branch" })

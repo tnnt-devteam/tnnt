@@ -582,8 +582,6 @@ fixup_special(void)
         /* water level is an odd beast - it has to be set up
            before calling place_lregions etc. */
         setup_waterlevel();
-    } else if (Is_rfk_level(&u.uz)) {
-        tnnt_setup_rfk_level();
     }
     for (x = 0; x < gn.num_lregions; x++, r++) {
         switch (r->rtype) {
@@ -1875,39 +1873,6 @@ unsetup_waterlevel(void)
         free((genericptr_t) b);
     }
     svb.bbubbles = ge.ebubbles = (struct bubble *) 0;
-}
-
-staticfn void
-tnnt_setup_rfk_level(void)
-{
-    /* TNNT TODO FOR 3.7: do this in lua rather than C */
-#define NUM_NKI 70
-    coordxy x, y;
-    int i, tryct;
-    /* place kitten */
-    if (!tnnt_is_achieved(A_FOUND_KITTEN)) { /* in case of #wizmakemap */
-        tryct = 50;
-        do {
-            tnnt_globals.kitten_loc.x = x = rnd(COLNO - 1);
-            tnnt_globals.kitten_loc.y = y = rn2(ROWNO);
-        } while ((!goodpos(x, y, (struct monst *) 0, 0)
-                || t_at(x, y) != (struct trap *) 0)
-                && --tryct > 0);
-        levl[x][y].typ = NKI;
-    }
-
-    /* place non-kitten items */
-    for (i = 0; i < NUM_NKI; i++) {
-        for (tryct = rnd(4); tryct; tryct--) {
-            x = rnd(COLNO - 1);
-            y = rn2(ROWNO);
-            if (goodpos(x, y, (struct monst *) 0, 0)
-                && t_at(x, y) == (struct trap *) 0) {
-                levl[x][y].typ = NKI;
-                break;
-            }
-        }
-    }
 }
 
 staticfn void
