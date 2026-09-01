@@ -236,6 +236,8 @@ ACH("Helm Hoarder", "Identify all randomized helms", IDENTIFIED_ALL_HELMS),
 ACH("Cloak Connoisseur", "Identify all randomized cloaks",
     IDENTIFIED_ALL_CLOAKS),
 ACH("Glove Lover", "Identify all randomized gloves", IDENTIFIED_ALL_GLOVES),
+ACH("Shield Specialist", "Identify all randomized shields",
+    IDENTIFIED_ALL_SHIELDS),
 ACH("Footwear Fanatic", "Identify all randomized boots", IDENTIFIED_ALL_BOOTS),
 ACH("Mineralogist", "Identify all valuable gems",
     IDENTIFIED_ALL_GEMS),
@@ -745,8 +747,8 @@ ACH("Potion Roulette",
     "Drink an unidentified healing potion while below 10% HP",
     DRANK_UNID_HEALING_POTION),
 
-/* 6 free bits in tnntachieve5
- * 378 achievements defined
+/* 5 free bits in tnntachieve5
+ * 379 achievements defined
  * (The achievement bitmap is auto-sized at compile time based on
  * NUM_TNNT_ACHIEVEMENTS, but we still keep this comment around to remind the
  * person who rolls it over into a new tnntachieve* xlogfile field that they

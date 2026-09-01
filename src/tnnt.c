@@ -11,6 +11,8 @@
  *    only in rumors.c
  * 3) deathmatch region functions that need to use a table defined only in
  *    region.c
+ * 4) robotfindskitten custom special level function that needs to go in a table
+ *    in sp_lev.c
  */
 
 #include <sys/types.h>
@@ -130,7 +132,14 @@ dotnntdebug(void)
         }
         putstr(en_win, 0, "");
 
+        putstr(en_win, ATR_BOLD, "Swap Chest:");
         Sprintf(buf, "Swap chest #1 level: %d", tnnt_globals.swapchest1_dlevel);
+        putstr(en_win, 0, buf);
+        putstr(en_win, 0, "");
+
+        putstr(en_win, ATR_BOLD, "Robotfindskitten:");
+        Sprintf(buf, "Kitten x,y = %d,%d",
+                tnnt_globals.kitten_loc.x, tnnt_globals.kitten_loc.y);
         putstr(en_win, 0, buf);
 
         display_nhwindow(en_win, TRUE);
@@ -2520,17 +2529,14 @@ tnnt_update_ukilled(int mndx)
             if (i >= PM_BABY_GRAY_DRAGON && i <= PM_BABY_YELLOW_DRAGON) {
                 xint8 offset = i - PM_BABY_GRAY_DRAGON;
                 baby_dragons_killed |= (1 << offset);
-                /* TNNT TODO FOR 3.7: with the introduction of gold dragons,
-                 * 0x1ff will change to 0x3ff, both for this one and for
-                 * A_KILLED_ALL_DRAGONS a couple lines down */
-                if (baby_dragons_killed == 0x1ff)
+                if (baby_dragons_killed == 0x3ff)
                     tnnt_achieve(A_KILLED_ALL_BABY_DRAGONS);
             }
             /* Kill all dragons achievement */
             if (i >= PM_GRAY_DRAGON && i <= PM_YELLOW_DRAGON) {
                 xint8 offset = i - PM_GRAY_DRAGON;
                 dragons_killed |= (1 << offset);
-                if (dragons_killed == 0x1ff)
+                if (dragons_killed == 0x3ff)
                     tnnt_achieve(A_KILLED_ALL_DRAGONS);
             }
         }
@@ -2574,17 +2580,18 @@ tnnt_id_achvmt(short otyp)
     switch (objects[otyp].oc_class) {
     case ARMOR_CLASS:
         /* Armor achievements have a lot of ranges, unfortunately. */
-        /* TNNT TODO FOR 3.7: At least one of these ranges has changed (helm of
-         * brilliance is no longer shuffled, and comes before the shuffled ones;
-         * identifying brilliance should still be required for the achievement).
-         * Review and fix these ranges. */
         if ((otyp >= CORNUTHAUM && otyp <= DUNCE_CAP)
             || (otyp >= HELMET && otyp <= HELM_OF_TELEPATHY))
+            /* note that this does not include the non-randomized
+             * crystal helmet / helm of brilliance, which therefore is not
+             * required for this achievement */
             return A_IDENTIFIED_ALL_HELMS;
         if (otyp >= CLOAK_OF_PROTECTION && otyp <= CLOAK_OF_DISPLACEMENT)
             return A_IDENTIFIED_ALL_CLOAKS;
         if (otyp >= LEATHER_GLOVES && otyp <= GAUNTLETS_OF_DEXTERITY)
             return A_IDENTIFIED_ALL_GLOVES;
+        if (otyp >= SMALL_SHIELD && otyp <= SHIELD_OF_SHOCK_RESISTANCE)
+            return A_IDENTIFIED_ALL_SHIELDS;
         if (otyp >= SPEED_BOOTS && otyp <= LEVITATION_BOOTS)
             return A_IDENTIFIED_ALL_BOOTS;
         break;

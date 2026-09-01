@@ -134,10 +134,6 @@ struct tnnt_globals_t {
 #define RDBL_SCROLL  0x0001
 #define RDBL_BOOK    0x0002
 #define RDBL_COIN    0x0004
-/* TNNT TODO FOR 3.7: Hawaiian shirt can be read, but doesn't actually contain
- * text. We should decide if we want to count them (and change the achievement
- * description to "shirt") or explicitly keep it as only T-shirt (and make this
- * constant RDBL_T_SHIRT). */
 #define RDBL_SHIRT   0x0008
 #define RDBL_MARKER  0x0010
 #define RDBL_CANDY   0x0020
@@ -146,7 +142,10 @@ struct tnnt_globals_t {
 #define RDBL_APRON   0x0100
 #define ALL_READABLE 0x01FF
     /* Book of the Dead and Orb of Fate are also readable items, but are not
-     * counted towards the "read all readable items" achievement. */
+     * counted towards the "read all readable items" achievement.
+     * Hawaiian shirt can be "read" to see what its design is, but doesn't
+     * actually contain any text, so it doesn't make sense to be required for an
+     * achievement named "Hyperliterate". */
     unsigned short readables;
 
     unsigned feline_m_ids[MAX_TAMED_FELINES]; /* Cat Lady: ids of tamed cats */
