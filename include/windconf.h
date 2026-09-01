@@ -1,4 +1,4 @@
-/* NetHack 5.0	windconf.h	$NHDT-Date: 1596498552 2020/08/03 23:49:12 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.89 $ */
+/* NetHack 5.0	windconf.h	$NHDT-Date: 1781973091 2026/06/20 16:31:31 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.133 $ */
 /* Copyright (c) NetHack PC Development Team 1993, 1994.  */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -163,7 +163,7 @@ typedef SSIZE_T ssize_t;
 #endif /* _MSC_VER */
 
 /* The following is needed for prototypes of certain functions */
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || defined(__GNUC__)
 #include <process.h> /* Provides prototypes of exit(), spawn()      */
 #endif
 

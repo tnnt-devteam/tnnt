@@ -1,4 +1,4 @@
-/* NetHack 5.0	mkobj.c	$NHDT-Date: 1764044196 2025/11/24 20:16:36 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.326 $ */
+/* NetHack 5.0	mkobj.c	$NHDT-Date: 1781973055 2026/06/20 16:30:55 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.335 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Derek S. Ray, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -1522,7 +1522,7 @@ shrink_glob(
             shrink = FALSE, gone = FALSE, updinv = FALSE;
     struct obj *contnr = (obj->where == OBJ_CONTAINED) ? obj->ocontainer : 0,
                *topcontnr = 0;
-    unsigned old_top_owt = 0;
+    unsigned old_top_owt = 0, old_owt = obj->owt;
 
     if (!obj->globby) {
         impossible("shrink_glob for non-glob [%d: %s]?",
@@ -1551,12 +1551,25 @@ shrink_glob(
             obj->owt = 0; /* not required; accurately reflects obj's state */
             shrinking_glob_gone(obj);
         } else {
-            /* shrank but not gone; reduce remaining weight */
+
+            /* shrank but not gone; reduce remaining weight
+               and food-content (if needed) */
             obj->owt -= (unsigned) delta;
             /* when contained, update container's weight (recursively if
                nested); won't be in a container carried by hero (since
                catching up for lost time never applies in that situation)
                but might be in one on floor or one carried by a monster */
+            if (old_owt && obj->oeaten) {
+                unsigned percent_reduction = 100 - ((obj->owt * 100) / old_owt),
+                         oeaten_reduction;
+
+                /* reduce remaining nutrition by same percentage */
+                oeaten_reduction = (percent_reduction * obj->oeaten + 50) / 100;
+
+                if (oeaten_reduction <= obj->oeaten)
+                    obj->oeaten -= oeaten_reduction;
+
+            }
             if (contnr)
                 container_weight(contnr);
             /* resume regular shrinking */
@@ -1685,6 +1698,8 @@ staticfn void
 shrinking_glob_gone(struct obj *obj)
 {
     xint16 owhere = obj->where;
+
+    /* obfree() should take care of eating_glob() food fixups */
 
     if (owhere == OBJ_INVENT) {
         if (obj->owornmask) {

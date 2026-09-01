@@ -1,4 +1,4 @@
-/* NetHack 5.0	do.c	$NHDT-Date: 1774269965 2026/03/23 04:46:05 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.404 $ */
+/* NetHack 5.0	do.c	$NHDT-Date: 1781973045 2026/06/20 16:30:45 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.411 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Derek S. Ray, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -1393,8 +1393,10 @@ save_currentstate(void)
     if (flags.ins_chkpt) {
         /* write out just-attained level, with pets and everything */
         nhfp = currentlevel_rewrite();
-        if (!nhfp)
+        if (!nhfp) {
+            program_state.in_checkpoint--;
             return;
+        }
         if (nhfp->structlevel)
             bufon(nhfp->fd);
         nhfp->mode = WRITING;
@@ -2347,6 +2349,7 @@ revive_corpse(struct obj *corpse)
                     pline("%s disappears%s!", The(cname), effect);
                 }
             }
+            (void) maybe_set_terrain_effects(mtmp, 0);
             break;
 
         case OBJ_MINVENT: /* probably a nymph's */

@@ -1,4 +1,4 @@
-/* NetHack 5.0	restore.c	$NHDT-Date: 1736530208 2025/01/10 09:30:08 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.234 $ */
+/* NetHack 5.0	restore.c	$NHDT-Date: 1781973064 2026/06/20 16:31:04 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.265 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Michael Allison, 2009. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -448,6 +448,14 @@ restmonchn(NHFILE *nhfp)
             restshk(mtmp, ghostly);
         if (mtmp->ispriest)
             restpriest(mtmp, ghostly);
+        if (mtmp->isgd) {
+            /* fixup for new bit MON_PARKED added post 5.0.0 */
+            if (!mtmp->mx && (mtmp->mstate & MON_PARKED) == 0L
+                && (mtmp->mstate & MON_MIGRATING) == 0L) {
+                mtmp->mstate &= ~TERRAIN_FALLOUT_MASK;
+                mtmp->mstate |= MON_PARKED;
+            }
+        }
 
         if (!ghostly) {
             if (mtmp->m_id == svc.context.polearm.m_id)
@@ -855,9 +863,6 @@ dorecover(NHFILE *nhfp)
     init_oclass_probs(); /* recompute go.oclass_prob_totals[] */
 
     restlevelstate();
-#ifdef INSURANCE
-    savestateinlock();
-#endif
     rtmp = restlevelfile(ledger_no(&u.uz));
     if (rtmp < 2)
         return rtmp; /* dorecover called recursively */
@@ -965,6 +970,12 @@ dorecover(NHFILE *nhfp)
 
     run_timers(); /* expire all timers that have gone off while away */
     program_state.restoring = 0; /* affects bot() so clear before docrt() */
+#ifdef INSURANCE
+    /* first checkpoint of the restored session; every level file has been
+       written and the current level has been read back in, so recover has
+       something to work with even if the player never changes level */
+    save_currentstate();
+#endif
 
     if (ge.early_raw_messages && !program_state.beyond_savefile_load) {
         /*
@@ -1152,7 +1163,7 @@ getlev(NHFILE *nhfp, int pid, xint8 lev)
     Sfi_dest_area(nhfp, &svu.updest, "lev-updest");
     Sfi_dest_area(nhfp, &svd.dndest, "lev-dndest");
     Sfi_levelflags(nhfp, &svl.level.flags, "lev-level_flags");
-    rest_adjust_levelflags();
+    rest_adjust_levelflags(elapsed);
     if (svd.doors) {
         free(svd.doors);
         svd.doors = 0;
@@ -1219,6 +1230,8 @@ getlev(NHFILE *nhfp, int pid, xint8 lev)
         for (y = 0; y < ROWNO; y++)
             svl.level.monsters[x][y] = (struct monst *) 0;
     for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+        if ((mtmp->mstate & TERRAIN_FALLOUT_MASK) != 0)
+            gp.pending_terrain_effects |= (mtmp->mstate & TERRAIN_FALLOUT_MASK);
         if (mtmp->isshk)
             set_residency(mtmp, FALSE);
         /* set some monst fields to sane values when coming from a bones file */
@@ -1231,8 +1244,7 @@ getlev(NHFILE *nhfp, int pid, xint8 lev)
             u.usteed_mid = 0;
         } else {
             if (mtmp->m_id == u.ustuck_mid) {
-                set_ustuck(mtmp);
-                u.ustuck_mid = 0;
+                set_ustuck(mtmp); /* set_ustuck clears u.ustuck_mid */
             }
             place_monster(mtmp, mtmp->mx, mtmp->my);
             if (mtmp->wormno)
@@ -1360,11 +1372,13 @@ getlev(NHFILE *nhfp, int pid, xint8 lev)
 }
 
 void
-rest_adjust_levelflags(void)
+rest_adjust_levelflags(long elapsed)
 {
     /* adjust timestamps */
     relative_time_to_moves(&svl.level.flags.stasis_until);
+    svl.level.flags.stasis_until -= elapsed;
 }
+
 void
 moves_to_relative_time(long *timestamp)
 {

@@ -1,4 +1,4 @@
-/* NetHack 5.0	Window.c	$NHDT-Date: 1596498371 2020/08/03 23:46:11 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.12 $ */
+/* NetHack 5.0	Window.c	$NHDT-Date: 1781973108 2026/06/20 16:31:48 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.17 $ */
 /* Copyright (c) Dean Luick, 1992                                 */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -168,6 +168,7 @@ WindowClassRec windowClassRec = {
 
 WidgetClass windowWidgetClass = (WidgetClass) &windowClassRec;
 
+#ifndef USE_XFT
 Font
 WindowFont(Widget w)
 {
@@ -179,3 +180,4 @@ WindowFontStruct(Widget w)
 {
     return ((WindowWidget) w)->window.font;
 }
+#endif

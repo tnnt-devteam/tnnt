@@ -153,7 +153,7 @@ SYSOBJ ?= $(TARGETPFX)ioctl.o $(TARGETPFX)unixmain.o $(TARGETPFX)unixtty.o \
 # flags for Linux
 #   compile normally
 # CFLAGS = -O2 -fomit-frame-pointer -I../include
-# LFLAGS = -L/usr/X11R6/lib
+# LFLAGS = -L/usr/lib64
 #   OR compile backwards compatible a.out format
 # CFLAGS = -O2 -b i486-linuxaout -fomit-frame-pointer -I../include
 # LFLAGS = -b i486-linuxaout -L/usr/X11R6/lib
@@ -259,11 +259,11 @@ WINCURSESOBJ ?= $(TARGETPFX)cursmain.o $(TARGETPFX)curswins.o \
 WINX11SRC ?= ../win/X11/Window.c ../win/X11/dialogs.c ../win/X11/winX.c \
 	../win/X11/winmap.c  ../win/X11/winmenu.c ../win/X11/winmesg.c \
 	../win/X11/winmisc.c ../win/X11/winstat.c ../win/X11/wintext.c \
-	../win/X11/winval.c $(GENTILECFILE)
+	../win/X11/winval.c ../win/X11/winlabel.c $(GENTILECFILE)
 WINX11OBJ ?= $(TARGETPFX)Window.o $(TARGETPFX)dialogs.o $(TARGETPFX)winX.o \
 	$(TARGETPFX)winmap.o $(TARGETPFX)winmenu.o $(TARGETPFX)winmesg.o \
 	$(TARGETPFX)winmisc.o $(TARGETPFX)winstat.o $(TARGETPFX)wintext.o \
-	$(TARGETPFX)winval.o
+	$(TARGETPFX)winval.o $(TARGETPFX)winlabel.o
 #
 # Files for a Qt 3 interface (renamed since nethack 3.6.x)
 #
@@ -659,7 +659,7 @@ $(GAME):	pregame $(MAKEDEFS) $(LUALIB) $(WAVS) $(SYSTEM)
 #$(info DATE_O=$(DATE_O))
 #$(info GENTILEOFILE=$(GENTILEOFILE))
 
-Sysunix: $(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
+Sysunix: $(HOSTOBJ) $(HOBJ) $(GENTILEOFILE) $(TARGET_HACKLIB) \
 		$(DATE_O) $(BUILDMORE) Makefile
 	@echo "Linking $(GAME)."
 	$(AT)$(TARGET_LINK) $(TARGET_LFLAGS) -o $(GAMEBIN) \
@@ -668,7 +668,7 @@ Sysunix: $(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
 		$(TARGET_LIBS) $(LUALIBS) $(AUTOLIBS)
 	@touch Sysunix
 
-Sys3B2:	$(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
+Sys3B2:	$(HOSTOBJ) $(HOBJ) $(GENTILEOFILE) $(TARGET_HACKLIB) \
 		$(DATE_O) $(BUILDMORE) Makefile
 	@echo "Linking $(GAME)."
 	$(AT)$(TARGET_LINK) $(TARGET_LFLAGS) -o $(GAMEBIN) \
@@ -676,7 +676,7 @@ Sys3B2:	$(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
 		$(TARGET_HACKLIB) $(WINLIB) $(LUALIBS) -lmalloc
 	@touch Sys3B2
 
-Sysatt:	$(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
+Sysatt:	$(HOSTOBJ) $(HOBJ) $(GENTILEOFILE) $(TARGET_HACKLIB) \
 		$(DATE_O) $(BUILDMORE) Makefile
 	@echo "Loading $(GAME)."
 	$(AT)$(LD) $(TARGET_LFLAGS) /lib/crt0s.o /lib/shlib.ifile \
@@ -684,7 +684,7 @@ Sysatt:	$(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
 		$(DATE_O) $(GENTILEOFILE) $(TARGET_HACKLIB) $(LUALIBS)
 	@touch Sysatt
 
-Systos:	$(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
+Systos:	$(HOSTOBJ) $(HOBJ) $(GENTILEOFILE) $(TARGET_HACKLIB) \
 		$(DATE_O) $(BUILDMORE) Makefile
 	@echo "Linking $(GAME)."
 	$(AT)$(TARGET_LINK) $(TARGET_LFLAGS) -o $(GAMEBIN) \
@@ -692,7 +692,7 @@ Systos:	$(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
 		$(WINLIB) $(LUALIBS)
 	@touch Systos
 
-SysV-AT: DUMB.Setup $(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
+SysV-AT: DUMB.Setup $(HOSTOBJ) $(HOBJ) $(GENTILEOFILE) $(TARGET_HACKLIB) \
 		$(DATE_O) $(BUILDMORE) Makefile
 	@echo "Linking $(GAME)."
 	$(AT)$(TARGET_LINK) $(TARGET_LFLAGS) -o $(GAMEBIN) \
@@ -700,7 +700,7 @@ SysV-AT: DUMB.Setup $(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
 		$(WINLIB) $(LUALIBS)
 	@touch SysV-AT
 
-SysBe: $(GENTILEOFILE) $(HOSTOBJ) $(HOBJ) $(TARGET_HACKLIB) \
+SysBe: $(HOSTOBJ) $(HOBJ) $(GENTILEOFILE) $(TARGET_HACKLIB) \
 		$(DATE_O) $(BUILDMORE) Makefile
 	@echo "Linking $(GAME)."
 	$(AT)$(TARGET_LINK) $(TARGET_LFLAGS) -o $(GAME) \
@@ -1085,6 +1085,8 @@ $(TARGETPFX)winX.o: ../win/X11/winX.c $(HACK_H) ../include/dlb.h \
 		../include/winX.h ../include/xwindow.h ../win/X11/nh32icon \
 		../win/X11/nh56icon ../win/X11/nh72icon
 	$(TARGET_CC) $(TARGET_CFLAGS) $(X11CFLAGS) -c -o $@ ../win/X11/winX.c
+$(TARGETPFX)winlabel.o: ../win/X11/winlabel.c $(HACK_H) ../include/winX.h
+	$(TARGET_CC) $(TARGET_CFLAGS) $(X11CFLAGS) -c -o $@ ../win/X11/winlabel.c
 $(TARGETPFX)winmap.o: ../win/X11/winmap.c $(HACK_H) ../include/dlb.h \
 		../include/tile2x11.h ../include/winX.h ../include/xwindow.h
 	$(TARGET_CC) $(TARGET_CFLAGS) $(X11CFLAGS) -c -o $@ ../win/X11/winmap.c

@@ -1,4 +1,4 @@
-/* NetHack 5.0	symbols.c	$NHDT-Date: 1736530208 2025/01/10 09:30:08 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.123 $ */
+/* NetHack 5.0	symbols.c	$NHDT-Date: 1781973069 2026/06/20 16:31:09 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.128 $ */
 /* Copyright (c) NetHack Development Team 2020.                   */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -7,6 +7,9 @@
 
 staticfn void savedsym_add(const char *, const char *, int);
 staticfn struct _savedsym *savedsym_find(const char *, int);
+staticfn const struct symparse *search_loadsyms(const char *buf, size_t len);
+staticfn int symparse_compare(const void *s1_, const void *s2_);
+staticfn int symparse_find(const void *bstr_, const void *rec_);
 
 extern const uchar def_r_oc_syms[MAXOCLASSES];      /* drawing.c */
 
@@ -28,6 +31,11 @@ void (*ibmgraphics_mode_callback)(void) = 0;
 void (*utf8graphics_mode_callback)(void) = 0; /* set in term_start_screen and
                                                * found in unixtty,windtty,&c */
 #endif
+
+struct bounded_string {
+    const char *str;
+    size_t len;
+};
 
 /*
  * Explanations of the functions found below:
@@ -873,43 +881,112 @@ match_sym(char *buf)
         { "S_explode8", "S_expl_bc" }, { "S_explode9", "S_expl_br" },
     };
     int i;
-    size_t len = strlen(buf);
-    const char *p = strchr(buf, ':'), *q = strchr(buf, '=');
-    const struct symparse *sp = loadsyms;
+    size_t len;
+    const struct symparse *sp;
 
     /* G_ lines will never match here */
     if ((buf[0] == 'G' || buf[0] == 'g') && buf[1] == '_')
         return (struct symparse *) 0;
 
-    if (!p || (q && q < p))
-        p = q;
-    if (p) {
-        /* note: there will be at most one space before the '='
-           because caller has condensed buf[] with mungspaces() */
-        if (p > buf && p[-1] == ' ')
-            p--;
-        len = (int) (p - buf);
-    }
-    while (sp->range) {
-        if ((len >= strlen(sp->name)) && !strncmpi(buf, sp->name, len))
-            return sp;
-        sp++;
-    }
+    len = strcspn(buf, "=:");
+    /* note: there will be at most one space before the '='
+       because caller has condensed buf[] with mungspaces() */
+    if (len != 0 && buf[len-1] == ' ')
+        len--;
+    sp = search_loadsyms(buf, len);
+    if (sp != NULL)
+        return sp;
     for (i = 0; i < SIZE(alternates); ++i) {
         if ((len >= strlen(alternates[i].altnm))
             && !strncmpi(buf, alternates[i].altnm, len)) {
-            sp = loadsyms;
-            while (sp->range) {
-                if (!strcmp(alternates[i].nm, sp->name))
-                    return sp;
-                sp++;
-            }
+            sp = search_loadsyms(alternates[i].nm, strlen(alternates[i].nm));
+            if (sp != NULL)
+                return sp;
         }
     }
     return (struct symparse *) 0;
 }
 
-DISABLE_WARNING_FORMAT_NONLITERAL
+staticfn const struct symparse *
+search_loadsyms(const char *buf, size_t len)
+{
+    struct bounded_string bstr;
+
+    /* Sorted index to loadsyms */
+    static boolean first_time = TRUE;
+    static const struct symparse *loadsyms_sorted[SIZE(loadsyms) - 1];
+    if (first_time) {
+        const struct symparse *sp = loadsyms;
+        size_t i = 0;
+        while (sp->range) {
+            loadsyms_sorted[i] = sp;
+            ++sp;
+            ++i;
+        }
+        qsort((struct symparse **)loadsyms_sorted, SIZE(loadsyms_sorted),
+              sizeof(loadsyms_sorted[0]), symparse_compare);
+        first_time = FALSE;
+    }
+
+    bstr.str = buf;
+    bstr.len = len;
+    const struct symparse **sp = bsearch(&bstr, loadsyms_sorted,
+            SIZE(loadsyms_sorted), sizeof(loadsyms_sorted[0]),
+            symparse_find);
+    return sp ? *sp : NULL;
+}
+
+staticfn int
+symparse_compare(const void *s1_, const void *s2_)
+{
+    const struct symparse **s1 = (const struct symparse **)s1_;
+    const struct symparse **s2 = (const struct symparse **)s2_;
+    const char *n1 = (*s1)->name;
+    const char *n2 = (*s2)->name;
+    size_t i;
+
+    /* Can we count on strcmpi to say less than or greater than consistently? */
+    for (i = 0; n1[i] != 0 && n2[i] != 0; ++i) {
+        char c1 = n1[i];
+        char c2 = n2[i];
+        if ('A' <= c1 && c1 <= 'Z') {
+            c1 += 'a' - 'A';
+        }
+        if ('A' <= c2 && c2 <= 'Z') {
+            c2 += 'a' - 'A';
+        }
+        if (c1 != c2) {
+            return c1 - c2;
+        }
+    }
+
+    return n1[i] - n2[i];
+}
+
+staticfn int
+symparse_find(const void *bstr_, const void *rec_)
+{
+    const struct bounded_string *bstr = (const struct bounded_string *)bstr_;
+    const struct symparse **rec = (const struct symparse **)rec_;
+    size_t i;
+
+    /* Can we count on strcmpi to say less than or greater than consistently? */
+    for (i = 0; i < bstr->len; ++i) {
+        char c1 = bstr->str[i];
+        char c2 = (*rec)->name[i];
+        if ('A' <= c1 && c1 <= 'Z') {
+            c1 += 'a' - 'A';
+        }
+        if ('A' <= c2 && c2 <= 'Z') {
+            c2 += 'a' - 'A';
+        }
+        if (c1 != c2) {
+            return c1 - c2;
+        }
+    }
+
+    return 0;
+}
 
 /*
  * this is called from options.c to do the symset work.
@@ -924,7 +1001,7 @@ do_symset(boolean rogueflag)
     menu_item *symset_pick = (menu_item *) 0;
     boolean ready_to_switch = FALSE,
             nothing_to_do = FALSE;
-    char *symset_name, fmtstr[20];
+    char *symset_name;
     struct symsetentry *sl;
     int res, which_set, setcount = 0, chosen = -2, defindx = 0;
     int clr = NO_COLOR;
@@ -971,7 +1048,6 @@ do_symset(boolean rogueflag)
             return TRUE;
         }
 
-        Sprintf(fmtstr, "%%-%ds %%s", biggest + 2);
         tmpwin = create_nhwindow(NHW_MENU);
         start_menu(tmpwin, MENU_BEHAVE_STANDARD);
         any = cg.zeroany;
@@ -1002,7 +1078,11 @@ do_symset(boolean rogueflag)
                 any.a_int = sl->idx + 2;
                 if (symset_name && !strcmpi(sl->name, symset_name))
                     defindx = any.a_int;
-                Sprintf(buf, fmtstr, sl->name, sl->desc ? sl->desc : "");
+                if (iflags.menu_tab_sep) {
+                    Sprintf(buf, "%s\t%s", sl->name, sl->desc ? sl->desc : "");
+                } else {
+                    Sprintf(buf, "%-*s %s", biggest + 2, sl->name, sl->desc ? sl->desc : "");
+                }
                 add_menu(tmpwin, &nul_glyphinfo, &any, 0, 0,
                          ATR_NONE, clr, buf,
                          (any.a_int == defindx) ? MENU_ITEMFLAGS_SELECTED
@@ -1106,7 +1186,5 @@ do_symset(boolean rogueflag)
     preference_update("symset");
     return TRUE;
 }
-
-RESTORE_WARNING_FORMAT_NONLITERAL
 
 /*symbols.c*/

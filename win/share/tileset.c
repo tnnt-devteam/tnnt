@@ -1,8 +1,11 @@
-/* NetHack 5.0    tileset.c    $NHDT-Date: 1596498341 2020/08/03 23:45:41 $ $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.3 $ */
+/* NetHack 5.0    tileset.c    $NHDT-Date: 1781973099 2026/06/20 16:31:39 $ $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.6 $ */
 /* Copyright (c) Ray Chason, 2016. */
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "config.h"
+
+#ifdef TILES_IN_GLYPHMAP
+
 #include "objclass.h"
 #include "flag.h"
 #include "tileset.h"
@@ -29,6 +32,9 @@ read_tiles(const char *filename, boolean true_color)
     FILE *fp;
     char header[16];
     boolean ok;
+
+    if (tiles != NULL)
+        return TRUE;
 
     /* Fill the image structure with known values */
     image.width = 0;
@@ -283,7 +289,7 @@ split_tiles(const struct TileSetImage *image)
 {
     unsigned tile_rows, tile_cols;
     size_t tile_size, i, j;
-    unsigned x1, y1, x2, y2;
+    unsigned x1, y1, y2;
 
     /* Get the number of tiles */
     tile_rows = image->height / iflags.wc_tile_height;
@@ -308,16 +314,15 @@ split_tiles(const struct TileSetImage *image)
                 tile->indexes = (unsigned char *) alloc(tile_size);
             }
             for (y2 = 0; y2 < (unsigned) iflags.wc_tile_height; ++y2) {
-                for (x2 = 0; x2 < (unsigned) iflags.wc_tile_width; ++x2) {
-                    unsigned x = x1 * iflags.wc_tile_width + x2;
-                    unsigned y = y1 * iflags.wc_tile_height + y2;
-
-                    i = y * image->width + x;
-                    j = y2 * tile->width + x2;
-                    tile->pixels[j] = image->pixels[i];
-                    if (image->indexes != NULL) {
-                        tile->indexes[j] = image->indexes[i];
-                    }
+                unsigned y = y1 * iflags.wc_tile_height + y2;
+                unsigned x = x1 * iflags.wc_tile_width;
+                i = y * image->width;
+                j = y2 * tile->width;
+                memcpy(tile->pixels + j, image->pixels + i + x,
+                        sizeof(tile->pixels[0]) * iflags.wc_tile_width);
+                if (image->indexes != NULL) {
+                    memcpy(tile->indexes + j, image->indexes + i + x,
+                            iflags.wc_tile_width);
                 }
             }
         }
@@ -346,3 +351,5 @@ read_png_tiles(const char *filename UNUSED, struct TileSetImage *image UNUSED)
     /* stub */
     return FALSE;
 }
+
+#endif /* TILES_IN_GLYPHMAP */

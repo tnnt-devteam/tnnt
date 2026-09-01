@@ -1,4 +1,4 @@
-/* NetHack 5.0	tile2bmp.c	$NHDT-Date: 1737281026 2025/01/19 02:03:46 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.51 $ */
+/* NetHack 5.0	tile2bmp.c	$NHDT-Date: 1781973098 2026/06/20 16:31:38 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.53 $ */
 /*   Copyright (c) NetHack PC Development Team 1995                 */
 /*   NetHack may be freely redistributed.  See license for details. */
 
@@ -114,12 +114,9 @@ static void build_bmptile(pixel(*) [TILE_X]);
 #define TILESETS 1
 static const char *const relative_tiledir = "../win/share/";
 /* monsters must be first because main uses it twice */
-const char *const tilefilenames[TILESETS][3] = {
-    {"monsters.txt", "objects.txt", "other.txt"},
-#if 0
-    {"mon32.txt", "obj32.txt", "oth32.txt"},
-    {"mon64.txt", "obj64.txt", "oth64.txt"},
-#endif
+const char *const tilefilenames[TILESETS][5] = {
+    { "monsters.txt", "objects.txt", "other.txt",
+	    "monsters.txt", "decals.txt" },
 };
 
 int tilecnt[SIZE(tilefilenames[0])];
@@ -191,8 +188,8 @@ main(int argc, char *argv[])
         printf("Error creating tile file %s, aborting.\n", bmpname);
         exit(EXIT_FAILURE);
     }
-    while (pass < 4) {
-        filenum = pass % SIZE(tilefilenames[tilefileset]);
+    filenum = 0;
+    while (pass < SIZE(tilefilenames[tilefileset])) {
         if (!set_tilefile_path(relative_tiledir,
                                tilefilenames[tilefileset][filenum],
                                tilefile_full_path, sizeof tilefile_full_path)) {
@@ -248,6 +245,7 @@ main(int argc, char *argv[])
         }
         (void) fclose_text_file();
         ++pass;
+	++filenum;
     }
     fwrite(newbmp, bmpsize, 1, fp);
     fclose(fp);

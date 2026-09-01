@@ -10,8 +10,16 @@
 #ifdef SCREEN_VGA /* this file is for SCREEN_VGA only    */
 #include "pcvideo.h"
 #include "tile.h"
-#include "tileset.h"
 #include "font.h"
+
+#ifdef TILES_IN_GLYPHMAP
+#include "tileset.h"
+#else
+/* For the palette */
+struct Pixel {
+    unsigned char r, g, b, a;
+};
+#endif
 
 #include <dos.h>
 #include "wintty.h"
@@ -109,28 +117,37 @@ void vga_backsp(void);
 #ifdef SCROLLMAP
 static void vga_scrollmap(boolean);
 #endif
+#ifdef TILES_IN_GLYPHMAP
 static void vga_redrawmap(boolean);
 static void vga_cliparound(int, int);
 static void decal_planar(struct planar_cell_struct *, unsigned);
+static void decal_oview_planar(struct overview_planar_cell_struct *, unsigned);
+#endif
 
 #ifdef POSITIONBAR
 static void positionbar(void);
 static void vga_special(int, int, int);
 #endif
 
+#ifdef TILES_IN_GLYPHMAP
 static void vga_DisplayCell(struct planar_cell_struct *, int, int);
 static void vga_DisplayCell_O(struct overview_planar_cell_struct *, int,
                               int);
+#endif
 static void vga_SwitchMode(unsigned int);
 static void vga_SetPalette(const struct Pixel *);
-static void vga_WriteChar(uint32, int, int, int);
+static void vga_WriteChar(uint32, int, int, int, int);
 static void vga_GetBitmap(uint32, unsigned char *);
 static void vga_WriteStr(char *, int, int, int, int);
+static char __far *vga_FontPtrs(void);
 
+#ifdef TILES_IN_GLYPHMAP
+static int glyph_to_tilenum(unsigned);
 static void read_planar_tile(unsigned, struct planar_cell_struct *);
 static void read_planar_tile_O(unsigned,
                                struct overview_planar_cell_struct *);
 static void read_tile_indexes(unsigned, unsigned char (*)[TILE_X]);
+#endif
 
 extern int clipx, clipxmax; /* current clipping column from wintty.c */
 extern boolean clipping;    /* clipping on? from wintty.c */
@@ -156,6 +173,7 @@ static struct BitmapFont *psf_font;
 static char *screentable[SCREENHEIGHT];
 
 static const struct Pixel *paletteptr;
+#ifdef TILES_IN_GLYPHMAP
 static struct map_struct {
     int glyph;
     uint32 ch;
@@ -163,9 +181,14 @@ static struct map_struct {
     unsigned special;
     short int tileidx;
     uint32 framecolor;
+    int inverse;
 } map[ROWNO][COLNO]; /* track the glyphs */
 
-extern int total_tiles_used, Tile_corr, Tile_unexplored;  /* from tile.c */
+extern int total_tiles_used,
+           Tile_corr, Tile_unexplored,
+           Tile_delimiter,
+           Tile_petmark,
+           Tile_pilemark;  /* from tile.c */
 
 #define vga_clearmap()                                          \
     {                                                           \
@@ -178,43 +201,57 @@ extern int total_tiles_used, Tile_corr, Tile_unexplored;  /* from tile.c */
                 map[y][x].attr = 0;                             \
                 map[y][x].special = 0;                          \
                 map[y][x].tileidx = Tile_unexplored;            \
+                map[y][x].inverse = 0;                          \
             }                                                   \
     }
+#endif /* TILES_IN_GLYPHMAP */
 #define TOP_MAP_ROW 1
 
-static int vgacmap[CLR_MAX] = {  1, 4, 6, 10, 5, 9, 0, 15,
-                                    12, 3, 7,  8, 2, 9, 0, 14 };
+#ifdef TILES_IN_GLYPHMAP
+static const int vgacmap[CLR_MAX] = {
+    1, 4, 6, 10, 5, 9, 0, 15,
+    12, 3, 7, 8, 2, 9, 0, 14 };
+#endif
+static const int textcmap[CLR_MAX] = {
+    1, 4, 6, 10, 5, 9, 0, 15,
+    12, 3, 7, 8, 2, 11, 13, 14 };
 static int viewport_size = 40;
 /* static char masktable[8]={0x80,0x40,0x20,0x10,0x08,0x04,0x02,0x01}; */
 /* static char bittable[8]= {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80}; */
-#if 0
-static char defpalette[] = { /* Default VGA palette         */
-        0x00, 0x00, 0x00,
-        0x00, 0x00, 0xaa,
-        0x00, 0xaa, 0x00,
-        0x00, 0xaa, 0xaa,
-        0xaa, 0x00, 0x00,
-        0xaa, 0x00, 0xaa,
-        0xaa, 0xaa, 0x00,
-        0xaa, 0xaa, 0xaa,
-        0x55, 0x55, 0x55,
-        0xcc, 0xcc, 0xcc,
-        0x00, 0x00, 0xff,
-        0x00, 0xff, 0x00,
-        0xff, 0x00, 0x00,
-        0xff, 0xff, 0x00,
-        0xff, 0x00, 0xff,
-        0xff, 0xff, 0xff
+/* When showing the text view, use this palette */
+static const struct Pixel text_palette[] = {
+        /* Permuted to mostly match the tileset */
+        { 0x00, 0xaa, 0xaa, 0xff }, /* CLR_CYAN */
+        { 0x00, 0x00, 0x00, 0xff }, /* CLR_BLACK */
+        { 0x44, 0x44, 0xff, 0xff }, /* CLR_BRIGHT_BLUE */
+        { 0xff, 0x90, 0x00, 0xff }, /* CLR_ORANGE */
+        { 0xaa, 0x00, 0x00, 0xff }, /* CLR_RED */
+        { 0x22, 0x22, 0xff, 0xff }, /* CLR_BLUE */
+        { 0x00, 0xaa, 0x00, 0xff }, /* CLR_GREEN */
+        { 0x00, 0xff, 0x00, 0xff }, /* CLR_BRIGHT_GREEN */
+        { 0xff, 0xff, 0x00, 0xff }, /* CLR_YELLOW */
+        { 0xaa, 0x00, 0xaa, 0xff }, /* CLR_MAGENTA */
+        { 0x99, 0x40, 0x00, 0xff }, /* CLR_BROWN */
+        { 0xff, 0x00, 0xff, 0xff }, /* CLR_BRIGHT_MAGENTA */
+        { 0x55, 0x55, 0x55, 0xff }, /* NO_COLOR */
+        { 0x00, 0xff, 0xff, 0xff }, /* CLR_BRIGHT_CYAN */
+        { 0xff, 0xff, 0xff, 0xff }, /* CLR_WHITE */
+        { 0xaa, 0xaa, 0xaa, 0xff }, /* CLR_GRAY */
+        { 0x00, 0xff, 0xff, 0xff }  /* CLR_BRIGHT_CYAN repeated */
         };
-#endif
 
 #ifndef ALTERNATE_VIDEO_METHOD
-int vp[SCREENPLANES] = { 8, 4, 2, 1 };
+static int vp[SCREENPLANES] = { 8, 4, 2, 1 };
 #endif
-int vp2[SCREENPLANES] = { 1, 2, 4, 8 };
 
-static struct planar_cell_struct planecell;
-static struct overview_planar_cell_struct planecell_O;
+#ifdef TILES_IN_GLYPHMAP
+static struct planar_cell_struct **cell_cache;
+static struct overview_planar_cell_struct **cell_cache_O;
+
+enum { delimdecal, petdecal, piledecal, NUMDECALS };
+static struct cellplane *decal_alpha[NUMDECALS] = { 0 };
+static struct overview_cellplane *decal_oview_alpha[NUMDECALS] = { 0 };
+#endif
 
 /* static int  g_attribute; */ /* Current attribute to use */
 
@@ -255,8 +292,10 @@ vga_clear_screen(int colour)
         WRITE_ABSOLUTE_DWORD(&pch[j], 0x00000000);
     }
     egawriteplane(15);
+#ifdef TILES_IN_GLYPHMAP
     if (iflags.tile_view)
         vga_clearmap();
+#endif
     vga_gotoloc(0, 0); /* is this needed? */
 }
 
@@ -271,7 +310,7 @@ void vga_cl_end(int col, int row)
      * mode 2 methods as did term_clear_screen()
      */
     for (count = col; count < (CO - 1); ++count) {
-        vga_WriteChar(' ', count, row, BACKGROUND_VGA_COLOR);
+        vga_WriteChar(' ', count, row, BACKGROUND_VGA_COLOR, FALSE);
     }
 }
 
@@ -283,7 +322,7 @@ void vga_cl_eos(int cy)
     cl_end();
     while (cy <= LI - 2) {
         for (count = 0; count < (CO - 1); ++count) {
-            vga_WriteChar(' ', count, cy, BACKGROUND_VGA_COLOR);
+            vga_WriteChar(' ', count, cy, BACKGROUND_VGA_COLOR, FALSE);
         }
         cy++;
     }
@@ -355,7 +394,7 @@ void vga_xputc(char ch, int attr)
         ++row;
         break;
     default:
-        vga_WriteChar((unsigned char) ch, col, row, attr);
+        vga_WriteChar((unsigned char) ch, col, row, attr, FALSE);
         if (col < (CO - 1))
             ++col;
         break;
@@ -402,16 +441,18 @@ vga_xputg(const glyph_info *glyphinfo,
     attr = (g_attribute == 0) ? attrib_gr_normal : g_attribute;
     map[ry][col].attr = attr;
     map[ry][col].tileidx = glyphinfo->gm.tileidx;
+    map[ry][col].inverse = inversed;
     if (bkglyphinfo->framecolor != NO_COLOR) {
         map[ry][col].framecolor = bkglyphinfo->framecolor;
     }
 
     if (iflags.traditional_view) {
-        vga_WriteChar(ch, col, row, attr);
+        vga_WriteChar(ch, col, row, attr, inversed);
     } else if (!iflags.over_view) {
         if ((col >= clipx) && (col <= clipxmax)) {
-            read_planar_tile(glyphnum, &planecell);
-            if (map[ry][col].special)
+            struct planar_cell_struct planecell;
+            read_planar_tile(glyph_to_tilenum(glyphnum), &planecell);
+            if (special)
                 decal_planar(&planecell, special);
             vga_DisplayCell(&planecell, col - clipx, row);
             if (bkglyphinfo->framecolor != NO_COLOR) {
@@ -426,7 +467,10 @@ vga_xputg(const glyph_info *glyphinfo,
             }
         }
     } else {
-        read_planar_tile_O(glyphnum, &planecell_O);
+        struct overview_planar_cell_struct planecell_O;
+        read_planar_tile_O(glyph_to_tilenum(glyphnum), &planecell_O);
+        if (special)
+            decal_oview_planar(&planecell_O, special);
         vga_DisplayCell_O(&planecell_O, col, row);
     }
     if (col < (CO - 1))
@@ -508,16 +552,21 @@ vga_redrawmap(boolean clearfirst)
             if (iflags.traditional_view) {
                 if (!(clearfirst && map[y][x].ch == S_stone))
                     vga_WriteChar(map[y][x].ch, x,
-                                  y + TOP_MAP_ROW, map[y][x].attr);
+                                  y + TOP_MAP_ROW, map[y][x].attr,
+                                  map[y][x].inverse);
             } else {
                 t = map[y][x].glyph;
                 if (!iflags.over_view) {
-                    read_planar_tile(t, &planecell);
+                    struct planar_cell_struct planecell;
+                    read_planar_tile(glyph_to_tilenum(t), &planecell);
                     if (map[y][x].special)
                         decal_planar(&planecell, map[y][x].special);
                     vga_DisplayCell(&planecell, x - clipx, y + TOP_MAP_ROW);
                 } else {
-                    read_planar_tile_O(t, &planecell_O);
+                    struct overview_planar_cell_struct planecell_O;
+                    read_planar_tile_O(glyph_to_tilenum(t), &planecell_O);
+                    if (map[y][x].special)
+                        decal_oview_planar(&planecell_O, map[y][x].special);
                     vga_DisplayCell_O(&planecell_O, x, y + TOP_MAP_ROW);
                 }
             }
@@ -525,6 +574,7 @@ vga_redrawmap(boolean clearfirst)
 }
 #endif /* TILES_IN_GLYPHMAP && CLIPPING */
 
+#ifdef TILES_IN_GLYPHMAP
 void
 vga_userpan(enum vga_pan_direction pan)
 {
@@ -548,6 +598,7 @@ void
 vga_overview(boolean on)
 {
     /* vga_HideCursor(); */
+    vga_SetPalette(paletteptr);
     if (on) {
         iflags.over_view = TRUE;
         clipx = 0;
@@ -568,10 +619,12 @@ vga_traditional(boolean on)
     if (on) {
         /* switch_symbols(FALSE); */
         iflags.traditional_view = TRUE;
+        vga_SetPalette(text_palette);
         clipx = 0;
         clipxmax = CO - 1;
     } else {
         iflags.traditional_view = FALSE;
+        vga_SetPalette(paletteptr);
         if (!iflags.over_view) {
             clipx = max(0, (curcol - viewport_size / 2));
             if (clipx > ((CO - 1) - viewport_size))
@@ -643,8 +696,9 @@ boolean left;
     }
     for (y = 0; y < ROWNO; ++y) {
         for (x = i; x < j; x += 2) {
+            struct planar_cell_struct planecell;
             t = map[y][x].glyph;
-            read_planar_tile(t, &planecell);
+            read_planar_tile(glyph_to_tilenum(t), &planecell);
             if (map[y][x].special)
                 decal_planar(&planecell, map[y][x].special);
             vga_DisplayCell(&planecell, x - clipx, y + TOP_MAP_ROW);
@@ -653,66 +707,90 @@ boolean left;
 }
 #endif /* SCROLLMAP */
 
-static void
-read_planar_tile(unsigned glyph, struct planar_cell_struct *cell)
+static int
+glyph_to_tilenum(unsigned glyph)
 {
-    unsigned char indexes[TILE_Y][TILE_X];
-    unsigned plane, y, byte, bit;
-
-    read_tile_indexes(glyph, indexes);
-    /* cell->plane[0..3].image[0..15][0..1] */
-    for (plane = 0; plane < SCREENPLANES; ++plane) {
-        for (y = 0; y < TILE_Y; ++y) {
-            for (byte = 0; byte < MAX_BYTES_PER_CELL; ++byte) {
-                unsigned char b = 0;
-                for (bit = 0; bit < 8; ++bit) {
-                    unsigned char x = byte * 8 + bit;
-                    unsigned char i = indexes[y][x];
-                    b <<= 1;
-                    if (i & (0x8 >> plane)) b |= 1;
-                }
-                cell->plane[plane].image[y][byte] = b;
-            }
-        }
-    }
-}
-
-static void
-read_planar_tile_O(unsigned glyph, struct overview_planar_cell_struct *cell)
-{
-    unsigned char indexes[TILE_Y][TILE_X];
-    unsigned plane, y, bit;
-
-    read_tile_indexes(glyph, indexes);
-    /* cell->plane[0..3].image[0..15][0..0] */
-    for (plane = 0; plane < SCREENPLANES; ++plane) {
-        for (y = 0; y < TILE_Y; ++y) {
-            unsigned char b = 0;
-            for (bit = 0; bit < 8; ++bit) {
-                unsigned char x = bit * 2;
-                unsigned char i = indexes[y][x];
-                b <<= 1;
-                if (i & (0x8 >> plane)) b |= 1;
-            }
-            cell->plane[plane].image[y][0] = b;
-        }
-    }
-}
-
-static void
-read_tile_indexes(unsigned glyph, unsigned char (*indexes)[TILE_X])
-{
-    const struct TileImage *tile;
-    unsigned x, y;
-    int tilenum;
-
     /* We don't have enough colors to show the statues */
     if (glyph_is_statue(glyph)) {
         glyph = GLYPH_OBJ_OFF + STATUE;
     }
 
+    return glyphmap[glyph].tileidx;
+}
+
+static void
+read_planar_tile(unsigned tilenum, struct planar_cell_struct *cell)
+{
+    struct planar_cell_struct *pcell;
+    unsigned char indexes[TILE_Y][TILE_X];
+    unsigned plane, y, byte, bit;
+
+    /* Get the processed tile from the cache if we can */
+    pcell = cell_cache[tilenum];
+    if (pcell == NULL) {
+        /* Process the tile */
+        pcell = (struct planar_cell_struct *) alloc(sizeof(*pcell));
+        cell_cache[tilenum] = pcell;
+        read_tile_indexes(tilenum, indexes);
+        /* pcell->plane[0..3].image[0..15][0..1] */
+        for (plane = 0; plane < SCREENPLANES; ++plane) {
+            for (y = 0; y < TILE_Y; ++y) {
+                for (byte = 0; byte < MAX_BYTES_PER_CELL; ++byte) {
+                    unsigned char b = 0;
+                    for (bit = 0; bit < 8; ++bit) {
+                        unsigned char x = byte * 8 + bit;
+                        unsigned char i = indexes[y][x];
+                        b <<= 1;
+                        if (i & (0x8 >> plane)) b |= 1;
+                    }
+                    pcell->plane[plane].image[y][byte] = b;
+                }
+            }
+        }
+    }
+
+    *cell = *pcell;
+}
+
+static void
+read_planar_tile_O(unsigned tilenum, struct overview_planar_cell_struct *cell)
+{
+    struct overview_planar_cell_struct *pcell;
+    unsigned char indexes[TILE_Y][TILE_X];
+    unsigned plane, y, bit;
+
+    /* Get the processed tile from the cache if we can */
+    pcell = cell_cache_O[tilenum];
+    if (pcell == NULL) {
+        /* Process the tile */
+        pcell = (struct overview_planar_cell_struct *) alloc(sizeof(*pcell));
+        cell_cache_O[tilenum] = pcell;
+        read_tile_indexes(tilenum, indexes);
+        /* pcell->plane[0..3].image[0..15][0..0] */
+        for (plane = 0; plane < SCREENPLANES; ++plane) {
+            for (y = 0; y < TILE_Y; ++y) {
+                unsigned char b = 0;
+                for (bit = 0; bit < 8; ++bit) {
+                    unsigned char x = bit * 2;
+                    unsigned char i = indexes[y][x];
+                    b <<= 1;
+                    if (i & (0x8 >> plane)) b |= 1;
+                }
+                pcell->plane[plane].image[y][0] = b;
+            }
+        }
+    }
+
+    *cell = *pcell;
+}
+
+static void
+read_tile_indexes(unsigned tilenum, unsigned char (*indexes)[TILE_X])
+{
+    const struct TileImage *tile;
+    unsigned x, y;
+
     /* Get the tile from the image */
-    tilenum = glyphmap[glyph].tileidx;
     tile = get_tile(tilenum);
 
     /* Map to a 16 bit palette; assume colors laid out as in default tileset */
@@ -730,15 +808,125 @@ read_tile_indexes(unsigned glyph, unsigned char (*indexes)[TILE_X])
 }
 
 static void
-decal_planar(struct planar_cell_struct *gpcs UNUSED, unsigned special)
+decal_planar(struct planar_cell_struct *gpcs, unsigned special)
 {
-    if (special & MG_CORPSE) {
-    } else if (special & MG_INVIS) {
-    } else if (special & MG_DETECT) {
-    } else if (special & MG_PET) {
-    } else if (special & MG_RIDDEN) {
+    int decalnum;   /* indexes decal_alpha */
+    int decal_tile; /* tile index of decal */
+
+    /* Which decal do we use? */
+    if ((special & MG_PET) != 0 && iflags.hilite_pet) {
+        decalnum = petdecal;
+        decal_tile = Tile_petmark;
+    } else if ((special & MG_OBJPILE) != 0 && iflags.hilite_pile) {
+        decalnum = piledecal;
+        decal_tile = Tile_pilemark;
+    } else {
+        /* No decal */
+        return;
+    }
+
+    /* Read the decal */
+    struct planar_cell_struct decal;
+    read_planar_tile(decal_tile, &decal);
+
+    /* Build the alpha channel for the decal */
+    struct cellplane *alpha = decal_alpha[decalnum];
+
+    if (alpha == NULL) {
+        /* Read the delimiter to get the background color */
+        struct planar_cell_struct delim;
+        read_planar_tile(Tile_delimiter, &delim);
+
+        /* Allocate space for the alpha channel */
+        alpha = (struct cellplane *) alloc(sizeof(*alpha));
+        decal_alpha[decalnum] = alpha;
+        memset(alpha, 0x00, sizeof(*alpha));
+
+        /* Alpha channel is 0 where all planes of the decal match the
+           background, and 1 otherwise */
+        for (unsigned i = 0; i < SCREENPLANES; ++i) {
+            uint8_t background = (delim.plane[i].image[0][0] & 0x80) ? 0xFF : 0x00;
+            for (unsigned j = 0; j < MAX_ROWS_PER_CELL; ++j) {
+                for (unsigned k = 0; k < MAX_BYTES_PER_CELL; ++k) {
+                    /* Set alpha to 1 wherever the decal doesn't match the
+                       background */
+                    alpha->image[j][k] |= decal.plane[i].image[j][k] ^ background;
+                }
+            }
+        }
+    }
+
+    /* Apply the decal to the tile */
+    for (unsigned i = 0; i < SCREENPLANES; ++i) {
+        for (unsigned j = 0; j < MAX_ROWS_PER_CELL; ++j) {
+            for (unsigned k = 0; k < MAX_BYTES_PER_CELL; ++k) {
+                uint8_t b1 = gpcs->plane[i].image[j][k];
+                uint8_t b2 = decal.plane[i].image[j][k];
+                uint8_t a = alpha->image[j][k];
+                gpcs->plane[i].image[j][k] = (b1 & ~a) | (b2 & a);
+            }
+        }
     }
 }
+
+static void
+decal_oview_planar(struct overview_planar_cell_struct *gpcs, unsigned special)
+{
+    int decalnum;   /* indexes decal_alpha */
+    int decal_tile; /* tile index of decal */
+
+    /* Which decal do we use? */
+    if ((special & MG_PET) != 0 && iflags.hilite_pet) {
+        decalnum = petdecal;
+        decal_tile = Tile_petmark;
+    } else if ((special & MG_OBJPILE) != 0 && iflags.hilite_pile) {
+        decalnum = piledecal;
+        decal_tile = Tile_pilemark;
+    } else {
+        /* No decal */
+        return;
+    }
+
+    /* Read the decal */
+    struct overview_planar_cell_struct decal;
+    read_planar_tile_O(decal_tile, &decal);
+
+    /* Build the alpha channel for the decal */
+    struct overview_cellplane *alpha = decal_oview_alpha[decalnum];
+
+    if (alpha == NULL) {
+        /* Read the delimiter to get the background color */
+        struct planar_cell_struct delim; /* not overview_planar_cell_struct */
+        read_planar_tile(Tile_delimiter, &delim);
+
+        /* Allocate space for the alpha channel */
+        alpha = (struct overview_cellplane *) alloc(sizeof(*alpha));
+        decal_oview_alpha[decalnum] = alpha;
+        memset(alpha, 0x00, sizeof(*alpha));
+
+        /* Alpha channel is 0 where all planes of the decal match the
+           background, and 1 otherwise */
+        for (unsigned i = 0; i < SCREENPLANES; ++i) {
+            uint8_t background = (delim.plane[i].image[0][0] & 0x80) ? 0xFF : 0x00;
+            for (unsigned j = 0; j < MAX_ROWS_PER_CELL; ++j) {
+                /* Set alpha to 1 wherever the decal doesn't match the
+                   background */
+                alpha->image[j][0] |= decal.plane[i].image[j][0] ^ background;
+            }
+        }
+    }
+
+    /* Apply the decal to the tile */
+    for (unsigned i = 0; i < SCREENPLANES; ++i) {
+        for (unsigned j = 0; j < MAX_ROWS_PER_CELL; ++j) {
+            uint8_t b1 = gpcs->plane[i].image[j][0];
+            uint8_t b2 = decal.plane[i].image[j][0];
+            uint8_t a = alpha->image[j][0];
+            gpcs->plane[i].image[j][0] = (b1 & ~a) | (b2 & a);
+        }
+    }
+}
+#endif /* TILES_IN_GLYPHMAP */
 
 /*
  * Open tile files,
@@ -782,6 +970,15 @@ vga_Init(void)
         /* term_clear_screen() */ /* not vga_clear_screen() */
         return;
     }
+
+    if (cell_cache == NULL) {
+        cell_cache = (struct planar_cell_struct **) alloc(
+                total_tiles_used * sizeof(cell_cache[0]));
+        memset(cell_cache, 0, total_tiles_used * sizeof(cell_cache[0]));
+        cell_cache_O = (struct overview_planar_cell_struct **) alloc(
+                total_tiles_used * sizeof(cell_cache_O[0]));
+        memset(cell_cache_O, 0, total_tiles_used * sizeof(cell_cache_O[0]));
+    }
 #endif
 
     if (iflags.usevga) {
@@ -790,7 +987,9 @@ vga_Init(void)
         }
     }
     vga_SwitchMode(MODE640x480);
+#ifdef TILES_IN_GLYPHMAP
     windowprocs.win_cliparound = vga_cliparound;
+#endif
     /*     vga_NoBorder(BACKGROUND_VGA_COLOR); */ /* Not needed after palette
                                                      mod */
 #ifdef TILES_IN_GLYPHMAP
@@ -798,7 +997,7 @@ vga_Init(void)
     iflags.tile_view = TRUE;
     iflags.over_view = FALSE;
 #else
-    paletteptr = defpalette;
+    paletteptr = text_palette;
 #endif
     vga_SetPalette(paletteptr);
     g_attribute = attrib_gr_normal;
@@ -811,7 +1010,7 @@ vga_Init(void)
     }
     free_font(psf_font);
     psf_font = load_font(font_name);
-    if (psf_font->width != 8 || psf_font->height != 16) {
+    if (psf_font != NULL && (psf_font->width != 8 || psf_font->height != 16)) {
         raw_printf("VGA mode only supports 8x16 fonts");
         free_font(psf_font);
         psf_font = NULL;
@@ -860,7 +1059,19 @@ vga_SwitchMode(unsigned int mode)
 void
 vga_Finish(void)
 {
+#ifdef TILES_IN_GLYPHMAP
+    int i;
+
     free_tiles();
+    for (i = 0; i < total_tiles_used; ++i) {
+        free(cell_cache[i]);
+        free(cell_cache_O[i]);
+    }
+    free(cell_cache);
+    cell_cache = NULL;
+    free(cell_cache_O);
+    cell_cache_O = NULL;
+#endif
     vga_SwitchMode(MODETEXT);
     windowprocs.win_cliparound = tty_cliparound;
     g_attribute = attrib_text_normal;
@@ -900,7 +1111,7 @@ vga_NoBorder(int bc)
  * address of the appropriate character definition table for
  * the current graphics mode into interrupt vector 0x43 (0000:010C).
  */
-char __far *
+static char __far *
 vga_FontPtrs(void)
 {
     USHORT __far *tmp;
@@ -955,14 +1166,14 @@ extern int curframecolor;    /* video.c */
  *
  */
 static void
-vga_WriteChar(uint32 chr, int col, int row, int colour)
+vga_WriteChar(uint32 chr, int col, int row, int colour, int inverse)
 {
     int i;
     int x, pixy;
 
     char __far *cp;
     unsigned char fnt;
-    int actual_colour = vgacmap[colour];
+    int actual_colour = colour;
     int bgcolor;
     int vplane;
     unsigned char bitmap[ROWS_PER_CELL];
@@ -971,15 +1182,28 @@ vga_WriteChar(uint32 chr, int col, int row, int colour)
     vga_GetBitmap(chr, bitmap);
 
     if (curframecolor != NO_COLOR)
-        bgcolor = vgacmap[curframecolor];
+        bgcolor = curframecolor;
     else
-        bgcolor = BACKGROUND_VGA_COLOR;
+        bgcolor = CLR_BLACK;
 
-    if (inversed) {
+    if (inverse) {
         int tmpc = actual_colour;
         actual_colour = bgcolor;
         bgcolor = tmpc;
     }
+
+#ifdef TILES_IN_GLYPHMAP
+    if (iflags.traditional_view) {
+#endif
+        /* A one-to-one remapping to keep black at the same index either way */
+        actual_colour = textcmap[actual_colour];
+        bgcolor = textcmap[bgcolor];
+#ifdef TILES_IN_GLYPHMAP
+    } else {
+        actual_colour = vgacmap[actual_colour];
+        bgcolor = vgacmap[bgcolor];
+    }
+#endif
 
     x = min(col, (CO - 1));         /* min() used protection from callers */
     pixy = min(row, (LI - 1)) * 16; /* assumes 8 x 16 char set */
@@ -1042,6 +1266,7 @@ vga_GetBitmap(uint32 chr, unsigned char *bitmap)
     }
 }
 
+#ifdef TILES_IN_GLYPHMAP
 /*
  * This is the routine that displays a high-res "cell" pointed to by 'gp'
  * at the desired location (col,row).
@@ -1105,6 +1330,7 @@ vga_DisplayCell_O(struct overview_planar_cell_struct *gpcs, int col, int row)
     }
     egawriteplane(15);
 }
+#endif /* TILES_IN_GLYPHMAP */
 
 /*
  * Write the character string pointed to by 's', whose maximum length
@@ -1124,7 +1350,7 @@ vga_WriteStr(char *s, int len, int col, int row, int colour)
     i = 0;
     us = (unsigned char *) s;
     while ((*us != 0) && (i < len) && (col < (CO - 1))) {
-        vga_WriteChar((uchar) *us, col, row, colour);
+        vga_WriteChar((uchar) *us, col, row, colour, FALSE);
         ++us;
         ++i;
         ++col;
@@ -1354,9 +1580,13 @@ vga_DrawCursor(void)
     unsigned char first, second;
     /* char on[2] =  {0xFF,0xFF}; */
     /* char off[2] = {0x00,0x00}; */
+#ifdef TILES_IN_GLYPHMAP
     boolean isrogue = Is_rogue_level(&u.uz);
     boolean singlebyte =
         (isrogue || iflags.over_view || iflags.traditional_view || !inmap);
+#else
+    const boolean singlebyte = TRUE;
+#endif
     int curtyp;
 
     if (!cursor_type && inmap)
@@ -1566,9 +1796,13 @@ vga_HideCursor(void)
     int i, pixx, pixy, x, y;
     char __far *tmp1;
     char __far *tmp2;
+#ifdef TILES_IN_GLYPHMAP
     boolean isrogue = Is_rogue_level(&u.uz);
     boolean singlebyte =
         (isrogue || iflags.over_view || iflags.traditional_view || !inmap);
+#else
+    const boolean singlebyte = TRUE;
+#endif
     int curtyp;
 
     if (inmap && !cursor_type)

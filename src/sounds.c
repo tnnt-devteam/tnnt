@@ -1,4 +1,4 @@
-/* NetHack 5.0	sounds.c	$NHDT-Date: 1736530208 2025/01/10 09:30:08 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.165 $ */
+/* NetHack 5.0	sounds.c	$NHDT-Date: 1781973067 2026/06/20 16:31:07 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.172 $ */
 /*      Copyright (c) 1989 Janet Walz, Mike Threepoint */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -836,8 +836,10 @@ domonnoise(struct monst *mtmp)
                                                flags.female ? FEMALE : MALE))
                                    : an(racenoun));
                     verbl_msg = verbuf;
-                } else
-                    verbl_msg = vampmsg[vampindex];
+                } else if (vampindex > 1) {
+                    if (vampindex >= 0 && vampindex < SIZE(vampmsg))
+                        verbl_msg = vampmsg[vampindex];
+                }
             }
         }
         break;
@@ -1681,6 +1683,8 @@ tiphat(void)
     return res;
 }
 
+char *sounddir = 0;
+
 #ifdef USER_SOUNDS
 
 typedef struct audio_mapping_rec {
@@ -1694,7 +1698,6 @@ typedef struct audio_mapping_rec {
 static audio_mapping *soundmap = 0;
 static audio_mapping *sound_matches_message(const char *);
 
-char *sounddir = 0; /* set in files.c */
 
 /* adds a sound file mapping, returns 0 on failure, 1 on success */
 int

@@ -1,4 +1,4 @@
-/* NetHack 5.0	hack.h	$NHDT-Date: 1736530208 2025/01/10 09:30:08 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.266 $ */
+/* NetHack 5.0	hack.h	$NHDT-Date: 1781973080 2026/06/20 16:31:20 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.299 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Pasi Kallinen, 2017. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -38,7 +38,6 @@
 #include "sys.h"
 #include "timeout.h"
 #include "winprocs.h"
-#include "wintype.h"
 #include "vision.h"
 #include "you.h"
 
@@ -66,6 +65,7 @@
 #define CXN_PFX_THE 4   /* prefix with "the " (unless pname) */
 #define CXN_ARTICLE 8   /* include a/an/the prefix */
 #define CXN_NOCORPSE 16 /* suppress " corpse" suffix */
+#define CXN_ADDGNDR 32  /* include a gender */
 
 /* number of turns it takes for vault guard to show up */
 #define VAULT_GUARD_TIME 30
@@ -744,6 +744,14 @@ struct plinemsg_type {
 #define MSGTYP_ALERT    4 /* TNNT: custom msgtype alert patch */
 /* bitmask for callers of hide_unhide_msgtypes() */
 #define MSGTYP_MASK_REP_SHOW ((1 << MSGTYP_NOREP) | (1 << MSGTYP_NOSHOW))
+
+enum mon_terrain_effects {
+    no_terrain_effects = 0x00000000,
+    /* these bit values must be beyond the MON_ ranges in monst.h
+       since they get set on mon->mstate */
+    nonflyer_vs_liquid  = 0x10000000,
+    candrown_vs_liquid = 0x20000000,
+};
 
 /* polyself flags */
 enum polyself_flags {
@@ -1429,9 +1437,10 @@ typedef uint32_t mmflags_nht;     /* makemon MM_ flags */
 #define HEALTHY_TIN (-3)
 
 /* Corpse aging */
-#define TAINT_AGE (50L)        /* age when corpses go bad */
+#define INEDIBLE_AGE  (50L)    /* age when corpse becomes unsafe to eat */
+#define TAINT_AGE    (100L)    /* age when corpse becomes tainted */
+#define ROT_AGE      (250L)    /* age when corpse rots away */
 #define TROLL_REVIVE_CHANCE 37 /* 1/37 chance for 50 turns ~ 75% chance */
-#define ROT_AGE (250L)         /* age when corpses rot away */
 
 /* Some misc definitions */
 #define POTION_OCCUPANT_CHANCE(n) (13 + 2 * (n))

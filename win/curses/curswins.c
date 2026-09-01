@@ -40,7 +40,8 @@ typedef struct nhwd {
 
 typedef struct nhchar {
     int ch;                     /* character */
-    int color;                  /* color info for character */
+    int color;                  /* basic color info for character */
+    int color256;               /* extended color for the character, 0 if none */
     int framecolor;                /* background color info for character */
     int attr;                   /* attributes of character */
     struct unicode_representation *unicode_representation;
@@ -532,7 +533,7 @@ curses_putch(winid wid, int x, int y, int ch,
 #ifdef ENHANCED_SYMBOLS
              struct unicode_representation *unicode_representation,
 #endif
-             int color, int framecolor, int attr)
+             const struct glyph_attributes *attr)
 {
     static boolean map_initted = FALSE;
     int sx, sy, ex, ey;
@@ -554,9 +555,10 @@ curses_putch(winid wid, int x, int y, int ch,
 
     --x; /* map column [0] is not used; draw column [1] in first screen col */
     map[y][x].ch = ch;
-    map[y][x].color = color;
-    map[y][x].framecolor = framecolor;
-    map[y][x].attr = attr;
+    map[y][x].color = attr->basic_color;
+    map[y][x].color256 = attr->color256;
+    map[y][x].framecolor = attr->framecolor;
+    map[y][x].attr = attr->attribute_flags;
 #ifdef ENHANCED_SYMBOLS
     map[y][x].unicode_representation = unicode_representation;
 #endif
@@ -763,22 +765,27 @@ is_main_window(winid wid)
 coordinates without a refresh.  Currently only used for the map. */
 
 /* convert nhcolor (fg) and framecolor (bg) to curses colorpair */
-int
-get_framecolor(int nhcolor, int framecolor)
+static int
+get_framecolor(const nethack_char *nch)
 {
+    int bgcolor = (nch->framecolor != NO_COLOR) ? nch->framecolor : 0;
     /* curses_toggle_color_attr() adds the +1 and takes care of COLORS < 16 */
-    return (16 * (framecolor % 8)) + (nhcolor % 16);
+    if (curses_has_256color()) {
+        int color = nch->color256 ? nch->color256 : nch->color;
+        return (256 * (bgcolor % CURSES_NUM_BACKGROUND_COLORS)) + (color % 256);
+    } else
+        return (16 * (bgcolor % CURSES_NUM_BACKGROUND_COLORS)) + (nch->color % 16);
 }
 
 static void
 write_char(WINDOW * win, int x, int y, nethack_char nch)
 {
-    int curscolor = nch.color, cursattr = nch.attr;
+    int curscolor;
+    int cursattr = nch.attr;
 
-    if (nch.framecolor != NO_COLOR) {
-        curscolor = get_framecolor(nch.color, nch.framecolor);
-        if (nch.attr == A_REVERSE)
-            cursattr = A_NORMAL; /* hilited pet looks odd otherwise */
+    curscolor = get_framecolor(&nch);
+    if ((nch.framecolor != NO_COLOR) && (nch.attr == A_REVERSE)) {
+        cursattr = A_NORMAL; /* hilited pet looks odd otherwise */
     }
     curses_toggle_color_attr(win, curscolor, cursattr, ON);
 #if defined(CURSES_UNICODE) && defined(ENHANCED_SYMBOLS)
@@ -876,21 +883,25 @@ curses_draw_map(int sx, int sy, int ex, int ey)
 #ifdef MAP_SCROLLBARS
     hsb_back.ch = '-';
     hsb_back.color = SCROLLBAR_BACK_COLOR;
+    hsb_back.color256 = 0;
     hsb_back.framecolor = NO_COLOR;
     hsb_back.attr = A_NORMAL;
     hsb_back.unicode_representation = NULL;
     hsb_bar.ch = '*';
     hsb_bar.color = SCROLLBAR_COLOR;
+    hsb_bar.color256 = 0;
     hsb_bar.framecolor = NO_COLOR;
     hsb_bar.attr = A_NORMAL;
     hsb_bar.unicode_representation = NULL;
     vsb_back.ch = '|';
     vsb_back.color = SCROLLBAR_BACK_COLOR;
+    vsb_back.color256 = 0;
     vsb_back.framecolor = NO_COLOR;
     vsb_back.attr = A_NORMAL;
     vsb_back.unicode_representation = NULL;
     vsb_bar.ch = '*';
     vsb_bar.color = SCROLLBAR_COLOR;
+    vsb_bar.color256 = 0;
     vsb_bar.framecolor = NO_COLOR;
     vsb_bar.attr = A_NORMAL;
     vsb_bar.unicode_representation = NULL;
@@ -958,6 +969,8 @@ clear_map(void)
         for (y = 0; y < ROWNO; y++) {
             map[y][x].ch = ' ';
             map[y][x].color = NO_COLOR;
+            map[y][x].color256 = 0;
+            map[y][x].framecolor = NO_COLOR;
             map[y][x].attr = A_NORMAL;
             map[y][x].unicode_representation = NULL;
         }

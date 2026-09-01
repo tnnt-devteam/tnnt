@@ -373,8 +373,10 @@ compose_glyph_name(int glyph, char *buf, size_t bufsz)
             };
 
             j = glyph - GLYPH_SWALLOW_OFF;
-            cmap = glyph_to_swallow(glyph);
             mnum = j / ((S_sw_br - S_sw_tl) + 1);
+            if (!attacktype(&mons[mnum], AT_ENGL))
+                return 0;
+            cmap = glyph_to_swallow(glyph);
             Snprintf(tmpbuf[3], sizeof tmpbuf[3], "swallow %s %s",
                      monsdump[mnum].nm, swallow_texts[cmap]);
             buf3 = tmpbuf[3];
@@ -709,8 +711,10 @@ apply_customizations(
     struct customization_detail *details;
     struct symset_customization *sc;
     boolean at_least_one = FALSE,
-            do_colors = ((docustomize & do_custom_colors) != 0),
-            do_symbols = ((docustomize & do_custom_symbols) != 0);
+            do_colors = ((docustomize & do_custom_colors) != 0);
+#ifdef ENHANCED_SYMBOLS
+    boolean do_symbols = ((docustomize & do_custom_symbols) != 0);
+#endif
     int custs;
 
     for (custs = 0; custs < (int) custom_count; ++custs) {

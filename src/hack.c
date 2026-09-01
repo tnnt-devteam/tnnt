@@ -1,4 +1,4 @@
-/* NetHack 5.0	hack.c	$NHDT-Date: 1763708572 2025/11/20 23:02:52 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.494 $ */
+/* NetHack 5.0	hack.c	$NHDT-Date: 1781973050 2026/06/20 16:30:50 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.508 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Derek S. Ray, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -1760,7 +1760,7 @@ notice_mon(struct monst *mtmp)
             set_msg_xy(mtmp->mx, mtmp->my);
             You("%s %s.", canseemon(mtmp) ? "see" : "notice",
                 x_monnam(mtmp,
-                     mtmp->mtame ? ARTICLE_YOUR
+                     (mtmp->mtame && !Hallucination) ? ARTICLE_YOUR
                      : (!has_mgivenname(mtmp)
                         && !type_is_pname(mtmp->data)) ? ARTICLE_A
                      : ARTICLE_NONE,

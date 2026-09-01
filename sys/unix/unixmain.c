@@ -328,7 +328,7 @@ main(int argc, char *argv[])
 static void
 process_options(int argc, char *argv[])
 {
-    char *arg, *origarg;
+    char *arg, *origarg = 0;
     int i, l;
 
     config_error_init(FALSE, "command line", FALSE);
@@ -454,22 +454,8 @@ process_options(int argc, char *argv[])
         }
     }
 
-    if (argc > 1) {
-        int mxplyrs = atoi(argv[1]);
-        boolean mx_ok = (mxplyrs > 0);
-#ifdef SYSCF
-        config_error_add("%s%s%s",
-                         mx_ok ? "MAXPLAYERS are set in sysconf file"
-                               : "Expected MAXPLAYERS, found \"",
-                         mx_ok ? "" : argv[1], mx_ok ? "" : "\"");
-#else
-        /* XXX This is deprecated in favor of SYSCF with MAXPLAYERS */
-        if (mx_ok)
-            gl.locknum = mxplyrs;
-        else
-            config_error_add("Invalid MAXPLAYERS \"%s\"", argv[1]);
-#endif
-    }
+    if (argc > 1 && origarg)
+        config_error_add("Unknown option: %.60s", origarg);
 #ifdef MAX_NR_OF_PLAYERS
     /* limit to compile-time limit */
     if (!gl.locknum || gl.locknum > MAX_NR_OF_PLAYERS)

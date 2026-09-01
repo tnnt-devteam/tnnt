@@ -1,4 +1,4 @@
-/* NetHack 5.0	mthrowu.c	$NHDT-Date: 1737392015 2025/01/20 08:53:35 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.173 $ */
+/* NetHack 5.0	mthrowu.c	$NHDT-Date: 1781973057 2026/06/20 16:30:57 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.192 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Pasi Kallinen, 2016. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -540,7 +540,7 @@ u_catch_thrown_obj(struct obj *otmp)
     int catch_chance = 100 - ACURR(A_DEX)
                        - ((Role_if(PM_MONK) || Role_if(PM_ROGUE)) ? 20 : 0);
 
-    if (!Blind && !Confusion && !Stunned && !Fumbling
+    if (!Blind && !Confusion && !Stunned && !Fumbling && !Unaware
         && otmp->oclass != VENOM_CLASS
         && !nohands(gy.youmonst.data) && freehand()
         && calc_capacity(otmp->owt) <= SLT_ENCUMBER && !rn2(catch_chance)) {

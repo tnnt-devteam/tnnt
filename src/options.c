@@ -2575,6 +2575,14 @@ optfn_name(
 
         if ((op = string_for_env_opt(allopt[optidx].name, opts, FALSE))
             != empty_optstr) {
+#ifdef WIN32
+            /*
+             * Under windows, if we already set flags.debug with -D
+             * on the command line, leave that alone.
+             */
+            if (flags.debug && !strcmpi(svp.plname, "wizard"))
+                return optn_ok;
+#endif
             nmcpy(svp.plname, op, PL_NSIZ);
         } else
             return optn_err;
@@ -3049,8 +3057,8 @@ optfn_paranoid_confirmation(
                          " %s", paranoia[i].argname);
         }
         /* note: always leaves enough room for caller to tack on '\n' */
-        opts[0] = '\0';
-        (void) strncat(opts, tmpbuf[0] ? &tmpbuf[1] : "none", BUFSZ - 1);
+        Snprintf(opts, BUFSZ - 1, "%s",
+                 tmpbuf[0] ? &tmpbuf[1] : "none");
         return optn_ok;
     }
     if (req == do_handler) {
@@ -5801,8 +5809,13 @@ handler_disclose(void)
     start_menu(tmpwin, MENU_BEHAVE_STANDARD);
     any = cg.zeroany;
     for (i = 0; i < NUM_DISCLOSURE_OPTIONS; i++) {
-        Sprintf(buf, "%-14s[%c%c]", disclosure_names[i],
-                flags.end_disclose[i], disclosure_options[i]);
+        if (iflags.menu_tab_sep) {
+            Sprintf(buf, "%s\t[%c%c]", disclosure_names[i],
+                    flags.end_disclose[i], disclosure_options[i]);
+        } else {
+            Sprintf(buf, "%-12s[%c%c]", disclosure_names[i],
+                    flags.end_disclose[i], disclosure_options[i]);
+        }
         any.a_int = i + 1;
         add_menu(tmpwin, &nul_glyphinfo, &any, disclosure_options[i],
                  0, ATR_NONE, clr, buf, MENU_ITEMFLAGS_NONE);
@@ -9137,9 +9150,10 @@ doset(void) /* changing options via menu by Per Liboriussen */
                     getlin(buf, abuf);
                     if (abuf[0] == '\033')
                         continue;
-                    Sprintf(buf, "%s:", allopt[opt_indx].name);
-                    (void) strncat(eos(buf), abuf,
-                                   (sizeof buf - 1 - strlen(buf)));
+                    Snprintf(buf, sizeof buf,
+                             "%s:%s",
+                             allopt[opt_indx].name,
+                             abuf);
                     /* pass the buck */
                     (void) parseoptions(buf, FALSE, FALSE);
                 }

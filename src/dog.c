@@ -1,4 +1,4 @@
-/* NetHack 5.0	dog.c	$NHDT-Date: 1753856387 2025/07/29 22:19:47 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.190 $ */
+/* NetHack 5.0	dog.c	$NHDT-Date: 1781973045 2026/06/20 16:30:45 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.197 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2011. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -427,6 +427,7 @@ mon_arrive(struct monst *mtmp, int when)
     stairway *stway;
     d_level fromdlev;
 
+    mtmp->mstate &= ~TERRAIN_FALLOUT_MASK;  /* shouldn't be set anyway */
     mtmp->mstate |= MON_STILL_ARRIVING;
     mtmp->nmon = fmon;
     fmon = mtmp;
@@ -905,6 +906,7 @@ migrate_to_level(
     /* prepare to take mtmp off the map */
     num_segs = mon_leave(mtmp);
     /* take off map and move mtmp from fmon list to migrating_mons */
+    mtmp->mstate &= ~TERRAIN_FALLOUT_MASK;
     relmon(mtmp, &gm.migrating_mons); /* mtmp->mx,my retain their value */
     mtmp->mstate |= MON_MIGRATING;
 

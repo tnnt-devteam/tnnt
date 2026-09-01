@@ -176,6 +176,9 @@ else   # g++ version greater than or equal to 9? (no follows)
 CCXX=g++ -std=c++17
 endif  # g++ version greater than or equal to 9
 endif  # CPLUSPLUS_NEED20
+ifdef ADDITIONAL_NO_WARN_GPPCCX
+CCXXFLAGS+=$(ADDITIONAL_NO_WARN_GPPCCX)
+endif
 
 
 else   # g++ or clang++ ?
@@ -216,6 +219,9 @@ ifeq "$(CLANGPPGTEQ17)" "1"
 CCXX=clang++ -std=c++20
 endif  # clang++ greater than or equal to 17
 endif  # CPLUSPLUS_NEED20
+ifdef ADDITIONAL_NO_WARN_CLANGCCX
+CCXXFLAGS+=$(ADDITIONAL_NO_WARN_CLANGCCX)
+endif
 endif  # end of clang++-specific section
 CXX=$(CCXX)
 endif  # CPLUSPLUS_NEEDED

@@ -1,4 +1,4 @@
-/* NetHack 5.0	earlyarg.c	$NHDT-Date: 1771213100 2026/02/15 19:38:20 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.286 $ */
+/* NetHack 5.0	earlyarg.c	$NHDT-Date: 1782016695 2026/06/20 23:38:15 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.11 $ */
 /* Copyright (c) Robert Patrick Rankin, 2012. */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -359,6 +359,89 @@ early_options(int *argc_p, char ***argv_p, char **hackdir_p)
     config_error_done();
     return;
 }
+
+/* profession (role), race, alignment, gender command line options */
+void
+genl_prag(int argc, char *argv[])
+{
+    char *arg;
+    int i;
+
+    config_error_init(FALSE, "command line", FALSE);
+
+    while (argc > 1 && argv[1][0] == '-') {
+        argv++;
+        argc--;
+        arg = argv[0];
+        /* allow second dash if arg is longer than one character */
+        if (arg[0] == '-' && arg[1] == '-'
+            && arg[2] != '\0'
+            /* "--a=b" violates the "--" ok when at least 2 chars long rule */
+            && (arg[3] != '\0' && arg[3] != '=' && arg[3] != ':'))
+            ++arg;
+        if (strchr("prag@", arg[1])) {
+            switch (arg[1]) {
+            case 'a':
+                if (arg[2]) {
+                    if ((i = str2align(&arg[2])) >= 0)
+                        flags.initalign = i;
+                } else if (argc > 1) {
+                    argc--;
+                    argv++;
+                    if ((i = str2align(argv[0])) >= 0)
+                        flags.initalign = i;
+                }
+                break;
+            case 'g':
+                if (arg[2]) {
+                    if ((i = str2gend(&arg[2])) >= 0)
+                        flags.initgend = i;
+                } else if (argc > 1) {
+                    argc--;
+                    argv++;
+                    if ((i = str2gend(argv[0])) >= 0)
+                        flags.initgend = i;
+                }
+                break;
+            case 'p': /* profession (role) */
+                if (arg[2]) {
+                    if ((i = str2role(&arg[2])) >= 0)
+                        flags.initrole = i;
+                } else if (argc > 1) {
+                    argc--;
+                    argv++;
+                    if ((i = str2role(argv[0])) >= 0)
+                        flags.initrole = i;
+                }
+                break;
+            case 'r': /* race */
+                if (arg[2]) {
+                    if ((i = str2race(&arg[2])) >= 0)
+                        flags.initrace = i;
+                } else if (argc > 1) {
+                    argc--;
+                    argv++;
+                    if ((i = str2race(argv[0])) >= 0)
+                        flags.initrace = i;
+                }
+                break;
+            case '@':
+                flags.randomall = 1;
+                break;
+            }
+        } else {
+            /* default for "-x" is to play as the role that starts with "x" */
+            if ((i = str2role(&argv[1][0])) >= 0) {
+                flags.initrole = i;
+            }
+        }
+    }
+
+    /* empty or "N errors on command line" */
+    config_error_done();
+    return;
+}
+
 /* for command-line options that perform some immediate action and then
    terminate the program without starting play, like 'nethack --version'
    or 'nethack -s Zelda'; do some cleanup before that termination */
@@ -498,11 +581,7 @@ argcheck(int argc, char *argv[], enum earlyarg e_arg)
 
             if (extended_opt) {
                 extended_opt++;
-                    /* Deprecated in favor of "copy" - remove no later
-                       than  next major version */
-                if (match_optname(extended_opt, "paste", 5, FALSE)) {
-                    insert_into_pastebuf = TRUE;
-                } else if (match_optname(extended_opt, "copy", 4, FALSE)) {
+                if (match_optname(extended_opt, "copy", 4, FALSE)) {
                     insert_into_pastebuf = TRUE;
                 } else if (match_optname(extended_opt, "dump", 4, FALSE)) {
                     /* version number plus enabled features and sanity

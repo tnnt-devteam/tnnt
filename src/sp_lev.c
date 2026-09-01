@@ -2046,7 +2046,8 @@ create_monster(monster *m, struct mkroom *croom)
                         && m_bad_boulder_spot(x, y)) {
                         int retrylimit = 10;
 
-                        remove_monster(x, y);
+                        if (x >= 0)
+                            remove_monster(x, y);
                         do {
                             x = m->x;
                             y = m->y;

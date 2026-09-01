@@ -1,4 +1,4 @@
-/* NetHack 5.0	minion.c	$NHDT-Date: 1762727599 2025/11/09 14:33:19 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.81 $ */
+/* NetHack 5.0	minion.c	$NHDT-Date: 1781973054 2026/06/20 16:30:54 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.88 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) Robert Patrick Rankin, 2008. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -43,9 +43,7 @@ monster_census(boolean spotted) /* seen|sensed vs all */
     int count = 0;
 
     for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-        if (DEADMONSTER(mtmp))
-            continue;
-        if (mtmp->isgd && mtmp->mx == 0)
+        if (DEADMONSTER(mtmp) || PARKEDMONSTER(mtmp))
             continue;
         if (spotted && !canspotmon(mtmp))
             continue;
@@ -312,7 +310,8 @@ demon_talk(struct monst *mtmp)
             pline("%s says, \"Good hunting, %s.\"", Amonnam(mtmp),
                   flags.female ? "Sister" : "Brother");
         else if (canseemon(mtmp))
-            pline("%s says something.", Amonnam(mtmp));
+            pline("%s %s something.", Amonnam(mtmp),
+                  says());
         if (!tele_restrict(mtmp))
             (void) rloc(mtmp, RLOC_MSG);
         return 1;

@@ -1,4 +1,4 @@
-/* NetHack 5.0	ball.c	$NHDT-Date: 1596498150 2020/08/03 23:42:30 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.51 $ */
+/* NetHack 5.0	ball.c	$NHDT-Date: 1781973041 2026/06/20 16:30:41 $  $NHDT-Branch: NetHack-5.0 $:$NHDT-Revision: 1.78 $ */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /*-Copyright (c) David Cohrs, 2006. */
 /* NetHack may be freely redistributed.  See license for details. */
@@ -809,7 +809,7 @@ drag_ball(coordxy x, coordxy y, int *bc_control,
 
             } /* now check again in case mon died */
             if (!m_at(uchain->ox, uchain->oy)
-                /* TNNT TODO FOR 3.7: this is a fix to a vanilla bug. Check if
+                /* TNNT TODO FOR 5.0: this is a fix to a vanilla bug. Check if
                  * vanilla has fixed it in some different way. */
                 && in_out_region(uchain->ox, uchain->oy)) {
                 u.ux = uchain->ox;
@@ -823,6 +823,9 @@ drag_ball(coordxy x, coordxy y, int *bc_control,
             *ballx = uchain->ox;
             *bally = uchain->oy;
             move_bc(0, *bc_control, *ballx, *bally, *chainx, *chainy);
+            /* weirdness: you were dragged back on account of the ball falling
+             * into the pit, but if you escape the pit, the ball is "on top of"
+             * the pit and does not hinder your movement further */
             spoteffects(TRUE);
             return FALSE;
         }
@@ -936,7 +939,7 @@ drop_ball(coordxy x, coordxy y)
                 || ((t = t_at(x, y))
                     && (is_pit(t->ttyp)
                         || is_hole(t->ttyp))))
-            /* TNNT TODO FOR 3.7: Both these in_out_regions are fixes to a
+            /* TNNT TODO FOR 5.0: Both these in_out_regions are fixes to a
              * vanilla bug that are necessary so the hero cannot drag themselves
              * into the NPC deathmatch arena behind a thrown ball and avoid
              * triggering the deathmatch. Check if vanilla has fixed this bug */
