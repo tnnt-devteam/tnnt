@@ -1630,10 +1630,6 @@ goto_level(
     /* digging context is level-aware and can actually be resumed if
        hero returns to the previous level without any intervening dig */
 
-#ifdef WHEREIS_FILE
-    touch_whereis();
-#endif
-
     if (falling) /* assuming this is only trap door or hole */
         impact_drop((struct obj *) 0, u.ux, u.uy, newlevel->dlevel);
 
@@ -2132,6 +2128,11 @@ goto_level(
     }
 
     assign_level(&u.uz0, &u.uz); /* reset u.uz0 */
+#ifdef WHEREIS_FILE
+    /* must come after u.uz has been assigned the destination above,
+       otherwise this publishes the level the hero just left */
+    touch_whereis();
+#endif
 #ifdef INSURANCE
     save_currentstate();
 #endif

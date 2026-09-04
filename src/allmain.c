@@ -298,6 +298,10 @@ moveloop_core(void)
                     mk_dgl_extrainfo();
                 }
 #endif
+#ifdef WHEREIS_FILE
+                /* honour a SIGUSR1 that arrived since the last turn */
+                ck_whereis();
+#endif
 
                 /* TNNT: check watchmen in Minetown
                  * Note that it's possible that the achievement doesn't trigger
