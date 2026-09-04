@@ -1151,9 +1151,6 @@ extern boolean debugcore(const char *, boolean);
 extern void reveal_paths(int);
 extern boolean read_tribute(const char *, const char *, int, char *, int,
                             unsigned);
-#ifdef EXTRAINFO_FN
-extern void mk_dgl_extrainfo(void);
-#endif
 extern boolean Death_quote(char *, int) NONNULLARG1;
 extern void livelog_add(long ll_type, const char *) NONNULLARG2;
 ATTRNORETURN extern void do_deferred_showpaths(int) NORETURN;
@@ -3924,9 +3921,14 @@ extern void dump_end_screendump(void);
 extern void html_print_glyph(winid, coordxy, coordxy, const glyph_info *,
                              const glyph_info *);
 #endif
-#ifdef DUMPLOG
+#if defined(DUMPLOG) || defined(DUMPHTML) || defined(EXTRAINFO_FN)
 extern char *dump_fmtstr(const char *, char *, boolean) NONNULLPTRS;
+#endif
+#ifdef DUMPLOG
 extern void livelog_dump_url(unsigned int);
+#endif
+#ifdef EXTRAINFO_FN
+extern void mk_dgl_extrainfo(void);
 #endif
 extern void dump_open_log(time_t);
 extern void dump_close_log(void);

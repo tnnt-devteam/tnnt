@@ -289,7 +289,11 @@ moveloop_core(void)
                     u.ublesscnt--;
 
 #ifdef EXTRAINFO_FN
-                if ((prev_dgl_extrainfo == 0) || (prev_dgl_extrainfo < (svm.moves + 250))) {
+                /* refresh the dgamelaunch watch-menu entry periodically;
+                   rewriting it every turn would be a file create+chmod+
+                   write per turn per live game for no visible benefit */
+                if (prev_dgl_extrainfo == 0
+                    || prev_dgl_extrainfo + 250 < svm.moves) {
                     prev_dgl_extrainfo = svm.moves;
                     mk_dgl_extrainfo();
                 }
