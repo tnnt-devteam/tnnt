@@ -516,7 +516,18 @@ SYSCONFENSURE = (if ! test -f $(INSTDIR)/sysconf ; then \
 
 ifdef WANT_SOURCE_INSTALL
 CFLAGS+=-DSYSCF -DSYSCF_FILE=\"$(HACKDIR)/sysconf\" -DSECURE
-MOREALL=$(MAKE) install
+# Deliberately NOT chaining `make install` onto `make all`.
+# On this server the chroot is populated by install-to-chroot.sh as an explicit,
+# reviewable step; `make all` should only ever produce artifacts in the tree.
+# The auto-install was harmless here (INSTDIR resolves to the source tree, since
+# dirs-perms.500's unconditional PREFIX= shadows its own /opt/nethack default) --
+# but `install:` runs `rm -rf $(INSTDIR) $(VARDIR)`, so anything that ever made
+# PREFIX resolve at the chroot would turn a plain build into deleting the
+# playground and every save. Not a risk worth carrying for a staging dir nothing
+# consumes. `make install` remains available explicitly if it is ever wanted.
+# NOTE: WANT_SOURCE_INSTALL must STAY set -- the CFLAGS line above is gated on it,
+# and without it the binary builds with no SYSCF at all.
+#MOREALL=$(MAKE) install
 endif #?WANT_SOURCE_INSTALL
 
 ifdef MAKEFILE_TOP
