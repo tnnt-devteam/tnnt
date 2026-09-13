@@ -216,7 +216,7 @@ LFLAGS+=-fsanitize=address
 endif
 
 ifeq "$(USE_UBSAN)" "1"
-CFLAGS+=-fsanitize=undefined
+CFLAGS+=-fsanitize=undefined -fno-sanitize-recover=all
 LFLAGS+=-fsanitize=undefined
 endif
 
@@ -309,7 +309,6 @@ NHCFLAGS+=-DDUMPHTML
 NHCFLAGS+=-DUSE_GENERAL_ALTAR_COLORS
 #NHCFLAGS+=-DCHANGE_COLOR
 NHCFLAGS+=-DSELF_RECOVER
-NHCFLAGS+=-g3 -O0 -Wall -Werror
 NHCFLAGS+=-DTNNT_BETA
 ifeq "$(USE_CURSESLIB)" "1"
 NHCFLAGS+=$(NCURSES_CFLAGS)
