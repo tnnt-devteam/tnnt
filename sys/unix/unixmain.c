@@ -54,6 +54,30 @@ extern void init_linux_cons(void);
 static void wd_message(void);
 static struct passwd *get_unix_pw(void);
 
+#ifdef ASAN_DEFAULT_OPTIONS
+/* built-in AddressSanitizer runtime defaults, set by the hints file;
+   ASAN_OPTIONS in the environment can still override them */
+const char *__asan_default_options(void);
+
+const char *
+__asan_default_options(void)
+{
+    return ASAN_DEFAULT_OPTIONS;
+}
+#endif /* ASAN_DEFAULT_OPTIONS */
+
+#ifdef UBSAN_DEFAULT_OPTIONS
+/* built-in UndefinedBehaviorSanitizer runtime defaults, set by the hints
+   file; UBSAN_OPTIONS in the environment can still override them */
+const char *__ubsan_default_options(void);
+
+const char *
+__ubsan_default_options(void)
+{
+    return UBSAN_DEFAULT_OPTIONS;
+}
+#endif /* UBSAN_DEFAULT_OPTIONS */
+
 int
 main(int argc, char *argv[])
 {

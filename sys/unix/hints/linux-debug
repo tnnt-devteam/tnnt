@@ -212,11 +212,15 @@ endif  # WANT_WIN_QT
 
 ifeq "$(USE_ASAN)" "1"
 CFLAGS+=-fsanitize=address
+# built-in runtime defaults; see __asan_default_options() in unixmain.c
+CFLAGS+=-DASAN_DEFAULT_OPTIONS=\"abort_on_error=1\"
 LFLAGS+=-fsanitize=address
 endif
 
 ifeq "$(USE_UBSAN)" "1"
 CFLAGS+=-fsanitize=undefined -fno-sanitize-recover=all
+# built-in runtime defaults; see __ubsan_default_options() in unixmain.c
+CFLAGS+=-DUBSAN_DEFAULT_OPTIONS=\"abort_on_error=1\"
 LFLAGS+=-fsanitize=undefined
 endif
 
