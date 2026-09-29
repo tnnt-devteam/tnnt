@@ -1149,24 +1149,19 @@ peffect_gain_level(struct obj *otmp)
 staticfn void
 peffect_healing(struct obj *otmp)
 {
-    /* TNNT - for Potion Roulette achievement;
-     * we bar Upolyd not because of being too lazy to check u.mh but because the
-     * spirit of the potion is your life must actually be on the line, and if
-     * you're polymorphed there's no actual danger */
-    boolean crithp = (!Upolyd && (u.uhp * 10 < u.uhpmax));
-
     You_feel("better.");
     healup(8 + d(4 + 2 * bcsign(otmp), 4), !otmp->cursed ? 1 : 0,
            !!otmp->blessed, !otmp->cursed);
     exercise(A_CON, TRUE);
-    if (crithp && !objects[POT_HEALING].oc_name_known)
-        tnnt_achieve(A_DRANK_UNID_HEALING_POTION);
 }
 
 staticfn void
 peffect_extra_healing(struct obj *otmp)
 {
-    /* TNNT - see comment in peffect_healing */
+    /* TNNT - for Potion Roulette achievement;
+     * we bar Upolyd not because of being too lazy to check u.mh but because the
+     * spirit of the potion is your life must actually be on the line, and if
+     * you're polymorphed there's no actual danger */
     boolean crithp = (!Upolyd && (u.uhp * 10 < u.uhpmax));
 
     You_feel("much better.");
@@ -1187,7 +1182,7 @@ peffect_extra_healing(struct obj *otmp)
 staticfn void
 peffect_full_healing(struct obj *otmp)
 {
-    /* TNNT - see comment in peffect_healing */
+    /* TNNT - see comment in peffect_extra_healing */
     boolean crithp = (!Upolyd && (u.uhp * 10 < u.uhpmax));
 
     You_feel("completely healed.");

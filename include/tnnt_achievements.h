@@ -731,12 +731,8 @@ ACH("The Long Road Through Hell",
     DESCENDED_GEHENNOM_WITHOUT_BACKTRACKING),
 ACH("DeathOnAStick Protege", "Polymorph a rock into a valuable gem",
     POLYED_ROCK_INTO_GEM),
-/* TNNT TODO FOR 3.7: Potions of healing will be both extremely common and
- * extremely easy to informally identify, with their unique price tier. We
- * probably should revisit this achievement, perhaps to limit it to extra or
- * full healing potions. */
 ACH("Potion Roulette",
-    "Drink an unidentified healing potion while below 10% HP",
+    "Drink an unidentified extra/full healing potion while below 10% HP",
     DRANK_UNID_HEALING_POTION),
 
 /* 5 free bits in tnntachieve5
