@@ -720,14 +720,6 @@ ACH("Inverse Genie", "Summon three djinni who do not grant a wish",
  * through most of the floors - only the Wizard's Tower bars it. "Without
  * backtracking" prevents dipping into Vlad's or using the portal to the
  * Wizard's Tower. */
-/* TNNT TODO FOR 3.7: Iron Miner could be failed before it's really begun if the
- * player takes the wrong downstairs from the level containing the Mines
- * entrance. In current 3.6 TNNT, these stairs are distinguishable, but in 3.7
- * branch stairways are not distinguishable until you've used them. So this
- * means a 50% chance they make themselves ineligible, which we don't want, but
- * we also don't want to allow a player to ignore the Mines, do as much of the
- * rest of the dungeon as they want, and breeze through the Mines on their first
- * visit when they come back. */
 ACH("Iron Miner",
     "Obtain the luckstone from Mines' End without backtracking to previous levels",
     GOT_LUCKSTONE_WITHOUT_BACKTRACKING),

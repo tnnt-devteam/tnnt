@@ -179,7 +179,21 @@ On_stairs_dn(coordxy x, coordxy y)
 boolean
 known_branch_stairs(stairway *sway)
 {
-    return (sway && sway->tolev.dnum != u.uz.dnum && sway->u_traversed);
+    return (sway && sway->tolev.dnum != u.uz.dnum
+            /* TNNT: mines stairway is ALWAYS revealed, in order to facilitate
+             * the "Iron Miner" achievement.
+             * In TNNT based on NetHack 3.6, we used a custom patch that special
+             * cased the color of branch stairs to yellow.
+             * NetHack 5.0 added S_brupstair and S_brdnstair to represent branch
+             * stairs, but this function would not display them as such until
+             * the hero had actually used them (the u_traversed check below).
+             * If that behavior were left in place, a player attempting Iron
+             * Miner would make themselves ineligible 50% of the time by
+             * randomly picking the wrong (Dungeons of Doom) stairway and
+             * necessitating a backtrack to reach the Mines.
+             */
+            && (sway->u_traversed
+                || sway->tolev.dnum == mines_dnum));
 }
 
 /* describe staircase 'sway' based on whether hero knows the destination */
