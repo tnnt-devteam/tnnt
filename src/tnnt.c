@@ -530,7 +530,7 @@ show_tnnt_achievements(boolean final)
     int i, num_earned = 0, num_prevgame = 0;
     int clr = NO_COLOR;
 
-    start_menu(en_win, MENU_BEHAVE_STANDARD);
+    start_menu(win, MENU_BEHAVE_STANDARD);
     if (!final) {
         anything any;
         any.a_char = 'e';
