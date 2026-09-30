@@ -441,57 +441,17 @@ staticfn const char *term_for_boolean(int, boolean *);
 
 /* ask user if they want a tutorial, except if tutorial boolean option has
    been set in config - either on or off - in which case just obey that
-   setting without asking */
+   setting without asking
+   TNNT: we don't allow the tutorial, so we don't prompt for it. A message will
+   only be shown if you explicitly have tutorial turned on in your config. */
 boolean
 ask_do_tutorial(void)
 {
-    boolean dotut = flags.tutorial;
-
-    if (!opt_set_in_config[opt_tutorial]) {
-        winid win;
-        menu_item *sel;
-        anything any;
-        char buf[BUFSZ];
-        const char *rc;
-        boolean norc;
-        int n, pass = 0;
-
-        rc = nh_basename(get_configfile(), TRUE);
-        norc = !strcmp(get_configfile(), "/dev/null");
-        Snprintf(buf, sizeof buf,
-                 "Put \"OPTIONS=!tutorial\" in %s to skip this query.",
-                 (rc && *rc && !norc) ? rc : "your configuration file");
-        do {
-            win = create_nhwindow(NHW_MENU);
-            start_menu(win, MENU_BEHAVE_STANDARD);
-            any = cg.zeroany;
-            any.a_char = 'y';
-            add_menu(win, &nul_glyphinfo, &any, any.a_char, 0,
-                     ATR_NONE, NO_COLOR,
-                     "Yes, do a tutorial", MENU_ITEMFLAGS_NONE);
-            any.a_char = 'n';
-            add_menu(win, &nul_glyphinfo, &any, any.a_char, 0,
-                     ATR_NONE, NO_COLOR,
-                     "No, just start play", MENU_ITEMFLAGS_NONE);
-
-            add_menu_str(win, "");
-            add_menu_str(win, buf);
-            if (pass++) /* we'll get here after <space> or <return> */
-                add_menu_str(win, "(Please choose 'y' or 'n'.)");
-
-            end_menu(win, "Do you want a tutorial?");
-
-            n = select_menu(win, PICK_ONE, &sel);
-            destroy_nhwindow(win);
-        } while (!n);
-        if (n > 0) {
-            dotut = (sel[0].item.a_char == 'y');
-            free((genericptr_t) sel);
-        } else { /* ESC */
-            dotut = FALSE;
-        }
+    if (opt_set_in_config[opt_tutorial] && flags.tutorial) {
+        pline(
+ "You have OPTIONS=tutorial set, but the tutorial is not available in TNNT.");
     }
-    return dotut;
+    return false;
 }
 
 /*

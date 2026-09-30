@@ -649,7 +649,7 @@ maybe_do_tutorial(void)
     if (!sp)
         return;
 
-    if (ask_do_tutorial()) {
+    if (ask_do_tutorial()) { /* TNNT: this always returns false */
         assign_level(&u.ucamefrom, &u.uz);
         iflags.nofollowers = TRUE;
         schedule_goto(&sp->dlevel, UTOTYPE_NONE,
