@@ -3528,7 +3528,6 @@ use_pole(struct obj *obj, boolean autohit)
             return ECMD_FAIL;
         }
 
-        check_caitiff(mtmp);
         gn.notonhead = (gb.bhitpos.x != mtmp->mx || gb.bhitpos.y != mtmp->my);
 
         /* Snickersnee allows one free hit from a distance per turn */
@@ -3868,7 +3867,6 @@ use_grapple(struct obj *obj)
             flags.confirm = FALSE;
             (void) attack_checks(mtmp, uwep);
             flags.confirm = save_confirm;
-            check_caitiff(mtmp);
             (void) thitmonst(mtmp, uwep);
             return ECMD_TIME;
         }

@@ -184,6 +184,8 @@ struct instance_globals_a {
         a chain of objects, use alternate phrasing after the first message */
     struct h2o_ctx acid_ctx;
 
+    long articulo_mortis;
+
     boolean havestate;
 };
 
