@@ -764,6 +764,54 @@ dotnntspecies(void)
 }
 
 /* ######################################################################
+ * TNNT ADDED CONDUCTS
+ * ###################################################################### */
+
+/* This is basically the same as encodeconduct(), but now uses its own xlogfile
+ * field, which this function generates. */
+long
+encode_tnnt_conducts(void)
+{
+    long e = 0L;
+
+    /* begin TNNT tracked conducts */
+    if (!u.uconduct.elbereth)
+        e |= 1L << 0;
+    if (u.umortality == 0)
+        e |= 1L << 1;
+    if (u.uconduct.rmswapchest == 0)
+        e |= 1L << 2;
+    if (!tnnt_globals.unique_info[tnnt_uniqndx(gu.urole.neminum)].died)
+        e |= 1L << 3;
+    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_VLAD_THE_IMPALER)].died)
+        e |= 1L << 4;
+    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_WIZARD_OF_YENDOR)].died)
+        e |= 1L << 5;
+    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_HIGH_CLERIC)].died)
+        e |= 1L << 6;
+    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_DEATH)].died
+        && !tnnt_globals.unique_info[tnnt_uniqndx(PM_PESTILENCE)].died
+        && !tnnt_globals.unique_info[tnnt_uniqndx(PM_FAMINE)].died)
+        e |= 1L << 7;
+    if (u.uconduct.artitouch == 0)
+        e |= 1L << 8;
+    if (u.uroleplay.deaf)
+        e |= 1L << 9;
+    if (u.uroleplay.hallu)
+        e |= 1L << 10;
+    if (u.uroleplay.numbones == 0)
+        e |= 1L << 11;
+    if (u.uconduct.container == 0)
+        e |= 1L << 12;
+    if (u.uconduct.zaps == 0)
+        e |= 1L << 13;
+    if (u.uconduct.potionuse == 0)
+        e |= 1L << 14;
+
+    return e;
+}
+
+/* ######################################################################
  * SWAP CHEST FUNCTIONS
  * ###################################################################### */
 

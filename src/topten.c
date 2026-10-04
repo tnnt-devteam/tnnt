@@ -371,6 +371,8 @@ writexlentry(FILE *rfile, struct toptenentry *tt, int how)
     Fprintf(rfile, "%cconduct=0x%lx%cturns=%ld%cachieve=0x%lx", XLOG_SEP,
             encodeconduct(), XLOG_SEP, svm.moves, XLOG_SEP,
             encodeachieve(FALSE));
+    Fprintf(rfile, "%ctnntconduct=0x%lx", XLOG_SEP,
+            encode_tnnt_conducts());
     Fprintf(rfile, "%cachieveX=%s", XLOG_SEP,
             encode_extended_achievements(achbuf));
     Fprintf(rfile, "%cconductX=%s", XLOG_SEP,
@@ -454,43 +456,9 @@ encodeconduct(void)
         e |= 1L << 12;
     if (!u.uconduct.pets)
         e |= 1L << 13;
-    /* begin TNNT tracked conducts */
-    if (!u.uconduct.elbereth)
-        e |= 1L << 14;
-    if (u.umortality == 0)
-        e |= 1L << 15;
-    if (u.uconduct.rmswapchest == 0)
-        e |= 1L << 16;
-    if (!tnnt_globals.unique_info[tnnt_uniqndx(gu.urole.neminum)].died)
-        e |= 1L << 17;
-    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_VLAD_THE_IMPALER)].died)
-        e |= 1L << 18;
-    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_WIZARD_OF_YENDOR)].died)
-        e |= 1L << 19;
-    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_HIGH_CLERIC)].died)
-        e |= 1L << 20;
-    if (!tnnt_globals.unique_info[tnnt_uniqndx(PM_DEATH)].died
-        && !tnnt_globals.unique_info[tnnt_uniqndx(PM_PESTILENCE)].died
-        && !tnnt_globals.unique_info[tnnt_uniqndx(PM_FAMINE)].died)
-        e |= 1L << 21;
-    if (u.uconduct.artitouch == 0)
-        e |= 1L << 22;
-    if (u.uroleplay.deaf)
-        e |= 1L << 23;
-    if (u.uroleplay.hallu)
-        e |= 1L << 24;
-    if (u.uroleplay.numbones == 0)
-        e |= 1L << 25;
-    if (u.uconduct.container == 0)
-        e |= 1L << 26;
-    if (u.uconduct.zaps == 0)
-        e |= 1L << 27;
-    if (u.uconduct.potionuse == 0)
-        e |= 1L << 28;
-    /* TNNT: there is only space to add 3 more conducts before needing to extend
-     * the int size (or put additional conducts in the achieve field); could buy
-     * 1 more space by removing numbones and reading it from the flags field
-     * instead */
+
+    /* TNNT-added conducts used to be added here but outgrew the 32-bit int and
+     * now appear in their own xlogfile field, "tnntconduct". */
 
     return e;
 }
