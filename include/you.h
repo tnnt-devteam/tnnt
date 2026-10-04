@@ -167,6 +167,10 @@ struct u_conduct {     /* number of times... */
     long container;    /* picked up or applied (but not looted) a container */
     long zaps;         /* zapped a wand or attempted to cast a spell */
     long potionuse;    /* directly used a potion in any way, or shattered one */
+    long identifies;   /* magically identified an item */
+    long gained_refl;  /* had intrinsic or extrinsic reflection */
+    long gained_mr;    /* had intrinsic or extrinsic Antimagic */
+    long usedmoney;    /* spent, received, or donated gold (carrying is ok) */
     long reserved1;
     long reserved2;
     long reserved3;

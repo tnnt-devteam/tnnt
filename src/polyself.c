@@ -124,6 +124,23 @@ set_uasmon(void)
 #endif
     /* we can reset this now, having just done what it is meant to trigger */
     gw.were_changes = 0L;
+
+    /* TNNT: even presuming the player is fully up-to-date on which polyforms
+     * confer magic resistance, it would be possible to leak some information
+     * about item identities by the presence or absence of this line in
+     * #chronicle after polymorphing (e.g. if it's absent, something you
+     * had equipped previously must have provided the property).
+     * Thus, these use LL_SPOILER. */
+    if (Reflecting)
+        if (!u.uconduct.gained_refl++)
+            livelog_printf(LL_CONDUCT | LL_SPOILER,
+                       "gained reflection for the first time, by becoming %s",
+                           an(pmname(mdat, flags.female ? FEMALE : MALE)));
+    if (Antimagic)
+        if (!u.uconduct.gained_mr++)
+            livelog_printf(LL_CONDUCT | LL_SPOILER,
+                "gained magic resistance for the first time, by becoming %s",
+                           an(pmname(mdat, flags.female ? FEMALE : MALE)));
 }
 
 /* Levitation overrides Flying; set or clear BFlying|I_SPECIAL */

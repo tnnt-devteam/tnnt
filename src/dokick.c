@@ -406,6 +406,16 @@ ghitm(struct monst *mtmp, struct obj *gold)
                           flags.female ? "lady" : "buddy");
             }
         }
+        /* TNNT: throwing gold at a monster who accepts it always breaks the
+         * conduct, even if it has no effect (the guard cases above, or throwing
+         * it to a likes_gold monster like a dwarf who doesn't have any defined
+         * interaction above). Not only is the code cleaner this way, but it's
+         * reasonable to assume an attempt to throw gold at a monster is an
+         * attempt to use that money for something. */
+        if (!u.uconduct.usedmoney++)
+            livelog_printf(LL_CONDUCT,
+                           "used money for the first time, by throwing gold to %s",
+                           mon_nam(mtmp));
         return TRUE;
     }
 

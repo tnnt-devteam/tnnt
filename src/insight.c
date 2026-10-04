@@ -2283,6 +2283,26 @@ show_conduct(int final)
     if (u.uconduct.potionuse == 0)
         you_have_never("used or shattered a potion");
 
+    if (u.uconduct.identifies == 0)
+        you_have_never("magically identified an object");
+
+    /* To avoid leaking item identity information, we cannot show during the
+     * game that the hero has never had reflection or antimagic (otherwise one
+     * could try on items until it changes or stops appearing in #conduct).
+     * This can only be shown at the end of the game. */
+    if (!final && !wizard) {
+        enlght_out("-- Reflectionless and MRless cannot be shown in-game --");
+    }
+    else {
+        if (u.uconduct.gained_refl == 0)
+            you_have_never("had magical reflection");
+        if (u.uconduct.gained_mr == 0)
+            you_have_never("had magic resistance");
+    }
+
+    if (u.uconduct.usedmoney == 0)
+        you_have_never("used money");
+
     /* end TNNT extra conducts */
 
     show_achievements(final);

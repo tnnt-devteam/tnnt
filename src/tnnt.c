@@ -805,6 +805,14 @@ encode_tnnt_conducts(void)
         e |= 1L << 12;
     if (u.uconduct.potionuse == 0)
         e |= 1L << 13;
+    if (u.uconduct.identifies == 0)
+        e |= 1L << 14;
+    if (u.uconduct.gained_refl == 0)
+        e |= 1L << 15;
+    if (u.uconduct.gained_mr == 0)
+        e |= 1L << 16;
+    if (u.uconduct.usedmoney == 0)
+        e |= 1L << 17;
 
     /* begin vanilla tracked conducts that are not expressed in the "conduct"
      * field
@@ -2952,4 +2960,12 @@ tnnt_do_quest_achievements(void)
         tnnt_achieve(A_PARTIAL_ZAPLESS);
     if (u.uconduct.potionuse == 0)
         tnnt_achieve(A_PARTIAL_POTIONLESS);
+    if (u.uconduct.identifies == 0)
+        tnnt_achieve(A_PARTIAL_IDLESS);
+    if (u.uconduct.gained_refl == 0)
+        tnnt_achieve(A_PARTIAL_REFLECTIONLESS);
+    if (u.uconduct.gained_mr == 0)
+        tnnt_achieve(A_PARTIAL_MRLESS);
+    if (u.uconduct.usedmoney == 0)
+        tnnt_achieve(A_PARTIAL_MONEYLESS);
 }

@@ -129,6 +129,17 @@ setworn(struct obj *obj, long mask)
                         if (obj->oartifact)
                             set_artifact_intrinsic(obj, 1, mask);
                     }
+                    if (Reflecting)
+                        if (!u.uconduct.gained_refl++)
+                            livelog_printf(LL_CONDUCT | LL_SPOILER,
+                        "gained reflection for the first time, by equipping %s",
+                                           ansimpleoname(obj));
+
+                    if (Antimagic)
+                        if (!u.uconduct.gained_mr++)
+                            livelog_printf(LL_CONDUCT | LL_SPOILER,
+                "gained magic resistance for the first time, by equipping %s",
+                                           ansimpleoname(obj));
                 }
             }
         }

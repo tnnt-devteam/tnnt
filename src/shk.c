@@ -174,6 +174,10 @@ money2mon(struct monst *mon, long amount)
     freeinv(ygold);
     add_to_minv(mon, ygold);
     disp.botl = TRUE;
+    if (!u.uconduct.usedmoney++)
+        livelog_printf(LL_CONDUCT,
+                       "used money for the first time, by paying %s",
+                       mon_nam(mon));
     return amount;
 }
 
@@ -209,6 +213,10 @@ money2u(struct monst *mon, long amount)
         addinv(mongold);
         disp.botl = TRUE;
     }
+    if (!u.uconduct.usedmoney++)
+        livelog_printf(LL_CONDUCT,
+                       "used money for the first time, by receiving it from %s",
+                       mon_nam(mon));
 }
 
 staticfn struct monst *
@@ -3984,6 +3992,9 @@ donate_gold(
                   delta, currency(delta), !selling ? " back" : "",
                   eshkp->credit, currency(eshkp->credit));
     }
+    if (!u.uconduct.usedmoney++)
+        livelog_printf(LL_CONDUCT,
+               "used money for the first time, by establishing shop credit");
 }
 
 void
@@ -5884,6 +5895,9 @@ costly_gold(
         eshkp->loan += delta;
         eshkp->credit = 0L;
     }
+    if (!u.uconduct.usedmoney++)
+        livelog_printf(LL_CONDUCT,
+                   "used money for the first time, by establishing shop debt");
 }
 
 /* used in domove to block diagonal shop-exit */

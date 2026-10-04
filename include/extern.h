@@ -3331,6 +3331,7 @@ extern int dotnntachievements(void);
 extern int show_tnnt_achievements(boolean);
 extern int doshowfoodseaten(void);
 extern int dotnntspecies(void);
+extern long encode_tnnt_conducts(void);
 extern boolean write_swapobj_file(struct obj *, xint8) NONNULLARG1;
 extern void refresh_swap_chest_contents(struct obj *) NONNULLARG1;
 extern boolean delete_swapobj_file(struct obj *) NONNULLARG1;

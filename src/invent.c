@@ -2704,6 +2704,15 @@ identify(struct obj *otmp)
 {
     fully_identify_obj(otmp);
     prinv((char *) 0, otmp, 0L);
+    /* TNNT - identificationless conduct gets broken in this function because
+     * fully_identify_obj is called from a few other places that are not magical
+     * ID (such as throwing invocation items to the quest leader).
+     * This function does also get called without explicit magical
+     * identification in wizard mode when flags.override_ID is true, but that's
+     * OK. */
+    if (!u.uconduct.identifies++)
+        livelog_printf(LL_CONDUCT, "magically identified %s first object - %s",
+                       uhis(), xname(otmp));
     return 1;
 }
 
