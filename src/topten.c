@@ -458,7 +458,11 @@ encodeconduct(void)
         e |= 1L << 13;
 
     /* TNNT-added conducts used to be added here but outgrew the 32-bit int and
-     * now appear in their own xlogfile field, "tnntconduct". */
+     * now appear in their own xlogfile field, "tnntconduct".
+     * Conducts/roleplay options that ARE tracked natively in vanilla but are
+     * NOT expressed in the conduct xlogfile field (deaf and pauper) go in
+     * tnntconduct, so that this function stays identical to vanilla except for
+     * this comment. */
 
     return e;
 }
