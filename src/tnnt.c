@@ -819,6 +819,8 @@ encode_tnnt_conducts(void)
      * these appear at the END of tnntconduct so that if vanilla adds them to
      * the regular conduct field, they can just be removed from here without
      * shaking up other TNNT conducts. */
+    if (u.uroleplay.pauper)
+        e |= 1L << 30;
     if (u.uroleplay.deaf)
         e |= 1L << 31;
 
@@ -2968,4 +2970,6 @@ tnnt_do_quest_achievements(void)
         tnnt_achieve(A_PARTIAL_MRLESS);
     if (u.uconduct.usedmoney == 0)
         tnnt_achieve(A_PARTIAL_MONEYLESS);
+    if (u.uroleplay.pauper)
+        tnnt_achieve(A_PARTIAL_PAUPER);
 }

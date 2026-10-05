@@ -314,6 +314,8 @@ ACH("Magic Magnet",
     PARTIAL_MRLESS),
 ACH("Vow of Poverty", "Receive the Quest with moneyless conduct intact",
     PARTIAL_MONEYLESS),
+ACH("Starting from Nothing", "Receive the Quest after starting as a pauper",
+    PARTIAL_PAUPER),
 /* not conduct related but still involves the quest leader */
 ACH("To The Quest Without A Rest",
     "Talk to your Quest leader before turn 5000", QUICKLY_REACHED_QUEST),
