@@ -795,18 +795,24 @@ encode_tnnt_conducts(void)
         e |= 1L << 7;
     if (u.uconduct.artitouch == 0)
         e |= 1L << 8;
-    if (u.uroleplay.deaf)
-        e |= 1L << 9;
     if (u.uroleplay.hallu)
-        e |= 1L << 10;
+        e |= 1L << 9;
     if (u.uroleplay.numbones == 0)
-        e |= 1L << 11;
+        e |= 1L << 10;
     if (u.uconduct.container == 0)
-        e |= 1L << 12;
+        e |= 1L << 11;
     if (u.uconduct.zaps == 0)
-        e |= 1L << 13;
+        e |= 1L << 12;
     if (u.uconduct.potionuse == 0)
-        e |= 1L << 14;
+        e |= 1L << 13;
+
+    /* begin vanilla tracked conducts that are not expressed in the "conduct"
+     * field
+     * these appear at the END of tnntconduct so that if vanilla adds them to
+     * the regular conduct field, they can just be removed from here without
+     * shaking up other TNNT conducts. */
+    if (u.uroleplay.deaf)
+        e |= 1L << 31;
 
     return e;
 }
