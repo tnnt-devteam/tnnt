@@ -38,12 +38,10 @@ local NUM_NKI = 70
 
 -- place kitten
 local kcoord = all:rndcoord(1)
-nh.pline(kcoord.x..', '..kcoord.y)
 des.set_kitten_loc(kcoord.x, kcoord.y)
 des.terrain(kcoord, "N")
 
--- place non-kitten items; a special case in sel_set_ter makes the first one set
--- the real kitten
+-- place non-kitten items
 for i = 1, NUM_NKI do
    local coord = all:rndcoord(1)
    des.terrain(coord, "N")
