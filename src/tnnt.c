@@ -1923,7 +1923,7 @@ collect_all_transient(struct obj* exception)
         for (x = 0; x < COLNO; ++x) {
             for (otmp = svl.level.objects[x][y]; otmp; otmp = next) {
                 coordxy oldox = otmp->ox, oldoy = otmp->oy;
-                next = otmp->nobj;
+                next = otmp->nexthere;
                 t_collect(otmp);
                 if (otmp->transient)
                     newsym(oldox, oldoy);
