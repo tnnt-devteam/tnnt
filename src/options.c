@@ -451,7 +451,7 @@ ask_do_tutorial(void)
         pline(
  "You have OPTIONS=tutorial set, but the tutorial is not available in TNNT.");
     }
-    return false;
+    return FALSE;
 }
 
 /*
