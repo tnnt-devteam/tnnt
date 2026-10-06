@@ -2627,6 +2627,8 @@ trapeffect_landmine(
     } else {
         boolean trapkilled = FALSE;
         boolean in_sight = canseemon(mtmp) || (mtmp == u.usteed);
+        /* TNNT: blow_up_landmine() may delete the trap or clear madeby_u */
+        boolean yours = trap->madeby_u;
         coordxy tx = trap->tx, ty = trap->ty;
 
         /* heavier monsters are more likely to set off a land mine; on the
@@ -2679,7 +2681,7 @@ trapeffect_landmine(
             gm.multi = -1;
             gn.nomovemsg = "The explosion awakens you!";
         }
-        if (trap->madeby_u)
+        if (yours)
             tnnt_achieve(A_TRAPPED_MONSTER);
         return trapkilled ? Trap_Killed_Mon : mtmp->mtrapped
             ? Trap_Caught_Mon : Trap_Effect_Finished;
