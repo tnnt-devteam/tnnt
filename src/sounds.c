@@ -1478,13 +1478,19 @@ dochat(void)
                           Hallucination ? rndmonnam((char *) 0) : "statue");
             return ECMD_OK;
         }
-        if (otmp->otyp == SWAP_CHEST) {
+        /* otmp is Null here when there's no object at all */
+        if (otmp && otmp->otyp == SWAP_CHEST) {
             if (otmp->swapitems == SWAP_CHEST_USED_UP) {
-                pline("You get no response from %s. It seems to be waiting for someoene else.", the(xname(otmp)));
+                pline("You get no response from %s. "
+                      "It seems to be waiting for someone else.",
+                      the(xname(otmp)));
             } else {
-                pline("%s bounces impatiently, and flaps its lid.", The(xname(otmp)));
-                pline("Inside, you catch a glimpse of treasure left behind by adventurers who came before you.");
+                pline("%s bounces impatiently, and flaps its lid.",
+                      The(xname(otmp)));
+                pline("Inside, you catch a glimpse of treasure left behind "
+                      "by adventurers who came before you.");
             }
+            return ECMD_OK;
         }
         if (!Deaf && (IS_WALL(levl[tx][ty].typ)
                       || levl[tx][ty].typ == SDOOR)) {
