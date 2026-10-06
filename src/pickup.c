@@ -2741,7 +2741,6 @@ in_container(struct obj *obj)
             (void) stop_timer(SHRINK_GLOB, obj_to_any(obj));
         }
     } else if (Is_mbag(gc.current_container) && mbag_explodes(obj, 0)) {
-        livelog_printf(LL_ACHIEVE, "just blew up %s bag of holding", uhis());
         /* explicitly mention what item is triggering the explosion */
         urgent_pline(
               "As you put %s inside, you are blasted by a magical explosion!",
@@ -3375,7 +3374,8 @@ use_container(
             pline1(emptymsg); /* <whatever> is empty. */
             if (!gc.current_container->cknown)
                 used = ECMD_TIME;
-            gc.current_container->cknown = 1;
+            if (gc.current_container->otyp != SWAP_CHEST)
+                gc.current_container->cknown = 1;
         } else {
             add_valid_menu_class(0); /* reset */
             if (flags.menu_style == MENU_TRADITIONAL)
@@ -3888,18 +3888,6 @@ dotip(void)
                         return ECMD_OK;
                     if (c == 'n')
                         continue;
-                    if (cobj->otyp == SWAP_CHEST) {
-                        if (rn2(5)) {
-                            pline("%s digs its toes in and refuses to budge.",
-                                  The(xname(cobj)));
-                        } else {
-                            pline("%s reveals hundreds of little legs and stomps on you!",
-                                  The(xname(cobj)));
-                            losehp(rn1(10,5), "trampled to death by an angry box",
-                                              NO_KILLER_PREFIX);
-                        }
-                        return 0;
-                    }
                     tipcontainer(cobj);
                     /* can only tip one container at a time */
                     return ECMD_TIME;
@@ -3980,6 +3968,21 @@ tipcontainer(struct obj *box) /* or bag */
     boolean srcheld = FALSE, dstheld = FALSE, maybeshopgoods;
     struct obj *targetbox = (struct obj *) 0;
     boolean cancelled = FALSE;
+
+    /* TNNT: the swap chest can't be tipped; checked here rather than in
+       dotip() so that choose_tip_container_menu() is covered too */
+    if (box->otyp == SWAP_CHEST) {
+        if (rn2(5)) {
+            pline("%s digs its toes in and refuses to budge.",
+                  The(xname(box)));
+        } else {
+            pline("%s reveals hundreds of little legs and stomps on you!",
+                  The(xname(box)));
+            losehp(rn1(10, 5), "trampled to death by an angry box",
+                   NO_KILLER_PREFIX);
+        }
+        return;
+    }
 
     /* box is either held or on floor at hero's spot; no need to check for
        nesting; when held, we need to update its location to match hero's;
