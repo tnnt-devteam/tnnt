@@ -1027,7 +1027,11 @@ mkswapobj(struct obj *swapchest, char *filename, short *rcode)
         free(o);
         return (struct obj *) 0;
     }
-    add_to_container(swapchest, o);
+    /* nomerge: an identical object from another file (same donor and
+     * slot) would otherwise absorb o, which then gets marked deleted */
+    o->nomerge = 1;
+    (void) add_to_container(swapchest, o);
+    o->nomerge = 0;
     o->where = OBJ_INSWAP;
     o->swapobj_filename = strdup(filename);
     *rcode = MKSWAPOBJ_SUCCESS;

@@ -1600,7 +1600,7 @@ meatobj(struct monst *mtmp) /* for gelatinous cubes */
                             ? "nearby" : "in the distance"));
             }
             mondead(mtmp);
-            return 0;
+            return DEADMONSTER(mtmp) ? 2 : 1; /* 2: tell m_move it died */
         }
 
         /* avoid special items; once hero picks them up, they'll cease

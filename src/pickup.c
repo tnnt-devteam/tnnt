@@ -2959,9 +2959,9 @@ out_container(struct obj *obj)
          * different way already (the tests aren't really necessary, since
          * swapobjs should always be named non-artifacts, but out of an
          * abundance of caution...) */
-        save_oname = has_oname(obj) ? ONAME(obj) : (char *) 0;
-        if (save_oname && !obj->oartifact)
-            ONAME(obj) = (char *) 0;
+        save_oname = has_oname(otmp) ? ONAME(otmp) : (char *) 0;
+        if (save_oname && !otmp->oartifact)
+            ONAME(otmp) = (char *) 0;
         /* xname would be easier to use here since it doesn't include an
          * article, but it's nice to see enchantment, quantity, etc */
         itemname = doname(otmp);
@@ -2970,8 +2970,8 @@ out_container(struct obj *obj)
             itemname = strchr(itemname, ' ') + 1; /* strip article */
         livelog_printf(LL_ACHIEVE, "removed %s %s from the swap chest",
                        prefix, itemname);
-        if (save_oname && !obj->oartifact)
-            ONAME(obj) = save_oname;
+        if (save_oname && !otmp->oartifact)
+            ONAME(otmp) = save_oname;
         return -1; /* don't try to remove any more items */
     }
     /* <-- */
