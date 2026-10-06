@@ -2126,7 +2126,7 @@ extern int l_obj_register(lua_State *) NONNULLARG1;
 /* ### nhlobj.c ### */
 
 #if !defined(CROSSCOMPILE) || defined(CROSSCOMPILE_TARGET)
-extern void nhl_push_obj(lua_State *, struct obj *) NONNULLARG12;
+extern void nhl_push_obj(lua_State *, struct obj *) NONNULLARG1;
 extern int nhl_obj_u_giveobj(lua_State *) NONNULLARG1;
 extern int l_obj_register(lua_State *) NONNULLARG1;
 #endif

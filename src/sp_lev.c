@@ -2445,13 +2445,15 @@ create_object(object *o, struct mkroom *croom)
     /* TNNT hack: transmute any statue of any player monster on the deathmatch
      * level into a topten-named player monster statue. The player monster type
      * specified in the des is discarded. */
-    if (Is_deathmatch_level(&u.uz) && otmp->otyp == STATUE
+    if (otmp && Is_deathmatch_level(&u.uz) && otmp->otyp == STATUE
         && is_mplayer(&mons[otmp->corpsenm])) {
-        /* Also, these should not have books in them.
-         * This case comes first in case tt_oname fails to find any topten
-         * entries and returns null. */
+        /* Also, these should not have books in them. */
         delete_contents(otmp);
-        otmp = tt_oname(otmp);
+        /* tt_oname() returns Null if the scoreboard is empty; keep the
+           statue and give it a random role, like mk_tt_object() does */
+        if (!tt_oname(otmp))
+            set_corpsenm(otmp,
+                         rn1(PM_WIZARD - PM_ARCHEOLOGIST + 1, PM_ARCHEOLOGIST));
     }
     return otmp;
 }
