@@ -6035,6 +6035,11 @@ lspo_set_kitten_loc(lua_State *L)
         nhl_error(L, "wrong parameters");
     }
 
+    /* the kitten can only be found once; don't place a new one if the
+       level is recreated by #wizmakemap */
+    if (tnnt_is_achieved(A_FOUND_KITTEN))
+        return 0;
+
     get_location_coord(&x, &y, ANY_LOC, gc.coder->croom,
                        SP_COORD_PACK(x, y));
     tnnt_globals.kitten_loc.x = x;
