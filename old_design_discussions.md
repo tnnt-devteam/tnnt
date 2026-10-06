@@ -16,7 +16,7 @@ While this file covers a lot of reasons why various features were rejected,
 don't assume that every idea in here has been considered and rejected. Sometimes
 an idea just never got enough interest from anyone to get implemented.
 
-The discussions in this file date from prior to the 2025 tournament, and do not
+The discussions in this file date from prior to the 2026 tournament, and do not
 cover anything during or after that tournament.
 
 ## Swap Chest
@@ -142,6 +142,7 @@ achievement:
    - Go to heaven prematurely.
    - After getting the Mines luckstone and Sokoban prize and leaving both
      branches, never return to either.
+   - Carry a large box at all times while in the Planes.
 2. Achievements should be something a player can accomplish in one NetHack game,
    which is how the achievement framework works. Things outside that framework
    are difficult to compute and can't be shown to the player in-game.
@@ -169,6 +170,13 @@ achievement:
    generation or other RNG such that they might be unachievable in a given game;
    otherwise we couldn't have Big Room or Ludios based achievements, for
    instance.
+6. Achievements that reward _negative or self-harming_ behavior tend to get
+   discouraged. This is not a hard rule, and we do have some achievements along
+   these lines, such as blowing up a bag of holding (the achievement is likely
+   to be a consolation prize) or getting +30 AC (getting that much negatively
+   enchanted gear is impressive in and of itself). But proposals for
+   achievements that propose to make the hero do something detrimental should
+   be scrutinized more heavily.
 
 Other unsorted rejected ideas:
 - Minesweeper should not be entirely locked behind Ludios; it should just
@@ -267,6 +275,24 @@ Other unsorted rejected ideas:
   - It's difficult to get a stoned pet "naturally" as they will avoid eating
     cockatrice meat, so this basically requires you to stone the pet yourself,
     then cure it.
+- Achievement for converting one of an altar of each other alignment to your
+  own alignment.
+  - This has some ill-defined interactions with changing "your own alignment"
+    either temporarily or permanently. The question of whether or not to
+    require converting an altar to Moloch is also tricky: not requiring it
+    makes it a not very hard achievement to convert two altars, and requiring
+    it would either take a bit of RNG luck in getting Orcish Town, or playing a
+    role whose quest guarantees an altar to Moloch.
+- Achievement for finding a "Saved by the bell" bell on a grave.
+  - Since the bell doesn't do anything, this is not particularly interesting
+    while also being entirely dependent on RNG to find the bell.
+- Achievement for pacifying the Wizard of Yendor.
+  - Ultimately, the tactic for doing this is too similar to the tactic for
+    taming a Rider (involves tediously reducing his level to the point where he
+    is vulnerable to magical attacks, and then the strategies diverge: the
+    Wizard can then be polymorphed into something with a special-case way to
+    pacify it) and is likely to make obtaining all achievements more of a chore
+    rather than more fun.
 
 ### Achievement categorization
 
@@ -400,3 +426,9 @@ Miscellaneous suggestions:
 - On the week of (USA) Thanksgiving, make randomly generated fruits appear using
   names of traditional Thanksgiving foods, such as roast turkeys and cranberry
   sauce. This might confuse players outside the USA though.
+- A "straitlaced" conduct - never consume booze or hallucinate.
+  - It's fairly common to hallucinate without wanting to, when an invisible
+    black light explodes, so a fair percentage of people trying for this
+    conduct would break it unless they relied on getting Grayswandir very
+    early. Apart from that, it is not a particularly interesting conduct since
+    booze and hallucination have very few upsides.
