@@ -617,6 +617,7 @@ dump_everything(
     putstr(NHW_DUMPTXT, 0, "");
     list_genocided('d', FALSE); /* 'd' => 'y' */
     /* TNNT: show stats and achievements */
+    putstr(NHW_DUMPTXT, 0, "");
     show_tnnt_stats(TRUE);
     putstr(NHW_DUMPTXT, 0, "");
     show_tnnt_achievements(TRUE);
