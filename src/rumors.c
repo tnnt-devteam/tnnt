@@ -1012,6 +1012,7 @@ tnnt_get_nki_text(char *buf, coordxy x, coordxy y)
         if ((endp = strchr(line, '\n')) != 0)
             *endp = 0;
         Strcat(buf, xcrypt(line, xbuf));
+        unpadline(buf); /* strip makedefs' '_' padding */
         (void) dlb_fclose(fh);
     } else {
         couldnt_open_file(TNNT_NKIFILE);
