@@ -2698,6 +2698,20 @@ map_glyphinfo(
            turn off override symbol if caller has specified NOOVERRIDE */
         glyphinfo->gm.sym.symidx = mons[glyph_to_mon(glyph)].mlet + SYM_OFF_M;
     }
+    /* TNNT: on the robotfindskitten level, each non-kitten item gets a
+       random but fixed object symbol and color based on its location */
+    if (glyph == cmap_to_glyph(S_nki) && Is_rfk_level(&u.uz)) {
+        unsigned int hash = tnnt_coord_hash(x, y, 0);
+
+        glyphinfo->gm.sym.symidx = (hash % (VENOM_CLASS - 2))
+                                   + SYM_OFF_O + 1;
+        glyphinfo->gm.sym.color = hash % CLR_MAX;
+        glyphinfo->gm.customcolor = 0;
+        glyphinfo->gm.color256idx = 0;
+#ifdef ENHANCED_SYMBOLS
+        glyphinfo->gm.u = NULL;
+#endif
+    }
     glyphinfo->ttychar = gs.showsyms[glyphinfo->gm.sym.symidx];
     glyphinfo->glyph = glyph;
 }
