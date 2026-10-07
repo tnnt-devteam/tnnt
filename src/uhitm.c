@@ -1834,6 +1834,8 @@ hmon_hitmon(
     hmd.doreturn = FALSE;
     hmd.retval = FALSE;
     hmd.saved_oname[0] = '\0';
+    hmd.artibane = FALSE; /* TNNT */
+    hmd.potion_hit = FALSE; /* TNNT */
 
     hmon_hitmon_do_hit(&hmd, mon, obj);
     if (hmd.doreturn)
