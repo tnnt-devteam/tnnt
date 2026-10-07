@@ -3253,7 +3253,8 @@ cancel_monst(struct monst *mdef, struct obj *obj, boolean youattack,
         }
     } else {
         if (youattack)
-            tnnt_achieve(A_CANCELED_MONSTER);
+            tnnt_achieve_controlnotify(A_CANCELED_MONSTER,
+                                       !objects[WAN_CANCELLATION].oc_name_known);
         mdef->mcan = TRUE;
 
         if (is_were(mdef->data) && mdef->data->mlet != S_HUMAN)

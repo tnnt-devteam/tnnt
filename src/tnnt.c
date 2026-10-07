@@ -2383,6 +2383,18 @@ tnnt_achieve(short achvmt)
         write_temp_achievements_file();
 }
 
+/* Wrapper of tnnt_achieve that allows the caller to suppress an "Achievement
+ * unlocked" message. */
+void
+tnnt_achieve_controlnotify(short achvmt, boolean suppress_notify)
+{
+    boolean oldnotify = flags.notify_achievements;
+    if (suppress_notify)
+        flags.notify_achievements = FALSE;
+    tnnt_achieve(achvmt);
+    flags.notify_achievements = oldnotify;
+}
+
 /* Announce new achievements (those that were just earned, and have
  * needs_notification flipped on) to the player. */
 void

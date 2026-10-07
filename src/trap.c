@@ -1559,7 +1559,8 @@ trapeffect_bear_trap(
                 }
             }
             if (trap->madeby_u)
-                tnnt_achieve(A_TRAPPED_MONSTER);
+                tnnt_achieve_controlnotify(A_TRAPPED_MONSTER,
+                                           !(in_sight || is_bear));
             if (is_bear && trap->madeby_u)
                 tnnt_achieve(A_TRAPPED_BEAR_IN_BEAR_TRAP);
         } else if (forcetrap) {
@@ -2024,7 +2025,7 @@ trapeffect_pit(
             trapkilled = TRUE;
 
         if (trap->madeby_u)
-            tnnt_achieve(A_TRAPPED_MONSTER);
+            tnnt_achieve_controlnotify(A_TRAPPED_MONSTER, !in_sight);
 
         return trapkilled ? Trap_Killed_Mon : mtmp->mtrapped
             ? Trap_Caught_Mon : Trap_Effect_Finished;
@@ -2085,7 +2086,7 @@ trapeffect_hole(
                 return Trap_Effect_Finished;
         }
         if (trap->madeby_u)
-            tnnt_achieve(A_TRAPPED_MONSTER);
+            tnnt_achieve_controlnotify(A_TRAPPED_MONSTER, !in_sight);
         return trapeffect_level_telep(mtmp, trap, trflags);
     }
     return Trap_Effect_Finished;
@@ -2263,7 +2264,7 @@ trapeffect_web(
             }
             mtmp->mtrapped = tear_web ? 0 : 1;
             if (trap->madeby_u && mtmp->mtrapped)
-                tnnt_achieve(A_TRAPPED_MONSTER);
+                tnnt_achieve_controlnotify(A_TRAPPED_MONSTER, !in_sight);
             break;
             /* this list is fairly arbitrary; it deliberately
                excludes wumpus & giant/ettin zombies/mummies */
@@ -2682,7 +2683,8 @@ trapeffect_landmine(
             gn.nomovemsg = "The explosion awakens you!";
         }
         if (yours)
-            tnnt_achieve(A_TRAPPED_MONSTER);
+            tnnt_achieve_controlnotify(A_TRAPPED_MONSTER,
+                                       (!in_sight && Deaf));
         return trapkilled ? Trap_Killed_Mon : mtmp->mtrapped
             ? Trap_Caught_Mon : Trap_Effect_Finished;
     }

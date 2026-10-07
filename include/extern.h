@@ -3354,6 +3354,7 @@ extern void erase_temp_achievements_file(void);
 extern void initialize_prev_game_achievements(void);
 extern void write_prev_ach_file(void);
 extern boolean tnnt_is_achieved(short);
+extern void tnnt_achieve_controlnotify(short, boolean);
 extern void tnnt_achieve(short);
 extern void tnnt_announce_achievements(void);
 extern boolean tnnt_is_watch_present(void);
