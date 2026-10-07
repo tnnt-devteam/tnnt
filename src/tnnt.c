@@ -265,6 +265,14 @@ show_tnnt_stats(boolean final)
             maybe_have(final), tnnt_globals.maxpw_from_corpses);
     putstr(en_win, 0, buf);
 
+    for (i = 0; i < HEIST_VAULTS; ++i) {
+        if (tnnt_globals.vaults_entered[i] == 0)
+            break;
+    }
+    Sprintf(buf, "You have entered %s%d vault%s.",
+            (i >= HEIST_VAULTS) ? "at least " : "", i, plur(i));
+    putstr(en_win, 0, buf);
+
 #define print_visited(altars)      \
     if ((altars) == 0)             \
         Strcat(buf, " none");      \
@@ -2824,46 +2832,6 @@ tnnt_maybe_grant_ahab(void)
 #endif
         ) {
         tnnt_achieve(A_SURVIVED_DROWNING);
-    }
-}
-
-/* Grant "The Great Heist" achievement if player has entered every vault in the
- * game, and there are no more levels that might generate another vault. */
-void
-tnnt_maybe_award_heist(void)
-{
-    d_level lvl = u.uz;
-    int i;
-    int not_entered = 0;
-    int entered = 0;
-    if (!In_dungeons_of_doom(&lvl)) {
-        impossible("checking vaults not in Dungeons?");
-        return;
-    }
-    for (i = 1; i <= dunlevs_in_dungeon(&u.uz); ++i) {
-        lvl.dlevel = i;
-        if (tnnt_globals.vault_status[i] == LEVEL_NOT_GENERATED) {
-            if (Is_special(&lvl)) {
-                /* Medusa, Castle etc; we already know this level will not have
-                 * a vault, so we can just fix it up */
-                tnnt_globals.vault_status[i] = LEVEL_HAS_NO_VAULT;
-            }
-            else {
-                /* not enough information to tell if we have plundered all
-                 * vaults */
-                return;
-            }
-        }
-        else if (tnnt_globals.vault_status[i] == VAULT_NOT_ENTERED)
-            not_entered++;
-        else if (tnnt_globals.vault_status[i] == VAULT_ENTERED)
-            entered++;
-    }
-    /* we do need to check that at least one vault has been entered; in the
-     * extremely rare case that a dungeon contains no vaults, the achievement
-     * cannot be earned */
-    if (not_entered == 0 && entered > 0) {
-        tnnt_achieve(A_ENTERED_ALL_VAULTS);
     }
 }
 

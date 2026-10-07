@@ -1157,12 +1157,6 @@ fill_ordinary_room(
     }
     if (In_dungeons_of_doom(&u.uz)) {
         maybe_place_dungeons_swapchest();
-        /* Need to call this here since the hero might plunder all the vaults
-         * that generate while leaving some more levels un-generated, and when
-         * they generate they don't end up with a vault. We didn't have enough
-         * information to award it earlier, and we can't count on the hero
-         * stepping back inside a vault to award it later. */
-        tnnt_maybe_award_heist();
     }
 
  skip_nonrogue:
@@ -1278,10 +1272,6 @@ makelevel(void)
     oinit(); /* assign level dependent obj probabilities */
     clear_level_structures();
 
-    if (In_dungeons_of_doom(&u.uz)) {
-        tnnt_globals.vault_status[u.uz.dlevel] = LEVEL_HAS_NO_VAULT;
-    }
-
     slev = Is_special(&u.uz);
     /* check for special levels */
     if (slev && !Is_rogue_level(&u.uz)) {
@@ -1349,7 +1339,6 @@ makelevel(void)
                 mk_knox_portal(gv.vault_x + w, gv.vault_y + h);
                 if (!svl.level.flags.noteleport && !rn2(3))
                     makevtele();
-                tnnt_globals.vault_status[u.uz.dlevel] = VAULT_NOT_ENTERED;
             } else if (rnd_rect() && create_vault()) {
                 gv.vault_x = svr.rooms[svn.nroom].lx;
                 gv.vault_y = svr.rooms[svn.nroom].ly;

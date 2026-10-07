@@ -3738,8 +3738,20 @@ check_special_room(boolean newlev)
         switch (rt) {
         case VAULT:
             tnnt_achieve(A_ENTERED_VAULT);
-            tnnt_globals.vault_status[u.uz.dlevel] = VAULT_ENTERED;
-            tnnt_maybe_award_heist();
+            if (In_dungeons_of_doom(&u.uz) /* don't count Ludios's */
+                && !tnnt_is_achieved(A_ENTERED_5_VAULTS)) {
+                int i;
+                for (i = 0; i < HEIST_VAULTS; ++i) {
+                    if (tnnt_globals.vaults_entered[i] == u.uz.dlevel)
+                        break;
+                    if (tnnt_globals.vaults_entered[i] == 0) {
+                        tnnt_globals.vaults_entered[i] = u.uz.dlevel;
+                        if (i + 1 == HEIST_VAULTS)
+                            tnnt_achieve(A_ENTERED_5_VAULTS);
+                        break;
+                    }
+                }
+            }
             rt = 0; /* don't unmake vault */
             break;
         case ZOO:
