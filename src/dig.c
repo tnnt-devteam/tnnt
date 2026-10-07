@@ -246,10 +246,9 @@ dig_check(struct monst *madeby, coordxy x, coordxy y)
                   prevent broken wands from turning holes into pits */
                && (ttmp || is_pool_or_lava(x, y))) {
         /* digging by player handles pools separately */
+        return DIGCHECK_FAIL_OBJ_POOL_OR_TRAP;
     } else if (levl[x][y].typ == NKI) {
         return DIGCHECK_FAIL_NKI;
-    } else {
-        return DIGCHECK_FAIL_OBJ_POOL_OR_TRAP;
     }
     return DIGCHECK_PASSED;
 }
