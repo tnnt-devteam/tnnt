@@ -3818,6 +3818,15 @@ check_special_room(boolean newlev)
                 msg_given = FALSE;
             break;
         }
+        case THEMEROOM:
+            /* TNNT: we define themed rooms in certain levels because the
+             * special level loader will preserve them, and having a room define
+             * a specific area provides a really easy way to hook achievement
+             * triggers onto entering that area. */
+            /* Ludios themed room encompasses the treasure vault */
+            if (Is_knox(&u.uz) && !tnnt_globals.u_exited_ludios)
+                tnnt_achieve(A_COMPLETED_LUDIOS_WITHOUT_BACKTRACKING);
+            break;
         case TEMPLE:
             intemple(roomno + ROOMOFFSET);
             FALLTHROUGH;

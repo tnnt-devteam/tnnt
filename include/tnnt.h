@@ -264,6 +264,7 @@ struct tnnt_globals_t {
     boolean u_entered_soko;
     boolean u_backtracked_after_soko; /* can only be set after u_entered_soko is
                                          true */
+    boolean u_exited_ludios;
     boolean non_downstairs_move_in_hell;
     boolean unforeseen_fall; /* so if someone hits a trap door in Gehennom they
                                 legitimately didn't know about, it won't break the

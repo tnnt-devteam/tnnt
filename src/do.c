@@ -1846,6 +1846,9 @@ goto_level(
         if (tnnt_globals.u_entered_soko) {
             tnnt_globals.u_backtracked_after_soko = TRUE;
         }
+        if (Is_knox(&u.uz0)) {
+            tnnt_globals.u_exited_ludios = TRUE;
+        }
     }
     reglyph_darkroom();
     set_uinwater(0); /* u.uinwater = 0 */

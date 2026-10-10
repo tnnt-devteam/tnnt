@@ -65,7 +65,11 @@ function treasure_spot(x,y)
    end
 end
 
-des.region({ region={21,08,35,11}, lit=1, type="ordinary" })
+-- TNNT: we define this region as "themed" so that the special level code
+-- doesn't delete it as an uninteresting room that was provided only for
+-- lighting. By keeping it as a room, we can trigger achievements off entering
+-- it.
+des.region({ region={21,08,35,11}, lit=1, type="themed", filled=0 })
 local treasury = selection.area(21,08,35,11);
 treasury:iterate(treasure_spot);
 
