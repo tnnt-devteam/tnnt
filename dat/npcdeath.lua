@@ -26,69 +26,67 @@ des.message("You resist the urge to flee.")
 --         1         2         3         4         5         6         7
 --123456789012345678901234567890123456789012345678901234567890123456789012345
 des.map([[
-                         ----------------                                  
-                      ----LLLLLLLLLLLLLL----                               
-                   ----LLLL.....--.....LLLL----                            
-                 ---LLLL........--........LLLL---                          
-               ---LLL........................LLL---                        
-             ---LLL.............LL.............LLL---                      
-            --LLL........--.....LL.....--........LLL--      ---------      
-            |LL..........--.....LL.....--..........LL|      |.......|      
-            |L..................LL...................|-------.......|      
-            |L.......................................+..............|      
-            |L..................LL...................|-------.......|      
-            |LL..........--.....LL.....--..........LL|      |.......|      
-            --LLL........--.....LL.....--........LLL--      ---------      
-             ---LLL.............LL.............LLL---                      
-               ---LLL........................LLL---                        
-                 ---LLLL........--........LLLL---                          
-                   ----LLLL.....--.....LLLL----                            
-                      ----LLLLLLLLLLLLLL----                               
-                         ----------------                                  
+             ----------------                            
+          ----LLLLLLLLLLLLLL----                         
+       ----LLLL.....--.....LLLL----                      
+     ---LLLL........--........LLLL---                    
+   ---LLL........................LLL---                  
+ ---LLL.............LL.............LLL---                
+--LLL........--.....LL.....--........LLL--      ---------
+|LL..........--.....LL.....--..........LL|      |.......|
+|L..................LL...................|-------.......|
+|L.......................................+..............|
+|L..................LL...................|-------.......|
+|LL..........--.....LL.....--..........LL|      |.......|
+--LLL........--.....LL.....--........LLL--      ---------
+ ---LLL.............LL.............LLL---                
+   ---LLL........................LLL---                  
+     ---LLLL........--........LLLL---                    
+       ----LLLL.....--.....LLLL----                      
+          ----LLLLLLLLLLLLLL----                         
+             ----------------                            
 ]]);
 
-des.region(selection.area(12,00,68,18), "lit")
-des.levregion({ region = {66,09,66,09}, exclude = {0,0,0,0}, type="branch" })
-des.teleport_region({ region={61,08,67,12} })
-des.non_diggable(selection.area(0,0,75,19))
-des.non_passwall(selection.area(0,0,75,19))
-
-des.region(selection.area(12,00,52,18), "lit")
+des.region(selection.area(00,00,56,18), "lit")
+des.levregion({ region = {54,09,54,09}, exclude = {0,0,0,0}, type="branch" })
+des.teleport_region({ region={49,08,55,12} })
+des.non_diggable(selection.area(0,0,56,18))
+des.non_passwall(selection.area(0,0,56,19))
 
 --# Foyer
-des.engraving({54,09}, "burn", "Point of no return")
-des.engraving({60,09}, "burn", "Two players enter, one player leaves...")
+des.engraving({42,09}, "burn", "Point of no return")
+des.engraving({48,09}, "burn", "Two players enter, one player leaves...")
 
-des.door("closed",53,09)
+des.door("closed",41,09)
 
 -- Statues of those before...
 -- Note: the special level code sees a statue of a player monster and converts
 -- it to a suitable player monster statue from the topten list. These don't all
 -- actually come out as archeologists.
-des.object({ id = "statue", x = 61, y = 07, montype = "archeologist" })
-des.object({ id = "statue", x = 62, y = 07, montype = "archeologist" })
-des.object({ id = "statue", x = 63, y = 07, montype = "archeologist" })
-des.object({ id = "statue", x = 64, y = 07, montype = "archeologist" })
-des.object({ id = "statue", x = 65, y = 07, montype = "archeologist" })
-des.object({ id = "statue", x = 66, y = 07, montype = "archeologist" })
-des.object({ id = "statue", x = 67, y = 07, montype = "archeologist" })
-des.object({ id = "statue", x = 61, y = 11, montype = "archeologist" })
-des.object({ id = "statue", x = 62, y = 11, montype = "archeologist" })
-des.object({ id = "statue", x = 63, y = 11, montype = "archeologist" })
-des.object({ id = "statue", x = 64, y = 11, montype = "archeologist" })
-des.object({ id = "statue", x = 65, y = 11, montype = "archeologist" })
-des.object({ id = "statue", x = 66, y = 11, montype = "archeologist" })
-des.object({ id = "statue", x = 67, y = 11, montype = "archeologist" })
+des.object({ id = "statue", x = 49, y = 07, montype = "archeologist" })
+des.object({ id = "statue", x = 50, y = 07, montype = "archeologist" })
+des.object({ id = "statue", x = 51, y = 07, montype = "archeologist" })
+des.object({ id = "statue", x = 52, y = 07, montype = "archeologist" })
+des.object({ id = "statue", x = 53, y = 07, montype = "archeologist" })
+des.object({ id = "statue", x = 54, y = 07, montype = "archeologist" })
+des.object({ id = "statue", x = 55, y = 07, montype = "archeologist" })
+des.object({ id = "statue", x = 49, y = 11, montype = "archeologist" })
+des.object({ id = "statue", x = 50, y = 11, montype = "archeologist" })
+des.object({ id = "statue", x = 51, y = 11, montype = "archeologist" })
+des.object({ id = "statue", x = 52, y = 11, montype = "archeologist" })
+des.object({ id = "statue", x = 53, y = 11, montype = "archeologist" })
+des.object({ id = "statue", x = 54, y = 11, montype = "archeologist" })
+des.object({ id = "statue", x = 55, y = 11, montype = "archeologist" })
 
 --# The Arena
 
 -- The NPC themselves!
 -- Note: the special level code converts any player monster specified on this
 -- level into the NPC. It won't [necessarily] come out as an archeologist.
-des.monster("archeologist", 19, 09)
+des.monster("archeologist", 07, 09)
 
 -- Pitfalls
-arena = selection.floodfill(33,09)
+arena = selection.floodfill(21,09)
 for i=1,4 do
   des.trap("spiked pit", arena:rndcoord(1))
   des.trap("bear", arena:rndcoord(1))
