@@ -182,6 +182,10 @@ tshirt_text(struct obj *tshirt, char *buf)
            TV show "Game of Thrones" (probably an actual T-shirt too...) */
         "/Valar morghulis/ -- /Valar dohaeris/",
         "Asidonhopo once said: the namesake of my enemy is my enemy",
+        /* TNNT - additional shirt texts */
+        "My TNNT Beta Game Was Erased And All I Got Was This Lousy T-Shirt",
+        "The Kinda Cool Shirt",
+        "The Uncool Shirt",
     };
 
     /* TNNT - The Really Cool Shirt has ever-shifting text */
