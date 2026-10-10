@@ -2926,8 +2926,6 @@ domove_core(void)
         exercise_steed(); /* train riding skill */
     }
 
-    tnnt_check_castle_rush();
-
     if (mtmp) {
         if (displaceu) {
             boolean noticed_it = (canspotmon(mtmp)
@@ -3826,6 +3824,11 @@ check_special_room(boolean newlev)
             /* Ludios themed room encompasses the treasure vault */
             if (Is_knox(&u.uz) && !tnnt_globals.u_exited_ludios)
                 tnnt_achieve(A_COMPLETED_LUDIOS_WITHOUT_BACKTRACKING);
+            /* Castle themed room is the one just past the drawbridge */
+            if (Is_stronghold(&u.uz)
+                && (svm.moves <=
+                    tnnt_globals.entered_castle_time + TNNT_CASTLE_TURNS))
+                tnnt_achieve(A_ENTERED_CASTLE_QUICKLY);
             break;
         case TEMPLE:
             intemple(roomno + ROOMOFFSET);

@@ -2916,20 +2916,6 @@ tnnt_record_altar(unsigned int amask)
         tnnt_achieve(A_VISITED_ALL_ALTARS);
 }
 
-/* Hero just moved (u.ux, u.uy represent the space they just moved to). Check
- * to see if they moved to the specific spot that earns the "get into the Castle
- * quick" achievement and if it is and they got there quickly enough, award it.
- * TNNT TODO FOR 3.7: check if this assumption holds or if the Castle can be
- * level flipped and appear in a slightly different position */
-void
-tnnt_check_castle_rush(void)
-{
-    if (Is_stronghold(&u.uz) && u.ux == 15 && u.uy == 11
-        && svm.moves <= tnnt_globals.entered_castle_time + TNNT_CASTLE_TURNS) {
-        tnnt_achieve(A_ENTERED_CASTLE_QUICKLY);
-    }
-}
-
 /* Hero just got assigned the Quest. Award achievements that use this as a
  * trigger condition.  */
 void

@@ -58,6 +58,10 @@ des.teleport_region({ region = {01,00,10,20}, region_islev=1, exclude={1,1,61,15
 des.teleport_region({ region = {69,00,79,20}, region_islev=1, exclude={1,1,61,15}, dir="up" })
 des.levregion({ region = {01,00,10,20}, region_islev=1, exclude={0,0,62,16}, type="stair-up" })
 des.feature("fountain", 10,08)
+-- TNNT: define a themed room in this courtyard so that it will stay a room that
+-- the special level code won't remove, which we can then trigger achievements
+-- upon entering.
+des.region({ region={07,05,14,11}, type="themed", filled=0 })
 -- Doors
 des.door("closed",07,03)
 des.door("closed",55,03)

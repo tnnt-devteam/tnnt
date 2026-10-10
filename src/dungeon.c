@@ -1613,7 +1613,6 @@ u_on_newpos(coordxy x, coordxy y)
         if (!Blind && !Hallucination && !u.uswallow)
             see_nearby_objects();
     }
-    tnnt_check_castle_rush();
     earth_sense();
 }
 
