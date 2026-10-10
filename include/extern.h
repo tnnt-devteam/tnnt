@@ -3361,6 +3361,7 @@ extern boolean tnnt_is_watch_present(void);
 extern boolean In_dungeons_of_doom(d_level *) NONNULLARG1;
 extern boolean Is_minetown(d_level *) NONNULLARG1;
 extern void tnnt_add_untrap(unsigned int);
+extern void tnnt_discover_trap(int);
 extern void tnnt_door_resists(coordxy, coordxy);
 extern void tnnt_update_ukilled(int);
 extern int tnnt_id_achvmt(short);

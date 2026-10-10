@@ -1236,6 +1236,7 @@ doorlock(struct obj *otmp, coordxy x, coordxy y)
                         Soundeffect(se_kaboom_door_explodes, 75);
                         if ((sawit || seeit) && !Unaware) {
                             pline("KABOOM!!  You see a door explode.");
+                            tnnt_discover_trap(TRAPPED_DOOR);
                         } else if (!Deaf) {
                             Soundeffect(se_explosion, 75);
                             You_hear("a %s explosion.",

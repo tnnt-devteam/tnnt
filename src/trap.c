@@ -862,6 +862,7 @@ animate_statue(
             map_invisible(x, y);
         stop_occupation();
     }
+    tnnt_discover_trap(STATUE_TRAP);
 
     /* if this isn't caused by a monster using a wand of striking,
        there might be consequences for the hero */
@@ -3083,6 +3084,8 @@ dotrap(struct trap *trap, unsigned trflags)
         mon_learns_traps(u.usteed, ttype);
     mons_see_trap(trap);
 
+    tnnt_discover_trap(ttype);
+
     /*
      * Note:
      *  Most references to trap types here don't use trapname() for
@@ -3627,6 +3630,7 @@ seetrap(struct trap *trap)
         trap->tseen = 1;
         newsym(trap->tx, trap->ty);
     }
+    tnnt_discover_trap(trap->ttyp);
 }
 
 /* like seetrap() but overrides vision */
@@ -3861,6 +3865,9 @@ mintrap(struct monst *mtmp, unsigned mintrapflags)
 
         mon_learns_traps(mtmp, tt);
         mons_see_trap(trap);
+
+        if (cansee(mtmp->mx, mtmp->my))
+            tnnt_discover_trap(tt);
 
         /* Monster is aggravated by being trapped by you.
            Recognizing who made the trap isn't completely
@@ -5915,6 +5922,7 @@ untrap_box(
         observe_object(box);
         if (!confused)
             exercise(A_WIS, TRUE);
+        tnnt_discover_trap(TRAPPED_CHEST);
 
         if (ynq("Disarm it?") == 'y')
             disarm_box(box, force, confused);
@@ -6031,6 +6039,7 @@ untrap(
                 }
             }
             if (deal_with_floor_trap) {
+                tnnt_discover_trap(ttmp->ttyp);
                 if (u.utrap) {
                     You("cannot deal with %s while trapped%s!", the_trap,
                         u_at(x, y) ? " in it" : "");
@@ -6389,6 +6398,7 @@ chest_trap(
     otmp->otrapped = 0; /* trap is one-shot; clear flag first in case
                          * chest kills you and ends up in bones file */
     You(disarm ? "set it off!" : "trigger a trap!");
+    tnnt_discover_trap(TRAPPED_CHEST);
     display_nhwindow(WIN_MESSAGE, FALSE);
     if (Luck > -13 && rn2(13 + Luck) > 7) { /* saved by luck */
         /* trap went off, but good luck prevents damage */
@@ -6778,6 +6788,11 @@ b_trapped(const char *item, int bodypart)
     int lvl = level_difficulty(),
         dmg = rnd(5 + (lvl < 5 ? lvl : 2 + lvl / 2));
 
+    if (!strcmp(item, "tin"))
+        tnnt_achieve(A_BOOBY_TRAPPED_TIN);
+    else
+        tnnt_discover_trap(TRAPPED_DOOR);
+
     Soundeffect(se_kaboom, 80);
     pline("KABOOM!!  %s was booby-trapped!", The(item));
     wake_nearby(FALSE);
@@ -6786,8 +6801,6 @@ b_trapped(const char *item, int bodypart)
     if (bodypart != NO_PART)
         exercise(A_CON, FALSE);
     make_stunned((HStun & TIMEOUT) + (long) dmg, TRUE);
-    if (!strcmp(item, "tin"))
-        tnnt_achieve(A_BOOBY_TRAPPED_TIN);
 }
 
 /* Monster is hit by trap. */

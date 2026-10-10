@@ -201,6 +201,18 @@ struct tnnt_globals_t {
 #define ALL_UNTRAPPABLE_TRAPTYPES 0x00FF
     uint16_t untrapped_types;
 
+    /* there are 25 traps in enum trap_types. The achievement is about finding
+     * "hazardous" traps so it doesn't require all of them (which is really
+     * about not requiring the hero to get down to the vibrating square level
+     * to earn the achievement).
+     * The holes in this bitmask are:
+     * NO_TRAP (1 << 0 or 0x1)
+     * MAGIC_PORTAL (1 << 17 or 0x20000)
+     * VIBRATING_SQUARE (1 << 23 or 0x800000)
+     */
+#define TNNT_TRAP_DISCOVER_MASK 0x37DFFFE
+    uint32_t discovered_traps;
+
     /* mthrowu.c tracks an 'archer' variable, but for some reason only for a
      * monster deliberately shooting at another monster. This does the same for
      * monster shooting at the player, for the "friendly fire" achievement. */

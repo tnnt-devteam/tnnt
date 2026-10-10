@@ -357,6 +357,35 @@ show_tnnt_stats(boolean final)
         Strcat(buf, " box");
     putstr(en_win, 0, buf);
 
+    if (!tnnt_is_achieved(A_FOUND_ALL_TRAPS)) {
+        total = count = 0;
+        for (i = 0; i < TRAPNUM; ++i) {
+            int bit = (1 << i);
+            if (!(TNNT_TRAP_DISCOVER_MASK & bit)) /* does it count? */
+                continue;
+            total++;
+            if (tnnt_globals.discovered_traps & bit)
+                count++;
+        }
+        /* 5 is the number of undiscovered traps at which we switch from "x/y"
+         * display to listing the remaining ones */
+        if (count + 5 >= total) {
+            Strcpy(buf, "You discovered all traps except:");
+            for (i = 0; i < TRAPNUM; ++i) {
+                int bit = (1 << i);
+                if ((TNNT_TRAP_DISCOVER_MASK & bit)
+                    && !(tnnt_globals.discovered_traps & bit)) {
+                    Strcat(buf, " ");
+                    Strcat(buf, trapname(i, TRUE));
+                }
+            }
+        }
+        else {
+            Sprintf(buf, "You have discovered %d/%d traps.", count, total);
+        }
+        putstr(en_win, 0, buf);
+    }
+
     Sprintf(buf, "%sarmful potions drunk:", !final ? "Known h" : "H");
     {
         /* we can't check '!(pots_drunk & HARMFUL_DRUNK)' to print "none"
@@ -2478,6 +2507,17 @@ tnnt_add_untrap(unsigned int mask)
     if ((tnnt_globals.untrapped_types & ALL_UNTRAPPABLE_TRAPTYPES)
         == ALL_UNTRAPPABLE_TRAPTYPES)
         tnnt_achieve(A_UNTRAPPED_ALL_TRAPS);
+}
+
+/* player has just triggered, seen, or otherwise encountered one of the types of
+ * traps. Add it and check if they earned the achievement. */
+void
+tnnt_discover_trap(int trapnum)
+{
+    tnnt_globals.discovered_traps |= (1 << trapnum);
+    if ((tnnt_globals.discovered_traps & TNNT_TRAP_DISCOVER_MASK)
+        == TNNT_TRAP_DISCOVER_MASK)
+        tnnt_achieve(A_FOUND_ALL_TRAPS);
 }
 
 /* A door at this point is resisting (either from opening or closing).

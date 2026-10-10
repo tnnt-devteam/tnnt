@@ -302,6 +302,8 @@ map_trap(struct trap *trap, int show)
         levl[x][y].glyph = glyph;
     if (show)
         show_glyph(x, y, glyph);
+
+    tnnt_discover_trap(trap->ttyp);
 }
 
 /*

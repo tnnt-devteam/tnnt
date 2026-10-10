@@ -54,8 +54,10 @@ boolean
 mb_trapped(struct monst *mtmp, boolean canseeit)
 {
     if (flags.verbose) {
-        if (canseeit && !Unaware)
+        if (canseeit && !Unaware) {
             pline_mon(mtmp, "KABOOM!!  You see a door explode.");
+            tnnt_discover_trap(TRAPPED_DOOR);
+        }
         else if (!Deaf)
             You_hear("a %s explosion.",
                      (mdistu(mtmp) > 7 * 7) ? "distant" : "nearby");

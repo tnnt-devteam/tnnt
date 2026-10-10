@@ -346,6 +346,8 @@ ACH("Hyperliterate",
     READ_ALL_READABLE),
 ACH("Bomb Squad", "Untrap all 8 types of traps that can be untrapped",
     UNTRAPPED_ALL_TRAPS),
+ACH("Trap Expert", "Discover all 23 types of hazardous traps",
+    FOUND_ALL_TRAPS), /* doesn't count magic portal or vibrating square */
 ACH("Balanced Diet", "Eat one of each type of produce in one game",
     ATE_ALL_PRODUCE),
 ACH("Smorgasbord", "Eat every type of food in the game", ATE_ALL_FOODS),
