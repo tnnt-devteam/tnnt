@@ -25,9 +25,8 @@ dungeon = {
          },
          {
             name = "robotfindskitten",
-            chainlevel = "oracle",
-            base = -2,
-            range = 1,
+            base = 3,
+            range = 5,
             branchtype = "portal"
          },
          {
