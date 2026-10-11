@@ -36,8 +36,10 @@ des.levregion({ region = {01,09,01,09}, exclude = {0,0,0,0}, type="branch" })
 des.region(selection.area(00,00,57,16), "lit")
 des.non_diggable(selection.area(0,0,57,16))
 
-des.engraving({02,09}, "burn",
-   "This is my program. There are many programs like it, but this one is mine...")
+local entrycorr = selection.area(02,08,08,10)
+
+des.engraving({ coord = entrycorr:rndcoord(), type = "burn",
+   text = "This is my program. There are many programs like it, but this one is mine..." })
 
 --The Devteam
 des.monster({ id = "DevTeam member", x=29, y=06, peaceful = 1, name = "bhaak" })
