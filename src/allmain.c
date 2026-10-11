@@ -516,6 +516,7 @@ moveloop_core(void)
         u.uevent.amulet_wish = 1;
         display_nhwindow(WIN_MESSAGE, TRUE);
         urgent_pline("The Amulet is bestowing a wish upon you!");
+        tnnt_globals.wish_sources |= WISHSRC_AMULET;
         makewish();
     }
 

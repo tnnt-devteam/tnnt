@@ -117,16 +117,13 @@ struct tnnt_globals_t {
 
     unsigned short genderflips;
 
-/* TNNT TODO FOR 3.7: The Amulet of Yendor will grant a wish when picked up. Do
- * we add it to this list?
- * Also, should Vlad's throne count separately from a normal throne because its
- * wish is guaranteed? */
 #define WISHSRC_WAND         0x01
 #define WISHSRC_LAMP         0x02
 #define WISHSRC_SMOKY_POTION 0x04
-#define WISHSRC_THRONE       0x08
+#define WISHSRC_THRONE       0x08 /* counts Vlad's throne */
 #define WISHSRC_WATER_DEMON  0x10
-#define WISHSRC_ALL          0x1F
+#define WISHSRC_AMULET       0x20
+#define WISHSRC_ALL          0x3F
     unsigned char wish_sources;
 
     boolean blew_up_ludios; /* blew up any of its land mines */

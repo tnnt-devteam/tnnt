@@ -310,6 +310,8 @@ show_tnnt_stats(boolean final)
             Strcat(buf, " throne");
         if ((tnnt_globals.wish_sources & WISHSRC_WATER_DEMON) != 0)
             Strcat(buf, " fountain");
+        if ((tnnt_globals.wish_sources & WISHSRC_AMULET) != 0)
+            Strcat(buf, " amulet");
     }
     putstr(en_win, 0, buf);
 

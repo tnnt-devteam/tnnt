@@ -269,6 +269,7 @@ special_throne_effect(int effect) {
            This is the only way the throne can disappear from sitting
            on it, so if you sit on it enough (enduring the negative
            effects) you are guaranteed an eventual wish. */
+        tnnt_globals.wish_sources |= WISHSRC_THRONE;
         makewish();
         levl[tx][ty].typ = ROOM, levl[tx][ty].flags = 0;
         map_background(tx, ty, FALSE);
