@@ -6410,6 +6410,10 @@ makewish(void)
     if ((tnnt_globals.wish_sources & WISHSRC_ALL) == WISHSRC_ALL)
         tnnt_achieve(A_WISH_FROM_EVERYTHING);
 
+    tnnt_globals.wishes_offered++;
+    if (tnnt_globals.wishes_offered >= 10)
+        tnnt_achieve(A_GOT_10_WISHES);
+
     svc.context.resume_wish = 0;
     promptbuf[0] = '\0';
     nothing = cg.zeroobj; /* lint suppression; only its address matters */

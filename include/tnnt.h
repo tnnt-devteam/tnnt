@@ -285,6 +285,11 @@ struct tnnt_globals_t {
     uchar dlords_on_level; /* extracted after movemon/movemon_singlemon split,
                               to avoid having to loop over fmon twice */
 
+    /* wishes_offered is not the same as uconduct.wishes - that ticks up only
+     * upon actually wishing for something and wishing for "nothing" doesn't
+     * count; for this achievement, we only care about the amount of wishes the
+     * player COULD have made, not whether they actually used them. */
+    unsigned short wishes_offered;
 
     /* tnnt devs: add more as needed */
 };

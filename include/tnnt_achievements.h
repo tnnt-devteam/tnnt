@@ -757,6 +757,8 @@ ACH("DeathOnAStick Protege", "Polymorph a rock into a valuable gem",
 ACH("Potion Roulette",
     "Drink an unidentified extra/full healing potion while below 10% HP",
     DRANK_UNID_HEALING_POTION),
+ACH("An Embarrassment of Wishes", "Get offered a wish at least 10 times",
+    GOT_10_WISHES),
 
 /* 5 free bits in tnntachieve5
  * 379 achievements defined
