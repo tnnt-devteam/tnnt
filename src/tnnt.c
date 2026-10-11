@@ -1312,6 +1312,8 @@ swap_chest_eligible(struct obj *obj)
             case FUMBLE_BOOTS:
             case GAUNTLETS_OF_FUMBLING:
                 return FALSE;
+            case OILSKIN_CLOAK:
+                return TRUE;
             default:
                 return (objects[obj->otyp].oc_magic || obj->spe > 2);
             }
