@@ -301,25 +301,6 @@ Another popular suggestion is to put the achievements into categories so the
 Achievements are currently sorted into loose unofficial categories in the source
 code, but that's it.
 
-### Achievement visibility from past games
-
-Some way of distinguishing in the #achievements command which achievements the
-player has earned in previous games this tournament, but haven't yet earned in
-the current game, the inverse of the scoreboard's display of achievements earned
-in a current game which hasn't yet finished.
-
-This is difficult without having the game make requests into the database
-somehow, or read through its own xlogfile, but that would be an expensive
-operation and wouldn't account for multiple servers. Probably the simplest
-implementation is to write a persistent file into the data directory (probably
-in a new subdirectory like donors, because you'd have one for each player) that
-stores the bitwise OR of all tnntachieveX xlogfile fields earned in previous
-games. Upon starting a new game, this file would be read and loaded into some
-data structure which is capable of telling #achievements the ones it had
-previously. Of course this STILL does not solve the multi-server problem, so a
-complete implementation would need to sync these files across servers, bitwise
-ORing the fields together if they differ.
-
 ## DevTeam Quest
 
 A common criticism of the devteam quest is that it's a pile of resources
