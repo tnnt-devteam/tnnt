@@ -47,6 +47,9 @@ des.teleport_region({ region={49,08,55,12} })
 des.non_diggable(selection.area(0,0,56,18))
 des.non_passwall(selection.area(0,0,56,19))
 
+-- no random monster spawning in here
+des.exclusion({ type = "monster-generation", region = {00,00,56,18} })
+
 -- Define a themed room in the arena so that we can trigger the match start when
 -- the player enters this room.
 -- Note that the rectangle defined here ends one space *before* the space
