@@ -1155,10 +1155,6 @@ fill_ordinary_room(
             }
         }
     }
-    if (In_dungeons_of_doom(&u.uz)) {
-        maybe_place_dungeons_swapchest();
-    }
-
  skip_nonrogue:
     if (!rn2(3) && somexyspace(croom, &pos)) {
         (void) mkobj_at(RANDOM_CLASS, pos.x, pos.y, TRUE);
@@ -1418,6 +1414,8 @@ makelevel(void)
             if (fillable)
                 --bonus_item_room_countdown;
         }
+        if (In_dungeons_of_doom(&u.uz))
+            maybe_place_dungeons_swapchest();
     }
     /* Fill all special rooms now, regardless of whether this is a special
      * level, proto level, or ordinary level. */
