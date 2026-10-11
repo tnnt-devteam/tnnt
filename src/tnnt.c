@@ -1637,6 +1637,10 @@ create_tnnt_npc(coordxy x, coordxy y)
     npc->mpeaceful = 0;
     npc->msleeping = 1; /* npc from file has MM_ASLEEP but not Mr. Generic */
     set_malign(npc);
+    /* You don't know where the traps are, but the champion does
+     * (it gets anticlimactic if they bumble straight into a pit or bear trap
+     * and you can move freely around them...) */
+    mon_learns_traps(npc, ALL_TRAPS);
 
     /* Inventory! */
     strategy = NEED_HTH_WEAPON;
