@@ -1868,6 +1868,7 @@ shut_the_front_door(void)
                 levl[x][y].doormask = D_LOCKED;
                 if (wasopen)
                     pline("The door behind you closes.");
+                block_point(x, y);
                 newsym(x, y);
             }
         }
