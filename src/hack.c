@@ -3829,6 +3829,11 @@ check_special_room(boolean newlev)
                 && (svm.moves <=
                     tnnt_globals.entered_castle_time + TNNT_CASTLE_TURNS))
                 tnnt_achieve(A_ENTERED_CASTLE_QUICKLY);
+            /* Deathmatch themed room is the arena proper */
+            if (Is_deathmatch_level(&u.uz)) {
+                shut_the_front_door();
+                aggravate(); /* this calls npc_awakens() */
+            }
             break;
         case TEMPLE:
             intemple(roomno + ROOMOFFSET);

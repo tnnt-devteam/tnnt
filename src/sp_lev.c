@@ -6556,9 +6556,6 @@ load_special(const char *name)
 
     result = TRUE;
 
-    if (Is_deathmatch_level(&u.uz)) {
-        add_deathmatch_arena_region();
-    }
  give_up:
     Free(gc.coder);
     gc.coder = NULL;

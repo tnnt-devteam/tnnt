@@ -12,19 +12,13 @@ des.level_init({ style = "solidfill", fg = " " });
 
 des.level_flags("mazelevel");
 
--- The noflipx is VERY IMPORTANT. The invisible region which covers the whole
--- arena and triggers the start of the deathmatch upon entry has hardcoded,
--- fixed coordinates that are defined in C - not here, because there isn't a way
--- to add such a region in the special level code (des.region refers to a
--- different type of region). If this level were to be flipped, the hero would
--- spawn inside the arena region and the deathmatch would start immediately.
-des.level_flags("nommap", "noteleport", "hardfloor", "noflipx")
+des.level_flags("nommap", "noteleport", "hardfloor")
 des.message("Upon exiting the portal, you immediately feel on edge.")
 des.message("You feel as if you've stumbled across something very dangerous.")
 des.message("You resist the urge to flee.")
 
---         1         2         3         4         5         6         7
---123456789012345678901234567890123456789012345678901234567890123456789012345
+--        1         2         3         4         5         6         7
+--23456789012345678901234567890123456789012345678901234567890123456789012345
 des.map([[
              ----------------                            
           ----LLLLLLLLLLLLLL----                         
@@ -52,6 +46,15 @@ des.levregion({ region = {54,09,54,09}, exclude = {0,0,0,0}, type="branch" })
 des.teleport_region({ region={49,08,55,12} })
 des.non_diggable(selection.area(0,0,56,18))
 des.non_passwall(selection.area(0,0,56,19))
+
+-- Define a themed room in the arena so that we can trigger the match start when
+-- the player enters this room.
+-- Note that the rectangle defined here ends one space *before* the space
+-- adjacent to the door. This is because all rooms expand by 1 in all directions
+-- to account for presumed walls, and we don't want the player to trigger the
+-- deathmatch from the door's space itself. This expansion is also why an
+-- irregular region doesn't work.
+des.region({ region={00,00,39,18}, type="themed", filled=0, lit=1 })
 
 --# Foyer
 des.engraving({42,09}, "burn", "Point of no return")

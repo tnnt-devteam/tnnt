@@ -22,7 +22,6 @@ void add_rect_to_reg(NhRegion *, NhRect *);
 void add_mon_to_reg(NhRegion *, struct monst *);
 void remove_mon_from_reg(NhRegion *, struct monst *);
 boolean mon_in_region(NhRegion *, struct monst *);
-boolean inside_arena(genericptr, genericptr); /* TNNT */
 
 #if 0
 NhRegion *clone_region(NhRegion *);
@@ -48,9 +47,6 @@ static const callback_proc callbacks[] = {
     inside_gas_cloud,
 #define EXPIRE_GAS_CLOUD 1
     expire_gas_cloud,
-    /* TNNT */
-#define INSIDE_ARENA 2
-    inside_arena,
 };
 
 /* Should be inlined. */
@@ -1410,48 +1406,5 @@ region_safety(void)
         make_blinded(0L, TRUE);
 }
 #endif /* !SFCTOOL */
-
-/* TNNT FUNCTIONS FOR DEATHMATCH ARENA REGION */
-
-/* TNNT - callback for entering the deathmatch arena region. */
-boolean
-inside_arena(genericptr region UNUSED, genericptr monst)
-{
-    if (monst == (genericptr) 0) { /* player entered region */
-        shut_the_front_door();
-        aggravate(); /* this will call npc_awakens() */
-    }
-    /* else, some other monster entered the arena, do nothing */
-    return FALSE;
-}
-
-/* TNNT - hack for checking whether the Arena has been entered. This can't
- * be done in the lua file because the lua loading code does not support
- * adding a region. This gets called just before the end of the special level
- * loading code.
- * I previously considered making an upstream contribution to make the special
- * level loader capable of adding a region (this type of region which has
- * entry/exit/within triggers, not the existing des.region), but since there is
- * no clear use case for it upstream, and no other clear use case for it in
- * TNNT, there's little motivation for it. We might want to implement it if we
- * ever want to provide multiple different deathmatch maps, because the arena
- * size and coordinates could then vary.
- */
-void
-add_deathmatch_arena_region(void)
-{
-    NhRect tmprect;
-    NhRegion *arena;
-    /* MAJOR ASSUMPTION: The deathmatch arena has a single, fixed map that will
-     * always spawn such that the below coordinates are the furthest bounds of
-     * the arena area. */
-    tmprect.lx = 16;
-    tmprect.ly = 2;
-    tmprect.hx = 55;
-    tmprect.hy = 18;
-    arena = create_region(&tmprect, 1);
-    arena->enter_f = INSIDE_ARENA;
-    add_region(arena);
-}
 
 /*region.c*/

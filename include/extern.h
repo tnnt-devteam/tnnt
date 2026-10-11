@@ -2740,7 +2740,6 @@ extern NhRegion *create_gas_cloud(coordxy, coordxy, int, int);
 extern NhRegion *create_gas_cloud_selection(struct selectionvar *, int);
 extern boolean region_danger(void);
 extern void region_safety(void);
-extern void add_deathmatch_arena_region(void); /* TNNT */
 
 /* ### report.c ### */
 
