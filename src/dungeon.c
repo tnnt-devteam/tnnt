@@ -3152,7 +3152,7 @@ recalc_mapseen(void)
             }
         }
         if (solved == 4) {
-            tnnt_achieve(A_DID_PURE_SOKOBAN);
+            tnnt_achieve(A_COMPLETED_PURE_SOKOBAN);
         }
     }
     /* mptr->flags.bigroom retains previous value when hero can't see */

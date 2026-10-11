@@ -1011,6 +1011,9 @@ addinv_core1(struct obj *obj)
         if (!tnnt_globals.u_backtracked_after_soko) {
             tnnt_achieve(A_COMPLETED_SOKOBAN_WITHOUT_BACKTRACKING);
         }
+        if (svd.dungeons[mines_dnum].dunlev_ureached == 0) {
+            tnnt_achieve(A_COMPLETED_SOKOBAN_IGNORING_MINES);
+        }
         svc.context.achieveo.soko_prize_oid = 0; /* done w/ bag/amulet o_id */
         obj->nomerge = 0; /* (got set in sp_lev.c) */
     }
