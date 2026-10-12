@@ -770,6 +770,8 @@ ACH("Potion Roulette",
     DRANK_UNID_HEALING_POTION),
 ACH("An Embarrassment of Wishes", "Get offered a wish at least 10 times",
     GOT_10_WISHES),
+ACH("Speed Achiever", "Get 100 achievements in the first 10000 turns",
+    GOT_100_ACHIEVEMENTS_IN_10K_TURNS),
 
 /* 5 free bits in tnntachieve5
  * 379 achievements defined

@@ -2441,6 +2441,19 @@ tnnt_achieve(short achvmt)
         /* as mentioned above, ACH_EARNED_IN_PREVIOUS_GAME achievements have no
          * reason to be written out as temp achievements */
         write_temp_achievements_file();
+
+    /* check for meta-achievement */
+    if (svm.moves < 10000
+        && !tnnt_is_achieved(A_GOT_100_ACHIEVEMENTS_IN_10K_TURNS)) {
+        int i;
+        int count = 0;
+        for (i = 0; i < NUM_TNNT_ACHIEVEMENTS; ++i) {
+            if (tnnt_globals.ach_status[i].status == ACH_EARNED_THIS_GAME)
+                count++;
+        }
+        if (count >= 100)
+            tnnt_achieve(A_GOT_100_ACHIEVEMENTS_IN_10K_TURNS);
+    }
 }
 
 /* Wrapper of tnnt_achieve that allows the caller to suppress an "Achievement
