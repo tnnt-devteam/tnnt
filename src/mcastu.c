@@ -348,6 +348,8 @@ touch_of_death(struct monst *mtmp)
         dmg = adjuhploss(dmg, olduhp); /* reduce pending damage if uhp has
                                         * already been reduced due to drop
                                         * in uhpmax */
+        if (dmg < u.uhp)
+            tnnt_achieve(A_SURVIVED_TOD);
         losehp(dmg, kbuf, KILLED_BY);
     }
     svk.killer.name[0] = '\0'; /* not killed if we get here... */
@@ -391,9 +393,11 @@ mcast_death_touch(struct monst *mtmp)
     pline("Oh no, %s's using the touch of death!", mhe(mtmp));
     if (nonliving(gy.youmonst.data) || is_demon(gy.youmonst.data)) {
         You("seem no deader than before.");
+        tnnt_achieve(A_SURVIVED_TOD);
     } else if (!Antimagic && rn2(mtmp->m_lev) > 12) {
         if (Hallucination) {
             You("have an out of body experience.");
+            tnnt_achieve(A_SURVIVED_TOD);
         } else {
             touch_of_death(mtmp);
         }
@@ -402,6 +406,9 @@ mcast_death_touch(struct monst *mtmp)
         if (Antimagic) {
             shieldeff(u.ux, u.uy);
             monstseesu(M_SEEN_MAGR);
+        }
+        else {
+            tnnt_achieve(A_SURVIVED_TOD);
         }
         pline("Lucky for you, it didn't work!");
     }

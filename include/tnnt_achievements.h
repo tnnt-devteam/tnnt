@@ -212,6 +212,9 @@ ACH("Captain Ahab", "Survive being grabbed by a sea monster",
     SURVIVED_DROWNING),
 ACH("Furry Little Problem", "Cure lycanthropy", CURED_LYCANTHROPY),
 ACH("New Lease On Life", "Cure deathly illness", CURED_ILLNESS),
+ACH("Cheating the Reaper",
+    "Survive a touch of death without magic resistance",
+    SURVIVED_TOD),
 
 /* involving identification */
 ACH("Diamond In The Rough", "Identify a gem with a touchstone",
