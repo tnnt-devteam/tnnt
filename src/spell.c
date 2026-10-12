@@ -1016,6 +1016,7 @@ propagate_chain_lightning(
 staticfn void
 cast_chain_lightning(void)
 {
+    unsigned short numkilled = 0; /* TNNT */
     struct chain_lightning_queue clq = {
         {{0}}, 0, 0, Hallucination ? rn2_on_display_rng(6) : (AD_ELEC - 1)
     };
@@ -1061,6 +1062,8 @@ cast_chain_lightning(void)
                        steer it away from peacefuls */
                     if (DEADMONSTER(mon)) {
                         xkilled(mon, XKILL_GIVEMSG);
+                        if (++numkilled >= 20)
+                            tnnt_achieve(A_KILLED_20_WITH_CHAIN_LIGHTNING);
                     } else {
                         pline("You shock %s%s", mon_nam(mon), exclam(dmg));
                         /* if a long worm, only map 'I' for its head */

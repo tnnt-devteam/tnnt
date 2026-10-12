@@ -207,6 +207,9 @@ ACH("Faster Than Light", "Kill a \"y\" monster in melee without it exploding",
 ACH("Dracarys",
     "Kill a monster with the breath attack of your tame dragon",
     KILLED_WITH_TAME_DRAGON_BREATH),
+ACH("I Am The Storm",
+    "Kill 20 or more monsters in a single casting of chain lightning",
+    KILLED_20_WITH_CHAIN_LIGHTNING),
 
 /* "survive a hazard" group */
 ACH("Part-Time Statue", "Cure stoning", CURED_STONING),
