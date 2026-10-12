@@ -83,6 +83,7 @@ dowrite(struct obj *pen)
     boolean by_descr = FALSE;
     const char *typeword;
     int spell_knowledge;
+    int is_unknown = 0; /* TNNT */
 
     if (nohands(gy.youmonst.data)) {
         You("need hands to be able to write!");
@@ -318,6 +319,8 @@ dowrite(struct obj *pen)
         && !(by_descr && objects[new_obj->otyp].oc_encountered)
         /* else fresh knowledge of the spell works */
         && spell_knowledge != spe_Fresh
+        /* TNNT - record that the spell really is unknown, as a side effect */
+        && (++is_unknown)
         /* and Luck might override after previous checks have failed */
         && rnl(((Role_if(PM_WIZARD) && paper->oclass != SPBOOK_CLASS)
                 || spell_knowledge == spe_GoingStale)
@@ -366,6 +369,8 @@ dowrite(struct obj *pen)
     }
     else
         tnnt_achieve(A_WROTE_SCROLL);
+    if (is_unknown)
+        tnnt_achieve(A_WROTE_UNKNOWN_SCROLL_OR_BOOK);
     new_obj->blessed = (curseval > 0);
     new_obj->cursed = (curseval < 0);
 #ifdef MAIL_STRUCTURES
