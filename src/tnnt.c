@@ -2021,6 +2021,16 @@ tnnt_arena_victory(struct monst *mtmp)
     int transient_invent = 0;
 
     tnnt_globals.deathmatch_completed = TRUE;
+
+    /* important to stop multishot in case the hero is throwing transient
+     * projectiles - the remaining ones will be taken out of their inventory by
+     * this function, and if the multishot loop were to continue, it would try
+     * to take another one out of the inventory, causing a panic.
+     * Minor side effect of this is that the hero will stop multishooting
+     * NON-transient projectiles as well as soon as one kills the NPC, but
+     * that's a minor enough effect to live with. */
+    endmultishot(FALSE);
+
     /* before we collect/extract all the transient items, check whether hero
      * will be losing items she already picked up (e.g. missiles or ammo) */
     /* since this is used to distinguish between "none", "one", and "multiple"
