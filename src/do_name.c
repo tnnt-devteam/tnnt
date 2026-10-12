@@ -1198,6 +1198,14 @@ distant_monnam(
         && Is_astralevel(&u.uz) && !m_next2u(mon)) {
         Strcpy(outbuf, article == ARTICLE_THE ? "the " : "");
         Strcat(outbuf, mon->female ? "high priestess" : "high priest");
+    } else if (is_deathmatch_opponent(mon)
+               && !tnnt_globals.deathmatch_started) {
+        /* TNNT: the opponent's name/role is often enough information to look up
+         * their dumplog and decide if they don't have anything worth taking
+         * enough to justify doing the deathmatch. So prevent the hero from
+         * knowing until the deathmatch has begun. */
+        Strcpy(outbuf, article == ARTICLE_THE ? "the " : "");
+        Strcat(outbuf, "gladiator");
     } else {
         Strcpy(outbuf, x_monnam(mon, article, (char *) 0, 0, TRUE));
     }
