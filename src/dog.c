@@ -1150,6 +1150,7 @@ tamedog(
     boolean givemsg)
 {
     boolean blessed_scroll = FALSE;
+    boolean was_peaceful = mtmp->mpeaceful; /* TNNT */
 
     if (obj && (obj->oclass == SCROLL_CLASS || obj->oclass == SPBOOK_CLASS)) {
         blessed_scroll = obj->blessed ? TRUE : FALSE;
@@ -1241,6 +1242,17 @@ tamedog(
         return FALSE;
     }
 
+    /* TNNT: this if statement normally goes below the block starting with
+     * !mtmp->mcanmove, but I have raised it up here so that it can check for
+     * the achievement in only one place, and not short-circuit on quest leaders
+     * that are human. Since both if blocks just return false, this should have
+     * no impact on gameplay. */
+    if (mtmp->m_id == svq.quest_status.leader_m_id) {
+        if (!was_peaceful)
+            tnnt_achieve(A_PACIFIED_QUEST_LEADER);
+        return FALSE;
+    }
+
     if (!mtmp->mcanmove
         /* monsters with conflicting structures cannot be tamed
            [note: the various mextra structures don't actually conflict
@@ -1249,9 +1261,6 @@ tamedog(
         || is_covetous(mtmp->data) || is_human(mtmp->data)
         || (is_demon(mtmp->data) && !is_demon(gy.youmonst.data))
         || (obj && dogfood(mtmp, obj) >= MANFOOD))
-        return FALSE;
-
-    if (mtmp->m_id == svq.quest_status.leader_m_id)
         return FALSE;
 
     if (obj && obj->otyp == BANANA && mtmp->data->mlet == S_YETI)
