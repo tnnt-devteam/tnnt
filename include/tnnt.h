@@ -288,6 +288,8 @@ struct tnnt_globals_t {
      * player COULD have made, not whether they actually used them. */
     unsigned short wishes_offered;
 
+    boolean tame_dragon_breathing;
+
     /* tnnt devs: add more as needed */
 };
 

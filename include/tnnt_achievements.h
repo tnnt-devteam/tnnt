@@ -204,6 +204,9 @@ ACH("Some Nemesis You Are",
     ONE_SIDED_NEMESIS_KILL),
 ACH("Faster Than Light", "Kill a \"y\" monster in melee without it exploding",
     KILLED_LIGHT_MELEE),
+ACH("Dracarys",
+    "Kill a monster with the breath attack of your tame dragon",
+    KILLED_WITH_TAME_DRAGON_BREATH),
 
 /* "survive a hazard" group */
 ACH("Part-Time Statue", "Cure stoning", CURED_STONING),

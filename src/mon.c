@@ -3166,6 +3166,8 @@ logdeadmon(struct monst *mtmp, int mndx)
                 tnnt_achieve(A_AVENGED_ORCTOWN);
         }
     }
+    if (tnnt_globals.tame_dragon_breathing)
+        tnnt_achieve(A_KILLED_WITH_TAME_DRAGON_BREATH);
 }
 
 /* anger all the quest guards on the level */

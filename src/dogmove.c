@@ -912,9 +912,15 @@ pet_ranged_attk(struct monst *mtmp, boolean forced)
     if (mtarg && (!hungry || !rn2(5))) {
         int mstatus = M_ATTK_MISS;
 
+        if (mtmp->data->mlet == S_DRAGON)
+            tnnt_globals.tame_dragon_breathing = TRUE;
+
         if (mtarg == &gy.youmonst) {
-            if (mattacku(mtmp))
+            if (mattacku(mtmp)) {
+                tnnt_globals.tame_dragon_breathing = FALSE;
                 return MMOVE_DIED;
+            }
+            tnnt_globals.tame_dragon_breathing = FALSE;
             /* Treat this as the pet having initiated an attack even if it
              * didn't, so it will lose its move.  This isn't entirely fair,
              * but mattacku doesn't distinguish between "did not attack"
@@ -926,6 +932,7 @@ pet_ranged_attk(struct monst *mtmp, boolean forced)
             gb.bhitpos.x = mtmp->mx, gb.bhitpos.y = mtmp->my;
             gn.notonhead = FALSE;
             mstatus = mattackm(mtmp, mtarg);
+            tnnt_globals.tame_dragon_breathing = FALSE;
 
             /* Shouldn't happen, really */
             if (mstatus & M_ATTK_AGR_DIED)
