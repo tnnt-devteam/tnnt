@@ -210,6 +210,8 @@ ACH("Dracarys",
 ACH("I Am The Storm",
     "Kill 20 or more monsters in a single casting of chain lightning",
     KILLED_20_WITH_CHAIN_LIGHTNING),
+ACH("Rage Against The Riders", "Kill each Rider at least once in melee combat",
+    KILLED_ALL_RIDERS_IN_MELEE),
 
 /* "survive a hazard" group */
 ACH("Part-Time Statue", "Cure stoning", CURED_STONING),

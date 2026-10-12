@@ -476,6 +476,18 @@ show_tnnt_stats(boolean final)
         Sprintf(buf, "Monsters on Astral eaten by purple worms: %d",
                 tnnt_globals.astral_worm_gulps);
         putstr(en_win, 0, buf);
+        Strcpy(buf, "Riders killed in melee: ");
+        if (!(tnnt_globals.killed_death_in_melee
+              || tnnt_globals.killed_pesty_in_melee
+              || tnnt_globals.killed_famine_in_melee))
+            Strcat(buf, "none");
+        if (tnnt_globals.killed_death_in_melee)
+            Strcat(buf, "Death ");
+        if (tnnt_globals.killed_pesty_in_melee)
+            Strcat(buf, "Pestilence ");
+        if (tnnt_globals.killed_famine_in_melee)
+            Strcat(buf, "Famine");
+        putstr(en_win, 0, buf);
     }
 
     for (i = 0; i < MAXOCLASSES; ++i) {

@@ -648,6 +648,18 @@ known_hitum(
             /* monster was killed by the attack */
             if (mon->data->mlet == S_LIGHT)
                 tnnt_achieve(A_KILLED_LIGHT_MELEE);
+            if (is_rider(mon->data)) {
+                if (mon->data == &mons[PM_DEATH])
+                    tnnt_globals.killed_death_in_melee = TRUE;
+                else if (mon->data == &mons[PM_PESTILENCE])
+                    tnnt_globals.killed_pesty_in_melee = TRUE;
+                else if (mon->data == &mons[PM_FAMINE])
+                    tnnt_globals.killed_famine_in_melee = TRUE;
+                if (tnnt_globals.killed_death_in_melee
+                    && tnnt_globals.killed_pesty_in_melee
+                    && tnnt_globals.killed_famine_in_melee)
+                    tnnt_achieve(A_KILLED_ALL_RIDERS_IN_MELEE);
+            }
         }
     }
     return malive;

@@ -289,6 +289,9 @@ struct tnnt_globals_t {
     unsigned short wishes_offered;
 
     boolean tame_dragon_breathing;
+    boolean killed_death_in_melee;
+    boolean killed_pesty_in_melee;
+    boolean killed_famine_in_melee;
 
     /* tnnt devs: add more as needed */
 };
