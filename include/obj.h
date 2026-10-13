@@ -160,6 +160,10 @@ struct obj {
     /* TNNT obj fields start here:
      * (note: "free bits" count is not updated from vanilla) */
     Bitfield(transient, 1); /* property of NPC in deathmatch, vanishes easily */
+    Bitfield(tnntwishedfor, 1); /* gotten from wish (or merged with item gotten
+                                 * from wish); prevents swap chest from
+                                 * accepting it, not intended to collide with
+                                 * existing "wishedfor" overload of usecount */
 #if 0
     /* not implemented */
     Bitfield(eknown, 1); /* effect known for wands zapped or rings worn when

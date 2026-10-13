@@ -923,6 +923,11 @@ merged(struct obj **potmp, struct obj **pobj)
         if (obj->bypass)
             otmp->bypass = 1;
 
+        /* TNNT: a wished-for item will spread the wished-for-ness to a stack it
+         * merges into */
+        if (obj->tnntwishedfor)
+            otmp->tnntwishedfor = 1;
+
         /* handle puddings a bit differently; absorption will free the
            other object automatically so we can just return out from here */
         if (obj->globby) {

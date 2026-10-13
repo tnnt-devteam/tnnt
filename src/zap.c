@@ -1832,6 +1832,8 @@ poly_obj(struct obj *obj, int id)
     otmp->cursed = obj->cursed;
     otmp->blessed = obj->blessed;
 
+    /* TNNT: obj->tnntwishedfor is deliberately not preserved */
+
     if (erosion_matters(otmp)) {
         if (is_flammable(otmp) || is_rustprone(otmp) || is_crackable(otmp))
             otmp->oeroded = obj->oeroded;
@@ -6494,6 +6496,8 @@ makewish(void)
 
     if (otmp->otyp == CORPSE && !u_safe_from_fatal_corpse(otmp, st_all))
         otmp->wishedfor = 1;
+
+    otmp->tnntwishedfor = 1;
 
     const char *verb = ((Is_airlevel(&u.uz) || u.uinwater)
                         ? "slip"

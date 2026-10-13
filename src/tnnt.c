@@ -1224,6 +1224,9 @@ swap_chest_eligible(struct obj *obj)
     if (obj->oartifact)
         return FALSE;
 
+    if (obj->tnntwishedfor)
+        return FALSE;
+
     switch (obj->oclass) {
         case RING_CLASS:
             /* reject cursed rings and chargeable rings at +0 or worse */
@@ -1621,6 +1624,7 @@ create_tnnt_npc(coordxy x, coordxy y)
                 obj->corpsenm = corpsenm;
                 obj->usecount = usecount;
                 obj->oeaten = oeaten;
+                obj->tnntwishedfor = 0;
                 if (n == 12)
                     obj = oname(obj, objnam, ONAME_NO_FLAGS);
                 /* add to temp invent chain */
