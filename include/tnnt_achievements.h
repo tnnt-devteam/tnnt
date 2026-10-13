@@ -777,8 +777,8 @@ ACH("An Embarrassment of Wishes", "Get offered a wish at least 10 times",
 ACH("Speed Achiever", "Get 100 achievements in the first 10000 turns",
     GOT_100_ACHIEVEMENTS_IN_10K_TURNS),
 
-/* 5 free bits in tnntachieve5
- * 379 achievements defined
+/* 53 free bits in tnntachieve6
+ * 395 achievements defined
  * (The achievement bitmap is auto-sized at compile time based on
  * NUM_TNNT_ACHIEVEMENTS, but we still keep this comment around to remind the
  * person who rolls it over into a new tnntachieve* xlogfile field that they
