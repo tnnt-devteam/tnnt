@@ -2254,21 +2254,26 @@ show_conduct(int final)
     if (u.uconduct.rmswapchest == 0)
         you_have_never("removed an item from a swap chest");
 
-    if (svm.mvitals[gu.urole.neminum].died == 0)
-        you_have_never("allowed your nemesis to die");
+    if ((final || u.uevent.qcalled)
+        && !tnnt_globals.unique_info[tnnt_uniqndx(gu.urole.neminum)].died)
+        you_have_never("allowed your quest nemesis to die");
 
-    if (svm.mvitals[PM_VLAD_THE_IMPALER].died == 0)
+    if ((final || u.uevent.gehennom_entered)
+        && !tnnt_globals.unique_info[tnnt_uniqndx(PM_VLAD_THE_IMPALER)].died)
         you_have_never("allowed Vlad to die");
 
-    if (svm.mvitals[PM_WIZARD_OF_YENDOR].died == 0)
+    if ((final || u.uevent.gehennom_entered)
+        && !tnnt_globals.unique_info[tnnt_uniqndx(PM_WIZARD_OF_YENDOR)].died)
         you_have_never("allowed the Wizard to die");
 
-    if (svm.mvitals[PM_HIGH_CLERIC].died == 0)
+    if ((final || u.uevent.invoked)
+        && !tnnt_globals.unique_info[tnnt_uniqndx(PM_HIGH_CLERIC)].died)
         you_have_never("allowed a high priest to die");
 
-    if (svm.mvitals[PM_DEATH].died == 0
-        && svm.mvitals[PM_PESTILENCE].died == 0
-        && svm.mvitals[PM_FAMINE].died == 0)
+    if ((final || Is_astralevel(&u.uz))
+        && !tnnt_globals.unique_info[tnnt_uniqndx(PM_DEATH)].died
+        && !tnnt_globals.unique_info[tnnt_uniqndx(PM_PESTILENCE)].died
+        && !tnnt_globals.unique_info[tnnt_uniqndx(PM_FAMINE)].died)
         you_have_never("allowed a Rider to die");
 
     if (u.uconduct.artitouch == 0)
