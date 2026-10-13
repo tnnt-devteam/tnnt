@@ -786,24 +786,3 @@ ACH("Speed Achiever", "Get 100 achievements in the first 10000 turns",
  */
 
 #undef ACH
-
-/*
-TNNT TODO FOR 3.7: Here are some good achievement ideas we want to do but they
-are best off waiting until 3.7 is released and TNNT rebases on it.
-
-Dry out a wet towel with fire. That behavior only exists in 3.7.
-
-Pacify your quest leader after angering them. Pre 3.7, if you anger them, you
-just get kicked out and your game is unwinnable.
-
-"Chain Reaction" - Blow up a monster by triggering another monster to blow up.
-The only way to do this "organically" in pre 3.7 is to luck into two nearby gas
-spores. Otherwise, it requires artificial methods such as reverse genocide or
-create monster spam. 3.7 has more monsters that explode on death, so it's more
-feasible to happen organically.
-
-Kill a certain number of monsters with a single casting of chain lightning.
-
-"Dracarys" - Kill a monster by getting your dragon steed (or just pet) to
-breathe at it.
-*/
