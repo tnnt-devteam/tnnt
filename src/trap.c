@@ -3216,8 +3216,11 @@ blow_up_landmine(struct trap *trap)
     old_typ = lev->typ;
 
     /* TNNT - blowing up a mine in Ludios will necessarily prevent them from
-     * achieving "disarm all mines in Ludios", so track that here. */
-    if (Is_knox(&u.uz))
+     * achieving "disarm all mines in Ludios", so track that here.
+     * In order to avoid making this unachievable when e.g. a monster spawns in
+     * the vault and triggers land mines, this doesn't get set until the player
+     * has made it inside the vault. */
+    if (Is_knox(&u.uz) && tnnt_globals.entered_ludios_vault)
         tnnt_globals.blew_up_ludios = TRUE;
 
     (void) scatter(x, y, 4,

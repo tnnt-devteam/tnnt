@@ -3822,8 +3822,12 @@ check_special_room(boolean newlev)
              * a specific area provides a really easy way to hook achievement
              * triggers onto entering that area. */
             /* Ludios themed room encompasses the treasure vault */
-            if (Is_knox(&u.uz) && !tnnt_globals.u_exited_ludios)
-                tnnt_achieve(A_COMPLETED_LUDIOS_WITHOUT_BACKTRACKING);
+            if (Is_knox(&u.uz)) {
+                if (!tnnt_globals.u_exited_ludios)
+                    tnnt_achieve(A_COMPLETED_LUDIOS_WITHOUT_BACKTRACKING);
+                /* start watching for Minesweeper violations */
+                tnnt_globals.entered_ludios_vault = TRUE;
+            }
             /* Castle themed room is the one just past the drawbridge */
             if (Is_stronghold(&u.uz)
                 && (svm.moves <=

@@ -127,6 +127,8 @@ struct tnnt_globals_t {
     unsigned char wish_sources;
 
     boolean blew_up_ludios; /* blew up any of its land mines */
+    boolean entered_ludios_vault; /* spare penalizing for land mines that blew
+                                   * up before this */
 
 #define RDBL_SCROLL  0x0001
 #define RDBL_BOOK    0x0002
