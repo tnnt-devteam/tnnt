@@ -108,6 +108,17 @@ Miscellaneous suggestions:
   pick from everything.
 - If you don't donate 3 items before taking an item, the chest will let you
   donate more, up to the normal total of 3.
+- Define two tiers of acceptable items, with the early swapchest accepting
+  items in the lower tier but the late swapchest accepting only items in the
+  higher tier. An example of an item in the lower tier would be most wands: by
+  the Valley, most people can spare a random throwaway wand just to be able to
+  withdraw something. This was from before the early swap chest moved from a
+  fixed location in Mines' End, so it is probably less of an issue now.
+- If you kick the swap chest a sufficient number of times, it should turn into
+  a very strong m-class monster. If you manage to kill it, it drops 2 random
+  items out of the swap chest pool (so you don't get to pick, but you get 2 of
+  them). This would likely be hard to balance and would mostly be an exercise
+  in balancing to the Lord British Postulate.
 
 ## Deathmatch
 
@@ -293,6 +304,38 @@ Other unsorted rejected ideas:
     Wizard can then be polymorphed into something with a special-case way to
     pacify it) and is likely to make obtaining all achievements more of a chore
     rather than more fun.
+- Achievement for guaranteeing Stormbringer as your first sacrifice gift by
+  being an elf and naming Orcrist and Sting.
+  - Main reason for rejection is this gets a little too much into the
+    metastrategy, which also makes it hard to succinctly explain or define a
+    triggering condition for.
+  - This also hasn't been examined to see if 5.0 artifact gift rebalance breaks
+    this tactic.
+- Achievement for taming a horse that randomly generated with a saddle.
+  - Horses so rarely spawn with saddles (1% of them) that this would be either
+    very RNG-hard or require extinctionist-level grinding.
+- Achievement for entering a shop that is in the middle of a level horizontally
+  - defined as there being a non-vault room with lx > shop's hx and a different
+    non-vault room with hx < shop's lx.
+  - This sort of thing is interesting only to level generation nerds like
+    aosdict. Also it's pretty RNG-based (not *that* rare, but still).
+- Achievement for opening the Castle drawbridge with the Bell of Opening.
+  - We already have a lot of achievements around the Castle and even around the
+    drawbridge specifically.
+- "Chain Reaction" - Blow up a monster by getting another monster to blow up.
+  - This was suggested based on the assumption that spheres would explode on
+    death in 5.0.0, but gas spores remain the only monster that explodes on
+    death. So the player would probably still need to artificially engineer the
+    situation.
+- Achievement for drying out a wet towel with fire.
+  - Not interesting enough to implement.
+- "Doors Are Overrated": enter and leave a vault without passing through its
+  walls at any point (whether from digging, phasing, guard letting you out, etc).
+  - "Leaving a room" is pretty tricky to track, considering this achievement
+    would treat levelporting or digging a hole as valid ways to leave.
+- _Remove_ all the "get Quest with a conduct intact" achievements, and turn
+  them into trophies instead, so that going for Most Achievements In One Game
+  doesn't have to concern itself with conducts.
 
 ### Achievement categorization
 
@@ -306,7 +349,9 @@ code, but that's it.
 A common criticism of the devteam quest is that it's a pile of resources
 (throne, sinks for rings and foocubi, identify scrolls, tameable pets,
 spellbooks, etc) and the presence of these resources makes the game easier than
-vanilla.
+vanilla. This was ameliorated somewhat in the 2025 tournament when most of
+these things were given individual low-probability chances, but the underlying
+problem is still there.
 
 Miscellaneous suggestions:
 - The devteam members could give you helpful in-game information, such as item
@@ -321,6 +366,14 @@ Miscellaneous suggestions:
   minigame for fighting Z-class monsters." Not implemented mainly because no
   role's background knows how to program and would understand it, and there's
   already a YAFM for reading the scroll with high Int.
+- The devteam should respect nudist conduct, and award you an artifact towel or
+  some other non-armor prize if you have kept nudist conduct upon completing
+  the quest, or give you a pile of transient objects that you can take one of,
+  using the same system as the deathmatch prizes. Not implemented because of
+  the principle that conducts exist to provide an extra challenge, and most
+  existing things in the game don't compensate you for keeping a conduct (for
+  example, if your quest artifact is armor, you simply can't wear it as
+  nudist).
 
 ## Potential future custom challenges
 
@@ -413,3 +466,10 @@ Miscellaneous suggestions:
     conduct would break it unless they relied on getting Grayswandir very
     early. Apart from that, it is not a particularly interesting conduct since
     booze and hallucination have very few upsides.
+- Turn TNNT into a modders' tournament. Players are encouraged to submit
+  changes for new levels, objects, and monsters. These new things must appear
+  exclusively in new branches so the rest of the game plays normally. The
+  changes should be kept secret (at least by the TNNT devteam) until the end of
+  the tournament, at which point they are fully open-sourced. Branch stairs to
+  lead to these branches should be a new color so it's clear they lead to a mod
+  branch.
