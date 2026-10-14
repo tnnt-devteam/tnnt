@@ -1392,19 +1392,30 @@ swap_chest_eligible(struct obj *obj)
 void
 maybe_place_dungeons_swapchest(void)
 {
-    struct mkroom *croom;
     if (In_dungeons_of_doom(&u.uz)
         && tnnt_globals.swapchest1_dlevel == u.uz.dlevel) {
-        croom = search_special(VAULT);
+        struct mkroom *croom = search_special(VAULT);
+        coord cc;
         if (!croom) {
             /* no vault on this level
              * ensure swap chest doesn't land in a shop */
             do {
                 croom = &svr.rooms[rn2(svn.nroom)];
-            } while (croom->orig_rtype >= SHOPBASE);
+            } while (croom->rtype >= SHOPBASE);
+            /* must use rtype and not orig_rtype here; this is called within
+             * makelevel() after rtype has been set, but orig_rtype will still
+             * be 0 until level_finalize_topology() gets called, and that only
+             * happens after makelevel() is done */
         }
-        (void) mksobj_at(SWAP_CHEST, somex(croom), somey(croom), TRUE,
-                         FALSE);
+        if (!somexyspace(croom, &cc))
+            impossible("couldn't find a spot to place swap chest");
+        /* but even if a space couldn't be found, place the swap chest on
+         * whatever somexyspace's last attempt was
+         * somexyspace can return ICE, which might be auto-melting, so make sure
+         * that will not happen under the chest */
+        if (levl[cc.x][cc.y].typ == ICE)
+            spot_stop_timers(cc.x, cc.y, MELT_ICE_AWAY);
+        (void) mksobj_at(SWAP_CHEST, cc.x, cc.y, TRUE, FALSE);
     }
 }
 
