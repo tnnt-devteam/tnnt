@@ -306,15 +306,6 @@ static NEARDATA struct artifact artilist[] = {
       NON_PM,
       0, 12, 4000L, NO_COLOR, EYE_OF_THE_AETHIOPICA),
 
-    /*
-     *  Custom armor artifact for 'The November Nethack Tournament'
-     */
-
-    A("The Really Cool Shirt", T_SHIRT,
-      (SPFX_NOGEN | SPFX_RESTR | SPFX_LUCK | SPFX_WARN), 0, 0,
-      NO_ATTK, NO_DFNS, NO_CARY, 0, A_NONE, NON_PM, NON_PM,
-      0, 12, 800L, NO_COLOR, REALLY_COOL_SHIRT),
-
 #if !defined(ARTI_ENUM) && !defined(DUMP_ARTI_ENUM)
     /*
      *  terminator; otyp must be zero

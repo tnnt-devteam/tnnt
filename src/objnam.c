@@ -989,6 +989,14 @@ xname_flags(
         switch (obj->otyp) {
         case T_SHIRT:
         case ALCHEMY_SMOCK:
+            if (obj->isreallycool) {
+                /* TNNT: tshirt_text would insert a random rumor here, which
+                 * would make an inordinately long line in the dumplog that
+                 * would stick out like a sore thumb. The rumor isn't really
+                 * relevant anyway since it's constantly shifting, so just leave
+                 * it off. */
+                break;
+            }
             ConcatF1(buf, 0, " with text \"%s\"",
                      (obj->otyp == T_SHIRT) ? tshirt_text(obj, tmpbuf)
                                             : apron_text(obj, tmpbuf));
@@ -5431,7 +5439,6 @@ readobjnam(char *bp, struct obj *no_wish)
     /* more wishing abuse: don't allow wishing for certain artifacts */
     /* and make them pay; charge them for the wish anyway! */
     if ((is_quest_artifact(d.otmp)
-         || (d.otmp->oartifact == ART_REALLY_COOL_SHIRT)
          || (d.otmp->oartifact && rn2(nartifact_exist()) > 1)) && !wizard) {
         artifact_exists(d.otmp, safe_oname(d.otmp), FALSE, ONAME_NO_FLAGS);
         obfree(d.otmp, (struct obj *) 0);

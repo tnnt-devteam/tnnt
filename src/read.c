@@ -189,9 +189,13 @@ tshirt_text(struct obj *tshirt, char *buf)
     };
 
     /* TNNT - The Really Cool Shirt has ever-shifting text */
-    if (tshirt->oartifact == ART_REALLY_COOL_SHIRT) {
+    if (tshirt->isreallycool) {
         const char *rumor;
-        if (rn2(50) && (rumor = getrumor(bcsign(tshirt), buf, TRUE))
+        if (tshirt->spe < 0) {
+            Strcpy(buf,
+ "I ran errands for the DevTeam and all I got was this lousy T-shirt!");
+        }
+        else if (rn2(50) && (rumor = getrumor(bcsign(tshirt), buf, TRUE))
             && *rumor) {
             /* do nothing: getrumor has already inserted result into buf */
         } else {

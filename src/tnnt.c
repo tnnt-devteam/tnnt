@@ -2246,11 +2246,9 @@ devteam_quest(struct monst *devteam, struct obj *thrownscroll)
                         pline("%s signs:", Monnam(devteam));
                     com_pager("devteam_finishquest");
                     reward = mksobj(T_SHIRT, FALSE, FALSE);
-                    reward = oname(reward, artiname(ART_REALLY_COOL_SHIRT),
-                                   /* "random" is not really correct but is the
-                                    * most correct option; ONAME_GIFT would be
-                                    * treated as a divine gift */
-                                   ONAME_RANDOM);
+                    reward->isreallycool = 1;
+                    reward = oname(reward, "The Really Cool Shirt",
+                                   ONAME_NO_FLAGS);
                     /* player should have just given up at least one scroll, so
                        should have room for this in inventory, but might get
                        encumbered and want to decline :d */

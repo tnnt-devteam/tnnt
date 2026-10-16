@@ -129,11 +129,12 @@ resetobjs(struct obj *ochain, boolean restore)
             }
 
             /* TNNT: The Really Cool Shirt is only ever obtained from the
-             * devteam, and cannot be found in bones. (Otherwise, you can either
-             * get a duplicate of it, or the devteam quest fails to give you
-             * it upon completion, depending on how it'd be implemented.) */
-            if (otmp->oartifact == ART_REALLY_COOL_SHIRT) {
-                otmp->oartifact = 0;
+             * devteam, and cannot be found in bones. (If it could, you would
+             * either get a duplicate of it, or the devteam quest would fail to
+             * give you it upon completion, depending on how it'd be
+             * implemented.) */
+            if (otmp->otyp == T_SHIRT && otmp->isreallycool) {
+                otmp->isreallycool = 0;
                 free_oname(otmp);
             }
 
