@@ -6,12 +6,13 @@
 
 const char *escape_string(const char *s);
 
-#define ACH(nam, desc, id) { nam, desc, #id }
+#define TNNT_ACH_DUMPYAML_INFO
 struct ach_info {
     const char *name, *desc, *id;
 } ach_list[] = {
 #include "tnnt_achievements.h"
 };
+#undef TNNT_ACH_DUMPYAML_INFO
 
 int
 main(void)

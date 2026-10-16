@@ -2,10 +2,17 @@
 /* there is a slight possibility of name collision here since attributes and
  * alignments both use A_*** as well. We use A_ to keep the constant names
  * short and mitigate having to do ugly line wrappings in heavily indented
- * blocks. */
-#define ACH(nam, desc, id) A_##id
+ * code blocks. */
+#define ACH(nam, desc, id) A_##id,
+
 #elif defined (TNNT_ACH_NAMES)
-#define ACH(nam, desc, id) {nam, desc}
+
+#define ACH(nam, desc, id) {nam, desc},
+
+#elif defined (TNNT_ACH_DUMPYAML_INFO) /* see util/tnnt_ach_to_yaml.c */
+
+#define ACH(name, desc, id) { nam, desc, #id },
+
 #elif !defined(ACH)
 #error Bad inclusion of tnnt_achievements.h
 #endif
@@ -42,464 +49,465 @@
  * or on the scoreboard, with the exception of rank title achievements which
  * come after all the "story" ones.
  */
-ACH("Delving Deep", "Enter the Gnomish Mines", ENTERED_MINES),
-ACH("Back To Civilisation", "Enter Minetown", ENTERED_MINETOWN),
+ACH("Delving Deep", "Enter the Gnomish Mines", ENTERED_MINES)
+ACH("Back To Civilisation", "Enter Minetown", ENTERED_MINETOWN)
 ACH("Are You Feeling Lucky", "Get the luckstone from Mines' End",
-    GOT_LUCKSTONE),
-ACH("Sage Advice", "Consult the Oracle", CONSULTED_ORACLE),
-ACH("Boulder Pusher", "Enter Sokoban", ENTERED_SOKOBAN),
-ACH("Boulder Master", "Finish Sokoban by getting its prize", COMPLETED_SOKOBAN),
-ACH("Escape To Discworld", "Read a Terry Pratchett novel", READ_NOVEL),
-ACH("Wow, That's A Big Room", "Enter the Big Room", ENTERED_BIGROOM),
+    GOT_LUCKSTONE)
+ACH("Sage Advice", "Consult the Oracle", CONSULTED_ORACLE)
+ACH("Boulder Pusher", "Enter Sokoban", ENTERED_SOKOBAN)
+ACH("Boulder Master", "Finish Sokoban by getting its prize", COMPLETED_SOKOBAN)
+ACH("Escape To Discworld", "Read a Terry Pratchett novel", READ_NOVEL)
+ACH("Wow, That's A Big Room", "Enter the Big Room", ENTERED_BIGROOM)
 ACH("Holy Sanctuary", "Enter a temple with a priest in attendance",
-    ENTERED_TEMPLE),
-ACH("Ringing In My Ears", "Get the Bell of Opening", GOT_BELL),
-ACH("Anti-Stoner", "Kill Medusa", KILLED_MEDUSA),
+    ENTERED_TEMPLE)
+ACH("Ringing In My Ears", "Get the Bell of Opening", GOT_BELL)
+ACH("Anti-Stoner", "Kill Medusa", KILLED_MEDUSA)
     /* note: vanilla has only one ACH_TUNE achievement, but we award separate
      * achievements for each of the two ways you can learn the tune */
 ACH("Heavenly Music", "Learn the passtune from your god",
-    LEARNED_PASSTUNE_FROM_GOD),
+    LEARNED_PASSTUNE_FROM_GOD)
 ACH("Musical Mastermind", "Open the Castle drawbridge by deducing the passtune",
-    DEDUCED_PASSTUNE),
-ACH("We Need To Go Deeper", "Enter Gehennom", ENTERED_GEHENNOM),
+    DEDUCED_PASSTUNE)
+ACH("We Need To Go Deeper", "Enter Gehennom", ENTERED_GEHENNOM)
 ACH("Emerging Into The Light", "Get the Candelabrum of Invocation",
-    GOT_CANDELABRUM),
-ACH("Weighing Of The Heart", "Get the Book of the Dead", GOT_BOOK_OF_DEAD),
-ACH("Bell, Book And Candle", "Perform the invocation ritual", DID_INVOCATION),
-ACH("My Preciousss", "Get the Amulet of Yendor", GOT_AOY),
-ACH("From The Dungeon They Came", "Enter the Elemental Planes", ENTERED_PLANES),
-ACH("The Halls Of The Gods", "Enter the Astral Plane", ENTERED_ASTRAL),
-ACH("Joining The Ranks", "Earn your second rank", GOT_RANK2),
-ACH("Rank and File", "Earn your third rank", GOT_RANK3),
-ACH("Rising Through The Ranks", "Earn your fourth rank", GOT_RANK4),
-ACH("Quest Rank", "Earn your fifth rank", GOT_RANK5),
-ACH("A Rank Above", "Earn your sixth rank", GOT_RANK6),
-ACH("High Ranking", "Earn your seventh rank", GOT_RANK7),
-ACH("Banking the Ranks", "Earn your eighth rank", GOT_RANK8),
-ACH("Top Ranked", "Earn your ninth and final rank", GOT_RANK9),
+    GOT_CANDELABRUM)
+ACH("Weighing Of The Heart", "Get the Book of the Dead", GOT_BOOK_OF_DEAD)
+ACH("Bell, Book And Candle", "Perform the invocation ritual", DID_INVOCATION)
+ACH("My Preciousss", "Get the Amulet of Yendor", GOT_AOY)
+ACH("From The Dungeon They Came", "Enter the Elemental Planes", ENTERED_PLANES)
+ACH("The Halls Of The Gods", "Enter the Astral Plane", ENTERED_ASTRAL)
+
+ACH("Joining The Ranks", "Earn your second rank", GOT_RANK2)
+ACH("Rank and File", "Earn your third rank", GOT_RANK3)
+ACH("Rising Through The Ranks", "Earn your fourth rank", GOT_RANK4)
+ACH("Quest Rank", "Earn your fifth rank", GOT_RANK5)
+ACH("A Rank Above", "Earn your sixth rank", GOT_RANK6)
+ACH("High Ranking", "Earn your seventh rank", GOT_RANK7)
+ACH("Banking the Ranks", "Earn your eighth rank", GOT_RANK8)
+ACH("Top Ranked", "Earn your ninth and final rank", GOT_RANK9)
 
 /* "vanilla-ish milestones" group */
-ACH("The Archetypal Hero", "Get admitted to the Quest", STARTED_QUEST),
+ACH("The Archetypal Hero", "Get admitted to the Quest", STARTED_QUEST)
 ACH("Have Fun Storming The Castle", "Blow up the Castle drawbridge",
-    BLEW_UP_DRAWBRIDGE),
-ACH("The Chosen One", "Get crowned", CROWNED),
+    BLEW_UP_DRAWBRIDGE)
+ACH("The Chosen One", "Get crowned", CROWNED)
 ACH("Watch Your Footing", "Step onto the vibrating square",
-    REACHED_VIBRATING_SQ),
+    REACHED_VIBRATING_SQ)
 
 /* "TNNT custom challenges" group */
 ACH("It's Dangerous To Go Alone! Take This", "Put an item into a swap chest",
-    PUT_INTO_SWAPCHEST),
-ACH("Paw Patrol", "Find kitten", FOUND_KITTEN),
+    PUT_INTO_SWAPCHEST)
+ACH("Paw Patrol", "Find kitten", FOUND_KITTEN)
 ACH("The True Dungeon Masters", "Chat with an active devteam member",
-    TALKED_TO_DEVTEAM),
+    TALKED_TO_DEVTEAM)
 ACH("There Is No Spoon", "Finish the task the devteam requires of you",
-    FINISHED_DEVTEAM_QUEST),
+    FINISHED_DEVTEAM_QUEST)
 ACH("Thunderdome", "Defeat the adversary in the Deathmatch Arena",
-    NPC_DEATHMATCH),
+    NPC_DEATHMATCH)
 
 /* "kill specific things" group */
-ACH("Asmodead", "Kill Asmodeus", KILLED_ASMODEUS),
-ACH("Baalzebust", "Kill Baalzebub", KILLED_BAALZEBUB),
-ACH("Orcrushed", "Kill Orcus", KILLED_ORCUS),
-ACH("Juibl-X", "Kill Juiblex", KILLED_JUIBLEX),
-ACH("Demogorgone", "Kill Demogorgon", KILLED_DEMOGORGON),
-ACH("Yee-No-Go", "Kill Yeenoghu", KILLED_YEENOGHU),
-ACH("Geryon-Be-Gone", "Kill Geryon", KILLED_GERYON),
-ACH("Dispater-Dispatcher", "Kill Dispater", KILLED_DISPATER),
-ACH("Conqueror Of Death", "Kill Death", KILLED_DEATH),
-ACH("Curer Of Pestilence", "Kill Pestilence", KILLED_PESTILENCE),
-ACH("Feeder Of Famine", "Kill Famine", KILLED_FAMINE),
+ACH("Asmodead", "Kill Asmodeus", KILLED_ASMODEUS)
+ACH("Baalzebust", "Kill Baalzebub", KILLED_BAALZEBUB)
+ACH("Orcrushed", "Kill Orcus", KILLED_ORCUS)
+ACH("Juibl-X", "Kill Juiblex", KILLED_JUIBLEX)
+ACH("Demogorgone", "Kill Demogorgon", KILLED_DEMOGORGON)
+ACH("Yee-No-Go", "Kill Yeenoghu", KILLED_YEENOGHU)
+ACH("Geryon-Be-Gone", "Kill Geryon", KILLED_GERYON)
+ACH("Dispater-Dispatcher", "Kill Dispater", KILLED_DISPATER)
+ACH("Conqueror Of Death", "Kill Death", KILLED_DEATH)
+ACH("Curer Of Pestilence", "Kill Pestilence", KILLED_PESTILENCE)
+ACH("Feeder Of Famine", "Kill Famine", KILLED_FAMINE)
 ACH("Why Won't You DIE Already", "Kill the Wizard of Yendor 20 or more times",
-    KILLED_20_WIZARDS),
+    KILLED_20_WIZARDS)
 ACH("Double Whammy", "Kill the Wizard of Yendor twice in one action",
-    WIZ_DOUBLE_KILL),
+    WIZ_DOUBLE_KILL)
 ACH("Actual Perseus", "Kill Medusa with physical damage",
-    KILLED_MEDUSA_PHYSICALLY),
-ACH("Actual Actual Perseus", "Decapitate Medusa", DECAPITATED_MEDUSA),
-ACH("I Did It For The Money", "Kill Croesus", KILLED_CROESUS),
-ACH("Holy War", "Kill a priest of Moloch", KILLED_MOLOCH_PRIEST),
+    KILLED_MEDUSA_PHYSICALLY)
+ACH("Actual Actual Perseus", "Decapitate Medusa", DECAPITATED_MEDUSA)
+ACH("I Did It For The Money", "Kill Croesus", KILLED_CROESUS)
+ACH("Holy War", "Kill a priest of Moloch", KILLED_MOLOCH_PRIEST)
 ACH("Nine For Mortal Men Doomed To Die ... Again",
-    "Collect all nine Nazgul rings", GOT_9_NAZGUL_RINGS),
-ACH("Furious", "Kill all three erinyes", KILLED_3_ERINYES),
-ACH("Minetown Avenger", "Kill every orc in Orctown", AVENGED_ORCTOWN),
-ACH("All Clear", "Kill all hostiles in the Big Room", CLEARED_BIGROOM),
+    "Collect all nine Nazgul rings", GOT_9_NAZGUL_RINGS)
+ACH("Furious", "Kill all three erinyes", KILLED_3_ERINYES)
+ACH("Minetown Avenger", "Kill every orc in Orctown", AVENGED_ORCTOWN)
+ACH("All Clear", "Kill all hostiles in the Big Room", CLEARED_BIGROOM)
 ACH("Master Of The Four Elementals",
     "Kill at least 4 elementals of each type on their respective home planes",
-    KILLED_4X4_ELEMENTALS),
-ACH("Kill It Twice", "Destroy a ghost", KILLED_GHOST),
-ACH("Dragonslayer", "Kill a dragon", KILLED_DRAGON),
+    KILLED_4X4_ELEMENTALS)
+ACH("Kill It Twice", "Destroy a ghost", KILLED_GHOST)
+ACH("Dragonslayer", "Kill a dragon", KILLED_DRAGON)
 ACH("Kill The Rainbow", "Kill every color of adult dragon",
-    KILLED_ALL_DRAGONS),
+    KILLED_ALL_DRAGONS)
 ACH("Kill The Rainbow, Jr.", "Kill every color of baby dragon",
-    KILLED_ALL_BABY_DRAGONS),
-ACH("Playerbanebane", "Kill a soldier ant", KILLED_SOLDIER_ANT),
-ACH("How Much Wood?", "Kill or tame a woodchuck", KILLED_TAMED_WOODCHUCK),
-ACH("Storm The Gates Of Heaven", "Kill an Archon", KILLED_ARCHON),
+    KILLED_ALL_BABY_DRAGONS)
+ACH("Playerbanebane", "Kill a soldier ant", KILLED_SOLDIER_ANT)
+ACH("How Much Wood?", "Kill or tame a woodchuck", KILLED_TAMED_WOODCHUCK)
+ACH("Storm The Gates Of Heaven", "Kill an Archon", KILLED_ARCHON)
 ACH("Minesflayer",
     "Kill a mind flayer or master mind flayer in the Gnomish Mines",
-    KILLED_FLAYER_IN_MINES),
+    KILLED_FLAYER_IN_MINES)
 ACH("Quadruple Kill",
     "Kill 4 monsters with a single volley of missile weapons",
-    MULTISHOT_4_KILLED),
+    MULTISHOT_4_KILLED)
 ACH("Dishing Out Death", "Kill a member of 25 different monster species",
-    KILLED_25_SPECIES),
+    KILLED_25_SPECIES)
 ACH("Bring Out Your Dead", "Kill a member of 50 different monster species",
-    KILLED_50_SPECIES),
+    KILLED_50_SPECIES)
 ACH("Diverse Death-Dealer", "Kill a member of 100 different monster species",
-    KILLED_100_SPECIES),
+    KILLED_100_SPECIES)
 ACH("Grim Reaper", "Kill a member of 200 different monster species",
-    KILLED_200_SPECIES),
+    KILLED_200_SPECIES)
 ACH("Gotta Kill 'em All", "Kill a member of all eligible monster species",
-    KILLED_ALL_SPECIES),
+    KILLED_ALL_SPECIES)
 ACH("Learn The Alphabet", "Kill a monster of each class from a to z",
-    KILLED_A_Z_LOWERCASE),
+    KILLED_A_Z_LOWERCASE)
 ACH("LEARN THE ALPHABET",
     "Kill a monster of each class from A to Z (except I)",
-    KILLED_A_Z_UPPERCASE),
+    KILLED_A_Z_UPPERCASE)
 
 /* "kill things in specific circumstances" group */
 ACH("What It Was Made For", "Kill an appropriate monster with a Bane weapon",
-    USED_CORRECT_BANE),
+    USED_CORRECT_BANE)
 ACH("Kop Training Program", "Kill a monster with a rubber hose",
-    KILLED_WITH_HOSE),
-ACH("Buffy", "Destroy an undead with #turn", DESTROYED_VIA_TURN),
+    KILLED_WITH_HOSE)
+ACH("Buffy", "Destroy an undead with #turn", DESTROYED_VIA_TURN)
 ACH("Bright Light, Bright Light", "Kill a gremlin with any light source",
-    LIT_UP_GREMLIN),
+    LIT_UP_GREMLIN)
 ACH("Get Your Gas Mask", "Kill a monster with a stinking cloud",
-    GASSED_MONSTER),
+    GASSED_MONSTER)
 ACH("It's The Pits", "Kill something while you are stuck in a pit",
-    KILLED_WHILE_IN_PIT),
+    KILLED_WHILE_IN_PIT)
 ACH("Never Saw It Coming", "Kill an invisible monster without see invisible",
-    KILLED_INVISIBLE),
-ACH("Rope-A-Dope", "Kill a monster with a thrown aklys", KILLED_WITH_AKLYS),
+    KILLED_INVISIBLE)
+ACH("Rope-A-Dope", "Kill a monster with a thrown aklys", KILLED_WITH_AKLYS)
 ACH("Hulk Smash", "Kill a monster with a heavy iron ball",
-    KILLED_WITH_IRONBALL),
-ACH("DIRGE", "Instakill a monster with poison", INSTAPOISONED),
-ACH("Poseidon", "Kill a sea monster with a trident", KILLED_WITH_TRIDENT),
+    KILLED_WITH_IRONBALL)
+ACH("DIRGE", "Instakill a monster with poison", INSTAPOISONED)
+ACH("Poseidon", "Kill a sea monster with a trident", KILLED_WITH_TRIDENT)
 ACH("Touch It With A 10 Foot Pole",
     "Kill a floating eye at range with a lance or polearm",
-    KILLED_EYE_POLEARM),
+    KILLED_EYE_POLEARM)
 ACH("Bar Brawler", "Kill a monster with HP damage by smashing a bottle on it",
-    KILLED_WITH_BOTTLE),
-ACH("Rat Tail", "Kill a monster with a wet towel", KILLED_WITH_TOWEL),
+    KILLED_WITH_BOTTLE)
+ACH("Rat Tail", "Kill a monster with a wet towel", KILLED_WITH_TOWEL)
 ACH("Hammer Of The Gods",
     "Kill a monster by throwing Mjollnir and having it return to your hand",
-    MJOLLNIR_THROW_KILL),
+    MJOLLNIR_THROW_KILL)
 ACH("Friendly Fire",
     "Get one hostile monster killed by another's projectile weapon",
-    MVM_PROJECTILE_KILL),
+    MVM_PROJECTILE_KILL)
 ACH("Hoist With Its Own Petard",
     "Have a monster kill itself with its own wand zap",
-    M_KILLED_BY_OWN_WAND),
+    M_KILLED_BY_OWN_WAND)
 ACH("Purple Rain",
     "Get at least 20 enemies eaten by purple worms on the Astral Plane",
-    PURPLE_RAIN),
+    PURPLE_RAIN)
 ACH("Off With Her Head!", "Decapitate an enemy with Vorpal Blade",
-    DECAPITATED_ENEMY),
-ACH("It's 4:20 Somewhere", "Stone a monster", STONED_A_MONSTER),
+    DECAPITATED_ENEMY)
+ACH("It's 4:20 Somewhere", "Stone a monster", STONED_A_MONSTER)
 ACH("On Thin Ice", "Drown a monster by melting the ice beneath it",
-    MELTED_ICE_KILL),
+    MELTED_ICE_KILL)
 ACH("Some Nemesis You Are",
     "Kill your quest nemesis without them getting a move",
-    ONE_SIDED_NEMESIS_KILL),
+    ONE_SIDED_NEMESIS_KILL)
 ACH("Faster Than Light", "Kill a \"y\" monster in melee without it exploding",
-    KILLED_LIGHT_MELEE),
+    KILLED_LIGHT_MELEE)
 ACH("Dracarys",
     "Kill a monster with the breath attack of your tame dragon",
-    KILLED_WITH_TAME_DRAGON_BREATH),
+    KILLED_WITH_TAME_DRAGON_BREATH)
 ACH("Ride The Lightning",
     "Kill 20 or more monsters in a single casting of chain lightning",
-    KILLED_20_WITH_CHAIN_LIGHTNING),
+    KILLED_20_WITH_CHAIN_LIGHTNING)
 ACH("There Can Be Only One", "Kill each Rider at least once in melee combat",
-    KILLED_ALL_RIDERS_IN_MELEE),
+    KILLED_ALL_RIDERS_IN_MELEE)
 
 /* "survive a hazard" group */
-ACH("Part-Time Statue", "Cure stoning", CURED_STONING),
-ACH("The Blob", "Cure sliming", CURED_SLIMING),
+ACH("Part-Time Statue", "Cure stoning", CURED_STONING)
+ACH("The Blob", "Cure sliming", CURED_SLIMING)
 ACH("Captain Ahab", "Survive being grabbed by a sea monster",
-    SURVIVED_DROWNING),
-ACH("Furry Little Problem", "Cure lycanthropy", CURED_LYCANTHROPY),
-ACH("New Lease On Life", "Cure deathly illness", CURED_ILLNESS),
+    SURVIVED_DROWNING)
+ACH("Furry Little Problem", "Cure lycanthropy", CURED_LYCANTHROPY)
+ACH("New Lease On Life", "Cure deathly illness", CURED_ILLNESS)
 ACH("Cheating the Reaper",
     "Survive a touch of death without magic resistance",
-    SURVIVED_TOD),
+    SURVIVED_TOD)
 
 /* involving identification */
 ACH("Diamond In The Rough", "Identify a gem with a touchstone",
-    USED_TOUCHSTONE),
+    USED_TOUCHSTONE)
 ACH("Curse The Darkness", "Identify a potion of oil by applying it",
-    LIT_OIL_POTION),
+    LIT_OIL_POTION)
 ACH("Michelin Guide", "Identify both sources of food detection",
-    ID_DETECT_FOOD),
-ACH("Hoard of the Rings", "Identify all rings", IDENTIFIED_ALL_RINGS),
-ACH("Wand Whiz", "Identify all wands", IDENTIFIED_ALL_WANDS),
-ACH("King Of Bling", "Identify all amulets", IDENTIFIED_ALL_AMULETS),
-ACH("Bookworm", "Identify all spellbooks", IDENTIFIED_ALL_BOOKS),
-ACH("Scroll Sage", "Identify all scrolls", IDENTIFIED_ALL_SCROLLS),
-ACH("Potion Prodigy", "Identify all potions", IDENTIFIED_ALL_POTIONS),
-ACH("I'm The Bagman", "Identify all bags", IDENTIFIED_ALL_BAGS),
-ACH("Four Horns Adventures", "Identify all horns", IDENTIFIED_ALL_HORNS),
-ACH("Izchak's Apprentice", "Identify all light sources", IDENTIFIED_ALL_LIGHTS),
+    ID_DETECT_FOOD)
+ACH("Hoard of the Rings", "Identify all rings", IDENTIFIED_ALL_RINGS)
+ACH("Wand Whiz", "Identify all wands", IDENTIFIED_ALL_WANDS)
+ACH("King Of Bling", "Identify all amulets", IDENTIFIED_ALL_AMULETS)
+ACH("Bookworm", "Identify all spellbooks", IDENTIFIED_ALL_BOOKS)
+ACH("Scroll Sage", "Identify all scrolls", IDENTIFIED_ALL_SCROLLS)
+ACH("Potion Prodigy", "Identify all potions", IDENTIFIED_ALL_POTIONS)
+ACH("I'm The Bagman", "Identify all bags", IDENTIFIED_ALL_BAGS)
+ACH("Four Horns Adventures", "Identify all horns", IDENTIFIED_ALL_HORNS)
+ACH("Izchak's Apprentice", "Identify all light sources", IDENTIFIED_ALL_LIGHTS)
 ACH("The One-Man Magic Band",
     "Identify all 4 magical musical instruments (besides horns)",
-    IDENTIFIED_ALL_MAGIC_INSTRUMENTS), /* this DOES include magic whistles */
-ACH("Helm Hoarder", "Identify all randomized helms", IDENTIFIED_ALL_HELMS),
+    IDENTIFIED_ALL_MAGIC_INSTRUMENTS) /* this DOES include magic whistles */
+ACH("Helm Hoarder", "Identify all randomized helms", IDENTIFIED_ALL_HELMS)
 ACH("Cloak Connoisseur", "Identify all randomized cloaks",
-    IDENTIFIED_ALL_CLOAKS),
-ACH("Glove Lover", "Identify all randomized gloves", IDENTIFIED_ALL_GLOVES),
+    IDENTIFIED_ALL_CLOAKS)
+ACH("Glove Lover", "Identify all randomized gloves", IDENTIFIED_ALL_GLOVES)
 ACH("Shield Specialist", "Identify all randomized shields",
-    IDENTIFIED_ALL_SHIELDS),
-ACH("Footwear Fanatic", "Identify all randomized boots", IDENTIFIED_ALL_BOOTS),
+    IDENTIFIED_ALL_SHIELDS)
+ACH("Footwear Fanatic", "Identify all randomized boots", IDENTIFIED_ALL_BOOTS)
 ACH("Mineralogist", "Identify all valuable gems",
-    IDENTIFIED_ALL_GEMS),
-ACH("Geologist", "Identify all gray stones", IDENTIFIED_ALL_STONES),
-ACH("Glass Collector", "Identify all worthless glass", IDENTIFIED_ALL_GLASS),
+    IDENTIFIED_ALL_GEMS)
+ACH("Geologist", "Identify all gray stones", IDENTIFIED_ALL_STONES)
+ACH("Glass Collector", "Identify all worthless glass", IDENTIFIED_ALL_GLASS)
 
 /* involving maintaining a conduct up to Quest */
 ACH("Friends Not Food", "Receive the Quest with vegetarian conduct intact",
-    PARTIAL_VEGETARIAN),
+    PARTIAL_VEGETARIAN)
 ACH("Animal Rights Activist", "Receive the Quest with vegan conduct intact",
-    PARTIAL_VEGAN),
+    PARTIAL_VEGAN)
 ACH("Anti Gulp", "Receive the Quest with foodless conduct intact",
-    PARTIAL_FOODLESS),
+    PARTIAL_FOODLESS)
 ACH("No Help From Above", "Receive the Quest with atheist conduct intact",
-    PARTIAL_ATHEIST),
+    PARTIAL_ATHEIST)
 ACH("Wax On Wax Off", "Receive the Quest with weaponless conduct intact",
-    PARTIAL_WEAPONLESS),
+    PARTIAL_WEAPONLESS)
 ACH("Thou Shalt Not Kill", "Receive the Quest with pacifist conduct intact",
-    PARTIAL_PACIFIST),
+    PARTIAL_PACIFIST)
 ACH("Me No Do Words Good", "Receive the Quest with illiterate conduct intact",
-    PARTIAL_ILLITERATE),
+    PARTIAL_ILLITERATE)
 ACH("Lost My Transmutation License",
     "Receive the Quest with polypileless conduct intact",
-    PARTIAL_POLYPILELESS),
+    PARTIAL_POLYPILELESS)
 ACH("True To Form", "Receive the Quest with polyselfless conduct intact",
-    PARTIAL_POLYSELFLESS),
+    PARTIAL_POLYSELFLESS)
 ACH("Self Sufficient", "Receive the Quest with wishless conduct intact",
-    PARTIAL_WISHLESS),
+    PARTIAL_WISHLESS)
 ACH("Leave The Artifacts To The Gods",
     "Receive the Quest with artifact wishless conduct intact",
-    PARTIAL_ARTIWISHLESS),
+    PARTIAL_ARTIWISHLESS)
 ACH("Feeling Your Way",
     "Receive the Quest with zen (permablind) conduct intact",
-    PARTIAL_ZEN),
+    PARTIAL_ZEN)
 ACH("Going Commando", "Receive the Quest with nudist conduct intact",
-    PARTIAL_NUDIST),
+    PARTIAL_NUDIST)
 ACH("Make Love, Not War",
     "Receive the Quest with genocideless conduct intact",
-    PARTIAL_GENOCIDELESS),
+    PARTIAL_GENOCIDELESS)
 ACH("No Help From The Floor",
     "Receive the Quest with Elberethless conduct intact",
-    PARTIAL_ELBERETHLESS),
+    PARTIAL_ELBERETHLESS)
 ACH("It's A Wonderful Trip",
     "Receive the Quest with permahallu conduct intact",
-    PARTIAL_PERMAHALLU),
+    PARTIAL_PERMAHALLU)
 ACH("Silent World", "Receive the Quest with permadeaf conduct intact",
-    PARTIAL_PERMADEAF),
+    PARTIAL_PERMADEAF)
 ACH("Keep Your Fancy Toys",
     "Receive the Quest with artifactless conduct intact",
-    PARTIAL_ARTIFACTLESS),
+    PARTIAL_ARTIFACTLESS)
 ACH("New Dungeon, Never Occupied",
     "Receive the Quest with bonesless conduct intact",
-    PARTIAL_BONESLESS),
+    PARTIAL_BONESLESS)
 ACH("Extradimensionally Challenged",
     "Receive the Quest with swapchestless conduct intact",
-    PARTIAL_SWAPCHESTLESS),
+    PARTIAL_SWAPCHESTLESS)
 ACH("Fur Allergy", "Receive the Quest with petless conduct intact",
-    PARTIAL_PETLESS),
+    PARTIAL_PETLESS)
 ACH("Death Isn't So Cheap", "Receive the Quest with survivor conduct intact",
-    PARTIAL_SURVIVOR),
+    PARTIAL_SURVIVOR)
 ACH("Open Carry", "Receive the Quest with containerless conduct intact",
-    PARTIAL_CONTAINERLESS),
+    PARTIAL_CONTAINERLESS)
 ACH("Beyond The Wand", "Receive the Quest with zapless conduct intact",
-    PARTIAL_ZAPLESS),
+    PARTIAL_ZAPLESS)
 ACH("No Drink For Me, Please",
-    "Receive the Quest with potionless conduct intact", PARTIAL_POTIONLESS),
+    "Receive the Quest with potionless conduct intact", PARTIAL_POTIONLESS)
 ACH("I-Don't-Ify", "Receive the Quest with identificationless conduct intact",
-    PARTIAL_IDLESS),
+    PARTIAL_IDLESS)
 ACH("Hit Me With Your Best Shot, Fire A Ray",
     "Receive the Quest with reflectionless conduct intact",
-    PARTIAL_REFLECTIONLESS),
+    PARTIAL_REFLECTIONLESS)
 ACH("Magic Magnet",
     "Receive the Quest with magic-resistance-less conduct intact",
-    PARTIAL_MRLESS),
+    PARTIAL_MRLESS)
 ACH("Vow of Poverty", "Receive the Quest with moneyless conduct intact",
-    PARTIAL_MONEYLESS),
+    PARTIAL_MONEYLESS)
 ACH("Starting from Nothing", "Receive the Quest after starting as a pauper",
-    PARTIAL_PAUPER),
+    PARTIAL_PAUPER)
 /* not conduct related but still involves the quest leader */
 ACH("To The Quest Without A Rest",
-    "Talk to your Quest leader before turn 5000", QUICKLY_REACHED_QUEST),
+    "Talk to your Quest leader before turn 5000", QUICKLY_REACHED_QUEST)
 
 /* involving entering a certain room/area */
-ACH("Breaking And Entering", "Enter a vault", ENTERED_VAULT),
-ACH("Who Was That David Person Anyway?", "Enter a treasure zoo", ENTERED_ZOO),
-ACH("Absolute Monarchy", "Enter a throne room", ENTERED_THRONE_ROOM),
+ACH("Breaking And Entering", "Enter a vault", ENTERED_VAULT)
+ACH("Who Was That David Person Anyway?", "Enter a treasure zoo", ENTERED_ZOO)
+ACH("Absolute Monarchy", "Enter a throne room", ENTERED_THRONE_ROOM)
 ACH("They're After Me Lucky Charms", "Enter a leprechaun hall",
-    ENTERED_LEP_HALL),
-ACH("Hive Mind", "Enter a beehive", ENTERED_BEEHIVE),
-ACH("Day Of The Dead", "Enter a graveyard", ENTERED_GRAVEYARD),
-ACH("Team Ant Headquarters", "Enter an anthole", ENTERED_ANTHOLE),
-ACH("Halt, Who Goes There?", "Enter a barracks", ENTERED_BARRACKS),
-ACH("Dungeon Ecology", "Enter a swamp", ENTERED_SWAMP),
-ACH("Statue Showcase", "Enter a cockatrice nest", ENTERED_COCKNEST),
-ACH("Ocean's Eleven", "Enter Fort Ludios", ENTERED_LUDIOS),
+    ENTERED_LEP_HALL)
+ACH("Hive Mind", "Enter a beehive", ENTERED_BEEHIVE)
+ACH("Day Of The Dead", "Enter a graveyard", ENTERED_GRAVEYARD)
+ACH("Team Ant Headquarters", "Enter an anthole", ENTERED_ANTHOLE)
+ACH("Halt, Who Goes There?", "Enter a barracks", ENTERED_BARRACKS)
+ACH("Dungeon Ecology", "Enter a swamp", ENTERED_SWAMP)
+ACH("Statue Showcase", "Enter a cockatrice nest", ENTERED_COCKNEST)
+ACH("Ocean's Eleven", "Enter Fort Ludios", ENTERED_LUDIOS)
 
 /* involving doing all of a set of things */
-ACH("Pilgrim", "Visit all 4 types of altars", VISITED_ALL_ALTARS),
+ACH("Pilgrim", "Visit all 4 types of altars", VISITED_ALL_ALTARS)
 ACH("The Grand Tour", "Visit each high altar on the Astral Plane",
-    VISITED_HIGH_ALTARS),
+    VISITED_HIGH_ALTARS)
 ACH("All You Ever Wanted", "Get a wish from every wish source",
-    WISH_FROM_EVERYTHING),
+    WISH_FROM_EVERYTHING)
 ACH("Hyperliterate",
     "Read every readable item in the game (scroll, book, coin, T-shirt, apron, "
     "magic marker, candy bar, credit card, fortune cookie)",
-    READ_ALL_READABLE),
+    READ_ALL_READABLE)
 ACH("Bomb Squad", "Untrap all 8 types of traps that can be untrapped",
-    UNTRAPPED_ALL_TRAPS),
+    UNTRAPPED_ALL_TRAPS)
 ACH("Trap Expert", "Discover all 23 types of hazardous traps",
-    FOUND_ALL_TRAPS), /* doesn't count magic portal or vibrating square */
+    FOUND_ALL_TRAPS) /* doesn't count magic portal or vibrating square */
 ACH("Balanced Diet", "Eat one of each type of produce in one game",
-    ATE_ALL_PRODUCE),
-ACH("Smorgasbord", "Eat every type of food in the game", ATE_ALL_FOODS),
+    ATE_ALL_PRODUCE)
+ACH("Smorgasbord", "Eat every type of food in the game", ATE_ALL_FOODS)
 ACH("Extreme Omnivore",
     "Eat an object from every common, edible object class",
-    ATE_EVERY_OBJCLASS),
+    ATE_EVERY_OBJCLASS)
 ACH("Ultimate Polearm Geek",
     "Collect one of each of the 12 types of polearm",
-    COLLECTED_ALL_POLEARMS),
+    COLLECTED_ALL_POLEARMS)
 
 /* involving artifact gifts */
 ACH("Go Forth And Smite", "Receive an artifact gift from your deity",
-    GRANTED_ARTI),
+    GRANTED_ARTI)
 ACH("Too Little Too Late", "Get a sacrifice gift on the Astral Plane",
-    GIFT_ON_ASTRAL),
-ACH("Some Watery Tart", "Be gifted Excalibur", GOT_EXCALIBUR),
+    GIFT_ON_ASTRAL)
+ACH("Some Watery Tart", "Be gifted Excalibur", GOT_EXCALIBUR)
 
 /* involving eating */
-ACH("Superfood", "Gain strength by eating royal jelly", ATE_ROYAL_JELLY),
+ACH("Superfood", "Gain strength by eating royal jelly", ATE_ROYAL_JELLY)
 ACH("You Are What You Eat",
     "Gain an intrinsic by eating a corpse (or tin or glob)",
-    GOT_CORPSE_INTRINSIC),
+    GOT_CORPSE_INTRINSIC)
 ACH("Magivore", "Gain a magical intrinsic by eating a piece of jewelry",
-    INTRINSIC_FROM_JEWELRY),
-ACH("Stunning Flavor", "Get stunned by eating bat meat", STUNNED_BAT_MEAT),
+    INTRINSIC_FROM_JEWELRY)
+ACH("Stunning Flavor", "Get stunned by eating bat meat", STUNNED_BAT_MEAT)
 ACH("Wasn't A Meal, Wasn't Ready, And You Shouldn't Have Eaten It",
-    "Eat a military ration", ATE_MILITARY_RATION),
+    "Eat a military ration", ATE_MILITARY_RATION)
 ACH("Tastes Like Chicken", "Eat chickatrice or cockatrice meat",
-    TASTED_COCKATRICE),
-ACH("Heroes' Feast", "Eat at least 3 artifacts", ATE_3_ARTIFACTS),
+    TASTED_COCKATRICE)
+ACH("Heroes' Feast", "Eat at least 3 artifacts", ATE_3_ARTIFACTS)
 ACH("Buzzing With Energy", "Gain at least 5 max Pw by eating corpses or tins",
-    5_MAXPW_FROM_NEWTS),
+    5_MAXPW_FROM_NEWTS)
 ACH("Culinary Experience", "Gain a level by eating a tripe ration",
-    LEVEL_FROM_TRIPE),
+    LEVEL_FROM_TRIPE)
 ACH("Wafer-Thin Mint", "Eat a wraith corpse while already satiated",
-    SATIATED_ATE_WRAITH),
+    SATIATED_ATE_WRAITH)
 ACH("The Omelet Of Yendor",
     "While carrying 3 eggs, spinach, wolfsbane, garlic, eucalyptus, violet "
     "fungus, oil, and a dented pot, put on an apron and wield a knife",
-    OMELET_OF_YENDOR),
+    OMELET_OF_YENDOR)
 
 /* involving taming and pets */
-ACH("Pet Whisperer", "Tame a monster by feeding it", TAMED_BY_FOOD),
-ACH("Beast Master", "Tame a monster without using food", TAMED_NOT_BY_FOOD),
-ACH("Shifty", "Tame a shapeshifter in any way", TAMED_SHAPECHANGER),
-ACH("Cat Lady", "Tame seven \"f\" in the course of one game", TAMED_7_CATS),
+ACH("Pet Whisperer", "Tame a monster by feeding it", TAMED_BY_FOOD)
+ACH("Beast Master", "Tame a monster without using food", TAMED_NOT_BY_FOOD)
+ACH("Shifty", "Tame a shapeshifter in any way", TAMED_SHAPECHANGER)
+ACH("Cat Lady", "Tame seven \"f\" in the course of one game", TAMED_7_CATS)
 ACH("Monkey Business", "Tame a monkey or ape by giving it a banana",
-    BANANA_TAMED_Y),
+    BANANA_TAMED_Y)
 ACH("Best Friends Forever", "Take your starting pet to full adulthood",
-    FULLY_RAISED_PET),
+    FULLY_RAISED_PET)
 ACH("Pet Rescue", "Free a pet from a trap that you didn't create yourself",
-    UNTRAPPED_PET),
+    UNTRAPPED_PET)
 ACH("Distinction Without a Difference", "Polymorph a pet using a polytrap",
-    POLYED_PET_ON_TRAP),
+    POLYED_PET_ON_TRAP)
 ACH("Tenacious Companion",
     "Have a pet survive all the way to the Astral Plane that you brought into the Plane of Earth",
-    PET_THROUGH_PLANES),
-ACH("Apocalyptic Horseplay", "Tame a Rider", TAMED_RIDER),
+    PET_THROUGH_PLANES)
+ACH("Apocalyptic Horseplay", "Tame a Rider", TAMED_RIDER)
 
 /* involving bones */
 ACH("Those Who Came Before", "Sight another player's bones pile",
-    FOUND_BONES_PILE),
+    FOUND_BONES_PILE)
 ACH("Imitation Bones", "Step onto the Rogue level fake bones pile",
-    FOUND_ROGUE_BONES_PILE),
+    FOUND_ROGUE_BONES_PILE)
 ACH("Recorporealized", "Draw the ghost of a former hero back into its body",
-    RECORPOREALIZED_GHOST),
+    RECORPOREALIZED_GHOST)
 ACH("Double Bones", "Encounter two bones piles on a single level",
-    DOUBLE_BONES),
+    DOUBLE_BONES)
 ACH("Mr. Bones' Wild Ride",
     "Find the bones of four former heroes in one game",
-    FOUND_FOUR_BONES),
+    FOUND_FOUR_BONES)
 
 /* involving tins */
-ACH("Civilized Cooking", "Open a tin with a tin opener", OPENED_TIN_PROPERLY),
-ACH("Exotic Meat", "Tin a unique monster", TINNED_UNIQUE_MON),
-ACH("Tinned Out", "Use up a tinning kit", USED_UP_TINNING_KIT),
+ACH("Civilized Cooking", "Open a tin with a tin opener", OPENED_TIN_PROPERLY)
+ACH("Exotic Meat", "Tin a unique monster", TINNED_UNIQUE_MON)
+ACH("Tinned Out", "Use up a tinning kit", USED_UP_TINNING_KIT)
 
 /* involving resurrection */
 ACH("Reincarnation Cancelled",
     "Feel \"less hassled\" after blocking a troll's revival attempt",
-    BLOCKED_TROLL_REVIVAL),
-ACH("Well... Bye", "Prevent a Rider from resurrecting", PERMAKILLED_RIDER),
-ACH("Only Mostly Dead", "Resurrect a corpse", REVIVIFIED_CORPSE),
+    BLOCKED_TROLL_REVIVAL)
+ACH("Well... Bye", "Prevent a Rider from resurrecting", PERMAKILLED_RIDER)
+ACH("Only Mostly Dead", "Resurrect a corpse", REVIVIFIED_CORPSE)
 ACH("Necromancer", "Resurrect a fallen pet and have it return tame",
-    RESURRECTED_PET_TAME),
-ACH("Asudem", "Revive Perseus", REVIVED_PERSEUS),
+    RESURRECTED_PET_TAME)
+ACH("Asudem", "Revive Perseus", REVIVED_PERSEUS)
 ACH("So Thou Thought Thou Couldst Resurrect Me",
-    "Resurrect the Wizard of Yendor's corpse", RESURRECTED_WIZARD),
-ACH("Insert Quarter To Continue", "Get life-saved", GOT_LIFESAVED),
+    "Resurrect the Wizard of Yendor's corpse", RESURRECTED_WIZARD)
+ACH("Insert Quarter To Continue", "Get life-saved", GOT_LIFESAVED)
 
 /* involving shops */
-ACH("Always Talk To The Wise Old Man", "Chat with Izchak", CHATTED_IZCHAK),
-ACH("Dungeon Economics", "Buy or sell something at a shop", PURCHASED),
+ACH("Always Talk To The Wise Old Man", "Chat with Izchak", CHATTED_IZCHAK)
+ACH("Dungeon Economics", "Buy or sell something at a shop", PURCHASED)
 ACH("Conspicuous Consumption", "Buy an unidentified gem from a shop",
-    BOUGHT_UNID_GEM),
+    BOUGHT_UNID_GEM)
 ACH("The Art Of The Deal", "Bankrupt a shopkeeper by getting all their money",
-    BANKRUPTED_SHOPKEEPER),
-ACH("Stop, Thief!", "Be chased by the Keystone Kops", ROBBED_SHOP),
+    BANKRUPTED_SHOPKEEPER)
+ACH("Stop, Thief!", "Be chased by the Keystone Kops", ROBBED_SHOP)
 ACH("The Last Chance Outpost", "Visit a shop at or below level 20",
-    VISITED_DEEP_SHOP),
+    VISITED_DEEP_SHOP)
 ACH("If We Don't Have It, You Don't Need It", "Visit a general store",
-    ENTERED_GENERAL_STORE),
-ACH("Food Glorious Food", "Visit a delicatessen", ENTERED_DELICATESSEN),
-ACH("Single-Use Reading Material", "Visit a scroll shop", ENTERED_SCROLL_SHOP),
-ACH("Nearest Thing To A Library", "Visit a book shop", ENTERED_BOOK_SHOP),
-ACH("What's Your Poison?", "Visit a potion shop", ENTERED_POTION_SHOP),
-ACH("He Protec", "Visit an armor shop", ENTERED_ARMOR_SHOP),
-ACH("But He Also Attac", "Visit a weapon shop", ENTERED_WEAPON_SHOP),
-ACH("The Right Tool For The Job", "Visit a tool shop", ENTERED_TOOL_SHOP),
-ACH("Vegan Outfitters", "Visit a health food shop", ENTERED_HEALTH_FOOD_SHOP),
-ACH("Zap Happy", "Visit a wand shop", ENTERED_WAND_SHOP),
-ACH("A Real Gem Of A Shop", "Visit a jewelry shop", ENTERED_JEWELRY_SHOP),
+    ENTERED_GENERAL_STORE)
+ACH("Food Glorious Food", "Visit a delicatessen", ENTERED_DELICATESSEN)
+ACH("Single-Use Reading Material", "Visit a scroll shop", ENTERED_SCROLL_SHOP)
+ACH("Nearest Thing To A Library", "Visit a book shop", ENTERED_BOOK_SHOP)
+ACH("What's Your Poison?", "Visit a potion shop", ENTERED_POTION_SHOP)
+ACH("He Protec", "Visit an armor shop", ENTERED_ARMOR_SHOP)
+ACH("But He Also Attac", "Visit a weapon shop", ENTERED_WEAPON_SHOP)
+ACH("The Right Tool For The Job", "Visit a tool shop", ENTERED_TOOL_SHOP)
+ACH("Vegan Outfitters", "Visit a health food shop", ENTERED_HEALTH_FOOD_SHOP)
+ACH("Zap Happy", "Visit a wand shop", ENTERED_WAND_SHOP)
+ACH("A Real Gem Of A Shop", "Visit a jewelry shop", ENTERED_JEWELRY_SHOP)
 
 /* involving bribing */
 ACH("Money Talks", "Bribe a demon lord with at least 25000 gold",
-    BRIBED_DEMON_LORD),
+    BRIBED_DEMON_LORD)
 ACH("The Negotiator", "Successfully bribe a demon lord with 1 zorkmid",
-    BRIBED_WITH_1),
-ACH("Look The Other Way", "Successfully bribe a mercenary", BRIBED_MERC),
+    BRIBED_WITH_1)
+ACH("Look The Other Way", "Successfully bribe a mercenary", BRIBED_MERC)
 
 /* involving monsters doing things to you */
-ACH("A Little Light Larceny", "Get robbed by a nymph", ROBBED_BY_NYMPH),
+ACH("A Little Light Larceny", "Get robbed by a nymph", ROBBED_BY_NYMPH)
 ACH("Pot Of Greed", "Have your purse lightened by a leprechaun",
-    ROBBED_BY_LEPRECHAUN),
-ACH("The Birds And The Bees", "Dally with a foocubus", ENCOUNTERED_FOOCUBUS),
+    ROBBED_BY_LEPRECHAUN)
+ACH("The Birds And The Bees", "Dally with a foocubus", ENCOUNTERED_FOOCUBUS)
 ACH("Hello, Nurse!", "Get a nurse to heal you or raise your max HP",
-    HEALED_BY_NURSE),
-ACH("Tin Foil Hat", "Dodge a brainsucking attack", EVADED_BRAINSUCK),
-ACH("Who You Gonna Call?", "Get scared by a ghost", SCARED_BY_GHOST),
+    HEALED_BY_NURSE)
+ACH("Tin Foil Hat", "Dodge a brainsucking attack", EVADED_BRAINSUCK)
+ACH("Who You Gonna Call?", "Get scared by a ghost", SCARED_BY_GHOST)
 ACH("Heisenberg", "Become uncertain about your position or velocity",
-    HEISENBERG),
-ACH("Yoink!", "Have the Amulet of Yendor stolen from you", AMULET_WAS_STOLEN),
+    HEISENBERG)
+ACH("Yoink!", "Have the Amulet of Yendor stolen from you", AMULET_WAS_STOLEN)
 
 /* involving gods and religion */
-ACH("Indulgences", "Buy protection from a priest", BOUGHT_PROTECTION),
-ACH("Orthodoxy", "Convert an altar", CONVERTED_ALTAR),
+ACH("Indulgences", "Buy protection from a priest", BOUGHT_PROTECTION)
+ACH("Orthodoxy", "Convert an altar", CONVERTED_ALTAR)
 ACH("Potions Of Booze Cost More Than That",
-    "Get two bits for an ale from a priest", GOT_TWO_BITS),
+    "Get two bits for an ale from a priest", GOT_TWO_BITS)
 ACH("Fumata Bianca", "Get a priest to grow up into a high priest",
-    MON_GREW_TO_HIPRIEST),
-ACH("Get Flashed", "Learn an item's beatitude from an altar", BUC_FROM_ALTAR),
+    MON_GREW_TO_HIPRIEST)
+ACH("Get Flashed", "Learn an item's beatitude from an altar", BUC_FROM_ALTAR)
 
 /* involving doing something notable without backtracking
  *
@@ -517,265 +525,265 @@ ACH("Get Flashed", "Learn an item's beatitude from an altar", BUC_FROM_ALTAR),
  * Wizard's Tower. */
 ACH("Iron Miner",
     "Obtain the luckstone from Mines' End without backtracking to previous levels",
-    GOT_LUCKSTONE_WITHOUT_BACKTRACKING),
+    GOT_LUCKSTONE_WITHOUT_BACKTRACKING)
 ACH("Soko In One Go",
     "Complete Sokoban without backtracking after first entering it",
-    COMPLETED_SOKOBAN_WITHOUT_BACKTRACKING),
+    COMPLETED_SOKOBAN_WITHOUT_BACKTRACKING)
 ACH("Gold Rush",
     "Enter the Fort Ludios vault on your first visit to the level",
-    COMPLETED_LUDIOS_WITHOUT_BACKTRACKING),
+    COMPLETED_LUDIOS_WITHOUT_BACKTRACKING)
 ACH("The Long Road Through Hell",
     "Go from the Valley to the Vibrating Square without backtracking, using only downstairs",
-    DESCENDED_GEHENNOM_WITHOUT_BACKTRACKING),
+    DESCENDED_GEHENNOM_WITHOUT_BACKTRACKING)
 
 /* unsorted */
-ACH("The Royal Treatment", "Sit on a throne", USED_THRONE),
-ACH("It'll Turn Up Later", "Drop a ring in a sink", DROPPED_RING_IN_SINK),
-ACH("Isaac Newton", "Get fruit by kicking a tree", KICKED_FRUIT_TREE),
-ACH("Not The Bees", "Get bees by kicking a tree", GOT_BEES_FROM_TREE),
-ACH("Wash It Clean", "Uncurse an item in a fountain", UNCURSED_IN_FOUNTAIN),
-ACH("Well-Read", "Learn a level 5+ spell", LEARNED_LV5_SPELL),
-ACH("Hand Crafted", "Make a dragon scale mail", CREATED_DSM),
+ACH("The Royal Treatment", "Sit on a throne", USED_THRONE)
+ACH("It'll Turn Up Later", "Drop a ring in a sink", DROPPED_RING_IN_SINK)
+ACH("Isaac Newton", "Get fruit by kicking a tree", KICKED_FRUIT_TREE)
+ACH("Not The Bees", "Get bees by kicking a tree", GOT_BEES_FROM_TREE)
+ACH("Wash It Clean", "Uncurse an item in a fountain", UNCURSED_IN_FOUNTAIN)
+ACH("Well-Read", "Learn a level 5+ spell", LEARNED_LV5_SPELL)
+ACH("Hand Crafted", "Make a dragon scale mail", CREATED_DSM)
 ACH("The Most Dangerous Game", "Catch a monster in a trap set by you",
-    TRAPPED_MONSTER),
+    TRAPPED_MONSTER)
 ACH("Foobear", "Catch a bearish monster in a bear trap you set",
-    TRAPPED_BEAR_IN_BEAR_TRAP),
-ACH("Liberated", "Get yourself unpunished", GOT_UNPUNISHED),
+    TRAPPED_BEAR_IN_BEAR_TRAP)
+ACH("Liberated", "Get yourself unpunished", GOT_UNPUNISHED)
 ACH("It's Called That For A Reason",
-    "Come to earth by levitating over a sink", FELL_ONTO_SINK),
-ACH("Scribe", "Write a scroll with a magic marker", WROTE_SCROLL),
-ACH("First Edition", "Write a spellbook", WROTE_SPELLBOOK),
+    "Come to earth by levitating over a sink", FELL_ONTO_SINK)
+ACH("Scribe", "Write a scroll with a magic marker", WROTE_SCROLL)
+ACH("First Edition", "Write a spellbook", WROTE_SPELLBOOK)
 ACH("Scientia Ex Nihilo", "Successfully write an unknown scroll or book",
-    WROTE_UNKNOWN_SCROLL_OR_BOOK),
-ACH("Dragon Rider", "Ride a dragon", RODE_DRAGON),
-ACH("Shimmer", "Erosionproof an item", ERODEPROOFED_ITEM),
-ACH("They Like Shiny Things", "Throw a gem at a unicorn", THREW_UNICORN_GEM),
-ACH("Buried Treasure", "Dig up a grave not in a graveyard", DUG_UP_GRAVE),
-ACH("Movers And Shakers", "Cause an earthquake", CAUSED_EARTHQUAKE),
-ACH("Snake Charmer", "Pacify a snake with a flute", CHARMED_SNAKE),
+    WROTE_UNKNOWN_SCROLL_OR_BOOK)
+ACH("Dragon Rider", "Ride a dragon", RODE_DRAGON)
+ACH("Shimmer", "Erosionproof an item", ERODEPROOFED_ITEM)
+ACH("They Like Shiny Things", "Throw a gem at a unicorn", THREW_UNICORN_GEM)
+ACH("Buried Treasure", "Dig up a grave not in a graveyard", DUG_UP_GRAVE)
+ACH("Movers And Shakers", "Cause an earthquake", CAUSED_EARTHQUAKE)
+ACH("Snake Charmer", "Pacify a snake with a flute", CHARMED_SNAKE)
 ACH("Androcles' Lion", "Pacify a monster by freeing it from a trap",
-    PACIFIED_BY_UNTRAPPING),
+    PACIFIED_BY_UNTRAPPING)
 ACH("All Just A Misunderstanding", "Pacify an angry shopkeeper",
-    PACIFIED_SHOPKEEPER),
+    PACIFIED_SHOPKEEPER)
 ACH("Please Stop Overreacting", "Pacify your angry quest leader",
-    PACIFIED_QUEST_LEADER),
+    PACIFIED_QUEST_LEADER)
 ACH("Right Back At Ya",
     "Hit an enemy with an indirect strike from a thrown boomerang",
-    HIT_WITH_BOOMERANG),
+    HIT_WITH_BOOMERANG)
 ACH("It Burnsss", "Deal silver damage to a silver-hating monster",
-    DEALT_SILVER_DAMAGE),
-ACH("Arrakis", "Make a crysknife", MADE_CRYSKNIFE),
+    DEALT_SILVER_DAMAGE)
+ACH("Arrakis", "Make a crysknife", MADE_CRYSKNIFE)
 ACH("Obligatory Pointy Hat", "Put on a cornuthaum as a wizard",
-    WIZ_WORE_CORNUTHAUM),
-ACH("Hobbit Skin", "Wear a mithril coat", WORE_MITHRIL_COAT),
-ACH("The Words Of The Prophets", "Read 3 random graffiti", FOUND_3_GRAFFITI),
-ACH("Are You Still Pudding Farming", "Split a pudding", SPLIT_A_PUDDING),
+    WIZ_WORE_CORNUTHAUM)
+ACH("Hobbit Skin", "Wear a mithril coat", WORE_MITHRIL_COAT)
+ACH("The Words Of The Prophets", "Read 3 random graffiti", FOUND_3_GRAFFITI)
+ACH("Are You Still Pudding Farming", "Split a pudding", SPLIT_A_PUDDING)
 ACH("Yes I Am Still Pudding Farming",
-    "Split enough puddings to coalesce a large glob", MADE_LARGE_GLOB),
-ACH("Wearable Snack", "Wear a meat ring", WORE_MEAT_RING),
-ACH("Frozen Treats", "Loot an ice box", LOOTED_ICE_BOX),
+    "Split enough puddings to coalesce a large glob", MADE_LARGE_GLOB)
+ACH("Wearable Snack", "Wear a meat ring", WORE_MEAT_RING)
+ACH("Frozen Treats", "Loot an ice box", LOOTED_ICE_BOX)
 ACH("Six Pack", "Stock an ice box with 6 or more potions of booze",
-    STOCKED_SIX_PACK),
-ACH("Pygmalion", "Create a monster from a figurine", ANIMATED_FIGURINE),
-ACH("Nerd", "Read a spellbook while wearing lenses and a T-shirt", NERD),
-ACH("Recharged", "Charge an object", CHARGED_AN_OBJECT),
+    STOCKED_SIX_PACK)
+ACH("Pygmalion", "Create a monster from a figurine", ANIMATED_FIGURINE)
+ACH("Nerd", "Read a spellbook while wearing lenses and a T-shirt", NERD)
+ACH("Recharged", "Charge an object", CHARGED_AN_OBJECT)
 ACH("Get Your Kicks", "Kick an item embedded in a wall or rock",
-    KICKED_EMBEDDED_ITEM),
-ACH("Spiderman", "Grab an item with a grappling hook", SNAGGED_WITH_HOOK),
+    KICKED_EMBEDDED_ITEM)
+ACH("Spiderman", "Grab an item with a grappling hook", SNAGGED_WITH_HOOK)
 ACH("More Light",
     "Refill the Candelabrum after it burns out after the Invocation",
-    REFILLED_CANDELABRUM),
+    REFILLED_CANDELABRUM)
 ACH("Fill 'Er Up", "Fill an oil lamp with a potion of oil",
-    REFILLED_OIL_LAMP),
+    REFILLED_OIL_LAMP)
 ACH("Chemistry 101", "Alchemize two potions in an established recipe",
-    ALCHEMIZED),
+    ALCHEMIZED)
 ACH("Near Death Experience",
-    "Chat with Death while carrying a Terry Pratchett novel", TALKED_TO_DEATH),
+    "Chat with Death while carrying a Terry Pratchett novel", TALKED_TO_DEATH)
 ACH("Prize Inside!",
     "Get a spellbook by breaking a naturally-generated statue",
-    GOT_SPBOOK_FROM_STATUE),
-ACH("Ding-A-Ling", "Summon a nymph by ringing a cursed bell", SUMMONED_NYMPH),
+    GOT_SPBOOK_FROM_STATUE)
+ACH("Ding-A-Ling", "Summon a nymph by ringing a cursed bell", SUMMONED_NYMPH)
 ACH("Diver Down",
     "Dive into a moat or pool and retrieve an item from the bottom",
-    GOT_OBJECT_UNDERWATER),
-ACH("Infinity Pool", "Go swimming on the Plane of Water", SWAM_ON_WATER_PLANE),
+    GOT_OBJECT_UNDERWATER)
+ACH("Infinity Pool", "Go swimming on the Plane of Water", SWAM_ON_WATER_PLANE)
 ACH("Ceiling Clinging Commute", "Ride a wumpus over water",
-    RODE_WUMPUS_OVER_WATER),
+    RODE_WUMPUS_OVER_WATER)
 ACH("Collapse The Wavefunction", "Open the box containing Schroedinger's Cat",
-    OPENED_SCHROEDINGERS),
-ACH("I'm Free! I'm Free!", "Free a prisoner", FREED_PRISONER),
-ACH("Spam, Spam, Spam", "Read a scroll of mail", READ_MAIL),
-ACH("Gender Swap", "Put on an amulet of change", CHANGED_GENDER),
-ACH("Gender Bender", "Change gender two or more times", MULTI_GENDER_FLIP),
-ACH("Motherhood", "Lay an egg", LAID_EGG),
+    OPENED_SCHROEDINGERS)
+ACH("I'm Free! I'm Free!", "Free a prisoner", FREED_PRISONER)
+ACH("Spam, Spam, Spam", "Read a scroll of mail", READ_MAIL)
+ACH("Gender Swap", "Put on an amulet of change", CHANGED_GENDER)
+ACH("Gender Bender", "Change gender two or more times", MULTI_GENDER_FLIP)
+ACH("Motherhood", "Lay an egg", LAID_EGG)
 ACH("Father Figure", "Hatch an egg not laid by you and have it come out tame",
-    HATCHED_FOREIGN_EGG),
-ACH("Shafted", "Fall down a shaft", FELL_DOWN_SHAFT),
-ACH("Horatius At The Bridge", "Make soldiers extinct", EXTINCTED_ARMY),
+    HATCHED_FOREIGN_EGG)
+ACH("Shafted", "Fall down a shaft", FELL_DOWN_SHAFT)
+ACH("Horatius At The Bridge", "Make soldiers extinct", EXTINCTED_ARMY)
 ACH("Who's That Pretty Girl In The Mirror, There?",
-    "Deflect a nymph with a mirror", DEFLECTED_NYMPH),
+    "Deflect a nymph with a mirror", DEFLECTED_NYMPH)
 ACH("Under New Management", "Change your alignment by any means",
-    CHANGED_ALIGNMENT),
-ACH("Tainted", "Dip an item in unholy water", DIPPED_IN_UNHOLY),
-ACH("Hydrochloric", "Dissolve iron bars with acid", DISSOLVED_IRONBARS),
+    CHANGED_ALIGNMENT)
+ACH("Tainted", "Dip an item in unholy water", DIPPED_IN_UNHOLY)
+ACH("Hydrochloric", "Dissolve iron bars with acid", DISSOLVED_IRONBARS)
 ACH("Predictably, Nothing Happens", "Break an identified wand of nothing",
-    BROKE_WAN_NOTHING),
+    BROKE_WAN_NOTHING)
 ACH("Wanton Waste",
     "Break an identified wand of wishing with at least 1 charge",
-    BROKE_WAND_WISHING),
-ACH("Neutralized", "Cancel a monster", CANCELED_MONSTER),
+    BROKE_WAND_WISHING)
+ACH("Neutralized", "Cancel a monster", CANCELED_MONSTER)
 ACH("Panacea", "Neutralize a harmful potion with a unicorn horn",
-    NEUTRALIZED_POTION),
+    NEUTRALIZED_POTION)
 ACH("Croesus Competitor",
     "Carry at least 50000 gold at any one time",
-    CARRIED_50000_GOLD),
+    CARRIED_50000_GOLD)
 ACH("Croesus Buyout",
     "Carry at least 100000 gold at any one time",
-    CARRIED_100000_GOLD),
-ACH("Palantir", "Successfully apply a crystal ball", APPLIED_CRYSTAL_BALL),
+    CARRIED_100000_GOLD)
+ACH("Palantir", "Successfully apply a crystal ball", APPLIED_CRYSTAL_BALL)
 ACH("Peak Condition", "Raise all attributes to at least 18",
-    MAXED_ATTRIBUTES),
-ACH("Replacement Goldfish", "Cast create familiar", CREATED_FAMILIAR),
+    MAXED_ATTRIBUTES)
+ACH("Replacement Goldfish", "Cast create familiar", CREATED_FAMILIAR)
 ACH("Pop The Question", "Give a ring of adornment when seduced by a succubus",
-    GAVE_ADORNMENT),
+    GAVE_ADORNMENT)
 ACH("No Soup For You!", "Get permanently expelled from the Quest",
-    EXPELLED_FROM_QUEST),
-ACH("Discerning Palate", "Gain intrinsic food appraisal", GOT_FOOD_APPRAISAL),
+    EXPELLED_FROM_QUEST)
+ACH("Discerning Palate", "Gain intrinsic food appraisal", GOT_FOOD_APPRAISAL)
 ACH("Banishing Spells Not Included", "Summon a demon lord",
-    SUMMONED_DEMON_LORD),
+    SUMMONED_DEMON_LORD)
 ACH("Dust To Dust", "Wrest one last charge from a wand of wishing",
-    WRESTED_WOW),
+    WRESTED_WOW)
 ACH("Teetotaler", "Neutralize a potion of booze with an amethyst",
-    AMETHYST_BOOZE),
+    AMETHYST_BOOZE)
 ACH("Spooky Scary Skeletons", "Get scared by the rattling of a skeleton",
-    SCARED_OF_SKELETON),
+    SCARED_OF_SKELETON)
 ACH("Gullible", "Get out of trouble by successfully lying to a vault guard",
-    LIED_TO_GUARD),
-ACH("Luck Of The Grasshopper", "Reach +13 Luck", GOT_13_LUCK),
-ACH("Murphy's Law", "Reach -13 Luck", GOT_NEGATIVE_13_LUCK),
-ACH("Looking Slick", "Grease a piece of armor", GREASED_ARMOR),
+    LIED_TO_GUARD)
+ACH("Luck Of The Grasshopper", "Reach +13 Luck", GOT_13_LUCK)
+ACH("Murphy's Law", "Reach -13 Luck", GOT_NEGATIVE_13_LUCK)
+ACH("Looking Slick", "Grease a piece of armor", GREASED_ARMOR)
 /* Deathly Hallows additionally requires all items to be identified (to prevent
  * leaking the identity of a wand/cloak/amulet when you don't have some of the
  * items identified and trying random combinations until you do have the
- * achievement), but noting this in the description would make it too long. */
+ * achievement) but noting this in the description would make it too long. */
 ACH("The Deathly Hallows",
     "Wield a wand of death while wearing an invisibility cloak and amulet of life saving",
-    DEATHLY_HALLOWS),
-ACH("Indiana Jones", "Disarm a monster with a bullwhip", DISARMED_WITH_WHIP),
+    DEATHLY_HALLOWS)
+ACH("Indiana Jones", "Disarm a monster with a bullwhip", DISARMED_WITH_WHIP)
 ACH("Minesweeper",
     "Disarm all Fort Ludios land mines without triggering any after entering the vault",
-    DISARMED_LUDIOS_MINES),
-ACH("007", "Unlock something with a credit card", UNLOCKED_CREDIT_CARD),
+    DISARMED_LUDIOS_MINES)
+ACH("007", "Unlock something with a credit card", UNLOCKED_CREDIT_CARD)
 ACH("Bob Ross", "Release a picture-painting demon from a camera",
-    RELEASED_CAMERA_DEMON),
-ACH("Got No Talent", "Scare something by playing music", SCARED_WITH_MUSIC),
+    RELEASED_CAMERA_DEMON)
+ACH("Got No Talent", "Scare something by playing music", SCARED_WITH_MUSIC)
 ACH("Cookie Monster", "Read a fortune without eating its cookie",
-    READ_FORTUNE_FOODLESS),
+    READ_FORTUNE_FOODLESS)
 ACH("Say Hello To My Evil Friend",
     "Have a non-guaranteed demon lord gated in or summoned",
-    GATED_IN_DEMON_LORD),
+    GATED_IN_DEMON_LORD)
 ACH("Boss Rush",
     "Get every demon lord and prince active and hostile on the same level at the same time",
-    FACED_ALL_DEMON_LORDS_AT_ONCE),
-ACH("Make Your Mark", "Engrave with an athame", ENGRAVED_WITH_ATHAME),
+    FACED_ALL_DEMON_LORDS_AT_ONCE)
+ACH("Make Your Mark", "Engrave with an athame", ENGRAVED_WITH_ATHAME)
 ACH("One Hit KO",
     "Deal a monster its maximum HP or more of damage (minimum 20)",
-    ONE_HIT_KO),
+    ONE_HIT_KO)
 ACH("Drink It To The Next Level", "Level up by drinking from a sink",
-    LEVELED_UP_FROM_SINK),
+    LEVELED_UP_FROM_SINK)
 ACH("You're About To Die, You Scrub",
     "Get a special message saying you're about to die, you scrub",
-    ABOUT_TO_DIE),
+    ABOUT_TO_DIE)
 ACH("Extinctionist Lite", "Perform genocide 5 or more times",
-    GENOCIDED_5_TIMES),
-ACH("Dudley's Hero", "Make newts extinct", EXTINCTED_NEWTS),
-ACH("Ice Jesus", "Walk on top of lava unharmed", WALKED_ON_LAVA),
+    GENOCIDED_5_TIMES)
+ACH("Dudley's Hero", "Make newts extinct", EXTINCTED_NEWTS)
+ACH("Ice Jesus", "Walk on top of lava unharmed", WALKED_ON_LAVA)
 ACH("Rare Loot",
     "Acquire an athame that was generated in the inventory of a lich",
-    GOT_LICH_ATHAME),
+    GOT_LICH_ATHAME)
 ACH("Boy Scout",
     "Complete Sokoban without incurring any penalties for rule-breaking",
-    COMPLETED_PURE_SOKOBAN),
+    COMPLETED_PURE_SOKOBAN)
 ACH("Love The Boulder, Hate The Gnome",
     "Complete Sokoban without ever having entered the Gnomish Mines",
-    COMPLETED_SOKOBAN_IGNORING_MINES),
+    COMPLETED_SOKOBAN_IGNORING_MINES)
 ACH("Sounds Hollow", "Reveal a secret door with a stethoscope",
-    STETHOSCOPED_SDOOR),
-ACH("Unorthodox Exit", "Reach the Planes via quaffing", PLANES_VIA_QUAFFING),
-ACH("Paddling Pool", "Create pools from a fountain", WATER_GUSH_FORTH),
-ACH("Practical Joke", "Have a tin blow up in your face", BOOBY_TRAPPED_TIN),
+    STETHOSCOPED_SDOOR)
+ACH("Unorthodox Exit", "Reach the Planes via quaffing", PLANES_VIA_QUAFFING)
+ACH("Paddling Pool", "Create pools from a fountain", WATER_GUSH_FORTH)
+ACH("Practical Joke", "Have a tin blow up in your face", BOOBY_TRAPPED_TIN)
 ACH("Amon Hen",
     "Get either of the two \"vision\" effects from sitting on a throne",
-    VISION_FROM_THRONE),
-ACH("Detonator", "Explode a large box or chest", EXPLODED_LARGE_BOX),
+    VISION_FROM_THRONE)
+ACH("Detonator", "Explode a large box or chest", EXPLODED_LARGE_BOX)
 ACH("Lightbringer", "Light up at least 20 dark rooms in the Dungeons of Doom",
-    LIT_20_ROOMS),
+    LIT_20_ROOMS)
 ACH("Cosmic Bungee Cord",
     "Get sent back a total of 15 or more levels by the mysterious force",
-    MFORCE_15_LEVELS),
-ACH("No Rulez", "Remove all watchmen from Minetown", GOT_RID_OF_WATCH),
-ACH("Bag End", "Blow up a bag of holding", BLEW_UP_BOH),
+    MFORCE_15_LEVELS)
+ACH("No Rulez", "Remove all watchmen from Minetown", GOT_RID_OF_WATCH)
+ACH("Bag End", "Blow up a bag of holding", BLEW_UP_BOH)
 ACH("Packing Light",
     "Successfully store a bag of holding inside another bag of holding",
-    NESTED_BOH),
+    NESTED_BOH)
 ACH("Shoo Off", "Make a monster of difficulty 5 or more escape the dungeon",
-    MAKE_MON_ESCAPE),
+    MAKE_MON_ESCAPE)
 ACH("What Have I Unleashed", "Make a demon lord escape the dungeon",
-    MAKE_DLORD_ESCAPE),
-ACH("Walking Bullseye", "Have +30 AC", GOT_30_AC),
-ACH("Tanking It", "Have -50 AC", GOT_MINUS_50_AC),
+    MAKE_DLORD_ESCAPE)
+ACH("Walking Bullseye", "Have +30 AC", GOT_30_AC)
+ACH("Tanking It", "Have -50 AC", GOT_MINUS_50_AC)
 ACH("Dude, How Are You Losing To A Door?",
     "Have a door resist 8 consecutive times when trying to open or close it",
-    DOOR_RESIST_8X),
+    DOOR_RESIST_8X)
 ACH("Practically Permanent",
-    "Have more than 10,000 turns of a temporary intrinsic", LONG_TIMEOUT),
+    "Have more than 10,000 turns of a temporary intrinsic", LONG_TIMEOUT)
 ACH("This One Goes To +8", "Successfully enchant a weapon to +8 or higher",
-    ENCHANT_WEP_TO_8),
+    ENCHANT_WEP_TO_8)
 ACH("Glowy Blue Upgrade",
-    "Successfully increase the enchantment on your weapon", ENCHANT_WEAPON),
+    "Successfully increase the enchantment on your weapon", ENCHANT_WEAPON)
 ACH("Blasters' Handbook", "Blow up a boulder with a land mine",
-    BLEW_UP_BOULDER),
-ACH("Loew Life", "Create a golem from a pile of objects", POLY_MADE_GOLEM),
+    BLEW_UP_BOULDER)
+ACH("Loew Life", "Create a golem from a pile of objects", POLY_MADE_GOLEM)
 ACH("Never Tell Me The Odds",
     "Successfully cast a spell with a failure rate of 95% or greater",
-    CAST_LOCHANCE_SPELL),
-ACH("Archmage", "Successfully cast a level 7 spell", CAST_LV7_SPELL),
+    CAST_LOCHANCE_SPELL)
+ACH("Archmage", "Successfully cast a level 7 spell", CAST_LV7_SPELL)
 ACH("Leeroy Jenkins", "Cross the Castle drawbridge threshold within 30 turns"
-    " of entering the level for the first time", ENTERED_CASTLE_QUICKLY),
-ACH("Chocoban", "Acquire a candy bar generated in Sokoban", GOT_SOKO_CANDY),
+    " of entering the level for the first time", ENTERED_CASTLE_QUICKLY)
+ACH("Chocoban", "Acquire a candy bar generated in Sokoban", GOT_SOKO_CANDY)
 ACH("Thirst For Punishment", "Drink all harmful types of potion (conf, blind,"
     " paral, hallu, sleep, booze, sick, acid)",
-    DRANK_HARMFUL_POTS),
+    DRANK_HARMFUL_POTS)
 ACH("The Full Elven",
     "Deck yourself out in 5 pieces of +7 elven armor, then wield a +7 elven weapon",
-    EQUIPPED_ALL_ELVEN_GEAR),
+    EQUIPPED_ALL_ELVEN_GEAR)
 ACH("Drained And Regained",
     "Restore at least 3 lost levels with a single potion",
-    RESTORED_3_LEVELS),
+    RESTORED_3_LEVELS)
 ACH("Vlad Was Here", "Find a Vlad trapdoor without triggering it",
-    FOUND_VLAD_TRAPDOOR),
+    FOUND_VLAD_TRAPDOOR)
 ACH("Three-Rail Shot",
     "Hit a monster with a diagonal ray that bounced at least 3 times",
-    HIT_WITH_3_BOUNCES),
+    HIT_WITH_3_BOUNCES)
 ACH("Tis But A Scratch", "Lose 100 HP in one turn while not wearing life saving",
-    LOST_100_HP),
+    LOST_100_HP)
 ACH("Plane Sailing",
     "Exit each Elemental Plane within 100 turns of entering it",
-    SPEEDRAN_PLANES),
+    SPEEDRAN_PLANES)
 ACH("The Great Heist", "Plunder 5 vaults in the Dungeons of Doom",
-    ENTERED_5_VAULTS),
-ACH("In Your Face!", "Blind a monster by pieing it", BLINDED_MONSTER_WITH_PIE),
+    ENTERED_5_VAULTS)
+ACH("In Your Face!", "Blind a monster by pieing it", BLINDED_MONSTER_WITH_PIE)
 ACH("Inverse Genie", "Summon three djinni who do not grant a wish",
-    GOT_3_NON_WISH_DJINNI),
+    GOT_3_NON_WISH_DJINNI)
 ACH("DeathOnAStick Protege", "Polymorph a rock into a valuable gem",
-    POLYED_ROCK_INTO_GEM),
+    POLYED_ROCK_INTO_GEM)
 ACH("Potion Roulette",
     "Drink an unidentified extra/full healing potion while below 10% HP",
-    DRANK_UNID_HEALING_POTION),
+    DRANK_UNID_HEALING_POTION)
 ACH("An Embarrassment of Wishes", "Get offered a wish at least 10 times",
-    GOT_10_WISHES),
+    GOT_10_WISHES)
 ACH("Speed Achiever", "Get 100 achievements in the first 10000 turns",
-    GOT_100_ACHIEVEMENTS_IN_10K_TURNS),
+    GOT_100_ACHIEVEMENTS_IN_10K_TURNS)
 
 /* 53 free bits in tnntachieve6
  * 395 achievements defined
