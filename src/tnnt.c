@@ -2434,19 +2434,22 @@ tnnt_achieve(short achvmt)
 
     tnnt_globals.achievement_bitmap[(achvmt) / 64] |= 1UL << ((achvmt) % 64);
 
-    /* supersedes earned-in-previous-game status; we no longer care that it was
-     * earned in a previous game */
-    tnnt_globals.ach_status[achvmt].status = ACH_EARNED_THIS_GAME;
-
     /* mark for deferred notification, though only if flags.notify_achievements
      * is set. If it's off, this flag will never get set for this achievement
      * and it will never be announced, which is what we want rather than
      * setting needs_notification but then failing to print it until the player
      * flips it back on and gets notifications of all their old achievements */
-    if (flags.notify_achievements) {
+    if (flags.notify_achievements == ACH_NOTIFY_NEW_THIS_GAME
+        || (flags.notify_achievements == ACH_NOTIFY_NEW_THIS_TOURNAMENT
+            && tnnt_globals.ach_status[achvmt].status
+               != ACH_EARNED_IN_PREVIOUS_GAME)) {
         tnnt_globals.ach_status[achvmt].needs_notification = TRUE;
         tnnt_globals.ach_needs_notification = TRUE;
     }
+
+    /* supersedes earned-in-previous-game status; we no longer care that it was
+     * earned in a previous game */
+    tnnt_globals.ach_status[achvmt].status = ACH_EARNED_THIS_GAME;
 
     /* don't write temp achievements file for explore-mode games */
     if (discover)

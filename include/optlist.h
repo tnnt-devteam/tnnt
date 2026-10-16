@@ -795,8 +795,8 @@ static int optfn_##a(int, int, boolean, char *, char *);
     NHOPTB(tips, Advanced, 0, opt_out, set_in_game,
            On, Yes, No, No, NoAlias, &flags.tips, Term_False,
            "show some helpful tips during gameplay")
-    NHOPTB(tnnt_notify, General, 0, opt_out, set_in_game,
-           On, Yes, No, No, NoAlias, &flags.notify_achievements, Term_False,
+    NHOPTC(tnnt_notify, General, 0, opt_in, set_in_game,
+           Yes, Yes, No, Yes, NoAlias,
            "show a message when you earn a TNNT achievement")
     NHOPTB(tombstone, Advanced, 0, opt_out, set_in_game,
            On, Yes, No, No, NoAlias, &flags.tombstone, Term_False,

@@ -46,7 +46,10 @@ struct flag {
     boolean mention_decor;   /* give feedback for unobscured furniture */
     boolean mention_walls;   /* give feedback when bumping walls */
     boolean nap;             /* `timed_delay' option for display effects */
-    boolean notify_achievements; /* print message when completeing an ach */
+    uchar notify_achievements; /* TNNT: print message when completing an ach */
+#define ACH_NOTIFY_NONE 0
+#define ACH_NOTIFY_NEW_THIS_TOURNAMENT 1
+#define ACH_NOTIFY_NEW_THIS_GAME 2
     boolean nopick_dropped;  /* items you dropped may be autopicked */
     boolean null;            /* OK to send nulls to the terminal */
     boolean pickup;          /* whether you pickup or move and look */

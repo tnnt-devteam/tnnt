@@ -205,6 +205,8 @@ OPTIONS=msg_window:reversed,number_pad:1,sortloot:full
 OPTIONS=menu_objsyms,perm_invent,hitpointbar,quick_farsight
 # realtime options (wallclock time / play time / disabled)
 OPTIONS=realtime:wallclock time
+# notify all new achievements this game by default
+OPTIONS=tnnt_notify:2
 
 # Various MSGTYPE examples
 MSGTYPE=hide "Unknown command *"

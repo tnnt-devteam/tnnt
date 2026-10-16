@@ -421,6 +421,7 @@ staticfn int handler_petattr(void);
 staticfn int handler_sortloot(void);
 staticfn int handler_symset(int);
 staticfn int handler_versinfo(void);
+staticfn int handler_tnnt_notify(void); /* TNNT */
 staticfn int handler_whatis_coord(void);
 staticfn int handler_whatis_filter(void);
 /* next few are not allopt[] entries, so will only be called
@@ -4488,6 +4489,55 @@ optfn_tile_width(
     return optn_ok;
 }
 
+/* TNNT - implementation of tnnt_notify option */
+staticfn int
+optfn_tnnt_notify(
+    int optidx UNUSED, int req, boolean negated,
+    char *opts, char *op UNUSED)
+{
+    if (req == do_init) {
+        return optn_ok;
+    }
+    if (req == do_set) {
+        op = string_for_opt(opts, TRUE);
+        if (op == empty_optstr) {
+            /* this was previously a boolean option; for backwards
+             * compatibility, handle it the same way as that boolean behaved, by
+             * notifying all achievements earned this game */
+            flags.notify_achievements = (negated ? ACH_NOTIFY_NONE
+                                                 : ACH_NOTIFY_NEW_THIS_GAME);
+        }
+        else {
+            int mode = atoi(op);
+
+            if (mode < ACH_NOTIFY_NONE || mode > ACH_NOTIFY_NEW_THIS_GAME) {
+                config_error_add("Illegal %s parameter '%s'",
+                                 allopt[optidx].name, op);
+                return optn_err;
+            }
+            else {
+                flags.notify_achievements = mode;
+            }
+        }
+        return optn_ok;
+    }
+    if (req == get_val) {
+        static const char *const tnntnotifymodes[] = {
+            "0=no achievements",
+            "1=only unearned-in-tournament achievements",
+            "2=unearned-in-game achievements"
+        };
+        if (!opts)
+            return optn_err;
+        Strcpy(opts, tnntnotifymodes[flags.notify_achievements]);
+        return optn_ok;
+    }
+    if (req == do_handler) {
+        return handler_tnnt_notify();
+    }
+    return optn_ok;
+}
+
 staticfn int
 optfn_traps(
     int optidx UNUSED, int req, boolean negated UNUSED,
@@ -6335,6 +6385,47 @@ handler_sortloot(void)
         if (iflags.perm_invent)
             update_inventory();
         free((genericptr_t) sortl_pick);
+    }
+    destroy_nhwindow(tmpwin);
+    return optn_ok;
+}
+
+/* TNNT - menu handler for tnnt_notify option */
+staticfn int
+handler_tnnt_notify(void)
+{
+    winid tmpwin;
+    anything any;
+    int i;
+    static const char *const tnchoices[] = {
+        "0 (do not notify you when you earn an achievement)",
+        "1 (notify you only when you didn't earn it yet this tournament)",
+        "2 (notify you when you didn't earn it yet this game)"
+    };
+    menu_item *mode_pick = (menu_item *) 0;
+    int clr = NO_COLOR;
+
+    tmpwin = create_nhwindow(NHW_MENU);
+    start_menu(tmpwin, MENU_BEHAVE_STANDARD);
+    any = cg.zeroany;
+    for (i = 0; i < SIZE(tnchoices); i++) {
+        any.a_int = i + 1;
+        add_menu(tmpwin, &nul_glyphinfo, &any, 'a' + i, '0' + i,
+                 ATR_NONE, clr, tnchoices[i], MENU_ITEMFLAGS_NONE);
+    }
+    end_menu(tmpwin, "Select achievement notification preference:");
+    if (select_menu(tmpwin, PICK_ONE, &mode_pick) > 0) {
+        switch (mode_pick->item.a_int - 1) {
+        case 0:
+            flags.notify_achievements = ACH_NOTIFY_NONE;
+            break;
+        case 1:
+            flags.notify_achievements = ACH_NOTIFY_NEW_THIS_TOURNAMENT;
+            break;
+        case 2:
+            flags.notify_achievements = ACH_NOTIFY_NEW_THIS_GAME;
+            break;
+        }
     }
     destroy_nhwindow(tmpwin);
     return optn_ok;
