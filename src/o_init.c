@@ -486,10 +486,10 @@ discover_object(
                gameover => final disclosure */
             if (program_state.in_moveloop && !program_state.gameover) {
                 if (mark_as_known && credit_hero) {
-                    /* TNNT: trigger on discovering stuff, but do not count it if
-                    * the game is just starting or just ending. The final piece of
-                    * the set must become actively identified during the course of
-                    * the game. */
+                    /* TNNT: trigger on discovering stuff, but do not count it
+                     * if the game is just starting or just ending. The final
+                     * piece of the set must become actively identified during
+                     * the course of the game. */
                     tnnt_check_identifications(oindx);
                 }
                 if (objects[oindx].oc_class == GEM_CLASS)

@@ -2902,6 +2902,11 @@ out_container(struct obj *obj)
         free(obj->swapobj_filename);
         obj->where = OBJ_CONTAINED;
         obj->ocontainer = gc.current_container;
+        /* item identities are revealed in the chest, and having obj->known will
+         * reveal it after it enters inventory... but pickup_prinv gets called
+         * before that happens. Discover it now so that message doesn't report
+         * the item as if its type were still unknown. */
+        discover_object(obj->otyp, TRUE, TRUE, TRUE);
     }
     /* <-- */
 
