@@ -207,10 +207,10 @@ ACH("Faster Than Light", "Kill a \"y\" monster in melee without it exploding",
 ACH("Dracarys",
     "Kill a monster with the breath attack of your tame dragon",
     KILLED_WITH_TAME_DRAGON_BREATH),
-ACH("I Am The Storm",
+ACH("Ride The Lightning",
     "Kill 20 or more monsters in a single casting of chain lightning",
     KILLED_20_WITH_CHAIN_LIGHTNING),
-ACH("Rage Against The Riders", "Kill each Rider at least once in melee combat",
+ACH("There Can Be Only One", "Kill each Rider at least once in melee combat",
     KILLED_ALL_RIDERS_IN_MELEE),
 
 /* "survive a hazard" group */
