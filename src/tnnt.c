@@ -578,7 +578,7 @@ show_tnnt_achievements(boolean final)
      * constructed by printing searchbuf and other text into it; 100 should be
      * plenty for anyone's search. */
     char response, buf[BUFSZ], searchbuf[100];
-    int i, num_earned = 0, num_prevgame = 0;
+    int i, num_earned = 0, num_prevgame = 0, nextcat = 0;
     int clr = NO_COLOR;
 
     start_menu(win, MENU_BEHAVE_STANDARD);
@@ -689,11 +689,28 @@ show_tnnt_achievements(boolean final)
             || (response == 's' && searchmatch)) {
             char indicator = earned_game ? 'X'
                                          : earned_prev ? '=' : ' ';
+
+            if (i >= tnnt_ach_categories[nextcat].first_ach_id) {
+                /* first time we are showing a new category; however we may have
+                 * skipped over entire categories that shouldn't be shown */
+                while (tnnt_ach_categories[nextcat].first_ach_id <= i
+                       && nextcat < NUM_TNNT_ACH_CATEGORIES)
+                    nextcat++;
+                if (nextcat <= NUM_TNNT_ACH_CATEGORIES) {
+                    putstr(win, 0, "");
+                    /* Sprintf(buf,  %s", */
+                    /*         i, nextcat - 1, */
+                    /*         tnnt_ach_categories[nextcat - 1].name); */
+                    putstr(win, ATR_ULINE, tnnt_ach_categories[nextcat-1].name);
+                }
+            }
+
             Sprintf(buf, "[%c] #%03d \"%s\" - %s", indicator,
                     i + 1, dat->name, dat->descr);
             putstr(win, 0, buf);
         }
     }
+    putstr(win, 0, "");
     if (response == 'e' || response == 'u' || response == 'a') {
         Sprintf(buf, "%d/%d achievements earned in this game.",
                 num_earned, NUM_TNNT_ACHIEVEMENTS);

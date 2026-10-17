@@ -1,23 +1,89 @@
+/* no include guards on this file; similar to objects.h or monsters.h, it is
+ * intended to be included into another header or source file at a specific
+ * place after defining one of the following:
+ * TNNT_ACH_ENUM - enum of all achievements
+ * TNNT_ACH_NAMES - struct of achievement names and descriptions
+ * TNNT_ACH_DUMPYAML_INFO - struct of name, description, AND id, for the
+ *                          scoreboard
+ * TNNT_ACH_CATEGORIES_ENUM - enum of all categories
+ * TNNT_ACH_CATEGORY_INDICES_ENUM - enum associating categories with the index
+ *                                  of the first achievement in that category
+ * TNNT_ACH_CATEGORY_NAMES - struct of category names and indexes to 1st
+ *                           achievement, which is what we actually care about
+ */
+
 #if defined(TNNT_ACH_ENUM)
 /* there is a slight possibility of name collision here since attributes and
  * alignments both use A_*** as well. We use A_ to keep the constant names
  * short and mitigate having to do ugly line wrappings in heavily indented
  * code blocks. */
 #define ACH(nam, desc, id) A_##id,
+#define BEGIN_CATEGORY(nam, id)
 
 #elif defined (TNNT_ACH_NAMES)
 
 #define ACH(nam, desc, id) {nam, desc},
+#define BEGIN_CATEGORY(nam, id)
 
 #elif defined (TNNT_ACH_DUMPYAML_INFO) /* see util/tnnt_ach_to_yaml.c */
 
+#define BEGIN_CATEGORY(nam, id)
 #define ACH(name, desc, id) { nam, desc, #id },
+
+#elif defined (TNNT_ACH_CATEGORIES_ENUM)
+
+/* for enum tnnt_ach_categories, which holds just the categories in a simple
+ * increasing-by-1 list and blanks out the achievements.
+ * "AC" prefix stands for Achievement Category.
+ */
+#define BEGIN_CATEGORY(nam, id) AC_##id,
+#define ACH(nam, desc, id)
+
+#elif defined (TNNT_ACH_CATEGORY_INDICES_ENUM)
+
+/* This uses a bit of enum count-up-by-1 magic to make it work.
+ * BEGIN_CATEGORY defines a AC_ constant, then a dummy constant set to the
+ * value below it, so the following achievement gets the "right" value.
+ *
+ * So the enum actually ends up looking like:
+ * ACI_CATEGORY1,                                // 0 (category 1 start index)
+ * ACI_CATEGORY1_prevdummy = ACI_CATEGORY1 - 1,  // -1
+ * ACI_ACHIEVE1_achdummy = A_ACHIEVE1,           // A_ACHIEVE1
+ * ACI_ACHIEVE2_achdummy = A_ACHIEVE2,           // A_ACHIEVE2
+ * ACI_ACHIEVE3_achdummy = A_ACHIEVE3,           // A_ACHIEVE3
+ * ACI_CATEGORY2,                                // A_ACHIEVE3 + 1 (category 2 start index)
+ * ACI_CATEGORY2_prevdummy = ACI_CATEGORY,       // A_ACHIEVE3
+ * ACI_ACHIEVE4_achdummy,                        // A_ACHIEVE4 (should be A_ACHIEVE3 + 1)
+ * ...
+ *
+ * Assumes A_ achievement constants start at 0 and count up without holes.
+ *
+ * "ACI" prefix stands for Achievement Category Index.
+ *
+ * TNNT TODO: could this be merged with the overall achievement enum, after
+ * chopping off the "achdummy"? Does it serve anything to have the achievements
+ * in a separate enum and assigned to here, rather than just declared here?
+ */
+
+#define BEGIN_CATEGORY(nam, id) ACI_##id, ACI_##id##_prevdummy = ACI_##id - 1,
+#define ACH(nam, desc, id) AC_##id##_achdummy = A_##id,
+
+#elif defined (TNNT_ACH_CATEGORY_NAMES)
+
+#define BEGIN_CATEGORY(nam, id) { ACI_##id, nam },
+#define ACH(nam, desc, id)
 
 #elif !defined(ACH)
 #error Bad inclusion of tnnt_achievements.h
 #endif
 
-/* Style guidelines:
+/* TNNT 2026: introduction of formal achievement categories.
+ * BEGIN_CATEGORY terminates any previous category and means that any ACH
+ * following it will be treated as part of that category, up until another
+ * BEGIN_CATEGORY appears.
+ */
+
+/* Style guidelines for ACH:
  * 1. Every word in an achievement's name should be capitalized, even words like
  *    "a" and "the". Puns, references, rhymes, etc are encouraged. The only
  *    exception would be if the name doesn't make sense without using lowercase.
@@ -25,10 +91,10 @@
  *    describing what the player must do to earn them.
  * 3. Achievement constants should be in the past tense, tersely describing what
  *    the player has done to earn it.
+ *
+ * Style guidelines for BEGIN_CATEGORY:
+ * 1. Every word in the name should be capitalized.
  */
-
-/* starting around 2021 achievements are organized into sort of groups based
- * around common themes */
 
 /* "Vanilla achievements" group - these are all tracked in uachieved, and for
  * years TNNT just used that xlogfile field to pass the data to the scoreboard,
@@ -49,6 +115,7 @@
  * or on the scoreboard, with the exception of rank title achievements which
  * come after all the "story" ones.
  */
+BEGIN_CATEGORY("Vanilla Achievements", VANILLA)
 ACH("Delving Deep", "Enter the Gnomish Mines", ENTERED_MINES)
 ACH("Back To Civilisation", "Enter Minetown", ENTERED_MINETOWN)
 ACH("Are You Feeling Lucky", "Get the luckstone from Mines' End",
@@ -77,6 +144,7 @@ ACH("My Preciousss", "Get the Amulet of Yendor", GOT_AOY)
 ACH("From The Dungeon They Came", "Enter the Elemental Planes", ENTERED_PLANES)
 ACH("The Halls Of The Gods", "Enter the Astral Plane", ENTERED_ASTRAL)
 
+BEGIN_CATEGORY("Rank Advancements", RANK_ADVANCES)
 ACH("Joining The Ranks", "Earn your second rank", GOT_RANK2)
 ACH("Rank and File", "Earn your third rank", GOT_RANK3)
 ACH("Rising Through The Ranks", "Earn your fourth rank", GOT_RANK4)
@@ -86,7 +154,11 @@ ACH("High Ranking", "Earn your seventh rank", GOT_RANK7)
 ACH("Banking the Ranks", "Earn your eighth rank", GOT_RANK8)
 ACH("Top Ranked", "Earn your ninth and final rank", GOT_RANK9)
 
-/* "vanilla-ish milestones" group */
+/* TNNT TODO: should this merge into vanilla milestones? Few players are
+ * probably aware of the technical distinction between achievements that have a
+ * direct correspondent in vanilla's achievements system and achievements that
+ * feel the same, but aren't. */
+BEGIN_CATEGORY("Vanilla-Ish Milestones", VANILLAISH)
 ACH("The Archetypal Hero", "Get admitted to the Quest", STARTED_QUEST)
 ACH("Have Fun Storming The Castle", "Blow up the Castle drawbridge",
     BLEW_UP_DRAWBRIDGE)
@@ -94,7 +166,7 @@ ACH("The Chosen One", "Get crowned", CROWNED)
 ACH("Watch Your Footing", "Step onto the vibrating square",
     REACHED_VIBRATING_SQ)
 
-/* "TNNT custom challenges" group */
+BEGIN_CATEGORY("TNNT Extra Challenges", TNNT_CHALLENGES)
 ACH("It's Dangerous To Go Alone! Take This", "Put an item into a swap chest",
     PUT_INTO_SWAPCHEST)
 ACH("Paw Patrol", "Find kitten", FOUND_KITTEN)
@@ -105,7 +177,9 @@ ACH("There Is No Spoon", "Finish the task the devteam requires of you",
 ACH("Thunderdome", "Defeat the adversary in the Deathmatch Arena",
     NPC_DEATHMATCH)
 
-/* "kill specific things" group */
+/* TNNT TODO: we should probably break this up a bit. "kill unique monsters", "kill
+ * multiple species", etc */
+BEGIN_CATEGORY("Kill Specific Monsters", KILL_SPECIFIC_MONSTERS)
 ACH("Asmodead", "Kill Asmodeus", KILLED_ASMODEUS)
 ACH("Baalzebust", "Kill Baalzebub", KILLED_BAALZEBUB)
 ACH("Orcrushed", "Kill Orcus", KILLED_ORCUS)
@@ -165,7 +239,7 @@ ACH("LEARN THE ALPHABET",
     "Kill a monster of each class from A to Z (except I)",
     KILLED_A_Z_UPPERCASE)
 
-/* "kill things in specific circumstances" group */
+BEGIN_CATEGORY("Kill Things In Specific Ways", KILL_IN_CERTAIN_WAYS)
 ACH("What It Was Made For", "Kill an appropriate monster with a Bane weapon",
     USED_CORRECT_BANE)
 ACH("Kop Training Program", "Kill a monster with a rubber hose",
@@ -221,7 +295,7 @@ ACH("Ride The Lightning",
 ACH("There Can Be Only One", "Kill each Rider at least once in melee combat",
     KILLED_ALL_RIDERS_IN_MELEE)
 
-/* "survive a hazard" group */
+BEGIN_CATEGORY("Survive Hazards", SURVIVE_HAZARDS)
 ACH("Part-Time Statue", "Cure stoning", CURED_STONING)
 ACH("The Blob", "Cure sliming", CURED_SLIMING)
 ACH("Captain Ahab", "Survive being grabbed by a sea monster",
@@ -232,7 +306,7 @@ ACH("Cheating the Reaper",
     "Survive a touch of death without magic resistance",
     SURVIVED_TOD)
 
-/* involving identification */
+BEGIN_CATEGORY("Identification", IDENTIFICATION)
 ACH("Diamond In The Rough", "Identify a gem with a touchstone",
     USED_TOUCHSTONE)
 ACH("Curse The Darkness", "Identify a potion of oil by applying it",
@@ -263,7 +337,7 @@ ACH("Mineralogist", "Identify all valuable gems",
 ACH("Geologist", "Identify all gray stones", IDENTIFIED_ALL_STONES)
 ACH("Glass Collector", "Identify all worthless glass", IDENTIFIED_ALL_GLASS)
 
-/* involving maintaining a conduct up to Quest */
+BEGIN_CATEGORY("Maintain A Conduct Up To Quest", GET_QUEST_WITH_CONDUCT)
 ACH("Friends Not Food", "Receive the Quest with vegetarian conduct intact",
     PARTIAL_VEGETARIAN)
 ACH("Animal Rights Activist", "Receive the Quest with vegan conduct intact",
@@ -339,7 +413,7 @@ ACH("Starting from Nothing", "Receive the Quest after starting as a pauper",
 ACH("To The Quest Without A Rest",
     "Talk to your Quest leader before turn 5000", QUICKLY_REACHED_QUEST)
 
-/* involving entering a certain room/area */
+BEGIN_CATEGORY("Discover Special Rooms", SPECIAL_ROOMS)
 ACH("Breaking And Entering", "Enter a vault", ENTERED_VAULT)
 ACH("Who Was That David Person Anyway?", "Enter a treasure zoo", ENTERED_ZOO)
 ACH("Absolute Monarchy", "Enter a throne room", ENTERED_THRONE_ROOM)
@@ -353,7 +427,9 @@ ACH("Dungeon Ecology", "Enter a swamp", ENTERED_SWAMP)
 ACH("Statue Showcase", "Enter a cockatrice nest", ENTERED_COCKNEST)
 ACH("Ocean's Eleven", "Enter Fort Ludios", ENTERED_LUDIOS)
 
-/* involving doing all of a set of things */
+/* TNNT TODO: this is kind of a poor category name now that it's shown to the
+ * player. Revise? */
+BEGIN_CATEGORY("Do All Things Of A Set", SET_COMPLETION)
 ACH("Pilgrim", "Visit all 4 types of altars", VISITED_ALL_ALTARS)
 ACH("The Grand Tour", "Visit each high altar on the Astral Plane",
     VISITED_HIGH_ALTARS)
@@ -377,14 +453,14 @@ ACH("Ultimate Polearm Geek",
     "Collect one of each of the 12 types of polearm",
     COLLECTED_ALL_POLEARMS)
 
-/* involving artifact gifts */
+BEGIN_CATEGORY("Artifact Gifts", ARTIGIFTS)
 ACH("Go Forth And Smite", "Receive an artifact gift from your deity",
     GRANTED_ARTI)
 ACH("Too Little Too Late", "Get a sacrifice gift on the Astral Plane",
     GIFT_ON_ASTRAL)
 ACH("Some Watery Tart", "Be gifted Excalibur", GOT_EXCALIBUR)
 
-/* involving eating */
+BEGIN_CATEGORY("Food And Eating", EATING)
 ACH("Superfood", "Gain strength by eating royal jelly", ATE_ROYAL_JELLY)
 ACH("You Are What You Eat",
     "Gain an intrinsic by eating a corpse (or tin or glob)",
@@ -408,7 +484,7 @@ ACH("The Omelet Of Yendor",
     "fungus, oil, and a dented pot, put on an apron and wield a knife",
     OMELET_OF_YENDOR)
 
-/* involving taming and pets */
+BEGIN_CATEGORY("Taming And Pets", PETS)
 ACH("Pet Whisperer", "Tame a monster by feeding it", TAMED_BY_FOOD)
 ACH("Beast Master", "Tame a monster without using food", TAMED_NOT_BY_FOOD)
 ACH("Shifty", "Tame a shapeshifter in any way", TAMED_SHAPECHANGER)
@@ -426,7 +502,7 @@ ACH("Tenacious Companion",
     PET_THROUGH_PLANES)
 ACH("Apocalyptic Horseplay", "Tame a Rider", TAMED_RIDER)
 
-/* involving bones */
+BEGIN_CATEGORY("Bones Piles", BONES)
 ACH("Those Who Came Before", "Sight another player's bones pile",
     FOUND_BONES_PILE)
 ACH("Imitation Bones", "Step onto the Rogue level fake bones pile",
@@ -439,12 +515,12 @@ ACH("Mr. Bones' Wild Ride",
     "Find the bones of four former heroes in one game",
     FOUND_FOUR_BONES)
 
-/* involving tins */
+BEGIN_CATEGORY("Tins", TINS)
 ACH("Civilized Cooking", "Open a tin with a tin opener", OPENED_TIN_PROPERLY)
 ACH("Exotic Meat", "Tin a unique monster", TINNED_UNIQUE_MON)
 ACH("Tinned Out", "Use up a tinning kit", USED_UP_TINNING_KIT)
 
-/* involving resurrection */
+BEGIN_CATEGORY("Resurrection", RESURRECTION)
 ACH("Reincarnation Cancelled",
     "Feel \"less hassled\" after blocking a troll's revival attempt",
     BLOCKED_TROLL_REVIVAL)
@@ -457,7 +533,7 @@ ACH("So Thou Thought Thou Couldst Resurrect Me",
     "Resurrect the Wizard of Yendor's corpse", RESURRECTED_WIZARD)
 ACH("Insert Quarter To Continue", "Get life-saved", GOT_LIFESAVED)
 
-/* involving shops */
+BEGIN_CATEGORY("Shop Interaction And Discovery", SHOPS)
 ACH("Always Talk To The Wise Old Man", "Chat with Izchak", CHATTED_IZCHAK)
 ACH("Dungeon Economics", "Buy or sell something at a shop", PURCHASED)
 ACH("Conspicuous Consumption", "Buy an unidentified gem from a shop",
@@ -480,14 +556,14 @@ ACH("Vegan Outfitters", "Visit a health food shop", ENTERED_HEALTH_FOOD_SHOP)
 ACH("Zap Happy", "Visit a wand shop", ENTERED_WAND_SHOP)
 ACH("A Real Gem Of A Shop", "Visit a jewelry shop", ENTERED_JEWELRY_SHOP)
 
-/* involving bribing */
+BEGIN_CATEGORY("Bribery", BRIBERY)
 ACH("Money Talks", "Bribe a demon lord with at least 25000 gold",
     BRIBED_DEMON_LORD)
 ACH("The Negotiator", "Successfully bribe a demon lord with 1 zorkmid",
     BRIBED_WITH_1)
 ACH("Look The Other Way", "Successfully bribe a mercenary", BRIBED_MERC)
 
-/* involving monsters doing things to you */
+BEGIN_CATEGORY("Monster Attacks", MONSTER_ATTACKS)
 ACH("A Little Light Larceny", "Get robbed by a nymph", ROBBED_BY_NYMPH)
 ACH("Pot Of Greed", "Have your purse lightened by a leprechaun",
     ROBBED_BY_LEPRECHAUN)
@@ -500,7 +576,7 @@ ACH("Heisenberg", "Become uncertain about your position or velocity",
     HEISENBERG)
 ACH("Yoink!", "Have the Amulet of Yendor stolen from you", AMULET_WAS_STOLEN)
 
-/* involving gods and religion */
+BEGIN_CATEGORY("Gods And Religion", RELIGION)
 ACH("Indulgences", "Buy protection from a priest", BOUGHT_PROTECTION)
 ACH("Orthodoxy", "Convert an altar", CONVERTED_ALTAR)
 ACH("Potions Of Booze Cost More Than That",
@@ -509,9 +585,8 @@ ACH("Fumata Bianca", "Get a priest to grow up into a high priest",
     MON_GREW_TO_HIPRIEST)
 ACH("Get Flashed", "Learn an item's beatitude from an altar", BUC_FROM_ALTAR)
 
-/* involving doing something notable without backtracking
- *
- * These "ironman-ish" achievements have slightly different conditions.
+BEGIN_CATEGORY("Ironman Challenges", NO_BACKTRACKING)
+/* These "ironman-ish" achievements have slightly different conditions.
  * Iron Miner only forbids backtracking, and permits levelporting, because it's
  * relatively early game. (If it turns out it's too easy for an Archeologist to
  * dig down through the mines we may have to further forbid digging.)
@@ -536,7 +611,7 @@ ACH("The Long Road Through Hell",
     "Go from the Valley to the Vibrating Square without backtracking, using only downstairs",
     DESCENDED_GEHENNOM_WITHOUT_BACKTRACKING)
 
-/* unsorted */
+BEGIN_CATEGORY("All Other Achievements", UNSORTED)
 ACH("The Royal Treatment", "Sit on a throne", USED_THRONE)
 ACH("It'll Turn Up Later", "Drop a ring in a sink", DROPPED_RING_IN_SINK)
 ACH("Isaac Newton", "Get fruit by kicking a tree", KICKED_FRUIT_TREE)
@@ -793,4 +868,5 @@ ACH("Speed Achiever", "Get 100 achievements in the first 10000 turns",
  * need to update the xlogfile parsing on the scoreboard to check for it)
  */
 
+#undef BEGIN_CATEGORY
 #undef ACH

@@ -131,6 +131,13 @@ struct tnnt_achievement_strings tnnt_ach_strings[NUM_TNNT_ACHIEVEMENTS] = {
 };
 #undef TNNT_ACH_NAMES
 
+#define TNNT_ACH_CATEGORY_NAMES
+struct tnnt_achievement_category tnnt_ach_categories[NUM_TNNT_ACH_CATEGORIES] =
+{
+#include "tnnt_achievements.h"
+};
+#undef TNNT_ACH_CATEGORY_NAMES
+
 static const struct Role urole_init_data = {
     { "Undefined", 0 },
     { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 },

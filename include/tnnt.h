@@ -16,10 +16,34 @@ enum tnnt_achievements {
 };
 #undef TNNT_ACH_ENUM
 
+/* we don't actually really care about the various category enum constants, we
+ * only really care about the value of NUM_TNNT_ACH_CATEGORIES */
+#define TNNT_ACH_CATEGORIES_ENUM
+enum tnnt_ach_categories {
+#include "tnnt_achievements.h"
+    NUM_TNNT_ACH_CATEGORIES
+};
+#undef TNNT_ACH_CATEGORIES_ENUM
+
+/* similarly we don't care about the values in this enum in code anywhere; they
+ * are only used to populate the tnnt_ach_categories[] array, which is done
+ * automatically at compile time. */
+#define TNNT_ACH_CATEGORY_INDICES_ENUM
+enum tnnt_ach_category_indices {
+#include "tnnt_achievements.h"
+};
+#undef TNNT_ACH_CATEGORY_INDICES_ENUM
+
 /* Achievement names and descriptions */
 struct tnnt_achievement_strings {
     const char* name;
     const char* descr;
+};
+
+/* Achievement categories */
+struct tnnt_achievement_category {
+    int first_ach_id; /* A_* index of the first achievement in this category */
+    const char *name;
 };
 
 /* Generic globals that don't belong in you.h */
