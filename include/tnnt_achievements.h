@@ -851,6 +851,9 @@ ACH("Soko In One Go",
 ACH("Gold Rush",
     "Enter the Fort Ludios vault on your first visit to the level",
     COMPLETED_LUDIOS_WITHOUT_BACKTRACKING)
+ACH("Dug For Victory",
+    "Obtain the Castle wand without backtracking",
+    GOT_CASTLE_WOW_WITHOUT_BACKTRACKING)
 ACH("The Long Road Through Hell",
     "Go from the Valley to the Vibrating Square without backtracking, using only downstairs",
     DESCENDED_GEHENNOM_WITHOUT_BACKTRACKING)

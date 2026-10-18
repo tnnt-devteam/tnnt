@@ -1023,6 +1023,14 @@ addinv_core1(struct obj *obj)
         obj->nomerge = 0; /* (got set in sp_lev.c) */
     }
     /* TNNT: general checks for "acquired certain items" go here */
+    if (obj->o_id == svc.context.achieveo.castle_prize_old) {
+        /* TNNT: this isn't actually implemented in vanilla yet. I implemented
+         * it because we do need it for achievements. */
+        if (!tnnt_globals.u_backtracked)
+            tnnt_achieve(A_GOT_CASTLE_WOW_WITHOUT_BACKTRACKING);
+        svc.context.achieveo.castle_prize_old = 0;
+        obj->nomerge = 0;
+    }
     if (obj->otyp == ATHAME && obj->lichathame)
         tnnt_achieve(A_GOT_LICH_ATHAME);
     if (obj->otyp == CANDY_BAR && obj->soko_candy)

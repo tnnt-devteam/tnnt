@@ -2416,6 +2416,15 @@ create_object(object *o, struct mkroom *croom)
             } else {
                 impossible(prize_warning, "sokoban end");
             }
+        } else if (Is_stronghold(&u.uz)) {
+            if (!svc.context.achieveo.castle_prize_old) {
+                svc.context.achieveo.castle_prize_old = otmp->o_id;
+                svc.context.achieveo.castle_prize_otyp = otmp->otyp;
+                otmp->nomerge = 1; /* redundant; Castle prize doesn't stack;
+                                    * will be reset in addinv_core1() */
+            } else {
+                impossible(prize_warning, "castle");
+            }
         } else if (!iflags.lua_testing) {
             char lbuf[QBUFSZ];
 

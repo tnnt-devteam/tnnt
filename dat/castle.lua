@@ -147,7 +147,9 @@ des.object(object[4],55,11)
 local loc = place:rndcoord(1);
 des.object({ id = "chest", trapped = 0, locked = 1, coord = loc ,
              contents = function()
-                des.object("wishing");
+                -- TNNT: designate it as "achievement" (devteam hasn't done this
+                -- yet but intends to)
+                des.object({ id = "wishing", achievement = 1 });
                 des.object("potion of gain level");
              end
 });
