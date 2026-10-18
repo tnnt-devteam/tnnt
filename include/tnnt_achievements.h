@@ -804,8 +804,8 @@ ACH("It'll Turn Up Later", "Drop a ring in a sink", DROPPED_RING_IN_SINK)
 ACH("Isaac Newton", "Get fruit by kicking a tree", KICKED_FRUIT_TREE)
 ACH("Not The Bees", "Get bees by kicking a tree", GOT_BEES_FROM_TREE)
 ACH("Wash It Clean", "Uncurse an item in a fountain", UNCURSED_IN_FOUNTAIN)
-ACH("It's Called That For A Reason",
-    "Come to earth by levitating over a sink", FELL_ONTO_SINK)
+ACH("A Sinking Feeling", "Come to earth by levitating over a sink",
+    FELL_ONTO_SINK)
 ACH("Buried Treasure", "Dig up a grave not in a graveyard", DUG_UP_GRAVE)
 ACH("The Words Of The Prophets", "Read 3 random graffiti", FOUND_3_GRAFFITI)
 ACH("Paddling Pool", "Create pools from a fountain", WATER_GUSH_FORTH)
