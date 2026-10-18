@@ -28,7 +28,7 @@
 #elif defined (TNNT_ACH_DUMPYAML_INFO) /* see util/tnnt_ach_to_yaml.c */
 
 #define BEGIN_CATEGORY(nam, id)
-#define ACH(name, desc, id) { nam, desc, #id },
+#define ACH(nam, desc, id) { nam, desc, #id },
 
 #elif defined (TNNT_ACH_CATEGORIES_ENUM)
 
