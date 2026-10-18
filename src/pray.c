@@ -867,7 +867,7 @@ gcrownu(void)
                        what, u_gname());
         break;
     }
-    tnnt_achieve(A_CROWNED);
+    tnnt_achieve(A_GOT_CROWNED);
 
     if (objects[class_gift].oc_class == SPBOOK_CLASS) {
         char bbuf[BUFSZ];

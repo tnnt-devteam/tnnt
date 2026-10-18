@@ -593,7 +593,7 @@ ACH("Under New Management", "Change your alignment by any means",
 ACH("Pilgrim", "Visit all 4 types of altars", VISITED_ALL_ALTARS)
 ACH("Go Forth And Smite", "Receive an artifact gift from your deity",
     GRANTED_ARTI)
-ACH("The Chosen One", "Get crowned", CROWNED)
+ACH("The Chosen One", "Get crowned", GOT_CROWNED)
 ACH("Fumata Bianca", "Get a priest to grow up into a high priest",
     MON_GREW_TO_HIPRIEST)
 ACH("Too Little Too Late", "Get a sacrifice gift on the Astral Plane",
