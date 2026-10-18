@@ -690,7 +690,8 @@ show_tnnt_achievements(boolean final)
             char indicator = earned_game ? 'X'
                                          : earned_prev ? '=' : ' ';
 
-            if (i >= tnnt_ach_categories[nextcat].first_ach_id) {
+            if (i >= tnnt_ach_categories[nextcat].first_ach_id
+                && nextcat < NUM_TNNT_ACH_CATEGORIES) {
                 /* first time we are showing a new category; however we may have
                  * skipped over entire categories that shouldn't be shown */
                 while (tnnt_ach_categories[nextcat].first_ach_id <= i
@@ -698,9 +699,6 @@ show_tnnt_achievements(boolean final)
                     nextcat++;
                 if (nextcat <= NUM_TNNT_ACH_CATEGORIES) {
                     putstr(win, 0, "");
-                    /* Sprintf(buf,  %s", */
-                    /*         i, nextcat - 1, */
-                    /*         tnnt_ach_categories[nextcat - 1].name); */
                     putstr(win, ATR_ULINE, tnnt_ach_categories[nextcat-1].name);
                 }
             }
