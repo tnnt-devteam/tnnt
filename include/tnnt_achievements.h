@@ -284,7 +284,7 @@ ACH("Hoist With Its Own Petard",
 ACH("Purple Rain",
     "Get at least 20 enemies eaten by purple worms on the Astral Plane",
     PURPLE_RAIN)
-ACH("Off With Her Head!", "Decapitate an enemy with Vorpal Blade",
+ACH("Off With Her Head!", "Decapitate a monster with Vorpal Blade",
     DECAPITATED_ENEMY)
 ACH("It's 4:20 Somewhere", "Stone a monster", STONED_A_MONSTER)
 ACH("On Thin Ice", "Drown a monster by melting the ice beneath it",
@@ -605,7 +605,7 @@ ACH("The Grand Tour", "Visit each high altar on the Astral Plane",
  * objects.h (inventory display may vary based on packorder) */
 BEGIN_CATEGORY("Weapons", WEAPONS)
 ACH("Right Back At Ya",
-    "Hit an enemy with an indirect strike from a thrown boomerang",
+    "Hit a monster with an indirect strike from a thrown boomerang",
     HIT_WITH_BOOMERANG)
 ACH("It Burnsss", "Deal silver damage to a silver-hating monster",
     DEALT_SILVER_DAMAGE)
