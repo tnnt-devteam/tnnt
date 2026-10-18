@@ -200,7 +200,6 @@ expulsion(boolean seal)
         int reexpelled = u.uevent.qexpelled;
 
         u.uevent.qexpelled = 1;
-        tnnt_achieve(A_EXPELLED_FROM_QUEST);
         remdun_mapseen(quest_dnum);
         /* Delete the near portal now; the far (main dungeon side)
            portal will be deleted as part of arrival on that level.

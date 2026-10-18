@@ -868,8 +868,6 @@ ACH("Gender Swap", "Put on an amulet of change", CHANGED_GENDER)
 ACH("Gender Bender", "Change gender two or more times", MULTI_GENDER_FLIP)
 ACH("Peak Condition", "Raise all attributes to at least 18",
     MAXED_ATTRIBUTES)
-ACH("No Soup For You!", "Get permanently expelled from the Quest",
-    EXPELLED_FROM_QUEST)
 ACH("Luck Of The Grasshopper", "Reach +13 Luck", GOT_13_LUCK)
 ACH("Murphy's Law", "Reach -13 Luck", GOT_NEGATIVE_13_LUCK)
 ACH("Extinctionist Lite", "Perform genocide 5 or more times",
