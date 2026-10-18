@@ -102,6 +102,13 @@ if percent(30) then
   des.object({ id = "detect unseen", coord=devbooks[2], buc='uncursed', name=booknames[2] })
 end
 
+-- a mirror of the internal devteam repository (get it?)
+if percent(20) then
+   local devspots = { {29,06}, {38,06}, {29,12}, {38,12} }
+   shuffle(devspots)
+   des.object({ id = "mirror", coord = devspots[1], name = "https://github.com/NetHack/NetHack" })
+end
+
 -- janitor closet
 des.door("locked",29,16)
 if percent(30) then
