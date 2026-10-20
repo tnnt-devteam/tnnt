@@ -1010,6 +1010,11 @@ makemap_prepost(boolean pre, boolean wiztower)
                 if (remove_achievement(ACH_SOKO_PRIZE))
                     pline(Unachieve, "Soko-prize");
                 svc.context.achieveo.soko_prize_oid = 0;
+            } else if (Is_stronghold(&u.uz)) {
+                /* TNNT: the Castle wand is a prize too (create_object);
+                   no achievement to revoke, "Dug For Victory" is
+                   TNNT-only and tnnt_achieve() ignores repeat awards */
+                svc.context.achieveo.castle_prize_old = 0;
             }
         }
         if (Punished) {
