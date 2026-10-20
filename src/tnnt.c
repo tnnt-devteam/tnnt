@@ -690,12 +690,12 @@ show_tnnt_achievements(boolean final)
             char indicator = earned_game ? 'X'
                                          : earned_prev ? '=' : ' ';
 
-            if (i >= tnnt_ach_categories[nextcat].first_ach_id
-                && nextcat < NUM_TNNT_ACH_CATEGORIES) {
+            if (nextcat < NUM_TNNT_ACH_CATEGORIES
+                && i >= tnnt_ach_categories[nextcat].first_ach_id) {
                 /* first time we are showing a new category; however we may have
                  * skipped over entire categories that shouldn't be shown */
-                while (tnnt_ach_categories[nextcat].first_ach_id <= i
-                       && nextcat < NUM_TNNT_ACH_CATEGORIES)
+                while (nextcat < NUM_TNNT_ACH_CATEGORIES
+                       && tnnt_ach_categories[nextcat].first_ach_id <= i)
                     nextcat++;
                 if (nextcat <= NUM_TNNT_ACH_CATEGORIES) {
                     putstr(win, 0, "");
