@@ -24,6 +24,8 @@ staticfn void interrupt_multi(const char *);
 
 #ifdef EXTRAINFO_FN
 static long prev_dgl_extrainfo = 0;
+static d_level prev_dgl_uz;      /* level last written to extrainfo */
+static boolean prev_dgl_amulet;  /* Amulet state last written */
 #endif
 
 /*ARGSUSED*/
@@ -290,10 +292,16 @@ moveloop_core(void)
 #ifdef EXTRAINFO_FN
                 /* refresh the dgamelaunch watch-menu entry periodically;
                    rewriting it every turn would be a file create+chmod+
-                   write per turn per live game for no visible benefit */
+                   write per turn per live game for no visible benefit.
+                   The entry shows only the level and whether the hero
+                   has the Amulet, so also refresh when either changes */
                 if (prev_dgl_extrainfo == 0
-                    || prev_dgl_extrainfo + 250 < svm.moves) {
+                    || prev_dgl_extrainfo + 250 < svm.moves
+                    || !on_level(&prev_dgl_uz, &u.uz)
+                    || prev_dgl_amulet != u.uhave.amulet) {
                     prev_dgl_extrainfo = svm.moves;
+                    assign_level(&prev_dgl_uz, &u.uz);
+                    prev_dgl_amulet = u.uhave.amulet;
                     mk_dgl_extrainfo();
                 }
 #endif
