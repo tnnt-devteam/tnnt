@@ -3257,9 +3257,6 @@ cancel_monst(struct monst *mdef, struct obj *obj, boolean youattack,
         if (youattack)
             tnnt_achieve_controlnotify(A_CANCELED_MONSTER,
                                        !objects[WAN_CANCELLATION].oc_name_known);
-        mdef->mcan = TRUE;
-
-        if (is_were(mdef->data) && mdef->data->mlet != S_HUMAN)
         mdef->mcan = 1;
         /* force shapeshifter into its base form or mimic to unhide */
         normal_shape(mdef);
