@@ -1071,6 +1071,7 @@ mkswapobj(struct obj *swapchest, char *filename, short *rcode)
                 /* The player doesn't get to see their own items, unless in
                  * wizard or explore mode. */
                 *rcode = MKSWAPOBJ_IGNOREOBJ;
+                fclose(f);
                 goto free_swapobj;
             }
             Sprintf(new_name, "%s %s", pfx, donorname);
@@ -2369,6 +2370,7 @@ initialize_prev_game_achievements(void)
         bitmap = 0;
         if (achvmt >= NUM_TNNT_ACHIEVEMENTS) {
             impossible("too much data in prev achievements file");
+            fclose(achfile);
             return;
         }
         sscanf(line, "0x%" PRIx64 "\n", &bitmap);

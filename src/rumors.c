@@ -999,8 +999,10 @@ tnnt_get_nki_text(char *buf, coordxy x, coordxy y)
         /* might be zero (only if file is empty); should complain in that
            case but if could happen over and over, also the suggestion
            that save and restore might fix the problem wouldn't be useful */
-        if (sizetxt < 1L)
+        if (sizetxt < 1L) {
+            (void) dlb_fclose(fh);
             return buf;
+        }
         tidbit = seed % sizetxt;
 
         (void) dlb_fseek(fh, starttxt + tidbit, SEEK_SET);
