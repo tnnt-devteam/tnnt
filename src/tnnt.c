@@ -1658,6 +1658,7 @@ create_tnnt_npc(coordxy x, coordxy y)
                 invent_from_file = obj;
             }
         }
+        fclose(npcfile);
         /* Create the npc and take care of all the boilerplate. */
         npc = makemon(&mons[pm_num], x, y, mmflags);
     }
