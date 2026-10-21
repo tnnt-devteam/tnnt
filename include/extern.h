@@ -1161,10 +1161,6 @@ extern boolean contains_directory(const char *);
 extern void get_nhuuid(void);
 extern void free_nhuuid(void);
 
-#ifdef EXTRAINFO_FN
-extern void mk_dgl_extrainfo(void);
-#endif
-
 /* ### fountain.c ### */
 
 extern void floating_above(const char *) NONNULLARG1;
