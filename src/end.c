@@ -637,7 +637,7 @@ disclose(int how, boolean taken)
     char c = '\0', defquery;
     char qbuf[QBUFSZ];
     boolean ask = FALSE;
-    boolean achieved;
+    boolean achieved = FALSE;
     int i;
 
     if (gi.invent && !done_stopprint) {
