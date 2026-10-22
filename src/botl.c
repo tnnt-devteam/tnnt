@@ -792,7 +792,7 @@ static struct istat_s initblstats[MAXBLSTATS] = {
     INIT_BLSTAT("armor-class", " AC:%s", ANY_INT, 10, BL_AC),
     INIT_BLSTAT("HD", " HD:%s", ANY_INT, 10, BL_HD),
     INIT_BLSTAT("time", " T:%s", ANY_LONG, 30, BL_TIME),
-    INIT_BLSTAT("realtime", " %s", ANY_STR, 10, BL_REALTIME),
+    INIT_BLSTAT("realtime", " %s", ANY_STR, 20, BL_REALTIME),
     /* hunger used to be 'ANY_UINT'; see note below in bot_via_windowport() */
     INIT_BLSTAT("hunger", " %s", ANY_INT, 20, BL_HUNGER),
     INIT_BLSTATP("hitpoints", " HP:%s", ANY_INT, 10, BL_HPMAX, BL_HP),
