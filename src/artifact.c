@@ -1010,6 +1010,27 @@ bane_applies(const struct artifact *oart, struct monst *mon)
     return FALSE;
 }
 
+/* TNNT: does obj's artifact single out mon's kind for extra damage?
+   Only the per-monster, per-class and per-flag banes count, not
+   SPFX_DALIGN, so the "What It Was Made For" achievement keeps meaning
+   bane weapons and not the Sceptre of Might. */
+boolean
+artifact_is_bane(struct obj *obj, struct monst *mon)
+{
+    const struct artifact *weap = get_artifact(obj);
+
+    if (weap == &artilist[ART_NONARTIFACT])
+        return FALSE;
+    return (((weap->spfx & SPFX_DMONS)
+             && mon->data == &mons[(int) weap->mtype])
+            || ((weap->spfx & SPFX_DCLAS)
+                && weap->mtype == (unsigned long) mon->data->mlet)
+            || ((weap->spfx & SPFX_DFLAG1)
+                && (mon->data->mflags1 & weap->mtype) != 0L)
+            || ((weap->spfx & SPFX_DFLAG2)
+                && (mon->data->mflags2 & weap->mtype) != 0L));
+}
+
 /* decide whether an artifact's special attacks apply against mtmp */
 staticfn int
 spec_applies(const struct artifact *weap, struct monst *mtmp)

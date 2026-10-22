@@ -4,8 +4,6 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "artifact.h" /* needed for TNNT stuff */
-#include "artilist.h" /* needed for TNNT stuff */
 
 static const char brief_feeling[] =
     "have a %s feeling for a moment, then it passes.";
@@ -1045,20 +1043,8 @@ hmon_hitmon_weapon_melee(
         hmd->hittxt = TRUE;
     }
 
-    if (obj->oartifact) {
-        /* TNNT: stealing some code from spec_applies... */
-        const struct artifact * weap = &artilist[(uchar) obj->oartifact];
-        if (((weap->spfx & SPFX_DMONS)
-                && (mon->data == &mons[(int) weap->mtype]))
-            || ((weap->spfx & SPFX_DCLAS)
-                && (weap->mtype == (unsigned long) mon->data->mlet))
-            || ((weap->spfx & SPFX_DFLAG1)
-                && ((mon->data->mflags1 & weap->mtype) != 0L))
-            || ((weap->spfx & SPFX_DFLAG2)
-                && ((mon->data->mflags2 & weap->mtype) != 0L))) {
-            hmd->artibane = TRUE;
-        }
-    }
+    if (obj->oartifact && artifact_is_bane(obj, mon))
+        hmd->artibane = TRUE; /* TNNT */
     if (obj->oartifact
         && artifact_hit(&gy.youmonst, mon, obj, &hmd->dmg, hmd->dieroll)) {
         /* artifact_hit updates 'tmp' but doesn't inflict any
