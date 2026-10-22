@@ -1762,6 +1762,14 @@ create_tnnt_npc(coordxy x, coordxy y)
                     /* leashmon was the m_id of a pet in the ascender's
                      * game; keep mksobj()'s 0 */
                     break;
+                case CORPSE:
+                    /* set_corpsenm() also replaces the rot/revive timer that
+                     * mksobj() started for its own random corpse type, which
+                     * would otherwise rot away the ascender's lizard corpses
+                     * (and the NPC's own, once they merge) */
+                    if (ismnum(corpsenm))
+                        set_corpsenm(obj, corpsenm);
+                    break;
                 case STATUE:
                 case FIGURINE:
                     if (ismnum(corpsenm))
@@ -1769,7 +1777,8 @@ create_tnnt_npc(coordxy x, coordxy y)
                     break;
                 case EGG:
                 case TIN:
-                    /* NON_PM is a generic egg or an empty tin */
+                    /* NON_PM is a generic egg or an empty tin; eggs skip
+                     * set_corpsenm() so that they don't start hatching */
                     if (ismnum(corpsenm) || corpsenm == NON_PM)
                         obj->corpsenm = corpsenm;
                     break;
