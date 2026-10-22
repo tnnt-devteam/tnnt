@@ -309,6 +309,13 @@ NHCFLAGS+=-DDUMPHTML
 NHCFLAGS+=-DUSE_GENERAL_ALTAR_COLORS
 #NHCFLAGS+=-DCHANGE_COLOR
 NHCFLAGS+=-DSELF_RECOVER
+# TNNT per-server identity: xlogfile "server=", the two-letter suffix of
+# the per-player achievement files, and swap chest routing.  The default
+# is the US server; for the others override it on the command line, e.g.
+#   make SERVER_LOCATION=eu.hardfought.org install
+# or set it in make.prefs at the top of the tree.
+SERVER_LOCATION ?= us.hardfought.org
+NHCFLAGS+=-DSERVER_LOCATION=\"$(SERVER_LOCATION)\"
 ifeq "$(USE_CURSESLIB)" "1"
 NHCFLAGS+=$(NCURSES_CFLAGS)
 ifeq "$(HAVE_NCURSESW)" "1"
