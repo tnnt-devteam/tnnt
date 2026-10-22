@@ -7,13 +7,13 @@
 #define CONFIG_H
 
 /*
-* Section 1:   Operating and window systems selection.
-*              Select the version of the OS you are using.
-*              For "UNIX" select BSD, ULTRIX, SYSV, or HPUX in unixconf.h.
-*              A "VMS" option is not needed since the VMS C-compilers
-*              provide it (no need to change sec#1, vmsconf.h handles it).
-*              MacOSX uses the UNIX configuration, not the old MAC one.
-*/
+ * Section 1:   Operating and window systems selection.
+ *              Select the version of the OS you are using.
+ *              For "UNIX" select BSD, ULTRIX, SYSV, or HPUX in unixconf.h.
+ *              A "VMS" option is not needed since the VMS C-compilers
+ *              provide it (no need to change sec#1, vmsconf.h handles it).
+ *              MacOSX uses the UNIX configuration, not the old MAC one.
+ */
 
 #define UNIX /* delete if no fork(), exec() available */
 
@@ -24,23 +24,23 @@
 /* #define TOS */ /* define for Atari ST/TT */
 
 /* #define STUPID */ /* avoid some complicated expressions if
-                    * your C compiler chokes on them */
+                      * your C compiler chokes on them */
 /* #define MINIMAL_TERM */
 /* if a terminal handles highlighting or tabs poorly,
-try this define, used in pager.c and termcap.c */
+   try this define, used in pager.c and termcap.c */
 /* #define ULTRIX_CC20 */
 /* define only if using cc v2.0 on a DECstation */
 /* #define ULTRIX_PROTO */
 /* define for Ultrix 4.0 (or higher) on a DECstation;
  * if you get compiler errors, don't define this. */
 /* Hint: if you're not developing code, don't define
-ULTRIX_PROTO. */
+   ULTRIX_PROTO. */
 
 #include "config1.h" /* should auto-detect MSDOS, MAC68K, AMIGA, and WIN32 */
 
 /*
-* Consolidated version, patchlevel, development status.
-*/
+ * Consolidated version, patchlevel, development status.
+ */
 #ifdef SHORT_FILENAMES
 #include "patchlev.h"
 #else
@@ -49,9 +49,9 @@ ULTRIX_PROTO. */
 
 
 /* Windowing systems...
-* Define all of those you want supported in your binary.
-* Some combinations make no sense.  See the installation document.
-*/
+ * Define all of those you want supported in your binary.
+ * Some combinations make no sense.  See the installation document.
+ */
 #if !defined(NOTTYGRAPHICS)
 #define TTY_GRAPHICS /* good old tty-based graphics */
 #endif
@@ -61,11 +61,11 @@ ULTRIX_PROTO. */
 /* #define MSWIN_GRAPHICS */ /* Windows NT, CE, Graphics */
 
 /*
-* Define the default window system.  This should be one that is compiled
-* into your system (see defines above).  Known window systems are:
-*
-*      tty, X11, mac, amii, BeOS, Qt, Gem, Gnome, shim
-*/
+ * Define the default window system.  This should be one that is compiled
+ * into your system (see defines above).  Known window systems are:
+ *
+ *      tty, X11, mac, amii, BeOS, Qt, Gem, Gnome, shim
+ */
 
 /* MAC68K also means MAC windows */
 #ifdef MAC68K
@@ -97,7 +97,7 @@ ULTRIX_PROTO. */
 #ifdef QT_GRAPHICS
 #ifndef DEFAULT_WC_TILED_MAP
 #define DEFAULT_WC_TILED_MAP /* Default to tiles if users doesn't request
-                            * wc_ascii_map */
+                              * wc_ascii_map */
 #endif
 #ifndef USE_XPM
 #define USE_XPM           /* Use XPM format for images (required) */
@@ -149,15 +149,15 @@ ULTRIX_PROTO. */
 
 #ifdef X11_GRAPHICS
 /*
-* There are two ways that X11 tiles may be defined:
-* (1) using a custom format loaded by NetHack code.
-* (2) using the XPM format loaded by the free XPM library.
-* The second option allows you to then use other programs to
-* generate tiles files.  For example, the PBMPlus tools
-* would allow:
-*  xpmtoppm <x11tiles.xpm | pnmscale 1.25 | ppmquant 90 | \
-*      ppmtoxpm >x11tiles_big.xpm
-*/
+ * There are two ways that X11 tiles may be defined:
+ * (1) using a custom format loaded by NetHack code.
+ * (2) using the XPM format loaded by the free XPM library.
+ * The second option allows you to then use other programs to
+ * generate tiles files.  For example, the PBMPlus tools
+ * would allow:
+ *  xpmtoppm <x11tiles.xpm | pnmscale 1.25 | ppmquant 90 | \
+ *      ppmtoxpm >x11tiles_big.xpm
+ */
 /* # define USE_XPM */ /* Disable if you do not have the XPM library */
 #ifdef USE_XPM
 #ifndef GRAPHIC_TOMBSTONE
@@ -170,10 +170,10 @@ ULTRIX_PROTO. */
 #endif
 
 /*
-* Section 2:   Some global parameters and filenames.
-*
-*              LOGFILE, XLOGFILE, LIVELOGFILE, NEWS and PANICLOG refer to
-*              files in the playground directory.  Commenting out LOGFILE,
+ * Section 2:   Some global parameters and filenames.
+ *
+ *              LOGFILE, XLOGFILE, LIVELOGFILE, NEWS and PANICLOG refer to
+ *              files in the playground directory.  Commenting out LOGFILE,
  *              XLOGFILE, NEWS or PANICLOG removes that feature from the game.
  *
  *              Building with debugging features enabled is now unconditional;
@@ -766,7 +766,7 @@ typedef unsigned char uchar;
 #define DUMPLOG_FILE        "/tmp/tnnt.%n.%d.log"
 /* DUMPLOG_FILE allows following placeholders:
    %% literal '%'
-   %v version (eg. "3.6.6-0")
+   %v version (eg. "3.6.3-0")
    %u game UID
    %t game start time, UNIX timestamp format
    %T current time, UNIX timestamp format

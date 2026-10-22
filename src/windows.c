@@ -99,7 +99,7 @@ staticfn void dump_footers(void);
 staticfn void dump_css(void);
 staticfn void dump_outrip(winid, int, time_t);
 #endif /* DUMPHTML */
-#endif /* DUMPLOG */
+#endif /* DUMPLOG || DUMPHTML */
 
 #ifdef HANGUPHANDLING
 volatile

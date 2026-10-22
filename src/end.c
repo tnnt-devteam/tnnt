@@ -525,7 +525,7 @@ dump_plines(void)
         }
     }
 }
-#endif  /* DUMPLOG */
+#endif  /* DUMPLOG || DUMPHTML */
 
 /*ARGSUSED*/
 staticfn void
