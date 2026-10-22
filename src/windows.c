@@ -1138,8 +1138,10 @@ genl_status_update(
 
 RESTORE_WARNING_FORMAT_NONLITERAL
 
+#if defined(DUMPLOG) || defined(DUMPHTML)
 static struct window_procs dumplog_windowprocs_backup;
 static int menu_headings_backup;
+#endif
 
 static FILE *dumplog_file;
 static FILE *dumphtml_file;
@@ -1440,8 +1442,6 @@ dump_end_screendump(void)
         fprintf(dumphtml_file, "%s\n", PREF_E);
 }
 
-#endif /* DUMPHTML */
-
 /* Status and map highlighting */
 void
 dump_set_color_attr(
@@ -1449,7 +1449,6 @@ dump_set_color_attr(
     int  attrmask,
     boolean onoff)
 {
-#ifdef DUMPHTML
     if (!dumphtml_file)
         return;
     if (onoff) {
@@ -1475,14 +1474,8 @@ dump_set_color_attr(
         if (attrmask & HL_BOLD)
             fprintf(dumphtml_file, BOLD_E);
     }
-#else
-    nhUse(coloridx);
-    nhUse(attrmask);
-    nhUse(onoff);
-#endif /* DUMPHTML */
 }
 
-#ifdef DUMPHTML
 /** HTML Map **/
 
 /* Construct a symset for HTML line-drawing symbols.
@@ -1634,6 +1627,7 @@ html_print_glyph(
 
 /** Status bar (botl) **/
 
+#ifdef DUMPHTML
 /* Status field ordering for 2 or 3 lines, from tty windowport */
 #define blPAD BL_FLUSH
 #define MAX_PER_ROW 15
@@ -1669,7 +1663,6 @@ static long dump_condition_bits;
 static struct dump_status_fields dump_status[MAXBLSTATS];
 static int hpbar_percent, hpbar_color;
 
-#ifdef DUMPHTML
 /* condcolor and condattr are needed to render the HTML status bar.
    These static routines exist verbatim in at least two other window
    ports. They should be promoted to the core (maybe botl.c).
@@ -2091,7 +2084,9 @@ dump_open_log(time_t now)
         dumplog_windowprocs_backup = windowprocs;
         menu_headings_backup = iflags.menu_headings.attr;
     }
+#ifdef DUMPHTML
     dump_headers();
+#endif
 #else /*!DUMPLOG/HTML*/
     nhUse(now);
 #endif /*?DUMPLOG/HTML*/
@@ -2100,7 +2095,9 @@ dump_open_log(time_t now)
 void
 dump_close_log(void)
 {
+#ifdef DUMPHTML
     dump_footers();
+#endif
     if (dumplog_file) {
         (void) fclose(dumplog_file);
         dumplog_file = (FILE *) 0;
@@ -2137,6 +2134,8 @@ dump_putstr(winid win, int attr, const char *str)
         else
             html_dump_line(dumphtml_file, attr, str);
     }
+#else
+    nhUse(attr);
 #endif
 }
 
@@ -2145,6 +2144,8 @@ dump_create_nhwindow(int type)
 {
 #ifdef DUMPHTML
     gd.dumping_list = (boolean) (type == NHW_MENU);
+#else
+    nhUse(type);
 #endif
     return WIN_ERR;
 }
@@ -2259,8 +2260,8 @@ dump_redirect(boolean onoff_flag)
             windowprocs.win_putstr = dump_putstr;
 #ifdef DUMPHTML
             windowprocs.win_outrip = dump_outrip;
-#endif
             windowprocs.win_status_update = dump_status_update;
+#endif
         } else {
             windowprocs = dumplog_windowprocs_backup;
             iflags.menu_headings.attr = menu_headings_backup;

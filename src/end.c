@@ -28,8 +28,6 @@ staticfn void savelife(int);
 staticfn boolean should_query_disclose_option(int, char *);
 #if defined(DUMPLOG) || defined(DUMPHTML)
 staticfn void dump_plines(void);
-extern void dump_start_screendump(void); /* defined in windows.c */
-extern void dump_end_screendump(void);
 #endif
 staticfn void dump_everything(int, time_t);
 staticfn void fixup_death(int);
@@ -581,7 +579,9 @@ dump_everything(
                                              : gu.urole.name.m);
     putstr(0, ATR_SUBHEAD, pbuf);
     putstr(NHW_DUMPTXT, 0, "");
+#ifdef DUMPHTML
     dump_start_screendump();
+#endif
 
     /* info about current game state */
     dump_map();
@@ -592,7 +592,9 @@ dump_everything(
     status_initialize(TRUE);
     bot();
 
+#ifdef DUMPHTML
     dump_end_screendump();
+#endif
     putstr(NHW_DUMPTXT, 0, "");
 
     dump_plines();

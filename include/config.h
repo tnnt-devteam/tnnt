@@ -760,8 +760,6 @@ typedef unsigned char uchar;
 #endif /* LIVELOGFILE */
 #endif /* LIVELOG */
 
-#if defined(DUMPLOG) || defined(DUMPHTML)
-
 #ifdef DUMPLOG
 #define DUMPLOG_CORE
 #ifndef DUMPLOG_FILE
@@ -780,32 +778,23 @@ typedef unsigned char uchar;
 */
 #endif /* DUMPLOG_FILE */
 #endif /* DUMPLOG */
-#ifdef DUMPLOG_CORE
-#ifndef DUMPLOG_MSG_COUNT
-#define DUMPLOG_MSG_COUNT   50
-#endif /* DUMPLOG_MSG_COUNT */
 
 #ifdef DUMPHTML
+#ifndef DUMPLOG_CORE
+#define DUMPLOG_CORE
+#endif
 #ifndef DUMPHTML_FILE
 #define DUMPHTML_FILE        "/tmp/tnnt.%n.%d.html"
 /* Placeholders as above
- * DUMPHTML_FILE is not used if SYSCF is defiined
+ * DUMPHTML_FILE is not used if SYSCF is defined
  */
 #endif /* DUMPHTML_FILE */
 #endif /* DUMPHTML */
 
-#endif /* DUMPLOG */
-
-#ifdef DUMPHTML
-#ifndef DUMPHTML_FILE
-#define DUMPHTML_FILE        "/tmp/nethack.%n.%d.html"
-/* Placeholders as above
- * DUMPHTML_FILE is not used if SYSCF is defiined
- */
-
-#endif
-
-#endif /* DUMPHTML */
-#endif /* DUMPLOG || DUMPHTML */
+#ifdef DUMPLOG_CORE
+#ifndef DUMPLOG_MSG_COUNT
+#define DUMPLOG_MSG_COUNT   50
+#endif /* DUMPLOG_MSG_COUNT */
+#endif /* DUMPLOG_CORE */
 
 #endif /* CONFIG_H */

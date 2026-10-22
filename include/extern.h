@@ -3927,9 +3927,7 @@ extern void html_print_glyph(winid, coordxy, coordxy, const glyph_info *,
 #if defined(DUMPLOG) || defined(DUMPHTML) || defined(EXTRAINFO_FN)
 extern char *dump_fmtstr(const char *, char *, boolean) NONNULLPTRS;
 #endif
-#ifdef DUMPLOG
 extern void livelog_dump_url(unsigned int);
-#endif
 #ifdef EXTRAINFO_FN
 extern void mk_dgl_extrainfo(void);
 #endif

@@ -879,6 +879,8 @@ cnf_line_DUMPLOGURL(char *bufp)
     if (sysopt.dumplogurl)
         free((genericptr_t) sysopt.dumplogurl);
     sysopt.dumplogurl = dupstr(bufp);
+#else
+    nhUse(bufp);
 #endif /*DUMPLOG*/
     return TRUE;
 }
