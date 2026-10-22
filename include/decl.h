@@ -13,10 +13,6 @@ extern const char *c_obj_colors[];
 extern const char * const nhcb_name[];
 extern int nhcb_counts[];
 
-#ifdef WHEREIS_FILE
-extern char whereis_real_path[255];
-#endif
-
 extern NEARDATA const struct c_color_names c_color_names;
 #define NH_BLACK c_color_names.c_black
 #define NH_AMBER c_color_names.c_amber

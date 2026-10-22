@@ -19,7 +19,6 @@ staticfn boolean put_lregion_here(coordxy, coordxy, coordxy, coordxy, coordxy,
 staticfn void baalz_fixup(void);
 staticfn void setup_waterlevel(void);
 staticfn void unsetup_waterlevel(void);
-staticfn void tnnt_setup_rfk_level(void);
 staticfn void check_ransacked(const char *);
 staticfn void migr_booty_item(int, const char *);
 staticfn void migrate_orc(struct monst *, unsigned long);

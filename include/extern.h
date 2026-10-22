@@ -3361,7 +3361,6 @@ extern int tnnt_uniqndx(int);
 extern void tnnt_maybe_grant_ahab(void);
 extern void tnnt_read(int);
 extern void tnnt_record_altar(unsigned int);
-extern void tnnt_check_castle_rush(void);
 extern void tnnt_do_quest_achievements(void);
 
 /* ### topten.c ### */
@@ -3374,11 +3373,7 @@ extern struct toptenentry *get_rnd_toptenentry(void);
 extern struct obj *tt_oname(struct obj *) NO_NNARGS;
 extern int tt_doppel(struct monst *) NONNULLARG1;
 /* TNNT changes: */
-extern long encodeachieve(boolean); /* not new in TNNT, but externified */
 extern char *tnnt_get_rnd_tt_name(boolean);
-#ifdef RECORD_CONDUCT
-extern long encodeconduct(void);
-#endif
 
 
 /* ### track.c ### */
