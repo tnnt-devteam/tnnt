@@ -1575,6 +1575,8 @@ write_npc_data(void)
         /* TNNT TODO: handling for items that shouldn't be excluded entirely,
          * but should be modified somehow (e.g. artifacts). */
 
+        /* A leash's corpsenm is the m_id of the pet it's attached to in this
+         * game, which means nothing (or some other monster) in another one. */
         fprintf(npcfile, "%d %ld %d %d %d %d %d %d %d %d %d",
                 obj->otyp,
                 obj->quan,
@@ -1584,7 +1586,7 @@ write_npc_data(void)
                 obj->oerodeproof,
                 obj->recharged,
                 obj->greased,
-                obj->corpsenm,
+                (obj->otyp == LEASH) ? 0 : obj->corpsenm,
                 (clear_usecount ? 0 : obj->usecount),
                 obj->oeaten);
         if (has_oname(obj)) {
@@ -1756,6 +1758,10 @@ create_tnnt_npc(coordxy x, coordxy y)
                 obj->recharged = recharged;
                 obj->greased = greased;
                 switch (otyp) {
+                case LEASH:
+                    /* leashmon was the m_id of a pet in the ascender's
+                     * game; keep mksobj()'s 0 */
+                    break;
                 case STATUE:
                 case FIGURINE:
                     if (ismnum(corpsenm))
