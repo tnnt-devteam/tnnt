@@ -3642,7 +3642,10 @@ in_town(coordxy x, coordxy y)
     for (sroom = &svr.rooms[0]; sroom->hx > 0; sroom++) {
         if (sroom->nsubrooms > 0) {
             has_subrooms = TRUE;
-            if (inside_room(sroom, x, y))
+            /* TNNT - not inside_room(): a room with subrooms is flagged
+               irregular, which would leave out the town's buildings */
+            if (x >= sroom->lx - 1 && x <= sroom->hx + 1
+                && y >= sroom->ly - 1 && y <= sroom->hy + 1)
                 return TRUE;
         }
     }
