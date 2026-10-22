@@ -1670,6 +1670,12 @@ goto_level(
      * entered Earth entering Astral */
     if (Is_earthlevel(newlevel)) {
         int i = 0;
+
+        /* only reachable twice via wizard-mode tools, but don't leak */
+        if (tnnt_globals.planes_pet_m_ids) {
+            free((genericptr_t) tnnt_globals.planes_pet_m_ids);
+            tnnt_globals.planes_pet_m_ids = (unsigned int *) 0;
+        }
         tnnt_globals.num_planes_pets = 0;
         /* count number of pets being brought */
         for (mtmp = gm.mydogs; mtmp; mtmp = mtmp->nmon) {

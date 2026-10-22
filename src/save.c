@@ -359,7 +359,6 @@ savegamestate(NHFILE *nhfp)
             Sfo_unsigned(nhfp, &tnnt_globals.planes_pet_m_ids[i],
                          "gamestate-planes_pet_m_id");
         }
-        free((genericptr_t) tnnt_globals.planes_pet_m_ids);
     }
     /* end TNNT */
     save_artifacts(nhfp);
@@ -1242,6 +1241,13 @@ freedynamicdata(void)
         close_nhfile(tnhfp);
         tnhfp = 0;
     }
+
+    /* TNNT -- anything dynamically allocated */
+    if (tnnt_globals.planes_pet_m_ids) {
+        free((genericptr_t) tnnt_globals.planes_pet_m_ids);
+        tnnt_globals.planes_pet_m_ids = (unsigned int *) 0;
+    }
+    tnnt_globals.num_planes_pets = 0;
 
     /* last, because it frees data that might be used by panic() to provide
        feedback to the user; conceivably other freeing might trigger panic */

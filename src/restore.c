@@ -724,7 +724,7 @@ restgamestate(NHFILE *nhfp)
         tnnt_globals.planes_pet_m_ids = (unsigned int *)
             alloc(tnnt_globals.num_planes_pets * sizeof(unsigned int));
         for (i = 0; i < tnnt_globals.num_planes_pets; ++i) {
-            Sfo_unsigned(nhfp, &tnnt_globals.planes_pet_m_ids[i],
+            Sfi_unsigned(nhfp, &tnnt_globals.planes_pet_m_ids[i],
                          "gamestate-planes_pet_m_id");
         }
     }
