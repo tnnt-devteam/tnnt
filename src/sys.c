@@ -27,17 +27,12 @@ sys_early_init(void)
 
     sysopt.support = (char *) 0;
     sysopt.recover = (char *) 0;
-    sysopt.livelog = 0;
 #ifdef SYSCF
     sysopt.wizards = (char *) 0;
 #else
     if (sysopt.wizards)
         free((genericptr_t) sysopt.wizards);
     sysopt.wizards = dupstr(WIZARD_NAME);
- #ifdef LIVELOGFILE
-    sysopt.livelog = LIVELOG_DETAIL;
-    sysopt.ll_conduct_turns = 0;
- #endif
 #endif
 
     if ((p = getenv("DEBUGFILES")) != 0) {
@@ -59,9 +54,6 @@ sys_early_init(void)
 #ifdef DUMPLOG
     sysopt.dumplogfile = (char *) 0;
     sysopt.dumplogurl = (char *) 0;
-#endif
-#ifdef DUMPHTML
-    sysopt.dumphtmlfile = (char *) 0;
 #endif
 #ifdef DUMPHTML
     sysopt.dumphtmlfile = (char *) 0;
@@ -149,6 +141,8 @@ sysopt_release(void)
 #ifdef DUMPLOG
     if (sysopt.dumplogfile)
         free((genericptr_t) sysopt.dumplogfile), sysopt.dumplogfile=(char *) 0;
+    if (sysopt.dumplogurl)
+        free((genericptr_t) sysopt.dumplogurl), sysopt.dumplogurl = (char *) 0;
 #endif
 #ifdef DUMPHTML
     if (sysopt.dumphtmlfile)
