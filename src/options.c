@@ -3544,7 +3544,15 @@ optfn_realtime(
             for (i = 0; i < SIZE(realtime_type_strings); ++i) {
                 /* match against first character only */
                 if (op[0] == realtime_type_strings[i][0]) {
-                    iflags.show_realtime = op[0];
+                    /* "disabled" is stored as '\0', which is what the
+                       status code tests to hide the field */
+                    iflags.show_realtime = (op[0] == 'd') ? '\0' : op[0];
+                    if (go.opt_initial)
+                        return optn_ok;
+                    /* changed during play: show or hide the field */
+                    if (VIA_WINDOWPORT())
+                        status_initialize(REASSESS_ONLY);
+                    disp.botl = TRUE;
                     return optn_ok;
                 }
             }
@@ -3558,6 +3566,10 @@ optfn_realtime(
         return optn_err;
     }
     if (req == get_val || req == get_cnf_val) {
+        if (!iflags.show_realtime) {
+            Strcpy(opts, realtime_type_strings[0]); /* "disabled" */
+            return optn_ok;
+        }
         for (i = 0; i < SIZE(realtime_type_strings); ++i) {
             if (iflags.show_realtime == realtime_type_strings[i][0]) {
                 Strcpy(opts, realtime_type_strings[i]);
@@ -3603,11 +3615,12 @@ optfn_realtime_format(
     }
     if (req == get_val || req == get_cnf_val) {
         for (i = 0; i < SIZE(realtime_format_strings); ++i) {
-            if (iflags.show_realtime == realtime_format_strings[i][0]) {
+            if (iflags.realtime_format == realtime_format_strings[i][0]) {
                 Strcpy(opts, realtime_format_strings[i]);
                 return optn_ok;
             }
         }
+        return optn_err;
     }
     if (req == do_handler) {
         return handler_realtime_format();
@@ -6272,8 +6285,12 @@ handler_realtime(void)
     }
     end_menu(tmpwin, "Type of time to show on status bar:");
     if (select_menu(tmpwin, PICK_ONE, &mode_pick) > 0) {
-        iflags.show_realtime = mode_pick->item.a_char;
+        int tmp = mode_pick->item.a_char;
+
+        iflags.show_realtime = (tmp == 'd') ? '\0' : tmp;
         free((genericptr_t) mode_pick);
+        /* show or hide the field right away */
+        status_initialize(REASSESS_ONLY);
     }
     destroy_nhwindow(tmpwin);
     return optn_ok;

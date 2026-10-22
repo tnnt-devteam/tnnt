@@ -632,10 +632,10 @@ static int optfn_##a(int, int, boolean, char *, char *);
 #endif
 #ifdef REALTIME_ON_BOTL
     NHOPTC(realtime, Advanced, 1, opt_in, set_in_game,
-           Yes, Yes, No, No, NoAlias,
+           Yes, Yes, No, Yes, NoAlias,
            "show realtime on status line")
     NHOPTC(realtime_format, Advanced, 1, opt_in, set_in_game,
-           Yes, Yes, No, No, NoAlias,
+           Yes, Yes, No, Yes, NoAlias,
            "format of realtime on status line")
 #endif
     NHOPTB(reroll, Advanced, 0, opt_in, set_in_config,

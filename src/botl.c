@@ -1373,7 +1373,7 @@ stat_update_time(void)
 
     /* TNNT: realtime display, or time (seconds) */
     fld = BL_REALTIME;
-    gb.blstats[idx][fld].a.a_long = svm.moves;
+    Strcpy(gb.blstats[idx][fld].val, botl_realtime());
     gv.valset[fld] = FALSE;
 
     eval_notify_windowport_field(fld, gv.valset, idx);
