@@ -1983,10 +1983,10 @@ dump_headers(void)
     fprintf(dumphtml_file, "<!DOCTYPE html>\n");
     fprintf(dumphtml_file, "<html lang=\"en\">\n<head>\n");
     fprintf(dumphtml_file, "<meta charset=\"utf-8\">\n");
-    fprintf(dumphtml_file, "<title>NetHack %s (%s)</title>\n",
+    fprintf(dumphtml_file, "<title>NetHack (TNNT) %s (%s)</title>\n",
             version_string(vers, sizeof vers), svp.plname);
     fprintf(dumphtml_file,
-            "<meta name=\"generator\" content=\"NetHack %s (%s)\">\n",
+            "<meta name=\"generator\" content=\"NetHack (TNNT) %s (%s)\">\n",
             vers, svp.plname);
     fprintf(dumphtml_file, "<meta name=\"date\" content=\"%s\">\n", iso8601);
     fprintf(dumphtml_file,
@@ -2296,8 +2296,8 @@ has_color(int color)
 }
 
 #ifdef EXTRAINFO_FN
-/* This probably belongs in files.c, but it
- * uses dump_fmtstr() which is static here.
+/* This probably belongs in files.c, but it builds its file name with
+ * dump_fmtstr() and was written next to it here.
  */
 void
 mk_dgl_extrainfo(void)
