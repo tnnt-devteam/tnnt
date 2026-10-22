@@ -109,8 +109,9 @@ oracles:	oracles.txt ../util/makedefs
 
 engrave:	engrave.txt ../util/makedefs
 	../util/makedefs -2
+
 nki:	nki.txt ../util/makedefs
-	../util/makedefs -s
+	../util/makedefs -4
 
 epitaph:	epitaph.txt ../util/makedefs
 	../util/makedefs -1
