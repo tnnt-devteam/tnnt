@@ -1780,6 +1780,7 @@ create_tnnt_npc(coordxy x, coordxy y)
                 obj->usecount = usecount;
                 obj->oeaten = oeaten;
                 obj->tnntwishedfor = 0;
+                obj->owt = weight(obj); /* quan, corpsenm, oeaten changed */
                 if (n == 12)
                     obj = oname(obj, objnam, ONAME_NO_FLAGS);
                 /* add to temp invent chain */
