@@ -1223,9 +1223,6 @@ freedynamicdata(void)
 
     if (VIA_WINDOWPORT())
         status_finish();
-#if defined(DUMPLOG) || defined(DUMPHTML)
-    dumplogfreemessages();
-#endif
 
     if (options_set_window_colors_flag)
         options_free_window_colors();

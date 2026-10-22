@@ -3315,8 +3315,6 @@ debugcore(const char *filename, boolean wildcards)
 
 #define SYSCONFFILE "system configuration file"
 
-#define SYSCONFFILE "system configuration file"
-
 void
 reveal_paths(int code)
 {
