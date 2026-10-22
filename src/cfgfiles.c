@@ -127,7 +127,9 @@ static boolean ignore_errors_on_unmatched = FALSE,
 #endif /* SFCTOOL */
 
 /* TNNT config/sysconf functions: */
+#ifdef SYSCF
 staticfn boolean cnf_line_TNNTDEVS(char *);
+#endif /* SYSCF */
 
 /* ----------  BEGIN CONFIG FILE HANDLING ----------- */
 
@@ -1339,6 +1341,7 @@ cnf_line_QT_COMPACT(char *bufp)
 
 /* Begin TNNT config functions */
 
+#ifdef SYSCF
 staticfn boolean
 cnf_line_TNNTDEVS(char *bufp)
 {
@@ -1347,6 +1350,7 @@ cnf_line_TNNTDEVS(char *bufp)
     sysopt.tnnt_devs = dupstr(bufp);
     return TRUE;
 }
+#endif /* SYSCF */
 
 /* End TNNT config functions */
 
@@ -1394,6 +1398,7 @@ static const struct match_config_line_stmt {
     CNFL_S(SHELLERS, 8),
     CNFL_S(MSGHANDLER, 9),
     CNFL_S(EXPLORERS, 7),
+    CNFL_S(TNNTDEVS, 8), /* TNNT */
     CNFL_S(DEBUGFILES, 5),
     CNFL_S(DUMPLOGFILE, 7),
     CNFL_S(DUMPLOGURL, 10),
@@ -1437,11 +1442,8 @@ static const struct match_config_line_stmt {
     CNFL_N(QT_TILEWIDTH, 12),
     CNFL_N(QT_TILEHEIGHT, 13),
     CNFL_N(QT_FONTSIZE, 11),
-    CNFL_N(QT_COMPACT, 10),
+    CNFL_N(QT_COMPACT, 10)
 #endif /* SFCTOOL */
-    /* TNNT additions */
-    CNFL_N(TNNTDEVS, 8),
-    CNFL_N(DUMPHTMLFILE, 12)
 };
 
 #undef CNFL_N
