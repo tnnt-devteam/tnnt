@@ -14,8 +14,6 @@
 
 #-PRE xxxx
 
-WANT_SOURCE_INSTALL=1
-
 WHICH_OS=Linux
 HINTSVERSION := 500
 
@@ -552,15 +550,18 @@ CFLAGS+=-DSYSCF -DSYSCF_FILE=\"$(HACKDIR)/sysconf\" -DSECURE
 # On this server the chroot is populated by install-to-chroot.sh as an explicit,
 # reviewable step; `make all` should only ever produce artifacts in the tree.
 # The auto-install was harmless here (INSTDIR resolves to the source tree, since
-# dirs-perms.500's unconditional PREFIX= shadows its own /opt/nethack default) --
+# dirs-perms.500 sets PREFIX to the tree unless WANT_SHARED_INSTALL) --
 # but `install:` runs `rm -rf $(INSTDIR) $(VARDIR)`, so anything that ever made
 # PREFIX resolve at the chroot would turn a plain build into deleting the
 # playground and every save. Not a risk worth carrying for a staging dir nothing
 # consumes. `make install` remains available explicitly if it is ever wanted.
 # NOTE: SYSCF is always on: the NHCFLAGS line above adds -DSYSCF,
 # -DSYSCF_FILE and -DSECURE unconditionally, so the CFLAGS line here
-# only repeats them (as vanilla's linux.500 does). WANT_SOURCE_INSTALL
-# matters for the install layout chosen in dirs-perms.500, not for SYSCF.
+# only repeats them (as vanilla's linux.500 does). On Linux,
+# dirs-perms.500 picks the install layout from WANT_SHARED_INSTALL
+# alone (it reads WANT_SOURCE_INSTALL only on macOS), so neither hints
+# file sets WANT_SOURCE_INSTALL; this block runs only when it's given
+# on the make command line.
 #MOREALL=$(MAKE) install
 endif #?WANT_SOURCE_INSTALL
 
