@@ -32,11 +32,18 @@
 #define TNNT_AM_MOLOCH 0x08
 #define TNNT_AM_ALL 0x0F
 
+/* NPC file format version, written in the file's first line along with
+ * tnnt_data_fingerprint(); bump it when the layout of the lines changes */
+#define NPC_FILE_VERSION 1
+
 /* static forward declarations */
 static boolean tnnt_common_monst(int mndx);
+static uint32_t fp_add_name(uint32_t h, const char *s);
+static uint32_t tnnt_data_fingerprint(void);
 static char *make_swapobj_filename(struct obj *o);
 static struct obj * mkswapobj(struct obj *swapchest,
                               char *filename, short *rcode);
+static const char *npc_file_problem(const char *path);
 static char * pick_npc_file(void);
 static void collect_transient_within(struct obj *container,
                                      struct obj **olist);
@@ -897,6 +904,41 @@ encode_tnnt_conducts(void)
  * SWAP CHEST FUNCTIONS
  * ###################################################################### */
 
+/* 32-bit FNV-1a of string s (NULL hashes like ""), then a separator */
+static uint32_t
+fp_add_name(uint32_t h, const char *s)
+{
+    for (; s && *s; s++)
+        h = (h ^ (unsigned char) *s) * 16777619U;
+    return (h ^ 0xffU) * 16777619U;
+}
+
+/* Hash of every object and monster name, in table order.
+ * Swap chest object files and arena NPC files store raw otyp and PM_ numbers,
+ * which only mean the same thing to a build with the same objects[] and
+ * mons[] layout: an NPC file from the 3.6-based TNNT once turned its 217 gold
+ * pieces into 217 wands of secret door detection. Both kinds of file record
+ * this value when written and are ignored when it doesn't match. Object
+ * descriptions are left out because they get shuffled every game. */
+static uint32_t
+tnnt_data_fingerprint(void)
+{
+    static uint32_t fp = 0;
+    int i, g;
+
+    if (fp)
+        return fp;
+    fp = 2166136261U;
+    for (i = 0; i < NUM_OBJECTS; i++)
+        fp = fp_add_name(fp, OBJ_NAME(objects[i]));
+    for (i = 0; i < NUMMONS; i++)
+        for (g = 0; g < NUM_MGENDERS; g++)
+            fp = fp_add_name(fp, mons[i].pmnames[g]);
+    if (!fp) /* 0 means not computed yet */
+        fp = 1;
+    return fp;
+}
+
 static char *
 make_swapobj_filename(struct obj *o)
 {
@@ -946,10 +988,12 @@ write_swapobj_file(struct obj *o, xint8 swapnum)
     free(filename);
     if (!f)
         return FALSE;
-    fprintf(f, "o_id=%x\totyp=%d\towt=%d\tquan=%ld\tspe=%d\toclass=%d\t"
+    fprintf(f, "fp=%08" PRIx32 "\t"
+               "o_id=%x\totyp=%d\towt=%d\tquan=%ld\tspe=%d\toclass=%d\t"
                "cursed=%d\tblessed=%d\toeroded=%d\toeroded2=%d\toerodeproof=%d\t"
                "recharged=%d\tgreased=%d\topoisoned=%d\tusecount=%d\t"
                "corpsenm=%d\tswapnum=%d\tplaymode=%c\tname=%s\n",
+               tnnt_data_fingerprint(),
                o->o_id, o->otyp, o->owt, o->quan, o->spe, o->oclass,
                o->cursed, o->blessed, o->oeroded, o->oeroded2, o->oerodeproof,
                o->recharged, o->greased, o->opoisoned, o->usecount,
@@ -980,6 +1024,8 @@ mkswapobj(struct obj *swapchest, char *filename, short *rcode)
     FILE *f;
     struct obj *o;
     int tmp_bitfield;
+    uint32_t fp = 0;
+    boolean have_fp = FALSE;
     *rcode = MKSWAPOBJ_ERROR;
     Sprintf(buf, "%s/%s", TNNT_SWAPCHEST_DIR, filename);
     f = fopen(buf,"r");
@@ -999,6 +1045,10 @@ mkswapobj(struct obj *swapchest, char *filename, short *rcode)
 
     /* this only works because we separate fields with whitespace */
     while (fscanf(f,"%s",buf) == 1) {
+        if (sscanf(buf, "fp=%" SCNx32, &fp) == 1) {
+            have_fp = TRUE;
+            continue;
+        }
         if (sscanf(buf, "otyp=%hd", &(o->otyp)) == 1)
             continue;
         if (sscanf(buf, "owt=%u", &(o->owt)) == 1)
@@ -1087,7 +1137,15 @@ mkswapobj(struct obj *swapchest, char *filename, short *rcode)
         *rcode = MKSWAPOBJ_IGNOREOBJ;
         goto free_swapobj;
     }
-    if (!o->otyp) {
+    /* A file from a build with a different object and monster layout (or one
+     * from before files had a fingerprint) would have its otyp and corpsenm
+     * read as something else entirely. Leave it for a build that matches. */
+    if (!have_fp || fp != tnnt_data_fingerprint()) {
+        *rcode = MKSWAPOBJ_IGNOREOBJ;
+        goto free_swapobj;
+    }
+    if (o->otyp < FIRST_OBJECT || o->otyp >= NUM_OBJECTS
+        || o->oclass != objects[o->otyp].oc_class) {
  free_swapobj:
         if (o->oextra)
             dealloc_oextra(o);
@@ -1463,18 +1521,21 @@ write_npc_data(void)
         impossible("Error writing player data to '%s' file", buf);
         return;
     }
-    /* line 1: timestamp */
+    /* line 1: file format version and object/monster table fingerprint */
+    fprintf(npcfile, "TNNT-NPC %d %08" PRIx32 "\n", NPC_FILE_VERSION,
+            tnnt_data_fingerprint());
+    /* line 2: timestamp */
     fprintf(npcfile, "%ld\n", program_state.gameover ? urealtime.finish_time
                                                      : time(NULL));
-    /* line 2: player name */
+    /* line 3: player name */
     fprintf(npcfile, "%s\n", svp.plname);
-    /* line 3: player role index and gender */
+    /* line 4: player role index and gender */
     fprintf(npcfile, "%d %d\n", gu.urole.mnum, flags.female);
-    /* line 4: player experience level */
+    /* line 5: player experience level */
     fprintf(npcfile, "%d\n", u.ulevel);
-    /* line 5: player hit point maximum */
+    /* line 6: player hit point maximum */
     fprintf(npcfile, "%d\n", u.uhpmax);
-    /* line 6: player intrinsics, converted to mextrinsics format...
+    /* line 7: player intrinsics, converted to mextrinsics format...
      * fire cold shock sleep poison disintegration are the only ones that will
      * actually do anything and that are obtainable by the player intrinsically
      */
@@ -1492,7 +1553,7 @@ write_npc_data(void)
     if (HDisint_resistance & INTRINSIC)
         mintrinsics |= MR_DISINT;
     fprintf(npcfile, "0x%x\n", mintrinsics);
-    /* lines 7-end: carried objects, we preserve only certain fields because
+    /* lines 8-end: carried objects, we preserve only certain fields because
      * others would be pointless... */
     for (obj = gi.invent; obj; obj = obj->nobj) {
         boolean clear_usecount = FALSE;
@@ -1545,10 +1606,43 @@ write_npc_data(void)
     fclose(npcfile);
 }
 
+/* Check that the NPC file at path was written by a build with the same object
+ * and monster layout as this one, and that its role is a player monster.
+ * Returns NULL if the file is usable, otherwise the reason it isn't. */
+static const char *
+npc_file_problem(const char *path)
+{
+    FILE *npcfile;
+    char line[BUFSZ];
+    int version = 0, pm_num = 0, gender = 0;
+    uint32_t fp = 0;
+    const char *problem = (const char *) 0;
+
+    if (!(npcfile = fopen(path, "r")))
+        return "can't open";
+    if (!fgets(line, BUFSZ, npcfile)
+        || sscanf(line, "TNNT-NPC %d %" SCNx32, &version, &fp) != 2)
+        problem = "no TNNT-NPC header";
+    else if (version != NPC_FILE_VERSION)
+        problem = "wrong file version";
+    else if (fp != tnnt_data_fingerprint())
+        problem = "written by a build with different objects or monsters";
+    /* role is on line 4, after the timestamp and name */
+    else if (!fgets(line, BUFSZ, npcfile) || !fgets(line, BUFSZ, npcfile)
+             || !fgets(line, BUFSZ, npcfile)
+             || sscanf(line, "%d %d", &pm_num, &gender) != 2
+             || pm_num < PM_ARCHEOLOGIST || pm_num > PM_WIZARD)
+        problem = "role is not a player monster";
+    fclose(npcfile);
+    return problem;
+}
+
 static char *
 pick_npc_file(void)
 {
     static char npcpath[BUFSZ];
+    char buf[BUFSZ];
+    const char *problem;
     DIR *d = opendir(TNNT_NPC_DIR);
     int chance = 0;
     struct dirent *de;
@@ -1562,10 +1656,18 @@ pick_npc_file(void)
         return npcpath; /* with leading \0 */
     }
     while ((de = readdir(d)) != NULL) {
-        if (!strncmp(de->d_name, "NPC-", 4)
-            && !rn2(++chance)) {
-            Strcpy(npcpath, de->d_name);
+        if (strncmp(de->d_name, "NPC-", 4))
+            continue;
+        Snprintf(buf, sizeof buf, "%s/%s", TNNT_NPC_DIR, de->d_name);
+        if ((problem = npc_file_problem(buf)) != 0) {
+            /* tell the admins rather than the player; if no file is usable,
+             * create_tnnt_npc() still complains with impossible() */
+            Snprintf(buf, sizeof buf, "%s: %s", de->d_name, problem);
+            paniclog("npcfile", buf);
+            continue;
         }
+        if (!rn2(++chance))
+            Strcpy(npcpath, de->d_name);
     }
     closedir(d);
     return npcpath;
@@ -1615,6 +1717,8 @@ create_tnnt_npc(coordxy x, coordxy y)
         npc = mk_mplayer(&mons[pm_num], x, y, TRUE);
     }
     else {
+        /* eat up header; pick_npc_file() already checked it */
+        fgets(npcname, BUFSZ, npcfile);
         /* eat up timestamp; game doesn't use it */
         fgets(npcname, BUFSZ, npcfile);
         /* actually read in name this time */
@@ -1639,8 +1743,11 @@ create_tnnt_npc(coordxy x, coordxy y)
                        &otyp, &quan, &spe, &cursed, &blessed, &oerodeproof,
                        &recharged, &greased, &corpsenm, &usecount, &oeaten,
                        objnam);
-            if (n >= 11) {
+            if (n >= 11 && otyp >= FIRST_OBJECT && otyp < NUM_OBJECTS) {
                 obj = mksobj(otyp, FALSE, FALSE);
+                /* a stack of something that doesn't stack can't be real */
+                if (quan < 1L || (quan > 1L && !objects[otyp].oc_merge))
+                    quan = 1L;
                 obj->quan = quan;
                 obj->spe = spe;
                 obj->cursed = cursed;
@@ -1648,7 +1755,22 @@ create_tnnt_npc(coordxy x, coordxy y)
                 obj->oerodeproof = oerodeproof;
                 obj->recharged = recharged;
                 obj->greased = greased;
-                obj->corpsenm = corpsenm;
+                switch (otyp) {
+                case STATUE:
+                case FIGURINE:
+                    if (ismnum(corpsenm))
+                        obj->corpsenm = corpsenm;
+                    break;
+                case EGG:
+                case TIN:
+                    /* NON_PM is a generic egg or an empty tin */
+                    if (ismnum(corpsenm) || corpsenm == NON_PM)
+                        obj->corpsenm = corpsenm;
+                    break;
+                default:
+                    obj->corpsenm = corpsenm;
+                    break;
+                }
                 obj->usecount = usecount;
                 obj->oeaten = oeaten;
                 obj->tnntwishedfor = 0;
@@ -1779,6 +1901,9 @@ create_tnnt_npc(coordxy x, coordxy y)
     }
     /* Melee weapons selection */
     if (!MON_WEP(npc) && npc->data != &mons[PM_MONK]) {
+        /* without this, a monster that isn't one of these roles would pick
+         * up the last item made above a second time */
+        obj = (struct obj *) 0;
         if (npc->data == &mons[PM_ARCHEOLOGIST]
             || npc->data == &mons[PM_TOURIST])
             obj = mksobj(SILVER_SABER, FALSE, FALSE);
@@ -1798,10 +1923,12 @@ create_tnnt_npc(coordxy x, coordxy y)
             obj = mksobj(SHORT_SWORD, FALSE, FALSE);
         else if (npc->data == &mons[PM_SAMURAI])
             obj = mksobj(KATANA, FALSE, FALSE);
-        bless(obj);
-        obj->spe = rnd(3) + 4;
-        obj->oerodeproof = 1;
-        mpickobj(npc, obj);
+        if (obj) {
+            bless(obj);
+            obj->spe = rnd(3) + 4;
+            obj->oerodeproof = 1;
+            mpickobj(npc, obj);
+        }
     }
     /* Ranged weapons - NPC will spawn with these
      * regardless of whether the last ascending player
