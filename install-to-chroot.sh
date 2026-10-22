@@ -180,6 +180,8 @@ touch "$TNNT_CHROOT/$NHSUBDIR/var/xlogfile"
 chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var/xlogfile"
 touch "$TNNT_CHROOT/$NHSUBDIR/var/livelog"
 chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/var/livelog"
+touch "$TNNT_CHROOT/$NHSUBDIR/donors"
+chown -R "$USRGRP" "$TNNT_CHROOT/$NHSUBDIR/donors"
 
 RECOVER="$NETHACK_GIT/util/recover"
 
