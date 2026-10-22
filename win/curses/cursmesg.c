@@ -337,11 +337,6 @@ curses_block(
         mvwprintw(win, my, mx, (iflags.msg_is_alert ? " <TAB>" : " >>")), mx += morewidth;
     }
     curses_toggle_color_attr(win, MORECOLOR, moreattr, OFF);
-    if (iflags.msg_is_alert) {
-        curses_alert_main_borders(TRUE);
-        wrefresh(win);
-    }
-    while (iflags.msg_is_alert && (ret = wgetch(win) != '\t'));
     curses_set_wid_colors(MESSAGE_WIN, NULL);
     if (iflags.msg_is_alert) {
         curses_alert_main_borders(TRUE);
