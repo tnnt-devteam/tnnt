@@ -79,10 +79,6 @@ dosave0(void)
     NHFILE *nhfp, *onhfp;
     int res = 0;
 
-#ifdef WHEREIS_FILE
-    delete_whereis();
-#endif
-
     program_state.saving++; /* inhibit status and perm_invent updates */
     notice_mon_off();
 

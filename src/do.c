@@ -2171,10 +2171,6 @@ goto_level(
     }
 
     (void) pickup(1);
-
-#ifdef WHEREIS_FILE
-	touch_whereis();
-#endif
     return;
 }
 
