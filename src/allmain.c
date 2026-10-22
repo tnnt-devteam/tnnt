@@ -178,13 +178,12 @@ static int mvl_abort_lev;
 #endif
 static int mvl_wtcap = 0;
 static int mvl_change = 0;
+static int mvl_prevhp = 0; /* TNNT: hp tracking, previous turn's u.uhp */
 
 void
 moveloop_core(void)
 {
     boolean monscanmove = FALSE;
-    /* TNNT: hp tracking */
-    int prevhp = 0;
 
 #ifdef SAFERHANGUP
     if (program_state.done_hup)
@@ -324,7 +323,7 @@ moveloop_core(void)
                 }
 
                 /* TNNT: check amount of HP lost this turn */
-                if (u.uhp + 100 <= prevhp
+                if (u.uhp + 100 <= mvl_prevhp
                     && !tnnt_globals.lifesaved_this_turn
                     /* achievement specifies "without using life saving" in
                      * order to force you to really have skin in the game - so
@@ -332,7 +331,7 @@ moveloop_core(void)
                      * still negates the achievement. */
                     && !Lifesaved)
                     tnnt_achieve(A_LOST_100_HP);
-                prevhp = u.uhp;
+                mvl_prevhp = u.uhp;
                 tnnt_globals.lifesaved_this_turn = FALSE;
 
                 /* One possible result of prayer is healing.  Whether or
