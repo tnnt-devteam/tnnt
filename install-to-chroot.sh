@@ -114,6 +114,10 @@ if [ -n "$NETHACKBIN" -a ! -e "$NETHACKBIN" ]; then
   errorexit "Cannot find NetHack binary $NETHACKBIN"
 fi
 
+if [ -n "$COMPRESSBIN" -a ! -e "$COMPRESSBIN" ]; then
+  errorexit "Cannot find compression binary $COMPRESSBIN"
+fi
+
 if [ -n "$NETHACKBIN" -a -e "$NETHACKBIN" ]; then
   echo "Copying $NETHACKBIN"
   cd "$TNNT_CHROOT/$NHSUBDIR"
@@ -197,6 +201,16 @@ if [ -n "$RECOVER" -a -e "$RECOVER" ]; then
   rm -f "$TNNT_CHROOT/$NHSUBDIR/var/recover"   # clean up the old location
   LIBS="$LIBS `findlibs $RECOVER`"
   cd "$TNNT_CHROOT"
+fi
+
+# The game execs $COMPRESSBIN (COMPRESS in the hints) inside the chroot for
+# every save and bones file, so it has to be in there with its libraries.
+# Code, like recover: root-owned and installed atomically.
+if [ -n "$COMPRESSBIN" ]; then
+  echo "Copying $COMPRESSBIN"
+  mkdir -p "$TNNT_CHROOT`dirname $COMPRESSBIN`"
+  install_atomic "$COMPRESSBIN" "$TNNT_CHROOT$COMPRESSBIN" 755 root:root
+  LIBS="$LIBS `findlibs $COMPRESSBIN`"
 fi
 
 LIBS=`for lib in $LIBS; do echo $lib; done | sort | uniq`
