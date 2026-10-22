@@ -2072,14 +2072,20 @@ dump_open_log(time_t now)
 
     dumplog_now = now;
 #ifdef DUMPLOG
-    fname = dump_fmtstr(DUMPLOG_FILE, buf, TRUE);
-    if (fname)
-        dumplog_file = fopen(fname, "w");
+    /* sysconf without DUMPLOGFILE leaves this NULL; dump_fmtstr() is
+       NONNULL, so skip the dump instead of handing it a null format */
+    if (DUMPLOG_FILE) {
+        fname = dump_fmtstr(DUMPLOG_FILE, buf, TRUE);
+        if (fname)
+            dumplog_file = fopen(fname, "w");
+    }
 #endif
 #ifdef DUMPHTML
-    fname = dump_fmtstr(DUMPHTML_FILE, buf, TRUE);
-    if (fname)
-        dumphtml_file = fopen(fname, "w");
+    if (DUMPHTML_FILE) {
+        fname = dump_fmtstr(DUMPHTML_FILE, buf, TRUE);
+        if (fname)
+            dumphtml_file = fopen(fname, "w");
+    }
 #endif
     if (dumplog_file || dumphtml_file) {
         dumplog_windowprocs_backup = windowprocs;
