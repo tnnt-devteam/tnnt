@@ -649,3 +649,4 @@ spotless: clean
 		tilemap tileedit tile2bmp uudecode
 	-rm -f dgn_comp* dgn_lex.c dgn_yacc.c ../include/dgn_comp.h \
 		lev_comp* lev_lex.c lev_yacc.c ../include/lev_comp.h
+	-rm -f tnnt_ach_to_yaml tnnt_achievements.yaml

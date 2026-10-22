@@ -572,14 +572,13 @@ HACKINCL ?= align.h artifact.h artilist.h attrib.h botl.h \
 	color.h config.h config1.h context.h coord.h cstd.h decl.h \
 	defsym.h display.h dlb.h dungeon.h engrave.h extern.h flag.h \
 	fnamesiz.h func_tab.h global.h warnings.h hack.h lint.h mextra.h \
-	mcastu.h \
-	micro.h mfndpos.h mkroom.h monattk.h mondata.h monflag.h monst.h \
-	monsters.h nhmd4.h obj.h objects.h objclass.h optlist.h patchlevel.h \
-	pcconf.h permonst.h prop.h rect.h region.h savefile.h selvar.h sym.h \
-	rm.h sp_lev.h spell.h sndprocs.h seffects.h stairs.h sys.h \
-	tcap.h timeout.h tradstdc.h trap.h unixconf.h vision.h vmsconf.h \
-	wintty.h wincurs.h winX.h winprocs.h wintype.h you.h youprop.h \
-	weight.h \
+	mcastu.h micro.h mfndpos.h mkroom.h monattk.h mondata.h monflag.h \
+	monst.h monsters.h nhmd4.h obj.h objects.h objclass.h optlist.h \
+	patchlevel.h pcconf.h permonst.h prop.h rect.h region.h revision.h \
+	savefile.h selvar.h sym.h rm.h sp_lev.h spell.h sndprocs.h \
+	seffects.h stairs.h sys.h tcap.h timeout.h tradstdc.h trap.h \
+	unixconf.h vision.h vmsconf.h wintty.h wincurs.h winX.h winprocs.h \
+	wintype.h you.h youprop.h weight.h \
 	tnnt.h tnnt_achievements.h
 
 HSOURCES ?= $(HACKINCL) dgn_file.h
@@ -1322,7 +1321,7 @@ $(TARGETPFX)worm.o: worm.c $(HACK_H)
 $(TARGETPFX)worn.o: worn.c $(HACK_H)
 $(TARGETPFX)write.o: write.c $(HACK_H)
 $(TARGETPFX)zap.o: zap.c $(HACK_H)
-$(TARGETPFX)tnnt.o: tnnt.c $(HACK_H)
+$(TARGETPFX)tnnt.o: tnnt.c $(HACK_H) ../include/dlb.h
 qt_kde0.moc: $(QTn_H) ../win/Qt/qt_kde0.h
 	$(MOCPATH) -o $@ ../win/Qt/qt_kde0.h
 qt_main.moc: $(QTn_H) ../win/Qt/qt_kde0.h ../win/Qt/qt_main.h
