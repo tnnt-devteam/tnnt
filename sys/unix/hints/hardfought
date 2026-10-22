@@ -39,9 +39,25 @@ endif
 # linux.500 hints file provides a single-user build for Linux (such
 # as Ubuntu focal).
 
+# TNNT: tty and curses, tty by default (set here so the shared
+# multiw-1.500 stays as vanilla ships it)
+WANT_WIN_TTY=1
+WANT_WIN_CURSES=1
+WANT_DEFAULT=tty
+
 # note: '#-INCLUDE' is not just a comment
 #        multiw-1.500 contains sections 1 to 2
 #-INCLUDE multiw-1.500
+
+# TNNT: chroot layout. HACKDIR is the path inside the chroot that is
+# compiled into the binary; INSTDIR/VARDIR resolve under the source
+# tree because dirs-perms.500 sets PREFIX=$(abspath $(NHSROOT)).
+HACKDIR=/tnnt
+INSTDIR=$(PREFIX)$(HACKDIR)
+VARDIR=$(INSTDIR)/var
+GAMEPERM=0755
+VARFILEPERM=0600
+VARDIRPERM=0755
 
 # note: '#-INCLUDE' is not just a comment
 #        it pulls in the contents of dirs-perms.500
@@ -87,6 +103,10 @@ endif   # WANT_WIN_QT6
 # to both linux and macOS
 
 #-INCLUDE compiler.500
+
+# TNNT: full debug info, no optimisation (compiler.500 ships -g);
+# CFLAGS is built from CCFLAGS lazily, so this override takes effect
+CCFLAGS = -g3 -O0
 
 ifdef WANT_SYSTEM_LUA
 ifndef LUA_VERSION
@@ -537,8 +557,10 @@ CFLAGS+=-DSYSCF -DSYSCF_FILE=\"$(HACKDIR)/sysconf\" -DSECURE
 # PREFIX resolve at the chroot would turn a plain build into deleting the
 # playground and every save. Not a risk worth carrying for a staging dir nothing
 # consumes. `make install` remains available explicitly if it is ever wanted.
-# NOTE: WANT_SOURCE_INSTALL must STAY set -- the CFLAGS line above is gated on it,
-# and without it the binary builds with no SYSCF at all.
+# NOTE: SYSCF is always on: the NHCFLAGS line above adds -DSYSCF,
+# -DSYSCF_FILE and -DSECURE unconditionally, so the CFLAGS line here
+# only repeats them (as vanilla's linux.500 does). WANT_SOURCE_INSTALL
+# matters for the install layout chosen in dirs-perms.500, not for SYSCF.
 #MOREALL=$(MAKE) install
 endif #?WANT_SOURCE_INSTALL
 
