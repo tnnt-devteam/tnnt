@@ -1239,6 +1239,10 @@ tamedog(
     /* pacify angry shopkeeper but don't tame him/her/it/them */
     if (mtmp->isshk) {
         make_happy_shk(mtmp, FALSE);
+        /* TNNT: mpeaceful was already set above, so make_happy_shk()
+         * can't tell that the shopkeeper was angry */
+        if (!was_peaceful)
+            tnnt_achieve(A_PACIFIED_SHOPKEEPER);
         return FALSE;
     }
 
