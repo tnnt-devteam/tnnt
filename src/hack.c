@@ -3390,11 +3390,10 @@ spoteffects(boolean pick)
 
     /* TNNT: a few achievements trigger by moving onto a certain terrain type */
     if (spotterrain == ALTAR) {
-        xint8 mask = (levl[u.ux][u.uy].altarmask & ~AM_SHRINE);
+        xint8 mask = (levl[u.ux][u.uy].altarmask & AM_MASK);
         if (Is_astralevel(&u.uz)) {
-            /* Assumes that the AM_* flags are 1, 2, and 4. */
             tnnt_globals.high_altars |= mask;
-            if (tnnt_globals.high_altars == 0x7)
+            if ((tnnt_globals.high_altars & AM_MASK) == AM_MASK)
                 tnnt_achieve(A_VISITED_HIGH_ALTARS);
         }
         /* this is the weaker form of grand tour and happens anywhere, even on
