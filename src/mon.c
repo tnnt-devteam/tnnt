@@ -3129,12 +3129,12 @@ logdeadmon(struct monst *mtmp, int mndx)
                                mkilled, xtra);
         }
     }
-    /* TNNT-specific achievement/livelog cases start here */
-    else if (mtmp->data->msound == MS_NEMESIS
-               && !tnnt_globals.nemesis_got_a_move) {
+    /* TNNT-specific achievement/livelog cases start here; these are not
+       part of the chain above, which every unique already satisfies */
+    if (mtmp->data->msound == MS_NEMESIS
+        && !tnnt_globals.nemesis_got_a_move)
         tnnt_achieve(A_ONE_SIDED_NEMESIS_KILL);
-    }
-    else if (is_deathmatch_opponent(mtmp)) {
+    if (is_deathmatch_opponent(mtmp)) {
         tnnt_achieve(A_NPC_DEATHMATCH);
         livelog_printf(LL_UMONST, "killed %s in a deathmatch",
                        livelog_mon_nam(mtmp));
