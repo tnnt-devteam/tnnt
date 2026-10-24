@@ -1579,7 +1579,6 @@ H2Opotion_dip(
             costchange = COST_alter;
             altfmt = TRUE;
         }
-        tnnt_achieve(A_DIPPED_IN_UNHOLY);
     } else {
         /* dipping into uncursed water; carried() check skips steed saddle */
         if (carried(targobj)) {
@@ -2509,6 +2508,8 @@ potion_dip(struct obj *obj, struct obj *potion)
         boolean useeit = !Blind || (obj == ublindf && Blindfolded_only);
         const char *obj_glows = Yobjnam2(obj, "glow");
 
+        if (potion->cursed)
+            tnnt_achieve(A_DIPPED_IN_UNHOLY);
         if (H2Opotion_dip(potion, obj, useeit, obj_glows)) {
             poof(potion);
             return ECMD_TIME;
