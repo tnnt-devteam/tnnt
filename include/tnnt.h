@@ -264,9 +264,10 @@ struct tnnt_globals_t {
 
 #define FIRST_POLEARM PARTISAN
 #define LAST_POLEARM BEC_DE_CORBIN
-    /* Polearms (as we count them for this achievement) are not a contiguous
-     * block, hence why this does not have all lower bits set. */
-#define ALL_POLEARMS_FOUND 0x00003EEF
+    /* Polearms (as we count them for this achievement) have been one
+     * contiguous block since vanilla moved the lance and dwarvish mattock
+     * out of it, so every bit from FIRST_POLEARM to LAST_POLEARM is needed. */
+#define ALL_POLEARMS_FOUND ((1UL << (LAST_POLEARM - FIRST_POLEARM + 1)) - 1)
     uint32_t polearms_found;
 
     boolean killed_izchak;
