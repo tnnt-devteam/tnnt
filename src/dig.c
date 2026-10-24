@@ -1984,6 +1984,7 @@ buried_ball_to_freedom(void)
         reset_utrap(TRUE);
         del_engr_at(cc.x, cc.y);
         newsym(cc.x, cc.y);
+        tnnt_achieve(A_GOT_UNPUNISHED);
     }
 }
 
@@ -1999,8 +2000,9 @@ bury_an_obj(struct obj *otmp, boolean *dealloced)
     if (dealloced)
         *dealloced = FALSE;
     if (otmp == uball) {
-        unpunish();
+        /* TNNT: tether first, so unpunish() knows the hero isn't free */
         set_utrap((unsigned) rn1(50, 20), TT_BURIEDBALL);
+        unpunish();
         pline_The("iron ball gets buried!");
     }
     /* after unpunish(), or might get deallocated chain */

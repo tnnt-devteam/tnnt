@@ -3158,8 +3158,10 @@ unpunish(void)
 
     /* the chain is gone but the no longer attached ball persists */
     setworn((struct obj *) 0, W_BALL); /* sets 'uball' to Null */
-    /* TNNT: savebones() unpunishes a dead hero, which doesn't count */
-    if (!program_state.gameover)
+    /* TNNT: savebones() unpunishes a dead hero, and burying the ball
+       leaves the hero tethered to it; neither counts */
+    if (!program_state.gameover
+        && !(u.utrap && u.utraptype == TT_BURIEDBALL))
         tnnt_achieve(A_GOT_UNPUNISHED);
 }
 
