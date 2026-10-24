@@ -3102,7 +3102,10 @@ observe_quantum_cat(struct obj *box, boolean makecat, boolean givemsg)
         }
     }
 
-    tnnt_achieve(A_OPENED_SCHROEDINGERS);
+    /* TNNT: end-of-game disclosure settles the cat too, but that is not
+       the hero opening the box */
+    if (!program_state.gameover)
+        tnnt_achieve(A_OPENED_SCHROEDINGERS);
 
     nhUse(deadcat);
     return;
