@@ -3577,7 +3577,6 @@ set_ustuck(struct monst *mtmp)
     if (!u.ustuck) {
         u.uswallow = 0;
         u.uswldtim = 0;
-        tnnt_maybe_grant_ahab();
     }
 }
 
@@ -3588,6 +3587,7 @@ unstuck(struct monst *mtmp)
         struct permonst *ptr = mtmp->data;
         unsigned swallowed = u.uswallow;
 
+        tnnt_maybe_grant_ahab();
         /* do this first so that docrt()'s botl update is accurate;
            clears u.uswallow as well as setting u.ustuck to Null */
         set_ustuck((struct monst *) 0);

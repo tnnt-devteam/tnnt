@@ -2724,9 +2724,9 @@ escape_from_sticky_mon(coordxy x, coordxy y)
             case 1:
             case 2:
                 mtmp = u.ustuck;
+                tnnt_maybe_grant_ahab();
                 set_ustuck((struct monst *) 0);
                 You("pull free from %s.", y_monnam(mtmp));
-                tnnt_maybe_grant_ahab();
                 break;
             }
         }

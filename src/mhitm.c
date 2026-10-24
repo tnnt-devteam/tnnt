@@ -131,9 +131,9 @@ fightm(struct monst *mtmp)
             if (monnear(mtmp, mon->mx, mon->my)) {
                 if (!u.uswallow && (mtmp == u.ustuck)) {
                     if (!rn2(4)) {
+                        tnnt_maybe_grant_ahab();
                         set_ustuck((struct monst *) 0);
                         pline("%s releases you!", Monnam(mtmp));
-                        tnnt_maybe_grant_ahab();
                     } else
                         break;
                 }

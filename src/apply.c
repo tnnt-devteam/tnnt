@@ -2035,8 +2035,8 @@ jump(int magic) /* 0=Physical, otherwise skill level */
         if (u.ustuck->mtame && !Conflict && !u.ustuck->mconf) {
             struct monst *mtmp = u.ustuck;
 
-            set_ustuck((struct monst *) 0);
             tnnt_maybe_grant_ahab();
+            set_ustuck((struct monst *) 0);
             You("pull free from %s.", mon_nam(mtmp));
             return ECMD_TIME;
         }
