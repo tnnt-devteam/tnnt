@@ -1395,6 +1395,8 @@ spelleffects_check(int spell, int *res, int *energy)
     }
     if (chance <= 5)
         tnnt_achieve(A_CAST_LOCHANCE_SPELL);
+    if (spellev(spell) >= 7)
+        tnnt_achieve(A_CAST_LV7_SPELL);
     return FALSE;
 }
 
@@ -1412,9 +1414,6 @@ spelleffects(int spell_otyp, boolean atme, boolean force)
 
     if (!force && spelleffects_check(spell, &res, &energy))
         return res;
-
-    if (spellev(spell) >= 7)
-        tnnt_achieve(A_CAST_LV7_SPELL);
 
     u.uen -= energy;
     disp.botl = TRUE;
