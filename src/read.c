@@ -3158,7 +3158,9 @@ unpunish(void)
 
     /* the chain is gone but the no longer attached ball persists */
     setworn((struct obj *) 0, W_BALL); /* sets 'uball' to Null */
-    tnnt_achieve(A_GOT_UNPUNISHED);
+    /* TNNT: savebones() unpunishes a dead hero, which doesn't count */
+    if (!program_state.gameover)
+        tnnt_achieve(A_GOT_UNPUNISHED);
 }
 
 /* prompt the player to create a stinking cloud and then create it if they
