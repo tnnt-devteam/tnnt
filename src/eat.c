@@ -1028,7 +1028,9 @@ givit(int type, struct permonst *ptr)
     if (!should_givit(type, ptr) && !temp_givit(type, ptr))
         return;
 
-    if (!(u.uprops[type].intrinsic & FROMOUTSIDE))
+    /* TNNT: acid and stoning resistance from corpses are only timed */
+    if (type != ACID_RES && type != STONE_RES
+        && !(u.uprops[type].intrinsic & FROMOUTSIDE))
         tnnt_achieve(A_GOT_CORPSE_INTRINSIC);
 
     switch (type) {
