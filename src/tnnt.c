@@ -244,7 +244,7 @@ show_tnnt_stats(boolean final)
             tnnt_globals.artis_eaten, plur(tnnt_globals.artis_eaten));
     putstr(en_win, 0, buf);
 
-    if (final || u.uachieved[ACH_AMUL]) {
+    if (final || tnnt_is_achieved(A_GOT_AOY)) {
         Sprintf(buf, "You %s sent back %d level%s by the mysterious force.",
                 !final ? "have been" : "were",
                 tnnt_globals.mysterious_forced_back,
