@@ -2784,8 +2784,12 @@ potion_dip(struct obj *obj, struct obj *potion)
         boolean old_dknown = FALSE;
         boolean more_than_one = potion->quan > 1L;
 
+        /* TNNT: don't announce Teetotaler if that would identify an
+           unidentified amethyst or potion of booze */
         if (obj->otyp == AMETHYST && old_otyp == POT_BOOZE)
-            tnnt_achieve(A_AMETHYST_BOOZE);
+            tnnt_achieve_controlnotify(A_AMETHYST_BOOZE,
+                                       (!objects[AMETHYST].oc_name_known
+                                        || !objects[POT_BOOZE].oc_name_known));
         if (obj->otyp == UNICORN_HORN)
             tnnt_achieve(A_NEUTRALIZED_POTION);
         oldbuf[0] = '\0';
