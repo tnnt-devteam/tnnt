@@ -104,7 +104,7 @@ static const struct innate {
 
   hum_abil[] = { { 0, 0, 0, 0 } };
 
-staticfn void tnnt_check_luck(void);
+staticfn void tnnt_check_luck(boolean);
 staticfn void exerper(void);
 staticfn int rnd_attr(void);
 staticfn int init_attr_role_redist(int, boolean);
@@ -410,12 +410,12 @@ poisoned(
 
 /* TNNT: Luck reaches +/-13 through change_luck() or set_moreluck() */
 staticfn void
-tnnt_check_luck(void)
+tnnt_check_luck(boolean quiet)
 {
     if (Luck == 13)
-        tnnt_achieve(A_GOT_13_LUCK);
+        tnnt_achieve_controlnotify(A_GOT_13_LUCK, quiet);
     else if (Luck == -13)
-        tnnt_achieve(A_GOT_NEGATIVE_13_LUCK);
+        tnnt_achieve_controlnotify(A_GOT_NEGATIVE_13_LUCK, quiet);
 }
 
 void
@@ -427,7 +427,7 @@ change_luck(schar n)
     if (u.uluck > 0 && u.uluck > LUCKMAX)
         u.uluck = LUCKMAX;
 
-    tnnt_check_luck();
+    tnnt_check_luck(FALSE);
 }
 
 /* decide whether there are more blessed luckstones (plus luck-conferring
@@ -462,7 +462,8 @@ set_moreluck(void)
     else
         u.moreluck = -LUCKADD;
 
-    tnnt_check_luck();
+    /* don't announce it if that would reveal an unidentified luckstone */
+    tnnt_check_luck(!objects[LUCKSTONE].oc_name_known);
 }
 
 /* (not used) */
