@@ -200,6 +200,8 @@ bhitm(struct monst *mtmp, struct obj *otmp)
             pline("Boing!");
             /* 5.0: used to 'break' to avoid setting learn_it here */
         } else if (u.uswallow || rnd(20) < 10 + find_mac(mtmp)) {
+            int maxhp = mtmp->mhpmax; /* TNNT: before resist() kills it */
+
             if (disguised_mimic)
                 seemimic(mtmp);
             dmg = d(2, 12);
@@ -208,7 +210,11 @@ bhitm(struct monst *mtmp, struct obj *otmp)
             if (otyp == SPE_FORCE_BOLT)
                 dmg = spell_damage_bonus(dmg);
             hit(zap_type_text, mtmp, exclam(dmg));
-            (void) resist(mtmp, otmp->oclass, dmg, TELL);
+            /* TNNT: resist() deals dmg, halved if the monster resists */
+            if (resist(mtmp, otmp->oclass, dmg, TELL))
+                dmg = (dmg + 1) / 2;
+            if (dmg >= maxhp && dmg >= TNNT_OHKO_DMG)
+                tnnt_achieve(A_ONE_HIT_KO);
         } else {
             if (!disguised_mimic)
                 miss(zap_type_text, mtmp);
