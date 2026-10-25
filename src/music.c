@@ -838,8 +838,10 @@ do_play_instrument(struct obj *instr)
                         record_achievement(ACH_TUNE);
                         /* intentional that this achievement works even if you
                          * are first using it to close the drawbridge (maybe you
-                         * opened it previously with an opening beam) */
-                        tnnt_achieve(A_DEDUCED_PASSTUNE);
+                         * opened it previously with an opening beam); a tune
+                         * your god taught you wasn't deduced */
+                        if (!tnnt_is_achieved(A_LEARNED_PASSTUNE_FROM_GOD))
+                            tnnt_achieve(A_DEDUCED_PASSTUNE);
                         if (levl[x][y].typ == DRAWBRIDGE_DOWN)
                             close_drawbridge(x, y);
                         else
