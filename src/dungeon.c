@@ -2701,11 +2701,13 @@ rm_mapseen(int ledger_num)
     bpnext = mptr->final_resting_place;
     while ((bp = bpnext) != NULL) {
         bpnext = bp->next;
-        free((genericptr_t) bp);
         /* TNNT: it shouldn't be possible to forget a bones level and then find
          * the same bones again in normal play, but you can do it in wizard
-         * mode, so we still need to decrement to cover that case. */
-        tnnt_globals.bones_piles_found--;
+         * mode, so we still need to decrement to cover that case; only piles
+         * the hero found were counted. */
+        if (bp->bonesknown)
+            tnnt_globals.bones_piles_found--;
+        free((genericptr_t) bp);
     }
 
     if (mprev) {
