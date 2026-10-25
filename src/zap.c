@@ -1009,7 +1009,8 @@ revive(struct obj *corpse, boolean by_hero)
         mtmp = montraits(corpse, &xy, FALSE);
         if (mtmp && mtmp->mtame && !mtmp->isminion)
             wary_dog(mtmp, TRUE);
-        if (mtmp && mtmp->mtame) /* test if still tame after wary_dog... */
+        /* test if still tame after wary_dog, and only if the hero did it */
+        if (mtmp && mtmp->mtame && by_hero)
             tnnt_achieve(A_RESURRECTED_PET_TAME);
     } else {
         /* make a new monster */
