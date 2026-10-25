@@ -2656,10 +2656,12 @@ tnnt_announce_achievements(void)
         return;
 
     for (ach = 0; ach < NUM_TNNT_ACHIEVEMENTS; ++ach) {
-        if (ach == A_GOT_LUCKSTONE) {
+        if (ach == A_GOT_LUCKSTONE
+            || ach == A_GOT_LUCKSTONE_WITHOUT_BACKTRACKING) {
             /* since Mines' End tends to have other gray stones to mislead you
-             * from the luckstone, don't identify it by printing this (there are
-             * ways around it, but don't be blatantly obvious) */
+             * from the luckstone, don't identify it by printing either of
+             * these (there are ways around it, but don't be blatantly
+             * obvious) */
             continue;
         }
         if (tnnt_globals.ach_status[ach].needs_notification) {
