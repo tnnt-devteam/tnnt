@@ -1298,8 +1298,6 @@ use_crystal_ball(struct obj **optr)
         return;
     }
 
-    tnnt_achieve(A_APPLIED_CRYSTAL_BALL);
-
     /* read a single character */
     if (flags.verbose)
         You("may look for an object, monster, or special map symbol.");
@@ -1336,6 +1334,7 @@ use_crystal_ball(struct obj **optr)
 
         makeknown(CRYSTAL_BALL);
         consume_obj_charge(obj, TRUE);
+        tnnt_achieve(A_APPLIED_CRYSTAL_BALL);
 
         /* special case: accept ']' as synonym for mimic
          * we have to do this before the def_char_to_objclass check
