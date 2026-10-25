@@ -2559,6 +2559,7 @@ staticfn int
 use_figurine(struct obj **optr)
 {
     struct obj *obj = *optr;
+    struct monst *mtmp; /* TNNT */
     coordxy x, y;
     coord cc;
 
@@ -2586,10 +2587,12 @@ use_figurine(struct obj **optr)
                              : (u.dz < 0 ? "toss the figurine into the air"
                                          : "set the figurine on the ground"),
         Blind ? "supposedly " : "");
-    (void) make_familiar(obj, cc.x, cc.y, FALSE);
+    mtmp = make_familiar(obj, cc.x, cc.y, FALSE);
     (void) stop_timer(FIG_TRANSFORM, obj_to_any(obj));
     useup(obj);
-    tnnt_achieve(A_ANIMATED_FIGURINE);
+    /* TNNT: not if it shattered, crumbled to dust or drowned at once */
+    if (mtmp)
+        tnnt_achieve(A_ANIMATED_FIGURINE);
     if (Blind)
         map_invisible(cc.x, cc.y);
     *optr = 0;
