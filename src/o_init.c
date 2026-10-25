@@ -485,11 +485,13 @@ discover_object(
             /* !in_moveloop => initial inventory,
                gameover => final disclosure */
             if (program_state.in_moveloop && !program_state.gameover) {
-                if (mark_as_known && credit_hero) {
+                if (mark_as_known) {
                     /* TNNT: trigger on discovering stuff, but do not count it
                      * if the game is just starting or just ending. The final
                      * piece of the set must become actively identified during
-                     * the course of the game. */
+                     * the course of the game. Discoveries that don't credit
+                     * the hero (a Wizard learning spellbooks from #enhance)
+                     * still count. */
                     tnnt_check_identifications(oindx);
                 }
                 if (objects[oindx].oc_class == GEM_CLASS)
