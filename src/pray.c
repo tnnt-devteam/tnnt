@@ -1769,7 +1769,10 @@ sacrifice_your_race(
             nomul(-3);
             gm.multi_reason = "being terrified of a demon";
             gn.nomovemsg = 0;
-            tnnt_achieve(A_SUMMONED_DEMON_LORD);
+            /* TNNT: dlord() falls back to an ordinary demon once Juiblex and
+             * Yeenoghu are gone, and always in the endgame */
+            if (is_dlord(dmon->data) || is_dprince(dmon->data))
+                tnnt_achieve(A_SUMMONED_DEMON_LORD);
         } else
             pline_The("%s.", demonless_msg);
     }
