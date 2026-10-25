@@ -3190,7 +3190,9 @@ steedintrap(struct trap *trap, struct obj *otmp)
     case POLY_TRAP:
         if (!resists_magm(steed) && !resist(steed, WAND_CLASS, 0, NOTELL)) {
             /* newcham() will probably end up calling poly_steed() */
-            (void) newcham(steed, (struct permonst *) 0, NC_SHOW_MSG);
+            if (newcham(steed, (struct permonst *) 0, NC_SHOW_MSG)
+                && steed->mtame) /* TNNT: a steed is a pet too */
+                tnnt_achieve(A_POLYED_PET_ON_TRAP);
         }
         steedhit = TRUE;
         break;
