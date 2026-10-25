@@ -1647,9 +1647,12 @@ artifact_hit(
                 if (Hallucination && !flags.female)
                     pline("Good job Henry, but that wasn't Anne.");
                 observe_object(otmp);
-                tnnt_achieve(A_DECAPITATED_ENEMY);
-                if (mdef->data == &mons[PM_MEDUSA])
-                    tnnt_achieve(A_DECAPITATED_MEDUSA);
+                /* TNNT: only the hero's own beheadings count */
+                if (youattack) {
+                    tnnt_achieve(A_DECAPITATED_ENEMY);
+                    if (mdef->data == &mons[PM_MEDUSA])
+                        tnnt_achieve(A_DECAPITATED_MEDUSA);
+                }
                 return TRUE;
             } else {
                 if (!has_head(gy.youmonst.data)) {
