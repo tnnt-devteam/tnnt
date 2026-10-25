@@ -30,6 +30,7 @@ staticfn long carry_count(struct obj *, struct obj *, long, boolean, int *,
 staticfn int lift_object(struct obj *, struct obj *, long *, boolean);
 staticfn void pickup_prinv(struct obj *, long, const char *);
 staticfn boolean mbag_explodes(struct obj *, int);
+staticfn boolean tnnt_holds_boh(struct obj *);
 staticfn boolean is_boh_item_gone(void);
 staticfn void do_boh_explosion(struct obj *, boolean);
 staticfn long boh_loss(struct obj *, boolean);
@@ -2536,17 +2537,27 @@ mbag_explodes(struct obj *obj, int depthin)
     if ((Is_mbag(obj) || obj->otyp == WAN_CANCELLATION)
         && (rn2(1 << (depthin > 7 ? 7 : depthin)) <= depthin))
         return TRUE;
-    else {
-        if (obj->otyp == BAG_OF_HOLDING)
-            tnnt_achieve(A_NESTED_BOH);
-        if (Has_contents(obj)) {
-            struct obj *otmp;
+    else if (Has_contents(obj)) {
+        struct obj *otmp;
 
-            for (otmp = obj->cobj; otmp; otmp = otmp->nobj)
-                if (mbag_explodes(otmp, depthin + 1))
-                    return TRUE;
-        }
+        for (otmp = obj->cobj; otmp; otmp = otmp->nobj)
+            if (mbag_explodes(otmp, depthin + 1))
+                return TRUE;
     }
+    return FALSE;
+}
+
+/* TNNT: is obj a bag of holding, or does it hold one at any depth? */
+staticfn boolean
+tnnt_holds_boh(struct obj *obj)
+{
+    struct obj *otmp;
+
+    if (obj->otyp == BAG_OF_HOLDING)
+        return TRUE;
+    for (otmp = obj->cobj; otmp; otmp = otmp->nobj)
+        if (tnnt_holds_boh(otmp))
+            return TRUE;
     return FALSE;
 }
 
@@ -2777,6 +2788,9 @@ in_container(struct obj *obj)
         tnnt_achieve(A_BLEW_UP_BOH);
         losehp(d(6, 6), "magical explosion", KILLED_BY_AN);
         gc.current_container = 0; /* baggone = TRUE; */
+    } else if (gc.current_container->otyp == BAG_OF_HOLDING
+               && tnnt_holds_boh(obj)) {
+        tnnt_achieve(A_NESTED_BOH);
     }
 
     if (gc.current_container) {
@@ -4103,6 +4117,9 @@ tipcontainer(struct obj *box) /* or bag */
                     tnnt_achieve(A_BLEW_UP_BOH);
                     losehp(d(6, 6), "magical explosion", KILLED_BY_AN);
                 } else {
+                    if (targetbox->otyp == BAG_OF_HOLDING
+                        && tnnt_holds_boh(otmp))
+                        tnnt_achieve(A_NESTED_BOH);
                     (void) add_to_container(targetbox, otmp);
                 }
             } else if (highdrop) {
