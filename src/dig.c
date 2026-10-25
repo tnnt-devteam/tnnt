@@ -1033,6 +1033,7 @@ dig_up_grave(coord *cc)
 {
     struct obj *otmp;
     int what_happens;
+    int rno; /* TNNT */
     coordxy dig_x, dig_y;
 
     if (!cc) {
@@ -1045,7 +1046,10 @@ dig_up_grave(coord *cc)
             return;
     }
 
-    tnnt_achieve(A_DUG_UP_GRAVE);
+    /* TNNT: entering a morgue resets its rtype, so test orig_rtype */
+    rno = levl[dig_x][dig_y].roomno;
+    if (rno < ROOMOFFSET || svr.rooms[rno - ROOMOFFSET].orig_rtype != MORGUE)
+        tnnt_achieve(A_DUG_UP_GRAVE);
 
     /* Grave-robbing is frowned upon... */
     exercise(A_WIS, FALSE);
