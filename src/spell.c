@@ -517,7 +517,8 @@ study_book(struct obj *spellbook)
             return 1;
         }
 
-        if (uarmu && (ublindf && ublindf->otyp == LENSES))
+        if (uarmu && uarmu->otyp == T_SHIRT
+            && (ublindf && ublindf->otyp == LENSES))
             tnnt_achieve(A_NERD); /* Neeeeeeeerrrd! */
 
         /* 3.6 tribute */
