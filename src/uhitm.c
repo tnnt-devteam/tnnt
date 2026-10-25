@@ -1978,7 +1978,7 @@ hmon_hitmon(
             if (obj && is_pole(obj) && hmd.mdat == &mons[PM_FLOATING_EYE]
                 && thrown == HMON_APPLIED)
                 tnnt_achieve(A_KILLED_EYE_POLEARM);
-            if (obj && obj->otyp == TOWEL && obj->spe)
+            if (obj && obj->otyp == TOWEL && (obj->spe || hmd.dryit))
                 tnnt_achieve(A_KILLED_WITH_TOWEL);
         }
 
