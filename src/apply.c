@@ -1747,6 +1747,7 @@ light_cocktail(struct obj **optr)
     You("light %spotion.%s", shk_your(buf, obj),
         Blind ? "" : "  It gives off a dim light.");
 
+    u.uconduct.potionuse++; /* TNNT: lighting oil uses a potion */
     tnnt_achieve(A_LIT_OIL_POTION);
 
     if (obj->unpaid && costly_spot(u.ux, u.uy)) {
