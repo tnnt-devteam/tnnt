@@ -2555,9 +2555,6 @@ potion_dip(struct obj *obj, struct obj *potion)
 
         mixture = mixtype(obj, potion);
 
-        if (mixture != STRANGE_OBJECT)
-            tnnt_achieve(A_ALCHEMIZED);
-
         magic = (mixture != STRANGE_OBJECT) ? objects[mixture].oc_magic
             : (objects[obj->otyp].oc_magic || objects[potion->otyp].oc_magic);
         Strcpy(qbuf, "The"); /* assume full stack */
@@ -2599,6 +2596,7 @@ potion_dip(struct obj *obj, struct obj *potion)
 
         if (mixture != STRANGE_OBJECT) {
             obj->otyp = mixture;
+            tnnt_achieve(A_ALCHEMIZED);
         } else {
             struct obj *otmp;
 
