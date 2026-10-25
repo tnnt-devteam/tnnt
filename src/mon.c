@@ -3656,6 +3656,10 @@ xkilled(
     m_idx = (mtmp->cham != NON_PM) ? mtmp->cham : monsndx(mtmp->data);
     tnnt_update_ukilled(m_idx); /* killing groups of monsters achievements */
 
+    /* every way the hero stones a monster sets gs.stoned and calls here */
+    if (gs.stoned)
+        tnnt_achieve(A_STONED_A_MONSTER);
+
     if (mons[m_idx].mlet == S_DRAGON) {
         tnnt_achieve(A_KILLED_DRAGON);
     }

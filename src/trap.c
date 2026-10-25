@@ -3931,7 +3931,6 @@ minstapetrify(struct monst *mon, boolean byplayer)
     if (byplayer) {
         gs.stoned = TRUE;
         xkilled(mon, XKILL_NOMSG);
-        tnnt_achieve(A_STONED_A_MONSTER);
     } else
         monstone(mon);
 }
