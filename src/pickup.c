@@ -4100,6 +4100,7 @@ tipcontainer(struct obj *box) /* or bag */
                     targetbox = 0; /* it's gone */
                     nobj = 0; /* stop tipping; want loop to exit 'normally' */
 
+                    tnnt_achieve(A_BLEW_UP_BOH);
                     losehp(d(6, 6), "magical explosion", KILLED_BY_AN);
                 } else {
                     (void) add_to_container(targetbox, otmp);
