@@ -1127,9 +1127,13 @@ breamm(struct monst *mtmp, struct attack *mattk, struct monst *mtarg)
                     pline("%s breathes %s!",
                           Monnam(mtmp), breathwep_name(typ));
                 gb.buzzer = mtmp;
+                /* TNNT: kills by this breath count for Dracarys */
+                if (mtmp->mtame && mtmp->data->mlet == S_DRAGON)
+                    tnnt_globals.tame_dragon_breathing = TRUE;
                 dobuzz(BZ_M_BREATH(BZ_OFS_AD(typ)), (int) mattk->damn,
                        mtmp->mx, mtmp->my, sgn(gt.tbx), sgn(gt.tby),
                        utarget, utarget, FALSE);
+                tnnt_globals.tame_dragon_breathing = FALSE;
                 gb.buzzer = 0;
                 nomul(0);
                 /* breath runs out sometimes. Also, give monster some
