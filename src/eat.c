@@ -1195,6 +1195,9 @@ cpostfx(int pm)
         } else {
             if (!(HInvis & INTRINSIC))
                 You_feel("hidden!");
+            /* TNNT: permanent invisibility and see invisible */
+            if (!(HInvis & FROMOUTSIDE) || !(HSee_invisible & FROMOUTSIDE))
+                tnnt_achieve(A_GOT_CORPSE_INTRINSIC);
             HInvis |= FROMOUTSIDE;
             HSee_invisible |= FROMOUTSIDE;
         }
