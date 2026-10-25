@@ -175,8 +175,11 @@ stoned_dialogue(void)
         /* if also vomiting or turning into slime, stop those (no messages) */
         if (Vomiting)
             make_vomiting(0L, FALSE);
-        if (Slimed)
+        if (Slimed) {
+            tnnt_no_cure_credit = TRUE; /* TNNT: not a cure */
             make_slimed(0L, (char *) 0);
+            tnnt_no_cure_credit = FALSE;
+        }
         break;
     default:
         break;
@@ -435,8 +438,11 @@ slime_dialogue(void)
         break;
     case 1L: /* turning into slime */
         /* if also turning to stone, stop doing that (no message) */
-        if (Stoned)
+        if (Stoned) {
+            tnnt_no_cure_credit = TRUE; /* TNNT: not a cure */
             make_stoned(0L, (char *) 0, KILLED_BY_AN, (char *) 0);
+            tnnt_no_cure_credit = FALSE;
+        }
         break;
     }
     exercise(A_DEX, FALSE);

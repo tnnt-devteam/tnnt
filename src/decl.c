@@ -124,6 +124,10 @@ const char *ARGV0;
 /* TNNT - initialization of tnnt_globals */
 struct tnnt_globals_t tnnt_globals = DUMMY;
 
+/* TNNT - not saved; set while timeout.c ends one fatal countdown in
+   favor of another, so the cure achievements don't count it */
+boolean tnnt_no_cure_credit = FALSE;
+
 /* TNNT - custom tournament achievement names and descriptions */
 #define TNNT_ACH_NAMES
 struct tnnt_achievement_strings tnnt_ach_strings[NUM_TNNT_ACHIEVEMENTS] = {
