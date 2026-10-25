@@ -387,7 +387,8 @@ ghitm(struct monst *mtmp, struct obj *gold)
                 goldreqd += (umoney + u.ulevel * rn2(5)) / ACURR(A_CHA);
                 if (value > goldreqd) {
                     mtmp->mpeaceful = TRUE;
-                    tnnt_achieve(A_BRIBED_MERC);
+                    if (was_angry)
+                        tnnt_achieve(A_BRIBED_MERC);
                 }
             }
 
