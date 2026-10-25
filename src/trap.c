@@ -5166,6 +5166,8 @@ drown(void)
     }
 
     if (Amphibious || Breathless || Swimming) {
+        if (Is_waterlevel(&u.uz))
+            tnnt_achieve(A_SWAM_ON_WATER_PLANE);
         if (Amphibious || Breathless) {
             if (flags.verbose)
                 pline("But you aren't drowning.");
@@ -5174,9 +5176,6 @@ drown(void)
                     Your("keel hits the bottom.");
                 else
                     You("touch bottom.");
-            }
-            else {
-                tnnt_achieve(A_SWAM_ON_WATER_PLANE);
             }
         }
         if (Punished) {
