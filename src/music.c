@@ -134,7 +134,8 @@ charm_snakes(int distance)
                           Monnam(mtmp),
                           was_peaceful ? "" : ", and now seems quieter");
             }
-            tnnt_achieve(A_CHARMED_SNAKE);
+            if (!was_peaceful)
+                tnnt_achieve(A_CHARMED_SNAKE);
         }
     }
 }
