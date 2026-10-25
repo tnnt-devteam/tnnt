@@ -3303,7 +3303,10 @@ recalc_mapseen(void)
             bp->bonesknown = TRUE;
             mptr->flags.knownbones = 1;
             lvl_bones_found++;
-            if (strncmp(svp.plname, bp->who, strlen(svp.plname)))
+            /* TNNT: the name must be followed by the '-' that starts the
+             * role suffix, or "k2" would take "k21971"'s bones as its own */
+            if (strncmp(svp.plname, bp->who, strlen(svp.plname))
+                || bp->who[strlen(svp.plname)] != '-')
                 /* this one is only for someone else's bones, though the other
                  * ones below don't care */
                 tnnt_achieve(A_FOUND_BONES_PILE);
