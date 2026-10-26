@@ -1990,6 +1990,8 @@ trapeffect_pit(
         boolean trapkilled = FALSE;
         boolean forcetrap = ((trflags & FORCETRAP) != 0);
         boolean inescapable = (forcetrap || (Sokoban && !trap->madeby_u));
+        /* TNNT: a boulder dropped by the dying monster can fill the pit */
+        boolean yours = trap->madeby_u;
         struct permonst *mptr = mtmp->data;
         const char *fallverb;
 
@@ -2025,7 +2027,7 @@ trapeffect_pit(
                                        rnd(relevant_spikes ? 10 : 6), FALSE))
             trapkilled = TRUE;
 
-        if (trap->madeby_u)
+        if (yours)
             tnnt_achieve_controlnotify(A_TRAPPED_MONSTER, !in_sight);
 
         return trapkilled ? Trap_Killed_Mon : mtmp->mtrapped
