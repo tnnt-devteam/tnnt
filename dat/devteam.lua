@@ -93,13 +93,13 @@ booknames = { "grep", "ls", "htop" }
 shuffle(devbooks)
 shuffle(booknames)
 if percent(30) then
-  des.object({ id = "detect monsters", coord=devbooks[0], buc='uncursed', name=booknames[0] })
+  des.object({ id = "detect monsters", coord=devbooks[1], buc='uncursed', name=booknames[1] })
 end
 if percent(30) then
-  des.object({ id = "light", coord=devbooks[1], buc='uncursed', name=booknames[1] })
+  des.object({ id = "light", coord=devbooks[2], buc='uncursed', name=booknames[2] })
 end
 if percent(30) then
-  des.object({ id = "detect unseen", coord=devbooks[2], buc='uncursed', name=booknames[2] })
+  des.object({ id = "detect unseen", coord=devbooks[3], buc='uncursed', name=booknames[3] })
 end
 
 -- a mirror of the internal devteam repository (get it?)
@@ -124,9 +124,9 @@ end
 -- snack area
 snackrack = { {32,01},{33,01},{34,01} }
 shuffle(snackrack)
-des.object({ id = "candy bar", coord = snackrack[0], quan = d(3) })
-des.object({ id = "apple", coord = snackrack[1], quan = d(5) })
-des.object({ id = "banana", coord = snackrack[2], quan = d(4) })
+des.object({ id = "candy bar", coord = snackrack[1], quan = d(3) })
+des.object({ id = "apple", coord = snackrack[2], quan = d(5) })
+des.object({ id = "banana", coord = snackrack[3], quan = d(4) })
 des.engraving({33,03}, "burn", "Due to snack theft, lava has been installed.")
 
 -- novel
