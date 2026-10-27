@@ -270,9 +270,14 @@ do_mgivenname(void)
                     || mtmp->data->msound <= MS_ANIMAL)) {
         if (!alreadynamed(mtmp, monnambuf, buf)) {
             SetVoice(mtmp, 0, 80, 0);
-            verbalize("I'm %s, not %s.", shkname(mtmp), buf);
+            verbalize("I'm %s, not %s.",
+                      mtmp->isshk ? shkname(mtmp)
+                      : has_mgivenname(mtmp) ? MGIVENNAME(mtmp)
+                                             : noit_mon_nam(mtmp),
+                      buf);
         }
     } else if (mtmp->ispriest || mtmp->isminion || mtmp->isshk
+               || mtmp->data == &mons[PM_DEVTEAM_MEMBER]
                || is_deathmatch_opponent(mtmp)
                || mtmp->data == &mons[PM_GHOST] || has_ebones(mtmp)) {
         if (!alreadynamed(mtmp, monnambuf, buf))
