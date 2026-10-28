@@ -3616,6 +3616,7 @@ launch_obj(
             else if (typ == NKI) {
                 /* object stops here but with no message */
                 x2 = x, y2 = y;
+                break;
             }
         }
     } /* while dist > 0 */
