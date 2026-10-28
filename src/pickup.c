@@ -3311,7 +3311,9 @@ use_container(
      */
     for (;;) { /* repeats iff '?' or ':' gets chosen */
         outmaybe = (outokay || !gc.current_container->cknown
-                    || gc.current_container->otyp != SWAP_CHEST);
+                    /* TNNT: the swap chest is always worth trying to take
+                       from; a new file may have arrived since cknown was set */
+                    || gc.current_container->otyp == SWAP_CHEST);
         if (!outmaybe)
             (void) safe_qbuf(qbuf, (char *) 0, " is empty.  Do what with it?",
                              gc.current_container, Yname2, Ysimple_name2,
