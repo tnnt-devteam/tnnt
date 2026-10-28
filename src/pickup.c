@@ -3493,6 +3493,12 @@ use_container(
             gc.current_container->cknown = 1;
         update_inventory();
     }
+    /* TNNT: the swap chest's contents are a snapshot of the swap directory
+       taken for this #loot by refresh_swap_chest_contents().  Drop it now
+       so that nothing outside a loot ever sees OBJ_INSWAP objects: bones
+       (resetobjs() frees the chest), liquid damage, saving the level. */
+    if (gc.current_container && gc.current_container->otyp == SWAP_CHEST)
+        delete_swap_chest_contents(gc.current_container);
 
     sellobj_state(SELL_NORMAL); /* in case in_container() set it */
     *objp = gc.current_container; /* might have become null */

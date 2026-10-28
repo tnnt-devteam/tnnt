@@ -205,6 +205,10 @@ resetobjs(struct obj *ochain, boolean restore)
                 otmp->otyp = SPE_BLANK_PAPER;
                 curse(otmp);
             } else if (otmp->otyp == SWAP_CHEST) {
+                /* the chest's contents are OBJ_INSWAP objects read from the
+                 * swap directory; they are never saved, and dealloc_obj()
+                 * below panics on a non-empty cobj */
+                delete_swap_chest_contents(otmp);
                 if (Is_valley(&u.uz)) {
                     /* This swapchest does not get replaced when the bones are
                      * loaded. Leave it in place and refresh it for the next
