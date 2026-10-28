@@ -4537,6 +4537,7 @@ fire_damage(
         switch (obj->otyp) {
         case STATUE:
         case ICE_BOX:
+        case SWAP_CHEST: /* TNNT */
             return FALSE; /* Immune */
         case CHEST:
             chance = 40;
@@ -4784,6 +4785,10 @@ water_damage(
     boolean in_invent = obj && carried(obj), described = FALSE;
 
     if (!obj)
+        return ER_NOTHING;
+
+    /* TNNT: the swap chest and whatever it is showing are untouchable */
+    if (obj->otyp == SWAP_CHEST)
         return ER_NOTHING;
 
     if (splash_lit(obj))
