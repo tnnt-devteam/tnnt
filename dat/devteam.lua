@@ -80,9 +80,9 @@ end })
 -- Chest with identify scrolls.
 des.object({ id = "chest", x = 53, y = 09, contents = function()
    des.object({ class = "?", id = "identify", buc = 'blessed' })
-   des.object({ class = "?", buc = 'blessed' })
+   des.object({ class = "?", buc = 'uncursed' })
    if percent(50) then
-      des.object("?")
+      des.object({ class = "?", buc = 'uncursed' })
    end
 end })
 des.engraving({47,09}, "burn", "Beware - PEBCAK disposal area")
