@@ -1737,7 +1737,11 @@ boolean
 splittable(struct obj *obj)
 {
     return !((obj->otyp == LOADSTONE && obj->cursed)
-             || (obj == uwep && welded(uwep)));
+             || (obj == uwep && welded(uwep))
+             /* TNNT: a swap chest object shares its swapobj_filename with
+                any split-off part, so a count takes the whole stack, as
+                menu_loot() and out_container() already arrange */
+             || obj->where == OBJ_INSWAP);
 }
 
 /* match the prompt for either 'T' or 'R' command */
