@@ -4392,6 +4392,7 @@ qst_guardians_respond(void)
             continue;
         if (mon->data == q_guardian && mon->mpeaceful) {
             mon->mpeaceful = 0;
+            mon->mstrategy &= ~STRAT_WAITMASK; /* TNNT: end 'meditation' */
             if (canseemon(mon))
                 ++got_mad;
         }
