@@ -939,6 +939,20 @@ tnnt_data_fingerprint(void)
     return fp;
 }
 
+/* TNNT overloads usecount to mark objects that earn achievements (see the
+ * list in obj.h).  Swap chest files and arena NPC files store usecount so
+ * that spestudied survives, but the markers must not travel: an athame that
+ * was generated in a lich's inventory in one game is an ordinary athame in
+ * the next. */
+static boolean
+usecount_is_tnnt_flag(struct obj *obj)
+{
+    return ((obj->otyp == ATHAME && obj->lichathame)
+            || (obj->otyp == RIN_INVISIBILITY && obj->nazgul_ring)
+            || (obj->otyp == CANDY_BAR && obj->soko_candy)
+            || (obj->otyp == T_SHIRT && obj->isreallycool));
+}
+
 static char *
 make_swapobj_filename(struct obj *o)
 {
@@ -996,7 +1010,8 @@ write_swapobj_file(struct obj *o, xint8 swapnum)
                tnnt_data_fingerprint(),
                o->o_id, o->otyp, o->owt, o->quan, o->spe, o->oclass,
                o->cursed, o->blessed, o->oeroded, o->oeroded2, o->oerodeproof,
-               o->recharged, o->greased, o->opoisoned, o->usecount,
+               o->recharged, o->greased, o->opoisoned,
+               usecount_is_tnnt_flag(o) ? 0 : o->usecount,
                o->corpsenm, swapnum, playmode, svp.plname);
     /* the second line is just for humans to read what the object is, for debugging */
     iflags.override_ID = 1;
@@ -1568,9 +1583,7 @@ write_npc_data(void)
          * another, to prevent people e.g. getting the "athame generated in a
          * lich's inventory" achivement just by taking one out of the swap
          * chest. */
-        if ((obj->otyp == ATHAME && obj->lichathame)
-            || (obj->otyp == RIN_INVISIBILITY && obj->nazgul_ring)
-            || (obj->otyp == CANDY_BAR && obj->soko_candy))
+        if (usecount_is_tnnt_flag(obj))
             clear_usecount = TRUE;
         /* TNNT TODO: handling for items that shouldn't be excluded entirely,
          * but should be modified somehow (e.g. artifacts). */
