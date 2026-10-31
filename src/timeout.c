@@ -176,9 +176,9 @@ stoned_dialogue(void)
         if (Vomiting)
             make_vomiting(0L, FALSE);
         if (Slimed) {
-            tnnt_no_cure_credit = TRUE; /* TNNT: not a cure */
+            tnnt_globals.no_cure_credit = TRUE; /* TNNT: not a cure */
             make_slimed(0L, (char *) 0);
-            tnnt_no_cure_credit = FALSE;
+            tnnt_globals.no_cure_credit = FALSE;
         }
         break;
     default:
@@ -439,9 +439,9 @@ slime_dialogue(void)
     case 1L: /* turning into slime */
         /* if also turning to stone, stop doing that (no message) */
         if (Stoned) {
-            tnnt_no_cure_credit = TRUE; /* TNNT: not a cure */
+            tnnt_globals.no_cure_credit = TRUE; /* TNNT: not a cure */
             make_stoned(0L, (char *) 0, KILLED_BY_AN, (char *) 0);
-            tnnt_no_cure_credit = FALSE;
+            tnnt_globals.no_cure_credit = FALSE;
         }
         break;
     }

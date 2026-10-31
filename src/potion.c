@@ -211,7 +211,7 @@ make_slimed(long xtime, const char *msg)
             pline("%s", msg);
     }
     if (!Slimed) {
-        if (old && !tnnt_no_cure_credit)
+        if (old && !tnnt_globals.no_cure_credit)
             tnnt_achieve(A_CURED_SLIMING);
         dealloc_killer(find_delayed_killer(SLIMED));
         /* fake appearance is set late in turn-to-slime countdown */
@@ -240,7 +240,7 @@ make_stoned(long xtime, const char *msg, int killedby, const char *killername)
             pline("%s", msg);
     }
     if (!Stoned) {
-        if (old && !tnnt_no_cure_credit)
+        if (old && !tnnt_globals.no_cure_credit)
             tnnt_achieve(A_CURED_STONING);
         dealloc_killer(find_delayed_killer(STONED));
     }

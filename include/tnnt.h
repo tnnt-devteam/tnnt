@@ -319,6 +319,9 @@ struct tnnt_globals_t {
     boolean killed_death_in_melee;
     boolean killed_pesty_in_melee;
     boolean killed_famine_in_melee;
+    boolean no_cure_credit; /* set while timeout.c ends one fatal
+                               countdown in favor of another, so the
+                               cure achievements don't count it */
 
     /* tnnt devs: add more as needed */
 };

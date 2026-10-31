@@ -1321,6 +1321,5 @@ extern struct tnnt_achievement_strings tnnt_ach_strings[NUM_TNNT_ACHIEVEMENTS];
 extern struct tnnt_achievement_category
     tnnt_ach_categories[NUM_TNNT_ACH_CATEGORIES];
 extern struct tnnt_globals_t tnnt_globals;
-extern boolean tnnt_no_cure_credit;
 
 #endif /* DECL_H */
