@@ -125,7 +125,7 @@ MAX_STATUENAME_RANK=50
 # 0x2000 - Spoiler event; can include in livelog but hidden from #chronicle [bit 8192]
 # 0x4000 - Include as 'major' event in dumplog; can be hidden from livelog [bit 16384]
 # 0x8000 - Livelog debug msgs [bit 32768]
-LIVELOG=0x0FFF
+LIVELOG=0x2FFF
 
 # Show debugging information originating from these source files.
 # Use '*' for all, or list source files separated by spaces.
