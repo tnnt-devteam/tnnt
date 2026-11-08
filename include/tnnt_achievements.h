@@ -790,7 +790,8 @@ ACH("Shafted", "Fall down a shaft", FELL_DOWN_SHAFT)
 ACH("Blasters' Handbook", "Blow up a boulder with a land mine",
     BLEW_UP_BOULDER)
 ACH("Minesweeper",
-    "Disarm all Fort Ludios land mines without triggering any after entering the vault",
+    "Disarm all Fort Ludios land mines without triggering any after "
+    "entering the treasury",
     DISARMED_LUDIOS_MINES)
 ACH("Bomb Squad", "Untrap all 8 types of traps that can be untrapped",
     UNTRAPPED_ALL_TRAPS)
@@ -849,7 +850,8 @@ ACH("Soko In One Go",
     "Complete Sokoban without backtracking after first entering it",
     COMPLETED_SOKOBAN_WITHOUT_BACKTRACKING)
 ACH("Gold Rush",
-    "Enter the Fort Ludios vault on your first visit to the level",
+    "Enter the Fort Ludios treasury before leaving the level "
+    "for the first time",
     COMPLETED_LUDIOS_WITHOUT_BACKTRACKING)
 ACH("Dug For Victory",
     "Obtain the Castle wand without backtracking",
