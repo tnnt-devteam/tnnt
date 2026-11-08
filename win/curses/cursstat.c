@@ -707,8 +707,9 @@ draw_vertical(boolean border)
         BL_ALIGN,
         BL_XP, BL_EXP, BL_HD,
         BL_GOLD,
-        /* 3:blank (but only if time or score or both enabled) */
+        /* 3:blank (but only if time, realtime or score enabled) */
         BL_TIME,
+        BL_REALTIME, /* TNNT */
         BL_SCORE,
         /* 2:blank */
         BL_STR, BL_DX, BL_CO, BL_IN, BL_WI, BL_CH,
@@ -721,7 +722,7 @@ draw_vertical(boolean border)
         BL_FLUSH
     };
     static const enum statusfields shrinkorder[] = {
-        BL_VERS, BL_STR, BL_SCORE, BL_TIME, BL_LEVELDESC, BL_HP,
+        BL_VERS, BL_STR, BL_SCORE, BL_TIME, BL_REALTIME, BL_LEVELDESC, BL_HP,
         BL_TERRAIN, BL_ARMOR, BL_WEAPON,
         BL_CONDITION, BL_CAP, BL_HUNGER
     };
@@ -796,6 +797,12 @@ draw_vertical(boolean border)
         case BL_TIME:
             /* time will be separated from gold unless it is inactive */
             spacing[fld] = (time_and_score & 1) ? 2 : 0;
+            break;
+        case BL_REALTIME:
+            /* TNNT: realtime goes on the line after time; if time is
+               inactive, realtime takes over its separation from gold */
+            spacing[fld] = !status_activefields[fld] ? 0
+                           : (time_and_score & 1) ? 1 : 2;
             break;
         case BL_SCORE:
             /* unlike hunger+cap, score is shown on separate line from time;
@@ -1227,7 +1234,9 @@ curs_vert_status_vals(int win_width)
             *status_vals_long[fldidx] = '\0';
         } else {
             text = status_vals[fldidx];
-            if (fldidx != BL_TITLE && fldidx != BL_LEVELDESC) {
+            /* TNNT: realtime's value has colons of its own (0m:00s) */
+            if (fldidx != BL_TITLE && fldidx != BL_LEVELDESC
+                && fldidx != BL_REALTIME) {
                 if ((colon = strchr(text, ':')) != 0)
                     text = colon + 1;
             }
@@ -1252,6 +1261,7 @@ curs_vert_status_vals(int win_width)
                       : "hit-dice";
                 break;
             case BL_ALIGN:
+            case BL_REALTIME: /* TNNT */
                 /* don't want sprintf(": %s") below inserting second space */
                 if (*text == ' ')
                     ++text;
