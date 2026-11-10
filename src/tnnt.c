@@ -2161,6 +2161,12 @@ collect_all_transient(struct obj* exception)
         if (Has_contents(obj))                         \
             collect_transient_within(obj, &collected); \
         if (obj->transient) {                          \
+            /* gold dragon armor is lit only while     \
+               worn; artifact_light() needs the worn   \
+               mask, so end the light before clearing  \
+               it or dealloc_obj() won't find it */    \
+            if (obj->lamplit && artifact_light(obj))   \
+                end_burn(obj, FALSE);                  \
             obj->owornmask = 0;                        \
             obj_extract_self(obj);                     \
             obj->nobj = collected;                     \
@@ -2203,8 +2209,12 @@ collect_all_transient(struct obj* exception)
     for (otmp = gi.invent; otmp; otmp = next) {
         next = otmp->nobj;
         if (otmp != exception) {
-            if (otmp->transient && otmp->owornmask)
+            if (otmp->transient && otmp->owornmask) {
+                /* as in t_collect, before the mask is cleared */
+                if (otmp->lamplit && artifact_light(otmp))
+                    end_burn(otmp, FALSE);
                 setnotworn(otmp);
+            }
             t_collect(otmp);
         }
     }
